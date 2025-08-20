@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Glass Morphism Variables */
+    --glass-blur: 20px;
+    --glass-saturate: 180%;
+    --glass-opacity: 0.2;
+    --glass-border-opacity: 0.18;
+    
+    /* Liquid Animation Variables */
+    --liquid-duration: 20s;
+    --liquid-amplitude: 10px;
+    
+    /* OKLCH Color Variables */
+    --color-glass-primary: oklch(85% 0.02 200);
+    --color-glass-secondary: oklch(90% 0.01 250);
+    --color-glass-accent: oklch(75% 0.15 320);
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --liquid-duration: 0s;
+      --liquid-amplitude: 0px;
+    }
+  }
+}
+
+@layer components {
+  /* Performance-optimized glass morphism */
+  .glass-performance {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  /* Interactive glass effects */
+  .glass-interactive {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .glass-interactive:hover {
+    transform: translateY(-2px) scale(1.01);
+  }
+  
+  .glass-interactive:active {
+    transform: translateY(0) scale(0.99);
+  }
+  
+  /* Liquid glass effect */
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: radial-gradient(
+      circle at 30% 30%,
+      oklch(90% 0.15 320 / 0.3) 0%,
+      transparent 70%
+    );
+    animation: liquidFloat var(--liquid-duration) ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  /* Aurora glass effect */
+  .aurora-glass {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .aurora-glass::after {
+    content: '';
+    position: absolute;
+    inset: -100%;
+    background: linear-gradient(
+      45deg,
+      oklch(75% 0.2 280 / 0.2) 0%,
+      oklch(85% 0.15 320 / 0.15) 50%,
+      oklch(95% 0.1 360 / 0.1) 100%
+    );
+    animation: auroraShift 15s ease-in-out infinite;
+    pointer-events: none;
+    filter: blur(40px);
+    z-index: -1;
+  }
+}

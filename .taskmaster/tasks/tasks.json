@@ -1,0 +1,1293 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Project Setup and Base Configuration",
+        "description": "Initialize Next.js 14 project with TypeScript, configure essential dependencies and development environment",
+        "details": "1. Create Next.js project: `pnpm create next-app lineartime --typescript --tailwind --app\n2. Install core dependencies: shadcn/ui, Convex, Clerk, Vercel AI SDK\n3. Configure TypeScript with strict mode\n4. Setup ESLint and Prettier\n5. Initialize Git repository\n6. Configure environment variables\n7. Setup project structure following PRD specifications",
+        "testStrategy": "1. Verify all dependencies install correctly\n2. Run type checking\n3. Ensure development server starts\n4. Validate ESLint configuration\n5. Test environment variable loading",
+        "priority": "high",
+        "dependencies": [],
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Next.js Project with Core Dependencies",
+            "description": "Create new Next.js 14 project and install all required dependencies",
+            "dependencies": [],
+            "details": "Run pnpm create next-app lineartime --typescript --tailwind --app; Install dependencies: @shadcn/ui, convex, @clerk/nextjs, @vercel/ai; Configure package.json with correct versions and scripts",
+            "status": "done",
+            "testStrategy": "Verify project creation and dependency installation by running development server and checking package.json"
+          },
+          {
+            "id": 2,
+            "title": "Configure TypeScript and Code Quality Tools",
+            "description": "Setup TypeScript with strict mode, ESLint, and Prettier configurations",
+            "dependencies": [
+              1
+            ],
+            "details": "Create tsconfig.json with strict mode enabled; Setup ESLint with next/recommended config; Configure Prettier with project standards; Add lint-staged and husky for pre-commit hooks",
+            "status": "done",
+            "testStrategy": "Run type checking and linting on sample files to verify configuration"
+          },
+          {
+            "id": 3,
+            "title": "Setup Project Structure and Environment",
+            "description": "Create folder structure and configure environment variables",
+            "dependencies": [
+              2
+            ],
+            "details": "Create app/, components/, lib/, styles/ directories; Setup .env.local with required variables; Create .env.example template; Configure environment variable validation",
+            "status": "done",
+            "testStrategy": "Verify folder structure matches PRD specifications and environment variables load correctly"
+          },
+          {
+            "id": 4,
+            "title": "Initialize Version Control",
+            "description": "Setup Git repository with proper configuration and initial commit",
+            "dependencies": [
+              3
+            ],
+            "details": "Initialize Git repository; Create .gitignore file; Configure Git attributes and hooks; Create initial commit with project setup; Setup branch protection rules",
+            "status": "done",
+            "testStrategy": "Verify Git configuration and test commit hooks"
+          },
+          {
+            "id": 5,
+            "title": "Configure Deployment Pipeline",
+            "description": "Setup deployment configuration and CI/CD workflow",
+            "dependencies": [
+              4
+            ],
+            "details": "Configure Vercel project settings; Setup GitHub Actions for CI/CD; Create deployment scripts; Configure build optimization settings; Setup preview deployments",
+            "status": "pending",
+            "testStrategy": "Test deployment pipeline with sample build and verify preview environments"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Implement Glass Morphism Design System",
+        "description": "Create reusable glass morphism components and utilities following Apple's Liquid Glass design language",
+        "details": "1. Implement glass effect utilities in Tailwind\n2. Create base glass components (GlassCard, GlassButton, GlassDialog)\n3. Setup OKLCH color system\n4. Implement liquid animations\n5. Add blur and transparency effects\n6. Create glass morphism hooks for interactive effects",
+        "testStrategy": "1. Visual regression testing\n2. Performance testing for animations\n3. Cross-browser compatibility tests\n4. Accessibility contrast testing\n5. Component interaction tests",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Setup OKLCH Color System and Glass Effect Utilities",
+            "description": "Implement the OKLCH color system and create Tailwind utilities for glass morphism effects",
+            "dependencies": [],
+            "details": "Configure Tailwind config to support OKLCH colors, create custom utilities for backdrop-filter, blur effects, and transparency. Define color palette variables following Apple's Liquid Glass design guidelines",
+            "status": "done",
+            "testStrategy": "Visual regression testing for color accuracy and glass effect rendering across different browsers"
+          },
+          {
+            "id": 2,
+            "title": "Create Base Glass Components",
+            "description": "Develop core glass morphism components including GlassCard, GlassButton, and GlassDialog",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement React components using the glass effect utilities. Include proper transparency layers, blur effects, and border treatments. Ensure components are responsive and maintain consistent glass effect across different backgrounds",
+            "status": "done",
+            "testStrategy": "Component rendering tests, accessibility contrast testing, and interaction testing"
+          },
+          {
+            "id": 3,
+            "title": "Implement Liquid Animations",
+            "description": "Create smooth, fluid animations for glass component interactions",
+            "dependencies": [
+              2
+            ],
+            "details": "Use Framer Motion or React Spring to implement liquid-like animations for hover states, focus states, and transitions. Include subtle transform effects and smooth blur adjustments",
+            "status": "done",
+            "testStrategy": "Performance testing for animation smoothness, frame rate monitoring, and reduced motion testing"
+          },
+          {
+            "id": 4,
+            "title": "Develop Interactive Glass Morphism Hooks",
+            "description": "Create custom React hooks for handling glass morphism interactive effects",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Implement hooks for managing hover states, focus states, and interaction effects. Include cursor tracking for dynamic lighting effects and parallax movements",
+            "status": "pending",
+            "testStrategy": "Hook behavior testing, performance testing under different interaction scenarios"
+          },
+          {
+            "id": 5,
+            "title": "Implement Advanced Blur and Transparency System",
+            "description": "Create an advanced system for managing blur and transparency effects based on component state and context",
+            "dependencies": [
+              1,
+              4
+            ],
+            "details": "Develop a context-aware system that adjusts blur and transparency based on component stacking, background content, and user interaction. Include performance optimizations for blur effects",
+            "status": "pending",
+            "testStrategy": "Visual regression testing, performance benchmarking, and cross-browser compatibility testing"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Setup Authentication with Clerk",
+        "description": "Implement user authentication and authorization system using Clerk",
+        "details": "1. Initialize Clerk provider\n2. Create auth pages (sign-in, sign-up)\n3. Implement protected routes\n4. Setup middleware for auth checks\n5. Configure OAuth providers\n6. Implement MFA options",
+        "testStrategy": "1. Test all auth flows\n2. Verify protected route access\n3. Test OAuth integrations\n4. Validate session handling\n5. Security testing for auth endpoints",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Clerk Provider and Environment Setup",
+            "description": "Set up Clerk provider in the application and configure necessary environment variables",
+            "dependencies": [],
+            "details": "1. Install Clerk SDK and dependencies\n2. Create Clerk account and get API keys\n3. Configure environment variables (NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY)\n4. Implement ClerkProvider wrapper in _app.tsx\n5. Setup basic Clerk configuration options",
+            "status": "done",
+            "testStrategy": "Verify environment variables loading and provider initialization"
+          },
+          {
+            "id": 2,
+            "title": "Create Authentication Pages",
+            "description": "Implement sign-in and sign-up pages using Clerk components",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create /auth/sign-in page with SignIn component\n2. Create /auth/sign-up page with SignUp component\n3. Implement custom styling for auth components\n4. Add error handling and success redirects\n5. Setup authentication state management",
+            "status": "done",
+            "testStrategy": "Test sign-in and sign-up flows, error states, and redirects"
+          },
+          {
+            "id": 3,
+            "title": "Implement Protected Routes and Middleware",
+            "description": "Set up route protection and authentication middleware",
+            "dependencies": [
+              2
+            ],
+            "details": "1. Create middleware.ts for auth checks\n2. Configure public and private routes\n3. Implement authentication checks\n4. Setup route protection patterns\n5. Add session handling logic",
+            "status": "done",
+            "testStrategy": "Test protected route access, redirects, and session handling"
+          },
+          {
+            "id": 4,
+            "title": "Configure OAuth Providers",
+            "description": "Set up and integrate OAuth providers through Clerk",
+            "dependencies": [
+              3
+            ],
+            "details": "1. Configure Google OAuth in Clerk dashboard\n2. Add GitHub OAuth integration\n3. Implement OAuth buttons on auth pages\n4. Setup OAuth callback handling\n5. Add social profile data handling",
+            "status": "pending",
+            "testStrategy": "Test OAuth provider integrations and social sign-in flows"
+          },
+          {
+            "id": 5,
+            "title": "Implement MFA and Security Features",
+            "description": "Add multi-factor authentication and additional security features",
+            "dependencies": [
+              4
+            ],
+            "details": "1. Enable MFA in Clerk dashboard\n2. Implement MFA setup flow\n3. Add backup codes generation\n4. Create MFA verification screens\n5. Implement security event logging",
+            "status": "pending",
+            "testStrategy": "Test MFA enrollment, verification, and recovery flows"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Setup Convex Backend",
+        "description": "Initialize and configure Convex backend with database schema and functions",
+        "details": "1. Initialize Convex project\n2. Implement data models (users, calendars, events)\n3. Create CRUD functions\n4. Setup real-time subscriptions\n5. Configure indexes\n6. Implement validation rules",
+        "testStrategy": "1. Unit tests for database functions\n2. Schema validation tests\n3. Real-time subscription tests\n4. Performance testing\n5. Data integrity checks",
+        "priority": "high",
+        "dependencies": [
+          1,
+          3
+        ],
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Convex Project and Setup Environment",
+            "description": "Set up the Convex development environment and initialize the project with basic configuration",
+            "dependencies": [],
+            "details": "Run 'npx convex init', configure environment variables in .env.local, setup convex dev server, and integrate Convex client with Next.js app",
+            "status": "done",
+            "testStrategy": "Verify Convex connection and environment configuration through basic connectivity tests"
+          },
+          {
+            "id": 2,
+            "title": "Implement Data Models and Schema",
+            "description": "Define database schema for users, calendars, and events with proper relationships and constraints",
+            "dependencies": [
+              1
+            ],
+            "details": "Create schema.ts with User, Calendar, and Event models including relationships, timestamps, and required fields. Implement proper TypeScript types for all models",
+            "status": "done",
+            "testStrategy": "Run schema validation tests and verify type safety with TypeScript compiler"
+          },
+          {
+            "id": 3,
+            "title": "Create CRUD API Functions",
+            "description": "Implement core database operations for all models with proper validation and error handling",
+            "dependencies": [
+              2
+            ],
+            "details": "Create mutation.ts and query.ts files implementing createUser, updateCalendar, deleteEvent, etc. Include input validation and proper error handling for each operation",
+            "status": "done",
+            "testStrategy": "Unit test each CRUD operation with various input scenarios and edge cases"
+          },
+          {
+            "id": 4,
+            "title": "Implement Real-time Subscriptions",
+            "description": "Set up real-time data synchronization for calendar events and updates",
+            "dependencies": [
+              3
+            ],
+            "details": "Create subscription functions for calendar updates, implement WebSocket handlers, setup client-side subscription hooks, and handle connection management",
+            "status": "pending",
+            "testStrategy": "Test real-time updates with multiple clients and verify data consistency"
+          },
+          {
+            "id": 5,
+            "title": "Configure Indexes and Optimization",
+            "description": "Set up database indexes for performance optimization and implement validation rules",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "Define indexes for frequent queries, implement validation rules in schema, optimize query patterns, and set up proper access control rules",
+            "status": "pending",
+            "testStrategy": "Run performance tests on indexed queries and verify access control rules"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Implement Timeline Container Component",
+        "description": "Create the core linear calendar visualization component with horizontal continuous display of 365 days, featuring semantic zooming and virtual scrolling capabilities",
+        "status": "pending",
+        "dependencies": [
+          2,
+          4
+        ],
+        "priority": "high",
+        "details": "1. Implement TimelineContainer component with horizontal linear layout\n2. Add horizontal virtual scrolling with @tanstack/virtual\n3. Create semantic zoom level system (year→quarter→month→week→day)\n4. Implement smooth horizontal scrolling\n5. Add gesture controls with pinch-to-zoom\n6. Setup keyboard navigation\n7. Implement heat map visualization for event density\n8. Apply glassmorphic styling with backdrop-blur",
+        "testStrategy": "1. Performance testing for 60fps scrolling\n2. Gesture interaction tests including pinch-to-zoom\n3. Keyboard navigation tests\n4. Visual regression tests for all zoom levels\n5. Memory leak checks\n6. Heat map rendering tests\n7. Glassmorphic style verification",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Base TimelineContainer Component Structure",
+            "description": "Create the foundational horizontal linear calendar component with continuous day display",
+            "status": "pending",
+            "dependencies": [],
+            "details": "Create a React component using TypeScript with props for width and configuration. Setup horizontal scrolling container with CSS. Implement continuous day display layout. Create month row structure. Apply glassmorphic styling with backdrop-blur and gradients. Define interfaces for timeline data and configuration options.",
+            "testStrategy": "Unit tests for component rendering and prop validation. Visual regression tests for layout structure and glassmorphic styling."
+          },
+          {
+            "id": 2,
+            "title": "Implement Horizontal Virtual Scrolling System",
+            "description": "Add horizontal virtual scrolling capability using @tanstack/virtual for efficient continuous day display",
+            "status": "pending",
+            "dependencies": [
+              1
+            ],
+            "details": "Integrate @tanstack/virtual for horizontal scrolling. Implement day column virtualization. Create viewport calculation logic for continuous timeline. Setup horizontal scroll event handlers. Implement item rendering optimization with memoization. Ensure 60fps performance.",
+            "testStrategy": "Performance testing for 60fps. Scroll behavior tests. Memory usage monitoring. Visual smoothness validation."
+          },
+          {
+            "id": 3,
+            "title": "Create Semantic Zoom System",
+            "description": "Implement semantic zooming with different time scale representations and heat map visualization",
+            "status": "pending",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Create ZoomContext with semantic zoom levels. Implement zoom transitions between year, quarter, month, week, and day views. Add heat map visualization for event density in year view. Setup time scale representations for each zoom level. Implement smooth transitions between zoom levels.",
+            "testStrategy": "Zoom transition tests. Heat map rendering tests. Time scale accuracy tests. Visual regression tests for all zoom levels."
+          },
+          {
+            "id": 4,
+            "title": "Implement Smooth Scrolling and Gesture Controls",
+            "description": "Add smooth horizontal scrolling behavior and enhanced touch gesture controls",
+            "status": "pending",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Implement smooth horizontal scrolling. Add touch gesture handlers for horizontal pan and pinch-zoom. Create momentum scrolling for touch devices. Implement scroll snapping to time divisions. Setup gesture state management for zoom levels.",
+            "testStrategy": "Touch gesture interaction tests. Smooth scrolling behavior validation. Pinch-zoom accuracy tests. Cross-browser compatibility tests."
+          },
+          {
+            "id": 5,
+            "title": "Add Keyboard Navigation and Accessibility",
+            "description": "Implement keyboard controls and ensure accessibility compliance for linear calendar",
+            "status": "pending",
+            "dependencies": [
+              1,
+              4
+            ],
+            "details": "Setup keyboard event handlers for horizontal navigation. Implement focus management system for continuous timeline. Add ARIA labels and roles for calendar elements. Create keyboard shortcuts for zoom levels and navigation. Implement screen reader support with semantic day announcements.",
+            "testStrategy": "Keyboard navigation tests. WCAG compliance checks. Screen reader compatibility testing. Semantic announcement validation."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Implement Event Management System",
+        "description": "Create event creation, editing, and management functionality",
+        "details": "1. Create event CRUD operations\n2. Implement event forms with validation\n3. Add drag-and-drop functionality\n4. Create event cards with glass effects\n5. Implement event recurrence logic\n6. Add event categories and tags",
+        "testStrategy": "1. CRUD operation tests\n2. Form validation tests\n3. Drag-and-drop interaction tests\n4. Recurrence logic tests\n5. Real-time update tests",
+        "priority": "high",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Core Event CRUD Operations",
+            "description": "Create base API endpoints and database models for event management",
+            "dependencies": [],
+            "details": "Create Event model with fields: title, description, start_date, end_date, location, creator_id. Implement RESTful API endpoints for creating, reading, updating, and deleting events. Include proper error handling and input validation.",
+            "status": "pending",
+            "testStrategy": "Unit tests for CRUD operations, API endpoint testing, validation testing"
+          },
+          {
+            "id": 2,
+            "title": "Create Event Form Components",
+            "description": "Develop form components with validation for event creation and editing",
+            "dependencies": [
+              1
+            ],
+            "details": "Build React form components using react-hook-form, implement client-side validation, create reusable input components for date/time, location, and description. Add form submission handling and error display.",
+            "status": "pending",
+            "testStrategy": "Form validation tests, component rendering tests, user interaction testing"
+          },
+          {
+            "id": 3,
+            "title": "Implement Event Card UI",
+            "description": "Design and implement event card components with glass effect styling",
+            "dependencies": [
+              1
+            ],
+            "details": "Create responsive event card component with glass morphism effect using CSS. Include event details display, action buttons, and hover states. Implement skeleton loading state.",
+            "status": "pending",
+            "testStrategy": "Visual regression testing, responsive design testing, accessibility testing"
+          },
+          {
+            "id": 4,
+            "title": "Add Drag-and-Drop Functionality",
+            "description": "Implement drag-and-drop for event scheduling and rescheduling",
+            "dependencies": [
+              1,
+              3
+            ],
+            "details": "Use react-beautiful-dnd for drag-and-drop implementation. Add event repositioning logic, handle date/time updates, implement drag handles and drop zones. Include visual feedback during drag operations.",
+            "status": "pending",
+            "testStrategy": "Drag-and-drop interaction tests, state update verification, cross-browser testing"
+          },
+          {
+            "id": 5,
+            "title": "Implement Event Recurrence System",
+            "description": "Create event recurrence logic and UI controls",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Implement recurrence patterns (daily, weekly, monthly, yearly), create recurrence rule generator, add exception handling for modified instances. Build UI controls for recurrence pattern selection.",
+            "status": "pending",
+            "testStrategy": "Recurrence pattern tests, date calculation testing, edge case validation"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Implement Calendar Sync System",
+        "description": "Create calendar synchronization system for Google, Outlook, and Apple calendars",
+        "details": "1. Implement Google Calendar sync\n2. Add Microsoft Graph API integration\n3. Setup CalDAV support\n4. Create sync conflict resolution\n5. Implement real-time updates\n6. Add error handling",
+        "testStrategy": "1. Integration tests for each provider\n2. Sync conflict resolution tests\n3. Error handling tests\n4. Performance testing\n5. Rate limiting tests",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          6
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Google Calendar API Integration",
+            "description": "Set up OAuth2 authentication and implement basic CRUD operations for Google Calendar integration",
+            "dependencies": [],
+            "details": "1. Configure OAuth2 credentials in Google Cloud Console\n2. Implement OAuth2 flow for user authorization\n3. Create CalendarService class for Google Calendar\n4. Implement methods for reading, creating, updating, and deleting events\n5. Add rate limiting and token refresh handling",
+            "status": "pending",
+            "testStrategy": "1. Mock Google Calendar API responses\n2. Test OAuth flow\n3. Verify CRUD operations\n4. Test rate limiting behavior"
+          },
+          {
+            "id": 2,
+            "title": "Implement Microsoft Graph API Integration",
+            "description": "Create Microsoft Outlook calendar integration using Graph API",
+            "dependencies": [],
+            "details": "1. Register application in Azure AD\n2. Implement Microsoft authentication flow\n3. Create OutlookService class\n4. Implement CRUD operations for Outlook events\n5. Add error handling for API limits",
+            "status": "pending",
+            "testStrategy": "1. Mock Graph API responses\n2. Test authentication flow\n3. Verify calendar operations\n4. Test error handling"
+          },
+          {
+            "id": 3,
+            "title": "Implement CalDAV Support for Apple Calendar",
+            "description": "Create CalDAV client for Apple Calendar integration",
+            "dependencies": [],
+            "details": "1. Implement CalDAV client\n2. Add Apple Calendar discovery\n3. Create CRUD operations using CalDAV protocol\n4. Implement authentication handling\n5. Add support for calendar collections",
+            "status": "pending",
+            "testStrategy": "1. Test CalDAV operations\n2. Verify calendar discovery\n3. Test authentication\n4. Validate calendar collection handling"
+          },
+          {
+            "id": 4,
+            "title": "Implement Sync Conflict Resolution",
+            "description": "Create system to detect and resolve conflicts between different calendar sources",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "1. Implement conflict detection algorithm\n2. Create conflict resolution strategies\n3. Add version tracking for events\n4. Implement merge operations\n5. Create conflict notification system",
+            "status": "pending",
+            "testStrategy": "1. Test conflict detection accuracy\n2. Verify resolution strategies\n3. Test merge operations\n4. Validate notification system"
+          },
+          {
+            "id": 5,
+            "title": "Implement Real-time Updates and Error Handling",
+            "description": "Add real-time synchronization and comprehensive error handling",
+            "dependencies": [
+              4
+            ],
+            "details": "1. Implement WebSocket connections for real-time updates\n2. Create retry mechanism for failed operations\n3. Add error logging and monitoring\n4. Implement fallback mechanisms\n5. Create user notification system for sync status",
+            "status": "pending",
+            "testStrategy": "1. Test real-time update performance\n2. Verify error handling paths\n3. Test retry mechanism\n4. Validate monitoring system"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Implement AI Scheduling Assistant",
+        "description": "Create AI-powered scheduling assistant using Vercel AI SDK",
+        "details": "1. Setup Vercel AI SDK\n2. Implement scheduling algorithms\n3. Create natural language processing\n4. Add pattern recognition\n5. Implement suggestion system\n6. Create conflict detection",
+        "testStrategy": "1. AI response accuracy tests\n2. Performance testing\n3. Natural language processing tests\n4. Pattern recognition validation\n5. Integration tests",
+        "priority": "medium",
+        "dependencies": [
+          6
+        ],
+        "status": "deferred",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Setup Vercel AI SDK and Initial Configuration",
+            "description": "Initialize and configure Vercel AI SDK in the project, including environment setup and basic API integration",
+            "dependencies": [],
+            "details": "Install Vercel AI SDK via npm, configure API keys in environment variables, create basic AI service wrapper class, implement error handling for API calls, setup response streaming",
+            "status": "pending",
+            "testStrategy": "Unit tests for API configuration, environment variable validation, error handling scenarios"
+          },
+          {
+            "id": 2,
+            "title": "Implement Natural Language Processing Pipeline",
+            "description": "Create NLP system to parse and understand scheduling-related user inputs and commands",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement text preprocessing, entity recognition for dates/times/events, intent classification system, context management, response formatting pipeline",
+            "status": "pending",
+            "testStrategy": "Test suite for different input patterns, entity extraction accuracy, intent classification validation"
+          },
+          {
+            "id": 3,
+            "title": "Develop Core Scheduling Algorithm",
+            "description": "Create the main scheduling logic to handle time slot allocation and optimization",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Implement time slot management, conflict detection logic, optimization algorithm for best fit, priority handling, recurring event support",
+            "status": "pending",
+            "testStrategy": "Unit tests for scheduling scenarios, conflict resolution, optimization effectiveness"
+          },
+          {
+            "id": 4,
+            "title": "Create Pattern Recognition and Learning System",
+            "description": "Implement system to identify user scheduling patterns and preferences",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Create pattern analysis algorithm, user preference tracking, historical data analysis, preference weight calculation, adaptive learning system",
+            "status": "pending",
+            "testStrategy": "Pattern detection accuracy tests, learning system validation, preference prediction testing"
+          },
+          {
+            "id": 5,
+            "title": "Implement Smart Suggestion System",
+            "description": "Build intelligent suggestion system for optimal scheduling recommendations",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "Implement suggestion generation algorithm, context-aware recommendations, real-time availability checking, suggestion ranking system, user feedback integration",
+            "status": "pending",
+            "testStrategy": "Suggestion quality testing, performance benchmarks, user feedback integration tests"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Implement Timeline Mini-map",
+        "description": "Create mini-map navigation component for quick timeline navigation",
+        "details": "1. Create TimelineMinimap component\n2. Implement viewport visualization\n3. Add quick navigation\n4. Create event density visualization\n5. Add drag navigation",
+        "testStrategy": "1. Navigation accuracy tests\n2. Performance testing\n3. Interaction tests\n4. Visual regression tests\n5. Accessibility tests",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "deferred",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Base TimelineMinimap Component",
+            "description": "Implement the foundational TimelineMinimap React component with basic structure and styling",
+            "dependencies": [],
+            "details": "Create a new React component TimelineMinimap.tsx with a fixed-height container, basic styling, and props interface for timeline data. Use CSS Grid or Flexbox for layout. Include prop types for timeline range, events, and viewport position.",
+            "status": "pending",
+            "testStrategy": "Unit tests for component rendering and prop validation. Visual regression tests for basic layout."
+          },
+          {
+            "id": 2,
+            "title": "Implement Viewport Visualization",
+            "description": "Add visual representation of current viewport position and size within the minimap",
+            "dependencies": [
+              1
+            ],
+            "details": "Create a translucent overlay component that represents the current viewport. Calculate and update position based on main timeline scroll position. Implement viewport scaling based on zoom level. Use transform: translate for smooth positioning.",
+            "status": "pending",
+            "testStrategy": "Test viewport calculations and positioning accuracy. Verify correct scaling at different zoom levels."
+          },
+          {
+            "id": 3,
+            "title": "Add Event Density Visualization",
+            "description": "Create visual representation of event distribution across the timeline",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement algorithm to calculate event density per time unit. Create canvas-based visualization using requestAnimationFrame for performance. Use color intensity or bar height to represent density. Include caching mechanism for density calculations.",
+            "status": "pending",
+            "testStrategy": "Performance tests for density calculations. Visual tests for density representation accuracy."
+          },
+          {
+            "id": 4,
+            "title": "Implement Click Navigation",
+            "description": "Enable quick navigation by clicking different areas of the minimap",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Add click event handlers to the minimap. Calculate target timeline position based on click coordinates. Implement smooth scrolling animation using requestAnimationFrame. Add debounce for performance optimization.",
+            "status": "pending",
+            "testStrategy": "Test click position calculations. Verify smooth scroll behavior. Test edge cases for timeline boundaries."
+          },
+          {
+            "id": 5,
+            "title": "Add Drag Navigation",
+            "description": "Implement drag functionality for viewport manipulation",
+            "dependencies": [
+              2,
+              4
+            ],
+            "details": "Add mouse/touch event listeners for drag operations. Implement drag start, move, and end handlers. Calculate viewport position during drag. Use pointer events for cross-device compatibility. Add momentum scrolling for mobile.",
+            "status": "pending",
+            "testStrategy": "Test drag interactions on different devices. Verify smooth viewport updates. Test edge case handling for drag boundaries."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Implement Multi-scale Time Representation",
+        "description": "Create different zoom level views with appropriate time scale representations",
+        "details": "1. Implement year view\n2. Create quarter view\n3. Add month view\n4. Implement week view\n5. Create day view\n6. Add smooth transitions",
+        "testStrategy": "1. View transition tests\n2. Performance testing\n3. Data rendering tests\n4. Visual regression tests\n5. Memory usage tests",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "deferred",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Base Time Scale Component",
+            "description": "Create a foundational time scale component that can handle different zoom levels and time unit representations",
+            "dependencies": [],
+            "details": "Create a TimeScale class that manages time unit calculations, formatting, and scale transformations. Implement methods for converting between pixel coordinates and time values. Setup basic rendering structure with SVG or Canvas.",
+            "status": "pending",
+            "testStrategy": "Unit tests for time calculations, scale transformations, and formatting functions"
+          },
+          {
+            "id": 2,
+            "title": "Develop Year and Quarter Views",
+            "description": "Implement year and quarter level visualizations with appropriate markers and labels",
+            "dependencies": [
+              1
+            ],
+            "details": "Create year and quarter view components using the base time scale. Implement appropriate tick marks, labels, and grid lines. Add year/quarter boundaries and proper date formatting. Ensure proper handling of leap years.",
+            "status": "pending",
+            "testStrategy": "Visual regression tests for layout and formatting, date calculation tests for edge cases"
+          },
+          {
+            "id": 3,
+            "title": "Implement Month and Week Views",
+            "description": "Create month and week level visualizations with detailed time representations",
+            "dependencies": [
+              2
+            ],
+            "details": "Develop month and week view components with appropriate granularity. Add week numbers, month names, and day markers. Implement proper handling of month transitions and week boundaries.",
+            "status": "pending",
+            "testStrategy": "Test month/week boundary calculations, label formatting, and layout consistency"
+          },
+          {
+            "id": 4,
+            "title": "Create Day View with Hours",
+            "description": "Implement detailed day view with hour-level granularity",
+            "dependencies": [
+              3
+            ],
+            "details": "Build day view component with hour markers and minute indicators. Add support for different time zones and daylight saving time transitions. Implement proper time formatting and grid system.",
+            "status": "pending",
+            "testStrategy": "Time zone handling tests, DST transition tests, hour/minute calculation validation"
+          },
+          {
+            "id": 5,
+            "title": "Implement Zoom Transitions",
+            "description": "Add smooth transitions between different time scale views",
+            "dependencies": [
+              4
+            ],
+            "details": "Create animation system for transitioning between zoom levels. Implement interpolation for scale changes. Add gesture support for zoom interactions. Ensure smooth rendering during transitions. Handle state preservation during zoom operations.",
+            "status": "pending",
+            "testStrategy": "Animation performance tests, gesture interaction tests, state consistency validation during transitions"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Implement Settings and Preferences",
+        "description": "Create user settings and preferences management system",
+        "details": "1. Create settings UI\n2. Implement theme switching\n3. Add time format options\n4. Create notification preferences\n5. Implement calendar preferences\n6. Add keyboard shortcuts",
+        "testStrategy": "1. Settings persistence tests\n2. Theme switching tests\n3. Preference validation tests\n4. Integration tests\n5. UI interaction tests",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create Settings Storage and State Management",
+            "description": "Implement a centralized settings storage system using Redux/Context with local storage persistence",
+            "dependencies": [],
+            "details": "Create a settings slice in Redux store, implement local storage middleware, define settings interface types, create actions and reducers for all setting categories (theme, time format, notifications, calendar, shortcuts)",
+            "status": "pending",
+            "testStrategy": "Unit tests for reducers, storage persistence tests, state management integration tests"
+          },
+          {
+            "id": 2,
+            "title": "Implement Settings UI Components",
+            "description": "Create reusable UI components for settings panel with proper layout and navigation",
+            "dependencies": [
+              1
+            ],
+            "details": "Build Settings container component, implement tab/accordion navigation, create form components for each setting category, add responsive layout, implement accessibility features",
+            "status": "pending",
+            "testStrategy": "Component rendering tests, accessibility tests, responsive layout tests"
+          },
+          {
+            "id": 3,
+            "title": "Implement Theme System",
+            "description": "Create theme switching functionality with CSS variables and theme definitions",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Define theme interface, create light/dark theme configurations, implement CSS variable system, add theme switch component, handle system preference detection, implement smooth theme transitions",
+            "status": "pending",
+            "testStrategy": "Theme switching tests, CSS variable validation, system preference detection tests"
+          },
+          {
+            "id": 4,
+            "title": "Implement Time and Calendar Preferences",
+            "description": "Add time format and calendar preference controls with live preview",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Implement time format options (12/24h), add date format selections, create calendar view preferences, implement preview component, add validation logic, create format utilities",
+            "status": "pending",
+            "testStrategy": "Format validation tests, preview rendering tests, preference persistence tests"
+          },
+          {
+            "id": 5,
+            "title": "Implement Notifications and Shortcuts",
+            "description": "Add notification preferences and keyboard shortcut management",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Create notification preference controls, implement shortcut recording component, add conflict detection, create shortcut management system, implement shortcut persistence, add notification preview",
+            "status": "pending",
+            "testStrategy": "Shortcut conflict tests, notification preference tests, keyboard event handling tests"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Implement Export and Import System",
+        "description": "Create data export and import functionality for calendar data",
+        "details": "1. Implement ICS export\n2. Create PDF export\n3. Add ICS import\n4. Implement data validation\n5. Add progress tracking\n6. Create error handling",
+        "testStrategy": "1. Export format validation\n2. Import validation tests\n3. Error handling tests\n4. Performance testing\n5. File format compatibility tests",
+        "priority": "low",
+        "dependencies": [
+          6
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement ICS Export Functionality",
+            "description": "Create functionality to export calendar data to standard ICS format",
+            "dependencies": [],
+            "details": "Use ical.js library to generate ICS files, implement event data mapping, add file download mechanism, ensure proper encoding of event details including title, date, description, and location",
+            "status": "pending",
+            "testStrategy": "Validate ICS file structure, test with different calendar applications, verify all event properties are correctly exported"
+          },
+          {
+            "id": 2,
+            "title": "Create PDF Export System",
+            "description": "Develop PDF export functionality for calendar events and schedules",
+            "dependencies": [],
+            "details": "Use react-pdf library, create PDF template layouts, implement event data formatting, add custom styling options, ensure proper page breaks and layout consistency",
+            "status": "pending",
+            "testStrategy": "Test PDF generation with various data sizes, verify formatting consistency, check compatibility across different PDF readers"
+          },
+          {
+            "id": 3,
+            "title": "Implement ICS Import System",
+            "description": "Create functionality to import calendar data from ICS files",
+            "dependencies": [
+              1
+            ],
+            "details": "Use ical.js parser, implement file upload mechanism, create data mapping from ICS to application format, add duplicate event detection, implement merge strategies",
+            "status": "pending",
+            "testStrategy": "Test with various ICS file formats, verify data integrity after import, check handling of malformed files"
+          },
+          {
+            "id": 4,
+            "title": "Add Data Validation and Error Handling",
+            "description": "Implement comprehensive validation and error handling for import/export operations",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Create validation rules for both import and export, implement error catching mechanisms, add user-friendly error messages, create recovery procedures for failed operations",
+            "status": "pending",
+            "testStrategy": "Test with invalid data formats, verify error message clarity, check recovery procedures"
+          },
+          {
+            "id": 5,
+            "title": "Implement Progress Tracking and UI Feedback",
+            "description": "Add progress indicators and user feedback for import/export operations",
+            "dependencies": [
+              4
+            ],
+            "details": "Create progress bar component, implement file processing status updates, add success/failure notifications, implement cancellation mechanism for long-running operations",
+            "status": "pending",
+            "testStrategy": "Test progress accuracy, verify UI updates, check cancellation functionality"
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "Implement Analytics and Monitoring",
+        "description": "Setup analytics, error tracking, and performance monitoring",
+        "details": "1. Setup Sentry integration\n2. Implement PostHog analytics\n3. Add performance monitoring\n4. Create custom metrics\n5. Implement error reporting\n6. Add usage analytics",
+        "testStrategy": "1. Error tracking validation\n2. Analytics event tests\n3. Performance metric tests\n4. Integration tests\n5. Data accuracy tests",
+        "priority": "low",
+        "dependencies": [
+          1
+        ],
+        "status": "deferred",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Setup Sentry Error Tracking Integration",
+            "description": "Initialize and configure Sentry SDK for error tracking and monitoring across the application",
+            "dependencies": [],
+            "details": "Install @sentry/nextjs package, configure environment variables for Sentry DSN, initialize Sentry in both client and server components, setup error boundaries, and implement custom error handlers",
+            "status": "pending",
+            "testStrategy": "Verify error capture by triggering test errors, validate error context and metadata, check error grouping functionality"
+          },
+          {
+            "id": 2,
+            "title": "Implement PostHog Analytics Events",
+            "description": "Setup PostHog analytics and implement core event tracking throughout the application",
+            "dependencies": [],
+            "details": "Install PostHog SDK, configure API keys, implement core event tracking (pageviews, user actions, conversion events), setup user identification and properties, create custom event definitions",
+            "status": "pending",
+            "testStrategy": "Validate event capture using PostHog debug tools, verify event properties and user identification"
+          },
+          {
+            "id": 3,
+            "title": "Setup Performance Monitoring",
+            "description": "Implement comprehensive performance monitoring using Web Vitals and custom metrics",
+            "dependencies": [
+              1
+            ],
+            "details": "Setup Web Vitals monitoring, implement custom performance marks and measures, configure performance observers, create performance dashboards, setup alerts for performance degradation",
+            "status": "pending",
+            "testStrategy": "Benchmark core Web Vitals, validate performance metric collection, test alert thresholds"
+          },
+          {
+            "id": 4,
+            "title": "Create Custom Metrics Dashboard",
+            "description": "Develop a dashboard for visualizing analytics and monitoring data",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Create metrics visualization components, implement real-time data updates, setup metric aggregation logic, create filtering and time range selection, implement export functionality",
+            "status": "pending",
+            "testStrategy": "Test dashboard rendering, verify metric calculations, validate filter functionality"
+          },
+          {
+            "id": 5,
+            "title": "Implement Usage Analytics System",
+            "description": "Create comprehensive usage tracking and reporting system",
+            "dependencies": [
+              2,
+              4
+            ],
+            "details": "Implement user session tracking, setup feature usage analytics, create conversion funnels, implement retention metrics, setup automated reporting, create API for analytics data access",
+            "status": "pending",
+            "testStrategy": "Validate tracking accuracy, test data aggregation, verify report generation"
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Implement Accessibility Features",
+        "description": "Ensure WCAG 2.1 AA compliance and implement accessibility features",
+        "details": "1. Add ARIA labels\n2. Implement keyboard navigation\n3. Add screen reader support\n4. Create high contrast mode\n5. Implement reduced motion\n6. Add focus management",
+        "testStrategy": "1. Screen reader testing\n2. Keyboard navigation tests\n3. Color contrast tests\n4. WCAG compliance audit\n5. Accessibility tool validation",
+        "priority": "high",
+        "dependencies": [
+          2,
+          5,
+          6
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement ARIA Labels and Screen Reader Support",
+            "description": "Add comprehensive ARIA labels and ensure proper screen reader functionality across all components",
+            "dependencies": [],
+            "details": "1. Audit all interactive elements\n2. Add aria-label, aria-describedby, and role attributes\n3. Implement live regions for dynamic content\n4. Add descriptive alt text for images\n5. Ensure proper heading hierarchy\n6. Test with multiple screen readers",
+            "status": "pending",
+            "testStrategy": "Use NVDA and VoiceOver for testing, validate with aXe or WAVE tools"
+          },
+          {
+            "id": 2,
+            "title": "Implement Keyboard Navigation System",
+            "description": "Create a robust keyboard navigation system with proper focus management",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Implement focus trap for modals\n2. Add keyboard shortcuts for common actions\n3. Ensure logical tab order\n4. Create skip links\n5. Implement focus indicators\n6. Add keyboard shortcuts documentation",
+            "status": "pending",
+            "testStrategy": "Keyboard-only navigation testing, focus management validation"
+          },
+          {
+            "id": 3,
+            "title": "Create High Contrast Mode",
+            "description": "Implement high contrast mode with WCAG 2.1 AA compliant color ratios",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create high contrast color palette\n2. Implement theme toggle\n3. Add contrast mode CSS variables\n4. Ensure 4.5:1 contrast ratio for text\n5. Add focus indicators for high contrast\n6. Test with color blindness simulators",
+            "status": "pending",
+            "testStrategy": "Color contrast analysis, visual regression testing in high contrast mode"
+          },
+          {
+            "id": 4,
+            "title": "Implement Reduced Motion Features",
+            "description": "Add reduced motion support for animations and transitions",
+            "dependencies": [
+              2
+            ],
+            "details": "1. Detect prefers-reduced-motion setting\n2. Create alternative animations\n3. Implement motion toggle\n4. Add reduced motion CSS\n5. Modify transition durations\n6. Handle animation disabling",
+            "status": "pending",
+            "testStrategy": "Test with prefers-reduced-motion media query, animation timing validation"
+          },
+          {
+            "id": 5,
+            "title": "Implement Focus Management System",
+            "description": "Create comprehensive focus management system for dynamic content",
+            "dependencies": [
+              2,
+              4
+            ],
+            "details": "1. Implement focus restoration\n2. Add focus trapping for modals\n3. Create focus management utility\n4. Handle dynamic content focus\n5. Implement announcement system\n6. Add focus history management",
+            "status": "pending",
+            "testStrategy": "Focus management testing, modal interaction testing, dynamic content testing"
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Setup Deployment and CI/CD",
+        "description": "Configure deployment pipeline and continuous integration",
+        "details": "1. Setup Vercel deployment\n2. Configure GitHub Actions\n3. Implement automated testing\n4. Add deployment checks\n5. Setup monitoring alerts\n6. Create backup system",
+        "testStrategy": "1. Deployment validation\n2. CI pipeline tests\n3. Rollback testing\n4. Performance monitoring\n5. Security scanning",
+        "priority": "high",
+        "dependencies": [
+          1,
+          13
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Setup Vercel Deployment Configuration",
+            "description": "Configure Vercel project settings and deployment environment variables for production and preview deployments",
+            "dependencies": [],
+            "details": "1. Create Vercel project and link to GitHub repository\n2. Configure environment variables for different deployment environments\n3. Setup build settings and output directory\n4. Configure deployment branches for production and preview\n5. Implement custom deployment scripts if needed",
+            "status": "pending",
+            "testStrategy": "Verify deployment success across environments, test environment variable injection, validate build output"
+          },
+          {
+            "id": 2,
+            "title": "Implement GitHub Actions CI Pipeline",
+            "description": "Create GitHub Actions workflow for continuous integration including build, test, and lint processes",
+            "dependencies": [],
+            "details": "1. Create .github/workflows directory\n2. Configure build workflow with Node.js setup\n3. Add lint and type checking steps\n4. Setup test execution in CI environment\n5. Configure caching for node_modules\n6. Add status checks for pull requests",
+            "status": "pending",
+            "testStrategy": "Test workflow triggers, verify build artifacts, validate cache effectiveness"
+          },
+          {
+            "id": 3,
+            "title": "Setup Automated Testing Pipeline",
+            "description": "Configure automated testing infrastructure including unit, integration, and E2E tests in CI pipeline",
+            "dependencies": [
+              2
+            ],
+            "details": "1. Setup Jest configuration for unit tests\n2. Configure Cypress for E2E testing\n3. Implement test reporting and coverage collection\n4. Add test automation scripts to package.json\n5. Configure test database and mocking strategies",
+            "status": "pending",
+            "testStrategy": "Validate test coverage reports, verify parallel test execution, check test isolation"
+          },
+          {
+            "id": 4,
+            "title": "Implement Deployment Safety Checks",
+            "description": "Add pre-deployment verification steps and post-deployment health checks",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "1. Create deployment health check endpoints\n2. Implement smoke tests for critical paths\n3. Setup rollback triggers for failed deployments\n4. Configure deployment approval process\n5. Add performance baseline checks",
+            "status": "pending",
+            "testStrategy": "Test rollback functionality, verify health check accuracy, validate approval workflow"
+          },
+          {
+            "id": 5,
+            "title": "Configure Monitoring and Alerts",
+            "description": "Setup production monitoring, error tracking, and alert systems",
+            "dependencies": [
+              4
+            ],
+            "details": "1. Integrate error tracking service (e.g., Sentry)\n2. Setup performance monitoring\n3. Configure alert thresholds and notification channels\n4. Implement custom logging infrastructure\n5. Create backup automation scripts\n6. Setup uptime monitoring",
+            "status": "pending",
+            "testStrategy": "Verify alert triggers, test notification delivery, validate backup restoration process"
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Project Structure Refactoring and Component Cleanup",
+        "description": "Refactor project structure by removing deprecated calendar components, consolidating UI components, and organizing files by feature while establishing a proper component hierarchy for the linear timeline.",
+        "details": "1. Remove deprecated components:\n- Delete modern-calendar.tsx and linear-calendar.tsx\n- Remove associated styles and tests\n- Update any importing components\n\n2. Consolidate glassmorphic UI:\n- Move all glass-effect components to /ui/glass directory\n- Create unified GlassUI.tsx component library\n- Standardize glass effect properties and interfaces\n- Update component documentation\n\n3. Clean up duplicate code:\n- Audit and remove duplicate style definitions\n- Consolidate shared component logic\n- Create shared utility functions\n- Implement proper style inheritance\n\n4. Reorganize file structure:\n- Create feature directories: /timeline, /events, /ui\n- Move components to appropriate feature directories\n- Update import paths throughout codebase\n- Create index.ts files for clean exports\n\n5. Dependency cleanup:\n- Audit package.json for unused dependencies\n- Remove unnecessary packages\n- Update remaining package versions\n- Document required dependencies\n\n6. Timeline component hierarchy:\n- Create TimelineRoot.tsx as main container\n- Implement TimelineTrack.tsx for event rendering\n- Add TimelineControls.tsx for navigation\n- Create TimelineEvent.tsx for event display\n- Implement proper component composition",
+        "testStrategy": "1. Component removal verification:\n- Verify all deprecated components are removed\n- Check for any remaining references\n- Test affected components for regressions\n\n2. Style system validation:\n- Verify glass effect consistency\n- Test component styling across different contexts\n- Validate responsive behavior\n- Check for style conflicts\n\n3. Code quality checks:\n- Run linting on restructured code\n- Verify TypeScript compilation\n- Check bundle size impact\n- Run performance benchmarks\n\n4. Directory structure testing:\n- Verify all imports resolve correctly\n- Test build process with new structure\n- Validate development hot-reload\n- Check deployment builds\n\n5. Component hierarchy testing:\n- Unit test each timeline component\n- Test component integration\n- Verify event rendering\n- Validate timeline interactions\n\n6. Regression testing:\n- Run full test suite\n- Verify all features still work\n- Test application performance\n- Check browser compatibility",
+        "status": "pending",
+        "dependencies": [
+          1,
+          2
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Remove Deprecated Calendar Components",
+            "description": "Remove all deprecated calendar components and their associated files, ensuring clean removal without breaking dependencies",
+            "dependencies": [],
+            "details": "1. Delete modern-calendar.tsx and linear-calendar.tsx files\n2. Remove associated test files (*test.tsx, *spec.tsx)\n3. Delete corresponding style files (*.module.css, *.styles.ts)\n4. Search for and remove import statements in other components\n5. Update any components that were extending or using these calendar components\n6. Remove calendar-specific types and interfaces",
+            "status": "done",
+            "testStrategy": "1. Verify build succeeds after removal\n2. Check for any remaining file references\n3. Test components that previously depended on calendar components\n4. Run full test suite to ensure no regressions"
+          },
+          {
+            "id": 2,
+            "title": "Consolidate Glass UI Components",
+            "description": "Create a unified glass UI component library by consolidating all glass-effect components into a single directory with standardized interfaces",
+            "dependencies": [
+              1
+            ],
+            "details": "1. Create /ui/glass directory\n2. Move all glass-effect components to new directory\n3. Create GlassUI.tsx base component\n4. Define standard glass effect interfaces (IGlassProps)\n5. Implement shared glass styling utilities\n6. Update all glass component imports\n7. Create documentation for glass component usage",
+            "status": "pending",
+            "testStrategy": "1. Visual regression tests for glass effects\n2. Component prop validation tests\n3. Accessibility testing for glass components\n4. Performance testing for glass effects"
+          },
+          {
+            "id": 3,
+            "title": "Implement Timeline Component Hierarchy",
+            "description": "Create a proper component hierarchy for the linear timeline feature with clear parent-child relationships and component composition",
+            "dependencies": [
+              2
+            ],
+            "details": "1. Create TimelineRoot.tsx as main container\n2. Implement TimelineTrack.tsx for event rendering\n3. Add TimelineControls.tsx for navigation\n4. Create TimelineEvent.tsx for event display\n5. Setup proper component composition\n6. Implement event handling between components\n7. Create shared timeline context",
+            "status": "done",
+            "testStrategy": "1. Unit tests for each timeline component\n2. Integration tests for component interaction\n3. Event handling tests\n4. Context provider tests"
+          },
+          {
+            "id": 4,
+            "title": "Reorganize Project File Structure",
+            "description": "Restructure project files into feature-based directories with clear organization and proper import/export patterns",
+            "dependencies": [
+              3
+            ],
+            "details": "1. Create feature directories (/timeline, /events, /ui)\n2. Move components to appropriate directories\n3. Create index.ts files for each feature directory\n4. Update all import paths\n5. Implement barrel exports\n6. Update build configuration for new structure\n7. Document new project structure",
+            "status": "pending",
+            "testStrategy": "1. Verify all imports work correctly\n2. Test build process with new structure\n3. Validate circular dependency prevention\n4. Check for correct barrel exports"
+          },
+          {
+            "id": 5,
+            "title": "Clean Up Dependencies and Documentation",
+            "description": "Audit and clean up project dependencies, remove unused packages, and update documentation to reflect new structure",
+            "dependencies": [
+              4
+            ],
+            "details": "1. Audit package.json for unused dependencies\n2. Remove unnecessary packages\n3. Update remaining package versions\n4. Document required dependencies\n5. Update README.md with new project structure\n6. Create component documentation\n7. Update development guidelines",
+            "status": "pending",
+            "testStrategy": "1. Verify build with removed dependencies\n2. Test application functionality after package removal\n3. Validate documentation accuracy\n4. Check for broken documentation links"
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Implement Production Linear Calendar System",
+        "description": "Build the comprehensive linear calendar system integrating all PRD features including continuous timeline, semantic zooming, virtual scrolling, gestures, heat maps, and responsive design while meeting performance targets.",
+        "details": "1. Integration of Core Components:\n- Utilize TimelineContainer from Task 5 as foundation\n- Integrate glass morphism components from Task 2\n- Connect with Event Management System from Task 6\n- Implement accessibility features from Task 14\n- Incorporate Timeline Mini-map from Task 9\n\n2. Performance Optimization:\n- Implement TanStack Virtual for 60fps scrolling\n- Setup virtualization boundaries and overscan\n- Optimize render cycles with React.memo and useMemo\n- Implement progressive loading for heat maps\n- Setup performance monitoring with Web Vitals\n\n3. Gesture System Implementation:\n- Configure touch gesture handlers for mobile\n- Implement pinch-to-zoom with gesture recognition\n- Add momentum scrolling with physics-based animation\n- Setup touch event delegation for performance\n- Create gesture state management\n\n4. Semantic Zooming System:\n- Implement zoom level transitions\n- Create data aggregation for heat maps\n- Setup viewport calculations\n- Implement focus+context rendering\n- Add smooth animation transitions\n\n5. Mobile Optimization:\n- Implement responsive breakpoints\n- Create touch-specific interaction modes\n- Optimize touch target sizes\n- Setup mobile-specific gesture handling\n- Implement mobile performance optimizations\n\n6. Final Integration:\n- Connect all subsystems\n- Implement error boundaries\n- Setup performance monitoring\n- Create loading states\n- Implement error recovery",
+        "testStrategy": "1. Performance Testing:\n- Measure and verify <2s initial load time\n- Validate 60fps scrolling performance\n- Test interaction response times (<100ms)\n- Profile memory usage\n- Measure time-to-interactive\n\n2. Visual Regression Testing:\n- Capture screenshots at all zoom levels\n- Test responsive breakpoints\n- Verify heat map rendering\n- Validate animation smoothness\n- Test glass effect rendering\n\n3. Integration Testing:\n- Verify all subsystem connections\n- Test data flow between components\n- Validate event handling\n- Test state management\n- Verify real-time updates\n\n4. Mobile Testing:\n- Test touch interactions\n- Verify gesture recognition\n- Validate responsive layout\n- Test performance on various devices\n- Measure mobile load times\n\n5. Accessibility Testing:\n- Verify WCAG 2.1 AA compliance\n- Test screen reader compatibility\n- Validate keyboard navigation\n- Check focus management\n- Test high contrast mode\n\n6. Load Testing:\n- Test with large datasets\n- Verify memory management\n- Measure sustained performance\n- Test concurrent operations\n- Validate error handling",
+        "status": "pending",
+        "dependencies": [
+          2,
+          5,
+          6,
+          9,
+          10,
+          14
+        ],
+        "priority": "high",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-08-20T07:38:33.025Z",
+      "updated": "2025-08-20T18:27:21.821Z",
+      "description": "Tasks for master context"
+    }
+  },
+  "feature-linear-calendar": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Core Project Infrastructure",
+        "description": "Initialize project repository with basic structure, dependencies, and development environment setup",
+        "details": "1. Create React/TypeScript project using Vite\n2. Setup ESLint, Prettier, and testing framework (Jest + React Testing Library)\n3. Configure build pipeline and development scripts\n4. Setup project directory structure:\n   - src/\n     - components/\n     - hooks/\n     - utils/\n     - types/\n     - services/\n5. Initialize basic routing setup with React Router\n6. Create initial documentation structure",
+        "testStrategy": "1. Verify all development scripts work (build, test, lint)\n2. Ensure TypeScript compilation succeeds\n3. Validate test runner functionality\n4. Confirm proper loading of development environment",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Implement Core Data Model",
+        "description": "Create the fundamental data structures and types for calendar events and configuration",
+        "details": "1. Define TypeScript interfaces for:\n   - CalendarEvent (type, title, dates, metadata, status)\n   - EventType enum (personal, work, effort)\n   - EventStatus enum (tentative, confirmed, canceled)\n2. Implement data validation utilities\n3. Create event factory functions\n4. Setup local storage service for data persistence",
+        "testStrategy": "1. Unit tests for data model validation\n2. Test serialization/deserialization\n3. Verify type safety across interfaces\n4. Test storage service CRUD operations",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Develop Linear Year Grid Component",
+        "description": "Create the core visualization component showing the full year calendar view",
+        "details": "1. Implement YearGrid component with CSS Grid\n2. Create date calculation utilities\n3. Add month/week labels and day cells\n4. Implement responsive layout support\n5. Add basic styling for different event types\n6. Support both horizontal and vertical layouts",
+        "testStrategy": "1. Test date calculations and grid generation\n2. Verify responsive behavior\n3. Test layout switching\n4. Validate accessibility compliance",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Implement Event Rendering System",
+        "description": "Create system for rendering events on the year grid with proper positioning and styling",
+        "details": "1. Develop event positioning algorithm\n2. Implement event block rendering\n3. Add color coding by event type\n4. Handle event overlaps and clustering\n5. Add hover states and basic interactivity",
+        "testStrategy": "1. Test event positioning calculations\n2. Verify proper handling of overlapping events\n3. Test color coding logic\n4. Validate event rendering performance",
+        "priority": "high",
+        "dependencies": [
+          2,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Create Event Management UI",
+        "description": "Implement UI components for adding, editing, and managing calendar events",
+        "details": "1. Create EventModal component\n2. Implement event form with validation\n3. Add event type selection\n4. Implement date range picker\n5. Add metadata and tagging support\n6. Create event deletion confirmation dialog",
+        "testStrategy": "1. Test form validation\n2. Verify date picker functionality\n3. Test event CRUD operations\n4. Validate user input handling",
+        "priority": "high",
+        "dependencies": [
+          2,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Implement Filtering System",
+        "description": "Create filtering controls and logic for different view modes and event types",
+        "details": "1. Create FilterPanel component\n2. Implement filter toggles for event types\n3. Add view mode selection (static, personal, work, efforts)\n4. Create filtered view rendering logic\n5. Add filter state management",
+        "testStrategy": "1. Test filter combinations\n2. Verify view mode switching\n3. Test filter state persistence\n4. Validate filter performance",
+        "priority": "medium",
+        "dependencies": [
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Develop Drag and Drop Functionality",
+        "description": "Implement drag and drop support for event management",
+        "details": "1. Integrate React DnD library\n2. Implement drag handles for events\n3. Add drop zones in calendar grid\n4. Handle date recalculation on drop\n5. Add visual feedback during drag\n6. Implement undo/redo functionality",
+        "testStrategy": "1. Test drag and drop interactions\n2. Verify date updates after moving events\n3. Test undo/redo functionality\n4. Validate accessibility of drag/drop",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Create Reflection System",
+        "description": "Implement reflection prompts and workflow functionality",
+        "details": "1. Create ReflectionModal component\n2. Implement prompt system\n3. Add reflection triggers based on actions\n4. Create reflection data storage\n5. Add reflection history view",
+        "testStrategy": "1. Test prompt display logic\n2. Verify reflection data storage\n3. Test trigger conditions\n4. Validate reflection history functionality",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Print Mode",
+        "description": "Create printable version of the calendar with proper formatting",
+        "details": "1. Create print-specific CSS\n2. Implement page break logic\n3. Add print preview mode\n4. Handle different paper sizes (8.5x11, 11x17)\n5. Optimize layout for printing",
+        "testStrategy": "1. Test print layout rendering\n2. Verify page break handling\n3. Test different paper sizes\n4. Validate print quality",
+        "priority": "low",
+        "dependencies": [
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Develop Obsidian Plugin Integration",
+        "description": "Create Obsidian plugin for calendar integration",
+        "details": "1. Setup Obsidian plugin structure\n2. Implement file parsing for events\n3. Create plugin settings panel\n4. Add markdown syntax support\n5. Implement sync functionality",
+        "testStrategy": "1. Test plugin installation\n2. Verify file parsing accuracy\n3. Test settings persistence\n4. Validate sync functionality",
+        "priority": "medium",
+        "dependencies": [
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Implement External Calendar Integration",
+        "description": "Add support for Google Calendar and Notion integration",
+        "details": "1. Implement OAuth authentication\n2. Create Google Calendar API service\n3. Implement Notion API integration\n4. Add sync configuration UI\n5. Create background sync service",
+        "testStrategy": "1. Test authentication flow\n2. Verify calendar data sync\n3. Test error handling\n4. Validate sync conflicts resolution",
+        "priority": "low",
+        "dependencies": [
+          2,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Create Collaboration Features",
+        "description": "Implement team collaboration functionality",
+        "details": "1. Add user management system\n2. Implement shared calendar views\n3. Create commenting system\n4. Add real-time updates\n5. Implement permission system",
+        "testStrategy": "1. Test multi-user interactions\n2. Verify comment functionality\n3. Test real-time updates\n4. Validate permission enforcement",
+        "priority": "low",
+        "dependencies": [
+          5,
+          11
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-08-20T18:18:04.698Z",
+      "updated": "2025-08-20T18:18:04.698Z",
+      "description": "Tasks for feature-linear-calendar context"
+    }
+  }
+}
