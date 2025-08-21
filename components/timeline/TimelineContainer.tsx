@@ -16,6 +16,7 @@ export interface TimelineConfig {
   enableGestures?: boolean;
   enableKeyboardNavigation?: boolean;
   showHeatMap?: boolean;
+  // Deprecated - kept for backwards compatibility
   glassmorphic?: boolean;
   monthRowHeight?: number;
   dayColumnWidth?: number;
@@ -100,7 +101,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
     enableGestures = true,
     enableKeyboardNavigation = true,
     showHeatMap = true,
-    glassmorphic = true,
+    glassmorphic = false, // Disabled by default for better performance
     monthRowHeight = 120,
     minDayWidth = 4,
     maxDayWidth = 300
@@ -255,21 +256,21 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
         className={cn(
           'relative flex flex-col items-center justify-start transition-all duration-200',
           'border-r border-border',
-          'hover:bg-muted/50 cursor-pointer',
+          'hover:bg-accent/50 cursor-pointer transition-colors',
           'hover:shadow-lg',
           day.isToday && [
             'bg-blue-500/20',
             'border-blue-500/30',
             'shadow-lg'
           ],
-          day.isWeekend && 'bg-muted/5',
+          day.isWeekend && 'bg-muted/10',
           !isCurrentMonth && 'opacity-40'
         )}
         style={{
           width: `${dayColumnWidth}px`,
           minWidth: `${dayColumnWidth}px`,
           backgroundColor: showHeat ? getHeatColor(day.heat || 0) : undefined,
-          backdropFilter: glassmorphic ? 'blur(4px)' : undefined
+          backdropFilter: glassmorphic ? 'blur(2px)' : undefined // Reduced blur for performance
         }}
         onClick={() => onDayClick?.(day.date)}
         onMouseEnter={() => {
@@ -361,7 +362,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
       className={cn(
         'relative w-full overflow-hidden rounded-2xl',
         glassmorphic && [
-          'backdrop-blur-2xl',
+          'backdrop-blur-sm', // Reduced blur for performance
           'bg-gradient-to-br from-muted/20 to-muted/5',
           'border border-border',
           'shadow-lg',
@@ -385,10 +386,10 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
           }}
           className={cn(
             'p-2 rounded-xl transition-all duration-200',
-            'bg-muted/10 backdrop-blur-xl',
+            'bg-muted/20 backdrop-blur-sm',
             'border border-border',
             'shadow-sm',
-            'hover:bg-muted/20 hover:border-border',
+            'hover:bg-muted/30 hover:border-border transition-all',
             'hover:shadow-md',
             'active:scale-95',
             'disabled:opacity-50 disabled:cursor-not-allowed'
@@ -409,10 +410,10 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
           }}
           className={cn(
             'p-2 rounded-xl transition-all duration-200',
-            'bg-muted/10 backdrop-blur-xl',
+            'bg-muted/20 backdrop-blur-sm',
             'border border-border',
             'shadow-sm',
-            'hover:bg-muted/20 hover:border-border',
+            'hover:bg-muted/30 hover:border-border transition-all',
             'hover:shadow-md',
             'active:scale-95',
             'disabled:opacity-50 disabled:cursor-not-allowed'
@@ -429,8 +430,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
       <div className={cn(
         'sticky top-0 z-10 border-b',
         glassmorphic && [
-          'bg-gradient-to-r from-white/15 via-white/10 to-white/15',
-          'backdrop-blur-xl',
+          'bg-gradient-to-r from-muted/15 via-muted/10 to-muted/15',
+          'backdrop-blur-sm', // Reduced blur for performance
           'border-white/30',
           'shadow-[0_2px_12px_0_rgba(31,38,135,0.15)]'
         ]
@@ -459,7 +460,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
         className={cn(
           'overflow-x-auto overflow-y-hidden',
           'scrollbar-thin scrollbar-thumb-gray-400/50 scrollbar-track-transparent',
-          glassmorphic && 'scrollbar-thumb-white/30'
+          glassmorphic && 'scrollbar-thumb-muted/30'
         )}
         style={{ height: `${monthRowHeight}px` }}
       >
@@ -493,7 +494,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
         <div className={cn(
           'absolute bottom-4 left-4 z-20 p-3 rounded-xl',
           'bg-card/90',
-          'backdrop-blur-xl',
+          'backdrop-blur-sm', // Reduced blur for performance
           'border border-border',
           'shadow-lg',
           'text-foreground text-sm font-medium'

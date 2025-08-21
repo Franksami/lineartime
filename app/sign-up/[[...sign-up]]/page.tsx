@@ -1,26 +1,21 @@
 import { SignUp } from "@clerk/nextjs";
-import { GlassCard } from "@/components/glass";
+import { Card } from "@/components/ui/card";
 
 export default function SignUpPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-glass-secondary/10 via-transparent to-glass-accent/10" />
-        <div className="absolute top-1/3 right-1/3 w-96 h-96 rounded-full bg-glass-secondary/20 blur-3xl animate-liquid-float" />
-        <div className="absolute bottom-1/3 left-1/3 w-96 h-96 rounded-full bg-glass-accent/20 blur-3xl animate-liquid-float" style={{ animationDelay: '7s' }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+        <div className="absolute top-1/3 right-1/3 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute bottom-1/3 left-1/3 w-96 h-96 rounded-full bg-accent/10 blur-3xl" />
       </div>
       
-      <GlassCard 
-        className="p-8 max-w-md w-full"
-        variant="heavy"
-        liquid
-        aurora
-      >
+      <Card className="p-8 max-w-md w-full bg-card/95 backdrop-blur-sm border-border shadow-2xl transition-all hover:shadow-3xl">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-glass-secondary to-glass-accent bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Get Started
           </h1>
-          <p className="text-oklch-gray-600">
+          <p className="text-muted-foreground">
             Create your LinearTime account
           </p>
         </div>
@@ -32,15 +27,15 @@ export default function SignUpPage() {
               card: "bg-transparent shadow-none",
               headerTitle: "hidden",
               headerSubtitle: "hidden",
-              formButtonPrimary: "glass bg-glass-accent/20 hover:bg-glass-accent/30 border-glass-accent/30",
-              formFieldInput: "glass-light",
-              footerActionLink: "text-glass-accent hover:text-glass-accent/80",
-              dividerLine: "bg-glass-border/30",
-              dividerText: "text-oklch-gray-600",
-              socialButtonsBlockButton: "glass hover:glass-heavy border-glass-border/30",
+              formButtonPrimary: "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all",
+              formFieldInput: "bg-background border-input",
+              footerActionLink: "text-primary hover:text-primary/80",
+              dividerLine: "bg-border",
+              dividerText: "text-muted-foreground",
+              socialButtonsBlockButton: "bg-card hover:bg-accent border-border shadow-md hover:shadow-lg transition-all",
               socialButtonsBlockButtonText: "font-medium",
-              identityPreviewEditButton: "text-glass-accent hover:text-glass-accent/80",
-              formFieldLabel: "text-oklch-gray-700",
+              identityPreviewEditButton: "text-primary hover:text-primary/80",
+              formFieldLabel: "text-foreground",
             },
             layout: {
               socialButtonsPlacement: "top",
@@ -51,7 +46,7 @@ export default function SignUpPage() {
           path="/sign-up"
           signInUrl="/sign-in"
         />
-      </GlassCard>
+      </Card>
     </div>
   );
 }

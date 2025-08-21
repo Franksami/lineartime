@@ -136,12 +136,12 @@ export function EventModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
         className={cn(
-          "sm:max-w-[600px] bg-gradient-to-br from-white/95 to-white/85 dark:from-gray-900/95 dark:to-gray-900/85 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] overflow-visible",
+          "sm:max-w-[600px] bg-card/95 backdrop-blur-sm border-border shadow-2xl overflow-visible",
           prefersReducedMotion && "transition-none"
         )}
         aria-labelledby="event-dialog-title"
         aria-describedby="event-dialog-description">
-        <DialogHeader className="bg-gradient-to-r from-white/50 to-white/30 dark:from-gray-800/50 dark:to-gray-800/30 backdrop-blur-xl rounded-t-lg p-6 -m-6 mb-4 border-b border-white/20 dark:border-white/10">
+        <DialogHeader className="bg-muted/50 backdrop-blur-sm rounded-t-lg p-6 -m-6 mb-4 border-b border-border">
           <DialogTitle id="event-dialog-title" className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
             {event ? 'Edit Event' : 'Create New Event'}
           </DialogTitle>
@@ -161,7 +161,7 @@ export function EventModal({
               id="title"
               value={formData.title || ''}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-white/30 dark:border-white/10 focus:bg-white/70 dark:focus:bg-gray-800/70 transition-all"
+              className="bg-background/90 backdrop-blur-sm border-input focus:bg-background transition-all"
               placeholder="Enter event title..."
               aria-label="Event title"
               aria-required="true"
@@ -184,10 +184,10 @@ export function EventModal({
                   setFormData({ ...formData, category: value })
                 }
               >
-                <SelectTrigger className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-white/30 dark:border-white/10">
+                <SelectTrigger className="bg-background/90 backdrop-blur-sm border-input">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border-white/30 dark:border-white/10">
+                <SelectContent className="bg-popover/95 backdrop-blur-sm border-border">
                   <SelectItem value="personal">
                     <span className="flex items-center">
                       <span className={cn("w-3 h-3 rounded-full mr-2 shadow-sm", categoryColors.personal)} />
@@ -224,7 +224,7 @@ export function EventModal({
                 </div>
                 All Day Event
               </Label>
-              <div className="flex items-center space-x-2 h-10 px-3 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/30 dark:border-white/10 rounded-md">
+              <div className="flex items-center space-x-2 h-10 px-3 bg-background/90 backdrop-blur-sm border border-input rounded-md">
                 <Switch
                   id="all-day"
                   checked={formData.allDay || false}
@@ -252,7 +252,7 @@ export function EventModal({
                   <Button
                     variant="outline"
                     className={cn(
-                      "justify-start text-left font-normal bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-white/30 dark:border-white/10 hover:bg-white/70 dark:hover:bg-gray-800/70",
+                      "justify-start text-left font-normal bg-background/90 backdrop-blur-sm border-input hover:bg-accent hover:text-accent-foreground",
                       !formData.startDate && "text-muted-foreground"
                     )}
                   >
@@ -260,7 +260,7 @@ export function EventModal({
                     {formData.startDate ? format(formData.startDate, "PPP") : "Pick a date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border-white/30 dark:border-white/10">
+                <PopoverContent className="w-auto p-0 bg-popover/95 backdrop-blur-sm border-border">
                   <Calendar
                     mode="single"
                     selected={formData.startDate}
@@ -284,7 +284,7 @@ export function EventModal({
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left font-normal bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-white/30 dark:border-white/10 hover:bg-white/70 dark:hover:bg-gray-800/70",
+                      "w-full justify-start text-left font-normal bg-background/90 backdrop-blur-sm border-input hover:bg-accent hover:text-accent-foreground",
                       !formData.endDate && "text-muted-foreground"
                     )}
                   >
@@ -292,7 +292,7 @@ export function EventModal({
                     {formData.endDate ? format(formData.endDate, "PPP") : "Pick a date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border-white/30 dark:border-white/10">
+                <PopoverContent className="w-auto p-0 bg-popover/95 backdrop-blur-sm border-border">
                   <Calendar
                     mode="single"
                     selected={formData.endDate}
@@ -317,7 +317,7 @@ export function EventModal({
               id="location"
               value={formData.location || ''}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-white/30 dark:border-white/10 focus:bg-white/70 dark:focus:bg-gray-800/70 transition-all"
+              className="bg-background/90 backdrop-blur-sm border-input focus:bg-background transition-all"
               placeholder="Add location (optional)"
             />
           </div>
@@ -334,7 +334,7 @@ export function EventModal({
               id="description"
               value={formData.description || ''}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-white/30 dark:border-white/10 focus:bg-white/70 dark:focus:bg-gray-800/70 transition-all resize-none"
+              className="bg-background/90 backdrop-blur-sm border-input focus:bg-background transition-all resize-none"
               placeholder="Add description (optional)"
               rows={3}
             />
@@ -342,7 +342,7 @@ export function EventModal({
 
           {/* Conflict Warning */}
           {conflicts.length > 0 && (
-            <Alert className="bg-red-500/10 border-red-500/30 backdrop-blur-sm">
+            <Alert className="bg-destructive/10 border-destructive/30">
               <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
               <AlertDescription className="text-red-900 dark:text-red-100">
                 <strong>Schedule Conflict Detected</strong>
@@ -359,7 +359,7 @@ export function EventModal({
           )}
         </div>
 
-        <DialogFooter className="bg-gradient-to-r from-white/30 to-white/20 dark:from-gray-800/30 dark:to-gray-800/20 backdrop-blur-xl rounded-b-lg p-6 -m-6 mt-4 border-t border-white/20 dark:border-white/10">
+        <DialogFooter className="bg-muted/30 backdrop-blur-sm rounded-b-lg p-6 -m-6 mt-4 border-t border-border">
           {event && (
             <Button
               variant="ghost"
@@ -373,7 +373,7 @@ export function EventModal({
           <Button 
             variant="ghost" 
             onClick={() => onOpenChange(false)}
-            className="hover:bg-white/50 dark:hover:bg-gray-800/50"
+            className="hover:bg-accent hover:text-accent-foreground"
           >
             Cancel
           </Button>
