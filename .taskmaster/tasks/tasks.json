@@ -145,7 +145,7 @@
         "dependencies": [
           1
         ],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -197,7 +197,7 @@
               4
             ],
             "details": "1. Enable MFA in Clerk dashboard\n2. Implement MFA setup flow\n3. Add backup codes generation\n4. Create MFA verification screens\n5. Implement security event logging",
-            "status": "in-progress",
+            "status": "done",
             "testStrategy": "Test MFA enrollment, verification, and recovery flows"
           }
         ]
@@ -254,7 +254,7 @@
               3
             ],
             "details": "Create subscription functions for calendar updates, implement WebSocket handlers, setup client-side subscription hooks, and handle connection management",
-            "status": "pending",
+            "status": "in-progress",
             "testStrategy": "Test real-time updates with multiple clients and verify data consistency"
           },
           {
@@ -1712,7 +1712,7 @@
     ],
     "metadata": {
       "created": "2025-08-20T07:38:33.025Z",
-      "updated": "2025-08-21T16:32:19.371Z",
+      "updated": "2025-08-21T16:45:31.806Z",
       "description": "Tasks for master context"
     }
   },
