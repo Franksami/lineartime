@@ -6,6 +6,7 @@ import { TimelineContainer } from "@/components/timeline/TimelineContainer";
 import { EventManagement } from "@/components/calendar/EventManagement";
 import { ViewSwitcher, CalendarView } from "@/components/dashboard/ViewSwitcher";
 import { useOfflineEvents } from "@/hooks/useIndexedDB";
+import { HighContrastToggle } from "@/components/ui/high-contrast-toggle";
 
 export default function Page() {
   const currentYear = new Date().getFullYear();
@@ -39,10 +40,13 @@ export default function Page() {
                 Life is bigger than a week
               </p>
             </div>
-            <ViewSwitcher 
-              currentView={currentView} 
-              onViewChange={setCurrentView}
-            />
+            <div className="flex items-center gap-2">
+              <HighContrastToggle />
+              <ViewSwitcher 
+                currentView={currentView} 
+                onViewChange={setCurrentView}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -16,6 +16,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
 import type { Event, EventCategory } from "@/types/calendar"
+import { useReducedMotion } from "@/hooks/useReducedMotion"
+import { announceToScreenReader } from "@/lib/accessibility"
 
 interface DateRange {
   from: Date
@@ -43,6 +45,9 @@ export function EventModal({
   onDelete,
   checkOverlaps
 }: EventModalProps) {
+  const prefersReducedMotion = useReducedMotion()
+  const titleInputRef = React.useRef<HTMLInputElement>(null)
+  
   const [formData, setFormData] = React.useState<Partial<Event>>({
     title: '',
     category: 'personal',
@@ -79,6 +84,17 @@ export function EventModal({
       }))
     }
   }, [event, selectedDate, selectedRange])
+
+  // Focus management
+  React.useEffect(() => {
+    if (open && titleInputRef.current) {
+      // Small delay to ensure modal is fully rendered
+      setTimeout(() => {
+        titleInputRef.current?.focus()
+        announceToScreenReader(event ? 'Edit event dialog opened' : 'Create event dialog opened')
+      }, 100)
+    }
+  }, [open, event])
 
   const handleSave = () => {
     if (formData.title && formData.startDate && formData.endDate) {
@@ -118,9 +134,15 @@ export function EventModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] bg-gradient-to-br from-white/95 to-white/85 dark:from-gray-900/95 dark:to-gray-900/85 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] overflow-visible">
+      <DialogContent 
+        className={cn(
+          "sm:max-w-[600px] bg-gradient-to-br from-white/95 to-white/85 dark:from-gray-900/95 dark:to-gray-900/85 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] overflow-visible",
+          prefersReducedMotion && "transition-none"
+        )}
+        aria-labelledby="event-dialog-title"
+        aria-describedby="event-dialog-description">
         <DialogHeader className="bg-gradient-to-r from-white/50 to-white/30 dark:from-gray-800/50 dark:to-gray-800/30 backdrop-blur-xl rounded-t-lg p-6 -m-6 mb-4 border-b border-white/20 dark:border-white/10">
-          <DialogTitle className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+          <DialogTitle id="event-dialog-title" className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
             {event ? 'Edit Event' : 'Create New Event'}
           </DialogTitle>
         </DialogHeader>
@@ -135,11 +157,14 @@ export function EventModal({
               Event Title
             </Label>
             <Input
+              ref={titleInputRef}
               id="title"
               value={formData.title || ''}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-white/30 dark:border-white/10 focus:bg-white/70 dark:focus:bg-gray-800/70 transition-all"
               placeholder="Enter event title..."
+              aria-label="Event title"
+              aria-required="true"
             />
           </div>
 

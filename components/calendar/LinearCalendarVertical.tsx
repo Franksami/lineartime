@@ -12,6 +12,8 @@ import { ZoomControls } from "./ZoomControls"
 import { DayDetailView } from "./DayDetailView"
 import { useLinearCalendar } from "@/hooks/useLinearCalendar"
 import type { Event } from "@/types/calendar"
+import { getDayAriaLabel, getMonthAriaLabel, announceToScreenReader } from "@/lib/accessibility"
+import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation"
 
 interface LinearCalendarVerticalProps {
   initialYear?: number
@@ -123,57 +125,98 @@ export function LinearCalendarVertical({
     return () => document.removeEventListener('mouseup', handleMouseUp)
   }, [isSelecting, endSelection])
 
-  // Keyboard navigation
-  React.useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!selectedDate || showEventModal || showReflectionModal) return
-      
-      let newDate: Date | null = null
-      
-      switch (e.key) {
-        case 'ArrowLeft':
-          e.preventDefault()
-          if (e.shiftKey) {
-            setYear(year - 1)
-          } else {
-            newDate = new Date(selectedDate)
-            newDate.setDate(selectedDate.getDate() - 1)
-          }
-          break
-        case 'ArrowRight':
-          e.preventDefault()
-          if (e.shiftKey) {
-            setYear(year + 1)
-          } else {
-            newDate = new Date(selectedDate)
-            newDate.setDate(selectedDate.getDate() + 1)
-          }
-          break
-        case 'ArrowUp':
-          e.preventDefault()
-          newDate = new Date(selectedDate)
-          newDate.setMonth(selectedDate.getMonth() - 1)
-          break
-        case 'ArrowDown':
-          e.preventDefault()
-          newDate = new Date(selectedDate)
-          newDate.setMonth(selectedDate.getMonth() + 1)
-          break
-        case 'Enter':
-        case ' ':
-          e.preventDefault()
-          setShowEventModal(true)
-          break
+  // Enhanced keyboard navigation using custom hook
+  useKeyboardNavigation({
+    enabled: !showEventModal && !showReflectionModal,
+    onArrowLeft: React.useCallback(() => {
+      if (selectedDate) {
+        const newDate = new Date(selectedDate)
+        newDate.setDate(selectedDate.getDate() - 1)
+        if (newDate.getFullYear() === year) {
+          handleDateSelect(newDate)
+          announceToScreenReader(`Selected ${newDate.toLocaleDateString()}`)
+        }
       }
-      
-      if (newDate && newDate.getFullYear() === year) {
-        handleDateSelect(newDate)
+    }, [selectedDate, year, handleDateSelect]),
+    onArrowRight: React.useCallback(() => {
+      if (selectedDate) {
+        const newDate = new Date(selectedDate)
+        newDate.setDate(selectedDate.getDate() + 1)
+        if (newDate.getFullYear() === year) {
+          handleDateSelect(newDate)
+          announceToScreenReader(`Selected ${newDate.toLocaleDateString()}`)
+        }
       }
-    }
-    
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [selectedDate, year, handleDateSelect, setShowEventModal, showEventModal, showReflectionModal, setYear])
+    }, [selectedDate, year, handleDateSelect]),
+    onArrowUp: React.useCallback(() => {
+      if (selectedDate) {
+        const newDate = new Date(selectedDate)
+        newDate.setDate(selectedDate.getDate() - 7)
+        if (newDate.getFullYear() === year) {
+          handleDateSelect(newDate)
+          announceToScreenReader(`Selected ${newDate.toLocaleDateString()}`)
+        }
+      }
+    }, [selectedDate, year, handleDateSelect]),
+    onArrowDown: React.useCallback(() => {
+      if (selectedDate) {
+        const newDate = new Date(selectedDate)
+        newDate.setDate(selectedDate.getDate() + 7)
+        if (newDate.getFullYear() === year) {
+          handleDateSelect(newDate)
+          announceToScreenReader(`Selected ${newDate.toLocaleDateString()}`)
+        }
+      }
+    }, [selectedDate, year, handleDateSelect]),
+    onEnter: React.useCallback(() => {
+      if (selectedDate) {
+        setShowEventModal(true)
+        announceToScreenReader('Event creation dialog opened')
+      }
+    }, [selectedDate, setShowEventModal]),
+    onSpace: React.useCallback(() => {
+      if (selectedDate) {
+        setShowEventModal(true)
+        announceToScreenReader('Event creation dialog opened')
+      }
+    }, [selectedDate, setShowEventModal]),
+    onEscape: React.useCallback(() => {
+      if (showDayDetail) {
+        setShowDayDetail(false)
+        announceToScreenReader('Day detail view closed')
+      }
+    }, [showDayDetail]),
+    onHome: React.useCallback(() => {
+      const firstDay = new Date(year, 0, 1)
+      handleDateSelect(firstDay)
+      announceToScreenReader(`Navigated to January 1, ${year}`)
+    }, [year, handleDateSelect]),
+    onEnd: React.useCallback(() => {
+      const lastDay = new Date(year, 11, 31)
+      handleDateSelect(lastDay)
+      announceToScreenReader(`Navigated to December 31, ${year}`)
+    }, [year, handleDateSelect]),
+    onPageUp: React.useCallback(() => {
+      if (selectedDate) {
+        const newDate = new Date(selectedDate)
+        newDate.setMonth(selectedDate.getMonth() - 1)
+        if (newDate.getFullYear() === year) {
+          handleDateSelect(newDate)
+          announceToScreenReader(`Navigated to ${newDate.toLocaleDateString()}`)
+        }
+      }
+    }, [selectedDate, year, handleDateSelect]),
+    onPageDown: React.useCallback(() => {
+      if (selectedDate) {
+        const newDate = new Date(selectedDate)
+        newDate.setMonth(selectedDate.getMonth() + 1)
+        if (newDate.getFullYear() === year) {
+          handleDateSelect(newDate)
+          announceToScreenReader(`Navigated to ${newDate.toLocaleDateString()}`)
+        }
+      }
+    }, [selectedDate, year, handleDateSelect])
+  })
 
   // Zoom controls
   const handleZoomIn = React.useCallback(() => {
@@ -245,9 +288,15 @@ export function LinearCalendarVertical({
   const weekHeaders = generateWeekHeaders()
 
   return (
-    <div className={cn("flex flex-col h-full overflow-hidden", className)}>
+    <div 
+      className={cn("flex flex-col h-full overflow-hidden", className)}
+      role="application"
+      aria-label="Linear Calendar for year navigation and event management">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 h-10 border-b bg-background border-border shrink-0">
+      <div 
+        className="flex items-center justify-between px-4 h-10 border-b bg-background border-border shrink-0"
+        role="toolbar"
+        aria-label="Calendar navigation and controls">
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
@@ -255,8 +304,9 @@ export function LinearCalendarVertical({
             onClick={() => setYear(year - 1)}
             className="h-7 w-7 p-0"
             title="Previous Year (Shift + ←)"
+            aria-label="Go to previous year"
           >
-            <ChevronLeft className="h-3 w-3" />
+            <ChevronLeft className="h-3 w-3" aria-hidden="true" />
           </Button>
           <h1 className="text-lg font-bold min-w-[60px] text-center">
             {year} Linear Calendar
@@ -267,8 +317,9 @@ export function LinearCalendarVertical({
             onClick={() => setYear(year + 1)}
             className="h-7 w-7 p-0"
             title="Next Year (Shift + →)"
+            aria-label="Go to next year"
           >
-            <ChevronRight className="h-3 w-3" />
+            <ChevronRight className="h-3 w-3" aria-hidden="true" />
           </Button>
           <Button
             variant="ghost"
@@ -277,6 +328,7 @@ export function LinearCalendarVertical({
               setYear(new Date().getFullYear())
             }}
             className="text-xs text-muted-foreground hover:text-foreground px-2 h-7"
+            aria-label="Go to current year"
           >
             Today
           </Button>
@@ -288,6 +340,8 @@ export function LinearCalendarVertical({
             size="sm"
             onClick={() => setShowFilters(!showFilters)}
             className="h-7 text-xs px-2"
+            aria-label="Toggle filter panel"
+            aria-expanded={showFilters}
           >
             Filters
           </Button>
@@ -295,6 +349,7 @@ export function LinearCalendarVertical({
             size="sm"
             onClick={() => setShowReflectionModal(true)}
             className="h-7 text-xs px-2"
+            aria-label="Open reflection modal"
           >
             Reflect
           </Button>
@@ -344,9 +399,15 @@ export function LinearCalendarVertical({
                 <div 
                   key={monthData.month} 
                   className="flex-1 grid grid-cols-[auto_1fr_auto] border-b min-h-0"
+                  role="row"
+                  aria-label={getMonthAriaLabel(monthData.month, year)}
                 >
                   {/* Left Month Label */}
-                  <div className="w-12 flex items-center justify-center font-medium text-sm bg-background sticky left-0 z-10 border-r">
+                  <div 
+                    className="w-12 flex items-center justify-center font-medium text-sm bg-background sticky left-0 z-10 border-r"
+                    role="rowheader"
+                    aria-label={monthData.name}
+                  >
                     {monthData.name}
                   </div>
                   
@@ -388,6 +449,11 @@ export function LinearCalendarVertical({
                       return (
                         <button
                           key={cell.key}
+                          aria-label={getDayAriaLabel(date, dateEvents.length)}
+                          aria-selected={isSelected}
+                          aria-current={todayCell ? 'date' : undefined}
+                          role="gridcell"
+                          tabIndex={isSelected || todayCell ? 0 : -1}
                           className={cn(
                             "relative flex items-center justify-center border-r border-border transition-all",
                             "hover:bg-muted/50 hover:z-10",

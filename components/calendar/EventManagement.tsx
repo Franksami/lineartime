@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { getEventAriaLabel, announceToScreenReader } from '@/lib/accessibility'
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCenter } from '@dnd-kit/core'
 import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useSortable } from '@dnd-kit/sortable'
@@ -234,7 +235,7 @@ export function EventManagement({ userId }: { userId: string }) {
   const activeEvent = activeId ? filteredEvents.find(e => e.id === activeId) : null
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" role="region" aria-label="Event Management">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -249,8 +250,10 @@ export function EventManagement({ userId }: { userId: string }) {
           onClick={() => {
             setSelectedEvent(null)
             setModalOpen(true)
+            announceToScreenReader('New event dialog opened')
           }}
           className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg shadow-blue-500/25"
+          aria-label="Create new event"
         >
           <Plus className="h-4 w-4 mr-2" />
           New Event
@@ -267,6 +270,7 @@ export function EventManagement({ userId }: { userId: string }) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-9 bg-background border-border"
+              aria-label="Search events"
             />
           </div>
         </div>

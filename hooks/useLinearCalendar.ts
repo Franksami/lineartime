@@ -1,13 +1,22 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import type { Event, FilterState } from '@/types/calendar'
+import { useOfflineEvents } from './useIndexedDB'
 
 interface CalendarRange {
   from: Date
   to: Date
 }
 
-export function useLinearCalendar(year: number) {
-  const [events, setEvents] = useState<Event[]>([])
+export function useLinearCalendar(year: number, userId: string = 'default-user') {
+  // Use IndexedDB for persistent storage
+  const { 
+    events: dbEvents, 
+    createEvent: dbCreateEvent,
+    updateEvent: dbUpdateEvent,
+    deleteEvent: dbDeleteEvent,
+    loading: dbLoading
+  } = useOfflineEvents(userId)
+
   const [filters, setFilters] = useState<FilterState>({
     personal: true,
     work: true,
@@ -24,33 +33,32 @@ export function useLinearCalendar(year: number) {
   const [showReflectionModal, setShowReflectionModal] = useState(false)
   const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
 
-  // Load events from localStorage
-  useEffect(() => {
-    const savedEvents = localStorage.getItem(`events-${year}`)
-    if (savedEvents) {
-      try {
-        const parsed = JSON.parse(savedEvents)
-        setEvents(parsed.map((e: Event) => ({
-          ...e,
-          startDate: new Date(e.startDate),
-          endDate: new Date(e.endDate)
-        })))
-      } catch (error) {
-        console.error('Failed to load events:', error)
-        setEvents(generateSampleEvents(year))
-      }
-    } else {
-      // Load sample events
-      setEvents(generateSampleEvents(year))
-    }
-  }, [year])
-
-  // Save events to localStorage
-  useEffect(() => {
-    if (events.length > 0) {
-      localStorage.setItem(`events-${year}`, JSON.stringify(events))
-    }
-  }, [events, year])
+  // Convert IndexedDB events to calendar Event type and filter by year
+  const events = useMemo(() => {
+    if (!dbEvents) return []
+    
+    const yearStart = new Date(year, 0, 1).getTime()
+    const yearEnd = new Date(year, 11, 31, 23, 59, 59).getTime()
+    
+    return dbEvents
+      .filter(e => {
+        const eventStart = e.startTime
+        const eventEnd = e.endTime || e.startTime
+        // Include events that overlap with this year
+        return (eventStart <= yearEnd && eventEnd >= yearStart)
+      })
+      .map(e => ({
+        id: e.convexId || String(e.id),
+        title: e.title,
+        startDate: new Date(e.startTime),
+        endDate: e.endTime ? new Date(e.endTime) : new Date(e.startTime),
+        category: (e.categoryId || 'personal') as any,
+        description: e.description,
+        location: e.location,
+        allDay: e.allDay,
+        recurrence: e.recurrence
+      }))
+  }, [dbEvents, year])
 
   const handleDateSelect = useCallback((date: Date) => {
     setSelectedDate(date)
@@ -66,27 +74,48 @@ export function useLinearCalendar(year: number) {
     setShowEventModal(true)
   }, [])
 
-  const handleEventSave = useCallback((event: Partial<Event>) => {
+  const handleEventSave = useCallback(async (event: Partial<Event>) => {
     if (event.id) {
-      // Update existing event
-      setEvents(prev => prev.map(e => e.id === event.id ? { ...e, ...event } as Event : e))
-    } else {
-      // Add new event
-      const newEvent: Event = {
-        id: crypto.randomUUID(),
-        title: event.title || '',
-        startDate: event.startDate || new Date(),
-        endDate: event.endDate || new Date(),
-        category: event.category || 'personal',
-        description: event.description
+      // Update existing event in IndexedDB
+      const dbEvent = dbEvents?.find(e => e.convexId === event.id || String(e.id) === event.id)
+      if (dbEvent?.id) {
+        await dbUpdateEvent(dbEvent.id, {
+          title: event.title!,
+          description: event.description,
+          startTime: event.startDate!.getTime(),
+          endTime: event.endDate?.getTime(),
+          categoryId: event.category,
+          location: event.location,
+          allDay: event.allDay,
+          recurrence: event.recurrence as any
+        })
       }
-      setEvents(prev => [...prev, newEvent])
+    } else {
+      // Add new event to IndexedDB
+      await dbCreateEvent({
+        userId,
+        title: event.title || '',
+        description: event.description,
+        startTime: (event.startDate || new Date()).getTime(),
+        endTime: (event.endDate || event.startDate || new Date()).getTime(),
+        categoryId: event.category || 'personal',
+        location: event.location,
+        allDay: event.allDay,
+        recurrence: event.recurrence as any,
+        syncStatus: 'local',
+        lastModified: Date.now(),
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      })
     }
-  }, [])
+  }, [dbEvents, dbCreateEvent, dbUpdateEvent, userId])
 
-  const handleEventDelete = useCallback((id: string) => {
-    setEvents(prev => prev.filter(e => e.id !== id))
-  }, [])
+  const handleEventDelete = useCallback(async (id: string) => {
+    const dbEvent = dbEvents?.find(e => e.convexId === id || String(e.id) === id)
+    if (dbEvent?.id) {
+      await dbDeleteEvent(dbEvent.id)
+    }
+  }, [dbEvents, dbDeleteEvent])
 
   const handleFilterChange = useCallback((newFilters: FilterState | { viewOptions: { compactMode: boolean } }) => {
     if ('viewOptions' in newFilters && newFilters.viewOptions) {
@@ -189,7 +218,8 @@ export function useLinearCalendar(year: number) {
     updateSelection,
     endSelection,
     scrollToToday,
-    checkForOverlaps
+    checkForOverlaps,
+    loading: dbLoading
   }
 }
 
