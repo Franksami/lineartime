@@ -253,16 +253,23 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
       <div
         key={index}
         className={cn(
-          'relative flex flex-col items-center justify-start border-r border-gray-200/20 transition-all duration-200',
-          'hover:bg-white/5 cursor-pointer',
-          day.isToday && 'bg-blue-500/10 border-blue-500',
+          'relative flex flex-col items-center justify-start transition-all duration-200',
+          'border-r border-white/10',
+          'hover:bg-white/10 hover:backdrop-blur-lg cursor-pointer',
+          'hover:shadow-[inset_0_0_12px_rgba(255,255,255,0.1)]',
+          day.isToday && [
+            'bg-gradient-to-b from-blue-500/20 to-blue-500/10',
+            'border-blue-400/50',
+            'shadow-[inset_0_0_20px_rgba(59,130,246,0.2)]'
+          ],
           day.isWeekend && 'bg-gray-100/5',
-          !isCurrentMonth && 'opacity-50'
+          !isCurrentMonth && 'opacity-40'
         )}
         style={{
           width: `${dayColumnWidth}px`,
           minWidth: `${dayColumnWidth}px`,
-          backgroundColor: showHeat ? getHeatColor(day.heat || 0) : undefined
+          backgroundColor: showHeat ? getHeatColor(day.heat || 0) : undefined,
+          backdropFilter: glassmorphic ? 'blur(4px)' : undefined
         }}
         onClick={() => onDayClick?.(day.date)}
         onMouseEnter={() => {
@@ -276,9 +283,14 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
       >
         {/* Day number */}
         <div className={cn(
-          'text-xs font-medium p-1',
-          day.isToday && 'text-blue-600 font-bold',
-          showDetails ? 'text-sm' : 'text-[10px]'
+          'font-medium p-1',
+          day.isToday && [
+            'text-blue-600 dark:text-blue-400',
+            'font-bold',
+            'text-shadow-sm'
+          ],
+          showDetails ? 'text-sm' : 'text-[10px]',
+          'text-gray-700 dark:text-gray-300'
         )}>
           {showDetails ? format(day.date, 'd') : ''}
         </div>
@@ -287,7 +299,9 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
         {showDetails && day.eventCount > 0 && (
           <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
             <div className={cn(
-              'w-2 h-2 rounded-full bg-blue-500',
+              'w-2 h-2 rounded-full',
+              'shadow-[0_0_6px_currentColor]',
+              'bg-blue-500',
               day.eventCount > 3 && 'bg-orange-500',
               day.eventCount > 5 && 'bg-red-500'
             )} />
@@ -296,7 +310,13 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
 
         {/* Event count badge */}
         {showDetails && day.eventCount > 0 && dayColumnWidth >= 36 && (
-          <div className="absolute top-6 right-1 text-[10px] bg-blue-500/20 px-1 rounded">
+          <div className={cn(
+            'absolute top-6 right-1 text-[10px] px-1 rounded-md',
+            'bg-gradient-to-br from-blue-500/30 to-blue-500/20',
+            'backdrop-blur-sm',
+            'border border-blue-500/30',
+            'text-blue-700 dark:text-blue-300 font-semibold'
+          )}>
             {day.eventCount}
           </div>
         )}
@@ -340,8 +360,16 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
     <div 
       ref={containerRef}
       className={cn(
-        'relative w-full overflow-hidden rounded-xl',
-        glassmorphic && 'backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl',
+        'relative w-full overflow-hidden rounded-2xl',
+        glassmorphic && [
+          'backdrop-blur-2xl',
+          'bg-gradient-to-br from-white/20 to-white/5',
+          'border border-white/30',
+          'shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]',
+          'before:absolute before:inset-0 before:rounded-2xl',
+          'before:bg-gradient-to-br before:from-white/10 before:to-transparent',
+          'before:pointer-events-none'
+        ],
         className
       )}
       {...bind()}
@@ -356,7 +384,16 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
               handleZoomChange(zoomLevels[currentIndex - 1]);
             }
           }}
-          className="p-2 bg-white/20 backdrop-blur rounded-lg hover:bg-white/30 transition-colors"
+          className={cn(
+            'p-2 rounded-xl transition-all duration-200',
+            'bg-white/10 backdrop-blur-xl',
+            'border border-white/20',
+            'shadow-[0_2px_8px_0_rgba(31,38,135,0.2)]',
+            'hover:bg-white/20 hover:border-white/30',
+            'hover:shadow-[0_4px_16px_0_rgba(31,38,135,0.3)]',
+            'active:scale-95',
+            'disabled:opacity-50 disabled:cursor-not-allowed'
+          )}
           disabled={zoomLevel === ZoomLevel.YEAR}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -371,7 +408,16 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
               handleZoomChange(zoomLevels[currentIndex + 1]);
             }
           }}
-          className="p-2 bg-white/20 backdrop-blur rounded-lg hover:bg-white/30 transition-colors"
+          className={cn(
+            'p-2 rounded-xl transition-all duration-200',
+            'bg-white/10 backdrop-blur-xl',
+            'border border-white/20',
+            'shadow-[0_2px_8px_0_rgba(31,38,135,0.2)]',
+            'hover:bg-white/20 hover:border-white/30',
+            'hover:shadow-[0_4px_16px_0_rgba(31,38,135,0.3)]',
+            'active:scale-95',
+            'disabled:opacity-50 disabled:cursor-not-allowed'
+          )}
           disabled={zoomLevel === ZoomLevel.DAY}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -381,12 +427,25 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
       </div>
 
       {/* Month labels */}
-      <div className="sticky top-0 z-10 bg-white/5 backdrop-blur-sm border-b border-white/20">
-        <div className="flex h-8">
+      <div className={cn(
+        'sticky top-0 z-10 border-b',
+        glassmorphic && [
+          'bg-gradient-to-r from-white/15 via-white/10 to-white/15',
+          'backdrop-blur-xl',
+          'border-white/30',
+          'shadow-[0_2px_12px_0_rgba(31,38,135,0.15)]'
+        ]
+      )}>
+        <div className="flex h-10">
           {monthGroups.map((group, idx) => (
             <div
               key={idx}
-              className="flex-shrink-0 px-2 flex items-center justify-center text-xs font-medium text-gray-600"
+              className={cn(
+                'flex-shrink-0 px-2 flex items-center justify-center',
+                'text-xs font-semibold tracking-wider',
+                'text-gray-700 dark:text-gray-300',
+                'border-r border-white/10'
+              )}
               style={{ width: `${group.days.length * dayColumnWidth}px` }}
             >
               {group.month}
@@ -398,7 +457,11 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
       {/* Timeline scroll container */}
       <div
         ref={scrollRef}
-        className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent"
+        className={cn(
+          'overflow-x-auto overflow-y-hidden',
+          'scrollbar-thin scrollbar-thumb-gray-400/50 scrollbar-track-transparent',
+          glassmorphic && 'scrollbar-thumb-white/30'
+        )}
         style={{ height: `${monthRowHeight}px` }}
       >
         <div
@@ -428,7 +491,14 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
 
       {/* Hover tooltip */}
       {hoveredDate && zoomConfig.showDetails && (
-        <div className="absolute bottom-4 left-4 z-20 p-2 bg-black/80 text-white text-xs rounded-lg">
+        <div className={cn(
+          'absolute bottom-4 left-4 z-20 p-3 rounded-xl',
+          'bg-gradient-to-br from-gray-900/90 to-gray-800/90',
+          'backdrop-blur-xl',
+          'border border-white/20',
+          'shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]',
+          'text-white text-sm font-medium'
+        )}>
           {format(hoveredDate, 'EEEE, MMMM d, yyyy')}
         </div>
       )}
