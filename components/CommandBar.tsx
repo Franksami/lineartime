@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Command } from 'cmdk';
 import { EventParser } from '@/lib/nlp/EventParser';
 import type { Event } from '@/types/calendar';
 import { format, addMinutes } from 'date-fns';
@@ -18,6 +17,15 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+} from '@/components/ui/command'
 
 interface CommandBarProps {
   onEventCreate?: (event: Partial<Event>) => void;
@@ -157,7 +165,7 @@ export function CommandBar({
   }, [intent, preview, searchResults, events, onEventCreate, onEventDelete]);
   
   return (
-    <Command.Dialog
+    <CommandDialog
       open={open}
       onOpenChange={setOpen}
       className="fixed top-20 left-1/2 -translate-x-1/2 w-[600px] z-50"
@@ -165,7 +173,7 @@ export function CommandBar({
       <div className="bg-popover/95 backdrop-blur-sm border border-border rounded-lg shadow-2xl overflow-hidden">
         <div className="flex items-center border-b border-border px-4">
           <Search className="w-4 h-4 text-muted-foreground mr-2" />
-          <Command.Input
+          <CommandInput
             ref={inputRef}
             value={input}
             onValueChange={setInput}
@@ -184,7 +192,7 @@ export function CommandBar({
           </div>
         </div>
         
-        <Command.List className="max-h-[400px] overflow-y-auto p-2">
+        <CommandList className="max-h-[400px] overflow-y-auto p-2">
           {/* Event preview */}
           {preview && intent?.action === 'create' && (
             <div className="p-4 mb-2 bg-accent/10 rounded-lg border border-accent/20">
@@ -267,9 +275,9 @@ export function CommandBar({
           
           {/* Search results */}
           {searchResults.length > 0 && (
-            <Command.Group heading="Search Results">
+            <CommandGroup heading="Search Results">
               {searchResults.map((event) => (
-                <Command.Item
+                <CommandItem
                   key={event.id}
                   value={event.id}
                   onSelect={() => {
@@ -293,42 +301,42 @@ export function CommandBar({
                   )}>
                     {event.category}
                   </div>
-                </Command.Item>
+                </CommandItem>
               ))}
-            </Command.Group>
+            </CommandGroup>
           )}
           
           {/* Quick actions */}
           {!preview && searchResults.length === 0 && (
             <>
-              <Command.Group heading="Quick Actions">
-                <Command.Item
+              <CommandGroup heading="Quick Actions">
+                <CommandItem
                   value="meeting"
                   onSelect={() => setInput('Meeting tomorrow at 10am')}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent cursor-pointer"
                 >
                   <Calendar className="w-4 h-4 text-muted-foreground" />
                   <span>Schedule a meeting</span>
-                </Command.Item>
-                <Command.Item
+                </CommandItem>
+                <CommandItem
                   value="reminder"
                   onSelect={() => setInput('Reminder: ')}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent cursor-pointer"
                 >
                   <Clock className="w-4 h-4 text-muted-foreground" />
                   <span>Set a reminder</span>
-                </Command.Item>
-                <Command.Item
+                </CommandItem>
+                <CommandItem
                   value="block"
                   onSelect={() => setInput('Focus time tomorrow 9am to 12pm')}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent cursor-pointer"
                 >
                   <Tag className="w-4 h-4 text-muted-foreground" />
                   <span>Block focus time</span>
-                </Command.Item>
-              </Command.Group>
+                </CommandItem>
+              </CommandGroup>
               
-              <Command.Group heading="Examples">
+              <CommandGroup heading="Examples">
                 <div className="px-3 py-2 text-xs text-muted-foreground space-y-1">
                   <div>• "Lunch with Sarah tomorrow at 12pm at Starbucks"</div>
                   <div>• "Team meeting every Monday at 10am"</div>
@@ -336,11 +344,11 @@ export function CommandBar({
                   <div>• "Find meetings this week"</div>
                   <div>• "Delete birthday party"</div>
                 </div>
-              </Command.Group>
+              </CommandGroup>
             </>
           )}
-        </Command.List>
+        </CommandList>
       </div>
-    </Command.Dialog>
+    </CommandDialog>
   );
 }
