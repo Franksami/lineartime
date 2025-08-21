@@ -409,6 +409,15 @@
             "details": "Implement recurrence patterns (daily, weekly, monthly, yearly), create recurrence rule generator, add exception handling for modified instances. Build UI controls for recurrence pattern selection.",
             "status": "pending",
             "testStrategy": "Recurrence pattern tests, date calculation testing, edge case validation"
+          },
+          {
+            "id": 6,
+            "title": "Integrate Event Stacking into Main Calendar",
+            "description": "Integrate the event stacking system from test-stacking into the main LinearCalendarVertical component with day/week detail views",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 6
           }
         ]
       },
@@ -1398,7 +1407,7 @@
           18,
           19
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -1415,7 +1424,7 @@
             "description": "Create the Web Worker setup for offloading layout calculations",
             "dependencies": [],
             "details": "- Initialize worker file\n- Setup message handling\n- Create worker pool manager\n- Implement error handling",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1426,7 +1435,7 @@
               "20.1"
             ],
             "details": "- Implement event point sorting\n- Create status structure\n- Handle intersection detection\n- Optimize for large datasets",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1437,7 +1446,7 @@
               "20.3"
             ],
             "details": "- Implement conflict detection rules\n- Create resolution strategies\n- Add priority handling\n- Setup notification system",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1448,7 +1457,7 @@
               "20.2"
             ],
             "details": "- Setup LRU cache\n- Implement cache invalidation\n- Add cache statistics\n- Optimize memory usage",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1459,7 +1468,7 @@
               "20.1"
             ],
             "details": "- Create search algorithm\n- Optimize for time ranges\n- Add index structure\n- Implement range queries",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1471,7 +1480,7 @@
               "20.5"
             ],
             "details": "- Implement batch queue\n- Create processing strategies\n- Add priority handling\n- Setup batch optimization",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1482,7 +1491,7 @@
               "20.2"
             ],
             "details": "- Define message format\n- Implement serialization\n- Add compression\n- Create error handling",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1494,7 +1503,7 @@
               "20.7"
             ],
             "details": "- Add performance metrics\n- Create monitoring dashboard\n- Implement alerts\n- Setup optimization triggers",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1506,7 +1515,7 @@
               "20.4"
             ],
             "details": "- Define validation rules\n- Implement checks\n- Add error reporting\n- Create recovery strategies",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1518,7 +1527,7 @@
               "20.7"
             ],
             "details": "- Create memory pool\n- Implement garbage collection\n- Add memory monitoring\n- Optimize resource usage",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           }
         ]
@@ -1619,11 +1628,37 @@
         ],
         "status": "pending",
         "subtasks": []
+      },
+      {
+        "id": 28,
+        "title": "Implement Context Menus with shadcn/ui",
+        "description": "Add right-click context menus to calendar events for quick actions",
+        "details": "",
+        "testStrategy": "",
+        "status": "done",
+        "dependencies": [
+          20
+        ],
+        "priority": "high",
+        "subtasks": []
+      },
+      {
+        "id": 29,
+        "title": "Replace react-beautiful-dnd with @dnd-kit",
+        "description": "Migrate from deprecated react-beautiful-dnd to modern @dnd-kit for drag and drop functionality",
+        "details": "",
+        "testStrategy": "",
+        "status": "done",
+        "dependencies": [
+          20
+        ],
+        "priority": "high",
+        "subtasks": []
       }
     ],
     "metadata": {
       "created": "2025-08-20T07:38:33.025Z",
-      "updated": "2025-08-21T04:17:51.995Z",
+      "updated": "2025-08-21T05:30:28.237Z",
       "description": "Tasks for master context"
     }
   },

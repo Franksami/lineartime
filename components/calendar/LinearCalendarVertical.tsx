@@ -9,6 +9,7 @@ import { EventModal } from "./EventModal"
 import { FilterPanel } from "./FilterPanel"
 import { ReflectionModal } from "./ReflectionModal"
 import { ZoomControls } from "./ZoomControls"
+import { DayDetailView } from "./DayDetailView"
 import { useLinearCalendar } from "@/hooks/useLinearCalendar"
 import type { Event } from "@/types/calendar"
 
@@ -53,6 +54,8 @@ export function LinearCalendarVertical({
   } = useLinearCalendar(year)
 
   const [showFilters, setShowFilters] = React.useState(false)
+  const [showDayDetail, setShowDayDetail] = React.useState(false)
+  const [detailDate, setDetailDate] = React.useState<Date | null>(null)
 
   // Generate calendar data with empty cells for alignment
   const yearData = React.useMemo(() => {
@@ -404,6 +407,10 @@ export function LinearCalendarVertical({
                               handleDateSelect(date)
                               if (dateEvents.length === 0) {
                                 setShowEventModal(true)
+                              } else {
+                                // Show day detail view with stacked events
+                                setDetailDate(date)
+                                setShowDayDetail(true)
                               }
                             }
                           }}
@@ -502,6 +509,41 @@ export function LinearCalendarVertical({
         events={events}
         year={year}
       />
+
+      {/* Day Detail View */}
+      {showDayDetail && detailDate && (
+        <DayDetailView
+          date={detailDate}
+          events={events.filter(e => {
+            const eventStart = new Date(e.startDate)
+            const eventEnd = new Date(e.endDate)
+            return isWithinInterval(detailDate, { start: eventStart, end: eventEnd })
+          })}
+          onClose={() => setShowDayDetail(false)}
+          onEventUpdate={(updatedEvent) => {
+            // Update the event through the existing save handler
+            handleEventSave(updatedEvent)
+          }}
+          onEventDelete={(eventId) => {
+            const eventToDelete = events.find(e => e.id === eventId)
+            if (eventToDelete) {
+              handleEventDelete(eventToDelete)
+            }
+          }}
+          onEventEdit={(event) => {
+            setShowDayDetail(false)
+            setShowEventModal(true)
+          }}
+          onEventDuplicate={(event) => {
+            const newEvent = {
+              ...event,
+              id: crypto.randomUUID(),
+              title: `${event.title} (Copy)`
+            }
+            handleEventSave(newEvent)
+          }}
+        />
+      )}
     </div>
   )
 }
