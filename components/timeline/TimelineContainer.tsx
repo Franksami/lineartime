@@ -1,0 +1,437 @@
+'use client';
+
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { useGesture } from '@use-gesture/react';
+import { cn } from '@/lib/utils';
+import { format, addDays, startOfYear, getDaysInYear, differenceInDays, startOfMonth, endOfMonth, isToday, isSameMonth, isSameDay } from 'date-fns';
+
+/**
+ * Timeline Configuration
+ */
+export interface TimelineConfig {
+  startDate?: Date;
+  endDate?: Date;
+  initialZoomLevel?: ZoomLevel;
+  enableGestures?: boolean;
+  enableKeyboardNavigation?: boolean;
+  showHeatMap?: boolean;
+  glassmorphic?: boolean;
+  monthRowHeight?: number;
+  dayColumnWidth?: number;
+  minDayWidth?: number;
+  maxDayWidth?: number;
+}
+
+/**
+ * Zoom Levels for Semantic Zooming
+ */
+export enum ZoomLevel {
+  YEAR = 'year',       // 365 days view with heat map
+  QUARTER = 'quarter', // 90 days view
+  MONTH = 'month',     // 30 days view
+  WEEK = 'week',       // 7 days view
+  DAY = 'day'          // Single day focus
+}
+
+/**
+ * Day Data Interface
+ */
+export interface DayData {
+  date: Date;
+  eventCount: number;
+  events?: any[];
+  isToday: boolean;
+  isWeekend: boolean;
+  month: string;
+  heat?: number; // 0-1 for heat map intensity
+}
+
+/**
+ * Timeline Props
+ */
+export interface TimelineContainerProps {
+  className?: string;
+  config?: TimelineConfig;
+  events?: any[];
+  onDayClick?: (date: Date) => void;
+  onDayHover?: (date: Date | null) => void;
+  onZoomChange?: (level: ZoomLevel) => void;
+  currentDate?: Date;
+}
+
+/**
+ * Get zoom level configuration
+ */
+const getZoomConfig = (level: ZoomLevel) => {
+  switch (level) {
+    case ZoomLevel.YEAR:
+      return { dayWidth: 4, showDetails: false, showHeatMap: true };
+    case ZoomLevel.QUARTER:
+      return { dayWidth: 12, showDetails: false, showHeatMap: true };
+    case ZoomLevel.MONTH:
+      return { dayWidth: 36, showDetails: true, showHeatMap: false };
+    case ZoomLevel.WEEK:
+      return { dayWidth: 120, showDetails: true, showHeatMap: false };
+    case ZoomLevel.DAY:
+      return { dayWidth: 300, showDetails: true, showHeatMap: false };
+    default:
+      return { dayWidth: 36, showDetails: true, showHeatMap: false };
+  }
+};
+
+/**
+ * Timeline Container Component
+ */
+export const TimelineContainer: React.FC<TimelineContainerProps> = ({
+  className,
+  config = {},
+  events = [],
+  onDayClick,
+  onDayHover,
+  onZoomChange,
+  currentDate = new Date()
+}) => {
+  // Configuration with defaults
+  const {
+    startDate = startOfYear(currentDate),
+    endDate = addDays(startDate, 364),
+    initialZoomLevel = ZoomLevel.MONTH,
+    enableGestures = true,
+    enableKeyboardNavigation = true,
+    showHeatMap = true,
+    glassmorphic = true,
+    monthRowHeight = 120,
+    minDayWidth = 4,
+    maxDayWidth = 300
+  } = config;
+
+  // State
+  const [zoomLevel, setZoomLevel] = useState<ZoomLevel>(initialZoomLevel);
+  const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Calculate zoom configuration
+  const zoomConfig = useMemo(() => getZoomConfig(zoomLevel), [zoomLevel]);
+  const dayColumnWidth = Math.max(minDayWidth, Math.min(maxDayWidth, zoomConfig.dayWidth));
+
+  // Calculate days data
+  const daysData = useMemo<DayData[]>(() => {
+    const totalDays = differenceInDays(endDate, startDate) + 1;
+    const days: DayData[] = [];
+
+    for (let i = 0; i < totalDays; i++) {
+      const date = addDays(startDate, i);
+      const dayEvents = events.filter(event => 
+        isSameDay(new Date(event.date || event.startTime), date)
+      );
+
+      days.push({
+        date,
+        eventCount: dayEvents.length,
+        events: dayEvents,
+        isToday: isToday(date),
+        isWeekend: date.getDay() === 0 || date.getDay() === 6,
+        month: format(date, 'MMM'),
+        heat: dayEvents.length / 10 // Normalize to 0-1 range
+      });
+    }
+
+    return days;
+  }, [startDate, endDate, events]);
+
+  // Virtual scrolling setup
+  const virtualizer = useVirtualizer({
+    horizontal: true,
+    count: daysData.length,
+    getScrollElement: () => scrollRef.current,
+    estimateSize: useCallback(() => dayColumnWidth, [dayColumnWidth]),
+    overscan: 10,
+  });
+
+  // Handle zoom changes
+  const handleZoomChange = useCallback((newLevel: ZoomLevel) => {
+    setZoomLevel(newLevel);
+    onZoomChange?.(newLevel);
+  }, [onZoomChange]);
+
+  // Zoom with keyboard
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (!enableKeyboardNavigation) return;
+
+    const zoomLevels = Object.values(ZoomLevel);
+    const currentIndex = zoomLevels.indexOf(zoomLevel);
+
+    switch (e.key) {
+      case '+':
+      case '=':
+        if (currentIndex > 0) {
+          handleZoomChange(zoomLevels[currentIndex - 1]);
+        }
+        break;
+      case '-':
+      case '_':
+        if (currentIndex < zoomLevels.length - 1) {
+          handleZoomChange(zoomLevels[currentIndex + 1]);
+        }
+        break;
+      case 'ArrowLeft':
+        scrollRef.current?.scrollBy({ left: -dayColumnWidth * 7, behavior: 'smooth' });
+        break;
+      case 'ArrowRight':
+        scrollRef.current?.scrollBy({ left: dayColumnWidth * 7, behavior: 'smooth' });
+        break;
+      case 'Home':
+        scrollRef.current?.scrollTo({ left: 0, behavior: 'smooth' });
+        break;
+      case 'End':
+        scrollRef.current?.scrollTo({ 
+          left: scrollRef.current.scrollWidth, 
+          behavior: 'smooth' 
+        });
+        break;
+    }
+  }, [enableKeyboardNavigation, zoomLevel, handleZoomChange, dayColumnWidth]);
+
+  // Setup keyboard listeners
+  useEffect(() => {
+    if (enableKeyboardNavigation) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [handleKeyDown, enableKeyboardNavigation]);
+
+  // Gesture controls for pinch-to-zoom
+  const bind = useGesture({
+    onPinch: ({ offset: [scale] }) => {
+      if (!enableGestures) return;
+      
+      const zoomLevels = Object.values(ZoomLevel);
+      const currentIndex = zoomLevels.indexOf(zoomLevel);
+      
+      if (scale > 1.2 && currentIndex > 0) {
+        handleZoomChange(zoomLevels[currentIndex - 1]);
+      } else if (scale < 0.8 && currentIndex < zoomLevels.length - 1) {
+        handleZoomChange(zoomLevels[currentIndex + 1]);
+      }
+    },
+    onWheel: ({ event, delta: [, dy] }) => {
+      if (!enableGestures || !event.ctrlKey) return;
+      event.preventDefault();
+      
+      const zoomLevels = Object.values(ZoomLevel);
+      const currentIndex = zoomLevels.indexOf(zoomLevel);
+      
+      if (dy < 0 && currentIndex > 0) {
+        handleZoomChange(zoomLevels[currentIndex - 1]);
+      } else if (dy > 0 && currentIndex < zoomLevels.length - 1) {
+        handleZoomChange(zoomLevels[currentIndex + 1]);
+      }
+    }
+  }, {
+    pinch: { scaleBounds: { min: 0.5, max: 2 } },
+    wheel: { preventScroll: true }
+  });
+
+  // Calculate heat map color
+  const getHeatColor = (heat: number) => {
+    const intensity = Math.min(1, Math.max(0, heat));
+    const hue = 240 - (intensity * 60); // Blue to red
+    const saturation = 50 + (intensity * 50);
+    const lightness = 95 - (intensity * 35);
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  };
+
+  // Render day column
+  const renderDayColumn = (day: DayData, index: number) => {
+    const isCurrentMonth = isSameMonth(day.date, currentDate);
+    const showDetails = zoomConfig.showDetails;
+    const showHeat = zoomConfig.showHeatMap && showHeatMap;
+
+    return (
+      <div
+        key={index}
+        className={cn(
+          'relative flex flex-col items-center justify-start border-r border-gray-200/20 transition-all duration-200',
+          'hover:bg-white/5 cursor-pointer',
+          day.isToday && 'bg-blue-500/10 border-blue-500',
+          day.isWeekend && 'bg-gray-100/5',
+          !isCurrentMonth && 'opacity-50'
+        )}
+        style={{
+          width: `${dayColumnWidth}px`,
+          minWidth: `${dayColumnWidth}px`,
+          backgroundColor: showHeat ? getHeatColor(day.heat || 0) : undefined
+        }}
+        onClick={() => onDayClick?.(day.date)}
+        onMouseEnter={() => {
+          setHoveredDate(day.date);
+          onDayHover?.(day.date);
+        }}
+        onMouseLeave={() => {
+          setHoveredDate(null);
+          onDayHover?.(null);
+        }}
+      >
+        {/* Day number */}
+        <div className={cn(
+          'text-xs font-medium p-1',
+          day.isToday && 'text-blue-600 font-bold',
+          showDetails ? 'text-sm' : 'text-[10px]'
+        )}>
+          {showDetails ? format(day.date, 'd') : ''}
+        </div>
+
+        {/* Event indicator or details */}
+        {showDetails && day.eventCount > 0 && (
+          <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2">
+            <div className={cn(
+              'w-2 h-2 rounded-full bg-blue-500',
+              day.eventCount > 3 && 'bg-orange-500',
+              day.eventCount > 5 && 'bg-red-500'
+            )} />
+          </div>
+        )}
+
+        {/* Event count badge */}
+        {showDetails && day.eventCount > 0 && dayColumnWidth >= 36 && (
+          <div className="absolute top-6 right-1 text-[10px] bg-blue-500/20 px-1 rounded">
+            {day.eventCount}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Group days by month
+  const monthGroups = useMemo(() => {
+    const groups: { month: string; days: DayData[] }[] = [];
+    let currentMonth = '';
+    let currentGroup: DayData[] = [];
+
+    daysData.forEach(day => {
+      const monthKey = format(day.date, 'yyyy-MM');
+      if (monthKey !== currentMonth) {
+        if (currentGroup.length > 0) {
+          groups.push({ 
+            month: format(currentGroup[0].date, 'MMMM yyyy'), 
+            days: currentGroup 
+          });
+        }
+        currentMonth = monthKey;
+        currentGroup = [day];
+      } else {
+        currentGroup.push(day);
+      }
+    });
+
+    if (currentGroup.length > 0) {
+      groups.push({ 
+        month: format(currentGroup[0].date, 'MMMM yyyy'), 
+        days: currentGroup 
+      });
+    }
+
+    return groups;
+  }, [daysData]);
+
+  return (
+    <div 
+      ref={containerRef}
+      className={cn(
+        'relative w-full overflow-hidden rounded-xl',
+        glassmorphic && 'backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl',
+        className
+      )}
+      {...bind()}
+    >
+      {/* Zoom controls */}
+      <div className="absolute top-4 right-4 z-20 flex gap-2">
+        <button
+          onClick={() => {
+            const zoomLevels = Object.values(ZoomLevel);
+            const currentIndex = zoomLevels.indexOf(zoomLevel);
+            if (currentIndex > 0) {
+              handleZoomChange(zoomLevels[currentIndex - 1]);
+            }
+          }}
+          className="p-2 bg-white/20 backdrop-blur rounded-lg hover:bg-white/30 transition-colors"
+          disabled={zoomLevel === ZoomLevel.YEAR}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        </button>
+        <button
+          onClick={() => {
+            const zoomLevels = Object.values(ZoomLevel);
+            const currentIndex = zoomLevels.indexOf(zoomLevel);
+            if (currentIndex < zoomLevels.length - 1) {
+              handleZoomChange(zoomLevels[currentIndex + 1]);
+            }
+          }}
+          className="p-2 bg-white/20 backdrop-blur rounded-lg hover:bg-white/30 transition-colors"
+          disabled={zoomLevel === ZoomLevel.DAY}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Month labels */}
+      <div className="sticky top-0 z-10 bg-white/5 backdrop-blur-sm border-b border-white/20">
+        <div className="flex h-8">
+          {monthGroups.map((group, idx) => (
+            <div
+              key={idx}
+              className="flex-shrink-0 px-2 flex items-center justify-center text-xs font-medium text-gray-600"
+              style={{ width: `${group.days.length * dayColumnWidth}px` }}
+            >
+              {group.month}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Timeline scroll container */}
+      <div
+        ref={scrollRef}
+        className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent"
+        style={{ height: `${monthRowHeight}px` }}
+      >
+        <div
+          style={{
+            width: `${virtualizer.getTotalSize()}px`,
+            height: '100%',
+            position: 'relative'
+          }}
+        >
+          {virtualizer.getVirtualItems().map(virtualItem => (
+            <div
+              key={virtualItem.key}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: `${virtualItem.size}px`,
+                height: '100%',
+                transform: `translateX(${virtualItem.start}px)`
+              }}
+            >
+              {renderDayColumn(daysData[virtualItem.index], virtualItem.index)}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Hover tooltip */}
+      {hoveredDate && zoomConfig.showDetails && (
+        <div className="absolute bottom-4 left-4 z-20 p-2 bg-black/80 text-white text-xs rounded-lg">
+          {format(hoveredDate, 'EEEE, MMMM d, yyyy')}
+        </div>
+      )}
+    </div>
+  );
+};
