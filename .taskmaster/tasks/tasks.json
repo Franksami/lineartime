@@ -213,7 +213,7 @@
           1,
           3
         ],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -266,7 +266,7 @@
               4
             ],
             "details": "Define indexes for frequent queries, implement validation rules in schema, optimize query patterns, and set up proper access control rules",
-            "status": "in-progress",
+            "status": "done",
             "testStrategy": "Run performance tests on indexed queries and verify access control rules"
           }
         ]
@@ -1331,7 +1331,7 @@
         "dependencies": [
           18
         ],
-        "status": "pending",
+        "status": "in-progress",
         "subtasks": [
           {
             "id": 1,
@@ -1712,7 +1712,7 @@
     ],
     "metadata": {
       "created": "2025-08-20T07:38:33.025Z",
-      "updated": "2025-08-21T16:59:42.052Z",
+      "updated": "2025-08-21T17:12:35.002Z",
       "description": "Tasks for master context"
     }
   },
