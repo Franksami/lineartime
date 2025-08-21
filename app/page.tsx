@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { LinearCalendarVertical } from "@/components/calendar/LinearCalendarVertical";
 import { TimelineContainer } from "@/components/timeline/TimelineContainer";
 import { EventManagement } from "@/components/calendar/EventManagement";
 import { ViewSwitcher, CalendarView } from "@/components/dashboard/ViewSwitcher";
 import { useOfflineEvents } from "@/hooks/useIndexedDB";
 import { HighContrastToggle } from "@/components/ui/high-contrast-toggle";
+import { CommandBar } from "@/components/CommandBar";
+import type { Event } from "@/types/calendar";
 
 export default function Page() {
   const currentYear = new Date().getFullYear();
@@ -14,7 +16,7 @@ export default function Page() {
   const userId = 'default-user'; // This could come from auth context later
   
   // Get events from IndexedDB for timeline and management views
-  const { events } = useOfflineEvents(userId);
+  const { events, addEvent, updateEvent, deleteEvent } = useOfflineEvents(userId);
   
   // Convert IndexedDB events to the format expected by TimelineContainer
   const timelineEvents = events?.map(e => ({
@@ -25,8 +27,36 @@ export default function Page() {
     description: e.description
   })) || [];
   
+  // Handle event creation from CommandBar
+  const handleEventCreate = useCallback(async (event: Partial<Event>) => {
+    if (event.title && event.startDate) {
+      await addEvent({
+        title: event.title,
+        startTime: event.startDate,
+        endTime: event.endDate || event.startDate,
+        categoryId: event.category || 'personal',
+        description: event.description || '',
+        location: event.location
+      });
+    }
+  }, [addEvent]);
+  
+  // Handle event deletion from CommandBar
+  const handleEventDelete = useCallback(async (id: string) => {
+    const numericId = parseInt(id) || events?.find(e => e.convexId === id)?.id;
+    if (numericId) {
+      await deleteEvent(numericId);
+    }
+  }, [deleteEvent, events]);
+  
   return (
     <div className="h-screen bg-background overflow-hidden">
+      {/* Command Bar for NLP event creation */}
+      <CommandBar
+        onEventCreate={handleEventCreate}
+        onEventDelete={handleEventDelete}
+        events={events}
+      />
       
       {/* Header with View Switcher */}
       <div className="relative z-10 px-4 pt-4">
