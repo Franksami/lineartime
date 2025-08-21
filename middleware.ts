@@ -16,9 +16,16 @@
 //   auth.protect()
 // })
 
+// import { NextRequest } from 'next/server';
+// import { securityMiddleware } from '@/middleware/security';
+
 // Temporary passthrough middleware
-export default function middleware() {
-  // Allow all requests to pass through
+// Security features are implemented but disabled due to Edge Runtime limitations
+// They can be enabled in API routes instead of middleware
+export default async function middleware() {
+  // Security middleware disabled temporarily due to Edge Runtime limitations
+  // The crypto module is not available in Edge Runtime
+  // Security features can still be used in API routes
   return;
 }
 
