@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useCalendarWorker } from '@/lib/workers/useWorker'
 import type { Event } from '@/types/calendar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ResizableEvent } from '@/components/calendar/ResizableEvent'
 
 // Generate test events with various overlapping scenarios
 function generateTestEvents(): Event[] {
@@ -103,6 +104,8 @@ export default function TestStackingPage() {
   const [processing, setProcessing] = useState(false)
   const [testMode, setTestMode] = useState<'simple' | 'stress'>('simple')
   const [eventCount, setEventCount] = useState(20)
+  const [useResizable, setUseResizable] = useState(true)
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [metrics, setMetrics] = useState({
     layoutTime: 0,
     eventCount: 0,
@@ -157,6 +160,31 @@ export default function TestStackingPage() {
     }
   }
   
+  // Handle event resize
+  const handleEventResize = useCallback((eventId: string, width: number, height: number) => {
+    console.log('Resizing event:', eventId, { width, height })
+  }, [])
+  
+  const handleEventResizeStop = useCallback((eventId: string, width: number, height: number) => {
+    console.log('Resize complete:', eventId, { width, height })
+    // Update the event dimensions in state
+    setLayoutedEvents(prev => prev.map(event => 
+      event.id === eventId 
+        ? { ...event, width, height }
+        : event
+    ))
+  }, [])
+  
+  const handleEventClick = useCallback((event: Event) => {
+    console.log('Event clicked:', event)
+    setSelectedEvent(event)
+  }, [])
+  
+  const handleEventContextMenu = useCallback((event: Event, e: React.MouseEvent) => {
+    console.log('Context menu for:', event)
+    // Could show a context menu here
+  }, [])
+  
   // Color map for categories
   const categoryColors = {
     personal: '#10b981',
@@ -209,7 +237,7 @@ export default function TestStackingPage() {
                 </div>
               )}
               
-              <div className="flex items-end">
+              <div className="flex items-end gap-4">
                 <Button
                   onClick={testColumnLayout}
                   disabled={!worker.isReady || processing}
@@ -217,6 +245,18 @@ export default function TestStackingPage() {
                 >
                   {processing ? 'Processing...' : 'Test Column Layout'}
                 </Button>
+                
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={useResizable}
+                    onChange={(e) => setUseResizable(e.target.checked)}
+                    className="rounded"
+                  />
+                  <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                    Enable Resize
+                  </span>
+                </label>
               </div>
             </div>
           </CardContent>
@@ -263,6 +303,49 @@ export default function TestStackingPage() {
           </CardContent>
         </Card>
         
+        {/* Selected Event Info */}
+        {selectedEvent && (
+          <Card className="mb-6">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Selected Event</CardTitle>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setSelectedEvent(null)}
+                className="h-6 px-2"
+              >
+                ✕
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div>
+                  <span className="text-neutral-600 dark:text-neutral-400">Title:</span>
+                  <div className="font-medium">{selectedEvent.title}</div>
+                </div>
+                <div>
+                  <span className="text-neutral-600 dark:text-neutral-400">Category:</span>
+                  <div className="font-medium">{selectedEvent.category}</div>
+                </div>
+                <div>
+                  <span className="text-neutral-600 dark:text-neutral-400">Start:</span>
+                  <div className="font-medium">{new Date(selectedEvent.startDate).toLocaleTimeString()}</div>
+                </div>
+                <div>
+                  <span className="text-neutral-600 dark:text-neutral-400">End:</span>
+                  <div className="font-medium">{new Date(selectedEvent.endDate).toLocaleTimeString()}</div>
+                </div>
+                {selectedEvent.description && (
+                  <div className="col-span-2 md:col-span-4">
+                    <span className="text-neutral-600 dark:text-neutral-400">Description:</span>
+                    <div className="font-medium">{selectedEvent.description}</div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        
         {/* Visual Layout Preview */}
         {layoutedEvents.length > 0 && (
           <Card>
@@ -288,7 +371,20 @@ export default function TestStackingPage() {
                 {layoutedEvents.map((event: any) => {
                   const color = categoryColors[event.category as keyof typeof categoryColors] || '#6b7280'
                   
-                  return (
+                  return useResizable ? (
+                    <ResizableEvent
+                      key={event.id}
+                      event={event}
+                      onResize={handleEventResize}
+                      onResizeStop={handleEventResizeStop}
+                      onClick={handleEventClick}
+                      onContextMenu={handleEventContextMenu}
+                      minHeight={30}
+                      minWidth={60}
+                      maxWidth={600}
+                      gridSize={5}
+                    />
+                  ) : (
                     <div
                       key={event.id}
                       className="absolute rounded border border-white dark:border-neutral-900"
