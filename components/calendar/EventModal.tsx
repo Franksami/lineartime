@@ -49,36 +49,34 @@ export function EventModal({
     description: ''
   })
   
-  const [conflicts, setConflicts] = React.useState<Event[]>([])
+  const conflicts = React.useMemo(() => {
+    if (formData.startDate && formData.endDate) {
+      return checkOverlaps(
+        formData.startDate,
+        formData.endDate,
+        event?.id
+      )
+    }
+    return []
+  }, [formData.startDate, formData.endDate, checkOverlaps, event])
 
   React.useEffect(() => {
     if (event) {
       setFormData(event)
     } else if (selectedRange) {
-      setFormData({
-        ...formData,
+      setFormData(prev => ({
+        ...prev,
         startDate: selectedRange.from,
         endDate: selectedRange.to
-      })
+      }))
     } else if (selectedDate) {
-      setFormData({
-        ...formData,
+      setFormData(prev => ({
+        ...prev,
         startDate: selectedDate,
         endDate: selectedDate
-      })
+      }))
     }
   }, [event, selectedDate, selectedRange])
-
-  React.useEffect(() => {
-    if (formData.startDate && formData.endDate) {
-      const overlaps = checkOverlaps(
-        formData.startDate,
-        formData.endDate,
-        event?.id
-      )
-      setConflicts(overlaps)
-    }
-  }, [formData.startDate, formData.endDate, checkOverlaps, event])
 
   const handleSave = () => {
     if (formData.title && formData.startDate && formData.endDate) {
@@ -107,7 +105,6 @@ export function EventModal({
       endDate: new Date(),
       description: ''
     })
-    setConflicts([])
   }
 
   const categoryColors = {

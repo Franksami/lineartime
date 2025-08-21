@@ -7,10 +7,12 @@ import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 import type { FilterState, ViewOptions } from "@/types/calendar"
 
+type FilterChangeHandler = (filters: FilterState | { viewOptions: ViewOptions }) => void
+
 interface FilterPanelProps {
   filters: FilterState
   viewOptions: ViewOptions
-  onFilterChange: (filters: any) => void
+  onFilterChange: FilterChangeHandler
   onClose: () => void
 }
 

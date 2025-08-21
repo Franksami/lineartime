@@ -84,31 +84,58 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 
 ```
 lineartime/
-├── app/                          # Next.js app directory
-│   ├── page.tsx                 # Main calendar page
+├── .ai-rules/                   # AI assistant rules and configurations
+│   ├── .claude/                # Claude AI rules
+│   ├── .roo/                   # Roo AI rules
+│   ├── .trae/                  # Trae AI rules
+│   ├── .windsurf/              # Windsurf AI rules
+│   ├── .gemini/                # Gemini AI rules
+│   └── .clinerules/            # Cline AI rules
+├── .config/                     # Configuration files
+│   ├── .prettierrc             # Code formatting rules
+│   └── README.md               # Configuration documentation
+├── .github/                     # GitHub workflows and templates
+├── .taskmaster/                 # Project management and tasks
+├── app/                         # Next.js app directory
+│   ├── page.tsx                # Main calendar page
 │   ├── layout.tsx              # Root layout with providers
 │   ├── globals.css             # Global styles and theme
-│   ├── sign-in/               # Authentication pages
-│   └── sign-up/              # Authentication pages
+│   ├── sign-in/                # Authentication pages
+│   └── sign-up/                # Authentication pages
 ├── components/
-│   ├── calendar/              # Calendar components
+│   ├── calendar/               # Calendar components
 │   │   ├── LinearCalendarVertical.tsx  # Main calendar component
 │   │   ├── EventModal.tsx              # Event creation/editing
 │   │   ├── FilterPanel.tsx             # Category filters
 │   │   ├── ReflectionModal.tsx         # Year reflection
 │   │   ├── ZoomControls.tsx            # View controls
 │   │   └── index.ts                    # Exports
-│   ├── ui/                    # shadcn/ui components
-│   └── glass/                # Glass morphism components
+│   ├── ui/                     # shadcn/ui components
+│   └── glass/                  # Glass morphism components
+├── convex/                      # Backend configuration
+├── docs/                        # Project documentation
+│   ├── README.md               # Documentation index
+│   ├── ARCHITECTURE.md         # System architecture
+│   ├── COMPONENTS.md           # Component library
+│   ├── CHANGELOG.md            # Version history
+│   ├── CLAUDE.md               # Claude AI configuration
+│   ├── CALENDAR_IMPLEMENTATION_SUMMARY.md  # Calendar implementation
+│   └── LINEAR_CALENDAR_DESIGN.md           # Calendar design specs
 ├── hooks/
-│   ├── useLinearCalendar.ts  # Calendar state management
-│   └── use-mobile.ts         # Responsive utilities
-├── types/
-│   └── calendar.ts           # TypeScript definitions
+│   ├── useLinearCalendar.ts    # Calendar state management
+│   └── use-mobile.ts           # Responsive utilities
 ├── lib/
-│   └── utils.ts             # Utility functions
-├── convex/                  # Backend configuration
-└── .taskmaster/            # Project management
+│   └── utils.ts                # Utility functions
+├── public/                      # Static assets
+├── types/
+│   └── calendar.ts             # TypeScript definitions
+├── [config files]               # Essential config files (in root)
+│   ├── next.config.ts          # Next.js configuration
+│   ├── tailwind.config.ts      # Tailwind CSS configuration
+│   ├── tsconfig.json           # TypeScript configuration
+│   ├── eslint.config.mjs       # ESLint configuration
+│   └── package.json            # Dependencies and scripts
+└── README.md                    # This file - project overview
 ```
 
 ## Development

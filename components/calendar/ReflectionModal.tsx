@@ -195,7 +195,7 @@ export function ReflectionModal({
 
             <div>
               <Label htmlFor="missing" className="text-base font-medium mb-2">
-                3. What's missing from your year?
+                3. What&apos;s missing from your year?
               </Label>
               <Textarea
                 id="missing"
@@ -264,7 +264,7 @@ function calculateWeeksWithoutPersonal(events: Event[], year: number): number {
         isWithinInterval(eventEnd, { start: yearStart, end: yearEnd })) {
       
       // Get week numbers for the event duration
-      let currentDate = new Date(eventStart)
+      const currentDate = new Date(eventStart)
       while (currentDate <= eventEnd) {
         if (currentDate.getFullYear() === year) {
           const weekNum = getWeek(currentDate, { weekStartsOn: 0 })

@@ -1,0 +1,93 @@
+{
+	"meta": {
+		"generatedAt": "2025-08-21T03:39:03.192Z",
+		"tasksAnalyzed": 10,
+		"totalTasks": 27,
+		"analysisCount": 10,
+		"thresholdScore": 5,
+		"projectName": "LinearTime",
+		"usedResearch": true
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 18,
+			"taskTitle": "Implement Virtual Scrolling Foundation",
+			"complexityScore": 9,
+			"recommendedSubtasks": 12,
+			"expansionPrompt": "Break down the virtual scrolling implementation into core components focusing on viewport calculation, render queue management, and performance optimization strategies",
+			"reasoning": "High complexity due to performance requirements, multi-layer architecture, and need for precise timing/memory management. Requires deep understanding of browser rendering pipeline and optimization techniques."
+		},
+		{
+			"taskId": 19,
+			"taskTitle": "Implement IndexedDB Storage System",
+			"complexityScore": 7,
+			"recommendedSubtasks": 10,
+			"expansionPrompt": "Detail the database schema design, migration strategies, and offline sync mechanisms for the IndexedDB implementation",
+			"reasoning": "Moderate-high complexity due to schema design, migration handling, and concurrent operation management. Requires careful error handling and data integrity considerations."
+		},
+		{
+			"taskId": 20,
+			"taskTitle": "Develop Event Layout Engine",
+			"complexityScore": 8,
+			"recommendedSubtasks": 11,
+			"expansionPrompt": "Break down the layout engine implementation focusing on algorithm optimization, worker communication, and caching strategies",
+			"reasoning": "High complexity due to algorithmic challenges, concurrent processing requirements, and performance optimization needs. Requires careful balance of memory usage and processing speed."
+		},
+		{
+			"taskId": 21,
+			"taskTitle": "Implement Natural Language Processing",
+			"complexityScore": 6,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Detail the custom refiners implementation and integration points with the core calendar functionality",
+			"reasoning": "Moderate complexity due to natural language parsing edge cases and custom refiner implementation. Built on existing library reducing overall complexity."
+		},
+		{
+			"taskId": 22,
+			"taskTitle": "Develop AI Scheduling System",
+			"complexityScore": 9,
+			"recommendedSubtasks": 13,
+			"expansionPrompt": "Break down the CSP solver implementation focusing on constraint types, optimization strategies, and integration with existing calendar systems",
+			"reasoning": "High complexity due to algorithmic challenges, multiple constraint types, and need for optimization. Requires careful performance tuning and extensive testing."
+		},
+		{
+			"taskId": 23,
+			"taskTitle": "Implement Real-time Collaboration",
+			"complexityScore": 8,
+			"recommendedSubtasks": 11,
+			"expansionPrompt": "Detail the CRDT implementation, conflict resolution strategies, and offline sync mechanisms",
+			"reasoning": "High complexity due to distributed systems challenges, conflict resolution requirements, and need for robust sync mechanisms. Requires careful state management."
+		},
+		{
+			"taskId": 24,
+			"taskTitle": "Create Service Worker for Offline Support",
+			"complexityScore": 7,
+			"recommendedSubtasks": 9,
+			"expansionPrompt": "Break down the service worker implementation focusing on caching strategies and background sync mechanisms",
+			"reasoning": "Moderate-high complexity due to complex caching requirements, sync management, and need for robust error handling. Requires careful testing across network conditions."
+		},
+		{
+			"taskId": 25,
+			"taskTitle": "Implement Touch and Mobile Support",
+			"complexityScore": 7,
+			"recommendedSubtasks": 10,
+			"expansionPrompt": "Detail the touch interaction system implementation focusing on gesture recognition and performance optimization",
+			"reasoning": "Moderate-high complexity due to diverse device support requirements, performance optimization needs, and complex gesture handling."
+		},
+		{
+			"taskId": 26,
+			"taskTitle": "Implement Accessibility Features",
+			"complexityScore": 8,
+			"recommendedSubtasks": 12,
+			"expansionPrompt": "Break down the accessibility implementation focusing on ARIA patterns, keyboard navigation, and screen reader support",
+			"reasoning": "High complexity due to comprehensive WCAG compliance requirements, complex keyboard navigation needs, and extensive testing requirements across assistive technologies."
+		},
+		{
+			"taskId": 27,
+			"taskTitle": "Create Performance Monitoring System",
+			"complexityScore": 6,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Detail the performance metrics implementation focusing on data collection and visualization strategies",
+			"reasoning": "Moderate complexity due to metric collection requirements and visualization needs. Built on existing Web Vitals framework reducing overall complexity."
+		}
+	]
+}

@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { format, getDaysInMonth, startOfYear, addMonths, getDay, isToday, isSameDay, isWithinInterval, endOfMonth } from "date-fns"
+import { getDaysInMonth, startOfYear, addMonths, getDay, isToday, isSameDay, isWithinInterval, endOfMonth } from "date-fns"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { EventModal } from "./EventModal"
 import { FilterPanel } from "./FilterPanel"
@@ -46,7 +46,6 @@ export function LinearCalendarVertical({
     setHoveredDate,
     setShowEventModal,
     setShowReflectionModal,
-    setCurrentEvent,
     startSelection,
     updateSelection,
     endSelection,

@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
-import { isWithinInterval } from 'date-fns'
-import type { Event, DateRange, FilterState } from '@/types/calendar'
+import type { Event, FilterState } from '@/types/calendar'
 
 interface CalendarRange {
   from: Date
@@ -31,7 +30,7 @@ export function useLinearCalendar(year: number) {
     if (savedEvents) {
       try {
         const parsed = JSON.parse(savedEvents)
-        setEvents(parsed.map((e: any) => ({
+        setEvents(parsed.map((e: Event) => ({
           ...e,
           startDate: new Date(e.startDate),
           endDate: new Date(e.endDate)
@@ -89,11 +88,13 @@ export function useLinearCalendar(year: number) {
     setEvents(prev => prev.filter(e => e.id !== id))
   }, [])
 
-  const handleFilterChange = useCallback((newFilters: any) => {
-    if (newFilters.viewOptions) {
+  const handleFilterChange = useCallback((newFilters: FilterState | { viewOptions: { compactMode: boolean } }) => {
+    if ('viewOptions' in newFilters && newFilters.viewOptions) {
       setViewMode(newFilters.viewOptions.compactMode ? 'compact' : 'full')
     }
-    setFilters(newFilters)
+    if ('personal' in newFilters) {
+      setFilters(newFilters as FilterState)
+    }
   }, [])
 
   const startSelection = useCallback((date: Date) => {

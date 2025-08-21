@@ -1,17 +1,19 @@
 'use client';
 
-import { ClerkProvider, useAuth } from '@clerk/nextjs';
+import { ClerkProvider } from '@clerk/nextjs';
 import { ConvexProvider, ConvexReactClient } from 'convex/react';
 import { ReactNode } from 'react';
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL || 'https://gentle-seagull-346.convex.cloud');
 
 export function Providers({ children }: { children: ReactNode }) {
+  // Temporarily disable ClerkProvider for development
+  // Uncomment when you have valid Clerk keys
   return (
-    <ClerkProvider>
+    // <ClerkProvider>
       <ConvexProvider client={convex}>
         {children}
       </ConvexProvider>
-    </ClerkProvider>
+    // </ClerkProvider>
   );
 }

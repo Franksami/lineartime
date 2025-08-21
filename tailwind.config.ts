@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import tailwindcssAnimate from "tailwindcss-animate"
 
 const config: Config = {
   content: [
@@ -108,9 +109,10 @@ const config: Config = {
     },
   },
   plugins: [
-    require("tailwindcss-animate"),
+    tailwindcssAnimate,
     // Custom plugin for glass morphism utilities
-    function ({ addUtilities }: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function ({ addUtilities }: { addUtilities: (utilities: Record<string, any>) => void }) {
       const glassUtilities = {
         '.glass': {
           background: 'oklch(10% 0.01 240 / 0.2)',
@@ -128,7 +130,7 @@ const config: Config = {
           background: 'oklch(15% 0.005 240 / 0.1)',
           backdropFilter: 'blur(10px) saturate(150%)',
           WebkitBackdropFilter: 'blur(10px) saturate(150%)',
-          border: '1px solid oklch(100% 0 0 / 0.1)',
+          border: '1px solid oklch(100% 0 0 / 0.12)',
         },
         '.glass-frosted': {
           background: 'oklch(100% 0 0 / 0.6)',
@@ -144,9 +146,6 @@ const config: Config = {
         '.no-scrollbar': {
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
         },
       };
       addUtilities(glassUtilities);

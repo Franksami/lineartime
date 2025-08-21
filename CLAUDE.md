@@ -1,417 +1,350 @@
-# Task Master AI - Claude Code Integration Guide
+# CLAUDE.md
 
-## Essential Commands
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-### Core Workflow Commands
+## 🎯 Project Overview
 
+**Linear Calendar** - A year-at-a-glance calendar application being transformed into an enterprise-grade, AI-powered scheduling platform.
+
+**Current Version**: v0.2.0 (Basic implementation with LocalStorage)
+**Target Version**: v3.0.0 (Enterprise platform per PRD)
+
+### Tech Stack
+- **Framework**: Next.js 15.5.0 with Turbopack
+- **Language**: TypeScript 5.0
+- **UI**: React 19 + shadcn/ui + Tailwind CSS (dark theme)
+- **Storage**: LocalStorage (migrating to IndexedDB)
+- **Backend**: Convex (configured, not active)
+- **Auth**: Clerk (configured, not active)
+
+## 📦 Essential Commands
+
+### Development
 ```bash
-# Project Setup
-task-master init                                    # Initialize Task Master in current project
-task-master parse-prd .taskmaster/docs/prd.txt      # Generate tasks from PRD document
-task-master models --setup                        # Configure AI models interactively
+# Start development server with Turbopack
+pnpm dev
 
-# Daily Development Workflow
-task-master list                                   # Show all tasks with status
-task-master next                                   # Get next available task to work on
-task-master show <id>                             # View detailed task information (e.g., task-master show 1.2)
-task-master set-status --id=<id> --status=done    # Mark task complete
+# Build for production
+pnpm build
 
-# Task Management
-task-master add-task --prompt="description" --research        # Add new task with AI assistance
-task-master expand --id=<id> --research --force              # Break task into subtasks
-task-master update-task --id=<id> --prompt="changes"         # Update specific task
-task-master update --from=<id> --prompt="changes"            # Update multiple tasks from ID onwards
-task-master update-subtask --id=<id> --prompt="notes"        # Add implementation notes to subtask
+# Run production server
+pnpm start
 
-# Analysis & Planning
-task-master analyze-complexity --research          # Analyze task complexity
-task-master complexity-report                      # View complexity analysis
-task-master expand --all --research               # Expand all eligible tasks
-
-# Dependencies & Organization
-task-master add-dependency --id=<id> --depends-on=<id>       # Add task dependency
-task-master move --from=<id> --to=<id>                       # Reorganize task hierarchy
-task-master validate-dependencies                            # Check for dependency issues
-task-master generate                                         # Update task markdown files (usually auto-called)
+# Lint code (no tests configured yet)
+pnpm lint
 ```
 
-## Key Files & Project Structure
+### Task Master Commands (Project Management)
+```bash
+# View all tasks
+task-master list
 
-### Core Files
+# Get next task to work on
+task-master next
 
-- `.taskmaster/tasks/tasks.json` - Main task data file (auto-managed)
-- `.taskmaster/config.json` - AI model configuration (use `task-master models` to modify)
-- `.taskmaster/docs/prd.txt` - Product Requirements Document for parsing
-- `.taskmaster/tasks/*.txt` - Individual task files (auto-generated from tasks.json)
-- `.env` - API keys for CLI usage
+# Show task details
+task-master show <id>
 
-### Claude Code Integration Files
+# Mark task complete
+task-master set-status --id=<id> --status=done
 
-- `CLAUDE.md` - Auto-loaded context for Claude Code (this file)
-- `.claude/settings.json` - Claude Code tool allowlist and preferences
-- `.claude/commands/` - Custom slash commands for repeated workflows
-- `.mcp.json` - MCP server configuration (project-specific)
+# Update task implementation notes
+task-master update-subtask --id=<id> --prompt="implementation notes"
 
-### Directory Structure
-
-```
-project/
-├── .taskmaster/
-│   ├── tasks/              # Task files directory
-│   │   ├── tasks.json      # Main task database
-│   │   ├── task-1.md      # Individual task files
-│   │   └── task-2.md
-│   ├── docs/              # Documentation directory
-│   │   ├── prd.txt        # Product requirements
-│   ├── reports/           # Analysis reports directory
-│   │   └── task-complexity-report.json
-│   ├── templates/         # Template files
-│   │   └── example_prd.txt  # Example PRD template
-│   └── config.json        # AI models & settings
-├── .claude/
-│   ├── settings.json      # Claude Code configuration
-│   └── commands/         # Custom slash commands
-├── .env                  # API keys
-├── .mcp.json            # MCP configuration
-└── CLAUDE.md            # This file - auto-loaded by Claude Code
+# Parse new PRD features
+task-master parse-prd --append "Advanced Features technical-prd.md"
 ```
 
-## MCP Integration
+## 🏗 Architecture & Code Structure
 
-Task Master provides an MCP server that Claude Code can connect to. Configure in `.mcp.json`:
+### Current Implementation
 
-```json
-{
-  "mcpServers": {
-    "task-master-ai": {
-      "command": "npx",
-      "args": ["-y", "--package=task-master-ai", "task-master-ai"],
-      "env": {
-        "ANTHROPIC_API_KEY": "your_key_here",
-        "PERPLEXITY_API_KEY": "your_key_here",
-        "OPENAI_API_KEY": "OPENAI_API_KEY_HERE",
-        "GOOGLE_API_KEY": "GOOGLE_API_KEY_HERE",
-        "XAI_API_KEY": "XAI_API_KEY_HERE",
-        "OPENROUTER_API_KEY": "OPENROUTER_API_KEY_HERE",
-        "MISTRAL_API_KEY": "MISTRAL_API_KEY_HERE",
-        "AZURE_OPENAI_API_KEY": "AZURE_OPENAI_API_KEY_HERE",
-        "OLLAMA_API_KEY": "OLLAMA_API_KEY_HERE"
-      }
-    }
+#### Core Components
+- **`components/calendar/LinearCalendarVertical.tsx`**: Main calendar component using DOM rendering
+  - 12-month vertical layout (42 columns × 12 rows)
+  - Basic event rendering with category colors
+  - LocalStorage persistence (synchronous, blocks UI at >500 events)
+
+- **`hooks/useLinearCalendar.ts`**: State management hook
+  - Event CRUD operations
+  - Filter state management
+  - LocalStorage sync (5MB limit)
+  - Basic selection handling
+
+- **`types/calendar.ts`**: TypeScript definitions
+  - Event interface with categories
+  - Filter and view state types
+  - Color constants
+
+### Target Architecture (PRD Implementation)
+
+#### Phase 1: Performance Foundation (Critical - Start Here)
+**WARNING**: The app will break at >500 events without virtual scrolling. Implement this first!
+
+Key files to create:
+- `lib/canvas/CalendarRenderer.ts` - Three-layer Canvas architecture
+- `components/calendar/VirtualCalendar.tsx` - Virtual scrolling with react-window
+- `lib/data-structures/IntervalTree.ts` - O(log n) conflict detection
+- `workers/calendar.worker.ts` - Web Worker for heavy computations
+
+#### Phase 2: Storage Migration
+- `lib/storage/CalendarDB.ts` - IndexedDB with Dexie
+- `service-worker.ts` - Offline-first with background sync
+- Migration script to preserve existing LocalStorage data
+
+#### Phase 3: Natural Language Processing  
+- `lib/nlp/EventParser.ts` - Chrono.js integration
+- `components/CommandBar.tsx` - Command palette UI
+
+#### Phase 4: AI Scheduling
+- `lib/ai/SchedulingEngine.ts` - CSP solver
+- `lib/ai/FocusTimeManager.ts` - Focus protection
+
+#### Phase 5: Real-time Collaboration
+- `lib/collaboration/CollaborationManager.ts` - Yjs CRDT
+- WebSocket integration for presence
+
+## 🚀 PRD Implementation Strategy
+
+### Critical Path (Must Do First)
+1. **Virtual Scrolling** - App breaks without this at scale
+2. **Canvas Rendering** - DOM can't handle overlapping events
+3. **IndexedDB Migration** - LocalStorage is synchronous and limited
+
+### Implementation Order
+```bash
+# Week 1-2: Performance Foundation
+1. Implement VirtualCalendar.tsx with react-window
+2. Add Canvas rendering for events
+3. Create IntervalTree for conflict detection
+4. Set up Web Worker architecture
+
+# Week 3-4: Storage & Offline
+1. Migrate to IndexedDB with backward compatibility
+2. Implement Service Worker
+3. Add offline-first sync
+
+# Week 5-6: Natural Language
+1. Integrate Chrono.js
+2. Build command bar
+3. Add real-time parsing
+
+# Week 7-9: AI Features
+1. Implement scheduling engine
+2. Add focus time protection
+3. Build conflict resolution
+
+# Week 10-12: Collaboration & Polish
+1. Set up WebSocket infrastructure
+2. Implement Yjs CRDT
+3. Mobile optimization
+4. Accessibility patterns
+```
+
+### Performance Targets
+- **Initial render**: <500ms for 12 months
+- **Scrolling**: 60fps with 10,000+ events
+- **Memory**: <100MB typical, <200MB peak
+- **Event operations**: <100ms
+- **Sync latency**: <100ms
+
+## 🛠 Development Guidelines
+
+### Performance Requirements
+- Always test with 10,000+ events
+- Profile rendering with Chrome DevTools
+- Use React DevTools Profiler
+- Monitor memory usage
+- Implement virtual scrolling before any new features
+
+### Migration Safety
+```typescript
+// Always implement rollback capability
+async function safeMigration() {
+  await backupCurrentState();
+  try {
+    await migrateToNewSystem();
+    await verifyMigration();
+  } catch (error) {
+    await rollbackMigration();
+    throw error;
   }
 }
 ```
 
-### Essential MCP Tools
+### Feature Flags
+Use environment variables to control feature rollout:
+```typescript
+// .env.local
+NEXT_PUBLIC_FEATURE_VIRTUAL_SCROLL=true
+NEXT_PUBLIC_FEATURE_CANVAS_RENDER=false
+NEXT_PUBLIC_FEATURE_NLP_PARSER=false
+```
 
+### Testing Strategy
+```typescript
+// Performance test before features
+it('should render 10,000 events in under 500ms', async () => {
+  const events = generateMockEvents(10000);
+  const start = performance.now();
+  await renderCalendar(events);
+  expect(performance.now() - start).toBeLessThan(500);
+});
+
+it('should maintain 60fps while scrolling', async () => {
+  const fps = await measureScrollingFPS();
+  expect(fps).toBeGreaterThanOrEqual(59);
+});
+```
+
+## 📁 File Structure
+
+### Current Structure
+```
+lineartime/
+├── app/                    # Next.js app directory
+├── components/
+│   ├── calendar/          # Calendar components
+│   └── ui/               # shadcn components
+├── hooks/                # Custom React hooks
+├── types/                # TypeScript definitions
+└── lib/                  # Utilities
+
+```
+
+### Target Structure (After PRD)
+```
+lineartime/
+├── lib/
+│   ├── canvas/          # Canvas rendering engine
+│   ├── nlp/            # Natural language processing
+│   ├── ai/             # AI scheduling engine
+│   ├── collaboration/  # Real-time sync (Yjs)
+│   ├── storage/        # IndexedDB management
+│   ├── mobile/         # Touch gestures
+│   ├── plugins/        # Plugin architecture
+│   └── monitoring/     # Performance tracking
+├── workers/
+│   ├── calendar.worker.ts
+│   └── sync.worker.ts
+```
+
+## 🔧 Common Tasks
+
+### Add Dependencies for PRD Implementation
+```bash
+# Phase 1: Performance
+pnpm add react-window @tanstack/react-virtual
+
+# Phase 2: Storage
+pnpm add dexie workbox-webpack-plugin
+
+# Phase 3: NLP
+pnpm add chrono-node cmdk
+
+# Phase 4: Collaboration
+pnpm add yjs y-websocket y-indexeddb socket.io-client
+```
+
+### Performance Profiling
 ```javascript
-help; // = shows available taskmaster commands
-// Project setup
-initialize_project; // = task-master init
-parse_prd; // = task-master parse-prd
-
-// Daily workflow
-get_tasks; // = task-master list
-next_task; // = task-master next
-get_task; // = task-master show <id>
-set_task_status; // = task-master set-status
-
-// Task management
-add_task; // = task-master add-task
-expand_task; // = task-master expand
-update_task; // = task-master update-task
-update_subtask; // = task-master update-subtask
-update; // = task-master update
-
-// Analysis
-analyze_project_complexity; // = task-master analyze-complexity
-complexity_report; // = task-master complexity-report
-```
-
-## Claude Code Workflow Integration
-
-### Standard Development Workflow
-
-#### 1. Project Initialization
-
-```bash
-# Initialize Task Master
-task-master init
-
-# Create or obtain PRD, then parse it
-task-master parse-prd .taskmaster/docs/prd.txt
-
-# Analyze complexity and expand tasks
-task-master analyze-complexity --research
-task-master expand --all --research
-```
-
-If tasks already exist, another PRD can be parsed (with new information only!) using parse-prd with --append flag. This will add the generated tasks to the existing list of tasks..
-
-#### 2. Daily Development Loop
-
-```bash
-# Start each session
-task-master next                           # Find next available task
-task-master show <id>                     # Review task details
-
-# During implementation, check in code context into the tasks and subtasks
-task-master update-subtask --id=<id> --prompt="implementation notes..."
-
-# Complete tasks
-task-master set-status --id=<id> --status=done
-```
-
-#### 3. Multi-Claude Workflows
-
-For complex projects, use multiple Claude Code sessions:
-
-```bash
-# Terminal 1: Main implementation
-cd project && claude
-
-# Terminal 2: Testing and validation
-cd project-test-worktree && claude
-
-# Terminal 3: Documentation updates
-cd project-docs-worktree && claude
-```
-
-### Custom Slash Commands
-
-Create `.claude/commands/taskmaster-next.md`:
-
-```markdown
-Find the next available Task Master task and show its details.
-
-Steps:
-
-1. Run `task-master next` to get the next task
-2. If a task is available, run `task-master show <id>` for full details
-3. Provide a summary of what needs to be implemented
-4. Suggest the first implementation step
-```
-
-Create `.claude/commands/taskmaster-complete.md`:
-
-```markdown
-Complete a Task Master task: $ARGUMENTS
-
-Steps:
-
-1. Review the current task with `task-master show $ARGUMENTS`
-2. Verify all implementation is complete
-3. Run any tests related to this task
-4. Mark as complete: `task-master set-status --id=$ARGUMENTS --status=done`
-5. Show the next available task with `task-master next`
-```
-
-## Tool Allowlist Recommendations
-
-Add to `.claude/settings.json`:
-
-```json
-{
-  "allowedTools": [
-    "Edit",
-    "Bash(task-master *)",
-    "Bash(git commit:*)",
-    "Bash(git add:*)",
-    "Bash(npm run *)",
-    "mcp__task_master_ai__*"
-  ]
+// Add to components for performance monitoring
+if (process.env.NODE_ENV === 'development') {
+  const measure = performance.measure('render', 'start', 'end');
+  console.log(`Render time: ${measure.duration}ms`);
 }
 ```
 
-## Configuration & Setup
-
-### API Keys Required
-
-At least **one** of these API keys must be configured:
-
-- `ANTHROPIC_API_KEY` (Claude models) - **Recommended**
-- `PERPLEXITY_API_KEY` (Research features) - **Highly recommended**
-- `OPENAI_API_KEY` (GPT models)
-- `GOOGLE_API_KEY` (Gemini models)
-- `MISTRAL_API_KEY` (Mistral models)
-- `OPENROUTER_API_KEY` (Multiple models)
-- `XAI_API_KEY` (Grok models)
-
-An API key is required for any provider used across any of the 3 roles defined in the `models` command.
-
-### Model Configuration
-
-```bash
-# Interactive setup (recommended)
-task-master models --setup
-
-# Set specific models
-task-master models --set-main claude-3-5-sonnet-20241022
-task-master models --set-research perplexity-llama-3.1-sonar-large-128k-online
-task-master models --set-fallback gpt-4o-mini
+### Virtual Scrolling Implementation Check
+```javascript
+// Quick test for virtual scrolling
+const testVirtualScroll = () => {
+  const events = Array(10000).fill(null).map((_, i) => ({
+    id: `test-${i}`,
+    title: `Event ${i}`,
+    startDate: new Date(),
+    endDate: new Date(),
+    category: 'personal'
+  }));
+  // Should render without freezing
+};
 ```
 
-## Task Structure & IDs
+## 🐛 Known Issues & Solutions
 
-### Task ID Format
+### Current Limitations
+1. **Performance degrades at >500 events** - Implement virtual scrolling
+2. **LocalStorage blocks UI** - Migrate to IndexedDB
+3. **No conflict detection** - Implement IntervalTree
+4. **No mobile optimization** - Add touch handlers
+5. **Single-user only** - Implement Yjs CRDT
 
-- Main tasks: `1`, `2`, `3`, etc.
-- Subtasks: `1.1`, `1.2`, `2.1`, etc.
-- Sub-subtasks: `1.1.1`, `1.1.2`, etc.
+### Common Errors
+```typescript
+// LocalStorage quota exceeded
+if (e.name === 'QuotaExceededError') {
+  // Migrate to IndexedDB immediately
+}
 
-### Task Status Values
-
-- `pending` - Ready to work on
-- `in-progress` - Currently being worked on
-- `done` - Completed and verified
-- `deferred` - Postponed
-- `cancelled` - No longer needed
-- `blocked` - Waiting on external factors
-
-### Task Fields
-
-```json
-{
-  "id": "1.2",
-  "title": "Implement user authentication",
-  "description": "Set up JWT-based auth system",
-  "status": "pending",
-  "priority": "high",
-  "dependencies": ["1.1"],
-  "details": "Use bcrypt for hashing, JWT for tokens...",
-  "testStrategy": "Unit tests for auth functions, integration tests for login flow",
-  "subtasks": []
+// DOM rendering slowdown
+if (renderTime > 100) {
+  // Switch to Canvas rendering
 }
 ```
 
-## Claude Code Best Practices with Task Master
+## 📚 Key Resources
 
-### Context Management
+### Documentation
+- PRD: `/Advanced Features technical-prd.md`
+- Architecture: `/docs/ARCHITECTURE.md`
+- Components: `/docs/COMPONENTS.md`
+- Task Master Guide: `/docs/CLAUDE.md`
 
-- Use `/clear` between different tasks to maintain focus
-- This CLAUDE.md file is automatically loaded for context
-- Use `task-master show <id>` to pull specific task context when needed
+### External Documentation
+- [React Window](https://react-window.vercel.app/)
+- [Yjs CRDT](https://docs.yjs.dev/)
+- [Chrono.js](https://github.com/wanasit/chrono)
+- [IndexedDB with Dexie](https://dexie.org/)
 
-### Iterative Implementation
-
-1. `task-master show <subtask-id>` - Understand requirements
-2. Explore codebase and plan implementation
-3. `task-master update-subtask --id=<id> --prompt="detailed plan"` - Log plan
-4. `task-master set-status --id=<id> --status=in-progress` - Start work
-5. Implement code following logged plan
-6. `task-master update-subtask --id=<id> --prompt="what worked/didn't work"` - Log progress
-7. `task-master set-status --id=<id> --status=done` - Complete task
-
-### Complex Workflows with Checklists
-
-For large migrations or multi-step processes:
-
-1. Create a markdown PRD file describing the new changes: `touch task-migration-checklist.md` (prds can be .txt or .md)
-2. Use Taskmaster to parse the new prd with `task-master parse-prd --append` (also available in MCP)
-3. Use Taskmaster to expand the newly generated tasks into subtasks. Consdier using `analyze-complexity` with the correct --to and --from IDs (the new ids) to identify the ideal subtask amounts for each task. Then expand them.
-4. Work through items systematically, checking them off as completed
-5. Use `task-master update-subtask` to log progress on each task/subtask and/or updating/researching them before/during implementation if getting stuck
-
-### Git Integration
-
-Task Master works well with `gh` CLI:
+## ⚡ Quick Start for PRD Implementation
 
 ```bash
-# Create PR for completed task
-gh pr create --title "Complete task 1.2: User authentication" --body "Implements JWT auth system as specified in task 1.2"
+# 1. Set up virtual scrolling (CRITICAL)
+# Create: components/calendar/VirtualCalendar.tsx
+# Use the PRD code as template
 
-# Reference task in commits
-git commit -m "feat: implement JWT auth (task 1.2)"
+# 2. Test with large dataset
+# Generate 10,000 events and verify 60fps
+
+# 3. Implement Canvas layer
+# Create: lib/canvas/CalendarRenderer.ts
+
+# 4. Set up Web Worker
+# Create: workers/calendar.worker.ts
+
+# 5. Begin IndexedDB migration
+# Create: lib/storage/CalendarDB.ts
+# Maintain LocalStorage compatibility
 ```
 
-### Parallel Development with Git Worktrees
+## 🎯 Success Metrics
 
-```bash
-# Create worktrees for parallel task development
-git worktree add ../project-auth feature/auth-system
-git worktree add ../project-api feature/api-refactor
+Monitor these metrics during development:
 
-# Run Claude Code in each worktree
-cd ../project-auth && claude    # Terminal 1: Auth work
-cd ../project-api && claude     # Terminal 2: API work
-```
+| Metric | Current | Target | Critical? |
+|--------|---------|--------|-----------|
+| Initial Load | ~2s | <500ms | Yes |
+| Max Events | ~500 | 10,000+ | Yes |
+| Scroll FPS | 30-45 | 60 | Yes |
+| Memory Usage | 150MB+ | <100MB | Yes |
+| Event Create | 200ms | <100ms | No |
 
-## Troubleshooting
+## Task Master Integration
 
-### AI Commands Failing
+Use Task Master to track PRD implementation:
+1. Parse the PRD: `task-master parse-prd --append "Advanced Features technical-prd.md"`
+2. Break down into subtasks: `task-master expand --all --research`
+3. Track progress: `task-master list`
+4. Get next task: `task-master next`
 
-```bash
-# Check API keys are configured
-cat .env                           # For CLI usage
-
-# Verify model configuration
-task-master models
-
-# Test with different model
-task-master models --set-fallback gpt-4o-mini
-```
-
-### MCP Connection Issues
-
-- Check `.mcp.json` configuration
-- Verify Node.js installation
-- Use `--mcp-debug` flag when starting Claude Code
-- Use CLI as fallback if MCP unavailable
-
-### Task File Sync Issues
-
-```bash
-# Regenerate task files from tasks.json
-task-master generate
-
-# Fix dependency issues
-task-master fix-dependencies
-```
-
-DO NOT RE-INITIALIZE. That will not do anything beyond re-adding the same Taskmaster core files.
-
-## Important Notes
-
-### AI-Powered Operations
-
-These commands make AI calls and may take up to a minute:
-
-- `parse_prd` / `task-master parse-prd`
-- `analyze_project_complexity` / `task-master analyze-complexity`
-- `expand_task` / `task-master expand`
-- `expand_all` / `task-master expand --all`
-- `add_task` / `task-master add-task`
-- `update` / `task-master update`
-- `update_task` / `task-master update-task`
-- `update_subtask` / `task-master update-subtask`
-
-### File Management
-
-- Never manually edit `tasks.json` - use commands instead
-- Never manually edit `.taskmaster/config.json` - use `task-master models`
-- Task markdown files in `tasks/` are auto-generated
-- Run `task-master generate` after manual changes to tasks.json
-
-### Claude Code Session Management
-
-- Use `/clear` frequently to maintain focused context
-- Create custom slash commands for repeated Task Master workflows
-- Configure tool allowlist to streamline permissions
-- Use headless mode for automation: `claude -p "task-master next"`
-
-### Multi-Task Updates
-
-- Use `update --from=<id>` to update multiple future tasks
-- Use `update-task --id=<id>` for single task updates
-- Use `update-subtask --id=<id>` for implementation logging
-
-### Research Mode
-
-- Add `--research` flag for research-based AI enhancement
-- Requires a research model API key like Perplexity (`PERPLEXITY_API_KEY`) in environment
-- Provides more informed task creation and updates
-- Recommended for complex technical tasks
-
----
-
-_This guide ensures Claude Code has immediate access to Task Master's essential functionality for agentic development workflows._
+Remember: Always implement performance features before adding new functionality!
