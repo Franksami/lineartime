@@ -24,11 +24,15 @@ Linear Calendar presents an entire year in a single vertical view, with each mon
 - **Reflection Modal**: End-of-year reflection prompts
 
 ### UI/UX
+- **Vercel Theme**: Modern design system with oklch color space
+- **Full-Screen Layout**: Edge-to-edge immersive calendar view
+- **Pure Black Background**: `oklch(0 0 0)` for maximum contrast
 - **Responsive Design**: Adapts to different screen sizes
 - **Keyboard Support**: Tab navigation and escape key handling
 - **Visual Feedback**: Hover states and selection indicators
 - **Today Highlight**: Current date prominently marked
 - **Weekend Distinction**: Weekends visually differentiated
+- **WCAG 2.1 AA**: Accessibility compliance for all users
 
 ## 🚀 Planned Features
 
@@ -47,7 +51,8 @@ Linear Calendar presents an entire year in a single vertical view, with each mon
 
 - **Framework**: [Next.js 15.5.0](https://nextjs.org/) with Turbopack
 - **Language**: [TypeScript 5.0](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) with OKLCH color space
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) with oklch color space
+- **Design System**: Vercel theme via [shadcn/ui](https://ui.shadcn.com/)
 - **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
 - **Date Handling**: [date-fns](https://date-fns.org/)
 - **Authentication**: [Clerk](https://clerk.com/) (configured, not active)

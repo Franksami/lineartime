@@ -1,5 +1,41 @@
 # Task Master AI - Claude Code Integration Guide
 
+## 🎨 UI/UX Implementation Guidelines
+
+### Design System Standards
+When implementing UI/UX features, always follow the established design system documented in [UI_STANDARDS.md](./UI_STANDARDS.md).
+
+#### Core Requirements
+1. **Theme Installation**: Use Vercel theme with oklch color system
+   ```bash
+   pnpm dlx shadcn@latest add https://tweakcn.com/r/themes/vercel.json
+   ```
+
+2. **Color System**: Always use theme variables, never hardcode colors
+   - Background: `bg-background` (pure black oklch(0 0 0))
+   - Cards: `bg-card`
+   - Text: `text-foreground` or `text-muted-foreground`
+   - Borders: `border-border`
+
+3. **Layout**: Full-screen edge-to-edge with minimal padding
+   ```tsx
+   <div className="h-screen bg-background overflow-hidden">
+   ```
+
+4. **Quality Assurance**:
+   - Use ui-ux-engineer agent for validation
+   - Run Playwright tests before committing
+   - Ensure WCAG 2.1 AA compliance
+   - Test SSR compatibility
+
+#### UI/UX Task Workflow
+1. Review UI_STANDARDS.md before starting
+2. Install/verify theme configuration
+3. Implement with theme variables only
+4. Validate with ui-ux-engineer agent
+5. Test with Playwright
+6. Update documentation if needed
+
 ## Essential Commands
 
 ### Core Workflow Commands

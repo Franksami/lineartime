@@ -1,5 +1,39 @@
 # Linear Calendar Component API Documentation
 
+## Design System Compliance
+
+All components must follow the design system standards defined in [UI_STANDARDS.md](./UI_STANDARDS.md).
+
+### Component Requirements
+1. **Theme Variables Only**: No hardcoded colors - use `bg-background`, `text-foreground`, etc.
+2. **oklch Color Space**: All color values use oklch for perceptual uniformity
+3. **Full-Screen Layouts**: Edge-to-edge design with minimal padding
+4. **SSR Compatible**: Check for `typeof window !== 'undefined'`
+5. **Accessibility**: WCAG 2.1 AA compliance required
+
+### Component Template
+```tsx
+/**
+ * ComponentName
+ * 
+ * Design System: ✅ Compliant
+ * Theme Variables: ✅ Used exclusively
+ * Accessibility: ✅ WCAG 2.1 AA
+ * SSR: ✅ Compatible
+ */
+export function ComponentName({ className, ...props }: ComponentProps) {
+  return (
+    <div className={cn(
+      "bg-card border-border text-foreground", // Theme variables
+      "transition-all duration-200",            // Smooth transitions
+      className
+    )} {...props}>
+      {/* Component content */}
+    </div>
+  );
+}
+```
+
 ## Core Components
 
 ### LinearCalendarVertical

@@ -83,9 +83,9 @@
             "title": "Setup OKLCH Color System and Glass Effect Utilities",
             "description": "Implement the OKLCH color system and create Tailwind utilities for glass morphism effects",
             "dependencies": [],
-            "details": "Configure Tailwind config to support OKLCH colors, create custom utilities for backdrop-filter, blur effects, and transparency. Define color palette variables following Apple's Liquid Glass design guidelines",
+            "details": "Configure Tailwind config to support OKLCH colors, create custom utilities for backdrop-filter, blur effects, and transparency. Define color palette variables following Apple's Liquid Glass design guidelines. Use Vercel theme via shadcn CLI (pnpm dlx shadcn@latest add https://tweakcn.com/r/themes/vercel.json)",
             "status": "done",
-            "testStrategy": "Visual regression testing for color accuracy and glass effect rendering across different browsers"
+            "testStrategy": "Visual regression testing for color accuracy and glass effect rendering across different browsers. Validate with ui-ux-engineer agent and run Playwright tests for UI consistency. Ensure WCAG 2.1 AA compliance"
           },
           {
             "id": 2,

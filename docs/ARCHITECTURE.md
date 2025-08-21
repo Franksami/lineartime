@@ -11,6 +11,8 @@ Linear Calendar is built as a modern React application using Next.js 15 with a c
 3. **Type Safety**: Full TypeScript coverage for compile-time safety
 4. **Performance First**: Optimized rendering with React memoization and efficient data structures
 5. **Progressive Enhancement**: Core functionality works without optional services (auth, backend)
+6. **Design System Compliance**: Consistent use of oklch color system and theme variables
+7. **Accessibility by Default**: WCAG 2.1 AA compliance in all components
 
 ## System Architecture
 
@@ -26,8 +28,35 @@ Linear Calendar is built as a modern React application using Next.js 15 with a c
 │ • Components     │ • React Hooks     │ • LocalStorage       │
 │ • shadcn/ui      │ • Local State     │ • Convex (optional)  │
 │ • Tailwind CSS   │ • Context         │ • Clerk Auth         │
+│ • oklch colors   │ • Event Handlers  │ • IndexedDB          │
 └──────────────────┴──────────────────┴──────────────────────┘
 ```
+
+## Design System Architecture
+
+### Color System (oklch)
+The application uses the oklch color space for perceptually uniform colors:
+
+```css
+/* Core color variables defined in globals.css */
+--background: oklch(0 0 0);        /* Pure black background */
+--foreground: oklch(1 0 0);        /* White text */
+--card: oklch(0.14 0 0);           /* Elevated surfaces */
+--border: oklch(0.26 0 0);         /* Subtle borders */
+--muted: oklch(0.23 0 0);          /* Secondary surfaces */
+```
+
+### Theme Architecture
+- **Vercel Theme**: Base design system via shadcn/ui
+- **CSS Variables**: Dynamic theming support
+- **Dark Mode First**: Optimized for dark environments
+- **SSR Compatible**: Safe for server-side rendering
+
+### Layout System
+- **Full-Screen**: Edge-to-edge viewport utilization
+- **Responsive Grid**: Mobile-first responsive design
+- **Overflow Management**: Explicit scroll containers
+- **Z-Index Layers**: Consistent stacking contexts
 
 ## Component Hierarchy
 

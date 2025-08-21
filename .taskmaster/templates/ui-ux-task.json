@@ -1,0 +1,71 @@
+{
+  "templateName": "UI/UX Implementation Task",
+  "description": "Template for UI/UX design system implementation tasks",
+  "taskTemplate": {
+    "title": "{{COMPONENT_NAME}} UI Implementation",
+    "description": "Implement {{COMPONENT_NAME}} following design system standards with oklch colors and theme variables",
+    "details": "1. Review UI_STANDARDS.md for design system requirements\n2. Install/verify Vercel theme: pnpm dlx shadcn@latest add https://tweakcn.com/r/themes/vercel.json\n3. Implement component using only theme variables:\n   - Background: bg-background (pure black oklch(0 0 0))\n   - Cards: bg-card\n   - Text: text-foreground or text-muted-foreground\n   - Borders: border-border\n4. Ensure full-screen layout with edge-to-edge design\n5. Add proper overflow handling\n6. Implement responsive breakpoints\n7. Add accessibility features (ARIA labels, keyboard navigation)\n8. Test SSR compatibility (typeof window !== 'undefined')",
+    "testStrategy": "1. Visual validation with ui-ux-engineer agent\n2. Run Playwright tests for UI consistency\n3. Check WCAG 2.1 AA compliance\n4. Test responsive behavior across breakpoints\n5. Verify theme variable usage (no hardcoded colors)\n6. Test SSR compatibility\n7. Performance testing (<3s load time)\n8. Cross-browser testing",
+    "priority": "high",
+    "dependencies": [],
+    "status": "pending",
+    "subtasks": [
+      {
+        "title": "Design System Compliance Check",
+        "description": "Verify theme installation and color system setup",
+        "details": "Check globals.css for oklch variables, verify Vercel theme installation, confirm no hardcoded colors in codebase",
+        "testStrategy": "Grep for hardcoded colors, verify theme variable usage"
+      },
+      {
+        "title": "Component Implementation",
+        "description": "Build component with theme variables and proper styling",
+        "details": "Use only theme variables, implement glass morphism if needed, ensure responsive design",
+        "testStrategy": "Visual regression testing, theme compliance check"
+      },
+      {
+        "title": "Accessibility Implementation",
+        "description": "Add WCAG 2.1 AA compliance features",
+        "details": "Implement ARIA labels, keyboard navigation, focus management, color contrast validation",
+        "testStrategy": "Accessibility audit with axe-core, screen reader testing"
+      },
+      {
+        "title": "Testing and Validation",
+        "description": "Complete testing suite for UI component",
+        "details": "Run Playwright tests, validate with ui-ux-engineer agent, performance testing",
+        "testStrategy": "Automated UI tests, visual regression, performance metrics"
+      }
+    ]
+  },
+  "qualityGates": [
+    {
+      "name": "Theme Compliance",
+      "description": "All colors use theme variables",
+      "validation": "No hardcoded hex/rgb values in component"
+    },
+    {
+      "name": "Accessibility",
+      "description": "WCAG 2.1 AA compliant",
+      "validation": "Passes axe-core audit with no violations"
+    },
+    {
+      "name": "Performance",
+      "description": "Load time under 3 seconds",
+      "validation": "Lighthouse score > 95"
+    },
+    {
+      "name": "Responsive Design",
+      "description": "Works across all breakpoints",
+      "validation": "Visual tests pass on mobile, tablet, desktop"
+    },
+    {
+      "name": "SSR Compatibility",
+      "description": "Server-side rendering safe",
+      "validation": "No window/navigator errors during SSR"
+    }
+  ],
+  "variables": {
+    "COMPONENT_NAME": "Component name to implement",
+    "DESIGN_REFERENCE": "Link to design mockup or specification",
+    "PERFORMANCE_TARGET": "Specific performance requirements"
+  }
+}
