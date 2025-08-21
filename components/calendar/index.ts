@@ -1,5 +1,7 @@
 export { LinearCalendarVertical } from './LinearCalendarVertical'
 export { EventModal } from './EventModal'
+export { EventCard } from './EventCard'
+export { EventManagement } from './EventManagement'
 export { FilterPanel } from './FilterPanel'
 export { ReflectionModal } from './ReflectionModal'
 export { ZoomControls } from './ZoomControls'
