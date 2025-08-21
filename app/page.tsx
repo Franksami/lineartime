@@ -10,6 +10,7 @@ import { useOfflineEvents } from "@/hooks/useIndexedDB";
 import { HighContrastToggle } from "@/components/ui/high-contrast-toggle";
 import { CommandBar } from "@/components/CommandBar";
 import { PerformanceMonitor } from "@/components/ui/performance-monitor";
+import { AssistantPanel } from "@/components/ai/AssistantPanel";
 import type { Event } from "@/types/calendar";
 
 export default function Page() {
@@ -167,9 +168,17 @@ export default function Page() {
       {process.env.NODE_ENV === 'development' && (
         <PerformanceMonitor 
           eventCount={calendarEvents.length}
-          position="bottom-right"
+          position="bottom-left"
         />
       )}
+      
+      {/* AI Assistant Panel */}
+      <AssistantPanel
+        events={calendarEvents}
+        onEventCreate={handleEventCreate}
+        onEventUpdate={updateEvent}
+        onEventDelete={handleEventDelete}
+      />
     </div>
   );
 }
