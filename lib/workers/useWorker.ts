@@ -143,7 +143,7 @@ export function useWorker(
 
 // Specialized hook for calendar worker
 export function useCalendarWorker() {
-  const worker = useWorker('/calendar-worker.js')
+  const worker = useWorker('/calendar-worker-v2.js') // Updated to use V2 with column-based layout
   
   const calculateLayout = useCallback(async (events: any[]) => {
     return worker.sendMessage('CALCULATE_LAYOUT', { events })
@@ -157,10 +157,16 @@ export function useCalendarWorker() {
     return worker.sendMessage('OPTIMIZE_POSITIONS', { events, layouts })
   }, [worker.sendMessage])
   
+  // New column-based layout method using Google Calendar algorithm
+  const layoutEventsV2 = useCallback(async (events: any[], containerWidth?: number) => {
+    return worker.sendMessage('LAYOUT_EVENTS_V2', { events, containerWidth })
+  }, [worker.sendMessage])
+  
   return {
     ...worker,
     calculateLayout,
     detectConflicts,
-    optimizePositions
+    optimizePositions,
+    layoutEventsV2 // New method for column-based layout
   }
 }

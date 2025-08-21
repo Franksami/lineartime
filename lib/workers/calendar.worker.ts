@@ -1,10 +1,11 @@
 // Calendar Layout Worker - Offloads heavy computations to background thread
-// Handles event positioning, conflict detection, and layout calculations
+// Implements Google Calendar's column-based event stacking algorithm
 
 import type { Event } from '@/types/calendar'
+import { EventLayoutEngine, type LayoutedEvent } from '../layout/EventLayoutEngine'
 
 interface WorkerMessage {
-  type: 'CALCULATE_LAYOUT' | 'DETECT_CONFLICTS' | 'OPTIMIZE_POSITIONS'
+  type: 'CALCULATE_LAYOUT' | 'DETECT_CONFLICTS' | 'OPTIMIZE_POSITIONS' | 'LAYOUT_EVENTS_V2'
   data: any
   id: string
 }
@@ -188,6 +189,15 @@ function optimizePositions(events: Event[], layouts: LayoutResult[]): LayoutResu
   return optimized
 }
 
+// Initialize the layout engine
+const layoutEngine = new EventLayoutEngine({
+  containerWidth: 600,
+  cellWidth: 40,
+  cellHeight: 36,
+  columnGap: 2,
+  minEventHeight: 30
+})
+
 // Handle messages from main thread
 ctx.addEventListener('message', (event: MessageEvent<WorkerMessage>) => {
   const { type, data, id } = event.data
@@ -206,6 +216,14 @@ ctx.addEventListener('message', (event: MessageEvent<WorkerMessage>) => {
         
       case 'OPTIMIZE_POSITIONS':
         result = optimizePositions(data.events, data.layouts)
+        break
+        
+      case 'LAYOUT_EVENTS_V2':
+        // Use the new column-based layout engine
+        if (data.containerWidth) {
+          layoutEngine.setContainerWidth(data.containerWidth)
+        }
+        result = layoutEngine.layoutEvents(data.events)
         break
         
       default:
