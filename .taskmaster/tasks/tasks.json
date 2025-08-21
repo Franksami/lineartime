@@ -186,7 +186,7 @@
               3
             ],
             "details": "1. Configure Google OAuth in Clerk dashboard\n2. Add GitHub OAuth integration\n3. Implement OAuth buttons on auth pages\n4. Setup OAuth callback handling\n5. Add social profile data handling",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test OAuth provider integrations and social sign-in flows"
           },
           {
@@ -415,7 +415,7 @@
             "title": "Integrate Event Stacking into Main Calendar",
             "description": "Integrate the event stacking system from test-stacking into the main LinearCalendarVertical component with day/week detail views",
             "details": "",
-            "status": "pending",
+            "status": "done",
             "dependencies": [],
             "parentTaskId": 6
           }
@@ -432,7 +432,7 @@
           4,
           6
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -440,7 +440,7 @@
             "description": "Set up OAuth2 authentication and implement basic CRUD operations for Google Calendar integration",
             "dependencies": [],
             "details": "1. Configure OAuth2 credentials in Google Cloud Console\n2. Implement OAuth2 flow for user authorization\n3. Create CalendarService class for Google Calendar\n4. Implement methods for reading, creating, updating, and deleting events\n5. Add rate limiting and token refresh handling",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "1. Mock Google Calendar API responses\n2. Test OAuth flow\n3. Verify CRUD operations\n4. Test rate limiting behavior"
           },
           {
@@ -449,7 +449,7 @@
             "description": "Create Microsoft Outlook calendar integration using Graph API",
             "dependencies": [],
             "details": "1. Register application in Azure AD\n2. Implement Microsoft authentication flow\n3. Create OutlookService class\n4. Implement CRUD operations for Outlook events\n5. Add error handling for API limits",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "1. Mock Graph API responses\n2. Test authentication flow\n3. Verify calendar operations\n4. Test error handling"
           },
           {
@@ -458,7 +458,7 @@
             "description": "Create CalDAV client for Apple Calendar integration",
             "dependencies": [],
             "details": "1. Implement CalDAV client\n2. Add Apple Calendar discovery\n3. Create CRUD operations using CalDAV protocol\n4. Implement authentication handling\n5. Add support for calendar collections",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "1. Test CalDAV operations\n2. Verify calendar discovery\n3. Test authentication\n4. Validate calendar collection handling"
           },
           {
@@ -471,7 +471,7 @@
               3
             ],
             "details": "1. Implement conflict detection algorithm\n2. Create conflict resolution strategies\n3. Add version tracking for events\n4. Implement merge operations\n5. Create conflict notification system",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "1. Test conflict detection accuracy\n2. Verify resolution strategies\n3. Test merge operations\n4. Validate notification system"
           },
           {
@@ -482,8 +482,62 @@
               4
             ],
             "details": "1. Implement WebSocket connections for real-time updates\n2. Create retry mechanism for failed operations\n3. Add error logging and monitoring\n4. Implement fallback mechanisms\n5. Create user notification system for sync status",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "1. Test real-time update performance\n2. Verify error handling paths\n3. Test retry mechanism\n4. Validate monitoring system"
+          },
+          {
+            "id": 6,
+            "title": "OAuth Infrastructure Setup",
+            "description": "Set up OAuth authentication infrastructure with encryption service, Convex schema extensions, and provider callback routes",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 7
+          },
+          {
+            "id": 7,
+            "title": "Google Calendar Integration",
+            "description": "Implement full Google Calendar sync with OAuth, calendar list retrieval, full and incremental sync, webhooks, and two-way event sync",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 7
+          },
+          {
+            "id": 8,
+            "title": "Microsoft Graph Integration",
+            "description": "Implement Microsoft Outlook sync with Azure AD app registration, delta queries, webhooks, and category mapping",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 7
+          },
+          {
+            "id": 9,
+            "title": "CalDAV Universal Support",
+            "description": "Implement CalDAV protocol support using tsdav for Apple iCloud and generic CalDAV servers with VEVENT parsing",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 7
+          },
+          {
+            "id": 10,
+            "title": "Notion Integration",
+            "description": "Implement Notion calendar sync with OAuth, database mapping, and page-to-event transformation",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 7
+          },
+          {
+            "id": 11,
+            "title": "Sync Engine and Conflict Resolution",
+            "description": "Implement vector clock conflict detection, three-way merge, deduplication, rate limiting with exponential backoff, and HMAC webhook verification",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 7
           }
         ]
       },
@@ -1130,7 +1184,7 @@
         "testStrategy": "1. Performance testing with 10,000+ events\n2. FPS monitoring during scroll\n3. Memory usage tracking\n4. Visual regression tests\n5. Load time benchmarking",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "in-progress",
         "subtasks": [
           {
             "id": 1,
@@ -1658,7 +1712,7 @@
     ],
     "metadata": {
       "created": "2025-08-20T07:38:33.025Z",
-      "updated": "2025-08-21T05:30:28.237Z",
+      "updated": "2025-08-21T16:00:50.450Z",
       "description": "Tasks for master context"
     }
   },

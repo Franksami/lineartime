@@ -65,6 +65,23 @@ export const getUserByClerkId = query({
   },
 });
 
+export const getCurrentUser = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return null;
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .first();
+
+    return user;
+  },
+});
+
 export const updateUser = mutation({
   args: {
     userId: v.id("users"),
@@ -166,6 +183,36 @@ export const deleteUser = mutation({
     
     for (const calendar of calendars) {
       await ctx.db.delete(calendar._id);
+    }
+
+    // Delete all user's calendar providers
+    const providers = await ctx.db
+      .query("calendarProviders")
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .collect();
+    
+    for (const provider of providers) {
+      // Delete all event sync mappings for this provider
+      const eventSyncs = await ctx.db
+        .query("eventSync")
+        .withIndex("by_provider_id", (q) => q.eq("providerId", provider._id))
+        .collect();
+      
+      for (const sync of eventSyncs) {
+        await ctx.db.delete(sync._id);
+      }
+      
+      await ctx.db.delete(provider._id);
+    }
+
+    // Delete all user's sync queue items
+    const syncItems = await ctx.db
+      .query("syncQueue")
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .collect();
+    
+    for (const item of syncItems) {
+      await ctx.db.delete(item._id);
     }
 
     // Delete the user
