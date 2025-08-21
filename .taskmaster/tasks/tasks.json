@@ -1610,7 +1610,157 @@
           20
         ],
         "status": "in-progress",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design CSP Solver Class Structure",
+            "description": "Create the base class structure for the CSP solver with core interfaces and data models",
+            "dependencies": [],
+            "details": "Include variable representation, constraint interface, and solution state management",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Hard Constraints Handler",
+            "description": "Develop system for managing and enforcing hard constraints like double-booking prevention",
+            "dependencies": [
+              "22.1"
+            ],
+            "details": "Create constraint validation logic, conflict detection, and violation reporting",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement Soft Constraints Handler",
+            "description": "Create system for managing user preferences and soft constraints with weights",
+            "dependencies": [
+              "22.1"
+            ],
+            "details": "Implement preference scoring, weight management, and priority calculation",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Develop Scoring System",
+            "description": "Create comprehensive scoring system for evaluating solution quality",
+            "dependencies": [
+              "22.2",
+              "22.3"
+            ],
+            "details": "Implement scoring algorithms, normalization, and weighted combinations",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement Backtracking Search",
+            "description": "Create backtracking search algorithm for finding valid solutions",
+            "dependencies": [
+              "22.1",
+              "22.2"
+            ],
+            "details": "Implement depth-first search, variable ordering, and value selection",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Add Forward Checking",
+            "description": "Implement forward checking to improve search efficiency",
+            "dependencies": [
+              "22.5"
+            ],
+            "details": "Create domain reduction logic, constraint propagation, and early failure detection",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Implement Focus Time Protection",
+            "description": "Create system to protect designated focus time periods",
+            "dependencies": [
+              "22.2"
+            ],
+            "details": "Implement focus time constraints, protection rules, and override conditions",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 8,
+            "title": "Create Calendar Integration Layer",
+            "description": "Develop integration with existing calendar systems",
+            "dependencies": [
+              "22.1"
+            ],
+            "details": "Implement data conversion, sync handling, and constraint mapping",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 9,
+            "title": "Implement Solution Optimization",
+            "description": "Create optimization algorithms for improving initial solutions",
+            "dependencies": [
+              "22.4",
+              "22.5"
+            ],
+            "details": "Implement local search, solution refinement, and optimization strategies",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 10,
+            "title": "Add Performance Monitoring",
+            "description": "Implement performance tracking and optimization system",
+            "dependencies": [
+              "22.5",
+              "22.6"
+            ],
+            "details": "Create metrics collection, performance analysis, and optimization triggers",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 11,
+            "title": "Implement Constraint Persistence",
+            "description": "Create system for storing and managing persistent constraints",
+            "dependencies": [
+              "22.2",
+              "22.3"
+            ],
+            "details": "Implement constraint storage, retrieval, and update mechanisms",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 12,
+            "title": "Create Testing Framework",
+            "description": "Develop comprehensive testing system for CSP solver",
+            "dependencies": [
+              "22.1",
+              "22.2",
+              "22.3"
+            ],
+            "details": "Implement unit tests, integration tests, and performance benchmarks",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 13,
+            "title": "Add Error Recovery System",
+            "description": "Implement error handling and recovery mechanisms",
+            "dependencies": [
+              "22.5",
+              "22.6"
+            ],
+            "details": "Create error detection, recovery strategies, and fallback solutions",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 23,
