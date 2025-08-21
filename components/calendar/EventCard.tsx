@@ -37,10 +37,10 @@ interface EventCardProps {
 }
 
 const categoryColors: Record<EventCategory, string> = {
-  personal: 'from-green-500/20 to-emerald-500/20 border-green-500/30',
-  work: 'from-blue-500/20 to-indigo-500/20 border-blue-500/30',
-  effort: 'from-orange-500/20 to-amber-500/20 border-orange-500/30',
-  note: 'from-purple-500/20 to-pink-500/20 border-purple-500/30'
+  personal: 'bg-green-500/10 border-green-500/20',
+  work: 'bg-blue-500/10 border-blue-500/20',
+  effort: 'bg-orange-500/10 border-orange-500/20',
+  note: 'bg-purple-500/10 border-purple-500/20'
 }
 
 const categoryAccents: Record<EventCategory, string> = {
@@ -75,9 +75,8 @@ export function EventCard({
         onClick={handleClick}
         className={cn(
           'group relative px-2 py-1 rounded-md cursor-pointer transition-all duration-200',
-          'bg-gradient-to-r backdrop-blur-md',
           categoryColors[event.category],
-          'border border-white/20 dark:border-white/10',
+          'border',
           'hover:scale-[1.02] hover:shadow-lg',
           isDragging && 'opacity-50 scale-95',
           isSelected && 'ring-2 ring-blue-500 ring-offset-1',
@@ -97,36 +96,28 @@ export function EventCard({
       onClick={handleClick}
       className={cn(
         'group relative p-4 rounded-xl cursor-pointer transition-all duration-200',
-        'bg-gradient-to-br backdrop-blur-xl',
         categoryColors[event.category],
-        'border border-white/30 dark:border-white/10',
-        'shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]',
-        'hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.25)]',
+        'border',
+        'shadow-lg',
+        'hover:shadow-xl',
         'hover:scale-[1.02] hover:-translate-y-0.5',
-        'before:absolute before:inset-0 before:rounded-xl',
-        'before:bg-gradient-to-br before:from-white/10 before:to-transparent',
-        'before:pointer-events-none before:opacity-0 before:transition-opacity',
-        'hover:before:opacity-100',
         isDragging && 'opacity-50 scale-95 rotate-2',
         isSelected && 'ring-2 ring-blue-500 ring-offset-2',
         className
       )}
     >
-      {/* Glassmorphic overlay */}
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/5 to-white/0 pointer-events-none" />
-      
       {/* Content */}
-      <div className="relative z-10">
+      <div className="relative">
         {/* Header */}
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1">
-            <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2">
+            <h3 className="font-semibold text-foreground line-clamp-2">
               {event.title}
             </h3>
             {event.recurrence && (
               <Badge 
                 variant="secondary" 
-                className="mt-1 text-xs bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+                className="mt-1 text-xs bg-muted"
               >
                 <Repeat className="h-3 w-3 mr-1" />
                 Recurring
@@ -147,7 +138,7 @@ export function EventCard({
             </DropdownMenuTrigger>
             <DropdownMenuContent 
               align="end" 
-              className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border-white/30 dark:border-white/10"
+              className="bg-card backdrop-blur-xl border-border"
             >
               {onEdit && (
                 <DropdownMenuItem onClick={(e) => {
@@ -185,10 +176,10 @@ export function EventCard({
         </div>
 
         {/* Details */}
-        <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+        <div className="space-y-2 text-sm text-muted-foreground">
           {/* Date/Time */}
           <div className="flex items-center gap-2">
-            <div className="p-1 rounded-md bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm">
+            <div className="p-1 rounded-md bg-muted/30 backdrop-blur-sm">
               <Calendar className="h-3.5 w-3.5" />
             </div>
             <span className="text-xs">
@@ -200,7 +191,7 @@ export function EventCard({
           {/* Time */}
           {!event.allDay && event.startDate && (
             <div className="flex items-center gap-2">
-              <div className="p-1 rounded-md bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm">
+              <div className="p-1 rounded-md bg-muted/30 backdrop-blur-sm">
                 <Clock className="h-3.5 w-3.5" />
               </div>
               <span className="text-xs">
@@ -213,7 +204,7 @@ export function EventCard({
           {/* Location */}
           {event.location && (
             <div className="flex items-center gap-2">
-              <div className="p-1 rounded-md bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm">
+              <div className="p-1 rounded-md bg-muted/30 backdrop-blur-sm">
                 <MapPin className="h-3.5 w-3.5" />
               </div>
               <span className="text-xs truncate">{event.location}</span>
@@ -222,7 +213,7 @@ export function EventCard({
 
           {/* Description */}
           {event.description && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mt-2">
+            <p className="text-xs text-muted-foreground/70 line-clamp-2 mt-2">
               {event.description}
             </p>
           )}

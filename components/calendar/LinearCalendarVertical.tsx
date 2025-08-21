@@ -16,6 +16,7 @@ import type { Event } from "@/types/calendar"
 interface LinearCalendarVerticalProps {
   initialYear?: number
   className?: string
+  userId?: string
 }
 
 const WEEKDAY_ABBREVIATIONS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
@@ -24,7 +25,8 @@ const COLUMNS_PER_ROW = 42 // 6 weeks × 7 days
 
 export function LinearCalendarVertical({ 
   initialYear = new Date().getFullYear(), 
-  className 
+  className,
+  userId = 'default-user' 
 }: LinearCalendarVerticalProps) {
   const [year, setYear] = React.useState(initialYear)
   const [zoomLevel, setZoomLevel] = React.useState(1)
@@ -50,8 +52,9 @@ export function LinearCalendarVertical({
     startSelection,
     updateSelection,
     endSelection,
-    checkForOverlaps
-  } = useLinearCalendar(year)
+    checkForOverlaps,
+    loading
+  } = useLinearCalendar(year, userId)
 
   const [showFilters, setShowFilters] = React.useState(false)
   const [showDayDetail, setShowDayDetail] = React.useState(false)
@@ -242,9 +245,9 @@ export function LinearCalendarVertical({
   const weekHeaders = generateWeekHeaders()
 
   return (
-    <div className={cn("fixed inset-0 flex flex-col bg-background overflow-hidden", className)}>
-      {/* Minimal Header */}
-      <div className="flex items-center justify-between px-4 h-10 border-b bg-background/95 backdrop-blur-sm shrink-0">
+    <div className={cn("flex flex-col h-full overflow-hidden", className)}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 h-10 border-b bg-background border-border shrink-0">
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
@@ -311,12 +314,12 @@ export function LinearCalendarVertical({
         {/* Calendar Grid */}
         <div className="flex-1 overflow-auto">
           <div 
-            className="min-h-full flex flex-col"
+            className="h-full flex flex-col"
             style={{ 
               transform: `scale(${zoomLevel})`,
               transformOrigin: 'top left',
               width: `${100 / zoomLevel}%`,
-              height: `${100 / zoomLevel}%`
+              minHeight: '100%'
             }}
           >
             {/* Top Week Headers */}
@@ -326,7 +329,7 @@ export function LinearCalendarVertical({
                 {weekHeaders.map((day, idx) => (
                   <div 
                     key={`top-header-${idx}`} 
-                    className="text-center text-xs text-muted-foreground py-1 border-r border-border"
+                    className="text-center text-xs text-muted-foreground py-1 border-r border-border last:border-r-0"
                   >
                     {day}
                   </div>
@@ -419,7 +422,7 @@ export function LinearCalendarVertical({
                             "text-sm font-medium",
                             todayCell && "text-orange-100 font-bold",
                             isSelected && !todayCell && "text-primary font-semibold",
-                            !todayCell && !isSelected && "text-zinc-200"
+                            !todayCell && !isSelected && "text-foreground"
                           )}>
                             {String(cell.day).padStart(2, '0')}
                           </span>
@@ -465,7 +468,7 @@ export function LinearCalendarVertical({
                 {weekHeaders.map((day, idx) => (
                   <div 
                     key={`bottom-header-${idx}`} 
-                    className="text-center text-xs text-muted-foreground py-1 border-r border-border"
+                    className="text-center text-xs text-muted-foreground py-1 border-r border-border last:border-r-0"
                   >
                     {day}
                   </div>

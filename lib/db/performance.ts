@@ -240,13 +240,15 @@ export class MemoryManager {
  * Connection Pool Manager
  */
 export class ConnectionManager {
-  private static isOnline = navigator.onLine;
+  private static isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
   private static listeners = new Set<(online: boolean) => void>();
 
   /**
    * Initialize connection monitoring
    */
   static initialize(): void {
+    if (typeof window === 'undefined') return;
+    
     window.addEventListener('online', () => {
       this.isOnline = true;
       this.notifyListeners(true);

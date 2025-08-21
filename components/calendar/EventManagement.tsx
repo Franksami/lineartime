@@ -238,7 +238,7 @@ export function EventManagement({ userId }: { userId: string }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold text-foreground">
             Event Management
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
@@ -258,7 +258,7 @@ export function EventManagement({ userId }: { userId: string }) {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-4 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/30 dark:border-white/10">
+      <div className="flex flex-wrap gap-4 p-4 rounded-xl bg-card border border-border">
         <div className="flex-1 min-w-[200px]">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -266,16 +266,16 @@ export function EventManagement({ userId }: { userId: string }) {
               placeholder="Search events..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-white/30 dark:border-white/10"
+              className="pl-9 bg-background border-border"
             />
           </div>
         </div>
         
         <Select value={categoryFilter} onValueChange={(value: any) => setCategoryFilter(value)}>
-          <SelectTrigger className="w-[150px] bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-white/30 dark:border-white/10">
+          <SelectTrigger className="w-[150px] bg-background border-border">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
-          <SelectContent className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border-white/30 dark:border-white/10">
+          <SelectContent className="bg-card border-border">
             <SelectItem value="all">All Categories</SelectItem>
             <SelectItem value="personal">Personal</SelectItem>
             <SelectItem value="work">Work</SelectItem>
@@ -285,10 +285,10 @@ export function EventManagement({ userId }: { userId: string }) {
         </Select>
 
         <Select value={dateFilter} onValueChange={(value: any) => setDateFilter(value)}>
-          <SelectTrigger className="w-[150px] bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-white/30 dark:border-white/10">
+          <SelectTrigger className="w-[150px] bg-background border-border">
             <SelectValue placeholder="Date Range" />
           </SelectTrigger>
-          <SelectContent className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border-white/30 dark:border-white/10">
+          <SelectContent className="bg-card border-border">
             <SelectItem value="all">All Time</SelectItem>
             <SelectItem value="today">Today</SelectItem>
             <SelectItem value="week">This Week</SelectItem>
@@ -296,7 +296,7 @@ export function EventManagement({ userId }: { userId: string }) {
           </SelectContent>
         </Select>
 
-        <div className="flex gap-1 p-1 rounded-lg bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm">
+        <div className="flex gap-1 p-1 rounded-lg bg-muted">
           <Button
             variant={viewMode === 'grid' ? 'default' : 'ghost'}
             size="sm"
@@ -358,7 +358,7 @@ export function EventManagement({ userId }: { userId: string }) {
 
       {/* Empty State */}
       {filteredEvents.length === 0 && (
-        <div className="text-center py-12 px-4 rounded-xl bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm border border-white/20 dark:border-white/10">
+        <div className="text-center py-12 px-4 rounded-xl bg-card border border-border">
           <Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
           <h3 className="text-lg font-semibold mb-2">No events found</h3>
           <p className="text-sm text-muted-foreground mb-4">
