@@ -6,6 +6,9 @@ import type { Event } from '@/types/calendar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ResizableEvent } from '@/components/calendar/ResizableEvent'
+import { DraggableEvent } from '@/components/calendar/DraggableEvent'
+import { DroppableCalendarGrid } from '@/components/calendar/DroppableCalendarGrid'
+import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core'
 
 // Generate test events with various overlapping scenarios
 function generateTestEvents(): Event[] {
@@ -105,7 +108,9 @@ export default function TestStackingPage() {
   const [testMode, setTestMode] = useState<'simple' | 'stress'>('simple')
   const [eventCount, setEventCount] = useState(20)
   const [useResizable, setUseResizable] = useState(true)
+  const [useDragDrop, setUseDragDrop] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
+  const [activeId, setActiveId] = useState<string | null>(null)
   const [metrics, setMetrics] = useState({
     layoutTime: 0,
     eventCount: 0,
@@ -233,6 +238,55 @@ export default function TestStackingPage() {
     setLayoutedEvents(prev => prev.map(e => e.id === event.id ? { ...e, category } : e))
   }, [])
   
+  // Drag and drop handlers
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveId(event.active.id as string)
+    console.log('Drag started:', event.active.id)
+  }, [])
+  
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event
+    setActiveId(null)
+    
+    if (!over) {
+      console.log('Dropped outside droppable area')
+      return
+    }
+    
+    console.log('Drag ended:', {
+      from: active.id,
+      to: over.id,
+      data: over.data.current
+    })
+    
+    // Find the dragged event
+    const draggedEvent = events.find(e => e.id === active.id)
+    if (!draggedEvent) return
+    
+    // Parse drop target data
+    const dropData = over.data.current as { date?: Date; hour?: number }
+    if (dropData?.date) {
+      // Calculate new time based on drop position
+      const newDate = new Date(dropData.date)
+      if (dropData.hour !== undefined) {
+        newDate.setHours(dropData.hour)
+      }
+      
+      const duration = draggedEvent.endDate.getTime() - draggedEvent.startDate.getTime()
+      const updatedEvent = {
+        ...draggedEvent,
+        startDate: newDate,
+        endDate: new Date(newDate.getTime() + duration)
+      }
+      
+      setEvents(prev => prev.map(e => e.id === active.id ? updatedEvent : e))
+      // Re-run layout after drop
+      setTimeout(testColumnLayout, 100)
+    }
+  }, [events, testColumnLayout])
+  
+  const activeEvent = activeId ? layoutedEvents.find(e => e.id === activeId) : null
+  
   // Color map for categories
   const categoryColors = {
     personal: '#10b981',
@@ -303,6 +357,18 @@ export default function TestStackingPage() {
                   />
                   <span className="text-sm text-neutral-600 dark:text-neutral-400">
                     Enable Resize
+                  </span>
+                </label>
+                
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={useDragDrop}
+                    onChange={(e) => setUseDragDrop(e.target.checked)}
+                    className="rounded"
+                  />
+                  <span className="text-sm text-neutral-600 dark:text-neutral-400">
+                    Enable Drag & Drop
                   </span>
                 </label>
               </div>
@@ -401,43 +467,86 @@ export default function TestStackingPage() {
               <CardTitle>Visual Layout (Column-Based Stacking)</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="relative bg-white dark:bg-neutral-900 rounded-lg" style={{ height: '600px', width: '600px', overflow: 'hidden' }}>
-                {/* Hour grid lines */}
-                {Array.from({ length: 11 }, (_, i) => (
-                  <div
-                    key={`hour-${i}`}
-                    className="absolute w-full border-t border-neutral-200 dark:border-neutral-700"
-                    style={{ top: `${i * 60}px` }}
-                  >
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400 absolute -left-8">
-                      {8 + i}:00
-                    </span>
-                  </div>
-                ))}
-                
-                {/* Render layouted events */}
-                {layoutedEvents.map((event: any) => {
-                  const color = categoryColors[event.category as keyof typeof categoryColors] || '#6b7280'
+              <DndContext
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+              >
+                <div className="relative bg-white dark:bg-neutral-900 rounded-lg" style={{ height: '600px', width: '600px', overflow: 'hidden' }}>
+                  {/* Create droppable zones for each hour if drag & drop is enabled */}
+                  {useDragDrop && Array.from({ length: 11 }, (_, i) => {
+                    const hour = 8 + i
+                    const today = new Date()
+                    today.setHours(hour, 0, 0, 0)
+                    
+                    return (
+                      <DroppableCalendarGrid
+                        key={`drop-hour-${hour}`}
+                        id={`drop-hour-${hour}`}
+                        date={today}
+                        hour={hour}
+                        className="absolute w-full h-[60px] border-t border-neutral-200 dark:border-neutral-700"
+                        style={{ top: `${i * 60}px` }}
+                      />
+                    )
+                  })}
                   
-                  return useResizable ? (
-                    <ResizableEvent
-                      key={event.id}
-                      event={event}
-                      onResize={handleEventResize}
-                      onResizeStop={handleEventResizeStop}
-                      onClick={handleEventClick}
-                      onContextMenu={handleEventContextMenu}
-                      onEdit={handleEventEdit}
-                      onDelete={handleEventDelete}
-                      onDuplicate={handleEventDuplicate}
-                      onMove={handleEventMove}
-                      onChangeCategory={handleEventChangeCategory}
-                      minHeight={30}
-                      minWidth={60}
-                      maxWidth={600}
-                      gridSize={5}
-                      enableContextMenu={true}
-                    />
+                  {/* Hour grid lines */}
+                  {Array.from({ length: 11 }, (_, i) => (
+                    <div
+                      key={`hour-${i}`}
+                      className="absolute w-full border-t border-neutral-200 dark:border-neutral-700 pointer-events-none"
+                      style={{ top: `${i * 60}px` }}
+                    >
+                      <span className="text-xs text-neutral-500 dark:text-neutral-400 absolute -left-8">
+                        {8 + i}:00
+                      </span>
+                    </div>
+                  ))}
+                
+                  {/* Render layouted events */}
+                  {layoutedEvents.map((event: any) => {
+                    const color = categoryColors[event.category as keyof typeof categoryColors] || '#6b7280'
+                    
+                    return useDragDrop ? (
+                      <DraggableEvent
+                        key={event.id}
+                        event={event}
+                        onResize={handleEventResize}
+                        onResizeStop={handleEventResizeStop}
+                        onClick={handleEventClick}
+                        onContextMenu={handleEventContextMenu}
+                        onEdit={handleEventEdit}
+                        onDelete={handleEventDelete}
+                        onDuplicate={handleEventDuplicate}
+                        onMove={handleEventMove}
+                        onChangeCategory={handleEventChangeCategory}
+                        isDragging={activeId === event.id}
+                        dragDisabled={false}
+                        minHeight={30}
+                        minWidth={60}
+                        maxWidth={600}
+                        gridSize={5}
+                        enableContextMenu={true}
+                      />
+                    ) : useResizable ? (
+                      <ResizableEvent
+                        key={event.id}
+                        event={event}
+                        onResize={handleEventResize}
+                        onResizeStop={handleEventResizeStop}
+                        onClick={handleEventClick}
+                        onContextMenu={handleEventContextMenu}
+                        onEdit={handleEventEdit}
+                        onDelete={handleEventDelete}
+                        onDuplicate={handleEventDuplicate}
+                        onMove={handleEventMove}
+                        onChangeCategory={handleEventChangeCategory}
+                        minHeight={30}
+                        minWidth={60}
+                        maxWidth={600}
+                        gridSize={5}
+                        enableContextMenu={true}
+                      />
                   ) : (
                     <div
                       key={event.id}
@@ -466,7 +575,29 @@ export default function TestStackingPage() {
                     </div>
                   )
                 })}
-              </div>
+                </div>
+                
+                {/* Drag overlay for visual feedback */}
+                <DragOverlay>
+                  {activeEvent && (
+                    <div
+                      className="rounded border-2 border-blue-500 shadow-2xl"
+                      style={{
+                        width: `${activeEvent.width}px`,
+                        height: `${activeEvent.height}px`,
+                        backgroundColor: categoryColors[activeEvent.category as keyof typeof categoryColors] || '#6b7280',
+                        opacity: 0.8
+                      }}
+                    >
+                      <div className="p-1.5 text-white">
+                        <div className="font-medium text-xs truncate">
+                          {activeEvent.title}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </DragOverlay>
+              </DndContext>
             </CardContent>
           </Card>
         )}
