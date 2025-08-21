@@ -30,6 +30,17 @@ export function AssistantPanel({
   const [isOpen, setIsOpen] = React.useState(false)
   const [isMinimized, setIsMinimized] = React.useState(false)
   const [toolCalls, setToolCalls] = React.useState<any[]>([])
+  const [isMobile, setIsMobile] = React.useState(false)
+  
+  // Detect mobile viewport
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
   
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } = useChat({
     api: '/api/ai/chat',
@@ -70,7 +81,12 @@ export function AssistantPanel({
     return (
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 z-40 rounded-full h-12 w-12 shadow-lg"
+        className={cn(
+          "fixed z-40 rounded-full shadow-lg",
+          isMobile 
+            ? "bottom-20 right-4 h-14 w-14" // Mobile: Higher up to avoid nav
+            : "bottom-4 right-4 h-12 w-12"   // Desktop: Standard position
+        )}
         size="icon"
       >
         <Bot className="h-5 w-5" />
@@ -82,9 +98,17 @@ export function AssistantPanel({
   return (
     <Card className={cn(
       'fixed z-40 shadow-2xl transition-all duration-300',
-      isMinimized 
-        ? 'bottom-4 right-4 w-80 h-14'
-        : 'bottom-4 right-4 w-96 h-[600px] max-h-[80vh]',
+      isMobile ? (
+        // Mobile: Full screen
+        isMinimized 
+          ? 'bottom-0 left-0 right-0 h-14'
+          : 'inset-0 rounded-none'
+      ) : (
+        // Desktop: Floating panel
+        isMinimized 
+          ? 'bottom-4 right-4 w-80 h-14'
+          : 'bottom-4 right-4 w-96 h-[600px] max-h-[80vh]'
+      ),
       'flex flex-col',
       className
     )}>

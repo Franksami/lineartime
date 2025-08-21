@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { LinearCalendarVertical } from "@/components/calendar/LinearCalendarVertical";
 import { VirtualCalendar } from "@/components/calendar/VirtualCalendar";
+import { MobileCalendarView } from "@/components/mobile/MobileCalendarView";
 import { TimelineContainer } from "@/components/timeline/TimelineContainer";
 import { EventManagement } from "@/components/calendar/EventManagement";
 import { ViewSwitcher, CalendarView } from "@/components/dashboard/ViewSwitcher";
@@ -17,7 +18,19 @@ export default function Page() {
   const currentYear = new Date().getFullYear();
   const [currentView, setCurrentView] = useState<CalendarView>('year');
   const [useVirtualScroll, setUseVirtualScroll] = useState(true); // Feature flag for virtual scrolling
+  const [isMobile, setIsMobile] = useState(false);
   const userId = 'default-user'; // This could come from auth context later
+  
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [])
   
   // Get events from IndexedDB for timeline and management views
   const { events, createEvent, updateEvent, deleteEvent } = useOfflineEvents(userId);
@@ -108,7 +121,7 @@ export default function Page() {
         {currentView === 'year' && (
           <>
             {/* Virtual Scroll Toggle (temporary for testing) */}
-            {process.env.NODE_ENV === 'development' && (
+            {process.env.NODE_ENV === 'development' && !isMobile && (
               <div className="absolute top-20 right-4 z-20 bg-background/80 backdrop-blur-sm p-2 rounded-lg border">
                 <label className="flex items-center gap-2 text-sm">
                   <input 
@@ -122,20 +135,36 @@ export default function Page() {
               </div>
             )}
             
-            {useVirtualScroll ? (
-              <VirtualCalendar
-                year={currentYear}
+            {/* Mobile Calendar View */}
+            {isMobile ? (
+              <MobileCalendarView
                 events={calendarEvents}
-                className="h-full"
+                currentDate={new Date()}
                 onDateSelect={(date) => console.log('Date selected:', date)}
                 onEventClick={(event) => console.log('Event clicked:', event)}
+                onAddEvent={async (date) => {
+                  // Open event creation modal
+                  console.log('Add event for:', date)
+                }}
+                className="h-full"
               />
             ) : (
-              <LinearCalendarVertical 
-                initialYear={currentYear} 
-                className="h-full"
-                userId={userId}
-              />
+              /* Desktop Calendar View */
+              useVirtualScroll ? (
+                <VirtualCalendar
+                  year={currentYear}
+                  events={calendarEvents}
+                  className="h-full"
+                  onDateSelect={(date) => console.log('Date selected:', date)}
+                  onEventClick={(event) => console.log('Event clicked:', event)}
+                />
+              ) : (
+                <LinearCalendarVertical 
+                  initialYear={currentYear} 
+                  className="h-full"
+                  userId={userId}
+                />
+              )
             )}
           </>
         )}

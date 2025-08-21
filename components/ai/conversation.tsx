@@ -4,7 +4,7 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Message, MessageProps } from './message'
-import { useStickyBottom } from 'use-stick-to-bottom'
+import { useStickToBottom } from 'use-stick-to-bottom'
 
 export interface ConversationProps extends React.HTMLAttributes<HTMLDivElement> {
   messages: MessageProps[]
@@ -14,7 +14,7 @@ export interface ConversationProps extends React.HTMLAttributes<HTMLDivElement> 
 export const Conversation = React.forwardRef<HTMLDivElement, ConversationProps>(
   ({ className, messages, isLoading, ...props }, ref) => {
     const scrollRef = React.useRef<HTMLDivElement>(null)
-    const { scrollToBottom, isAtBottom } = useStickyBottom(scrollRef)
+    const { scrollToBottom, isAtBottom } = useStickToBottom(scrollRef)
     
     React.useEffect(() => {
       if (isAtBottom) {
