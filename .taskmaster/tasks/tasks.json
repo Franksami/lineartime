@@ -1116,7 +1116,7 @@
     ],
     "metadata": {
       "created": "2025-08-20T07:38:33.025Z",
-      "updated": "2025-08-20T18:27:21.821Z",
+      "updated": "2025-08-20T19:14:22.581Z",
       "description": "Tasks for master context"
     }
   },
@@ -1131,7 +1131,62 @@
         "priority": "high",
         "dependencies": [],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Next.js Project with Core Dependencies",
+            "description": "Create new Next.js 14 project with TypeScript and install essential dependencies",
+            "dependencies": [],
+            "details": "Run 'pnpm create next-app lineartime --typescript --tailwind --app', install dependencies: shadcn/ui, Convex, Clerk, Vercel AI SDK. Configure TypeScript compiler options in tsconfig.json with strict mode enabled",
+            "status": "pending",
+            "testStrategy": "Verify project creation, dependency installation, and TypeScript configuration by running 'pnpm dev' and checking for compilation errors"
+          },
+          {
+            "id": 2,
+            "title": "Setup Development Tools and Environment",
+            "description": "Configure ESLint, Prettier, and environment variables for development",
+            "dependencies": [
+              1
+            ],
+            "details": "Create .eslintrc.js with Next.js and TypeScript rules, setup .prettierrc, initialize .env.local with required variables, create .env.example template",
+            "status": "pending",
+            "testStrategy": "Run ESLint and Prettier checks, verify environment variable loading in development"
+          },
+          {
+            "id": 3,
+            "title": "Create Project Directory Structure",
+            "description": "Setup organized folder structure following PRD specifications",
+            "dependencies": [
+              1
+            ],
+            "details": "Create directories: app/, components/, lib/, hooks/, utils/, types/, services/. Add appropriate README files and index exports. Setup barrel files for clean imports",
+            "status": "pending",
+            "testStrategy": "Verify directory structure matches PRD, ensure proper module resolution"
+          },
+          {
+            "id": 4,
+            "title": "Initialize Git Repository and Version Control",
+            "description": "Setup Git repository with proper configuration and initial commit",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Initialize Git repository, create .gitignore for Next.js, add husky pre-commit hooks for linting and formatting, create initial commit with project structure",
+            "status": "pending",
+            "testStrategy": "Verify Git hooks work, ensure sensitive files are ignored, test commit process"
+          },
+          {
+            "id": 5,
+            "title": "Setup CI/CD Pipeline Configuration",
+            "description": "Configure basic CI/CD workflow for development",
+            "dependencies": [
+              4
+            ],
+            "details": "Create GitHub Actions workflow for CI/CD, setup build and test scripts in package.json, configure Vercel deployment settings, add build caching",
+            "status": "pending",
+            "testStrategy": "Test CI pipeline with sample PR, verify build process and deployment preview"
+          }
+        ]
       },
       {
         "id": 2,

@@ -58,10 +58,6 @@ node_modules/
 *.sw?
 # OS specific
 
-# Task files
-# tasks.json
-# tasks/ 
-
 # clerk configuration (can include secrets)
 /.clerk/
 
@@ -82,3 +78,7 @@ node_modules/
 
 # Development artifacts
 .turbo/
+
+# Task files
+# tasks.json
+# tasks/ 

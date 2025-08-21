@@ -1,57 +1,55 @@
-import { SignIn } from "@clerk/nextjs";
-import { GlassCard } from "@/components/glass";
+import { GalleryVerticalEnd } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function SignInPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-glass-accent/10 via-transparent to-glass-secondary/10" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-glass-accent/20 blur-3xl animate-liquid-float" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-glass-secondary/20 blur-3xl animate-liquid-float" style={{ animationDelay: '10s' }} />
-      </div>
-      
-      <GlassCard 
-        className="p-8 max-w-md w-full"
-        variant="heavy"
-        liquid
-        aurora
-      >
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-glass-accent to-glass-secondary bg-clip-text text-transparent">
-            Welcome Back
-          </h1>
-          <p className="text-oklch-gray-600">
-            Sign in to continue to LinearTime
-          </p>
+    <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <div className="flex flex-col gap-6">
+          <form>
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col items-center gap-2">
+                <a href="#" className="flex flex-col items-center gap-2 font-medium">
+                  <div className="flex size-8 items-center justify-center rounded-md">
+                    <GalleryVerticalEnd className="size-6" />
+                  </div>
+                  <span className="sr-only">LinearTime</span>
+                </a>
+                <h1 className="text-xl font-bold">Welcome to LinearTime</h1>
+                <div className="text-center text-sm">
+                  Don&apos;t have an account?{' '}
+                  <a href="/sign-up" className="underline underline-offset-4">
+                    Sign up
+                  </a>
+                </div>
+              </div>
+              <div className="flex flex-col gap-6">
+                <div className="grid gap-3">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" placeholder="m@example.com" required />
+                </div>
+                <Button type="submit" className="w-full">Login</Button>
+              </div>
+              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                <span className="bg-background text-muted-foreground relative z-10 px-2">Or</span>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Button variant="outline" type="button" className="w-full">
+                  Continue with Apple
+                </Button>
+                <Button variant="outline" type="button" className="w-full">
+                  Continue with Google
+                </Button>
+              </div>
+            </div>
+          </form>
+          <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+            By clicking continue, you agree to our <a href="#">Terms of Service</a>{' '}and <a href="#">Privacy Policy</a>.
+          </div>
         </div>
-        
-        <SignIn 
-          appearance={{
-            elements: {
-              rootBox: "w-full",
-              card: "bg-transparent shadow-none",
-              headerTitle: "hidden",
-              headerSubtitle: "hidden",
-              formButtonPrimary: "glass bg-glass-accent/20 hover:bg-glass-accent/30 border-glass-accent/30",
-              formFieldInput: "glass-light",
-              footerActionLink: "text-glass-accent hover:text-glass-accent/80",
-              dividerLine: "bg-glass-border/30",
-              dividerText: "text-oklch-gray-600",
-              socialButtonsBlockButton: "glass hover:glass-heavy border-glass-border/30",
-              socialButtonsBlockButtonText: "font-medium",
-              identityPreviewEditButton: "text-glass-accent hover:text-glass-accent/80",
-              formFieldLabel: "text-oklch-gray-700",
-            },
-            layout: {
-              socialButtonsPlacement: "top",
-              socialButtonsVariant: "blockButton",
-            },
-          }}
-          routing="path"
-          path="/sign-in"
-          signUpUrl="/sign-up"
-        />
-      </GlassCard>
+      </div>
     </div>
-  );
+  )
 }

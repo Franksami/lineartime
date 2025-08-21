@@ -1,4 +1,5 @@
-export { LinearCalendarView } from './LinearCalendarView';
-export { DateCell } from './DateCell';
-export { ActivityHeatmap } from './ActivityHeatmap';
-export { Navigator } from './Navigator';
+export { LinearCalendarVertical } from './LinearCalendarVertical'
+export { EventModal } from './EventModal'
+export { FilterPanel } from './FilterPanel'
+export { ReflectionModal } from './ReflectionModal'
+export { ZoomControls } from './ZoomControls'

@@ -6,9 +6,6 @@ const isPublicRoute = createRouteMatcher([
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/api/webhooks(.*)',
-  '/pricing',
-  '/features',
-  '/about',
 ]);
 
 // Define API routes that require authentication
