@@ -185,6 +185,54 @@ export default function TestStackingPage() {
     // Could show a context menu here
   }, [])
   
+  // Context menu action handlers
+  const handleEventEdit = useCallback((event: Event) => {
+    console.log('Edit event:', event)
+    alert(`Edit: ${event.title}`)
+  }, [])
+  
+  const handleEventDelete = useCallback((event: Event) => {
+    console.log('Delete event:', event)
+    if (confirm(`Delete "${event.title}"?`)) {
+      setLayoutedEvents(prev => prev.filter(e => e.id !== event.id))
+      setEvents(prev => prev.filter(e => e.id !== event.id))
+    }
+  }, [])
+  
+  const handleEventDuplicate = useCallback((event: Event) => {
+    console.log('Duplicate event:', event)
+    const newEvent = {
+      ...event,
+      id: `${event.id}-copy-${Date.now()}`,
+      title: `${event.title} (Copy)`,
+      startDate: new Date(event.startDate.getTime() + 60 * 60 * 1000), // 1 hour later
+      endDate: new Date(event.endDate.getTime() + 60 * 60 * 1000)
+    }
+    setEvents(prev => [...prev, newEvent])
+    // Re-run layout
+    testColumnLayout()
+  }, [])
+  
+  const handleEventMove = useCallback((event: Event, date: Date) => {
+    console.log('Move event:', event, 'to:', date)
+    const duration = event.endDate.getTime() - event.startDate.getTime()
+    const updatedEvent = {
+      ...event,
+      startDate: date,
+      endDate: new Date(date.getTime() + duration)
+    }
+    setEvents(prev => prev.map(e => e.id === event.id ? updatedEvent : e))
+    // Re-run layout
+    testColumnLayout()
+  }, [])
+  
+  const handleEventChangeCategory = useCallback((event: Event, category: Event['category']) => {
+    console.log('Change category:', event, 'to:', category)
+    const updatedEvent = { ...event, category }
+    setEvents(prev => prev.map(e => e.id === event.id ? updatedEvent : e))
+    setLayoutedEvents(prev => prev.map(e => e.id === event.id ? { ...e, category } : e))
+  }, [])
+  
   // Color map for categories
   const categoryColors = {
     personal: '#10b981',
@@ -379,10 +427,16 @@ export default function TestStackingPage() {
                       onResizeStop={handleEventResizeStop}
                       onClick={handleEventClick}
                       onContextMenu={handleEventContextMenu}
+                      onEdit={handleEventEdit}
+                      onDelete={handleEventDelete}
+                      onDuplicate={handleEventDuplicate}
+                      onMove={handleEventMove}
+                      onChangeCategory={handleEventChangeCategory}
                       minHeight={30}
                       minWidth={60}
                       maxWidth={600}
                       gridSize={5}
+                      enableContextMenu={true}
                     />
                   ) : (
                     <div

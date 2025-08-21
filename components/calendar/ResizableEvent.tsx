@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react'
 import { Resizable, ResizeDirection } from 're-resizable'
 import type { Event } from '@/types/calendar'
 import { cn } from '@/lib/utils'
+import { EventContextMenu } from './EventContextMenu'
 
 interface ResizableEventProps {
   event: Event & {
@@ -16,11 +17,17 @@ interface ResizableEventProps {
   onResizeStop?: (eventId: string, width: number, height: number) => void
   onClick?: (event: Event) => void
   onContextMenu?: (event: Event, e: React.MouseEvent) => void
+  onEdit?: (event: Event) => void
+  onDelete?: (event: Event) => void
+  onDuplicate?: (event: Event) => void
+  onMove?: (event: Event, date: Date) => void
+  onChangeCategory?: (event: Event, category: Event['category']) => void
   className?: string
   minHeight?: number
   minWidth?: number
   maxWidth?: number
   gridSize?: number
+  enableContextMenu?: boolean
 }
 
 const categoryColors = {
@@ -36,11 +43,17 @@ export function ResizableEvent({
   onResizeStop,
   onClick,
   onContextMenu,
+  onEdit,
+  onDelete,
+  onDuplicate,
+  onMove,
+  onChangeCategory,
   className,
   minHeight = 30,
   minWidth = 60,
   maxWidth = 600,
-  gridSize = 10
+  gridSize = 10,
+  enableContextMenu = true
 }: ResizableEventProps) {
   const [isResizing, setIsResizing] = useState(false)
   const [dimensions, setDimensions] = useState({
@@ -109,7 +122,7 @@ export function ResizableEvent({
   const startTime = formatTime(new Date(event.startDate))
   const endTime = formatTime(new Date(event.endDate))
 
-  return (
+  const resizableElement = (
     <Resizable
       size={{ width: dimensions.width, height: dimensions.height }}
       style={{
@@ -196,4 +209,21 @@ export function ResizableEvent({
       </div>
     </Resizable>
   )
+
+  if (enableContextMenu) {
+    return (
+      <EventContextMenu
+        event={event}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onDuplicate={onDuplicate}
+        onMove={onMove}
+        onChangeCategory={onChangeCategory}
+      >
+        {resizableElement}
+      </EventContextMenu>
+    )
+  }
+
+  return resizableElement
 }
