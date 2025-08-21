@@ -254,7 +254,7 @@
               3
             ],
             "details": "Create subscription functions for calendar updates, implement WebSocket handlers, setup client-side subscription hooks, and handle connection management",
-            "status": "in-progress",
+            "status": "done",
             "testStrategy": "Test real-time updates with multiple clients and verify data consistency"
           },
           {
@@ -266,7 +266,7 @@
               4
             ],
             "details": "Define indexes for frequent queries, implement validation rules in schema, optimize query patterns, and set up proper access control rules",
-            "status": "pending",
+            "status": "in-progress",
             "testStrategy": "Run performance tests on indexed queries and verify access control rules"
           }
         ]
@@ -1712,7 +1712,7 @@
     ],
     "metadata": {
       "created": "2025-08-20T07:38:33.025Z",
-      "updated": "2025-08-21T16:45:31.806Z",
+      "updated": "2025-08-21T16:59:42.052Z",
       "description": "Tasks for master context"
     }
   },

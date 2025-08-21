@@ -62,7 +62,10 @@ export default defineSchema({
     .index("by_user", ["userId"])
     .index("by_start_time", ["startTime"])
     .index("by_user_and_time", ["userId", "startTime"])
-    .index("by_category", ["categoryId"]),
+    .index("by_category", ["categoryId"])
+    .index("by_user_and_category", ["userId", "categoryId"])
+    .index("by_updated", ["updatedAt"])
+    .index("by_user_updated", ["userId", "updatedAt"]),
 
   categories: defineTable({
     userId: v.id("users"),
@@ -73,7 +76,8 @@ export default defineSchema({
     updatedAt: v.number(),
   })
     .index("by_user", ["userId"])
-    .index("by_name", ["name"]),
+    .index("by_name", ["name"])
+    .index("by_user_and_name", ["userId", "name"]),
 
   calendars: defineTable({
     userId: v.id("users"),
@@ -106,7 +110,9 @@ export default defineSchema({
     updatedAt: v.number(),
   })
     .index("by_user", ["userId"])
-    .index("by_user_default", ["userId", "isDefault"]),
+    .index("by_user_default", ["userId", "isDefault"])
+    .index("by_shared", ["isShared"])
+    .index("by_updated", ["updatedAt"]),
 
   aiSchedulingSessions: defineTable({
     userId: v.id("users"),
@@ -213,7 +219,9 @@ export default defineSchema({
     .index("by_status", ["status", "priority"])
     .index("by_user", ["userId"])
     .index("by_provider", ["provider", "status"])
-    .index("by_next_retry", ["nextRetry", "status"]),
+    .index("by_next_retry", ["nextRetry", "status"])
+    .index("by_priority_pending", ["priority", "status"])
+    .index("by_created", ["createdAt"]),
 
   // Event sync mapping for conflict resolution
   eventSync: defineTable({
