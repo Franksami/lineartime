@@ -57,7 +57,11 @@ export function ViewSwitcher({
   return (
     <div className={cn("flex items-center gap-2", className)}>
       {/* Desktop View - Tab Style */}
-      <div className="hidden md:flex items-center gap-1 p-1 rounded-lg bg-card border border-border">
+      <div 
+        className="hidden md:flex items-center gap-1 p-1 rounded-lg bg-card border border-border"
+        role="tablist"
+        aria-label="View selection"
+      >
         {Object.entries(viewConfig).map(([key, config]) => {
           const Icon = config.icon
           const isActive = currentView === key
@@ -65,7 +69,11 @@ export function ViewSwitcher({
           return (
             <button
               key={key}
+              role="tab"
               onClick={() => onViewChange(key as CalendarView)}
+              aria-label={`Switch to ${config.label}`}
+              aria-selected={isActive}
+              tabIndex={isActive ? 0 : -1}
               className={cn(
                 "flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200",
                 "hover:bg-muted/50",
@@ -78,7 +86,7 @@ export function ViewSwitcher({
                 ]
               )}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-4 w-4" aria-hidden="true" />
               <span className="text-sm font-medium">{config.label}</span>
             </button>
           )
@@ -132,8 +140,9 @@ export function ViewSwitcher({
         variant="ghost"
         size="icon"
         className="ml-2 hover:bg-muted/50"
+        aria-label="Settings"
       >
-        <Settings className="h-4 w-4" />
+        <Settings className="h-4 w-4" aria-hidden="true" />
       </Button>
     </div>
   )

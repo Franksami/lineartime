@@ -3,6 +3,7 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import { ConvexProvider, ConvexReactClient } from 'convex/react';
 import { ReactNode } from 'react';
+import { LiveRegionProvider } from '@/components/accessibility/LiveRegion';
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL || 'https://gentle-seagull-346.convex.cloud');
 
@@ -12,7 +13,9 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     // <ClerkProvider>
       <ConvexProvider client={convex}>
-        {children}
+        <LiveRegionProvider>
+          {children}
+        </LiveRegionProvider>
       </ConvexProvider>
     // </ClerkProvider>
   );

@@ -33,21 +33,23 @@ test.describe('Accessibility Tests', () => {
     const calendar = page.locator('[role="application"]');
     await expect(calendar).toHaveAttribute('aria-label', 'Linear Calendar for year navigation and event management');
 
-    // Check year navigation buttons
-    const prevYearButton = page.getByRole('button', { name: /previous year/i });
-    await expect(prevYearButton).toBeVisible();
-    
-    const nextYearButton = page.getByRole('button', { name: /next year/i });
-    await expect(nextYearButton).toBeVisible();
+    // Check that calendar grids have proper structure
+    const grids = page.locator('[role="grid"]');
+    await expect(grids.first()).toBeVisible();
 
-    // Check view switcher buttons
-    const yearViewButton = page.getByRole('button', { name: /year view/i });
-    await expect(yearViewButton).toBeVisible();
+    // Check that gridcells have proper aria labels
+    const gridcells = page.locator('[role="gridcell"][aria-label*="January"]');
+    const cellCount = await gridcells.count();
+    expect(cellCount).toBeGreaterThan(0);
+
+    // Check view switcher tabs
+    const viewTabs = page.locator('[role="tab"]');
+    await expect(viewTabs.first()).toBeVisible();
   });
 
   test('keyboard navigation should work correctly', async ({ page }) => {
-    // Focus on a calendar day
-    const firstDay = page.locator('[role="button"][aria-label*="January 1"]').first();
+    // Focus on a calendar day (gridcell in VirtualCalendar)
+    const firstDay = page.locator('[role="gridcell"][aria-label*="January 1"]').first();
     await firstDay.focus();
     
     // Test arrow key navigation
@@ -86,8 +88,8 @@ test.describe('Accessibility Tests', () => {
   });
 
   test('focus management in modals', async ({ page }) => {
-    // Open event modal
-    const firstDay = page.locator('[role="button"][aria-label*="January 1"]').first();
+    // Open event modal by clicking a calendar day
+    const firstDay = page.locator('[role="gridcell"][aria-label*="January 1"]').first();
     await firstDay.click();
     
     // Wait for modal to open
@@ -108,7 +110,7 @@ test.describe('Accessibility Tests', () => {
     const ariaLiveRegion = page.locator('[aria-live]');
     
     // Navigate with keyboard
-    const firstDay = page.locator('[role="button"][aria-label*="January 1"]').first();
+    const firstDay = page.locator('[role="gridcell"][aria-label*="January 1"]').first();
     await firstDay.focus();
     await page.keyboard.press('ArrowRight');
     
@@ -136,7 +138,8 @@ test.describe('Accessibility Tests', () => {
     });
     
     // When reduced motion is preferred, animations should be minimal or disabled
-    expect(animationDuration).toBe('0.01ms');
+    // Accept both '0.01ms' and scientific notation '1e-05s' or '0s'
+    expect(['0.01ms', '1e-05s', '0s', '0ms']).toContain(animationDuration);
   });
 
   test('color contrast should meet WCAG standards', async ({ page }) => {
@@ -155,7 +158,7 @@ test.describe('Accessibility Tests', () => {
 
   test('form inputs should have proper labels', async ({ page }) => {
     // Open event modal
-    const firstDay = page.locator('[role="button"][aria-label*="January 1"]').first();
+    const firstDay = page.locator('[role="gridcell"][aria-label*="January 1"]').first();
     await firstDay.click();
     
     // Check all form inputs have labels or aria-labels

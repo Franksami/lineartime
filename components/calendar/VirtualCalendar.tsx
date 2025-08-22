@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useRef, useEffect, useMemo, useCallback } from 'react'
+import React, { useRef, useEffect, useMemo, useCallback, useState } from 'react'
 import { VariableSizeList as List } from 'react-window'
 import { cn } from '@/lib/utils'
 import type { Event } from '@/types/calendar'
 import { getDaysInMonth, startOfYear, addMonths, getDay, isToday, isSameDay, isWithinInterval, endOfMonth, format } from 'date-fns'
+import { getDayAriaLabel, getMonthAriaLabel, announceToScreenReader } from '@/lib/accessibility'
 
 interface VirtualCalendarProps {
   year: number
@@ -49,6 +50,8 @@ export function VirtualCalendar({
 }: VirtualCalendarProps) {
   const listRef = useRef<List>(null)
   const [windowHeight, setWindowHeight] = React.useState(0)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [focusedDate, setFocusedDate] = useState<Date>(new Date())
   const observerRefs = useRef<Map<number, IntersectionObserver>>(new Map())
   const loadedMonths = useRef<Set<number>>(new Set())
   
@@ -168,29 +171,51 @@ export function VirtualCalendar({
       >
         {/* Month Header */}
         <div className="flex items-center h-10 mb-2 border-b border-neutral-200 dark:border-neutral-700">
-          <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+          <h3 
+            id={`month-heading-${index}`}
+            className="text-sm font-medium text-neutral-900 dark:text-neutral-100"
+            aria-label={getMonthAriaLabel(index, monthData.year)}
+          >
             {monthData.name} {monthData.year}
           </h3>
         </div>
         
         {/* Days Grid */}
-        <div className="grid grid-cols-7 gap-px bg-neutral-200 dark:bg-neutral-700 rounded-lg overflow-hidden">
-          {/* Weekday headers */}
-          {WEEKDAY_ABBREVIATIONS.map((day, i) => (
-            <div 
-              key={`header-${i}`}
-              className="bg-neutral-50 dark:bg-neutral-800 text-center py-1 text-xs font-medium text-neutral-600 dark:text-neutral-400"
-            >
-              {day}
-            </div>
-          ))}
+        <div 
+          role="grid"
+          aria-labelledby={`month-heading-${index}`}
+          className="bg-neutral-200 dark:bg-neutral-700 rounded-lg overflow-hidden"
+        >
+          {/* Weekday headers row */}
+          <div role="row" className="grid grid-cols-7 gap-px">
+            {WEEKDAY_ABBREVIATIONS.map((day, i) => (
+              <div 
+                key={`header-${i}`}
+                role="columnheader"
+                aria-label={['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][i]}
+                className="bg-neutral-50 dark:bg-neutral-800 text-center py-1 text-xs font-medium text-neutral-600 dark:text-neutral-400"
+              >
+                {day}
+              </div>
+            ))}
+          </div>
           
-          {/* Day cells */}
-          {monthData.cells.map((cell) => {
+          {/* Day cells grouped by week */}
+          {Array.from({ length: Math.ceil(monthData.cells.length / 7) }, (_, weekIndex) => {
+            const weekCells = monthData.cells.slice(weekIndex * 7, (weekIndex + 1) * 7)
+            // Skip rows that have no cells or only empty cells
+            if (weekCells.length === 0 || weekCells.every(cell => cell.type === 'empty')) {
+              return null
+            }
+            return (
+              <div key={`week-${weekIndex}`} role="row" className="grid grid-cols-7 gap-px">
+                {weekCells.map((cell) => {
             if (cell.type === 'empty') {
               return (
                 <div 
-                  key={cell.key} 
+                  key={cell.key}
+                  role="gridcell"
+                  aria-hidden="true"
                   className="bg-neutral-50 dark:bg-neutral-900 h-9"
                 />
               )
@@ -198,15 +223,29 @@ export function VirtualCalendar({
 
             const isCurrentDay = cell.date && isToday(cell.date)
             const hasEvents = cell.events && cell.events.length > 0
+            const isSelected = cell.date && selectedDate && isSameDay(cell.date, selectedDate)
+            const isFocused = cell.date && isSameDay(cell.date, focusedDate)
 
             return (
               <button
                 key={cell.key}
-                onClick={() => cell.date && onDateSelect?.(cell.date)}
+                role="gridcell"
+                aria-label={cell.date ? getDayAriaLabel(cell.date, cell.events?.length || 0) : undefined}
+                aria-selected={isSelected || undefined}
+                aria-current={isCurrentDay ? 'date' : undefined}
+                tabIndex={isFocused ? 0 : -1}
+                onClick={() => {
+                  if (cell.date) {
+                    setSelectedDate(cell.date)
+                    onDateSelect?.(cell.date)
+                    announceToScreenReader(`Selected ${getDayAriaLabel(cell.date, cell.events?.length || 0)}`)
+                  }
+                }}
                 className={cn(
                   "relative h-9 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors",
                   "flex flex-col items-center justify-center p-1",
                   isCurrentDay && "ring-2 ring-blue-500 dark:ring-blue-400",
+                  isSelected && "bg-blue-100 dark:bg-blue-900",
                   "focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 )}
               >
@@ -248,6 +287,9 @@ export function VirtualCalendar({
               </button>
             )
           })}
+              </div>
+            )
+          })}
         </div>
       </div>
     )
@@ -264,23 +306,119 @@ export function VirtualCalendar({
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Home') {
-        e.preventDefault()
-        listRef.current?.scrollToItem(0, 'start')
-      } else if (e.key === 'End') {
-        e.preventDefault()
-        listRef.current?.scrollToItem(11, 'start')
+      // Don't handle if user is typing in an input
+      const target = e.target as HTMLElement
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+        return
+      }
+
+      const currentDate = focusedDate || new Date()
+      const newDate = new Date(currentDate)
+      let handled = false
+
+      switch (e.key) {
+        case 'ArrowLeft':
+          e.preventDefault()
+          newDate.setDate(currentDate.getDate() - 1)
+          handled = true
+          break
+        case 'ArrowRight':
+          e.preventDefault()
+          newDate.setDate(currentDate.getDate() + 1)
+          handled = true
+          break
+        case 'ArrowUp':
+          e.preventDefault()
+          newDate.setDate(currentDate.getDate() - 7)
+          handled = true
+          break
+        case 'ArrowDown':
+          e.preventDefault()
+          newDate.setDate(currentDate.getDate() + 7)
+          handled = true
+          break
+        case 'PageUp':
+          e.preventDefault()
+          newDate.setMonth(currentDate.getMonth() - 1)
+          handled = true
+          break
+        case 'PageDown':
+          e.preventDefault()
+          newDate.setMonth(currentDate.getMonth() + 1)
+          handled = true
+          break
+        case 'Home':
+          if (e.ctrlKey) {
+            e.preventDefault()
+            listRef.current?.scrollToItem(0, 'start')
+            newDate.setMonth(0)
+            newDate.setDate(1)
+            handled = true
+          } else {
+            e.preventDefault()
+            // Go to start of week
+            const dayOfWeek = currentDate.getDay()
+            newDate.setDate(currentDate.getDate() - dayOfWeek)
+            handled = true
+          }
+          break
+        case 'End':
+          if (e.ctrlKey) {
+            e.preventDefault()
+            listRef.current?.scrollToItem(11, 'start')
+            newDate.setMonth(11)
+            newDate.setDate(31)
+            handled = true
+          } else {
+            e.preventDefault()
+            // Go to end of week
+            const dayOfWeek = currentDate.getDay()
+            newDate.setDate(currentDate.getDate() + (6 - dayOfWeek))
+            handled = true
+          }
+          break
+        case 'Enter':
+        case ' ':
+          e.preventDefault()
+          setSelectedDate(currentDate)
+          onDateSelect?.(currentDate)
+          announceToScreenReader(`Selected ${getDayAriaLabel(currentDate, 0)}`)
+          handled = true
+          break
+        case 'Escape':
+          e.preventDefault()
+          setSelectedDate(null)
+          announceToScreenReader('Selection cleared')
+          handled = true
+          break
+      }
+
+      if (handled && newDate.getFullYear() === year) {
+        setFocusedDate(newDate)
+        // Scroll to the month if needed
+        const newMonth = newDate.getMonth()
+        listRef.current?.scrollToItem(newMonth, 'auto')
+        announceToScreenReader(`Navigated to ${getDayAriaLabel(newDate, 0)}`)
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [focusedDate, year, onDateSelect])
 
   if (!windowHeight) return null
 
   return (
-    <div className={cn("w-full h-full", className)}>
+    <div 
+      className={cn("w-full h-full", className)}
+      role="region"
+      aria-label="Calendar grid with months of the year"
+      tabIndex={0}
+      aria-describedby="calendar-instructions"
+    >
+      <span id="calendar-instructions" className="sr-only">
+        Use arrow keys to navigate dates, Enter to select, Page Up/Down to change months
+      </span>
       <List
         ref={listRef}
         height={windowHeight}
@@ -289,6 +427,14 @@ export function VirtualCalendar({
         width="100%"
         overscanCount={2}
         className="scrollbar-thin scrollbar-thumb-neutral-400 dark:scrollbar-thumb-neutral-600"
+        outerElementType={React.forwardRef((props, ref) => (
+          <div
+            {...props}
+            ref={ref}
+            tabIndex={0}
+            aria-label="Scrollable calendar view"
+          />
+        ))}
       >
         {MonthRow}
       </List>

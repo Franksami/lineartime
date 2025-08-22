@@ -1815,8 +1815,147 @@
           18,
           25
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement ARIA Grid Role Structure",
+            "description": "Set up basic ARIA grid roles and attributes for the calendar interface",
+            "dependencies": [],
+            "details": "- Add role='grid' to container\n- Implement row and cell roles\n- Set up aria-rowcount and aria-colcount\n- Add aria-rowindex and aria-colindex",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Add Grid Cell Selection Management",
+            "description": "Implement cell selection and focus management within the ARIA grid",
+            "dependencies": [
+              "26.1"
+            ],
+            "details": "- Add aria-selected states\n- Implement current cell tracking\n- Set up aria-activedescendant\n- Handle focus containment",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement Arrow Key Navigation",
+            "description": "Add keyboard navigation support for arrow keys within the grid",
+            "dependencies": [
+              "26.1",
+              "26.2"
+            ],
+            "details": "- Handle Up/Down/Left/Right arrows\n- Implement edge detection\n- Add wrap-around navigation\n- Support Home/End keys",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Add Page Navigation Controls",
+            "description": "Implement keyboard shortcuts for page-level navigation",
+            "dependencies": [
+              "26.3"
+            ],
+            "details": "- Add PageUp/PageDown support\n- Implement Ctrl+Home/End\n- Handle month navigation\n- Support quick date selection",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Create Screen Reader Announcements",
+            "description": "Implement dynamic screen reader announcements for state changes",
+            "dependencies": [
+              "26.1",
+              "26.2"
+            ],
+            "details": "- Set up aria-live regions\n- Add selection announcements\n- Implement date change notifications\n- Handle error messages",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Implement Focus Management System",
+            "description": "Create comprehensive focus management for interactive elements",
+            "dependencies": [
+              "26.2"
+            ],
+            "details": "- Track focus history\n- Handle modal focus trapping\n- Implement focus restoration\n- Add keyboard focus indicators",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Add Skip Navigation Links",
+            "description": "Implement skip links for main content areas",
+            "dependencies": [],
+            "details": "- Create main content skip link\n- Add calendar navigation skip\n- Implement controls skip link\n- Style skip link visibility",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 8,
+            "title": "Set Up Live Regions",
+            "description": "Configure live regions for dynamic content updates",
+            "dependencies": [
+              "26.5"
+            ],
+            "details": "- Define polite/assertive regions\n- Set up status messages\n- Handle loading states\n- Implement error notifications",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 9,
+            "title": "Implement High Contrast Support",
+            "description": "Add high contrast mode and related visual accommodations",
+            "dependencies": [],
+            "details": "- Create high contrast theme\n- Add focus indicators\n- Implement border contrast\n- Handle system preferences",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 10,
+            "title": "Add Reduced Motion Support",
+            "description": "Implement reduced motion preferences and animations",
+            "dependencies": [],
+            "details": "- Detect motion preferences\n- Adjust transitions\n- Modify animations\n- Create fallbacks",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 11,
+            "title": "Create Accessibility Documentation",
+            "description": "Document all accessibility features and keyboard shortcuts",
+            "dependencies": [
+              "26.1",
+              "26.2",
+              "26.3",
+              "26.4"
+            ],
+            "details": "- List keyboard shortcuts\n- Document ARIA usage\n- Create user guide\n- Add developer documentation",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 12,
+            "title": "Implement Accessibility Testing Suite",
+            "description": "Create comprehensive accessibility testing framework",
+            "dependencies": [
+              "26.1",
+              "26.2",
+              "26.3",
+              "26.4",
+              "26.5",
+              "26.6",
+              "26.7",
+              "26.8",
+              "26.9",
+              "26.10"
+            ],
+            "details": "- Set up automated tests\n- Create screen reader test cases\n- Add keyboard navigation tests\n- Implement WCAG validation",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 27,
@@ -1879,7 +2018,7 @@
     ],
     "metadata": {
       "created": "2025-08-20T07:38:33.025Z",
-      "updated": "2025-08-21T23:59:22.339Z",
+      "updated": "2025-08-22T00:43:07.941Z",
       "description": "Tasks for master context"
     }
   },

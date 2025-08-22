@@ -47,6 +47,7 @@ export function EventModal({
 }: EventModalProps) {
   const prefersReducedMotion = useReducedMotion()
   const titleInputRef = React.useRef<HTMLInputElement>(null)
+  const previousFocusRef = React.useRef<HTMLElement | null>(null)
   
   const [formData, setFormData] = React.useState<Partial<Event>>({
     title: '',
@@ -87,12 +88,22 @@ export function EventModal({
 
   // Focus management
   React.useEffect(() => {
-    if (open && titleInputRef.current) {
-      // Small delay to ensure modal is fully rendered
+    if (open) {
+      // Save the currently focused element
+      previousFocusRef.current = document.activeElement as HTMLElement
+      
+      // Focus the title input after modal is rendered
       setTimeout(() => {
         titleInputRef.current?.focus()
         announceToScreenReader(event ? 'Edit event dialog opened' : 'Create event dialog opened')
       }, 100)
+    } else {
+      // Restore focus when modal closes
+      if (previousFocusRef.current) {
+        previousFocusRef.current.focus()
+        previousFocusRef.current = null
+        announceToScreenReader('Event dialog closed')
+      }
     }
   }, [open, event])
 

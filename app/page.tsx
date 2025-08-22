@@ -85,13 +85,31 @@ export default function Page() {
   }, [deleteEvent, events]);
   
   return (
-    <div className="h-screen bg-background overflow-hidden">
+    <div 
+      className="h-screen bg-background overflow-hidden"
+      role="application"
+      aria-label="Linear Calendar for year navigation and event management"
+    >
       {/* Command Bar for NLP event creation */}
       <CommandBar
         onEventCreate={handleEventCreate}
         onEventDelete={handleEventDelete}
         events={events}
       />
+      
+      {/* Skip Links for Accessibility */}
+      <a 
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
+      >
+        Skip to main content
+      </a>
+      <a 
+        href="#calendar-view"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-24 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
+      >
+        Skip to calendar
+      </a>
       
       {/* Header with View Switcher */}
       <div className="relative z-10 px-4 pt-4">
@@ -105,7 +123,7 @@ export default function Page() {
                 Life is bigger than a week
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2" role="toolbar" aria-label="Calendar controls">
               <HighContrastToggle />
               <ViewSwitcher 
                 currentView={currentView} 
@@ -117,9 +135,13 @@ export default function Page() {
       </div>
           
       {/* Main Content Area */}
-      <div className="flex-1 h-[calc(100vh-88px)] bg-background overflow-hidden">
+      <main 
+        id="main-content"
+        className="flex-1 h-[calc(100vh-88px)] bg-background overflow-hidden"
+        aria-label="Main calendar content"
+      >
         {currentView === 'year' && (
-          <>
+          <div id="calendar-view">
             {/* Virtual Scroll Toggle (temporary for testing) */}
             {process.env.NODE_ENV === 'development' && !isMobile && (
               <div className="absolute top-20 right-4 z-20 bg-background/80 backdrop-blur-sm p-2 rounded-lg border">
@@ -166,7 +188,7 @@ export default function Page() {
                 />
               )
             )}
-          </>
+          </div>
         )}
         
         {currentView === 'timeline' && (
@@ -191,7 +213,7 @@ export default function Page() {
             <EventManagement userId={userId} />
           </div>
         )}
-      </div>
+      </main>
       
       {/* Performance Monitor (development only) */}
       {process.env.NODE_ENV === 'development' && (
