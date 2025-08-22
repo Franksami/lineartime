@@ -6,16 +6,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Linear Calendar** - A year-at-a-glance calendar application being transformed into an enterprise-grade, AI-powered scheduling platform.
 
-**Current Version**: v0.2.0 (Basic implementation with LocalStorage)
+**Current Version**: v0.3.0 (Virtual scrolling, IndexedDB, AI Assistant, Mobile support)
 **Target Version**: v3.0.0 (Enterprise platform per PRD)
 
 ### Tech Stack
 - **Framework**: Next.js 15.5.0 with Turbopack
 - **Language**: TypeScript 5.0
 - **UI**: React 19 + shadcn/ui + Tailwind CSS (dark theme)
-- **Storage**: LocalStorage (migrating to IndexedDB)
+- **Storage**: IndexedDB with Dexie (migrated from LocalStorage)
+- **AI**: Vercel AI SDK v5 with OpenAI integration
 - **Backend**: Convex (configured, not active)
 - **Auth**: Clerk (configured, not active)
+- **Mobile**: Touch gestures with @use-gesture/react
 
 ## 📦 Essential Commands
 
@@ -60,49 +62,65 @@ task-master parse-prd --append "Advanced Features technical-prd.md"
 ### Current Implementation
 
 #### Core Components
-- **`components/calendar/LinearCalendarVertical.tsx`**: Main calendar component using DOM rendering
-  - 12-month vertical layout (42 columns × 12 rows)
-  - Basic event rendering with category colors
-  - LocalStorage persistence (synchronous, blocks UI at >500 events)
+- **`components/calendar/VirtualCalendar.tsx`**: Virtual scrolling calendar with react-window
+  - Handles 10,000+ events at 60fps
+  - Three-layer Canvas rendering architecture
+  - Smooth scrolling and performance optimization
 
-- **`hooks/useLinearCalendar.ts`**: State management hook
-  - Event CRUD operations
-  - Filter state management
-  - LocalStorage sync (5MB limit)
-  - Basic selection handling
+- **`components/calendar/LinearCalendarVertical.tsx`**: Legacy DOM-based calendar
+  - Still available as fallback option
+  - 12-month vertical layout
+
+- **`hooks/useLinearCalendar.ts`**: Enhanced state management hook
+  - Event CRUD operations with IndexedDB
+  - Advanced filter and search capabilities
+  - Offline-first architecture
+  - Touch gesture support for mobile
+  - Real-time sync preparation
 
 - **`types/calendar.ts`**: TypeScript definitions
   - Event interface with categories
   - Filter and view state types
   - Color constants
 
-### Target Architecture (PRD Implementation)
+### Completed Features
 
-#### Phase 1: Performance Foundation (Critical - Start Here)
-**WARNING**: The app will break at >500 events without virtual scrolling. Implement this first!
+#### ✅ Phase 1: Performance Foundation (COMPLETED)
+- Virtual scrolling with react-window
+- Three-layer Canvas rendering
+- IntervalTree for O(log n) conflict detection
+- Web Worker for heavy computations
 
-Key files to create:
-- `lib/canvas/CalendarRenderer.ts` - Three-layer Canvas architecture
-- `components/calendar/VirtualCalendar.tsx` - Virtual scrolling with react-window
-- `lib/data-structures/IntervalTree.ts` - O(log n) conflict detection
-- `workers/calendar.worker.ts` - Web Worker for heavy computations
+#### ✅ Phase 2: Storage Migration (COMPLETED)
+- IndexedDB with Dexie implementation
+- Offline-first architecture
+- Background sync preparation
+- Migration from LocalStorage preserved
 
-#### Phase 2: Storage Migration
-- `lib/storage/CalendarDB.ts` - IndexedDB with Dexie
-- `service-worker.ts` - Offline-first with background sync
-- Migration script to preserve existing LocalStorage data
+#### ✅ Phase 3: Natural Language Processing (COMPLETED)
+- Chrono.js integration for date parsing
+- Command bar implementation
+- Real-time event parsing from natural language
 
-#### Phase 3: Natural Language Processing  
-- `lib/nlp/EventParser.ts` - Chrono.js integration
-- `components/CommandBar.tsx` - Command palette UI
+#### ✅ Phase 4: AI Assistant (COMPLETED)
+- Vercel AI SDK v5 integration
+- AI-powered scheduling suggestions
+- Conflict resolution with CSP solver
+- Focus time protection
 
-#### Phase 4: AI Scheduling
-- `lib/ai/SchedulingEngine.ts` - CSP solver
-- `lib/ai/FocusTimeManager.ts` - Focus protection
+#### ✅ Phase 5: Mobile Support (COMPLETED)
+- Touch gesture support with @use-gesture/react
+- Mobile-optimized UI components
+- Responsive design for all screen sizes
+- Bottom sheet interactions
 
-#### Phase 5: Real-time Collaboration
-- `lib/collaboration/CollaborationManager.ts` - Yjs CRDT
-- WebSocket integration for presence
+### Next Implementation Phase
+
+#### Phase 6: Real-time Collaboration (TODO)
+- Yjs CRDT integration
+- WebSocket for real-time sync
+- Presence awareness
+- Collaborative editing
 
 ## 🚀 PRD Implementation Strategy
 
@@ -203,13 +221,26 @@ it('should maintain 60fps while scrolling', async () => {
 ```
 lineartime/
 ├── app/                    # Next.js app directory
+│   ├── api/ai/            # AI chat endpoints
+│   └── test-*/            # Test pages for features
 ├── components/
+│   ├── ai/                # AI Assistant components
+│   ├── ai-elements/       # Vercel AI SDK v5 components
 │   ├── calendar/          # Calendar components
-│   └── ui/               # shadcn components
-├── hooks/                # Custom React hooks
-├── types/                # TypeScript definitions
-└── lib/                  # Utilities
-
+│   ├── mobile/            # Mobile-specific components
+│   ├── performance/       # Performance monitoring
+│   ├── timeline/          # Timeline view components
+│   └── ui/                # shadcn components
+├── hooks/                  # Custom React hooks
+├── lib/                    # Utilities
+│   ├── ai/                # AI scheduling engine
+│   ├── canvas/            # Canvas rendering
+│   ├── data-structures/   # IntervalTree, etc.
+│   ├── mobile/            # Touch gesture handlers
+│   ├── nlp/               # Natural language processing
+│   └── storage/           # IndexedDB management
+├── types/                  # TypeScript definitions
+└── workers/                # Web Workers
 ```
 
 ### Target Structure (After PRD)
@@ -273,11 +304,10 @@ const testVirtualScroll = () => {
 ## 🐛 Known Issues & Solutions
 
 ### Current Limitations
-1. **Performance degrades at >500 events** - Implement virtual scrolling
-2. **LocalStorage blocks UI** - Migrate to IndexedDB
-3. **No conflict detection** - Implement IntervalTree
-4. **No mobile optimization** - Add touch handlers
-5. **Single-user only** - Implement Yjs CRDT
+1. **Single-user only** - Implement Yjs CRDT for collaboration
+2. **No service worker** - Add for full offline support
+3. **Limited calendar integrations** - Add Google/Outlook sync
+4. **No plugin system** - Implement extensibility framework
 
 ### Common Errors
 ```typescript

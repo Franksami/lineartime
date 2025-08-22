@@ -1,7 +1,7 @@
 # Page snapshot
 
 ```yaml
-- generic [ref=e1]:
+- generic [active] [ref=e1]:
   - generic [ref=e2]:
     - heading "Performance Test Suite" [level=1] [ref=e3]
     - generic [ref=e4]:
@@ -9,176 +9,65 @@
       - generic [ref=e8]:
         - generic [ref=e9]:
           - paragraph [ref=e10]: Event Count
-          - paragraph [ref=e11]: "0"
+          - paragraph [ref=e11]: "100"
         - generic [ref=e12]:
           - paragraph [ref=e13]: Storage Type
           - paragraph [ref=e14]: IndexedDB available
         - generic [ref=e15]:
           - paragraph [ref=e16]: Last Render Time
-          - paragraph [ref=e17]: 0.00ms
+          - paragraph [ref=e17]: 190.20ms
         - generic [ref=e18]:
           - paragraph [ref=e19]: Current FPS
-          - paragraph [ref=e20]: "59"
-    - generic [ref=e21]:
-      - generic [ref=e23]: Generate Test Events
-      - generic [ref=e24]:
-        - generic [ref=e25]:
-          - button "Add 100 Events" [ref=e26]
-          - button "Add 500 Events" [ref=e27]
-          - button "Add 1,000 Events" [ref=e28]
-          - button "Add 5,000 Events" [ref=e29]
-          - button "Add 10,000 Events (Stress Test)" [ref=e30]
-        - generic [ref=e31]:
-          - button "Clear All Events" [ref=e32]
-          - button "Go to Calendar" [ref=e33]
-    - generic [ref=e34]:
-      - generic [ref=e36]: Performance Targets
-      - generic [ref=e38]:
-        - generic [ref=e39]:
-          - generic [ref=e40]: Initial Render
-          - generic [ref=e41]: "Target: <500ms (Current: 0.00ms)"
+          - paragraph [ref=e20]: "60"
+        - generic [ref=e21]:
+          - paragraph [ref=e22]: Memory Used
+          - paragraph [ref=e23]: 26.32MB
+    - generic [ref=e24]:
+      - generic [ref=e26]: Generate Test Events
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - button "Add 100 Events" [ref=e29]
+          - button "Add 500 Events" [ref=e30]
+          - button "Add 1,000 Events" [ref=e31]
+          - button "Add 5,000 Events" [ref=e32]
+          - button "Add 10,000 Events (Stress Test)" [ref=e33]
+        - generic [ref=e34]:
+          - button "Clear All Events" [ref=e35]
+          - button "Go to Calendar" [ref=e36]
+    - generic [ref=e37]:
+      - generic [ref=e39]: Performance Targets
+      - generic [ref=e41]:
         - generic [ref=e42]:
-          - generic [ref=e43]: FPS
-          - generic [ref=e44]: "Target: 60fps (Current: 59fps)"
+          - generic [ref=e43]: Initial Render
+          - generic [ref=e44]: "Target: <500ms (Current: 190.20ms)"
         - generic [ref=e45]:
-          - generic [ref=e46]: Memory Usage
-          - generic [ref=e47]: "Target: <100MB (Current: 0.00MB)"
+          - generic [ref=e46]: FPS
+          - generic [ref=e47]: "Target: 60fps (Current: 60fps)"
         - generic [ref=e48]:
-          - generic [ref=e49]: Max Events
-          - generic [ref=e50]: "Target: 10,000+ (Current: 0)"
-    - generic [ref=e51]:
-      - generic [ref=e53]: Test Instructions
-      - generic [ref=e54]:
-        - paragraph [ref=e55]: 1. Start with 100 events and check calendar performance
-        - paragraph [ref=e56]: 2. Gradually increase to 500, then 1000 events
-        - paragraph [ref=e57]: 3. Monitor FPS while scrolling the calendar
-        - paragraph [ref=e58]: 4. Note when performance starts degrading
-        - paragraph [ref=e59]: 5. Test with 10,000 events for stress testing
-        - paragraph [ref=e60]: ⚠️ If the app becomes unresponsive, refresh the page and clear events
-  - generic [active]:
-    - generic [ref=e63]:
-      - generic [ref=e64]:
-        - generic [ref=e65]:
-          - navigation [ref=e66]:
-            - button "previous" [disabled] [ref=e67]:
-              - img "previous" [ref=e68]
-            - generic [ref=e70]:
-              - generic [ref=e71]: 1/
-              - generic [ref=e72]: "1"
-            - button "next" [disabled] [ref=e73]:
-              - img "next" [ref=e74]
-          - img
-        - generic [ref=e76]:
-          - generic [ref=e77]:
-            - img [ref=e78]
-            - generic "Latest available version is detected (15.5.0)." [ref=e80]: Next.js 15.5.0
-            - generic [ref=e81]: Turbopack
-          - img
-      - dialog "Build Error" [ref=e83]:
-        - generic [ref=e86]:
-          - generic [ref=e87]:
-            - generic [ref=e88]:
-              - generic [ref=e90]: Build Error
-              - generic [ref=e91]:
-                - button "Copy Error Info" [ref=e92] [cursor=pointer]:
-                  - img [ref=e93] [cursor=pointer]
-                - link "Go to related documentation" [ref=e95] [cursor=pointer]:
-                  - /url: https://nextjs.org/docs/messages/module-not-found
-                  - img [ref=e96] [cursor=pointer]
-                - link "Learn more about enabling Node.js inspector for server code with Chrome DevTools" [ref=e98] [cursor=pointer]:
-                  - /url: https://nextjs.org/docs/app/building-your-application/configuring/debugging#server-side-code
-                  - img [ref=e99] [cursor=pointer]
-            - paragraph [ref=e108]: "Module not found: Can't resolve 'ai/react'"
-          - generic [ref=e110]:
-            - generic [ref=e112]:
-              - img [ref=e114]
-              - generic [ref=e117]: ./components/ai/AssistantPanel.tsx (4:1)
-              - button "Open in editor" [ref=e118] [cursor=pointer]:
-                - img [ref=e120] [cursor=pointer]
-            - generic [ref=e123]:
-              - generic [ref=e124]: "Module not found: Can't resolve 'ai/react'"
-              - generic [ref=e126]: 2 |
-              - generic [ref=e128]: 3 |
-              - generic [ref=e130]: import
-              - generic [ref=e132]: "*"
-              - generic [ref=e134]: as
-              - generic [ref=e136]: React
-              - generic [ref=e138]: from
-              - generic [ref=e140]: "'react'"
-              - generic [ref=e141]: ">"
-              - generic [ref=e142]: 4 |
-              - generic [ref=e144]: import
-              - generic [ref=e145]: "{ useChat }"
-              - generic [ref=e146]: from
-              - generic [ref=e148]: "'ai/react'"
-              - generic [ref=e150]: "|"
-              - generic [ref=e152]: ^
-              - generic [ref=e153]: ^
-              - generic [ref=e154]: ^
-              - generic [ref=e155]: ^
-              - generic [ref=e156]: ^
-              - generic [ref=e157]: ^
-              - generic [ref=e158]: ^
-              - generic [ref=e159]: ^
-              - generic [ref=e160]: ^
-              - generic [ref=e161]: ^
-              - generic [ref=e162]: ^
-              - generic [ref=e163]: ^
-              - generic [ref=e164]: ^
-              - generic [ref=e165]: ^
-              - generic [ref=e166]: ^
-              - generic [ref=e167]: ^
-              - generic [ref=e168]: ^
-              - generic [ref=e169]: ^
-              - generic [ref=e170]: ^
-              - generic [ref=e171]: ^
-              - generic [ref=e172]: ^
-              - generic [ref=e173]: ^
-              - generic [ref=e174]: ^
-              - generic [ref=e175]: ^
-              - generic [ref=e176]: ^
-              - generic [ref=e177]: ^
-              - generic [ref=e178]: ^
-              - generic [ref=e179]: ^
-              - generic [ref=e180]: ^
-              - generic [ref=e181]: ^
-              - generic [ref=e182]: ^
-              - generic [ref=e183]: ^
-              - generic [ref=e184]: ^
-              - generic [ref=e185]: ^
-              - generic [ref=e187]: 5 |
-              - generic [ref=e189]: import
-              - generic [ref=e190]: "{ cn }"
-              - generic [ref=e191]: from
-              - generic [ref=e193]: "'@/lib/utils'"
-              - generic [ref=e195]: 6 |
-              - generic [ref=e197]: import
-              - generic [ref=e198]: "{"
-              - generic [ref=e199]: Card
-              - generic [ref=e200]: "}"
-              - generic [ref=e201]: from
-              - generic [ref=e203]: "'@/components/ui/card'"
-              - generic [ref=e205]: 7 |
-              - generic [ref=e207]: import
-              - generic [ref=e208]: "{"
-              - generic [ref=e209]: Button
-              - generic [ref=e210]: "}"
-              - generic [ref=e211]: from
-              - generic [ref=e213]: "'@/components/ui/button'"
-              - generic [ref=e214]:
-                - text: "Import traces: Client Component Browser: ./components/ai/AssistantPanel.tsx [Client Component Browser] ./app/page.tsx [Client Component Browser] ./app/page.tsx [Server Component] Client Component SSR: ./components/ai/AssistantPanel.tsx [Client Component SSR] ./app/page.tsx [Client Component SSR] ./app/page.tsx [Server Component]"
-                - link "https://nextjs.org/docs/messages/module-not-found" [ref=e215] [cursor=pointer]:
-                  - /url: https://nextjs.org/docs/messages/module-not-found
-        - generic [ref=e216]:
-          - generic [ref=e217]: "1"
-          - generic [ref=e218]: "2"
-    - generic [ref=e223] [cursor=pointer]:
-      - button "Open Next.js Dev Tools" [ref=e224] [cursor=pointer]:
-        - img [ref=e225] [cursor=pointer]
-      - button "Open issues overlay" [ref=e229] [cursor=pointer]:
-        - generic [ref=e230] [cursor=pointer]:
-          - generic [ref=e231] [cursor=pointer]: "0"
-          - generic [ref=e232] [cursor=pointer]: "1"
-        - generic [ref=e233] [cursor=pointer]: Issue
-  - alert [ref=e234]
+          - generic [ref=e49]: Memory Usage
+          - generic [ref=e50]: "Target: <100MB (Current: 26.32MB)"
+        - generic [ref=e51]:
+          - generic [ref=e52]: Max Events
+          - generic [ref=e53]: "Target: 10,000+ (Current: 100)"
+    - generic [ref=e54]:
+      - generic [ref=e56]: Test Instructions
+      - generic [ref=e57]:
+        - paragraph [ref=e58]: 1. Start with 100 events and check calendar performance
+        - paragraph [ref=e59]: 2. Gradually increase to 500, then 1000 events
+        - paragraph [ref=e60]: 3. Monitor FPS while scrolling the calendar
+        - paragraph [ref=e61]: 4. Note when performance starts degrading
+        - paragraph [ref=e62]: 5. Test with 10,000 events for stress testing
+        - paragraph [ref=e63]: ⚠️ If the app becomes unresponsive, refresh the page and clear events
+  - generic [ref=e68] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e69] [cursor=pointer]:
+      - img [ref=e70] [cursor=pointer]
+    - generic [ref=e73] [cursor=pointer]:
+      - button "Open issues overlay" [ref=e74] [cursor=pointer]:
+        - generic [ref=e75] [cursor=pointer]:
+          - generic [ref=e76] [cursor=pointer]: "0"
+          - generic [ref=e77] [cursor=pointer]: "1"
+        - generic [ref=e78] [cursor=pointer]: Issue
+      - button "Collapse issues badge" [ref=e79] [cursor=pointer]:
+        - img [ref=e80] [cursor=pointer]
+  - alert [ref=e82]
 ```

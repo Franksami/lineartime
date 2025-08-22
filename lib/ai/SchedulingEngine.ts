@@ -202,7 +202,7 @@ export class SchedulingEngine {
   public async protectFocusTime(
     request: FocusTimeRequest
   ): Promise<ProtectedTimeResult> {
-    const protected: FocusBlock[] = [];
+    const protectedBlocks: FocusBlock[] = [];
     const rescheduled: Event[] = [];
     const declined: Event[] = [];
     const conflicts: SchedulingConflict[] = [];
@@ -253,7 +253,7 @@ export class SchedulingEngine {
           recurring: request.recurring
         };
         
-        protected.push(focusBlock);
+        protectedBlocks.push(focusBlock);
         
         // Find conflicting events
         const conflictingEvents = this.context.existingEvents.filter(event => {
@@ -276,7 +276,7 @@ export class SchedulingEngine {
       });
       
       // Update context with new focus blocks
-      this.context.focusBlocks.push(...protected);
+      this.context.focusBlocks.push(...protectedBlocks);
       
       // If flexible, attempt to reschedule conflicting events
       if (request.flexibleScheduling && rescheduled.length > 0) {
@@ -295,7 +295,7 @@ export class SchedulingEngine {
       }
       
       return {
-        protected,
+        protected: protectedBlocks,
         rescheduled,
         declined,
         conflicts

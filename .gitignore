@@ -78,6 +78,10 @@ node_modules/
 
 # Development artifacts
 .turbo/
+.swc/
+test-results/
+playwright-report/
+run-tests.js
 
 # Task files
 # tasks.json

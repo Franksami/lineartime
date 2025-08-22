@@ -76,7 +76,11 @@ export function AssistantPanel({
   
   const handleSuggestionSelect = (suggestion: string) => {
     setInput(suggestion)
-    handleSubmit(new Event('submit') as any)
+    // Trigger form submission programmatically
+    const syntheticEvent = {
+      preventDefault: () => {}
+    } as React.FormEvent
+    handleSubmit(syntheticEvent)
   }
   
   const handleSubmit = (e: React.FormEvent) => {

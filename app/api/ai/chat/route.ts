@@ -134,7 +134,7 @@ export async function POST(request: Request) {
         explainConflicts: tool({
           description: 'Explain scheduling conflicts for a specific date or event',
           parameters: explainConflictsSchema,
-          execute: async ({ date, eventId }) => {
+          execute: async ({ date }) => {
             const targetDate = date ? new Date(date) : new Date()
             const dayStart = startOfDay(targetDate).getTime()
             const dayEnd = endOfDay(targetDate).getTime()
@@ -192,7 +192,7 @@ export async function POST(request: Request) {
               return eventStart >= start && eventStart <= end
             })
             
-            const categories = periodEvents.reduce((acc: any, e: Event) => {
+            const categories = periodEvents.reduce((acc: Record<string, number>, e: Event) => {
               acc[e.category] = (acc[e.category] || 0) + 1
               return acc
             }, {})
@@ -220,7 +220,7 @@ export async function POST(request: Request) {
         Current date: ${format(new Date(), 'PPP')}`
     })
     
-    return result.toDataStreamResponse()
+    return result.toUIMessageStreamResponse()
     
   } catch (error) {
     console.error('AI Chat API Error:', error)
