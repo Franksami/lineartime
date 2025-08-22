@@ -18,10 +18,11 @@ import {
   addDays,
   startOfMonth
 } from 'date-fns'
-import { Plus, Minus, GripVertical } from 'lucide-react'
+import { Plus, Minus, GripVertical, Menu, X } from 'lucide-react'
 import { FloatingToolbar } from './FloatingToolbar'
-import { DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, closestCenter } from '@dnd-kit/core'
+import { DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, closestCenter, TouchSensor } from '@dnd-kit/core'
 import { useDraggable } from '@dnd-kit/core'
+import { useMediaQuery } from '@/hooks/use-media-query'
 
 interface LinearCalendarHorizontalProps {
   year: number
@@ -49,7 +50,24 @@ const ZOOM_LEVELS = {
   day: 150      // 150px per day - day detail view
 }
 
+// Mobile-specific zoom levels
+const MOBILE_ZOOM_LEVELS = {
+  year: 2,      // 2px per day - more compact for mobile
+  quarter: 6,   // 6px per day - quarter view  
+  month: 18,    // 18px per day - month view
+  week: 45,     // 45px per day - week view
+  day: 100      // 100px per day - day detail view
+}
+
 type ZoomLevel = keyof typeof ZOOM_LEVELS
+
+// Touch gesture thresholds
+const TOUCH_THRESHOLDS = {
+  longPressDelay: 500,  // ms to trigger long press
+  swipeVelocity: 0.5,   // velocity threshold for swipe
+  pinchScale: 0.01,     // scale change per pixel of pinch
+  doubleTapDelay: 300   // ms between taps for double tap
+}
 
 export function LinearCalendarHorizontal({
   year,
@@ -75,6 +93,30 @@ export function LinearCalendarHorizontal({
   const [resizingEvent, setResizingEvent] = useState<Event | null>(null)
   const [resizeDirection, setResizeDirection] = useState<'start' | 'end' | null>(null)
   
+  // Mobile-specific state
+  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isTablet = useMediaQuery('(max-width: 1024px)')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [touchStartTime, setTouchStartTime] = useState<number | null>(null)
+  const [lastTapTime, setLastTapTime] = useState<number | null>(null)
+  const [isPinching, setIsPinching] = useState(false)
+  const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null)
+  
+  // Configure DND sensors for desktop and mobile
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: isMobile ? 10 : 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    })
+  )
+  
   // Event creation state
   const [isCreatingEvent, setIsCreatingEvent] = useState(false)
   const [creatingEventStart, setCreatingEventStart] = useState<Date | null>(null)
@@ -86,11 +128,12 @@ export function LinearCalendarHorizontal({
   const [panY, setPanY] = useState(0)
   const [scale, setScale] = useState(1)
   
-  const dayWidth = ZOOM_LEVELS[zoomLevel]
-  const monthHeight = 80 // Height of each month row (increased for better event stacking)
-  const headerWidth = 80 // Width of month name column
-  const eventHeight = 22 // Height of each event bar
-  const eventMargin = 2 // Margin between stacked events
+  // Responsive dimensions
+  const dayWidth = isMobile ? MOBILE_ZOOM_LEVELS[zoomLevel] : ZOOM_LEVELS[zoomLevel]
+  const monthHeight = isMobile ? 60 : 80 // Smaller height on mobile
+  const headerWidth = isMobile ? 50 : 80 // Narrower month column on mobile
+  const eventHeight = isMobile ? 18 : 22 // Smaller events on mobile
+  const eventMargin = isMobile ? 1 : 2 // Tighter margins on mobile
   
   // Calculate total width needed
   const totalDays = 365 + (year % 4 === 0 ? 1 : 0) // Account for leap year
@@ -320,19 +363,99 @@ export function LinearCalendarHorizontal({
     console.log('Duplicate event:', duplicatedEvent)
   }
   
-  // Event creation handlers
+  // Event creation handlers with mobile support
   const handleDayMouseDown = (date: Date, month: number) => {
-    setIsCreatingEvent(true)
-    setCreatingEventStart(date)
-    setCreatingEventEnd(date)
-    setCreatingEventMonth(month)
-    setSelectedEvent(null)
-    setToolbarPosition(null)
+    // On mobile, require long press for event creation
+    if (!isMobile) {
+      setIsCreatingEvent(true)
+      setCreatingEventStart(date)
+      setCreatingEventEnd(date)
+      setCreatingEventMonth(month)
+      setSelectedEvent(null)
+      setToolbarPosition(null)
+    }
+  }
+  
+  const handleDayTouchStart = (date: Date, month: number) => {
+    if (isMobile) {
+      setTouchStartTime(Date.now())
+      
+      // Set up long press timer for mobile
+      const timer = setTimeout(() => {
+        // Trigger haptic feedback if available
+        if (window.navigator && 'vibrate' in window.navigator) {
+          window.navigator.vibrate(50)
+        }
+        
+        // Start event creation after long press
+        setIsCreatingEvent(true)
+        setCreatingEventStart(date)
+        setCreatingEventEnd(date)
+        setCreatingEventMonth(month)
+        setSelectedEvent(null)
+        setToolbarPosition(null)
+      }, TOUCH_THRESHOLDS.longPressDelay)
+      
+      // Store timer to clear on touch end
+      ;(window as any).__longPressTimer = timer
+    }
+  }
+  
+  const handleDayTouchEnd = (date: Date) => {
+    if (isMobile) {
+      // Clear long press timer
+      if ((window as any).__longPressTimer) {
+        clearTimeout((window as any).__longPressTimer)
+        delete (window as any).__longPressTimer
+      }
+      
+      // Handle tap (not long press)
+      if (touchStartTime && Date.now() - touchStartTime < TOUCH_THRESHOLDS.longPressDelay) {
+        // Check for double tap
+        const now = Date.now()
+        if (lastTapTime && now - lastTapTime < TOUCH_THRESHOLDS.doubleTapDelay) {
+          // Double tap - zoom in on this date
+          handleZoomIn()
+          
+          // Center on the tapped date
+          if (scrollRef.current) {
+            const yearStart = startOfYear(new Date(year, 0, 1))
+            const dayOfYear = differenceInDays(date, yearStart)
+            const scrollPosition = dayOfYear * dayWidth - scrollRef.current.clientWidth / 2
+            scrollRef.current.scrollTo({
+              left: Math.max(0, scrollPosition),
+              behavior: 'smooth'
+            })
+          }
+          
+          setLastTapTime(null)
+        } else {
+          // Single tap - select date
+          setSelectedDate(date)
+          onDateSelect?.(date)
+          setLastTapTime(now)
+        }
+      }
+      
+      setTouchStartTime(null)
+    }
   }
   
   const handleDayMouseEnter = (date: Date) => {
-    if (isCreatingEvent && creatingEventStart) {
-      // Update end date while dragging
+    if (isCreatingEvent && creatingEventStart && !isMobile) {
+      // Update end date while dragging (desktop only)
+      if (date >= creatingEventStart) {
+        setCreatingEventEnd(date)
+      } else {
+        setCreatingEventEnd(creatingEventStart)
+        setCreatingEventStart(date)
+      }
+    }
+  }
+  
+  const handleDayTouchMove = (date: Date) => {
+    if (isCreatingEvent && creatingEventStart && isMobile) {
+      // Update end date while dragging on mobile
       if (date >= creatingEventStart) {
         setCreatingEventEnd(date)
       } else {
@@ -389,23 +512,82 @@ export function LinearCalendarHorizontal({
         />
       )}
       
-      {/* Zoom Controls */}
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-background/95 backdrop-blur-sm border rounded-lg p-1">
+      {/* Mobile Menu Button */}
+      {isMobile && (
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="absolute top-4 right-4 z-30 p-2 bg-background/95 backdrop-blur-sm border rounded-lg hover:bg-accent transition-colors"
+        >
+          {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      )}
+      
+      {/* Zoom Controls - Desktop or Mobile Menu */}
+      <div className={cn(
+        "absolute z-20 bg-background/95 backdrop-blur-sm border rounded-lg",
+        isMobile ? (
+          isMobileMenuOpen ? "top-16 right-4 flex flex-col gap-2 p-3 shadow-lg" : "hidden"
+        ) : "top-4 right-4 flex items-center gap-2 p-1"
+      )}>
         <button
           onClick={handleZoomOut}
-          className="p-1 hover:bg-accent rounded"
+          className={cn(
+            "hover:bg-accent rounded transition-colors",
+            isMobile ? "p-2 w-full flex items-center justify-center gap-2" : "p-1"
+          )}
           disabled={zoomLevel === 'year'}
         >
           <Minus className="h-4 w-4" />
+          {isMobile && <span className="text-sm">Zoom Out</span>}
         </button>
-        <span className="px-2 text-xs font-medium capitalize">{zoomLevel}</span>
+        <span className={cn(
+          "text-xs font-medium capitalize",
+          isMobile ? "text-center py-1" : "px-2"
+        )}>
+          {zoomLevel}
+        </span>
         <button
           onClick={handleZoomIn}
-          className="p-1 hover:bg-accent rounded"
+          className={cn(
+            "hover:bg-accent rounded transition-colors",
+            isMobile ? "p-2 w-full flex items-center justify-center gap-2" : "p-1"
+          )}
           disabled={zoomLevel === 'day'}
         >
           <Plus className="h-4 w-4" />
+          {isMobile && <span className="text-sm">Zoom In</span>}
         </button>
+        
+        {/* Mobile-specific controls */}
+        {isMobile && (
+          <>
+            <div className="border-t border-border my-2" />
+            <button
+              onClick={() => {
+                // Scroll to today
+                if (scrollRef.current) {
+                  const today = new Date()
+                  const yearStart = startOfYear(new Date(year, 0, 1))
+                  const dayOfYear = differenceInDays(today, yearStart)
+                  const scrollPosition = dayOfYear * dayWidth - scrollRef.current.clientWidth / 2
+                  scrollRef.current.scrollTo({
+                    left: Math.max(0, scrollPosition),
+                    behavior: 'smooth'
+                  })
+                }
+                setIsMobileMenuOpen(false)
+              }}
+              className="p-2 w-full bg-background border border-border rounded-md hover:bg-accent transition-colors text-sm"
+            >
+              Go to Today
+            </button>
+            <div className="text-xs text-muted-foreground text-center mt-2 space-y-1">
+              <p>• Long press to create event</p>
+              <p>• Double tap to zoom</p>
+              <p>• Pinch to zoom in/out</p>
+            </div>
+          </>
+        )}
       </div>
       
       {/* Main Calendar Container */}
@@ -489,7 +671,7 @@ export function LinearCalendarHorizontal({
                       onMouseUp={handleDayMouseUp}
                       onMouseLeave={() => setHoveredDate(null)}
                       onClick={() => {
-                        if (!isCreatingEvent) {
+                        if (!isCreatingEvent && !isMobile) {
                           setSelectedDate(date)
                           onDateSelect?.(date)
                         }
