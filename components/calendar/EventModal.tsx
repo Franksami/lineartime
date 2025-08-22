@@ -153,7 +153,7 @@ export function EventModal({
         aria-labelledby="event-dialog-title"
         aria-describedby="event-dialog-description">
         <DialogHeader className="bg-muted/50 backdrop-blur-sm rounded-t-lg p-6 -m-6 mb-4 border-b border-border">
-          <DialogTitle id="event-dialog-title" className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+          <DialogTitle id="event-dialog-title" className="text-xl font-semibold">
             {event ? 'Edit Event' : 'Create New Event'}
           </DialogTitle>
         </DialogHeader>
@@ -162,8 +162,8 @@ export function EventModal({
           {/* Title */}
           <div className="space-y-2">
             <Label htmlFor="title" className="text-sm font-medium flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm">
-                <Tag className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+              <div className="p-1.5 rounded-lg bg-muted">
+                <Tag className="h-3.5 w-3.5 text-muted-foreground" />
               </div>
               Event Title
             </Label>
@@ -184,7 +184,7 @@ export function EventModal({
             {/* Category */}
             <div className="space-y-2">
               <Label htmlFor="category" className="text-sm font-medium flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm">
+                <div className="p-1.5 rounded-lg bg-muted">
                   <Tag className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
                 </div>
                 Category
@@ -230,7 +230,7 @@ export function EventModal({
             {/* All Day Toggle */}
             <div className="space-y-2">
               <Label htmlFor="all-day" className="text-sm font-medium flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-sm">
+                <div className="p-1.5 rounded-lg bg-muted">
                   <Clock className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
                 </div>
                 All Day Event
@@ -253,7 +253,7 @@ export function EventModal({
             {/* Start Date */}
             <div className="space-y-2">
               <Label htmlFor="start-date" className="text-sm font-medium flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 backdrop-blur-sm">
+                <div className="p-1.5 rounded-lg bg-muted">
                   <CalendarIcon className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
                 </div>
                 Start Date
@@ -285,7 +285,7 @@ export function EventModal({
             {/* End Date */}
             <div className="space-y-2">
               <Label htmlFor="end-date" className="text-sm font-medium flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-gradient-to-br from-red-500/20 to-rose-500/20 backdrop-blur-sm">
+                <div className="p-1.5 rounded-lg bg-muted">
                   <CalendarIcon className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
                 </div>
                 End Date
@@ -319,7 +319,7 @@ export function EventModal({
           {/* Location */}
           <div className="space-y-2">
             <Label htmlFor="location" className="text-sm font-medium flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-gradient-to-br from-indigo-500/20 to-blue-500/20 backdrop-blur-sm">
+              <div className="p-1.5 rounded-lg bg-muted">
                 <MapPin className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
               </div>
               Location
@@ -336,7 +336,7 @@ export function EventModal({
           {/* Description */}
           <div className="space-y-2">
             <Label htmlFor="description" className="text-sm font-medium flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500/20 to-teal-500/20 backdrop-blur-sm">
+              <div className="p-1.5 rounded-lg bg-muted">
                 <Tag className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
               </div>
               Description
@@ -391,7 +391,8 @@ export function EventModal({
           <Button 
             onClick={handleSave} 
             disabled={!formData.title}
-            className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg shadow-blue-500/25 transition-all"
+            variant="default"
+            className="shadow-sm"
           >
             {conflicts.length > 0 ? 'Save Anyway' : event ? 'Update Event' : 'Create Event'}
           </Button>

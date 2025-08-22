@@ -163,9 +163,9 @@ export function AssistantPanel({
       {!isMinimized && (
         <>
           {/* Conversation */}
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-hidden p-3">
             <Conversation className="h-full">
-              <ConversationContent>
+              <ConversationContent className="space-y-3">
                 {messages.map((message) => (
                   <div key={message.id}>
                     <Message from={message.role} key={message.id}>
@@ -229,14 +229,15 @@ export function AssistantPanel({
           )}
           
           {/* Input */}
-          <div className="border-t">
-            <PromptInput onSubmit={handleSubmit} className="m-3">
+          <div className="border-t p-3">
+            <PromptInput onSubmit={handleSubmit} className="rounded-lg">
               <PromptInputTextarea
                 onChange={(e) => setInput(e.target.value)}
                 value={input}
                 placeholder="Ask about your schedule..."
+                className="min-h-[60px]"
               />
-              <PromptInputToolbar>
+              <PromptInputToolbar className="px-2 pb-2">
                 <PromptInputTools>
                   {/* Tool buttons could go here */}
                 </PromptInputTools>

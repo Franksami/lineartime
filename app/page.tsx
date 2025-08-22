@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { LinearCalendarVertical } from "@/components/calendar/LinearCalendarVertical";
 import { VirtualCalendar } from "@/components/calendar/VirtualCalendar";
+import { HybridCalendar } from "@/components/calendar/HybridCalendar";
 import { MobileCalendarView } from "@/components/mobile/MobileCalendarView";
 import { TimelineContainer } from "@/components/timeline/TimelineContainer";
 import { EventManagement } from "@/components/calendar/EventManagement";
@@ -12,12 +13,15 @@ import { HighContrastToggle } from "@/components/ui/high-contrast-toggle";
 import { CommandBar } from "@/components/CommandBar";
 import { PerformanceMonitor } from "@/components/ui/performance-monitor";
 import { AssistantPanel } from "@/components/ai/AssistantPanel";
+import { SettingsDialog } from "@/components/settings/SettingsDialog";
 import type { Event } from "@/types/calendar";
 
 export default function Page() {
   const currentYear = new Date().getFullYear();
   const [currentView, setCurrentView] = useState<CalendarView>('year');
-  const [useVirtualScroll, setUseVirtualScroll] = useState(true); // Feature flag for virtual scrolling
+  // Check for environment variable or default to HybridCalendar
+  const useHybrid = process.env.NEXT_PUBLIC_USE_HYBRID_CALENDAR !== 'false';
+  const [useVirtualScroll, setUseVirtualScroll] = useState(!useHybrid); // Feature flag for virtual scrolling
   const [isMobile, setIsMobile] = useState(false);
   const userId = 'default-user'; // This could come from auth context later
   
@@ -125,6 +129,7 @@ export default function Page() {
             </div>
             <div className="flex items-center gap-2" role="toolbar" aria-label="Calendar controls">
               <HighContrastToggle />
+              <SettingsDialog />
               <ViewSwitcher 
                 currentView={currentView} 
                 onViewChange={setCurrentView}
@@ -172,7 +177,31 @@ export default function Page() {
               />
             ) : (
               /* Desktop Calendar View */
-              useVirtualScroll ? (
+              useHybrid ? (
+                <HybridCalendar
+                  year={currentYear}
+                  events={calendarEvents}
+                  className="h-full"
+                  onDateSelect={(date) => console.log('Date selected:', date)}
+                  onEventClick={(event) => console.log('Event clicked:', event)}
+                  onEventUpdate={async (event) => {
+                    console.log('Event updated:', event)
+                    // Update the event in IndexedDB
+                    if (updateEvent) {
+                      const existingEvent = events?.find(e => e.convexId === event.id || String(e.id) === event.id)
+                      if (existingEvent) {
+                        await updateEvent(existingEvent.id, {
+                          startTime: event.startDate.getTime(),
+                          endTime: event.endDate.getTime(),
+                        })
+                      }
+                    }
+                  }}
+                  useCanvas={calendarEvents.length > 100} // Auto-switch to canvas for performance
+                  canvasThreshold={100}
+                  enableDragDrop={true}
+                />
+              ) : useVirtualScroll ? (
                 <VirtualCalendar
                   year={currentYear}
                   events={calendarEvents}

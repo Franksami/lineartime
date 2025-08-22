@@ -765,8 +765,8 @@
             "title": "Create Settings Storage and State Management",
             "description": "Implement a centralized settings storage system using Redux/Context with local storage persistence",
             "dependencies": [],
-            "details": "Create a settings slice in Redux store, implement local storage middleware, define settings interface types, create actions and reducers for all setting categories (theme, time format, notifications, calendar, shortcuts)",
-            "status": "pending",
+            "details": "Create a settings slice in Redux store, implement local storage middleware, define settings interface types, create actions and reducers for all setting categories (theme, time format, notifications, calendar, shortcuts)\n<info added on 2025-08-22T01:20:41.631Z>\nCompleted implementation of settings storage and state management system with the following components:\n\n- Created comprehensive UserSettings interface in lib/settings/types.ts covering appearance, calendar, time, notifications, shortcuts, and privacy settings\n- Implemented LocalStorage adapter in lib/settings/storage.ts with migration support, singleton pattern, and cross-tab synchronization\n- Developed useSettings React hook providing convenience methods for settings operations\n- Added SettingsContext for global state management with provider component\n- Implemented backward compatibility system with migrations, preserving existing high contrast toggle functionality\n- Integrated local storage persistence with automatic state synchronization across browser tabs\n- Added type-safe settings access and modification through strongly-typed interfaces and hooks\n</info added on 2025-08-22T01:20:41.631Z>",
+            "status": "done",
             "testStrategy": "Unit tests for reducers, storage persistence tests, state management integration tests"
           },
           {
@@ -776,8 +776,8 @@
             "dependencies": [
               1
             ],
-            "details": "Build Settings container component, implement tab/accordion navigation, create form components for each setting category, add responsive layout, implement accessibility features",
-            "status": "pending",
+            "details": "Build Settings container component, implement tab/accordion navigation, create form components for each setting category, add responsive layout, implement accessibility features\n<info added on 2025-08-22T01:38:03.891Z>\nCompleted implementation of Settings UI components with the following structure:\n\n- Created SettingsDialog.tsx as main modal container with tabbed interface\n- Implemented six core settings sections:\n  1. AppearanceSettings: theme, colors, font size, high contrast, reduced motion\n  2. CalendarSettings: week start, default view, event defaults, working hours\n  3. TimeSettings: time/date formats, timezone configuration\n  4. NotificationSettings: reminders, alerts, digest preferences\n  5. ShortcutSettings: keyboard bindings customization\n  6. PrivacySettings: data management, analytics toggles\n- Added Settings button to main UI in page.tsx, positioned next to HighContrastToggle\n- All components integrated with SettingsContext for state management\n- Connected UI components to storage layer from subtask 11.1\n- Implemented responsive layout and ARIA attributes for accessibility compliance\n</info added on 2025-08-22T01:38:03.891Z>",
+            "status": "done",
             "testStrategy": "Component rendering tests, accessibility tests, responsive layout tests"
           },
           {
@@ -788,8 +788,8 @@
               1,
               2
             ],
-            "details": "Define theme interface, create light/dark theme configurations, implement CSS variable system, add theme switch component, handle system preference detection, implement smooth theme transitions",
-            "status": "pending",
+            "details": "Define theme interface, create light/dark theme configurations, implement CSS variable system, add theme switch component, handle system preference detection, implement smooth theme transitions\n<info added on 2025-08-22T01:29:48.490Z>\nImplemented comprehensive theme system with following components: Created theme-manager.ts in lib/settings with functions for theme application, high contrast, reduced motion, font size, and color scheme preferences. Migrated HighContrastToggle to use centralized SettingsContext. Added ThemeProvider component for theme management and system preference monitoring. Updated providers.tsx with SettingsProvider and ThemeProvider integration. Implemented SSR-safe localStorage handling with window checks. System now supports light/dark/system themes with automatic preference detection and seamless switching. Theme transitions and preference persistence working as expected.\n</info added on 2025-08-22T01:29:48.490Z>",
+            "status": "done",
             "testStrategy": "Theme switching tests, CSS variable validation, system preference detection tests"
           },
           {
@@ -1815,7 +1815,7 @@
           18,
           25
         ],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -1823,7 +1823,7 @@
             "description": "Set up basic ARIA grid roles and attributes for the calendar interface",
             "dependencies": [],
             "details": "- Add role='grid' to container\n- Implement row and cell roles\n- Set up aria-rowcount and aria-colcount\n- Add aria-rowindex and aria-colindex",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1834,7 +1834,7 @@
               "26.1"
             ],
             "details": "- Add aria-selected states\n- Implement current cell tracking\n- Set up aria-activedescendant\n- Handle focus containment",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1846,7 +1846,7 @@
               "26.2"
             ],
             "details": "- Handle Up/Down/Left/Right arrows\n- Implement edge detection\n- Add wrap-around navigation\n- Support Home/End keys",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1857,7 +1857,7 @@
               "26.3"
             ],
             "details": "- Add PageUp/PageDown support\n- Implement Ctrl+Home/End\n- Handle month navigation\n- Support quick date selection",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1869,7 +1869,7 @@
               "26.2"
             ],
             "details": "- Set up aria-live regions\n- Add selection announcements\n- Implement date change notifications\n- Handle error messages",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1880,7 +1880,7 @@
               "26.2"
             ],
             "details": "- Track focus history\n- Handle modal focus trapping\n- Implement focus restoration\n- Add keyboard focus indicators",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1889,7 +1889,7 @@
             "description": "Implement skip links for main content areas",
             "dependencies": [],
             "details": "- Create main content skip link\n- Add calendar navigation skip\n- Implement controls skip link\n- Style skip link visibility",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1900,7 +1900,7 @@
               "26.5"
             ],
             "details": "- Define polite/assertive regions\n- Set up status messages\n- Handle loading states\n- Implement error notifications",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1909,7 +1909,7 @@
             "description": "Add high contrast mode and related visual accommodations",
             "dependencies": [],
             "details": "- Create high contrast theme\n- Add focus indicators\n- Implement border contrast\n- Handle system preferences",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1918,7 +1918,7 @@
             "description": "Implement reduced motion preferences and animations",
             "dependencies": [],
             "details": "- Detect motion preferences\n- Adjust transitions\n- Modify animations\n- Create fallbacks",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1932,7 +1932,7 @@
               "26.4"
             ],
             "details": "- List keyboard shortcuts\n- Document ARIA usage\n- Create user guide\n- Add developer documentation",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -1952,7 +1952,7 @@
               "26.10"
             ],
             "details": "- Set up automated tests\n- Create screen reader test cases\n- Add keyboard navigation tests\n- Implement WCAG validation",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           }
         ]
@@ -2014,11 +2014,269 @@
         ],
         "priority": "high",
         "subtasks": []
+      },
+      {
+        "id": 31,
+        "title": "Initialize HybridCalendar Component",
+        "description": "Replace VirtualCalendar with HybridCalendar and set up feature flag system",
+        "details": "Create new HybridCalendar.tsx component. Add NEXT_PUBLIC_USE_HYBRID_CALENDAR to .env. Update page.tsx with conditional rendering based on feature flag. Implement basic calendar grid structure with CSS Grid.",
+        "testStrategy": "Unit test component rendering, E2E test with Playwright for both feature flag states, verify no regression in existing functionality",
+        "priority": "high",
+        "dependencies": [],
+        "status": "in-progress",
+        "subtasks": []
+      },
+      {
+        "id": 32,
+        "title": "Implement Event Data Adapter",
+        "description": "Create adapter to transform IndexedDB event data to HybridCalendar format",
+        "details": "Create EventAdapter class to handle data transformation. Map fields: id, title, start_date, end_date, category, color. Add type definitions for both data formats. Implement caching for transformed data.",
+        "testStrategy": "Unit tests for data transformation, integration tests with IndexedDB, performance benchmarks for large datasets",
+        "priority": "high",
+        "dependencies": [
+          31
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 33,
+        "title": "Develop Multi-Day Event Rendering",
+        "description": "Implement rendering system for multi-day event bars with proper positioning",
+        "details": "Use CSS Grid for event positioning. Calculate gridColumn start/end based on dates. Implement stacking using IntervalTree algorithm. Add CSS for rounded corners and shadows. Use CSS text-overflow for truncation.",
+        "testStrategy": "Visual regression tests for different event durations, unit tests for position calculations, accessibility tests for event elements",
+        "priority": "high",
+        "dependencies": [
+          32
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 34,
+        "title": "Add Event Overlap Management",
+        "description": "Implement vertical stacking algorithm for overlapping events",
+        "details": "Create IntervalTree class for overlap detection. Calculate optimal vertical positions. Update CSS Grid row positioning. Handle edge cases like month boundaries. Implement efficient reflow on updates.",
+        "testStrategy": "Unit tests for IntervalTree operations, visual tests for various overlap scenarios, performance tests with many overlapping events",
+        "priority": "high",
+        "dependencies": [
+          33
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 35,
+        "title": "Implement DND Context Setup",
+        "description": "Set up drag-and-drop infrastructure using @dnd-kit/core",
+        "details": "Install @dnd-kit/core. Configure DndContext provider. Set up mouse and touch sensors. Create basic drag overlay. Implement drag start/end handlers. Add types for drag events.",
+        "testStrategy": "Unit tests for DND context setup, integration tests for sensor configuration, accessibility tests for drag operations",
+        "priority": "high",
+        "dependencies": [
+          33
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 36,
+        "title": "Create Draggable Event Component",
+        "description": "Implement draggable wrapper for calendar events",
+        "details": "Create DraggableEvent component using @dnd-kit/core. Add drag handles. Implement ghost image preview. Add CSS transitions for smooth animation. Handle z-index during drag.",
+        "testStrategy": "Component tests for drag interactions, visual regression tests for drag states, touch device testing",
+        "priority": "medium",
+        "dependencies": [
+          35
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 37,
+        "title": "Implement Drop Zone System",
+        "description": "Create droppable calendar grid cells with visual feedback",
+        "details": "Implement DroppableCalendarGrid component. Add hover states with CSS. Calculate date from grid position. Implement validation for drop targets. Add visual indicators for valid/invalid drops.",
+        "testStrategy": "Unit tests for date calculations, integration tests for drop handling, visual tests for feedback states",
+        "priority": "medium",
+        "dependencies": [
+          36
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 38,
+        "title": "Add Event Resize Functionality",
+        "description": "Implement resize handles and duration management",
+        "details": "Create ResizableEvent component. Add east/west resize handles. Implement snap-to-grid (15min intervals). Calculate new dates during resize. Add min/max duration constraints. Show duration tooltip.",
+        "testStrategy": "Unit tests for resize calculations, integration tests for constraints, visual regression tests for resize handles",
+        "priority": "medium",
+        "dependencies": [
+          37
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 39,
+        "title": "Develop Floating Toolbar",
+        "description": "Create contextual toolbar for selected events",
+        "details": "Implement FloatingToolbar component. Add Edit/Delete/Duplicate/Color buttons. Position using Popper.js. Handle viewport edge cases. Add keyboard shortcuts. Implement smooth show/hide animations.",
+        "testStrategy": "Unit tests for toolbar actions, visual tests for positioning, keyboard navigation tests",
+        "priority": "medium",
+        "dependencies": [
+          38
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 40,
+        "title": "Implement Quick Actions",
+        "description": "Add functionality for toolbar quick actions",
+        "details": "Create modal for quick edit. Implement delete confirmation. Add duplication logic with offset. Create color picker component. Connect keyboard shortcuts (Del, Ctrl+D). Update IndexedDB on actions.",
+        "testStrategy": "Integration tests for CRUD operations, keyboard shortcut tests, visual regression tests for modals",
+        "priority": "medium",
+        "dependencies": [
+          39
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 41,
+        "title": "Add DOM/Canvas Switching",
+        "description": "Implement automatic rendering mode switching based on event count",
+        "details": "Create CanvasRenderer class. Implement threshold detection. Add smooth transition between modes. Handle event rendering in canvas context. Optimize canvas drawing operations.",
+        "testStrategy": "Performance tests with varying event counts, visual comparison tests, memory usage monitoring",
+        "priority": "high",
+        "dependencies": [
+          33
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 42,
+        "title": "Implement Virtual Scrolling",
+        "description": "Add virtual scrolling support for large datasets",
+        "details": "Implement virtual scroll container. Calculate visible date range. Add buffer zones. Handle scroll events efficiently. Implement event pooling for DOM reuse. Use IntersectionObserver for visibility detection.",
+        "testStrategy": "Scroll performance tests, memory leak checks, visual tests for scroll boundaries",
+        "priority": "high",
+        "dependencies": [
+          41
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 43,
+        "title": "Add Performance Monitoring",
+        "description": "Implement performance tracking and monitoring overlay",
+        "details": "Create PerformanceMonitor component. Add FPS counter using requestAnimationFrame. Track memory usage with Performance API. Monitor render times. Add debug overlay toggle.",
+        "testStrategy": "Unit tests for metrics calculation, integration tests for monitoring system, performance baseline verification",
+        "priority": "low",
+        "dependencies": [
+          42
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 44,
+        "title": "Implement Pan Controls",
+        "description": "Add click-and-drag panning for infinite canvas mode",
+        "details": "Implement PanController class. Handle mouse and touch events. Add momentum scrolling. Calculate pan boundaries. Implement smooth animations. Add touch gesture support.",
+        "testStrategy": "Touch gesture tests, visual regression tests for panning, performance tests during pan operations",
+        "priority": "low",
+        "dependencies": [
+          42
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 45,
+        "title": "Add Zoom Functionality",
+        "description": "Implement zoom controls and gesture handling",
+        "details": "Create ZoomController class. Handle Ctrl+scroll events. Add zoom buttons to UI. Implement pinch-to-zoom. Set min/max zoom levels. Add smooth zoom transitions.",
+        "testStrategy": "Zoom gesture tests, visual regression tests at different zoom levels, accessibility tests for zoom controls",
+        "priority": "low",
+        "dependencies": [
+          44
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 46,
+        "title": "Develop Navigation Minimap",
+        "description": "Create overview minimap for timeline navigation",
+        "details": "Implement Minimap component. Show current viewport position. Handle click-to-navigate. Update position during pan/zoom. Add visible date range indicator. Implement efficient minimap rendering.",
+        "testStrategy": "Integration tests for navigation, visual regression tests for minimap, performance tests with large datasets",
+        "priority": "low",
+        "dependencies": [
+          45
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 47,
+        "title": "Implement Infinite Timeline",
+        "description": "Add support for infinite year scrolling",
+        "details": "Create TimelineManager class. Implement dynamic year loading. Handle date boundaries. Add smooth transitions between years. Optimize memory usage for distant dates.",
+        "testStrategy": "Integration tests for year transitions, performance tests for long scrolling, memory usage monitoring",
+        "priority": "low",
+        "dependencies": [
+          46
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 48,
+        "title": "Add Accessibility Features",
+        "description": "Implement WCAG AA compliance requirements",
+        "details": "Add ARIA labels and roles. Implement keyboard navigation. Add screen reader support. Ensure proper focus management. Add high contrast mode support. Implement announcement system for updates.",
+        "testStrategy": "Accessibility audit with axe-core, screen reader testing, keyboard navigation testing, WCAG compliance verification",
+        "priority": "high",
+        "dependencies": [
+          40
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 49,
+        "title": "Implement Error Boundary",
+        "description": "Add error handling and recovery system",
+        "details": "Create CalendarErrorBoundary component. Implement graceful degradation. Add error logging to service. Create user-friendly error messages. Add retry mechanism for failed operations.",
+        "testStrategy": "Error simulation tests, recovery mechanism verification, visual tests for error states",
+        "priority": "medium",
+        "dependencies": [
+          48
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 50,
+        "title": "Add Performance Documentation",
+        "description": "Create comprehensive performance guide and monitoring documentation",
+        "details": "Document performance optimization techniques. Create performance monitoring guide. Add troubleshooting section. Document known limitations. Add performance benchmark suite.",
+        "testStrategy": "Documentation review, benchmark suite verification, example code testing",
+        "priority": "low",
+        "dependencies": [
+          49
+        ],
+        "status": "pending",
+        "subtasks": []
       }
     ],
     "metadata": {
       "created": "2025-08-20T07:38:33.025Z",
-      "updated": "2025-08-22T00:43:07.941Z",
+      "updated": "2025-08-22T02:55:36.118Z",
       "description": "Tasks for master context"
     }
   },

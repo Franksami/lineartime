@@ -252,7 +252,8 @@ export function EventManagement({ userId }: { userId: string }) {
             setModalOpen(true)
             announceToScreenReader('New event dialog opened')
           }}
-          className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg shadow-blue-500/25"
+          variant="default"
+          className="shadow-sm"
           aria-label="Create new event"
         >
           <Plus className="h-4 w-4 mr-2" />

@@ -30,20 +30,17 @@ const viewConfig = {
   year: {
     label: 'Year View',
     icon: Calendar,
-    description: 'Full year calendar view',
-    color: 'from-blue-500/20 to-indigo-500/20'
+    description: 'Full year calendar view'
   },
   timeline: {
     label: 'Timeline',
     icon: LayoutGrid,
-    description: 'Horizontal timeline view',
-    color: 'from-purple-500/20 to-pink-500/20'
+    description: 'Horizontal timeline view'
   },
   manage: {
     label: 'Manage',
     icon: List,
-    description: 'Event management dashboard',
-    color: 'from-green-500/20 to-emerald-500/20'
+    description: 'Event management dashboard'
   }
 }
 
@@ -78,10 +75,7 @@ export function ViewSwitcher({
                 "flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200",
                 "hover:bg-muted/50",
                 isActive && [
-                  "bg-gradient-to-r",
-                  config.color,
-                  "bg-opacity-90",
-                  "shadow-lg",
+                  "bg-muted",
                   "border border-border"
                 ]
               )}

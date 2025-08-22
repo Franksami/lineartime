@@ -374,8 +374,8 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
       )}
       {...bind()}
     >
-      {/* Zoom controls */}
-      <div className="absolute top-4 right-4 z-20 flex gap-2">
+      {/* Zoom controls - positioned as fixed bottom-right to avoid any overlap */}
+      <div className="fixed bottom-20 right-4 z-50 flex flex-col gap-1 bg-card/95 backdrop-blur-sm border border-border rounded-lg p-1.5 shadow-lg">
         <button
           onClick={() => {
             const zoomLevels = Object.values(ZoomLevel);
@@ -385,21 +385,22 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
             }
           }}
           className={cn(
-            'p-2 rounded-xl transition-all duration-200',
-            'bg-muted/20 backdrop-blur-sm',
-            'border border-border',
-            'shadow-sm',
-            'hover:bg-muted/30 hover:border-border transition-all',
-            'hover:shadow-md',
+            'h-8 w-8 p-0 rounded transition-all duration-200',
+            'hover:bg-accent hover:text-accent-foreground',
             'active:scale-95',
             'disabled:opacity-50 disabled:cursor-not-allowed'
           )}
           disabled={zoomLevel === ZoomLevel.YEAR}
+          aria-label="Zoom in"
+          title="Zoom in"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
         </button>
+        <div className="text-xs text-center py-1 font-medium text-muted-foreground">
+          {Math.round(getZoomConfig(zoomLevel).dayWidth / 36 * 100)}%
+        </div>
         <button
           onClick={() => {
             const zoomLevels = Object.values(ZoomLevel);
@@ -409,18 +410,16 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
             }
           }}
           className={cn(
-            'p-2 rounded-xl transition-all duration-200',
-            'bg-muted/20 backdrop-blur-sm',
-            'border border-border',
-            'shadow-sm',
-            'hover:bg-muted/30 hover:border-border transition-all',
-            'hover:shadow-md',
+            'h-8 w-8 p-0 rounded transition-all duration-200',
+            'hover:bg-accent hover:text-accent-foreground',
             'active:scale-95',
             'disabled:opacity-50 disabled:cursor-not-allowed'
           )}
           disabled={zoomLevel === ZoomLevel.DAY}
+          aria-label="Zoom out"
+          title="Zoom out"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
           </svg>
         </button>
