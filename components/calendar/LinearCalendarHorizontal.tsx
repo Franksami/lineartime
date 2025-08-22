@@ -93,6 +93,12 @@ export function LinearCalendarHorizontal({
   const [resizingEvent, setResizingEvent] = useState<Event | null>(null)
   const [resizeDirection, setResizeDirection] = useState<'start' | 'end' | null>(null)
   
+  // Accessibility state
+  const [announceMessage, setAnnounceMessage] = useState<string>('')
+  const [focusedDate, setFocusedDate] = useState<Date | null>(null)
+  const [keyboardMode, setKeyboardMode] = useState(false)
+  const liveRegionRef = useRef<HTMLDivElement>(null)
+  
   // Mobile-specific state
   const isMobile = useMediaQuery('(max-width: 768px)')
   const isTablet = useMediaQuery('(max-width: 1024px)')
@@ -495,8 +501,95 @@ export function LinearCalendarHorizontal({
     setCreatingEventMonth(null)
   }
   
+  // Keyboard navigation handler
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (!focusedDate && (e.key === 'Tab' || e.key === 'Enter')) {
+      setFocusedDate(new Date())
+      setKeyboardMode(true)
+      setAnnounceMessage('Entered calendar navigation mode')
+      return
+    }
+
+    if (!focusedDate) return
+
+    let newDate = focusedDate
+    let handled = false
+
+    switch (e.key) {
+      case 'ArrowLeft':
+        newDate = addDays(focusedDate, -1)
+        handled = true
+        break
+      case 'ArrowRight':
+        newDate = addDays(focusedDate, 1)
+        handled = true
+        break
+      case 'ArrowUp':
+        newDate = addDays(focusedDate, -7)
+        handled = true
+        break
+      case 'ArrowDown':
+        newDate = addDays(focusedDate, 7)
+        handled = true
+        break
+      case 'Enter':
+      case ' ':
+        e.preventDefault()
+        if (focusedDate) {
+          setSelectedDate(focusedDate)
+          onDateSelect?.(focusedDate)
+          setAnnounceMessage(`Selected ${format(focusedDate, 'MMMM d, yyyy')}`)
+        }
+        handled = true
+        break
+      case 'Escape':
+        setFocusedDate(null)
+        setKeyboardMode(false)
+        setAnnounceMessage('Exited calendar navigation')
+        handled = true
+        break
+      case 't':
+      case 'T':
+        // Go to today
+        const today = new Date()
+        setFocusedDate(today)
+        setAnnounceMessage(`Navigated to today: ${format(today, 'MMMM d, yyyy')}`)
+        handled = true
+        break
+    }
+
+    if (handled) {
+      e.preventDefault()
+      if (newDate !== focusedDate) {
+        setFocusedDate(newDate)
+        setAnnounceMessage(`${format(newDate, 'EEEE, MMMM d, yyyy')}`)
+      }
+    }
+  }, [focusedDate, onDateSelect])
+
+  // Announce messages to screen readers
+  useEffect(() => {
+    if (announceMessage && liveRegionRef.current) {
+      liveRegionRef.current.textContent = announceMessage
+    }
+  }, [announceMessage])
+
   return (
-    <div className={cn("relative bg-background", className)}>
+    <div 
+      className={cn("relative bg-background focus:outline-none focus:ring-2 focus:ring-ring/50", className)}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="application"
+      aria-label={`Calendar for year ${year}. Press Enter to start navigation, use arrow keys to move between dates.`}
+    >
+      {/* Screen reader announcements */}
+      <div
+        ref={liveRegionRef}
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      />
       {/* Floating Toolbar */}
       {selectedEvent && toolbarPosition && (
         <FloatingToolbar
@@ -517,18 +610,26 @@ export function LinearCalendarHorizontal({
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="absolute top-4 right-4 z-30 p-2 bg-background/95 backdrop-blur-sm border rounded-lg hover:bg-accent transition-colors"
+          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-menu"
         >
-          {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          {isMobileMenuOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
         </button>
       )}
       
       {/* Zoom Controls - Desktop or Mobile Menu */}
-      <div className={cn(
-        "absolute z-20 bg-background/95 backdrop-blur-sm border rounded-lg",
-        isMobile ? (
-          isMobileMenuOpen ? "top-16 right-4 flex flex-col gap-2 p-3 shadow-lg" : "hidden"
-        ) : "top-4 right-4 flex items-center gap-2 p-1"
-      )}>
+      <div 
+        id="mobile-menu"
+        className={cn(
+          "absolute z-20 bg-background/95 backdrop-blur-sm border rounded-lg",
+          isMobile ? (
+            isMobileMenuOpen ? "top-16 right-4 flex flex-col gap-2 p-3 shadow-lg" : "hidden"
+          ) : "top-4 right-4 flex items-center gap-2 p-1"
+        )}
+        role="toolbar"
+        aria-label="Zoom controls"
+      >
         <button
           onClick={handleZoomOut}
           className={cn(
@@ -536,14 +637,21 @@ export function LinearCalendarHorizontal({
             isMobile ? "p-2 w-full flex items-center justify-center gap-2" : "p-1"
           )}
           disabled={zoomLevel === 'year'}
+          aria-label="Zoom out"
+          aria-disabled={zoomLevel === 'year'}
         >
-          <Minus className="h-4 w-4" />
+          <Minus className="h-4 w-4" aria-hidden="true" />
           {isMobile && <span className="text-sm">Zoom Out</span>}
         </button>
-        <span className={cn(
-          "text-xs font-medium capitalize",
-          isMobile ? "text-center py-1" : "px-2"
-        )}>
+        <span 
+          className={cn(
+            "text-xs font-medium capitalize",
+            isMobile ? "text-center py-1" : "px-2"
+          )}
+          role="status"
+          aria-live="polite"
+          aria-label={`Current zoom level: ${zoomLevel}`}
+        >
           {zoomLevel}
         </span>
         <button
@@ -553,8 +661,10 @@ export function LinearCalendarHorizontal({
             isMobile ? "p-2 w-full flex items-center justify-center gap-2" : "p-1"
           )}
           disabled={zoomLevel === 'day'}
+          aria-label="Zoom in"
+          aria-disabled={zoomLevel === 'day'}
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-4 w-4" aria-hidden="true" />
           {isMobile && <span className="text-sm">Zoom In</span>}
         </button>
         
@@ -596,6 +706,10 @@ export function LinearCalendarHorizontal({
         className="overflow-auto h-full relative"
         {...bind()}
         style={{ cursor: enableInfiniteCanvas ? 'grab' : 'default' }}
+        role="grid"
+        aria-label={`Calendar grid for ${year}. ${keyboardMode ? 'Keyboard navigation active.' : 'Press Enter to activate keyboard navigation.'}`}
+        aria-rowcount={12}
+        aria-colcount={31}
       >
         <div 
           className="relative"
@@ -748,6 +862,24 @@ export function LinearCalendarHorizontal({
                     isDragging && "opacity-50 cursor-grabbing",
                     !isDragging && "cursor-grab hover:shadow-md hover:z-10"
                   )}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Event: ${event.title}. From ${format(event.startDate, 'MMM d')} to ${format(event.endDate, 'MMM d')}. Category: ${event.category}. Press Enter to select, Delete to remove.`}
+                  aria-selected={isSelected}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      setSelectedEvent(event)
+                      onEventClick?.(event)
+                      setAnnounceMessage(`Selected event: ${event.title}`)
+                    } else if (e.key === 'Delete' || e.key === 'Backspace') {
+                      e.preventDefault()
+                      if (event.id) {
+                        onEventDelete?.(event.id)
+                        setAnnounceMessage(`Deleted event: ${event.title}`)
+                      }
+                    }
+                  }}
                   style={{
                     left: event.left - headerWidth,
                     top: event.top + (stackRow * (eventHeight + eventMargin)) + 4,
