@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon, AlertCircle, Clock, Repeat, MapPin, Tag, Users, Bell, Trash2 } from "lucide-react"
+import { CalendarIcon, AlertCircle, Clock, Repeat, MapPin, Tag, Users, Bell, Trash2, Sparkles } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -33,6 +33,8 @@ interface EventModalProps {
   onSave: (event: Partial<Event>) => void
   onDelete: (id: string) => void
   checkOverlaps: (start: Date, end: Date, excludeId?: string) => Event[]
+  onSmartSchedule?: (title: string, duration: number) => void
+  events?: Event[]
 }
 
 export function EventModal({
@@ -43,7 +45,9 @@ export function EventModal({
   selectedRange,
   onSave,
   onDelete,
-  checkOverlaps
+  checkOverlaps,
+  onSmartSchedule,
+  events = []
 }: EventModalProps) {
   const prefersReducedMotion = useReducedMotion()
   const titleInputRef = React.useRef<HTMLInputElement>(null)
@@ -56,6 +60,8 @@ export function EventModal({
     endDate: selectedDate || new Date(),
     description: ''
   })
+  
+  const [showSmartSchedule, setShowSmartSchedule] = React.useState(false)
   
   const conflicts = React.useMemo(() => {
     if (formData.startDate && formData.endDate) {
@@ -195,7 +201,7 @@ export function EventModal({
                   setFormData({ ...formData, category: value })
                 }
               >
-                <SelectTrigger className="bg-background/90 backdrop-blur-sm border-input">
+                <SelectTrigger data-testid="category-select" className="bg-background/90 backdrop-blur-sm border-input">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-popover/95 backdrop-blur-sm border-border">
@@ -379,6 +385,23 @@ export function EventModal({
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Delete
+            </Button>
+          )}
+          {!event && onSmartSchedule && (
+            <Button
+              variant="outline"
+              onClick={() => {
+                const duration = formData.endDate && formData.startDate
+                  ? Math.round((formData.endDate.getTime() - formData.startDate.getTime()) / 60000)
+                  : 60; // Default to 60 minutes
+                onSmartSchedule(formData.title || 'New Event', duration)
+                onOpenChange(false)
+              }}
+              disabled={!formData.title}
+              className="mr-auto hover:bg-primary/10 hover:text-primary transition-all"
+            >
+              <Sparkles className="h-4 w-4 mr-2" />
+              Smart Schedule
             </Button>
           )}
           <Button 

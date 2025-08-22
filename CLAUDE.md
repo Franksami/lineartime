@@ -9,6 +9,52 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Current Version**: v0.3.0 (Virtual scrolling, IndexedDB, AI Assistant, Mobile support)
 **Target Version**: v3.0.0 (Enterprise platform per PRD)
 
+## ⚠️ CRITICAL: Core Design Identity
+
+### **THE HORIZONTAL LINEAR TIMELINE LAYOUT IS THE CORE IDENTITY OF LINEARTIME**
+
+**This layout must NEVER be changed without explicit permission from the project owner.**
+
+#### Mandatory Layout Requirements:
+- **All 12 months displayed in ONE continuous horizontal row**
+- **Days numbered 01-31 across the top**
+- **Month labels on the left side**
+- **Events shown as horizontal bars with visible text**
+- **Horizontal scrolling (NOT vertical) for navigation**
+- **Component to use: `LinearCalendarHorizontal` (NOT HybridCalendar or VirtualCalendar)**
+
+#### What Makes LinearTime Unique:
+The horizontal linear timeline is what differentiates LinearTime from every other calendar application. While other calendars use traditional monthly grids or vertical layouts, LinearTime's unique value proposition is seeing an entire year as a single continuous timeline that scrolls horizontally.
+
+#### Performance Trade-offs Accepted:
+- Target 5,000 events instead of 20,000 to preserve the horizontal layout
+- Horizontal scrolling on mobile devices (not vertical)
+- Slightly slower initial render to maintain design fidelity
+- Canvas rendering optimized for horizontal layout, not vertical
+
+#### Configuration Lock:
+```env
+# .env.local - DO NOT CHANGE
+NEXT_PUBLIC_CALENDAR_LAYOUT=horizontal
+NEXT_PUBLIC_USE_HYBRID_CALENDAR=false
+```
+
+#### Component Usage:
+```tsx
+// ALWAYS use this component in app/page.tsx:
+<LinearCalendarHorizontal
+  year={currentYear}
+  events={calendarEvents}
+  className="h-full w-full"
+  onEventCreate={handleEventCreate}
+  onEventUpdate={handleEventUpdate}
+  onEventDelete={handleEventDelete}
+  enableInfiniteCanvas={true}
+/>
+```
+
+⚠️ **WARNING**: Any attempt to optimize performance by switching to vertical layouts (HybridCalendar, VirtualCalendar with vertical scrolling) fundamentally breaks the product's identity. Performance optimizations must work within the horizontal layout constraint.
+
 ### Tech Stack
 - **Framework**: Next.js 15.5.0 with Turbopack
 - **Language**: TypeScript 5.0
@@ -62,14 +108,22 @@ task-master parse-prd --append "Advanced Features technical-prd.md"
 ### Current Implementation
 
 #### Core Components
-- **`components/calendar/VirtualCalendar.tsx`**: Virtual scrolling calendar with react-window
-  - Handles 10,000+ events at 60fps
-  - Three-layer Canvas rendering architecture
-  - Smooth scrolling and performance optimization
+- **`components/calendar/LinearCalendarHorizontal.tsx`**: PRIMARY CALENDAR COMPONENT
+  - The ONLY calendar component that should be used
+  - Horizontal linear timeline layout (core identity)
+  - All 12 months in one continuous row
+  - Zoom controls and infinite canvas support
+  - Floating toolbar for event editing
+  - Target: 5,000 events with good performance
+
+- **`components/calendar/VirtualCalendar.tsx`**: Performance optimization component
+  - NOT TO BE USED as primary calendar
+  - Only for technical experiments with vertical layouts
+  - Handles 10,000+ events but breaks horizontal design
 
 - **`components/calendar/LinearCalendarVertical.tsx`**: Legacy DOM-based calendar
-  - Still available as fallback option
-  - 12-month vertical layout
+  - DO NOT USE - violates horizontal layout requirement
+  - Kept only for historical reference
 
 - **`hooks/useLinearCalendar.ts`**: Enhanced state management hook
   - Event CRUD operations with IndexedDB

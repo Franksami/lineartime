@@ -136,7 +136,8 @@ function DraggableEventItem({
     left: `${left}px`,
     top: `${top}px`,
     transform: CSS.Transform.toString(transform),
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 1000 : 10
   }
 
   return (
@@ -189,6 +190,7 @@ function DraggableEventItem({
           {...(!isResizing ? listeners : {})}
           {...(!isResizing ? attributes : {})}
           onClick={(e) => !isResizing && onEventClick(e, event)}
+          data-testid={`event-${event.id}`}
         >
           {event.title}
         </div>
@@ -529,15 +531,17 @@ export function LinearCalendarFullBleed({
                 width={eventWidth}
                 cellWidth={cellWidth}
                 categoryColors={categoryColors}
-                onEventClick={(e, event) => {
+                onEventClick={(e, clickedEvent) => {
                   e.stopPropagation()
-                  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-                  setSelectedEvent(event)
+                  // Get the bounding rect of the actual event element
+                  const eventElement = e.currentTarget as HTMLElement
+                  const rect = eventElement.getBoundingClientRect()
+                  setSelectedEvent(clickedEvent)
                   setToolbarPosition({ 
                     x: rect.left + rect.width / 2, 
                     y: rect.top 
                   })
-                  onEventClick?.(event)
+                  onEventClick?.(clickedEvent)
                 }}
                 onEventResize={async (resizedEvent, newWidth) => {
                   // Update in IndexedDB
@@ -606,8 +610,10 @@ export function LinearCalendarFullBleed({
               endDate: event.endDate ? addDays(event.endDate, 1) : addDays(event.startDate, 1)
             }
             
-            // Create in IndexedDB
-            if (createEvent) {
+            // Create in IndexedDB - only use onEventCreate if provided, otherwise use local createEvent
+            if (onEventCreate) {
+              onEventCreate(duplicatedEvent)
+            } else if (createEvent) {
               await createEvent({
                 userId,
                 title: duplicatedEvent.title!,
@@ -622,9 +628,6 @@ export function LinearCalendarFullBleed({
                 updatedAt: Date.now()
               })
             }
-            
-            // Call parent create handler
-            onEventCreate?.(duplicatedEvent)
             setSelectedEvent(null)
             setToolbarPosition(null)
           }}
@@ -638,9 +641,12 @@ export function LinearCalendarFullBleed({
       </div>
       
       {/* Drag Overlay */}
-      <DragOverlay>
+      <DragOverlay
+        dropAnimation={null}
+        style={{ zIndex: 9999 }}
+      >
         {activeEvent ? (
-          <div className="opacity-50 bg-primary text-primary-foreground px-2 py-1 rounded-md text-xs">
+          <div className="opacity-50 bg-primary text-primary-foreground px-2 py-1 rounded-md text-xs pointer-events-none">
             {activeEvent.title}
           </div>
         ) : null}
@@ -672,8 +678,10 @@ export function LinearCalendarFullBleed({
               }
             }
           } else {
-            // Create new event
-            if (createEvent) {
+            // Create new event - only use onEventCreate if provided, otherwise use local createEvent
+            if (onEventCreate) {
+              onEventCreate(eventData)
+            } else if (createEvent) {
               await createEvent({
                 userId,
                 title: eventData.title!,
@@ -690,7 +698,6 @@ export function LinearCalendarFullBleed({
                 updatedAt: Date.now()
               })
             }
-            onEventCreate?.(eventData)
           }
           setModalOpen(false)
           setSelectedEvent(null)

@@ -18,8 +18,10 @@ import {
   addDays,
   startOfMonth
 } from 'date-fns'
-import { Plus, Minus } from 'lucide-react'
+import { Plus, Minus, GripVertical } from 'lucide-react'
 import { FloatingToolbar } from './FloatingToolbar'
+import { DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, closestCenter } from '@dnd-kit/core'
+import { useDraggable } from '@dnd-kit/core'
 
 interface LinearCalendarHorizontalProps {
   year: number
@@ -28,6 +30,8 @@ interface LinearCalendarHorizontalProps {
   onDateSelect?: (date: Date) => void
   onEventClick?: (event: Event) => void
   onEventUpdate?: (event: Event) => void
+  onEventCreate?: (event: Partial<Event>) => void
+  onEventDelete?: (id: string) => void
   enableInfiniteCanvas?: boolean
 }
 
@@ -54,6 +58,8 @@ export function LinearCalendarHorizontal({
   onDateSelect,
   onEventClick,
   onEventUpdate,
+  onEventCreate,
+  onEventDelete,
   enableInfiniteCanvas = true
 }: LinearCalendarHorizontalProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -63,6 +69,11 @@ export function LinearCalendarHorizontal({
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [toolbarPosition, setToolbarPosition] = useState<{ x: number; y: number } | null>(null)
+  const [isDraggingEvent, setIsDraggingEvent] = useState(false)
+  const [draggedEvent, setDraggedEvent] = useState<Event | null>(null)
+  const [isResizingEvent, setIsResizingEvent] = useState(false)
+  const [resizingEvent, setResizingEvent] = useState<Event | null>(null)
+  const [resizeDirection, setResizeDirection] = useState<'start' | 'end' | null>(null)
   
   // Event creation state
   const [isCreatingEvent, setIsCreatingEvent] = useState(false)
@@ -76,8 +87,10 @@ export function LinearCalendarHorizontal({
   const [scale, setScale] = useState(1)
   
   const dayWidth = ZOOM_LEVELS[zoomLevel]
-  const monthHeight = 60 // Height of each month row
+  const monthHeight = 80 // Height of each month row (increased for better event stacking)
   const headerWidth = 80 // Width of month name column
+  const eventHeight = 22 // Height of each event bar
+  const eventMargin = 2 // Margin between stacked events
   
   // Calculate total width needed
   const totalDays = 365 + (year % 4 === 0 ? 1 : 0) // Account for leap year
@@ -236,6 +249,50 @@ export function LinearCalendarHorizontal({
     }
   }, [year, dayWidth])
   
+  // Handle resize mouse move
+  useEffect(() => {
+    if (!isResizingEvent || !resizingEvent) return
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!scrollRef.current) return
+      
+      const rect = scrollRef.current.getBoundingClientRect()
+      const x = e.clientX - rect.left + scrollRef.current.scrollLeft - headerWidth
+      const dayIndex = Math.floor(x / dayWidth)
+      const yearStart = startOfYear(new Date(year, 0, 1))
+      const newDate = addDays(yearStart, dayIndex)
+      
+      const updatedEvent = { ...resizingEvent }
+      
+      if (resizeDirection === 'start') {
+        if (newDate < resizingEvent.endDate) {
+          updatedEvent.startDate = newDate
+        }
+      } else if (resizeDirection === 'end') {
+        if (newDate > resizingEvent.startDate) {
+          updatedEvent.endDate = newDate
+        }
+      }
+      
+      onEventUpdate?.(updatedEvent)
+      setResizingEvent(updatedEvent)
+    }
+    
+    const handleMouseUp = () => {
+      setIsResizingEvent(false)
+      setResizingEvent(null)
+      setResizeDirection(null)
+    }
+    
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+    
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isResizingEvent, resizingEvent, resizeDirection, dayWidth, year, onEventUpdate, headerWidth])
+  
   // Toolbar handlers
   const handleEventUpdate = (updatedEvent: Event) => {
     setSelectedEvent(updatedEvent)
@@ -245,8 +302,10 @@ export function LinearCalendarHorizontal({
   const handleEventDelete = (eventId: string) => {
     setSelectedEvent(null)
     setToolbarPosition(null)
-    // You would implement actual delete logic here
-    console.log('Delete event:', eventId)
+    // Call onEventDelete if provided
+    if (onEventDelete) {
+      onEventDelete(eventId)
+    }
   }
   
   const handleEventDuplicate = (event: Event) => {
@@ -286,7 +345,7 @@ export function LinearCalendarHorizontal({
   const handleDayMouseUp = () => {
     if (isCreatingEvent && creatingEventStart && creatingEventEnd) {
       // Create the new event
-      const newEvent: Event = {
+      const newEvent: Partial<Event> = {
         id: `new-event-${Date.now()}`,
         title: 'New Event',
         description: '',
@@ -296,11 +355,13 @@ export function LinearCalendarHorizontal({
         isRecurring: false
       }
       
-      // You would call onEventCreate here if you had that prop
-      console.log('Create new event:', newEvent)
+      // Call onEventCreate if provided
+      if (onEventCreate) {
+        onEventCreate(newEvent)
+      }
       
       // Select the new event and show toolbar
-      setSelectedEvent(newEvent)
+      setSelectedEvent(newEvent as Event)
       // Calculate toolbar position for the new event
       // This would need proper calculation based on the event position
     }
@@ -486,28 +547,40 @@ export function LinearCalendarHorizontal({
             {processedEvents.map((event, index) => {
               const stackRow = (event as any).stackRow || 0
               const categoryColors = {
-                personal: 'bg-green-500',
-                work: 'bg-blue-500',
-                effort: 'bg-orange-500',
-                note: 'bg-purple-500'
+                personal: 'bg-green-500 hover:bg-green-600',
+                work: 'bg-blue-500 hover:bg-blue-600',
+                effort: 'bg-orange-500 hover:bg-orange-600',
+                note: 'bg-purple-500 hover:bg-purple-600'
               }
               
               const isSelected = selectedEvent?.id === event.id
+              const isDragging = draggedEvent?.id === event.id
               
               return (
                 <div
                   key={event.id || index}
                   className={cn(
-                    "absolute pointer-events-auto cursor-pointer rounded-sm px-1 text-white text-xs font-medium truncate",
-                    "hover:opacity-90 transition-all",
-                    categoryColors[event.category as keyof typeof categoryColors] || 'bg-gray-500',
-                    isSelected && "ring-2 ring-blue-400 ring-offset-2 ring-offset-background z-10"
+                    "absolute pointer-events-auto rounded-sm flex items-center text-white transition-all group",
+                    categoryColors[event.category as keyof typeof categoryColors] || 'bg-gray-500 hover:bg-gray-600',
+                    isSelected && "ring-2 ring-blue-400 ring-offset-1 ring-offset-background z-20 shadow-lg",
+                    isDragging && "opacity-50 cursor-grabbing",
+                    !isDragging && "cursor-grab hover:shadow-md hover:z-10"
                   )}
                   style={{
                     left: event.left - headerWidth,
-                    top: event.top + (stackRow * 22),
-                    width: event.width,
-                    height: event.height
+                    top: event.top + (stackRow * (eventHeight + eventMargin)) + 4,
+                    width: Math.max(event.width - 2, 30), // Minimum width for visibility
+                    height: eventHeight
+                  }}
+                  draggable
+                  onDragStart={(e) => {
+                    e.dataTransfer.effectAllowed = 'move'
+                    setDraggedEvent(event)
+                    setIsDraggingEvent(true)
+                  }}
+                  onDragEnd={() => {
+                    setDraggedEvent(null)
+                    setIsDraggingEvent(false)
                   }}
                   onClick={(e) => {
                     e.stopPropagation()
@@ -527,7 +600,42 @@ export function LinearCalendarHorizontal({
                   }}
                   title={`${event.title} (${format(event.startDate, 'MMM d')} - ${format(event.endDate, 'MMM d')})`}
                 >
-                  {dayWidth >= 20 ? event.title : ''}
+                  {/* Resize handle - left */}
+                  <div 
+                    className="absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize opacity-0 group-hover:opacity-100 hover:bg-white/20"
+                    onMouseDown={(e) => {
+                      e.stopPropagation()
+                      setIsResizingEvent(true)
+                      setResizingEvent(event)
+                      setResizeDirection('start')
+                    }}
+                  />
+                  
+                  {/* Event content with drag handle */}
+                  <div className="flex items-center gap-1 px-2 flex-1 min-w-0">
+                    {event.width > 60 && (
+                      <GripVertical className="h-3 w-3 opacity-0 group-hover:opacity-70 flex-shrink-0" />
+                    )}
+                    <span className="text-xs font-medium truncate">
+                      {event.title}
+                    </span>
+                    {event.width > 120 && (
+                      <span className="text-xs opacity-75 truncate">
+                        {format(event.startDate, 'MMM d')}
+                      </span>
+                    )}
+                  </div>
+                  
+                  {/* Resize handle - right */}
+                  <div 
+                    className="absolute right-0 top-0 bottom-0 w-2 cursor-ew-resize opacity-0 group-hover:opacity-100 hover:bg-white/20"
+                    onMouseDown={(e) => {
+                      e.stopPropagation()
+                      setIsResizingEvent(true)
+                      setResizingEvent(event)
+                      setResizeDirection('end')
+                    }}
+                  />
                 </div>
               )
             })}

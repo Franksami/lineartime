@@ -22,9 +22,8 @@ import type { Event } from "@/types/calendar";
 export default function Page() {
   const currentYear = new Date().getFullYear();
   const [currentView, setCurrentView] = useState<CalendarView>('year');
-  // Check for environment variable or default to HybridCalendar
-  const useHybrid = process.env.NEXT_PUBLIC_USE_HYBRID_CALENDAR !== 'false';
-  const [useVirtualScroll, setUseVirtualScroll] = useState(!useHybrid); // Feature flag for virtual scrolling
+  // CRITICAL: Never change from LinearCalendarHorizontal - this is the core identity of LinearTime
+  // The horizontal linear timeline layout is what makes this calendar unique
   const [isMobile, setIsMobile] = useState(false);
   const userId = 'default-user'; // This could come from auth context later
   
@@ -131,18 +130,10 @@ export default function Page() {
       >
         {isYearView && (
           <div id="calendar-view">
-            {/* Virtual Scroll Toggle (temporary for testing) */}
+            {/* Development Info */}
             {process.env.NODE_ENV === 'development' && !isMobile && (
               <div className="absolute top-20 right-4 z-20 bg-background/80 backdrop-blur-sm p-2 rounded-lg border">
-                <label className="flex items-center gap-2 text-sm">
-                  <input 
-                    type="checkbox" 
-                    checked={useVirtualScroll}
-                    onChange={(e) => setUseVirtualScroll(e.target.checked)}
-                    className="rounded"
-                  />
-                  Use Virtual Scrolling
-                </label>
+                <span className="text-xs text-muted-foreground">Horizontal Linear Timeline</span>
               </div>
             )}
             
@@ -160,48 +151,33 @@ export default function Page() {
                 className="h-full"
               />
             ) : (
-              /* Desktop Calendar View */
-              useHybrid ? (
-                <LinearCalendarFullBleed
-                  year={currentYear}
-                  events={calendarEvents}
-                  userId={userId}
-                  className="h-full w-full"
-                  onDateSelect={(date) => console.log('Date selected:', date)}
-                  onEventClick={(event) => console.log('Event clicked:', event)}
-                  onEventUpdate={async (event) => {
-                    if (updateEvent) {
-                      const existingEvent = events?.find(e => e.convexId === event.id || String(e.id) === event.id)
-                      if (existingEvent) {
-                        await updateEvent(existingEvent.id, {
-                          title: event.title,
-                          startTime: event.startDate.getTime(),
-                          endTime: event.endDate?.getTime() || event.startDate.getTime(),
-                          categoryId: event.category,
-                          description: event.description,
-                          location: event.location
-                        })
-                      }
+              /* Desktop Calendar View - HORIZONTAL LINEAR TIMELINE */
+              /* CRITICAL: This horizontal layout is the core identity of LinearTime */
+              <LinearCalendarHorizontal
+                year={currentYear}
+                events={calendarEvents}
+                className="h-full w-full"
+                onDateSelect={(date) => console.log('Date selected:', date)}
+                onEventClick={(event) => console.log('Event clicked:', event)}
+                onEventCreate={handleEventCreate}
+                onEventUpdate={async (event) => {
+                  if (updateEvent) {
+                    const existingEvent = events?.find(e => e.convexId === event.id || String(e.id) === event.id)
+                    if (existingEvent) {
+                      await updateEvent(existingEvent.id, {
+                        title: event.title,
+                        startTime: event.startDate.getTime(),
+                        endTime: event.endDate?.getTime() || event.startDate.getTime(),
+                        categoryId: event.category,
+                        description: event.description,
+                        location: event.location
+                      })
                     }
-                  }}
-                  onEventDelete={handleEventDelete}
-                  onEventCreate={handleEventCreate}
-                />
-              ) : useVirtualScroll ? (
-                <VirtualCalendar
-                  year={currentYear}
-                  events={calendarEvents}
-                  className="h-full"
-                  onDateSelect={(date) => console.log('Date selected:', date)}
-                  onEventClick={(event) => console.log('Event clicked:', event)}
-                />
-              ) : (
-                <LinearCalendarVertical 
-                  initialYear={currentYear} 
-                  className="h-full"
-                  userId={userId}
-                />
-              )
+                  }
+                }}
+                onEventDelete={handleEventDelete}
+                enableInfiniteCanvas={true}
+              />
             )}
           </div>
         )}
@@ -245,6 +221,31 @@ export default function Page() {
         onEventCreate={handleEventCreate}
         onEventUpdate={updateEvent}
         onEventDelete={handleEventDelete}
+      />
+      
+      {/* Command Bar - Natural Language Input (Cmd+K to open) */}
+      <CommandBar
+        onEventCreate={handleEventCreate}
+        onEventUpdate={async (id, event) => {
+          const numericId = parseInt(id) || events?.find(e => e.convexId === id)?.id;
+          if (numericId && updateEvent) {
+            await updateEvent(numericId, {
+              title: event.title || '',
+              startTime: event.startDate?.getTime() || Date.now(),
+              endTime: event.endDate?.getTime() || event.startDate?.getTime() || Date.now(),
+              categoryId: event.category || 'personal',
+              description: event.description,
+              location: event.location,
+              updatedAt: Date.now()
+            });
+          }
+        }}
+        onEventDelete={handleEventDelete}
+        onEventSearch={(query) => {
+          console.log('Searching for:', query);
+          // TODO: Implement search highlighting/filtering
+        }}
+        events={calendarEvents}
       />
     </div>
   );

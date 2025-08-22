@@ -108,6 +108,7 @@ export function FloatingToolbar({
       {event && (
         <motion.div
           ref={toolbarRef}
+          data-testid="floating-toolbar"
           initial={{ opacity: 0, y: 10, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -150,6 +151,7 @@ export function FloatingToolbar({
             <>
               {/* Edit Title Button */}
               <button
+                data-testid="toolbar-edit"
                 onClick={() => setIsEditing(true)}
                 className="p-1.5 hover:bg-accent rounded"
                 title="Edit title"
@@ -197,6 +199,7 @@ export function FloatingToolbar({
               
               {/* Duplicate */}
               <button
+                data-testid="toolbar-duplicate"
                 onClick={() => onDuplicate?.(event)}
                 className="p-1.5 hover:bg-accent rounded"
                 title="Duplicate event"
