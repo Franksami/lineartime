@@ -235,7 +235,7 @@ export function EventManagement({ userId }: { userId: string }) {
   const activeEvent = activeId ? filteredEvents.find(e => e.id === activeId) : null
 
   return (
-    <div className="space-y-6" role="region" aria-label="Event Management">
+    <div className="space-y-6" data-testid="event-management" role="region" aria-label="Event Management">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

@@ -285,6 +285,7 @@ export function FloatingToolbar({
               
               {/* Delete */}
               <button
+                data-testid="toolbar-delete"
                 onClick={() => {
                   if (confirm('Delete this event?')) {
                     onDelete?.(event.id)

@@ -5,6 +5,9 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { useGesture } from '@use-gesture/react';
 import { cn } from '@/lib/utils';
 import { format, addDays, startOfYear, getDaysInYear, differenceInDays, startOfMonth, endOfMonth, isToday, isSameMonth, isSameDay } from 'date-fns';
+import { useOfflineEvents } from '@/hooks/useIndexedDB';
+import { EventModal } from '@/components/calendar/EventModal';
+import type { Event } from '@/types/calendar';
 
 /**
  * Timeline Configuration
@@ -59,6 +62,7 @@ export interface TimelineContainerProps {
   onDayHover?: (date: Date | null) => void;
   onZoomChange?: (level: ZoomLevel) => void;
   currentDate?: Date;
+  userId?: string;
 }
 
 /**
@@ -91,8 +95,33 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
   onDayClick,
   onDayHover,
   onZoomChange,
-  currentDate = new Date()
+  currentDate = new Date(),
+  userId = 'default-user'
 }) => {
+  // Get IndexedDB operations
+  const { events: dbEvents, createEvent, updateEvent, deleteEvent } = useOfflineEvents(userId);
+  
+  // State for event modal
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  
+  // Convert IndexedDB events to Event type if needed
+  const timelineEvents = useMemo(() => {
+    if (dbEvents && dbEvents.length > 0) {
+      return dbEvents.map(e => ({
+        id: e.convexId || String(e.id),
+        title: e.title,
+        category: (e.categoryId || 'personal') as any,
+        date: new Date(e.startTime),
+        description: e.description,
+        startDate: new Date(e.startTime),
+        endDate: new Date(e.endTime || e.startTime),
+        location: e.location
+      }));
+    }
+    return events;
+  }, [dbEvents, events]);
   // Configuration with defaults
   const {
     startDate = startOfYear(currentDate),
@@ -272,7 +301,12 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
           backgroundColor: showHeat ? getHeatColor(day.heat || 0) : undefined,
           backdropFilter: glassmorphic ? 'blur(2px)' : undefined // Reduced blur for performance
         }}
-        onClick={() => onDayClick?.(day.date)}
+        onClick={() => {
+          setSelectedDate(day.date);
+          setSelectedEvent(null);
+          setModalOpen(true);
+          onDayClick?.(day.date);
+        }}
         onMouseEnter={() => {
           setHoveredDate(day.date);
           onDayHover?.(day.date);
@@ -359,6 +393,7 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
   return (
     <div 
       ref={containerRef}
+      data-testid="timeline-container"
       className={cn(
         'relative w-full overflow-hidden rounded-2xl',
         glassmorphic && [
@@ -501,6 +536,82 @@ export const TimelineContainer: React.FC<TimelineContainerProps> = ({
           {format(hoveredDate, 'EEEE, MMMM d, yyyy')}
         </div>
       )}
+      
+      {/* Event Modal for Creating/Editing Events */}
+      <EventModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        event={selectedEvent}
+        selectedDate={selectedDate}
+        selectedRange={null}
+        onSave={async (eventData) => {
+          if (selectedEvent) {
+            // Update existing event
+            if (updateEvent) {
+              const dbEvent = dbEvents?.find(e => e.convexId === selectedEvent.id || String(e.id) === selectedEvent.id);
+              if (dbEvent) {
+                await updateEvent(dbEvent.id, {
+                  title: eventData.title!,
+                  description: eventData.description,
+                  startTime: eventData.startDate!.getTime(),
+                  endTime: eventData.endDate?.getTime() || eventData.startDate!.getTime(),
+                  categoryId: eventData.category,
+                  location: eventData.location,
+                  allDay: eventData.allDay,
+                  recurrence: eventData.recurrence as any
+                });
+              }
+            }
+          } else {
+            // Create new event
+            if (createEvent) {
+              await createEvent({
+                userId,
+                title: eventData.title!,
+                startTime: eventData.startDate!.getTime(),
+                endTime: eventData.endDate?.getTime() || eventData.startDate!.getTime(),
+                categoryId: eventData.category,
+                description: eventData.description,
+                location: eventData.location,
+                allDay: eventData.allDay,
+                recurrence: eventData.recurrence as any,
+                syncStatus: 'local',
+                lastModified: Date.now(),
+                createdAt: Date.now(),
+                updatedAt: Date.now()
+              });
+            }
+          }
+          setModalOpen(false);
+          setSelectedEvent(null);
+          setSelectedDate(null);
+        }}
+        onDelete={async (eventId) => {
+          if (deleteEvent) {
+            const dbEvent = dbEvents?.find(e => e.convexId === eventId || String(e.id) === eventId);
+            if (dbEvent) {
+              await deleteEvent(dbEvent.id);
+            }
+          }
+          setModalOpen(false);
+          setSelectedEvent(null);
+        }}
+        checkOverlaps={(start, end, excludeId) => {
+          return timelineEvents.filter(event => {
+            if (event.id === excludeId) return false;
+            const eventStart = event.startDate.getTime();
+            const eventEnd = event.endDate?.getTime() || eventStart;
+            const checkStart = start.getTime();
+            const checkEnd = end.getTime();
+            
+            return (
+              (checkStart >= eventStart && checkStart < eventEnd) ||
+              (checkEnd > eventStart && checkEnd <= eventEnd) ||
+              (checkStart <= eventStart && checkEnd >= eventEnd)
+            );
+          });
+        }}
+      />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { LinearCalendarVertical } from "@/components/calendar/LinearCalendarVert
 import { VirtualCalendar } from "@/components/calendar/VirtualCalendar";
 import { HybridCalendar } from "@/components/calendar/HybridCalendar";
 import { LinearCalendarHorizontal } from "@/components/calendar/LinearCalendarHorizontal";
+import { LinearCalendarFullBleed } from "@/components/calendar/LinearCalendarFullBleed";
 import { MobileCalendarView } from "@/components/mobile/MobileCalendarView";
 import { TimelineContainer } from "@/components/timeline/TimelineContainer";
 import { EventManagement } from "@/components/calendar/EventManagement";
@@ -15,6 +16,7 @@ import { CommandBar } from "@/components/CommandBar";
 import { PerformanceMonitor } from "@/components/ui/performance-monitor";
 import { AssistantPanel } from "@/components/ai/AssistantPanel";
 import { SettingsDialog } from "@/components/settings/SettingsDialog";
+import { NavigationHeader } from "@/components/layout/NavigationHeader";
 import type { Event } from "@/types/calendar";
 
 export default function Page() {
@@ -89,14 +91,18 @@ export default function Page() {
     }
   }, [deleteEvent, events]);
   
+  const isYearView = currentView === 'year'
+
   return (
     <div 
-      className="h-screen bg-background overflow-hidden"
+      className="h-screen bg-background overflow-hidden flex flex-col"
       role="application"
       aria-label="Linear Calendar for year navigation and event management"
     >
-      {/* Command Bar for NLP event creation */}
-      <CommandBar
+      {/* Navigation Header */}
+      <NavigationHeader
+        currentView={currentView}
+        onViewChange={setCurrentView}
         onEventCreate={handleEventCreate}
         onEventDelete={handleEventDelete}
         events={events}
@@ -116,37 +122,14 @@ export default function Page() {
         Skip to calendar
       </a>
       
-      {/* Header with View Switcher */}
-      <div className="relative z-10 px-4 pt-4">
-        <div className="w-full">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-1">
-                {currentYear} Linear Calendar
-              </h1>
-              <p className="text-muted-foreground text-sm md:text-base">
-                Life is bigger than a week
-              </p>
-            </div>
-            <div className="flex items-center gap-2" role="toolbar" aria-label="Calendar controls">
-              <HighContrastToggle />
-              <SettingsDialog />
-              <ViewSwitcher 
-                currentView={currentView} 
-                onViewChange={setCurrentView}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
           
       {/* Main Content Area */}
       <main 
         id="main-content"
-        className="flex-1 h-[calc(100vh-88px)] bg-background overflow-hidden"
+        className="flex-1 bg-background overflow-hidden"
         aria-label="Main calendar content"
       >
-        {currentView === 'year' && (
+        {isYearView && (
           <div id="calendar-view">
             {/* Virtual Scroll Toggle (temporary for testing) */}
             {process.env.NODE_ENV === 'development' && !isMobile && (
@@ -179,26 +162,30 @@ export default function Page() {
             ) : (
               /* Desktop Calendar View */
               useHybrid ? (
-                <LinearCalendarHorizontal
+                <LinearCalendarFullBleed
                   year={currentYear}
                   events={calendarEvents}
-                  className="h-full"
+                  userId={userId}
+                  className="h-full w-full"
                   onDateSelect={(date) => console.log('Date selected:', date)}
                   onEventClick={(event) => console.log('Event clicked:', event)}
                   onEventUpdate={async (event) => {
-                    console.log('Event updated:', event)
-                    // Update the event in IndexedDB
                     if (updateEvent) {
                       const existingEvent = events?.find(e => e.convexId === event.id || String(e.id) === event.id)
                       if (existingEvent) {
                         await updateEvent(existingEvent.id, {
+                          title: event.title,
                           startTime: event.startDate.getTime(),
-                          endTime: event.endDate.getTime(),
+                          endTime: event.endDate?.getTime() || event.startDate.getTime(),
+                          categoryId: event.category,
+                          description: event.description,
+                          location: event.location
                         })
                       }
                     }
                   }}
-                  enableInfiniteCanvas={true}
+                  onEventDelete={handleEventDelete}
+                  onEventCreate={handleEventCreate}
                 />
               ) : useVirtualScroll ? (
                 <VirtualCalendar
@@ -224,6 +211,7 @@ export default function Page() {
             <TimelineContainer
               className="h-full"
               events={timelineEvents}
+              userId={userId}
               config={{
                 glassmorphic: false,
                 initialZoomLevel: 'month',

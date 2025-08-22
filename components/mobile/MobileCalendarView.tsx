@@ -102,6 +102,7 @@ export function MobileCalendarView({
   return (
     <div 
       ref={containerRef}
+      data-testid="mobile-calendar-view"
       className={cn(
         'relative h-full overflow-hidden bg-background touch-pan-y',
         className
