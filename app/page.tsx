@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { LinearCalendarVertical } from "@/components/calendar/LinearCalendarVertical";
 import { VirtualCalendar } from "@/components/calendar/VirtualCalendar";
 import { HybridCalendar } from "@/components/calendar/HybridCalendar";
+import { LinearCalendarHorizontal } from "@/components/calendar/LinearCalendarHorizontal";
 import { MobileCalendarView } from "@/components/mobile/MobileCalendarView";
 import { TimelineContainer } from "@/components/timeline/TimelineContainer";
 import { EventManagement } from "@/components/calendar/EventManagement";
@@ -178,7 +179,7 @@ export default function Page() {
             ) : (
               /* Desktop Calendar View */
               useHybrid ? (
-                <HybridCalendar
+                <LinearCalendarHorizontal
                   year={currentYear}
                   events={calendarEvents}
                   className="h-full"
@@ -197,9 +198,7 @@ export default function Page() {
                       }
                     }
                   }}
-                  useCanvas={calendarEvents.length > 100} // Auto-switch to canvas for performance
-                  canvasThreshold={100}
-                  enableDragDrop={true}
+                  enableInfiniteCanvas={true}
                 />
               ) : useVirtualScroll ? (
                 <VirtualCalendar
