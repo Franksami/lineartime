@@ -305,12 +305,21 @@ function FullYearGrid({
   )
 }
 
-// Touch gesture thresholds
+// Enhanced touch gesture thresholds for better mobile UX
 const TOUCH_THRESHOLDS = {
-  longPressDelay: 500,  // ms to trigger long press
-  swipeVelocity: 0.5,   // velocity threshold for swipe
-  pinchScale: 0.01,     // scale change per pixel of pinch
-  doubleTapDelay: 300   // ms between taps for double tap
+  longPressDelay: 400,     // Reduce from 500ms for faster feedback
+  swipeVelocity: 0.3,      // Reduce from 0.5 for easier swiping
+  pinchScale: 0.015,       // Increase from 0.01 for better zoom control
+  doubleTapDelay: 250,     // Reduce from 300ms for responsive feel
+  minimumSwipeDistance: 20 // Add minimum distance for intentional swipes
+}
+
+// Haptic feedback for better mobile experience
+const provideTactileFeedback = (type: 'light' | 'medium' | 'heavy') => {
+  if (typeof window !== 'undefined' && window.navigator && 'vibrate' in window.navigator) {
+    const patterns = { light: 25, medium: 50, heavy: 100 }
+    window.navigator.vibrate(patterns[type])
+  }
 }
 
 export function LinearCalendarHorizontal({
@@ -691,12 +700,10 @@ export function LinearCalendarHorizontal({
     if (isMobile) {
       setTouchStartTime(Date.now())
       
-      // Set up long press timer for mobile
+      // Set up long press timer for mobile with enhanced feedback
       const timer = setTimeout(() => {
-        // Trigger haptic feedback if available
-        if (window.navigator && 'vibrate' in window.navigator) {
-          window.navigator.vibrate(50)
-        }
+        // Enhanced haptic feedback
+        provideTactileFeedback('medium')
         
         // Start event creation after long press
         setIsCreatingEvent(true)
