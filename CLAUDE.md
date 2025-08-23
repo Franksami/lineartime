@@ -6,8 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Linear Calendar** - A year-at-a-glance calendar application being transformed into an enterprise-grade, AI-powered scheduling platform.
 
-**Current Version**: v0.3.0 (Virtual scrolling, IndexedDB, AI Assistant, Mobile support)
+**Current Version**: v0.3.1 (Event Creation System, CalendarContext, Enhanced Architecture)
 **Target Version**: v3.0.0 (Enterprise platform per PRD)
+**Project Completion**: 63% (39/62 tasks completed)
 
 ## 🔒 CRITICAL: FOUNDATION LOCKED - PERFECT IMPLEMENTATION ACHIEVED
 
@@ -99,9 +100,15 @@ pnpm start
 # Lint code
 pnpm lint
 
-# MANDATORY: Foundation protection testing before any commits
-npm run test:foundation
-npx playwright test tests/foundation-*.spec.ts
+# Testing Commands
+npm run test:foundation          # MANDATORY before commits
+npm run test:all                # Run all Playwright tests
+npm run test:manual             # Run manual testing helpers
+npm run test:seed               # Seed test data
+npx playwright test tests/foundation-*.spec.ts  # Foundation protection
+
+# Development Helpers
+npm run ci:guard                # CI validation guard
 ```
 
 ### 🚨 **CRITICAL: CodeRabbit Review Workflow (MANDATORY)**
@@ -134,17 +141,23 @@ gh pr create --title "Task #[ID]: [Feature]" --body "[testing details]"
 
 ### Task Master Commands (Project Management)
 ```bash
-# View all tasks
+# View all tasks with progress dashboard (56% complete, 35/62 tasks done)
 task-master list
 
-# Get next task to work on
+# Get next task to work on (currently #21 - Obsidian Plugin Integration)
 task-master next
 
 # Show task details
 task-master show <id>
 
+# Mark task in progress before starting work
+task-master set-status --id=<id> --status=in-progress
+
 # Mark task complete
 task-master set-status --id=<id> --status=done
+
+# Break down complex tasks into subtasks
+task-master expand --id=<id>
 
 # Update task implementation notes
 task-master update-subtask --id=<id> --prompt="implementation notes"
@@ -165,6 +178,24 @@ task-master parse-prd --append "Advanced Features technical-prd.md"
   - Zoom controls and infinite canvas support
   - Floating toolbar for event editing
   - Target: 5,000 events with good performance
+  
+- **`components/calendar/CalendarGrid.tsx`**: NEW - Grid rendering component
+  - Pure rendering component for 12×42 layout
+  - Optimized date calculations and cell rendering
+  - Mobile-responsive with touch support
+  
+- **`components/calendar/DragToCreate.tsx`**: NEW - Event creation handler
+  - Drag-to-create event functionality
+  - Quick edit inline UI
+  - Mobile-friendly interaction patterns
+  
+- **`components/calendar/EventLayer.tsx`**: NEW - Event rendering layer
+  - Separated event rendering for performance
+  - Handles event positioning and overlaps
+  
+- **`components/calendar/InteractionLayer.tsx`**: NEW - User interaction handler
+  - Manages all user interactions (click, drag, hover)
+  - Separated concerns for better maintainability
 
 - **`components/calendar/VirtualCalendar.tsx`**: Performance optimization component
   - NOT TO BE USED as primary calendar
@@ -175,12 +206,23 @@ task-master parse-prd --append "Advanced Features technical-prd.md"
   - DO NOT USE - violates horizontal layout requirement
   - Kept only for historical reference
 
+- **`contexts/CalendarContext.tsx`**: NEW - Centralized state management
+  - Global calendar state with useReducer pattern
+  - Performance optimizations with batch updates
+  - Accessibility support with announcements
+  - Mobile-specific state management
+  
 - **`hooks/useLinearCalendar.ts`**: Enhanced state management hook
   - Event CRUD operations with IndexedDB
   - Advanced filter and search capabilities
   - Offline-first architecture
   - Touch gesture support for mobile
   - Real-time sync preparation
+  
+- **`hooks/useCalendarEvents.ts`**: NEW - Event-specific hook
+  - Specialized event management logic
+  - Optimized event queries and mutations
+  - Integration with CalendarContext
 
 - **`types/calendar.ts`**: TypeScript definitions
   - Event interface with categories
@@ -218,9 +260,27 @@ task-master parse-prd --append "Advanced Features technical-prd.md"
 - Responsive design for all screen sizes
 - Bottom sheet interactions
 
+#### ✅ Phase 6: Event Creation System (COMPLETED - Task #30)
+- Click-to-create event functionality
+- Drag-to-create multi-day events
+- Inline quick edit UI
+- Layered architecture with separated concerns:
+  - CalendarGrid for rendering
+  - DragToCreate for creation
+  - EventLayer for event display
+  - InteractionLayer for user input
+- CalendarContext for centralized state management
+- Performance optimized with React.memo and useCallback
+
 ### Next Implementation Phase
 
-#### Phase 6: Real-time Collaboration (TODO)
+#### Phase 7: Plugin System & Integrations (IN PROGRESS - Task #21)
+- Obsidian Plugin Integration
+- Notion Integration
+- Enhanced calendar sync (Google/Microsoft/CalDAV)
+- Plugin architecture for extensibility
+
+#### Phase 8: Real-time Collaboration (TODO)
 - Yjs CRDT integration
 - WebSocket for real-time sync
 - Presence awareness
@@ -325,26 +385,34 @@ it('should maintain 60fps while scrolling', async () => {
 ```
 lineartime/
 ├── app/                    # Next.js app directory
-│   ├── api/ai/            # AI chat endpoints
-│   └── test-*/            # Test pages for features
+│   ├── api/               # API routes (ai, auth, webhooks)
+│   ├── calendar-sync/     # Calendar sync settings page
+│   ├── settings/          # Settings pages (integrations, security)
+│   └── test-*/            # Test pages for features (17 test pages)
 ├── components/
 │   ├── ai/                # AI Assistant components
-│   ├── ai-elements/       # Vercel AI SDK v5 components
-│   ├── calendar/          # Calendar components
+│   ├── ai-elements/       # Vercel AI SDK v5 components (10 components)
+│   ├── calendar/          # Calendar components (20+ components)
 │   ├── mobile/            # Mobile-specific components
 │   ├── performance/       # Performance monitoring
-│   ├── timeline/          # Timeline view components
-│   └── ui/                # shadcn components
-├── hooks/                  # Custom React hooks
-├── lib/                    # Utilities
-│   ├── ai/                # AI scheduling engine
-│   ├── canvas/            # Canvas rendering
-│   ├── data-structures/   # IntervalTree, etc.
-│   ├── mobile/            # Touch gesture handlers
-│   ├── nlp/               # Natural language processing
-│   └── storage/           # IndexedDB management
+│   ├── settings/          # Settings UI components
+│   └── ui/                # shadcn components (25+ components)
+├── hooks/                  # Custom React hooks (15+ hooks)
+├── lib/                    # Utilities and business logic
+│   ├── ai/                # AI scheduling engine with constraints
+│   ├── canvas/            # Canvas rendering system
+│   ├── data-structures/   # IntervalTree for event conflicts
+│   ├── db/                # IndexedDB operations and migrations
+│   ├── performance/       # Performance monitoring systems
+│   ├── security/          # Security and authentication
+│   ├── sync/              # Calendar sync and vector clocks
+│   └── workers/           # Web Worker utilities
+├── convex/                 # Convex backend (configured, not active)
+├── docs/                   # Comprehensive documentation (15+ docs)
+├── scripts/                # Build and test helpers
+├── tests/                  # Playwright test suite (12 test files)
 ├── types/                  # TypeScript definitions
-└── workers/                # Web Workers
+└── workers/                # Web Workers for heavy computations
 ```
 
 ### Target Structure (After PRD)
@@ -366,19 +434,28 @@ lineartime/
 
 ## 🔧 Common Tasks
 
-### Add Dependencies for PRD Implementation
+### Add Dependencies for Future Features
 ```bash
-# Phase 1: Performance
-pnpm add react-window @tanstack/react-virtual
+# Performance (already implemented)
+# ✅ pnpm add react-window @tanstack/react-virtual
 
-# Phase 2: Storage
-pnpm add dexie workbox-webpack-plugin
+# Storage (already implemented)
+# ✅ pnpm add dexie
 
-# Phase 3: NLP
-pnpm add chrono-node cmdk
+# NLP (already implemented)
+# ✅ pnpm add chrono-node cmdk
 
-# Phase 4: Collaboration
+# AI SDK (already implemented)
+# ✅ pnpm add ai @ai-sdk/openai @ai-sdk/react
+
+# Future Collaboration Features
 pnpm add yjs y-websocket y-indexeddb socket.io-client
+
+# Future Mobile Enhancements
+# ✅ pnpm add @use-gesture/react (already added)
+
+# Plugin Development (for Obsidian/Notion integrations)
+pnpm add @notionhq/client obsidian-api
 ```
 
 ### Performance Profiling
@@ -407,11 +484,12 @@ const testVirtualScroll = () => {
 
 ## 🐛 Known Issues & Solutions
 
-### Current Limitations
-1. **Single-user only** - Implement Yjs CRDT for collaboration
-2. **No service worker** - Add for full offline support
-3. **Limited calendar integrations** - Add Google/Outlook sync
-4. **No plugin system** - Implement extensibility framework
+### Current Limitations & Planned Solutions
+1. **Single-user only** - ✅ Real-time collaboration infrastructure ready (Convex backend)
+2. **Limited offline support** - ✅ IndexedDB implemented, Service Worker pending
+3. **Calendar integrations incomplete** - ✅ Google/Microsoft/CalDAV auth implemented, sync pending
+4. **Plugin system missing** - 🚧 Obsidian integration in progress (Task #21)
+5. **Limited mobile gestures** - ✅ @use-gesture/react implemented
 
 ### Common Errors
 ```typescript
@@ -429,10 +507,14 @@ if (renderTime > 100) {
 ## 📚 Key Resources
 
 ### Documentation
-- PRD: `/Advanced Features technical-prd.md`
-- Architecture: `/docs/ARCHITECTURE.md`
-- Components: `/docs/COMPONENTS.md`
-- Task Master Guide: `/docs/CLAUDE.md`
+- **PRD**: `/Advanced Features technical-prd.md` (Technical implementation guide)
+- **Architecture**: `/docs/ARCHITECTURE.md` (System design and patterns)
+- **Foundation**: `/docs/LINEAR_CALENDAR_FOUNDATION_LOCKED.md` (Core layout documentation)
+- **Testing**: `/docs/TESTING_METHODOLOGY.md` (Test strategies and validation)
+- **Git Workflow**: `/docs/GIT_WORKFLOW_RULES.md` (Development process)
+- **Components**: `/docs/COMPONENTS.md` (Component library guide)
+- **Accessibility**: `/docs/ACCESSIBILITY.md` (WCAG compliance guide)
+- **Manual Testing**: `/MANUAL_TESTING_CHECKLIST.md` (Quality assurance)
 
 ### External Documentation
 - [React Window](https://react-window.vercel.app/)
@@ -473,12 +555,45 @@ Monitor these metrics during development:
 | Memory Usage | 150MB+ | <100MB | Yes |
 | Event Create | 200ms | <100ms | No |
 
-## Task Master Integration
+## 🎯 Current Project Status & Next Steps
+
+**Project Progress**: 63% complete (39/62 tasks done)
+**Last Completed**: Task #30 - Event Creation System (with drag-to-create functionality)
+**Current Branch**: feature/task-30-fix-event-creation-bugs
+**Current Priority**: High-priority integrations and plugins
+**Recommended Next Task**: #21 - Develop Obsidian Plugin Integration
+
+### Task Master Integration Workflow
 
 Use Task Master to track PRD implementation:
-1. Parse the PRD: `task-master parse-prd --append "Advanced Features technical-prd.md"`
-2. Break down into subtasks: `task-master expand --all --research`
-3. Track progress: `task-master list`
-4. Get next task: `task-master next`
+1. Check current status: `task-master list`
+2. Get next task: `task-master next`
+3. Break down complex tasks: `task-master expand --id=21`
+4. Start work: `task-master set-status --id=21 --status=in-progress`
+5. Complete work: `task-master set-status --id=21 --status=done`
+6. Parse new PRD features: `task-master parse-prd --append "Advanced Features technical-prd.md"`
 
-Remember: Always implement performance features before adding new functionality!
+### High-Priority Pending Tasks (23 tasks remaining)
+- **#21** - Obsidian Plugin Integration (dependencies: 14, 16) - **NEXT TASK**
+- **#11** - Implement Accessibility Features (dependencies: 2, 3, 5, 6, 8, 10)
+- **#27** - Performance Optimization Suite (dependencies: 15, 16, 17, 18)
+- **#45** - Error Handling & Recovery System (dependencies: 32, 39)
+- **#55** - Accessibility Compliance (dependencies: 48, 52)
+
+### Recently Completed Tasks (Last 10)
+- **#30** ✅ Event Creation System - Click and drag-to-create functionality
+- **#31** ✅ FloatingToolbar Support - Enhanced event editing UI
+- **#50** ✅ FloatingEventEditor - Improved event editing experience
+- **#51** ✅ Smart Positioning - Intelligent UI element placement
+- **#52** ✅ Zustand Store Setup - State management architecture
+- **#56** ✅ Performance Monitoring - Metrics and tracking
+- **#58** ✅ CSS Drag Styles - Visual feedback for interactions
+- **#49** ✅ Z-Index Management - Proper layering system
+- **#48** ✅ useCalendarEvents Hook - Event management abstraction
+- **#47** ✅ Foundation Tests - Automated validation of core structure
+
+### Development Philosophy
+- Foundation is **LOCKED** - never modify core horizontal layout
+- Always implement performance features before adding new functionality
+- Use feature flags for rollout control
+- Maintain backwards compatibility during migrations

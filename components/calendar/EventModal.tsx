@@ -158,10 +158,13 @@ export function EventModal({
         )}
         aria-labelledby="event-dialog-title"
         aria-describedby="event-dialog-description">
+        <DialogTitle id="event-dialog-title" className="sr-only">
+          {event ? 'Edit Event' : 'Create New Event'}
+        </DialogTitle>
         <DialogHeader className="bg-muted/50 backdrop-blur-sm rounded-t-lg p-6 -m-6 mb-4 border-b border-border">
-          <DialogTitle id="event-dialog-title" className="text-xl font-semibold">
+          <div className="text-xl font-semibold">
             {event ? 'Edit Event' : 'Create New Event'}
-          </DialogTitle>
+          </div>
         </DialogHeader>
 
         <div className="grid gap-5 py-4">

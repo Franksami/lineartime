@@ -7,7 +7,7 @@ const { execSync } = require('node:child_process')
 
 function run(cmd) {
   try {
-    return execSync(cmd, { stdio: ['ignore', 'pipe', 'pipe'] }).toString()
+    return execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
   } catch (error) {
     // Extract details from execSync error
     const commandInfo = `Command: ${cmd}`
@@ -29,8 +29,8 @@ function run(cmd) {
     enhancedError.originalError = error
     enhancedError.command = cmd
     enhancedError.exitCode = error.status
-    enhancedError.stdout = error.stdout?.toString() || null
-    enhancedError.stderr = error.stderr?.toString() || null
+    enhancedError.stdout = error.stdout?.toString() ?? null
+    enhancedError.stderr = error.stderr?.toString() ?? null
     
     throw enhancedError
   }
@@ -64,7 +64,9 @@ for (const bannedPath of banned) {
         violations.push(line)
       }
     }
-  } catch (e) {}
+  } catch (e) {
+    console.warn(`Warning: Failed to check banned path "${bannedPath}":`, e.message)
+  }
 }
 
 if (violations.length) {

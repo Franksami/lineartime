@@ -2,7 +2,6 @@
 
 import React, { useRef, useState, useCallback, useEffect } from 'react'
 import { useGesture } from '@use-gesture/react'
-import { motion, useSpring, useTransform } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import type { Event } from '@/types/calendar'
 import { 
@@ -20,9 +19,8 @@ import {
 } from 'date-fns'
 import { Plus, Minus, GripVertical, Menu, X } from 'lucide-react'
 import { FloatingToolbar } from './FloatingToolbar'
-// import { EventModal } from './EventModal'  // Temporarily disabled due to missing dependencies
-import { DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, closestCenter, TouchSensor } from '@dnd-kit/core'
-import { useDraggable } from '@dnd-kit/core'
+import { EventModal } from './EventModal'
+import { DragToCreate } from './DragToCreate'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
 interface LinearCalendarHorizontalProps {
@@ -77,7 +75,7 @@ interface FullYearGridProps {
   setHoveredDate: (date: Date | null) => void
   setSelectedDate: (date: Date | null) => void
   handleDayClick: (date: Date) => void
-  format: (date: Date, formatString?: string) => string
+  format: (date: Date, formatString: string) => string
   isSameDay: (dateLeft: Date, dateRight: Date) => boolean
 }
 
@@ -241,8 +239,10 @@ function FullYearGrid({
       gridCells.push(
         <div
           key={`${monthRow}-${col}`}
+          data-date={date ? format(date, 'yyyy-MM-dd') : undefined}
+          data-day={date ? format(date, 'd') : undefined}
           className={cn(
-            "absolute transition-colors",
+            "absolute transition-colors day-cell",
             col % 7 === 6 && "border-r-2 border-border/60", // week separator
             isWeekend && "bg-muted/20",
             isEmpty && "bg-transparent cursor-default"
@@ -259,10 +259,12 @@ function FullYearGrid({
             }
           }}
           onMouseLeave={() => setHoveredDate(null)}
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault()
             if (date) {
-              // SIMPLIFIED: Simple click to create event
-              handleDayClick(date, monthRow)
+              // Route through onDateSelect to unify keyboard and mouse behavior
+              onDateSelect?.(date)
+              handleDayClick(date)
             }
           }}
           title={date ? format(date, 'EEEE, MMMM d, yyyy') : ''}
@@ -362,27 +364,9 @@ export function LinearCalendarHorizontal({
   const [isPinching, setIsPinching] = useState(false)
   const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null)
   
-  // Configure DND sensors for desktop and mobile
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: isMobile ? 10 : 8,
-      },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 250,
-        tolerance: 5,
-      },
-    })
-  )
   
   // SIMPLIFIED: No complex drag creation state needed for click-to-create
   
-  // Pan and zoom state
-  const [panX, setPanX] = useState(0)
-  const [panY, setPanY] = useState(0)
-  const [scale, setScale] = useState(1)
   
   // Calculate viewport dimensions for fullYear grid
   const [viewportWidth, setViewportWidth] = useState(0)
@@ -411,9 +395,6 @@ export function LinearCalendarHorizontal({
       scrollRef.current.scrollTo({ left: 0, top: 0 })
     }
     // Reset any pan/zoom drift on initial mount
-    setPanX(0)
-    setPanY(0)
-    setScale(1)
   }, [])
   
   // Calculate day width for fullYear zoom (42 columns per month row)
@@ -524,39 +505,6 @@ export function LinearCalendarHorizontal({
     })
   }, [events, dayWidth, year, isFullYearZoom])
   
-  // Group events by month and calculate stacking
-  const eventsByMonth = React.useMemo(() => {
-    const grouped = new Map<number, typeof processedEvents>()
-    
-    processedEvents.forEach(event => {
-      if (!grouped.has(event.month)) {
-        grouped.set(event.month, [])
-      }
-      grouped.get(event.month)!.push(event)
-    })
-    
-    // Calculate stacking for each month
-    grouped.forEach((monthEvents, month) => {
-      // Sort by start date, then duration
-      monthEvents.sort((a, b) => {
-        if (a.startDay !== b.startDay) return a.startDay - b.startDay
-        return b.duration - a.duration
-      })
-      
-      // Simple stacking algorithm
-      const rows: number[] = []
-      monthEvents.forEach(event => {
-        let row = 0
-        while (rows[row] && rows[row] >= event.startDay) {
-          row++
-        }
-        rows[row] = event.endDay
-        ;(event as any).stackRow = row
-      })
-    })
-    
-    return grouped
-  }, [processedEvents])
   
   // Pan and zoom handlers
   const handleZoomIn = () => {
@@ -681,38 +629,47 @@ export function LinearCalendarHorizontal({
     // You would implement actual duplicate logic here
     console.log('Duplicate event:', duplicatedEvent)
   }
+
+  // Check for overlapping events
+  const checkForOverlaps = useCallback((start: Date, end: Date, excludeId?: string) => {
+    return events.filter(event => {
+      if (excludeId && event.id === excludeId) return false
+      
+      // Check if the date ranges overlap
+      const eventStart = new Date(event.startDate)
+      const eventEnd = new Date(event.endDate)
+      
+      return (
+        (start <= eventEnd && end >= eventStart) ||
+        (eventStart <= end && eventEnd >= start)
+      )
+    })
+  }, [events])
   
-  // SIMPLIFIED: Direct click-to-create event (no modal complexity)
-  const handleDayClick = (date: Date, month: number) => {
+  // Open EventModal for event creation
+  const handleDayClick = (date: Date) => {
     // Clear any existing selections
     setSelectedEvent(null)
     setToolbarPosition(null)
-    
-    // Create event directly for immediate feedback
-    handleEventCreateDirect(date)
+    setSelectedDate(date)
+    setShowEventModal(true)
   }
-  
-  // SIMPLIFIED: Direct event creation without modal complexity
-  const handleEventCreateDirect = (date: Date) => {
-    if (onEventCreate) {
-      const newEvent: Partial<Event> = {
-        id: `event-${Date.now()}`,
-        title: 'New Event',
-        description: '',
-        startDate: date,
-        endDate: date,
-        category: 'personal'
-      }
-      
-      onEventCreate(newEvent)
+
+  // Handle event save from modal
+  const handleEventSave = useCallback((eventData: Partial<Event>) => {
+    if (eventData.id) {
+      // Update existing event
+      onEventUpdate?.(eventData as Event)
+    } else {
+      // Create new event
+      onEventCreate?.(eventData)
     }
-  }
+    setShowEventModal(false)
+    setSelectedDate(null)
+    setSelectedEvent(null)
+  }, [onEventCreate, onEventUpdate])
   
-  // SIMPLIFIED: Mobile uses same click-to-create as desktop
-  const handleMobileTouch = (date: Date) => {
-    // On mobile, also use simple click-to-create
-    handleDayClick(date, date.getMonth())
-  }
+  
   
   // REMOVED: Complex drag handlers - replaced with simple click-to-create
   
@@ -794,7 +751,6 @@ export function LinearCalendarHorizontal({
       className={cn("relative bg-background focus:outline-none focus:ring-2 focus:ring-ring/50", className)}
       onKeyDown={handleKeyDown}
       tabIndex={0}
-      role="application"
       aria-label={`Calendar for year ${year}. Press Enter to start navigation, use arrow keys to move between dates.`}
     >
       {/* PRD Required Header Layout */}
@@ -827,6 +783,10 @@ export function LinearCalendarHorizontal({
           onUpdate={handleEventUpdate}
           onDelete={handleEventDelete}
           onDuplicate={handleEventDuplicate}
+          onEdit={(event) => {
+            setSelectedEvent(event)
+            setShowEventModal(true)
+          }}
           onClose={() => {
             setSelectedEvent(null)
             setToolbarPosition(null)
@@ -941,6 +901,14 @@ export function LinearCalendarHorizontal({
           paddingTop: '60px' // Account for header height
         }}
         {...bind()}
+        onClick={(e) => {
+          // Close toolbar when clicking on the grid (not on an event)
+          if ((e.target as HTMLElement).closest('[role="grid"]') && 
+              !(e.target as HTMLElement).closest('[class*="bg-"]')) {
+            setSelectedEvent(null)
+            setToolbarPosition(null)
+          }
+        }}
         role="grid"
         aria-label={`Calendar grid for ${year}. ${keyboardMode ? 'Keyboard navigation active.' : 'Press Enter to activate keyboard navigation.'}`}
         aria-rowcount={12}
@@ -1031,8 +999,9 @@ export function LinearCalendarHorizontal({
                       onMouseLeave={() => setHoveredDate(null)}
                       onClick={(e) => {
                         e.preventDefault()
-                        // SIMPLIFIED: Simple click to create event
-                        handleDayClick(date, month.index)
+                        // Route through onDateSelect to unify keyboard and mouse behavior
+                        onDateSelect?.(date)
+                        handleDayClick(date)
                       }}
                       title={format(date, 'EEEE, MMMM d, yyyy')}
                     >
@@ -1057,6 +1026,23 @@ export function LinearCalendarHorizontal({
           )}
           
           {/* SIMPLIFIED: No complex drag preview needed for click-to-create */}
+          
+          {/* Drag to Create Layer */}
+          {!isFullYearZoom && (
+            <DragToCreate
+              year={year}
+              dayWidth={dayWidth}
+              monthHeight={monthHeight}
+              headerWidth={headerWidth}
+              headerHeight={headerHeight}
+              isFullYearZoom={isFullYearZoom}
+              scrollRef={scrollRef}
+              onEventCreate={(eventData) => {
+                onEventCreate?.(eventData)
+              }}
+              className="z-10"
+            />
+          )}
           
           {/* Event Bars */}
           <div className="absolute inset-0 pointer-events-none" style={{ marginLeft: isFullYearZoom ? 0 : headerWidth }}>
@@ -1120,17 +1106,19 @@ export function LinearCalendarHorizontal({
                     e.stopPropagation()
                     setSelectedEvent(event)
                     
-                    // Calculate toolbar position
+                    // Calculate toolbar position (absolute positioning)
                     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-                    const scrollRect = scrollRef.current?.getBoundingClientRect()
-                    if (scrollRect) {
-                      setToolbarPosition({
-                        x: rect.left + rect.width / 2 - scrollRect.left,
-                        y: rect.top - scrollRect.top
-                      })
-                    }
+                    setToolbarPosition({
+                      x: rect.left + rect.width / 2,
+                      y: rect.top
+                    })
                     
                     onEventClick?.(event)
+                  }}
+                  onDoubleClick={(e) => {
+                    e.stopPropagation()
+                    setSelectedEvent(event)
+                    setShowEventModal(true)
                   }}
                   title={`${event.title} (${format(event.startDate, 'MMM d')} - ${format(event.endDate, 'MMM d')})`}
                 >
@@ -1177,7 +1165,41 @@ export function LinearCalendarHorizontal({
         </div>
       </div>
       
-      {/* SIMPLIFIED: Event creation via direct API call for now */}
+      {/* FloatingToolbar for event editing */}
+      {selectedEvent && toolbarPosition && (
+        <FloatingToolbar
+          event={selectedEvent}
+          position={toolbarPosition}
+          onUpdate={async (updatedEvent) => {
+            // Update the event
+            onEventUpdate?.(updatedEvent)
+            setSelectedEvent(updatedEvent)
+          }}
+          onDelete={async (eventId) => {
+            // Delete the event
+            onEventDelete?.(eventId)
+            setSelectedEvent(null)
+            setToolbarPosition(null)
+          }}
+          onClose={() => {
+            setSelectedEvent(null)
+            setToolbarPosition(null)
+          }}
+        />
+      )}
+      
+      {/* EventModal */}
+      <EventModal
+        open={showEventModal}
+        onOpenChange={setShowEventModal}
+        event={selectedEvent}
+        selectedDate={selectedDate}
+        selectedRange={null} // This component doesn't support date ranges yet
+        onSave={handleEventSave}
+        onDelete={handleEventDelete}
+        checkOverlaps={checkForOverlaps}
+        events={events}
+      />
     </div>
   )
 }

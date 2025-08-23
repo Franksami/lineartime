@@ -2705,7 +2705,7 @@
           4,
           5
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -2720,7 +2720,7 @@
           5,
           6
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -2735,7 +2735,7 @@
           5,
           6
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -2764,7 +2764,7 @@
           4,
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -3157,6 +3157,7 @@
         "title": "Implement FloatingToolbar for Event Management",
         "description": "Rebuild floating toolbar with focus on basic visibility and correct positioning, ensuring reliable functionality for event editing and management",
         "status": "done",
+        "completedAt": "2025-08-23T14:45:00.000Z",
         "dependencies": [
           30
         ],
@@ -3169,6 +3170,7 @@
             "title": "Create user verification checklist",
             "description": "Create comprehensive checklist for manual testing verification",
             "status": "done",
+            "completedAt": "2025-08-23T14:42:00.000Z",
             "dependencies": [],
             "parentTaskId": 31,
             "details": "",
@@ -3179,6 +3181,7 @@
             "title": "Implement verification tracking",
             "description": "Add system to track and document user verification of each toolbar function",
             "status": "done",
+            "completedAt": "2025-08-23T14:43:00.000Z",
             "dependencies": [],
             "parentTaskId": 31,
             "details": "",
@@ -3189,6 +3192,7 @@
             "title": "Create verification UI",
             "description": "Implement UI for testers to mark each feature as verified and provide feedback",
             "status": "done",
+            "completedAt": "2025-08-23T14:43:30.000Z",
             "dependencies": [],
             "parentTaskId": 31,
             "details": "",
@@ -3199,6 +3203,7 @@
             "title": "Document testing requirements",
             "description": "Create detailed documentation of required manual testing steps and acceptance criteria",
             "status": "done",
+            "completedAt": "2025-08-23T14:44:00.000Z",
             "dependencies": [],
             "parentTaskId": 31,
             "details": "",
@@ -3209,6 +3214,7 @@
             "title": "Implement basic visibility fixes",
             "description": "Add guaranteed visibility through proper z-index management and background contrast",
             "status": "done",
+            "completedAt": "2025-08-23T14:44:30.000Z",
             "dependencies": [],
             "parentTaskId": 31,
             "details": "1. Set appropriate z-index hierarchy\n2. Add solid background\n3. Implement contrast checking\n4. Add visible borders",
@@ -3219,6 +3225,7 @@
             "title": "Create positioning system",
             "description": "Implement reliable positioning calculation with viewport awareness",
             "status": "done",
+            "completedAt": "2025-08-23T14:45:00.000Z",
             "dependencies": [],
             "parentTaskId": 31,
             "details": "1. Calculate click position\n2. Add viewport boundary detection\n3. Implement position adjustment logic\n4. Add overlap prevention",
@@ -3677,7 +3684,7 @@
     ],
     "metadata": {
       "created": "2025-08-22T21:12:58.974Z",
-      "updated": "2025-08-23T07:49:16.981Z",
+      "updated": "2025-08-23T19:27:29.299Z",
       "description": "Tasks for feature-full-year-viewport context"
     }
   }

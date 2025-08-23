@@ -1,4 +1,4 @@
- 
+/* eslint-disable */
 /**
  * Generated utilities for implementing server-side Convex query and mutation functions.
  *
@@ -66,9 +66,10 @@ export declare const internalMutation: MutationBuilder<DataModel, "internal">;
  *
  * An action is a function which can execute any JavaScript code, including non-deterministic
  * code and code with side-effects, like calling third-party services.
- * They can be invoked directly from the client.
+ * They can be run in Convex's JavaScript environment or in Node.js using the "use node" directive.
+ * They can interact with the database indirectly by calling queries and mutations using the {@link ActionCtx}.
  *
- * @param func - The action function. It receives an {@link ActionCtx} as its first argument.
+ * @param func - The action. It receives an {@link ActionCtx} as its first argument.
  * @returns The wrapped action. Include this as an `export` to name it and make it accessible.
  */
 export declare const action: ActionBuilder<DataModel, "public">;
@@ -76,8 +77,8 @@ export declare const action: ActionBuilder<DataModel, "public">;
 /**
  * Define an action that is only accessible from other Convex functions (but not from the client).
  *
- * @param func - The action function. It receives an {@link ActionCtx} as its first argument.
- * @returns The wrapped action. Include this as an `export` to name it and make it accessible.
+ * @param func - The function. It receives an {@link ActionCtx} as its first argument.
+ * @returns The wrapped function. Include this as an `export` to name it and make it accessible.
  */
 export declare const internalAction: ActionBuilder<DataModel, "internal">;
 
@@ -88,8 +89,8 @@ export declare const internalAction: ActionBuilder<DataModel, "internal">;
  * deployment if the requests matches the path and method where this action
  * is routed. Be sure to route your action in `convex/http.js`.
  *
- * @param func - The HTTP action function. It receives an {@link ActionCtx} as its first argument.
- * @returns The wrapped HTTP action. Import this function from `convex/http.js` and route it to hook it up.
+ * @param func - The function. It receives an {@link ActionCtx} as its first argument.
+ * @returns The wrapped function. Import this function from `convex/http.js` and route it to hook it up.
  */
 export declare const httpAction: HttpActionBuilder;
 
