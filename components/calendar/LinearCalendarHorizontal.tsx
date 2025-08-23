@@ -20,6 +20,7 @@ import {
 } from 'date-fns'
 import { Plus, Minus, GripVertical, Menu, X } from 'lucide-react'
 import { FloatingToolbar } from './FloatingToolbar'
+// import { EventModal } from './EventModal'  // Temporarily disabled due to missing dependencies
 import { DndContext, DragEndEvent, useSensor, useSensors, PointerSensor, closestCenter, TouchSensor } from '@dnd-kit/core'
 import { useDraggable } from '@dnd-kit/core'
 import { useMediaQuery } from '@/hooks/use-media-query'
@@ -63,7 +64,23 @@ const MOBILE_ZOOM_LEVELS = {
 
 type ZoomLevel = keyof typeof ZOOM_LEVELS
 
-// Full Year Grid Component (12×371 layout)
+// Full Year Grid Component (12×371 layout) - Props interface
+interface FullYearGridProps {
+  year: number
+  dayWidth: number
+  monthHeight: number
+  headerWidth: number
+  headerHeight: number
+  hoveredDate: Date | null
+  selectedDate: Date | null
+  onDateSelect?: (date: Date) => void
+  setHoveredDate: (date: Date | null) => void
+  setSelectedDate: (date: Date | null) => void
+  handleDayClick: (date: Date) => void
+  format: (date: Date, formatString?: string) => string
+  isSameDay: (dateLeft: Date, dateRight: Date) => boolean
+}
+
 function FullYearGrid({ 
   year, 
   dayWidth, 
@@ -75,16 +92,10 @@ function FullYearGrid({
   onDateSelect,
   setHoveredDate,
   setSelectedDate,
-  handleDayMouseDown,
-  handleDayMouseEnter,
-  handleDayMouseUp,
+  handleDayClick,
   format,
-  isSameDay,
-  isCreatingEvent,
-  creatingEventStart,
-  creatingEventEnd,
-  creatingEventMonth
-}: any) {
+  isSameDay
+}: FullYearGridProps) {
   // Calculate year details
   const yearStart = startOfYear(new Date(year, 0, 1))
   const jan1DayOfWeek = yearStart.getDay() // 0 = Sunday, 6 = Saturday
@@ -225,9 +236,7 @@ function FullYearGrid({
       const isHovered = date && hoveredDate && isSameDay(date, hoveredDate)
       const isEmpty = !date
       
-      // Check if this day is part of the creating event range
-      const isInCreatingRange = date && isCreatingEvent && creatingEventStart && creatingEventEnd && 
-        date >= creatingEventStart && date <= creatingEventEnd && monthRow === creatingEventMonth
+      // SIMPLIFIED: No complex event creation range needed
       
       gridCells.push(
         <div
@@ -244,24 +253,16 @@ function FullYearGrid({
             width: dayWidth,
             height: monthHeight
           }}
-          onMouseDown={(e) => {
-            if (date) {
-              e.preventDefault()
-              handleDayMouseDown(date, monthRow)
-            }
-          }}
           onMouseEnter={() => {
             if (date) {
               setHoveredDate(date)
-              handleDayMouseEnter(date)
             }
           }}
-          onMouseUp={handleDayMouseUp}
           onMouseLeave={() => setHoveredDate(null)}
           onClick={() => {
-            if (date && !isCreatingEvent) {
-              setSelectedDate(date)
-              onDateSelect?.(date)
+            if (date) {
+              // SIMPLIFIED: Simple click to create event
+              handleDayClick(date, monthRow)
             }
           }}
           title={date ? format(date, 'EEEE, MMMM d, yyyy') : ''}
@@ -270,9 +271,8 @@ function FullYearGrid({
             className={cn(
               "m-[2px] h-[calc(100%-4px)] rounded-sm border",
               isEmpty ? "border-transparent" : "border-border/40",
-              isSelected && "ring-1 ring-blue-500",
-              isHovered && !isEmpty && "bg-accent/20",
-              isInCreatingRange && "bg-green-500/20"
+              isSelected && "ring-1 ring-blue-500", 
+              isHovered && !isEmpty && "bg-accent/20"
             )}
             aria-hidden
           >
@@ -340,6 +340,7 @@ export function LinearCalendarHorizontal({
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [toolbarPosition, setToolbarPosition] = useState<{ x: number; y: number } | null>(null)
+  const [showEventModal, setShowEventModal] = useState(false)
   const [isDraggingEvent, setIsDraggingEvent] = useState(false)
   const [draggedEvent, setDraggedEvent] = useState<Event | null>(null)
   const [isResizingEvent, setIsResizingEvent] = useState(false)
@@ -376,11 +377,7 @@ export function LinearCalendarHorizontal({
     })
   )
   
-  // Event creation state
-  const [isCreatingEvent, setIsCreatingEvent] = useState(false)
-  const [creatingEventStart, setCreatingEventStart] = useState<Date | null>(null)
-  const [creatingEventEnd, setCreatingEventEnd] = useState<Date | null>(null)
-  const [creatingEventMonth, setCreatingEventMonth] = useState<number | null>(null)
+  // SIMPLIFIED: No complex drag creation state needed for click-to-create
   
   // Pan and zoom state
   const [panX, setPanX] = useState(0)
@@ -612,61 +609,7 @@ export function LinearCalendarHorizontal({
     }
   }, [year])
   
-  // CRITICAL FIX: Global mouse event listeners for event creation
-  useEffect(() => {
-    if (!isCreatingEvent) return
-
-    const handleGlobalMouseUp = () => {
-      // CRITICAL FIX: Create event if we have valid range
-      if (creatingEventStart && creatingEventEnd) {
-        const newEvent: Partial<Event> = {
-          id: `new-event-${Date.now()}`,
-          title: 'New Event',
-          description: '',
-          startDate: creatingEventStart,
-          endDate: creatingEventEnd,
-          category: 'personal'
-        }
-        
-        if (onEventCreate) {
-          onEventCreate(newEvent)
-        }
-        
-        setSelectedEvent(newEvent as Event)
-      }
-      
-      // CRITICAL FIX: Always reset state
-      setIsCreatingEvent(false)
-      setCreatingEventStart(null)
-      setCreatingEventEnd(null)
-      setCreatingEventMonth(null)
-      
-      // Reset cursor
-      if (document.body) {
-        document.body.style.cursor = 'default'
-      }
-    }
-
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      // Maintain crosshair cursor during creation
-      if (document.body && isCreatingEvent) {
-        document.body.style.cursor = 'crosshair'
-      }
-    }
-
-    // Add global listeners to capture mouse up anywhere
-    document.addEventListener('mouseup', handleGlobalMouseUp)
-    document.addEventListener('mousemove', handleGlobalMouseMove)
-
-    return () => {
-      document.removeEventListener('mouseup', handleGlobalMouseUp)
-      document.removeEventListener('mousemove', handleGlobalMouseMove)
-      // Ensure cursor is reset on cleanup
-      if (document.body) {
-        document.body.style.cursor = 'default'
-      }
-    }
-  }, [isCreatingEvent, creatingEventStart, creatingEventEnd, onEventCreate])
+  // REMOVED: Complex drag creation system - replaced with simple click-to-create
 
   // Handle resize mouse move
   useEffect(() => {
@@ -739,147 +682,39 @@ export function LinearCalendarHorizontal({
     console.log('Duplicate event:', duplicatedEvent)
   }
   
-  // Event creation handlers with mobile support
-  const handleDayMouseDown = (date: Date, month: number) => {
-    // On mobile, require long press for event creation
-    if (!isMobile) {
-      // CRITICAL FIX: Clear any existing selections first
-      setSelectedEvent(null)
-      setToolbarPosition(null)
-      
-      // Set creating state
-      setIsCreatingEvent(true)
-      setCreatingEventStart(date)
-      setCreatingEventEnd(date)
-      setCreatingEventMonth(month)
-      
-      // CRITICAL FIX: Set cursor style immediately
-      if (document.body) {
-        document.body.style.cursor = 'crosshair'
-      }
-    }
+  // SIMPLIFIED: Direct click-to-create event (no modal complexity)
+  const handleDayClick = (date: Date, month: number) => {
+    // Clear any existing selections
+    setSelectedEvent(null)
+    setToolbarPosition(null)
+    
+    // Create event directly for immediate feedback
+    handleEventCreateDirect(date)
   }
   
-  const handleDayTouchStart = (date: Date, month: number) => {
-    if (isMobile) {
-      setTouchStartTime(Date.now())
-      
-      // Set up long press timer for mobile with enhanced feedback
-      const timer = setTimeout(() => {
-        // Enhanced haptic feedback
-        provideTactileFeedback('medium')
-        
-        // Start event creation after long press
-        setIsCreatingEvent(true)
-        setCreatingEventStart(date)
-        setCreatingEventEnd(date)
-        setCreatingEventMonth(month)
-        setSelectedEvent(null)
-        setToolbarPosition(null)
-      }, TOUCH_THRESHOLDS.longPressDelay)
-      
-      // Store timer to clear on touch end
-      ;(window as any).__longPressTimer = timer
-    }
-  }
-  
-  const handleDayTouchEnd = (date: Date) => {
-    if (isMobile) {
-      // Clear long press timer
-      if ((window as any).__longPressTimer) {
-        clearTimeout((window as any).__longPressTimer)
-        delete (window as any).__longPressTimer
-      }
-      
-      // Handle tap (not long press)
-      if (touchStartTime && Date.now() - touchStartTime < TOUCH_THRESHOLDS.longPressDelay) {
-        // Check for double tap
-        const now = Date.now()
-        if (lastTapTime && now - lastTapTime < TOUCH_THRESHOLDS.doubleTapDelay) {
-          // Double tap - zoom in on this date
-          handleZoomIn()
-          
-          // Center on the tapped date
-          if (scrollRef.current) {
-            const yearStart = startOfYear(new Date(year, 0, 1))
-            const dayOfYear = differenceInDays(date, yearStart)
-            const scrollPosition = dayOfYear * dayWidth - scrollRef.current.clientWidth / 2
-            scrollRef.current.scrollTo({
-              left: Math.max(0, scrollPosition),
-              behavior: 'smooth'
-            })
-          }
-          
-          setLastTapTime(null)
-        } else {
-          // Single tap - select date
-          setSelectedDate(date)
-          onDateSelect?.(date)
-          setLastTapTime(now)
-        }
-      }
-      
-      setTouchStartTime(null)
-    }
-  }
-  
-  const handleDayMouseEnter = (date: Date) => {
-    if (isCreatingEvent && creatingEventStart && !isMobile) {
-      // Update end date while dragging (desktop only)
-      if (date >= creatingEventStart) {
-        setCreatingEventEnd(date)
-      } else {
-        setCreatingEventEnd(creatingEventStart)
-        setCreatingEventStart(date)
-      }
-    }
-  }
-  
-  const handleDayTouchMove = (date: Date) => {
-    if (isCreatingEvent && creatingEventStart && isMobile) {
-      // Update end date while dragging on mobile
-      if (date >= creatingEventStart) {
-        setCreatingEventEnd(date)
-      } else {
-        setCreatingEventEnd(creatingEventStart)
-        setCreatingEventStart(date)
-      }
-    }
-  }
-  
-  const handleDayMouseUp = () => {
-    // CRITICAL FIX: Always reset state, regardless of conditions
-    if (isCreatingEvent && creatingEventStart && creatingEventEnd) {
-      // Create the new event
+  // SIMPLIFIED: Direct event creation without modal complexity
+  const handleEventCreateDirect = (date: Date) => {
+    if (onEventCreate) {
       const newEvent: Partial<Event> = {
-        id: `new-event-${Date.now()}`,
+        id: `event-${Date.now()}`,
         title: 'New Event',
         description: '',
-        startDate: creatingEventStart,
-        endDate: creatingEventEnd,
+        startDate: date,
+        endDate: date,
         category: 'personal'
       }
       
-      // Call onEventCreate if provided
-      if (onEventCreate) {
-        onEventCreate(newEvent)
-      }
-      
-      // Select the new event and show toolbar
-      setSelectedEvent(newEvent as Event)
-    }
-    
-    // CRITICAL FIX: Always reset event creation state
-    setIsCreatingEvent(false)
-    setCreatingEventStart(null)
-    setCreatingEventEnd(null)
-    setCreatingEventMonth(null)
-    
-    // CRITICAL FIX: Reset cursor style
-    if (document.body) {
-      document.body.style.cursor = 'default'
+      onEventCreate(newEvent)
     }
   }
+  
+  // SIMPLIFIED: Mobile uses same click-to-create as desktop
+  const handleMobileTouch = (date: Date) => {
+    // On mobile, also use simple click-to-create
+    handleDayClick(date, date.getMonth())
+  }
+  
+  // REMOVED: Complex drag handlers - replaced with simple click-to-create
   
   // Keyboard navigation handler
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
@@ -923,21 +758,9 @@ export function LinearCalendarHorizontal({
         handled = true
         break
       case 'Escape':
-        // CRITICAL FIX: Cancel event creation if active
-        if (isCreatingEvent) {
-          setIsCreatingEvent(false)
-          setCreatingEventStart(null)
-          setCreatingEventEnd(null)
-          setCreatingEventMonth(null)
-          if (document.body) {
-            document.body.style.cursor = 'default'
-          }
-          setAnnounceMessage('Event creation cancelled')
-        } else {
-          setFocusedDate(null)
-          setKeyboardMode(false)
-          setAnnounceMessage('Exited calendar navigation')
-        }
+        setFocusedDate(null)
+        setKeyboardMode(false)
+        setAnnounceMessage('Exited calendar navigation')
         handled = true
         break
       case 't':
@@ -1145,15 +968,9 @@ export function LinearCalendarHorizontal({
               onDateSelect={onDateSelect}
               setHoveredDate={setHoveredDate}
               setSelectedDate={setSelectedDate}
-              handleDayMouseDown={handleDayMouseDown}
-              handleDayMouseEnter={handleDayMouseEnter}
-              handleDayMouseUp={handleDayMouseUp}
+              handleDayClick={handleDayClick}
               format={format}
               isSameDay={isSameDay}
-              isCreatingEvent={isCreatingEvent}
-              creatingEventStart={creatingEventStart}
-              creatingEventEnd={creatingEventEnd}
-              creatingEventMonth={creatingEventMonth}
             />
           ) : (
             // Normal horizontal month rows
@@ -1194,9 +1011,7 @@ export function LinearCalendarHorizontal({
                   const isSelected = selectedDate && isSameDay(date, selectedDate)
                   const isHovered = hoveredDate && isSameDay(date, hoveredDate)
                   
-                  // Check if this day is part of the creating event range
-                  const isInCreatingRange = isCreatingEvent && creatingEventStart && creatingEventEnd && 
-                    date >= creatingEventStart && date <= creatingEventEnd && month.index === creatingEventMonth
+                  // SIMPLIFIED: No complex event creation range needed
                   
                   return (
                     <div
@@ -1205,29 +1020,19 @@ export function LinearCalendarHorizontal({
                         "absolute top-0 border-r border-border/30 hover:bg-accent/10 transition-colors cursor-pointer",
                         isCurrentDay && "bg-blue-500/10 border-blue-500",
                         isSelected && "bg-blue-500/20",
-                        isHovered && "bg-accent/20",
-                        isInCreatingRange && "bg-green-500/20"
+                        isHovered && "bg-accent/20"
                       )}
                       style={{
                         left: (dayOfYear - month.startDayOfYear) * dayWidth,
                         width: dayWidth,
                         height: monthHeight
                       }}
-                      onMouseDown={(e) => {
-                        e.preventDefault()
-                        handleDayMouseDown(date, month.index)
-                      }}
-                      onMouseEnter={() => {
-                        setHoveredDate(date)
-                        handleDayMouseEnter(date)
-                      }}
-                      onMouseUp={handleDayMouseUp}
+                      onMouseEnter={() => setHoveredDate(date)}
                       onMouseLeave={() => setHoveredDate(null)}
-                      onClick={() => {
-                        if (!isCreatingEvent && !isMobile) {
-                          setSelectedDate(date)
-                          onDateSelect?.(date)
-                        }
+                      onClick={(e) => {
+                        e.preventDefault()
+                        // SIMPLIFIED: Simple click to create event
+                        handleDayClick(date, month.index)
                       }}
                       title={format(date, 'EEEE, MMMM d, yyyy')}
                     >
@@ -1251,46 +1056,7 @@ export function LinearCalendarHorizontal({
             </>
           )}
           
-          {/* Creating Event Preview */}
-          {isCreatingEvent && creatingEventStart && creatingEventEnd && creatingEventMonth !== null && (
-            <div className="absolute pointer-events-none" style={{ marginLeft: isFullYearZoom ? 0 : headerWidth }}>
-              {(() => {
-                const yearStart = startOfYear(new Date(year, 0, 1))
-                const jan1DayOfWeek = yearStart.getDay()
-                const startDay = differenceInDays(startOfDay(creatingEventStart), yearStart) + 1
-                const endDay = differenceInDays(endOfDay(creatingEventEnd), yearStart) + 1
-                const duration = endDay - startDay + 1
-                
-                let left, top
-                if (isFullYearZoom) {
-                  // For 371-column grid
-                  const startCol = jan1DayOfWeek + startDay - 1
-                  left = startCol * dayWidth + headerWidth
-                  top = creatingEventMonth * monthHeight + headerHeight + 4
-                } else {
-                  // Normal layout
-                  left = (startDay - 1) * dayWidth
-                  top = creatingEventMonth * monthHeight + 25
-                }
-                
-                return (
-                  <div
-                    className="absolute bg-green-500/50 rounded-sm border-2 border-green-500 border-dashed"
-                    style={{
-                      left,
-                      top,
-                      width: duration * dayWidth - 2,
-                      height: 20
-                    }}
-                  >
-                    <span className="text-xs text-white px-1 truncate">
-                      New Event ({duration} day{duration > 1 ? 's' : ''})
-                    </span>
-                  </div>
-                )
-              })()}
-            </div>
-          )}
+          {/* SIMPLIFIED: No complex drag preview needed for click-to-create */}
           
           {/* Event Bars */}
           <div className="absolute inset-0 pointer-events-none" style={{ marginLeft: isFullYearZoom ? 0 : headerWidth }}>
@@ -1410,6 +1176,8 @@ export function LinearCalendarHorizontal({
           </div>
         </div>
       </div>
+      
+      {/* SIMPLIFIED: Event creation via direct API call for now */}
     </div>
   )
 }
