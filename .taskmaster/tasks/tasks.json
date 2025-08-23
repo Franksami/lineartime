@@ -3016,7 +3016,7 @@
         "testStrategy": "1. Verify MobileCalendarView is completely removed\n2. Test that LinearCalendarHorizontal renders on mobile devices\n3. Check that no references to MobileCalendarView remain\n4. Validate bundle size reduction",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -3024,7 +3024,7 @@
             "description": "Delete the MobileCalendarView.tsx component file and any associated test files, styles, or utilities specific to this component",
             "dependencies": [],
             "details": "1. Delete MobileCalendarView.tsx\n2. Remove associated test files (MobileCalendarView.test.tsx)\n3. Delete any mobile-specific utility functions\n4. Remove mobile-specific style files or classes\n5. Update git tracking to remove deleted files",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify all files are properly removed and project builds successfully without any reference errors"
           },
           {
@@ -3035,7 +3035,7 @@
               "28.1"
             ],
             "details": "1. Add isMobileOptimized boolean prop to interface\n2. Add touchEnabled boolean prop\n3. Update prop types documentation\n4. Add default values for new props\n5. Implement basic prop handling logic",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Unit test new props and their default values, verify type safety"
           },
           {
@@ -3047,7 +3047,7 @@
               "28.2"
             ],
             "details": "1. Remove useMediaQuery hook for mobile detection\n2. Update LinearCalendarHorizontal implementation\n3. Remove mobile-specific imports\n4. Pass device type as prop to LinearCalendarHorizontal\n5. Clean up any unused variables or imports",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test page rendering across different viewport sizes, verify no console errors"
           },
           {
@@ -3058,7 +3058,7 @@
               "28.2"
             ],
             "details": "1. Remove mobile-only CSS classes\n2. Update responsive breakpoints\n3. Implement unified styling approach\n4. Update theme variables for responsive design\n5. Remove unused style imports",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Visual regression testing across different viewport sizes"
           },
           {
@@ -3070,7 +3070,7 @@
               "28.4"
             ],
             "details": "1. Test component rendering on desktop\n2. Test component rendering on mobile devices\n3. Verify touch interactions work correctly\n4. Check responsive behavior\n5. Validate bundle size reduction",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "End-to-end testing across different devices and browsers, performance testing, accessibility testing"
           }
         ]
@@ -3085,34 +3085,146 @@
         "dependencies": [
           28
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
         "id": 30,
         "title": "Integrate Event Creation System",
-        "description": "Implement and verify click-and-drag event creation functionality within LinearCalendarHorizontal",
-        "details": "1. Implement drag event handlers\n2. Add event creation overlay\n3. Create event positioning algorithm\n4. Implement event stacking logic\n5. Add event category selection\n6. Integrate with IndexedDB for persistence",
-        "testStrategy": "1. Test drag-to-create functionality\n2. Verify event positioning accuracy\n3. Check category assignment\n4. Validate event persistence\n5. Test edge cases and boundary conditions",
-        "priority": "high",
+        "description": "Implement, verify, and obtain manual approval for simplified click-to-create event functionality within LinearCalendarHorizontal, focusing on reliability and performance",
+        "status": "done",
         "dependencies": [
           29
         ],
-        "status": "pending",
-        "subtasks": []
+        "priority": "high",
+        "details": "1. Implement simple click-to-create event handler\n2. Create minimal event creation modal\n3. Implement basic event positioning\n4. Add essential event properties only\n5. Implement basic persistence with IndexedDB\n6. Focus on performance optimization\n7. Obtain explicit user testing approval on basic functionality\n8. Only after stable: consider adding drag functionality",
+        "testStrategy": "1. Test click-to-create reliability\n2. Measure and verify performance metrics\n3. Validate event positioning accuracy\n4. Test basic persistence functionality\n5. Verify system stability under load\n6. MANDATORY: User testing on basic functionality\n7. Document performance benchmarks\n8. Verify functionality across different time spans",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Basic Click-to-Create",
+            "description": "Implement simple, reliable click-to-create event functionality",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 30,
+            "details": "1. Add click event listener to cells\n2. Create simple event creation modal\n3. Implement basic validation\n4. Focus on performance optimization",
+            "testStrategy": "1. Verify click handling reliability\n2. Test modal functionality\n3. Measure performance metrics"
+          },
+          {
+            "id": 2,
+            "title": "Implement Essential Event Properties",
+            "description": "Add core event properties with simplified interface",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 30,
+            "details": "1. Add title field\n2. Add date/time selection\n3. Add basic category selection\n4. Implement simple validation",
+            "testStrategy": "1. Test data validation\n2. Verify field interactions\n3. Check performance impact"
+          },
+          {
+            "id": 3,
+            "title": "Basic Persistence Implementation",
+            "description": "Implement streamlined event storage with IndexedDB",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 30,
+            "details": "1. Setup basic IndexedDB structure\n2. Implement minimal CRUD operations\n3. Add error handling\n4. Optimize storage operations",
+            "testStrategy": "1. Test save/load operations\n2. Verify error handling\n3. Measure storage performance"
+          },
+          {
+            "id": 4,
+            "title": "Performance Testing",
+            "description": "Conduct thorough performance testing of basic functionality",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 30,
+            "details": "1. Create performance test suite\n2. Measure operation times\n3. Identify bottlenecks\n4. Document findings",
+            "testStrategy": "1. Measure click response time\n2. Test under various loads\n3. Document performance metrics"
+          },
+          {
+            "id": 5,
+            "title": "User Testing and Approval",
+            "description": "Obtain user approval on simplified functionality",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 30,
+            "details": "1. Create simplified test checklist\n2. Gather user feedback\n3. Document reliability metrics\n4. Get formal sign-off",
+            "testStrategy": "1. Test basic functionality\n2. Verify reliability\n3. Document user feedback"
+          }
+        ]
       },
       {
         "id": 31,
         "title": "Implement FloatingToolbar for Event Management",
-        "description": "Create and integrate floating toolbar for event editing and management",
-        "details": "1. Create FloatingToolbar component\n2. Implement event selection handling\n3. Add edit, delete, and move options\n4. Implement event resizing handles\n5. Add position calculation logic\n6. Implement toolbar animations",
-        "testStrategy": "1. Test toolbar appearance on event selection\n2. Verify all CRUD operations\n3. Test positioning across viewport\n4. Validate accessibility\n5. Check touch interaction support",
-        "priority": "high",
+        "description": "Rebuild floating toolbar with focus on basic visibility and correct positioning, ensuring reliable functionality for event editing and management",
+        "status": "done",
         "dependencies": [
           30
         ],
-        "status": "pending",
-        "subtasks": []
+        "priority": "high",
+        "details": "1. Create basic FloatingToolbar component with guaranteed visibility\n2. Implement robust positioning system to prevent overlapping\n3. Add proper z-index and stacking context management\n4. Implement simplified event selection handling\n5. Add basic edit, delete options (no animations initially)\n6. Create comprehensive positioning test suite\n7. Implement click-event position calculation\n8. Add viewport boundary detection\n9. Create visibility verification system",
+        "testStrategy": "1. Verify toolbar visibility on all event clicks\n2. Test positioning across different screen sizes\n3. Validate toolbar appears above all other elements\n4. Test basic CRUD operations functionality\n5. Verify no overlap with calendar elements\n6. Test edge cases:\n   - Events near viewport edges\n   - Multiple rapid clicks\n   - Different zoom levels\n   - Various event sizes\n7. Document visibility and positioning test results",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create user verification checklist",
+            "description": "Create comprehensive checklist for manual testing verification",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 31,
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement verification tracking",
+            "description": "Add system to track and document user verification of each toolbar function",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 31,
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Create verification UI",
+            "description": "Implement UI for testers to mark each feature as verified and provide feedback",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 31,
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Document testing requirements",
+            "description": "Create detailed documentation of required manual testing steps and acceptance criteria",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 31,
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement basic visibility fixes",
+            "description": "Add guaranteed visibility through proper z-index management and background contrast",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 31,
+            "details": "1. Set appropriate z-index hierarchy\n2. Add solid background\n3. Implement contrast checking\n4. Add visible borders",
+            "testStrategy": "Test visibility across different backgrounds and conditions"
+          },
+          {
+            "id": 6,
+            "title": "Create positioning system",
+            "description": "Implement reliable positioning calculation with viewport awareness",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 31,
+            "details": "1. Calculate click position\n2. Add viewport boundary detection\n3. Implement position adjustment logic\n4. Add overlap prevention",
+            "testStrategy": "Test positioning in various scenarios and viewport locations"
+          }
+        ]
       },
       {
         "id": 32,
@@ -3124,21 +3236,62 @@
         "dependencies": [
           30
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
         "id": 33,
         "title": "Implement Command Bar Integration",
-        "description": "Integrate command bar with natural language parsing for event creation",
-        "details": "1. Implement Cmd+K shortcut handler\n2. Integrate Chrono.js for date parsing\n3. Create command parser\n4. Add event creation flow\n5. Implement search functionality\n6. Add filter options",
-        "testStrategy": "1. Test keyboard shortcut functionality\n2. Verify natural language parsing accuracy\n3. Test search and filter operations\n4. Validate accessibility\n5. Check mobile support",
-        "priority": "medium",
+        "description": "Integrate command bar with natural language parsing for event creation, requiring mandatory user verification and approval",
+        "status": "done",
         "dependencies": [
           32
         ],
-        "status": "pending",
-        "subtasks": []
+        "priority": "medium",
+        "details": "1. Implement Cmd+K shortcut handler\n2. Integrate Chrono.js for date parsing\n3. Create command parser\n4. Add event creation flow\n5. Implement search functionality\n6. Add filter options\n7. Create user verification checklist\n8. Document manual testing requirements",
+        "testStrategy": "1. MANDATORY user verification testing:\n   - Cmd+K shortcut activation\n   - Natural language parsing accuracy\n   - Event creation workflow\n   - Explicit user approval required\n2. Test keyboard shortcut functionality\n3. Verify natural language parsing accuracy\n4. Test search and filter operations\n5. Validate accessibility\n6. Check mobile support\n7. Document user verification results",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement core Command Bar functionality",
+            "description": "Basic Cmd+K handler and UI implementation",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 33,
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Create user verification checklist",
+            "description": "Document required manual testing steps:\n- Cmd+K activation\n- Natural language parsing\n- Event creation flow\n- Search functionality\n- Filter operations",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 33,
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Implement verification tracking",
+            "description": "Add system to track and record user verification results",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 33,
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Create user testing documentation",
+            "description": "Prepare detailed testing instructions and approval process",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 33,
+            "details": "",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 34,
@@ -3150,7 +3303,7 @@
         "dependencies": [
           33
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -3189,7 +3342,7 @@
         "dependencies": [
           29
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -3327,11 +3480,204 @@
         ],
         "status": "pending",
         "subtasks": []
+      },
+      {
+        "id": 48,
+        "title": "Implement useCalendarDrag Custom Hook",
+        "description": "Create a robust drag handling system using pointer events with proper cleanup and global event listeners",
+        "details": "Create useCalendarDrag.tsx hook with complete pointer event handling, including pointer capture, drag state management, and cleanup. Implement drag offset calculations, visual feedback, and proper event cleanup. Use TypeScript for type safety. Key features: pointer capture, drag state management, cleanup handlers, and escape key support.",
+        "testStrategy": "Unit test drag lifecycle events, verify proper cleanup on unmount, test escape key cancellation, validate pointer capture/release, check state management accuracy",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 49,
+        "title": "Implement Z-Index Management System",
+        "description": "Create a centralized z-index management system with proper stacking contexts",
+        "details": "Create z-index.ts with CALENDAR_LAYERS constant, update Tailwind config with custom z-index values, implement CSS isolation for calendar container. Define complete layer hierarchy from grid to modal layers. Include constants for all UI components.",
+        "testStrategy": "Visual regression tests for layer ordering, validate stacking contexts, verify component z-index inheritance, test modal/overlay rendering",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 50,
+        "title": "Develop FloatingEventToolbar Component",
+        "description": "Create a floating toolbar component with proper portal usage and collision detection",
+        "details": "Implement FloatingEventToolbar.tsx using @floating-ui/react for positioning, handle color picker integration, manage portal rendering, implement smart positioning logic. Include animation with Framer Motion and proper event handling.",
+        "testStrategy": "Test positioning logic, verify portal rendering, check collision detection, validate color picker interaction, test accessibility",
+        "priority": "high",
+        "dependencies": [
+          49
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 51,
+        "title": "Implement Smart Position Hook",
+        "description": "Create a custom hook for intelligent positioning of floating elements",
+        "details": "Develop useSmartPosition hook with viewport boundary detection, implement position calculation logic, handle window resize events, manage placement flipping based on available space",
+        "testStrategy": "Unit test position calculations, verify boundary detection, test resize handling, validate placement logic",
+        "priority": "medium",
+        "dependencies": [
+          50
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 52,
+        "title": "Setup Zustand Store for Calendar State",
+        "description": "Implement centralized state management using Zustand with proper typing",
+        "details": "Create calendar store with Zustand and Immer, implement drag state management, event CRUD operations, proper TypeScript types, and state selectors. Include actions for drag operations and event management.",
+        "testStrategy": "Unit test store actions, verify state updates, test selector performance, validate type safety",
+        "priority": "high",
+        "dependencies": [
+          48
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 53,
+        "title": "Implement Touch Gesture Support",
+        "description": "Add comprehensive touch gesture support with proper event handling",
+        "details": "Create useTouchGestures hook, implement long press detection, handle touch move events, add haptic feedback, manage gesture state, implement proper cleanup",
+        "testStrategy": "Test touch event handling, verify gesture recognition, validate haptic feedback, test cleanup",
+        "priority": "medium",
+        "dependencies": [
+          48,
+          52
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 54,
+        "title": "Develop Virtual Scrolling Implementation",
+        "description": "Implement virtual scrolling for efficient rendering of large datasets",
+        "details": "Create VirtualEventList component using react-window, implement event row virtualization, handle scroll performance, manage overscan, implement proper height calculations",
+        "testStrategy": "Performance testing with large datasets, verify scroll behavior, test memory usage, validate render efficiency",
+        "priority": "medium",
+        "dependencies": [
+          52
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 55,
+        "title": "Implement Accessibility Features",
+        "description": "Add comprehensive accessibility support including ARIA attributes and keyboard navigation",
+        "details": "Create AccessibleCalendarGrid component, implement keyboard navigation, add ARIA labels, manage focus states, implement screen reader announcements",
+        "testStrategy": "Test with screen readers, verify keyboard navigation, validate ARIA attributes, test focus management",
+        "priority": "high",
+        "dependencies": [
+          48,
+          52
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 56,
+        "title": "Setup Performance Monitoring",
+        "description": "Implement performance monitoring system with PerformanceObserver",
+        "details": "Create performance-monitor.ts, implement PerformanceObserver setup, add measurement utilities, implement warning system for slow operations, add performance marks and measures",
+        "testStrategy": "Verify performance measurements, test threshold warnings, validate observer setup, check measurement accuracy",
+        "priority": "medium",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 57,
+        "title": "Implement React 18 Concurrent Features",
+        "description": "Integrate React 18 concurrent features for better performance",
+        "details": "Update CalendarGrid with useTransition and useDeferredValue, implement concurrent rendering optimizations, manage loading states, handle suspended rendering",
+        "testStrategy": "Test concurrent rendering, verify transition states, validate deferred updates, test performance improvements",
+        "priority": "medium",
+        "dependencies": [
+          52,
+          54
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 58,
+        "title": "Add CSS Drag Styles and Animations",
+        "description": "Implement CSS styles and animations for drag operations",
+        "details": "Create drag-related CSS classes, implement visual feedback states, add transition animations, handle touch-action properties, manage pointer events",
+        "testStrategy": "Visual testing of drag states, verify animations, test style application, validate visual feedback",
+        "priority": "medium",
+        "dependencies": [
+          48
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 59,
+        "title": "Implement Error Boundaries",
+        "description": "Add error boundaries for graceful failure handling",
+        "details": "Create calendar error boundary components, implement fallback UI, add error logging, handle recovery actions, manage error state",
+        "testStrategy": "Test error recovery, verify fallback rendering, validate error logging, test boundary isolation",
+        "priority": "medium",
+        "dependencies": [
+          52
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 60,
+        "title": "Setup Debug Utilities",
+        "description": "Implement debugging utilities for development",
+        "details": "Create debug-z-index.js utility, implement stacking context visualization, add performance debugging tools, create development-only debugging features",
+        "testStrategy": "Verify debug output, test utility functions, validate development features, check console output",
+        "priority": "low",
+        "dependencies": [
+          49,
+          56
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 61,
+        "title": "Implement Undo/Redo System",
+        "description": "Add undo/redo functionality for calendar operations",
+        "details": "Create action history stack, implement undo/redo operations, manage state history, handle command pattern implementation, add keyboard shortcuts",
+        "testStrategy": "Test undo/redo operations, verify state restoration, validate history management, test keyboard shortcuts",
+        "priority": "low",
+        "dependencies": [
+          52
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 62,
+        "title": "Add Telemetry System",
+        "description": "Implement telemetry for tracking drag operation success rates",
+        "details": "Setup telemetry system, implement drag operation tracking, add success rate calculations, implement error tracking, add performance metrics collection",
+        "testStrategy": "Verify metric collection, test data accuracy, validate tracking implementation, check error logging",
+        "priority": "low",
+        "dependencies": [
+          56
+        ],
+        "status": "pending",
+        "subtasks": []
       }
     ],
     "metadata": {
       "created": "2025-08-22T21:12:58.974Z",
-      "updated": "2025-08-23T02:06:14.646Z",
+      "updated": "2025-08-23T07:32:40.641Z",
       "description": "Tasks for feature-full-year-viewport context"
     }
   }

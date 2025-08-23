@@ -122,21 +122,13 @@ Open [http://localhost:3000](http://localhost:3000) to see the Linear Calendar f
 Following our **comprehensive testing methodology**, all feature development must:
 ```bash
 # 1. Foundation Protection Testing (MANDATORY)
-npm run test:foundation                    # Validate locked structure
-npx playwright test tests/foundation-*.spec.ts
+npm run test:foundation
 
-# 2. Feature Testing (REQUIRED)
-npx playwright test tests/[feature].spec.ts
-npm run test:[feature-area]
+# 2. Full Test Suite (REQUIRED for PRs)
+npm run test:all
 
-# 3. Performance Testing (REQUIRED)  
-npm run test:performance                   # Maintain 112+ FPS benchmarks
-
-# 4. Cross-Platform Testing (REQUIRED)
-npm run test:mobile                       # Foundation on all devices
-
-# 5. Build Validation (REQUIRED)
-npm run build && npm run lint             # Production readiness
+# 3. Build Validation (REQUIRED)
+npm run build && npm run lint
 ```
 
 ## Project Structure
@@ -163,7 +155,7 @@ lineartime/
 │   └── sign-up/                # Authentication pages
 ├── components/
 │   ├── calendar/               # Calendar components
-│   │   ├── LinearCalendarVertical.tsx  # Main calendar component
+│   │   ├── LinearCalendarHorizontal.tsx  # Main calendar component
 │   │   ├── EventModal.tsx              # Event creation/editing
 │   │   ├── FilterPanel.tsx             # Category filters
 │   │   ├── ReflectionModal.tsx         # Year reflection

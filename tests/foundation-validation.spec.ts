@@ -1,5 +1,30 @@
-import { test, expect } from '@playwright/test';
-import { Page } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test'
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+const WEEKDAYS = ['Su','Mo','Tu','We','Th','Fr','Sa']
+
+test.describe('Foundation validation (horizontal year timeline)', () => {
+  test('renders the LinearTime application container', async ({ page }) => {
+    await page.goto('/')
+    await expect(
+      page.getByRole('application', { name: /Linear Calendar/i })
+    ).toBeVisible()
+  })
+
+  test('shows all twelve month labels', async ({ page }) => {
+    await page.goto('/')
+    for (const month of MONTHS) {
+      await expect(page.getByText(new RegExp(`^${month}$`))).toBeVisible()
+    }
+  })
+
+  test('shows weekday headers somewhere in the view', async ({ page }) => {
+    await page.goto('/')
+    for (const wd of WEEKDAYS) {
+      await expect(page.getByText(new RegExp(`^${wd}$`))).toBeVisible()
+    }
+  })
+})
 
 // Helper to wait for LinearCalendarHorizontal foundation to load
 async function waitForFoundation(page: Page) {
