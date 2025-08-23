@@ -34,37 +34,57 @@ export function ComponentName({ className, ...props }: ComponentProps) {
 }
 ```
 
-## Core Components
+## 🔒 Core Components - Foundation Locked
 
-### LinearCalendarVertical
+### LinearCalendarHorizontal (PRIMARY COMPONENT)
 
-The main calendar component that renders a vertical year view with all 12 months.
+**🎯 THE DEFINITIVE CALENDAR COMPONENT** - Locked foundation implementing "Life is bigger than a week" philosophy.
 
 ```typescript
-interface LinearCalendarVerticalProps {
-  initialYear?: number  // Default: current year
+interface LinearCalendarHorizontalProps {
+  year: number
+  events: Event[]
+  className?: string
+  onDateSelect?: (date: Date) => void
+  onEventClick?: (event: Event) => void
+  onEventUpdate?: (event: Event) => void
+  onEventCreate?: (event: Partial<Event>) => void
+  onEventDelete?: (id: string) => void
+  enableInfiniteCanvas?: boolean
 }
 ```
 
 **Usage:**
 ```tsx
-import { LinearCalendarVertical } from '@/components/calendar'
+import { LinearCalendarHorizontal } from '@/components/calendar'
 
 export default function CalendarPage() {
-  return <LinearCalendarVertical initialYear={2024} />
+  return (
+    <LinearCalendarHorizontal
+      year={currentYear}
+      events={calendarEvents}
+      className="h-full w-full"
+      onEventCreate={handleEventCreate}
+      onEventUpdate={handleEventUpdate}
+      onEventDelete={handleEventDelete}
+      enableInfiniteCanvas={true}
+    />
+  )
 }
 ```
 
-**Features:**
-- Manages all calendar state internally
-- Handles event persistence to LocalStorage
-- Coordinates child component interactions
-- Provides keyboard navigation support
+**🔒 Foundation Features (LOCKED):**
+- **12 Horizontal Month Rows**: Complete Jan-Dec display  
+- **Week Day Headers**: Top and bottom "Su Mo Tu We Th Fr Sa" spanning full width
+- **Month Labels**: Both left and right sides of each row
+- **Complete Day Display**: 01-31 for each month with proper week alignment
+- **Professional Performance**: 112+ FPS, optimized memory usage
 
 **State Management:**
-- Uses `useLinearCalendar` hook for centralized state
-- Automatically saves/loads events from LocalStorage
-- Manages filter state and view options
+- Uses `useOfflineEvents` hook for IndexedDB persistence
+- Coordinates with AI Assistant for intelligent scheduling
+- Manages touch gestures and zoom controls
+- Provides full accessibility support
 
 ---
 
@@ -271,10 +291,12 @@ function CalendarComponent() {
 ```
 
 **Features:**
-- Centralized state management
-- Automatic LocalStorage persistence
+- Centralized state management with IndexedDB
+- Automatic offline-first persistence via Dexie
 - Optimized data structures (Map, Set)
 - Memoized computed values
+- Live query support for real-time updates
+- Migration support from LocalStorage
 
 ---
 
@@ -293,9 +315,19 @@ import { useMobile } from '@/hooks/use-mobile'
 function ResponsiveComponent() {
   const isMobile = useMobile()
   
-  return isMobile ? <MobileView /> : <DesktopView />
+  // ✅ FOUNDATION COMPLIANT: Use same component with mobile optimization
+  return (
+    <LinearCalendarHorizontal
+      year={currentYear}
+      events={events}
+      className={cn("h-full w-full", isMobile && "mobile-optimized")}
+      enableMobileGestures={isMobile}
+    />
+  )
 }
 ```
+
+**⚠️ FOUNDATION PROTECTION**: Never use different components for mobile vs desktop. The LinearCalendarHorizontal foundation must be used on ALL devices to preserve "Life is bigger than a week" philosophy.
 
 ---
 

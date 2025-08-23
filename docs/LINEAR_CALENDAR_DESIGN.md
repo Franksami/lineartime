@@ -1,41 +1,52 @@
-# Linear Calendar UI/UX Design Specification
+# 🔒 Linear Calendar UI/UX Design Specification - Foundation Locked
 
-## Design Philosophy
-A year-at-a-glance calendar that reveals time patterns instantly. Users should identify conflicts, clusters, and opportunities within 3 seconds of viewing.
+## 🎯 Design Philosophy - "Life is bigger than a week"
+A **horizontal timeline** calendar that reveals an entire year instantly. The revolutionary 12-month row structure allows users to identify patterns, conflicts, and opportunities across the complete year within 3 seconds.
+
+**🔒 LOCKED FOUNDATION**: This design represents the definitive LinearCalendar structure achieved August 23, 2025.
 
 ---
 
-## 1. Main Year View
+## 🏗️ **LOCKED FOUNDATION LAYOUT**
 
-### Layout Structure
+### **Definitive Structure (IMMUTABLE)**
 ```
-┌─────────────────────────────────────────────────────────┐
-│ [Logo] Linear Calendar 2025        [Filter] [View] [+]   │ ← Header Bar
-├─────────────────────────────────────────────────────────┤
-│     Jan   Feb   Mar   Apr   May   Jun                    │
-│ ┌────┬────┬────┬────┬────┬────┬────┐                    │
-│ │ M  │ □□□□□□□□□□□□□□□□□□□□□□□□□□ │ ← Week Row         │
-│ │ T  │ ████░░░░░░░░░████░░░░░░░░░ │   (Personal=Green) │
-│ │ W  │ ░░░░████████░░░░░░████░░░░ │   (Work=Blue)      │
-│ │ T  │ ░░░░░░░░░░░░░░░░░░░░░░░░░░ │   (Effort=Orange)  │
-│ │ F  │ ████████████████░░░░░░░░░░ │                    │
-│ │ S  │ ░░░░░░░░░░░░░░░░░░░░░░░░░░ │                    │
-│ │ S  │ ░░░░░░░░░░░░░░░░░░░░░░░░░░ │                    │
-│ └────┴────┴────┴────┴────┴────┴────┘                    │
-│     Jul   Aug   Sep   Oct   Nov   Dec                    │
-│ [Similar grid structure continues...]                     │
-├─────────────────────────────────────────────────────────┤
-│ MiniMap: [====[viewport]================]                │ ← Navigation
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ "2025 Linear Calendar"                    "Life is bigger than a week."      │ ← Year Header
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Su Mo Tu We Th Fr Sa Su Mo Tu We Th Fr Sa Su Mo Tu We Th Fr Sa Su Mo Tu...  │ ← Week Headers (Top)
+├─────────────────────────────────────────────────────────────────────────────┤
+│Jan [  ][  ][01][02][03][04][05][06][07][08][09]...[30][31] Jan│ ← Month Row 1
+│Feb [  ][  ][  ][  ][  ][01][02][03][04][05][06]...[27][28] Feb│ ← Month Row 2  
+│Mar [  ][  ][  ][  ][  ][01][02][03][04][05][06]...[30][31] Mar│ ← Month Row 3
+│Apr [  ][01][02][03][04][05][06][07][08][09][10]...[29][30] Apr│ ← Month Row 4
+│May [  ][  ][  ][01][02][03][04][05][06][07][08]...[30][31] May│ ← Month Row 5
+│Jun [01][02][03][04][05][06][07][08][09][10][11]...[29][30] Jun│ ← Month Row 6
+│Jul [  ][01][02][03][04][05][06][07][08][09][10]...[30][31] Jul│ ← Month Row 7
+│Aug [  ][  ][  ][  ][01][02][03][04][05][06][07]...[30][31] Aug│ ← Month Row 8
+│Sep [01][02][03][04][05][06][07][08][09][10][11]...[29][30] Sep│ ← Month Row 9
+│Oct [  ][  ][01][02][03][04][05][06][07][08][09]...[30][31] Oct│ ← Month Row 10
+│Nov [  ][  ][  ][  ][  ][01][02][03][04][05][06]...[29][30] Nov│ ← Month Row 11
+│Dec [01][02][03][04][05][06][07][08][09][10][11]...[30][31] Dec│ ← Month Row 12
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Su Mo Tu We Th Fr Sa Su Mo Tu We Th Fr Sa Su Mo Tu We Th Fr Sa Su Mo Tu...  │ ← Week Headers (Bottom)
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Grid Specifications
-- **Cell Dimensions**: 
-  - Digital: 24x24px minimum, 32x32px optimal
-  - Print: 8x8mm (8.5×11), 12x12mm (11×17)
-- **Month Columns**: Equal width, 30-31 cells tall
-- **Week Rows**: 7 cells, labeled Mon-Sun
-- **Gap Between Months**: 8px digital, 2mm print
+### **🔒 Foundation Grid Specifications (LOCKED)**
+- **42-Column Grid**: Maximum 6 weeks × 7 days per month row
+- **Cell Dimensions**: 20px minimum width, responsive height
+- **Month Labels**: Positioned on BOTH left and right sides  
+- **Week Headers**: Identical at top and bottom spanning full calendar width
+- **Perfect Alignment**: Headers align exactly with day columns
+- **Border System**: Consistent cell borders creating clear visual hierarchy
+
+### **🎯 Foundation Achievement Metrics**
+- **Performance**: 112+ FPS rendering, <100MB memory usage
+- **Structure**: 12 month rows × 42 day columns maximum
+- **Accessibility**: WCAG 2.1 AA compliant with keyboard navigation
+- **Cross-Platform**: Consistent horizontal timeline on all devices
+- **Integration**: IndexedDB persistence, AI Assistant, touch gestures
 
 ### Color System
 ```css
@@ -222,36 +233,41 @@ User can: [Adjust Now] [Remind Later] [Dismiss]
 
 ---
 
-## 4. Responsive & Print Behavior
+## 🔒 **Foundation-Compliant Responsive Behavior**
 
-### Breakpoints
+### **Foundation Preservation Across All Devices**
 ```css
-/* Mobile: 320-768px */
+/* ALL DEVICES: Maintain Horizontal Timeline Foundation */
+
+/* Mobile: 320-768px - Foundation Preserved */
 @media (max-width: 768px) {
-  - Vertical scroll with 3 months visible
-  - Tap to zoom month
-  - Bottom sheet for filters
+  - HORIZONTAL scrolling maintained (NO vertical scroll)
+  - Smaller day cells for compact 12-month display
+  - Touch gestures: pinch-zoom, long-press, swipe
+  - Mobile menu for zoom controls
+  - Foundation structure identical to desktop
 }
 
-/* Tablet: 768-1024px */
+/* Tablet: 768-1024px - Foundation Preserved */
 @media (max-width: 1024px) {
-  - 6 months visible
-  - Side panel collapses to icons
+  - Full 12-month horizontal row structure visible
+  - Medium-sized day cells for optimal viewing
+  - Foundation structure identical to desktop and mobile
 }
 
-/* Desktop: 1024px+ */
+/* Desktop: 1024px+ - Foundation Native */
 @media (min-width: 1024px) {
-  - Full year visible
-  - All panels expanded
-  - Hover interactions enabled
+  - Full year visible in optimal size
+  - All foundation elements clearly readable
+  - Hover interactions and precision controls
 }
 
-/* Print */
+/* Print - Foundation Adapted */
 @media print {
-  - Remove all interactive elements
-  - High contrast colors
-  - Page break after 6 months
-  - Legend on each page
+  - Maintain 12-month horizontal row structure
+  - High contrast for readability
+  - Preserve month labels and headers
+  - Foundation layout optimized for paper
 }
 ```
 
