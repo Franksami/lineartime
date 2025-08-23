@@ -96,8 +96,40 @@ pnpm build
 # Run production server
 pnpm start
 
-# Lint code (no tests configured yet)
+# Lint code
 pnpm lint
+
+# MANDATORY: Foundation protection testing before any commits
+npm run test:foundation
+npx playwright test tests/foundation-*.spec.ts
+```
+
+### 🚨 **CRITICAL: CodeRabbit Review Workflow (MANDATORY)**
+```bash
+# ❌ NEVER push directly to main branch
+git push origin main  # BLOCKED by pre-push hook
+
+# ✅ REQUIRED workflow for ALL changes:
+# 1. Create feature branch
+git checkout -b feature/task-[ID]-[description]
+
+# 2. Implement with testing (follow TESTING_METHODOLOGY.md)
+npm run test:foundation    # MANDATORY foundation protection
+npx playwright test       # Feature functionality testing
+npm run build            # Production build validation
+
+# 3. Commit to feature branch (ONLY if tests pass)
+git add .
+git commit -m "[detailed testing validation commit message]"
+
+# 4. Push feature branch and create PR
+git push origin feature/[branch-name]
+gh pr create --title "Task #[ID]: [Feature]" --body "[testing details]"
+
+# 5. WAIT for CodeRabbit review and approval
+# 6. Merge ONLY after CodeRabbit approval
+
+# See docs/GIT_WORKFLOW_RULES.md for complete workflow
 ```
 
 ### Task Master Commands (Project Management)
