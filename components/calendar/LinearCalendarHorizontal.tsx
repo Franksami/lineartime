@@ -43,6 +43,7 @@ const MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
 
 // Day width at different zoom levels
 const ZOOM_LEVELS = {
+  fullYear: -1, // Special value: calculate dynamically for 53×7 grid
   year: 3,      // 3px per day - full year view
   quarter: 8,   // 8px per day - quarter view  
   month: 24,    // 24px per day - month view
@@ -52,6 +53,7 @@ const ZOOM_LEVELS = {
 
 // Mobile-specific zoom levels
 const MOBILE_ZOOM_LEVELS = {
+  fullYear: -1, // Special value: calculate dynamically for 53×7 grid
   year: 2,      // 2px per day - more compact for mobile
   quarter: 6,   // 6px per day - quarter view  
   month: 18,    // 18px per day - month view
@@ -60,6 +62,248 @@ const MOBILE_ZOOM_LEVELS = {
 }
 
 type ZoomLevel = keyof typeof ZOOM_LEVELS
+
+// Full Year Grid Component (12×371 layout)
+function FullYearGrid({ 
+  year, 
+  dayWidth, 
+  monthHeight, 
+  headerWidth,
+  headerHeight,
+  hoveredDate,
+  selectedDate,
+  onDateSelect,
+  setHoveredDate,
+  setSelectedDate,
+  handleDayMouseDown,
+  handleDayMouseEnter,
+  handleDayMouseUp,
+  format,
+  isSameDay,
+  isCreatingEvent,
+  creatingEventStart,
+  creatingEventEnd,
+  creatingEventMonth
+}: any) {
+  // Calculate year details
+  const yearStart = startOfYear(new Date(year, 0, 1))
+  const jan1DayOfWeek = yearStart.getDay() // 0 = Sunday, 6 = Saturday
+  const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)
+  const daysInYear = isLeapYear ? 366 : 365
+  
+  // Helper function to get date for a specific cell in each month row
+  const getDateForCell = (monthRow: number, col: number): Date | null => {
+    // Create date for first day of this month
+    const monthDate = new Date(year, monthRow, 1)
+    const firstDayOfWeek = monthDate.getDay() // 0 = Sunday
+    const daysInThisMonth = getDaysInMonth(monthDate)
+    
+    // Calculate day number (1-31) based on column position
+    // Account for empty cells at beginning of month for week alignment
+    const dayNumber = col - firstDayOfWeek + 1
+    
+    // Check if this column should show a day number for this month
+    if (dayNumber < 1 || dayNumber > daysInThisMonth) {
+      return null // Empty cell for alignment
+    }
+    
+    // Return the actual date for this day of the month
+    return new Date(year, monthRow, dayNumber)
+  }
+  
+  // Helper function to get column index for a specific date
+  const getColumnForDate = (date: Date): number => {
+    const dayOfYear = differenceInDays(date, yearStart) + 1
+    return jan1DayOfWeek + dayOfYear - 1
+  }
+  
+  // Create day-of-week headers (top) with visual week grouping
+  const dayHeadersTop = (
+    <div className="absolute top-0 left-0 right-0 bg-background border-b border-border flex z-20" style={{ height: headerHeight }}>
+      <div style={{ width: headerWidth }} className="border-r border-border bg-background" />
+      {Array.from({ length: 42 }).map((_, col) => {
+        const dayOfWeek = col % 7
+        const dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+        const dayName = dayNames[dayOfWeek]
+
+        return (
+          <div 
+            key={`header-top-${col}`}
+            className={cn(
+              "flex items-center justify-center text-[10px] font-medium text-muted-foreground relative",
+              col % 7 === 6 && "border-r-2 border-border/60", // Stronger week separator
+              dayOfWeek === 0 && col > 0 && "border-l border-border/30" // Start of week
+            )}
+            style={{ width: dayWidth }}
+          >
+            {dayName}
+          </div>
+        )
+      })}
+      <div style={{ width: headerWidth }} className="border-l border-border bg-background" />
+    </div>
+  )
+  
+  // Create day-of-week headers (bottom) - mirror of top for easy reference
+  const dayHeadersBottom = (
+    <div className="absolute bottom-0 left-0 right-0 bg-background border-t border-border flex z-20" style={{ height: headerHeight }}>
+      <div style={{ width: headerWidth }} className="border-r border-border bg-background" />
+      {Array.from({ length: 42 }).map((_, col) => {
+        const dayOfWeek = col % 7
+        const dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+        const dayName = dayNames[dayOfWeek]
+
+        return (
+          <div 
+            key={`header-bottom-${col}`}
+            className={cn(
+              "flex items-center justify-center text-[10px] font-medium text-muted-foreground",
+              col % 7 === 6 && "border-r-2 border-border/60", // Stronger week separator
+              dayOfWeek === 0 && col > 0 && "border-l border-border/30" // Start of week
+            )}
+            style={{ width: dayWidth }}
+          >
+            {dayName}
+          </div>
+        )
+      })}
+      <div style={{ width: headerWidth }} className="border-l border-border bg-background" />
+    </div>
+  )
+  
+  // Create month labels (left and right)
+  const monthLabelsLeft = (
+    <div className="absolute left-0 bg-background border-r border-border z-10" style={{ width: headerWidth, top: headerHeight, bottom: headerHeight }}>
+      {MONTH_SHORT.map((month, idx) => (
+        <div
+          key={`left-${month}`}
+          className="absolute flex items-center justify-center font-medium text-sm"
+          style={{
+            top: idx * monthHeight,
+            height: monthHeight,
+            width: headerWidth,
+            writingMode: 'vertical-rl',
+            transform: 'rotate(180deg)',
+            transformOrigin: 'center'
+          }}
+        >
+          {month}
+        </div>
+      ))}
+    </div>
+  )
+  
+  const monthLabelsRight = (
+    <div className="absolute right-0 bg-background border-l border-border z-10" style={{ width: headerWidth, top: headerHeight, bottom: headerHeight }}>
+      {MONTH_SHORT.map((month, idx) => (
+        <div
+          key={`right-${month}`}
+          className="absolute flex items-center justify-center font-medium text-sm"
+          style={{
+            top: idx * monthHeight,
+            height: monthHeight,
+            width: headerWidth,
+            writingMode: 'vertical-rl'
+          }}
+        >
+          {month}
+        </div>
+      ))}
+    </div>
+  )
+  
+  // Generate grid cells (12 months × 42 days max)
+  const gridCells = []
+  for (let monthRow = 0; monthRow < 12; monthRow++) {
+    for (let col = 0; col < 42; col++) {
+      const date = getDateForCell(monthRow, col)
+      // Weekend detection based on column position (0=Sunday, 6=Saturday)
+      const dayOfWeek = col % 7
+      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
+      const isCurrentDay = date && isToday(date)
+      const isSelected = date && selectedDate && isSameDay(date, selectedDate)
+      const isHovered = date && hoveredDate && isSameDay(date, hoveredDate)
+      const isEmpty = !date
+      
+      // Check if this day is part of the creating event range
+      const isInCreatingRange = date && isCreatingEvent && creatingEventStart && creatingEventEnd && 
+        date >= creatingEventStart && date <= creatingEventEnd && monthRow === creatingEventMonth
+      
+      gridCells.push(
+        <div
+          key={`${monthRow}-${col}`}
+          className={cn(
+            "absolute transition-colors",
+            col % 7 === 6 && "border-r-2 border-border/60", // week separator
+            isWeekend && "bg-muted/20",
+            isEmpty && "bg-transparent cursor-default"
+          )}
+          style={{
+            left: headerWidth + (col * dayWidth),
+            top: headerHeight + (monthRow * monthHeight),
+            width: dayWidth,
+            height: monthHeight
+          }}
+          onMouseDown={(e) => {
+            if (date) {
+              e.preventDefault()
+              handleDayMouseDown(date, monthRow)
+            }
+          }}
+          onMouseEnter={() => {
+            if (date) {
+              setHoveredDate(date)
+              handleDayMouseEnter(date)
+            }
+          }}
+          onMouseUp={handleDayMouseUp}
+          onMouseLeave={() => setHoveredDate(null)}
+          onClick={() => {
+            if (date && !isCreatingEvent) {
+              setSelectedDate(date)
+              onDateSelect?.(date)
+            }
+          }}
+          title={date ? format(date, 'EEEE, MMMM d, yyyy') : ''}
+        >
+          <div
+            className={cn(
+              "m-[2px] h-[calc(100%-4px)] rounded-sm border",
+              isEmpty ? "border-transparent" : "border-border/40",
+              isSelected && "ring-1 ring-blue-500",
+              isHovered && !isEmpty && "bg-accent/20",
+              isInCreatingRange && "bg-green-500/20"
+            )}
+            aria-hidden
+          >
+            <div className="w-full h-full flex items-center justify-center">
+              {!isEmpty && (
+                <span className={cn(
+                  "text-[10px] leading-none text-muted-foreground",
+                  isCurrentDay && "font-semibold text-primary"
+                )}>
+                  {format(date!, 'dd')}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      )
+    }
+  }
+  
+  return (
+    <div className="relative w-full h-full">
+      {dayHeadersTop}
+      {dayHeadersBottom}
+      {monthLabelsLeft}
+      {monthLabelsRight}
+      <div className="absolute inset-0" style={{ paddingTop: headerHeight, paddingBottom: headerHeight }}>
+        {gridCells}
+      </div>
+    </div>
+  )
+}
 
 // Touch gesture thresholds
 const TOUCH_THRESHOLDS = {
@@ -82,7 +326,7 @@ export function LinearCalendarHorizontal({
 }: LinearCalendarHorizontalProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [zoomLevel, setZoomLevel] = useState<ZoomLevel>('month')
+  const [zoomLevel, setZoomLevel] = useState<ZoomLevel>('fullYear')
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
@@ -134,16 +378,63 @@ export function LinearCalendarHorizontal({
   const [panY, setPanY] = useState(0)
   const [scale, setScale] = useState(1)
   
-  // Responsive dimensions
-  const dayWidth = isMobile ? MOBILE_ZOOM_LEVELS[zoomLevel] : ZOOM_LEVELS[zoomLevel]
-  const monthHeight = isMobile ? 60 : 80 // Smaller height on mobile
+  // Calculate viewport dimensions for fullYear grid
+  const [viewportWidth, setViewportWidth] = useState(0)
+  const [viewportHeight, setViewportHeight] = useState(0)
+  
+  // Define headerWidth first, before it's used in calculations
   const headerWidth = isMobile ? 50 : 80 // Narrower month column on mobile
+  const headerHeight = 24 // top and bottom header height
+  
+  // Update viewport size on mount and resize
+  useEffect(() => {
+    const updateSize = () => {
+      const width = scrollRef.current?.clientWidth || window.innerWidth
+      const height = scrollRef.current?.clientHeight || window.innerHeight
+      setViewportWidth(width)
+      setViewportHeight(height)
+    }
+    updateSize()
+    window.addEventListener('resize', updateSize)
+    return () => window.removeEventListener('resize', updateSize)
+  }, [])
+
+  // Ensure the calendar opens focused at the top-left of the full-year grid
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ left: 0, top: 0 })
+    }
+    // Reset any pan/zoom drift on initial mount
+    setPanX(0)
+    setPanY(0)
+    setScale(1)
+  }, [])
+  
+  // Calculate day width for fullYear zoom (42 columns per month row)
+  const calculateFullYearDayWidth = () => {
+    if (viewportWidth === 0) return 20 // Fallback
+    const availableWidth = viewportWidth - (headerWidth * 2) // Subtract left and right sidebars
+    return Math.max(18, availableWidth / 42) // 42 columns (6 weeks × 7 days)
+  }
+  
+  // Responsive dimensions
+  const isFullYearZoom = zoomLevel === 'fullYear'
+  const dayWidth = isFullYearZoom 
+    ? calculateFullYearDayWidth()
+    : (isMobile ? MOBILE_ZOOM_LEVELS[zoomLevel] : ZOOM_LEVELS[zoomLevel])
+  
+  // For fullYear grid: 12 rows (one per month)
+  const monthHeight = isFullYearZoom 
+    ? Math.max(44, Math.floor((viewportHeight - headerHeight * 2) / 12))
+    : (isMobile ? 60 : 80)
   const eventHeight = isMobile ? 18 : 22 // Smaller events on mobile
   const eventMargin = isMobile ? 1 : 2 // Tighter margins on mobile
   
   // Calculate total width needed
-  const totalDays = 365 + (year % 4 === 0 ? 1 : 0) // Account for leap year
-  const totalWidth = totalDays * dayWidth + headerWidth
+  const totalDays = isFullYearZoom ? 42 : (365 + (year % 4 === 0 ? 1 : 0))
+  const totalWidth = isFullYearZoom 
+    ? (42 * dayWidth + headerWidth * 2) // 42 day columns plus sidebars on both sides
+    : (totalDays * dayWidth + headerWidth)
   
   // Generate calendar data
   const calendarData = React.useMemo(() => {
@@ -188,6 +479,7 @@ export function LinearCalendarHorizontal({
   const processedEvents = React.useMemo(() => {
     return events.map(event => {
       const yearStart = startOfYear(new Date(year, 0, 1))
+      const jan1DayOfWeek = yearStart.getDay()
       const startDay = differenceInDays(startOfDay(event.startDate), yearStart) + 1
       const endDay = differenceInDays(endOfDay(event.endDate), yearStart) + 1
       const duration = endDay - startDay + 1
@@ -195,19 +487,36 @@ export function LinearCalendarHorizontal({
       // Determine which month row this event belongs to (based on start date)
       const eventMonth = event.startDate.getMonth()
       
+      // Calculate position based on zoom level
+      let left, width, top
+      
+      if (isFullYearZoom) {
+        // For 371-column grid: use column-based positioning
+        const startCol = jan1DayOfWeek + startDay - 1
+        const endCol = jan1DayOfWeek + endDay - 1
+        left = startCol * dayWidth + headerWidth
+        width = (endCol - startCol + 1) * dayWidth - 2
+        top = eventMonth * monthHeight + headerHeight + 4
+      } else {
+        // Normal horizontal layout
+        left = (startDay - 1) * dayWidth + headerWidth
+        width = duration * dayWidth - 2
+        top = eventMonth * monthHeight + 25
+      }
+      
       return {
         ...event,
         startDay,
         endDay,
         duration,
         month: eventMonth,
-        left: (startDay - 1) * dayWidth + headerWidth,
-        width: duration * dayWidth - 2, // -2 for padding
-        top: eventMonth * monthHeight + 25, // Position below month header
+        left,
+        width,
+        top,
         height: 20
       }
     })
-  }, [events, dayWidth, year])
+  }, [events, dayWidth, year, isFullYearZoom])
   
   // Group events by month and calculate stacking
   const eventsByMonth = React.useMemo(() => {
@@ -245,7 +554,7 @@ export function LinearCalendarHorizontal({
   
   // Pan and zoom handlers
   const handleZoomIn = () => {
-    const levels: ZoomLevel[] = ['year', 'quarter', 'month', 'week', 'day']
+    const levels: ZoomLevel[] = ['fullYear', 'year', 'quarter', 'month', 'week', 'day']
     const currentIndex = levels.indexOf(zoomLevel)
     if (currentIndex < levels.length - 1) {
       setZoomLevel(levels[currentIndex + 1])
@@ -253,7 +562,7 @@ export function LinearCalendarHorizontal({
   }
   
   const handleZoomOut = () => {
-    const levels: ZoomLevel[] = ['year', 'quarter', 'month', 'week', 'day']
+    const levels: ZoomLevel[] = ['fullYear', 'year', 'quarter', 'month', 'week', 'day']
     const currentIndex = levels.indexOf(zoomLevel)
     if (currentIndex > 0) {
       setZoomLevel(levels[currentIndex - 1])
@@ -285,18 +594,14 @@ export function LinearCalendarHorizontal({
     wheel: { preventDefault: true }
   })
   
-  // Scroll to today on mount
+  // Scroll to January 1st on mount (start of the year)
   useEffect(() => {
     if (scrollRef.current) {
-      const today = new Date()
-      if (today.getFullYear() === year) {
-        const yearStart = startOfYear(new Date(year, 0, 1))
-        const dayOfYear = differenceInDays(today, yearStart)
-        const scrollPosition = dayOfYear * dayWidth - scrollRef.current.clientWidth / 2
-        scrollRef.current.scrollLeft = Math.max(0, scrollPosition)
-      }
+      // Always start at the beginning of the year (January 1st)
+      scrollRef.current.scrollLeft = 0
+      scrollRef.current.scrollTop = 0
     }
-  }, [year, dayWidth])
+  }, [year])
   
   // Handle resize mouse move
   useEffect(() => {
@@ -480,8 +785,8 @@ export function LinearCalendarHorizontal({
         description: '',
         startDate: creatingEventStart,
         endDate: creatingEventEnd,
-        category: 'personal',
-        isRecurring: false
+        category: 'personal'
+        // recurring is optional, not setting it
       }
       
       // Call onEventCreate if provided
@@ -582,6 +887,20 @@ export function LinearCalendarHorizontal({
       role="application"
       aria-label={`Calendar for year ${year}. Press Enter to start navigation, use arrow keys to move between dates.`}
     >
+      {/* PRD Required Header Layout */}
+      <div className="absolute top-0 left-0 right-0 z-30 bg-background border-b border-border">
+        <div className="flex items-center justify-between px-6 py-3">
+          {/* Year title (top-left) */}
+          <h1 className="text-xl font-semibold text-foreground">
+            {year} Linear Calendar
+          </h1>
+          
+          {/* Tagline (top-right) */}
+          <p className="text-sm text-muted-foreground italic">
+            Life is bigger than a week.
+          </p>
+        </div>
+      </div>
       {/* Screen reader announcements */}
       <div
         ref={liveRegionRef}
@@ -619,13 +938,16 @@ export function LinearCalendarHorizontal({
       )}
       
       {/* Zoom Controls - Desktop or Mobile Menu */}
+      {/* Hide zoom controls while in fullYear to avoid drifting away from the startup view */}
       <div 
         id="mobile-menu"
         className={cn(
           "absolute z-20 bg-background/95 backdrop-blur-sm border rounded-lg",
-          isMobile ? (
-            isMobileMenuOpen ? "top-16 right-4 flex flex-col gap-2 p-3 shadow-lg" : "hidden"
-          ) : "top-4 right-4 flex items-center gap-2 p-1"
+          isFullYearZoom ? "hidden" : (
+            isMobile ? (
+              isMobileMenuOpen ? "top-16 right-4 flex flex-col gap-2 p-3 shadow-lg" : "hidden"
+            ) : "top-4 right-4 flex items-center gap-2 p-1"
+          )
         )}
         role="toolbar"
         aria-label="Zoom controls"
@@ -636,9 +958,9 @@ export function LinearCalendarHorizontal({
             "hover:bg-accent rounded transition-colors",
             isMobile ? "p-2 w-full flex items-center justify-center gap-2" : "p-1"
           )}
-          disabled={zoomLevel === 'year'}
+          disabled={zoomLevel === 'fullYear'}
           aria-label="Zoom out"
-          aria-disabled={zoomLevel === 'year'}
+          aria-disabled={zoomLevel === 'fullYear'}
         >
           <Minus className="h-4 w-4" aria-hidden="true" />
           {isMobile && <span className="text-sm">Zoom Out</span>}
@@ -703,22 +1025,52 @@ export function LinearCalendarHorizontal({
       {/* Main Calendar Container */}
       <div 
         ref={scrollRef}
-        className="overflow-auto h-full relative"
+        className="h-full relative"
+        style={{ 
+          cursor: enableInfiniteCanvas ? 'grab' : 'default',
+          paddingTop: '60px' // Account for header height
+        }}
         {...bind()}
-        style={{ cursor: enableInfiniteCanvas ? 'grab' : 'default' }}
         role="grid"
         aria-label={`Calendar grid for ${year}. ${keyboardMode ? 'Keyboard navigation active.' : 'Press Enter to activate keyboard navigation.'}`}
         aria-rowcount={12}
-        aria-colcount={31}
+        aria-colcount={42}
       >
         <div 
           className="relative"
           style={{ 
             width: totalWidth,
-            height: 12 * monthHeight,
+            height: isFullYearZoom ? (12 * monthHeight + headerHeight * 2) : (12 * monthHeight),
             minWidth: '100%'
           }}
         >
+          {/* Render based on zoom mode */}
+          {isFullYearZoom ? (
+            // Full Year Grid View (12×371)
+            <FullYearGrid
+              year={year}
+              dayWidth={dayWidth}
+              monthHeight={monthHeight}
+              headerWidth={headerWidth}
+              headerHeight={headerHeight}
+              hoveredDate={hoveredDate}
+              selectedDate={selectedDate}
+              onDateSelect={onDateSelect}
+              setHoveredDate={setHoveredDate}
+              setSelectedDate={setSelectedDate}
+              handleDayMouseDown={handleDayMouseDown}
+              handleDayMouseEnter={handleDayMouseEnter}
+              handleDayMouseUp={handleDayMouseUp}
+              format={format}
+              isSameDay={isSameDay}
+              isCreatingEvent={isCreatingEvent}
+              creatingEventStart={creatingEventStart}
+              creatingEventEnd={creatingEventEnd}
+              creatingEventMonth={creatingEventMonth}
+            />
+          ) : (
+            // Normal horizontal month rows
+            <>
           {/* Month Rows */}
           {calendarData.map((month, monthIndex) => (
             <div 
@@ -809,22 +1161,37 @@ export function LinearCalendarHorizontal({
               </div>
             </div>
           ))}
+            </>
+          )}
           
           {/* Creating Event Preview */}
           {isCreatingEvent && creatingEventStart && creatingEventEnd && creatingEventMonth !== null && (
-            <div className="absolute pointer-events-none" style={{ marginLeft: headerWidth }}>
+            <div className="absolute pointer-events-none" style={{ marginLeft: isFullYearZoom ? 0 : headerWidth }}>
               {(() => {
                 const yearStart = startOfYear(new Date(year, 0, 1))
+                const jan1DayOfWeek = yearStart.getDay()
                 const startDay = differenceInDays(startOfDay(creatingEventStart), yearStart) + 1
                 const endDay = differenceInDays(endOfDay(creatingEventEnd), yearStart) + 1
                 const duration = endDay - startDay + 1
+                
+                let left, top
+                if (isFullYearZoom) {
+                  // For 371-column grid
+                  const startCol = jan1DayOfWeek + startDay - 1
+                  left = startCol * dayWidth + headerWidth
+                  top = creatingEventMonth * monthHeight + headerHeight + 4
+                } else {
+                  // Normal layout
+                  left = (startDay - 1) * dayWidth
+                  top = creatingEventMonth * monthHeight + 25
+                }
                 
                 return (
                   <div
                     className="absolute bg-green-500/50 rounded-sm border-2 border-green-500 border-dashed"
                     style={{
-                      left: (startDay - 1) * dayWidth,
-                      top: creatingEventMonth * monthHeight + 25,
+                      left,
+                      top,
                       width: duration * dayWidth - 2,
                       height: 20
                     }}
@@ -839,7 +1206,7 @@ export function LinearCalendarHorizontal({
           )}
           
           {/* Event Bars */}
-          <div className="absolute inset-0 pointer-events-none" style={{ marginLeft: headerWidth }}>
+          <div className="absolute inset-0 pointer-events-none" style={{ marginLeft: isFullYearZoom ? 0 : headerWidth }}>
             {processedEvents.map((event, index) => {
               const stackRow = (event as any).stackRow || 0
               const categoryColors = {
@@ -881,9 +1248,9 @@ export function LinearCalendarHorizontal({
                     }
                   }}
                   style={{
-                    left: event.left - headerWidth,
-                    top: event.top + (stackRow * (eventHeight + eventMargin)) + 4,
-                    width: Math.max(event.width - 2, 30), // Minimum width for visibility
+                    left: isFullYearZoom ? event.left : (event.left - headerWidth),
+                    top: event.top + (stackRow * (eventHeight + eventMargin)) + (isFullYearZoom ? 0 : 4),
+                    width: Math.max(event.width - 2, isFullYearZoom ? 10 : 30), // Smaller minimum for grid view
                     height: eventHeight
                   }}
                   draggable

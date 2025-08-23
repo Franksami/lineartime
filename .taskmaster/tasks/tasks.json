@@ -2628,5 +2628,711 @@
       "updated": "2025-08-20T18:18:04.698Z",
       "description": "Tasks for feature-linear-calendar context"
     }
+  },
+  "feature-full-year-viewport": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Initialize Project Structure and Core Dependencies",
+        "description": "Set up the base project structure with required dependencies, configuration files, and implement the basic component hierarchy.",
+        "details": "1. Initialize project with Vite/React\n2. Install dependencies: @dnd-kit/core, floating-ui, geist-ui\n3. Set up TypeScript configuration\n4. Implement basic component structure as specified in PRD\n5. Configure CSS variables for Geist design system\n6. Set up testing environment with Jest/React Testing Library",
+        "testStrategy": "1. Verify all dependencies are correctly installed and working\n2. Test basic component rendering\n3. Validate TypeScript configuration\n4. Check Geist theme integration",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Implement Core Calendar Grid Layout",
+        "description": "Create the responsive calendar grid layout that displays 365/366 days without horizontal scrolling.",
+        "details": "1. Implement CSS Grid layout as specified in PRD\n2. Calculate cell widths using formula: (viewportWidth - sidebarWidth * 2) / 53\n3. Create fixed-size tracks\n4. Implement 100vh container with proper grid template areas\n5. Handle leap year logic",
+        "testStrategy": "1. Test responsive behavior across different viewport sizes\n2. Verify grid calculations\n3. Check cell sizing consistency\n4. Validate leap year handling",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Develop Month and Day Headers",
+        "description": "Implement sticky day-of-week headers and rotated month name sidebars with proper positioning.",
+        "details": "1. Create abbreviated day headers (Su-Sa)\n2. Implement month positioning algorithm using cumulative day offsets\n3. Add sticky positioning for headers\n4. Implement 90° rotated month labels\n5. Handle month span calculations",
+        "testStrategy": "1. Verify header alignment with grid\n2. Test sticky behavior\n3. Validate month label positioning\n4. Check rotation and visibility",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Implement Event Data Model and State Management",
+        "description": "Create the event data structure and state management system with undo/redo capability.",
+        "details": "1. Implement CalendarEvent interface\n2. Set up centralized state management\n3. Create immutable update patterns\n4. Implement undo/redo system\n5. Add optimistic updates\n6. Set up IndexedDB persistence",
+        "testStrategy": "1. Unit test event operations\n2. Verify state immutability\n3. Test undo/redo functionality\n4. Validate persistence layer",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Develop Drag and Drop System",
+        "description": "Implement draggable event functionality using @dnd-kit/core with accessibility support.",
+        "details": "1. Set up @dnd-kit/core integration\n2. Implement drag phases (start, move, end)\n3. Add collision detection\n4. Implement snap-to-grid\n5. Add transform animations\n6. Handle accessibility requirements",
+        "testStrategy": "1. Test drag and drop operations\n2. Verify collision handling\n3. Check animation performance\n4. Validate accessibility compliance",
+        "priority": "high",
+        "dependencies": [
+          4
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Create Event Resize System",
+        "description": "Implement resizable event blocks with proper constraints and animation.",
+        "details": "1. Implement resize handlers\n2. Add direction-based resizing logic\n3. Implement duration constraints\n4. Add performance optimizations\n5. Handle edge cases",
+        "testStrategy": "1. Test resize operations\n2. Verify constraint handling\n3. Check animation smoothness\n4. Validate edge cases",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Implement Event Stacking Algorithm",
+        "description": "Create the vertical stacking system for overlapping events using layers.",
+        "details": "1. Implement layer assignment algorithm\n2. Optimize space utilization\n3. Handle overlap detection\n4. Implement layer reordering\n5. Add performance optimizations",
+        "testStrategy": "1. Test layer assignment\n2. Verify overlap handling\n3. Check performance with many events\n4. Validate visual layout",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Develop Floating Toolbar",
+        "description": "Create the floating toolbar system with smart positioning and action handling.",
+        "details": "1. Implement Floating UI integration\n2. Create toolbar actions\n3. Add keyboard shortcuts\n4. Handle multi-select\n5. Implement smart positioning",
+        "testStrategy": "1. Test toolbar positioning\n2. Verify action handling\n3. Check keyboard shortcuts\n4. Validate multi-select operations",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Event Duplication System",
+        "description": "Create the event duplication functionality with keyboard shortcuts and undo support.",
+        "details": "1. Implement duplication logic\n2. Add keyboard shortcuts\n3. Handle layer adjustment\n4. Implement undo support\n5. Add context menu integration",
+        "testStrategy": "1. Test duplication operations\n2. Verify keyboard shortcuts\n3. Check undo functionality\n4. Validate layer handling",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          7,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Create Inline Event Editing",
+        "description": "Implement inline editing capability with formatting toolbar and keyboard controls.",
+        "details": "1. Create inline editor component\n2. Add formatting toolbar\n3. Implement keyboard controls\n4. Handle save/cancel operations\n5. Add input validation",
+        "testStrategy": "1. Test editing operations\n2. Verify keyboard handling\n3. Check formatting options\n4. Validate input sanitization",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Implement Accessibility Features",
+        "description": "Add comprehensive accessibility support including ARIA labels and keyboard navigation.",
+        "details": "1. Add ARIA roles and labels\n2. Implement keyboard navigation\n3. Add live regions\n4. Create screen reader announcements\n5. Implement focus management",
+        "testStrategy": "1. Test with screen readers\n2. Verify keyboard navigation\n3. Check ARIA compliance\n4. Validate focus handling",
+        "priority": "high",
+        "dependencies": [
+          2,
+          3,
+          5,
+          6,
+          8,
+          10
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Implement Performance Optimizations",
+        "description": "Add performance optimizations including React.memo, windowing, and animation optimizations.",
+        "details": "1. Implement React.memo for cells\n2. Add windowing for large event sets\n3. Optimize animations\n4. Implement lazy loading\n5. Add performance monitoring",
+        "testStrategy": "1. Run performance benchmarks\n2. Test with large datasets\n3. Verify animation FPS\n4. Validate memory usage",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          5,
+          6,
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "Setup Core Project Infrastructure",
+        "description": "Initialize project repository with necessary dependencies and basic project structure for the Linear Calendar application",
+        "details": "1. Create new repository\n2. Setup TypeScript configuration\n3. Initialize package.json with core dependencies\n4. Configure ESLint and Prettier\n5. Setup basic folder structure:\n   - src/\n   - components/\n   - models/\n   - services/\n   - utils/\n6. Create initial README.md\n7. Setup build pipeline with Vite",
+        "testStrategy": "1. Verify all scripts run successfully (build, test, lint)\n2. Ensure TypeScript compilation works\n3. Validate ESLint rules\n4. Confirm development server starts correctly",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "Implement Core Data Model",
+        "description": "Create the fundamental data structures and types for events, including JSON/Markdown schema implementation",
+        "details": "1. Define TypeScript interfaces for:\n   - Event (type, title, dates, metadata, status)\n   - EventType enum (personal, work, effort)\n   - EventStatus enum (tentative, confirmed, canceled)\n2. Implement data validation utilities\n3. Create JSON schema for data persistence\n4. Build serialization/deserialization helpers",
+        "testStrategy": "1. Unit tests for all data models\n2. Validation tests for each field type\n3. Serialization/deserialization tests\n4. Edge case handling tests",
+        "priority": "high",
+        "dependencies": [
+          13
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "Develop Year Grid Renderer",
+        "description": "Create the core visualization component for displaying the full-year calendar grid",
+        "details": "1. Implement grid layout using CSS Grid\n2. Create date cell component\n3. Add month/week labels\n4. Implement horizontal/vertical layout switching\n5. Add zoom functionality\n6. Ensure responsive design\n7. Optimize rendering performance",
+        "testStrategy": "1. Visual regression tests for layout\n2. Responsive design tests\n3. Performance benchmarks\n4. Browser compatibility tests",
+        "priority": "high",
+        "dependencies": [
+          13,
+          14
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 16,
+        "title": "Build Event Rendering System",
+        "description": "Implement the visual representation of events within the year grid",
+        "details": "1. Create event block component\n2. Implement color coding by event type\n3. Handle event duration visualization\n4. Add hover states and tooltips\n5. Implement overlap detection and visualization\n6. Add visual indicators for tentative/confirmed status",
+        "testStrategy": "1. Unit tests for event rendering logic\n2. Visual tests for different event types\n3. Interaction tests for hover states\n4. Overlap detection accuracy tests",
+        "priority": "high",
+        "dependencies": [
+          14,
+          15
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 17,
+        "title": "Implement Event Management UI",
+        "description": "Create interfaces for adding, editing, and managing calendar events",
+        "details": "1. Build event creation modal\n2. Implement event editing form\n3. Add drag-and-drop functionality\n4. Create delete/cancel functionality\n5. Implement undo/redo system\n6. Add batch editing capabilities",
+        "testStrategy": "1. Integration tests for CRUD operations\n2. User interaction tests\n3. Drag-and-drop functionality tests\n4. Form validation tests",
+        "priority": "high",
+        "dependencies": [
+          14,
+          16
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 18,
+        "title": "Develop Filtering System",
+        "description": "Create filtering mechanism for different view modes and categories",
+        "details": "1. Implement filter controls panel\n2. Add toggle functionality for Personal/Work/Efforts\n3. Create filtered view renderer\n4. Add search functionality\n5. Implement filter state management\n6. Add filter persistence",
+        "testStrategy": "1. Unit tests for filter logic\n2. Integration tests for filter UI\n3. Performance tests for filtered views\n4. State management tests",
+        "priority": "medium",
+        "dependencies": [
+          16
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 19,
+        "title": "Create Reflection Workflow",
+        "description": "Implement the reflection system with prompts and analysis tools",
+        "details": "1. Build reflection prompt component\n2. Implement clustering analysis\n3. Create workload assessment visualization\n4. Add reflection data persistence\n5. Implement reflection scheduling system",
+        "testStrategy": "1. User interaction tests for prompts\n2. Clustering algorithm tests\n3. Data persistence tests\n4. UI/UX usability tests",
+        "priority": "medium",
+        "dependencies": [
+          16,
+          17
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 20,
+        "title": "Implement Print Mode",
+        "description": "Create printable version of the calendar with appropriate layouts",
+        "details": "1. Implement print-specific CSS\n2. Create print layout generator\n3. Add page break optimization\n4. Implement print preview\n5. Support multiple paper sizes (8.5×11, 11×17)",
+        "testStrategy": "1. Print layout tests\n2. Different paper size tests\n3. Browser print compatibility tests\n4. Print preview accuracy tests",
+        "priority": "low",
+        "dependencies": [
+          15,
+          16
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 21,
+        "title": "Develop Obsidian Plugin Integration",
+        "description": "Create Obsidian plugin for calendar integration and note synchronization",
+        "details": "1. Setup Obsidian plugin structure\n2. Implement file-based event detection\n3. Create UI panel integration\n4. Add plugin settings management\n5. Implement note synchronization\n6. Add markdown parsing/generation",
+        "testStrategy": "1. Plugin API compatibility tests\n2. File system interaction tests\n3. Settings management tests\n4. Sync functionality tests",
+        "priority": "high",
+        "dependencies": [
+          14,
+          16
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 22,
+        "title": "Implement Notion Integration",
+        "description": "Create Notion integration for database synchronization",
+        "details": "1. Implement Notion API client\n2. Create database mapping system\n3. Add two-way sync functionality\n4. Implement error handling\n5. Add conflict resolution\n6. Create sync status monitoring",
+        "testStrategy": "1. API integration tests\n2. Sync functionality tests\n3. Error handling tests\n4. Performance monitoring tests",
+        "priority": "medium",
+        "dependencies": [
+          14
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 23,
+        "title": "Build Google Calendar Integration",
+        "description": "Implement Google Calendar API integration for event synchronization",
+        "details": "1. Setup OAuth authentication\n2. Implement Calendar API client\n3. Create event mapping system\n4. Add import/export functionality\n5. Implement sync scheduling\n6. Add conflict resolution",
+        "testStrategy": "1. OAuth flow tests\n2. API integration tests\n3. Sync functionality tests\n4. Error handling tests",
+        "priority": "medium",
+        "dependencies": [
+          14
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 24,
+        "title": "Implement Collaboration Features",
+        "description": "Create shared calendar functionality with real-time updates",
+        "details": "1. Implement multi-user support\n2. Add commenting system\n3. Create shared view management\n4. Implement real-time updates\n5. Add access control\n6. Create activity logging",
+        "testStrategy": "1. Multi-user interaction tests\n2. Real-time sync tests\n3. Access control tests\n4. Performance tests under load",
+        "priority": "low",
+        "dependencies": [
+          14,
+          16,
+          17
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 25,
+        "title": "Create Alternative Visualizations",
+        "description": "Implement additional visualization modes including heatmaps and bandwidth graphs",
+        "details": "1. Create heatmap visualization\n2. Implement bandwidth graph\n3. Add visualization switcher\n4. Create custom visualization API\n5. Implement data transformers\n6. Add visualization settings",
+        "testStrategy": "1. Visualization accuracy tests\n2. Performance tests\n3. Data transformation tests\n4. UI interaction tests",
+        "priority": "low",
+        "dependencies": [
+          15,
+          16,
+          18
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 26,
+        "title": "Implement Knowledge Timeline Overlay",
+        "description": "Create visualization system for displaying notes and knowledge artifacts over time",
+        "details": "1. Implement note detection system\n2. Create timeline overlay renderer\n3. Add note clustering\n4. Implement filtering system\n5. Add search functionality\n6. Create note preview system",
+        "testStrategy": "1. Note detection accuracy tests\n2. Timeline rendering tests\n3. Search functionality tests\n4. Performance optimization tests",
+        "priority": "low",
+        "dependencies": [
+          15,
+          21
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 27,
+        "title": "Performance Optimization and Testing",
+        "description": "Optimize application performance and implement comprehensive testing",
+        "details": "1. Implement performance monitoring\n2. Optimize rendering pipeline\n3. Add load testing\n4. Implement caching system\n5. Optimize data structures\n6. Add performance benchmarks",
+        "testStrategy": "1. Performance benchmark tests\n2. Load testing scenarios\n3. Memory usage tests\n4. Browser compatibility tests",
+        "priority": "high",
+        "dependencies": [
+          15,
+          16,
+          17,
+          18
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 28,
+        "title": "Remove MobileCalendarView Component",
+        "description": "Remove the mobile-specific calendar view and ensure LinearCalendarHorizontal is used across all devices",
+        "details": "1. Remove MobileCalendarView.tsx component\n2. Update app/page.tsx to remove mobile conditional rendering\n3. Remove all imports and references to MobileCalendarView\n4. Update LinearCalendarHorizontal props interface to include isMobileOptimized\n5. Clean up any mobile-specific styles or components",
+        "testStrategy": "1. Verify MobileCalendarView is completely removed\n2. Test that LinearCalendarHorizontal renders on mobile devices\n3. Check that no references to MobileCalendarView remain\n4. Validate bundle size reduction",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Remove MobileCalendarView Component and Files",
+            "description": "Delete the MobileCalendarView.tsx component file and any associated test files, styles, or utilities specific to this component",
+            "dependencies": [],
+            "details": "1. Delete MobileCalendarView.tsx\n2. Remove associated test files (MobileCalendarView.test.tsx)\n3. Delete any mobile-specific utility functions\n4. Remove mobile-specific style files or classes\n5. Update git tracking to remove deleted files",
+            "status": "pending",
+            "testStrategy": "Verify all files are properly removed and project builds successfully without any reference errors"
+          },
+          {
+            "id": 2,
+            "title": "Update LinearCalendarHorizontal Component Interface",
+            "description": "Modify LinearCalendarHorizontal component to include mobile optimization props and handling",
+            "dependencies": [
+              "28.1"
+            ],
+            "details": "1. Add isMobileOptimized boolean prop to interface\n2. Add touchEnabled boolean prop\n3. Update prop types documentation\n4. Add default values for new props\n5. Implement basic prop handling logic",
+            "status": "pending",
+            "testStrategy": "Unit test new props and their default values, verify type safety"
+          },
+          {
+            "id": 3,
+            "title": "Update App Page Component",
+            "description": "Modify app/page.tsx to remove conditional rendering logic for mobile views and implement unified approach",
+            "dependencies": [
+              "28.1",
+              "28.2"
+            ],
+            "details": "1. Remove useMediaQuery hook for mobile detection\n2. Update LinearCalendarHorizontal implementation\n3. Remove mobile-specific imports\n4. Pass device type as prop to LinearCalendarHorizontal\n5. Clean up any unused variables or imports",
+            "status": "pending",
+            "testStrategy": "Test page rendering across different viewport sizes, verify no console errors"
+          },
+          {
+            "id": 4,
+            "title": "Clean Up Mobile-Specific Styles",
+            "description": "Remove mobile-specific styles and update responsive styling approach in LinearCalendarHorizontal",
+            "dependencies": [
+              "28.2"
+            ],
+            "details": "1. Remove mobile-only CSS classes\n2. Update responsive breakpoints\n3. Implement unified styling approach\n4. Update theme variables for responsive design\n5. Remove unused style imports",
+            "status": "pending",
+            "testStrategy": "Visual regression testing across different viewport sizes"
+          },
+          {
+            "id": 5,
+            "title": "Verify and Test Component Integration",
+            "description": "Comprehensive testing of the unified calendar component across all device types",
+            "dependencies": [
+              "28.3",
+              "28.4"
+            ],
+            "details": "1. Test component rendering on desktop\n2. Test component rendering on mobile devices\n3. Verify touch interactions work correctly\n4. Check responsive behavior\n5. Validate bundle size reduction",
+            "status": "pending",
+            "testStrategy": "End-to-end testing across different devices and browsers, performance testing, accessibility testing"
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "title": "Implement Mobile Optimization for LinearCalendarHorizontal",
+        "description": "Adapt LinearCalendarHorizontal component for mobile viewports while maintaining the foundation structure",
+        "details": "1. Add isMobileOptimized prop handling\n2. Implement responsive styles for mobile view\n3. Add touch-friendly dimensions and spacing\n4. Optimize horizontal scrolling for touch devices\n5. Implement touch event handlers\n6. Add mobile-specific gesture controls",
+        "testStrategy": "1. Test responsive behavior across different screen sizes\n2. Verify touch scrolling works smoothly\n3. Validate gesture controls\n4. Check accessibility on mobile devices\n5. Measure performance metrics on mobile",
+        "priority": "high",
+        "dependencies": [
+          28
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 30,
+        "title": "Integrate Event Creation System",
+        "description": "Implement and verify click-and-drag event creation functionality within LinearCalendarHorizontal",
+        "details": "1. Implement drag event handlers\n2. Add event creation overlay\n3. Create event positioning algorithm\n4. Implement event stacking logic\n5. Add event category selection\n6. Integrate with IndexedDB for persistence",
+        "testStrategy": "1. Test drag-to-create functionality\n2. Verify event positioning accuracy\n3. Check category assignment\n4. Validate event persistence\n5. Test edge cases and boundary conditions",
+        "priority": "high",
+        "dependencies": [
+          29
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 31,
+        "title": "Implement FloatingToolbar for Event Management",
+        "description": "Create and integrate floating toolbar for event editing and management",
+        "details": "1. Create FloatingToolbar component\n2. Implement event selection handling\n3. Add edit, delete, and move options\n4. Implement event resizing handles\n5. Add position calculation logic\n6. Implement toolbar animations",
+        "testStrategy": "1. Test toolbar appearance on event selection\n2. Verify all CRUD operations\n3. Test positioning across viewport\n4. Validate accessibility\n5. Check touch interaction support",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 32,
+        "title": "Implement IndexedDB Integration",
+        "description": "Complete implementation of IndexedDB persistence layer for events",
+        "details": "1. Create useOfflineEvents hook\n2. Implement IndexedDB CRUD operations\n3. Add event sync logic\n4. Implement error handling\n5. Add migration support\n6. Implement cache management",
+        "testStrategy": "1. Test data persistence across refreshes\n2. Verify CRUD operations\n3. Test offline functionality\n4. Validate data integrity\n5. Performance testing with large datasets",
+        "priority": "high",
+        "dependencies": [
+          30
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 33,
+        "title": "Implement Command Bar Integration",
+        "description": "Integrate command bar with natural language parsing for event creation",
+        "details": "1. Implement Cmd+K shortcut handler\n2. Integrate Chrono.js for date parsing\n3. Create command parser\n4. Add event creation flow\n5. Implement search functionality\n6. Add filter options",
+        "testStrategy": "1. Test keyboard shortcut functionality\n2. Verify natural language parsing accuracy\n3. Test search and filter operations\n4. Validate accessibility\n5. Check mobile support",
+        "priority": "medium",
+        "dependencies": [
+          32
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 34,
+        "title": "Integrate AI Assistant Panel",
+        "description": "Implement AI assistant functionality for calendar management",
+        "details": "1. Create AI Assistant panel component\n2. Implement scheduling suggestions\n3. Add conflict resolution logic\n4. Integrate with event system\n5. Add AI tools interface\n6. Implement response handling",
+        "testStrategy": "1. Test AI suggestions accuracy\n2. Verify conflict detection\n3. Test scheduling optimization\n4. Validate response times\n5. Check integration with events",
+        "priority": "medium",
+        "dependencies": [
+          33
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 35,
+        "title": "Implement Canvas Rendering System",
+        "description": "Integrate canvas-based rendering for improved performance with large datasets",
+        "details": "1. Integrate CalendarRenderer.ts\n2. Implement canvas drawing logic\n3. Add event rendering optimization\n4. Implement layer management\n5. Add performance monitoring\n6. Create toggle mechanism",
+        "testStrategy": "1. Test rendering performance\n2. Verify visual accuracy\n3. Test with 10K+ events\n4. Measure memory usage\n5. Validate FPS maintenance",
+        "priority": "medium",
+        "dependencies": [
+          31
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 36,
+        "title": "Implement Virtual Scrolling",
+        "description": "Integrate horizontal virtual scrolling for efficient rendering",
+        "details": "1. Integrate VirtualCalendar.tsx\n2. Implement viewport calculations\n3. Add event virtualization\n4. Implement scroll optimization\n5. Add buffer management\n6. Optimize memory usage",
+        "testStrategy": "1. Test scroll performance\n2. Verify render accuracy\n3. Test with large datasets\n4. Validate memory usage\n5. Check mobile performance",
+        "priority": "medium",
+        "dependencies": [
+          35
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 37,
+        "title": "Implement Touch Gesture System",
+        "description": "Add comprehensive touch gesture support for mobile devices",
+        "details": "1. Implement touch event handlers\n2. Add pinch-to-zoom support\n3. Create gesture recognition system\n4. Add momentum scrolling\n5. Implement touch feedback\n6. Add gesture guides",
+        "testStrategy": "1. Test all gesture interactions\n2. Verify smooth scrolling\n3. Test zoom functionality\n4. Validate feedback system\n5. Check gesture accuracy",
+        "priority": "high",
+        "dependencies": [
+          29
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 38,
+        "title": "Implement Performance Monitoring System",
+        "description": "Add comprehensive performance monitoring and optimization",
+        "details": "1. Implement FPS monitoring\n2. Add memory usage tracking\n3. Create performance metrics dashboard\n4. Implement optimization triggers\n5. Add performance logging\n6. Create alert system",
+        "testStrategy": "1. Verify metrics accuracy\n2. Test optimization triggers\n3. Validate logging system\n4. Check alert functionality\n5. Test dashboard updates",
+        "priority": "medium",
+        "dependencies": [
+          35,
+          36
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 39,
+        "title": "Implement Convex Backend Integration",
+        "description": "Integrate Convex backend for real-time collaboration",
+        "details": "1. Setup Convex connection\n2. Implement data migration\n3. Add real-time sync\n4. Create conflict resolution\n5. Implement user management\n6. Add collaboration features",
+        "testStrategy": "1. Test real-time updates\n2. Verify data migration\n3. Test multi-user scenarios\n4. Validate conflict handling\n5. Check offline fallback",
+        "priority": "low",
+        "dependencies": [
+          32
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 40,
+        "title": "Implement Google Calendar Integration",
+        "description": "Complete Google Calendar API integration for calendar sync",
+        "details": "1. Implement OAuth flow\n2. Create sync service\n3. Add event mapping\n4. Implement conflict resolution\n5. Add sync settings\n6. Create sync status UI",
+        "testStrategy": "1. Test OAuth process\n2. Verify bi-directional sync\n3. Test conflict handling\n4. Validate data mapping\n5. Check error handling",
+        "priority": "low",
+        "dependencies": [
+          32
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 41,
+        "title": "Implement Microsoft Graph Integration",
+        "description": "Complete Microsoft Calendar integration via Graph API",
+        "details": "1. Setup Graph API connection\n2. Implement authentication\n3. Create sync service\n4. Add event mapping\n5. Implement error handling\n6. Add sync controls",
+        "testStrategy": "1. Test authentication flow\n2. Verify sync functionality\n3. Test error scenarios\n4. Validate data integrity\n5. Check sync controls",
+        "priority": "low",
+        "dependencies": [
+          32
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 42,
+        "title": "Implement CalDAV Support",
+        "description": "Add CalDAV protocol support for calendar synchronization",
+        "details": "1. Implement CalDAV client\n2. Add protocol handlers\n3. Create sync service\n4. Implement authentication\n5. Add error handling\n6. Create sync UI",
+        "testStrategy": "1. Test CalDAV connectivity\n2. Verify sync operations\n3. Test authentication\n4. Validate protocol handling\n5. Check error scenarios",
+        "priority": "low",
+        "dependencies": [
+          32
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 43,
+        "title": "Implement Cross-Device Sync",
+        "description": "Create robust cross-device synchronization system",
+        "details": "1. Implement sync protocol\n2. Add conflict resolution\n3. Create merge strategy\n4. Implement version control\n5. Add sync status\n6. Create recovery system",
+        "testStrategy": "1. Test multi-device sync\n2. Verify conflict handling\n3. Test offline scenarios\n4. Validate data consistency\n5. Check recovery process",
+        "priority": "medium",
+        "dependencies": [
+          39
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 44,
+        "title": "Implement Accessibility Features",
+        "description": "Ensure comprehensive accessibility support across all features",
+        "details": "1. Add ARIA attributes\n2. Implement keyboard navigation\n3. Add screen reader support\n4. Create high contrast mode\n5. Add focus management\n6. Implement a11y testing",
+        "testStrategy": "1. Test with screen readers\n2. Verify keyboard navigation\n3. Validate ARIA attributes\n4. Check color contrast\n5. Test focus management",
+        "priority": "high",
+        "dependencies": [
+          29,
+          31,
+          33
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 45,
+        "title": "Implement Error Handling System",
+        "description": "Create comprehensive error handling and recovery system",
+        "details": "1. Implement error boundary\n2. Add error logging\n3. Create recovery mechanisms\n4. Implement user notifications\n5. Add debugging tools\n6. Create error reporting",
+        "testStrategy": "1. Test error scenarios\n2. Verify recovery process\n3. Validate error logging\n4. Check notification system\n5. Test debugging tools",
+        "priority": "high",
+        "dependencies": [
+          32,
+          39
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 46,
+        "title": "Implement Analytics System",
+        "description": "Add comprehensive usage and performance analytics",
+        "details": "1. Implement analytics tracking\n2. Add event logging\n3. Create usage metrics\n4. Implement performance tracking\n5. Add reporting dashboard\n6. Create export tools",
+        "testStrategy": "1. Verify tracking accuracy\n2. Test data collection\n3. Validate metrics calculation\n4. Check reporting system\n5. Test data export",
+        "priority": "low",
+        "dependencies": [
+          38
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 47,
+        "title": "Implement Foundation Consistency Tests",
+        "description": "Create comprehensive testing suite for foundation consistency",
+        "details": "1. Create visual regression tests\n2. Implement behavior tests\n3. Add cross-device testing\n4. Create performance tests\n5. Implement integration tests\n6. Add automated validation",
+        "testStrategy": "1. Run visual regression\n2. Test behavior consistency\n3. Verify cross-device rendering\n4. Validate performance metrics\n5. Check integration points",
+        "priority": "high",
+        "dependencies": [
+          29,
+          35,
+          36
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-08-22T21:12:58.974Z",
+      "updated": "2025-08-23T02:06:14.646Z",
+      "description": "Tasks for feature-full-year-viewport context"
+    }
   }
 }

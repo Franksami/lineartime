@@ -9,9 +9,17 @@ import { useSettingsContext } from '@/contexts/SettingsContext'
 
 export function HighContrastToggle() {
   const { settings, toggleSetting } = useSettingsContext()
-  const isHighContrast = settings.appearance.highContrast
+  const [mounted, setMounted] = React.useState(false)
+  
+  // Prevent hydration mismatch by only rendering after mount
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+  
+  const isHighContrast = mounted ? settings.appearance.highContrast : false
 
   const handleToggle = () => {
+    if (!mounted) return
     toggleSetting('appearance', 'highContrast')
     announceToScreenReader(
       isHighContrast ? 'High contrast mode disabled' : 'High contrast mode enabled'
