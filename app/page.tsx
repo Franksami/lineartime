@@ -1,12 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { LinearCalendarVertical } from "@/components/calendar/LinearCalendarVertical";
-import { VirtualCalendar } from "@/components/calendar/VirtualCalendar";
-import { HybridCalendar } from "@/components/calendar/HybridCalendar";
 import { LinearCalendarHorizontal } from "@/components/calendar/LinearCalendarHorizontal";
-import { LinearCalendarFullBleed } from "@/components/calendar/LinearCalendarFullBleed";
-import { MobileCalendarView } from "@/components/mobile/MobileCalendarView";
 import { TimelineContainer } from "@/components/timeline/TimelineContainer";
 import { EventManagement } from "@/components/calendar/EventManagement";
 import { ViewSwitcher, CalendarView } from "@/components/dashboard/ViewSwitcher";
@@ -137,22 +132,8 @@ export default function Page() {
               </div>
             )}
             
-            {/* Mobile Calendar View */}
-            {isMobile ? (
-              <MobileCalendarView
-                events={calendarEvents}
-                currentDate={new Date()}
-                onDateSelect={(date) => console.log('Date selected:', date)}
-                onEventClick={(event) => console.log('Event clicked:', event)}
-                onAddEvent={async (date) => {
-                  // Open event creation modal
-                  console.log('Add event for:', date)
-                }}
-                className="h-full"
-              />
-            ) : (
-              /* Desktop Calendar View - HORIZONTAL LINEAR TIMELINE */
-              /* CRITICAL: This horizontal layout is the core identity of LinearTime */
+            {/* 🔒 FOUNDATION: LinearCalendarHorizontal on ALL devices */}
+            {/* CRITICAL: Horizontal timeline preserved across desktop AND mobile */}
               <LinearCalendarHorizontal
                 year={currentYear}
                 events={calendarEvents}
@@ -178,7 +159,6 @@ export default function Page() {
                 onEventDelete={handleEventDelete}
                 enableInfiniteCanvas={true}
               />
-            )}
           </div>
         )}
         
