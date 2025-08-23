@@ -612,6 +612,62 @@ export function LinearCalendarHorizontal({
     }
   }, [year])
   
+  // CRITICAL FIX: Global mouse event listeners for event creation
+  useEffect(() => {
+    if (!isCreatingEvent) return
+
+    const handleGlobalMouseUp = () => {
+      // CRITICAL FIX: Create event if we have valid range
+      if (creatingEventStart && creatingEventEnd) {
+        const newEvent: Partial<Event> = {
+          id: `new-event-${Date.now()}`,
+          title: 'New Event',
+          description: '',
+          startDate: creatingEventStart,
+          endDate: creatingEventEnd,
+          category: 'personal'
+        }
+        
+        if (onEventCreate) {
+          onEventCreate(newEvent)
+        }
+        
+        setSelectedEvent(newEvent as Event)
+      }
+      
+      // CRITICAL FIX: Always reset state
+      setIsCreatingEvent(false)
+      setCreatingEventStart(null)
+      setCreatingEventEnd(null)
+      setCreatingEventMonth(null)
+      
+      // Reset cursor
+      if (document.body) {
+        document.body.style.cursor = 'default'
+      }
+    }
+
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      // Maintain crosshair cursor during creation
+      if (document.body && isCreatingEvent) {
+        document.body.style.cursor = 'crosshair'
+      }
+    }
+
+    // Add global listeners to capture mouse up anywhere
+    document.addEventListener('mouseup', handleGlobalMouseUp)
+    document.addEventListener('mousemove', handleGlobalMouseMove)
+
+    return () => {
+      document.removeEventListener('mouseup', handleGlobalMouseUp)
+      document.removeEventListener('mousemove', handleGlobalMouseMove)
+      // Ensure cursor is reset on cleanup
+      if (document.body) {
+        document.body.style.cursor = 'default'
+      }
+    }
+  }, [isCreatingEvent, creatingEventStart, creatingEventEnd, onEventCreate])
+
   // Handle resize mouse move
   useEffect(() => {
     if (!isResizingEvent || !resizingEvent) return
@@ -687,12 +743,20 @@ export function LinearCalendarHorizontal({
   const handleDayMouseDown = (date: Date, month: number) => {
     // On mobile, require long press for event creation
     if (!isMobile) {
+      // CRITICAL FIX: Clear any existing selections first
+      setSelectedEvent(null)
+      setToolbarPosition(null)
+      
+      // Set creating state
       setIsCreatingEvent(true)
       setCreatingEventStart(date)
       setCreatingEventEnd(date)
       setCreatingEventMonth(month)
-      setSelectedEvent(null)
-      setToolbarPosition(null)
+      
+      // CRITICAL FIX: Set cursor style immediately
+      if (document.body) {
+        document.body.style.cursor = 'crosshair'
+      }
     }
   }
   
@@ -784,6 +848,7 @@ export function LinearCalendarHorizontal({
   }
   
   const handleDayMouseUp = () => {
+    // CRITICAL FIX: Always reset state, regardless of conditions
     if (isCreatingEvent && creatingEventStart && creatingEventEnd) {
       // Create the new event
       const newEvent: Partial<Event> = {
@@ -793,7 +858,6 @@ export function LinearCalendarHorizontal({
         startDate: creatingEventStart,
         endDate: creatingEventEnd,
         category: 'personal'
-        // recurring is optional, not setting it
       }
       
       // Call onEventCreate if provided
@@ -803,14 +867,18 @@ export function LinearCalendarHorizontal({
       
       // Select the new event and show toolbar
       setSelectedEvent(newEvent as Event)
-      // Calculate toolbar position for the new event
-      // This would need proper calculation based on the event position
     }
     
+    // CRITICAL FIX: Always reset event creation state
     setIsCreatingEvent(false)
     setCreatingEventStart(null)
     setCreatingEventEnd(null)
     setCreatingEventMonth(null)
+    
+    // CRITICAL FIX: Reset cursor style
+    if (document.body) {
+      document.body.style.cursor = 'default'
+    }
   }
   
   // Keyboard navigation handler
@@ -855,9 +923,21 @@ export function LinearCalendarHorizontal({
         handled = true
         break
       case 'Escape':
-        setFocusedDate(null)
-        setKeyboardMode(false)
-        setAnnounceMessage('Exited calendar navigation')
+        // CRITICAL FIX: Cancel event creation if active
+        if (isCreatingEvent) {
+          setIsCreatingEvent(false)
+          setCreatingEventStart(null)
+          setCreatingEventEnd(null)
+          setCreatingEventMonth(null)
+          if (document.body) {
+            document.body.style.cursor = 'default'
+          }
+          setAnnounceMessage('Event creation cancelled')
+        } else {
+          setFocusedDate(null)
+          setKeyboardMode(false)
+          setAnnounceMessage('Exited calendar navigation')
+        }
         handled = true
         break
       case 't':
