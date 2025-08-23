@@ -114,11 +114,14 @@ export function FloatingToolbar({
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
           transition={{ duration: 0.15 }}
           className={cn(
-            "absolute z-50 bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg p-1",
+            "absolute bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg p-1",
             "flex items-center gap-1",
             className
           )}
-          style={toolbarStyle}
+          style={{
+            ...toolbarStyle,
+            zIndex: 20 // CALENDAR_LAYERS.FLOATING_TOOLBAR
+          }}
         >
           {/* Title Editing */}
           {isEditing ? (
@@ -177,6 +180,7 @@ export function FloatingToolbar({
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="absolute top-full left-0 mt-1 bg-background border rounded-lg shadow-lg p-2"
+                    style={{ zIndex: 30 }} // CALENDAR_LAYERS.COLOR_PICKER
                   >
                     <div className="grid grid-cols-2 gap-1">
                       {categoryColors.map((cat) => (
@@ -241,6 +245,7 @@ export function FloatingToolbar({
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="absolute top-full right-0 mt-1 bg-background border rounded-lg shadow-lg p-1 min-w-[150px]"
+                    style={{ zIndex: 31 }} // CALENDAR_LAYERS.DROPDOWN_MENU
                   >
                     <button
                       onClick={() => {

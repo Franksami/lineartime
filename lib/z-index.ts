@@ -1,6 +1,8 @@
 // Centralized Z-Index Management System for LinearCalendar
 // Fixes overlapping UI issues reported by user
 
+import React from 'react'
+
 export const CALENDAR_LAYERS = {
   // Base layers (Foundation)
   GRID: 0,
