@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import { LiveRegionProvider } from '@/components/accessibility/LiveRegion';
 import { SettingsProvider } from '@/contexts/SettingsContext';
 import { ThemeProvider } from '@/contexts/ThemeProvider';
+import { PWAProvider } from '@/components/pwa/PWAProvider';
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL || 'https://gentle-seagull-346.convex.cloud');
 
@@ -15,13 +16,15 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     // <ClerkProvider>
       <ConvexProvider client={convex}>
-        <SettingsProvider>
-          <ThemeProvider>
-            <LiveRegionProvider>
-              {children}
-            </LiveRegionProvider>
-          </ThemeProvider>
-        </SettingsProvider>
+        <PWAProvider>
+          <SettingsProvider>
+            <ThemeProvider>
+              <LiveRegionProvider>
+                {children}
+              </LiveRegionProvider>
+            </ThemeProvider>
+          </SettingsProvider>
+        </PWAProvider>
       </ConvexProvider>
     // </ClerkProvider>
   );

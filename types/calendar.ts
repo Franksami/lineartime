@@ -1,6 +1,7 @@
 // Linear Calendar specific types following the design specification
 
-export type EventCategory = 'personal' | 'work' | 'effort' | 'note';
+export type EventCategory = 'personal' | 'work' | 'effort' | 'note' | 'meeting' | 'deadline' | 'milestone';
+export type EventPriority = 'critical' | 'high' | 'medium' | 'low' | 'optional';
 export type EventStatus = 'tentative' | 'confirmed' | 'cancelled';
 export type ViewMode = 'full' | 'compact';
 export type ZoomLevel = 'compact' | 'standard' | 'expanded';
@@ -13,6 +14,7 @@ export interface Event {
   startDate: Date;
   endDate: Date;
   category: EventCategory;
+  priority?: EventPriority;
   color?: string;
   description?: string;
   recurring?: RecurrenceRule;
@@ -153,6 +155,20 @@ export const EVENT_COLORS: Record<EventCategory, string> = {
   work: '#2196F3',        // Blue
   effort: '#FF9800',      // Orange
   note: '#9C27B0',        // Purple
+  meeting: '#00BCD4',     // Cyan
+  deadline: '#F44336',    // Red
+  milestone: '#9C27B0',   // Deep Purple
+};
+
+// Category colors for the new category tag manager
+export const CATEGORY_COLORS: Record<EventCategory, string> = {
+  personal: 'hsl(var(--chart-4))',
+  work: 'hsl(var(--chart-1))',
+  effort: 'hsl(var(--chart-3))',
+  note: 'hsl(var(--chart-5))',
+  meeting: 'hsl(var(--chart-2))',
+  deadline: 'hsl(var(--destructive))',
+  milestone: 'hsl(var(--chart-1))',
 };
 
 // Calendar theme colors following PRD design spec

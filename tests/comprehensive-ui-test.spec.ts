@@ -136,7 +136,11 @@ test.describe('🔍 Comprehensive UI Testing', () => {
     
     // Measure initial load time
     const metrics = await page.evaluate(() => {
-      const perf = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
+      const navEntries = performance.getEntriesByType('navigation')
+      if (!navEntries.length || navEntries[0].entryType !== 'navigation') {
+        throw new Error('Navigation timing entry not available')
+      }
+      const perf = navEntries[0] as PerformanceNavigationTiming
       return {
         domContentLoaded: perf.domContentLoadedEventEnd - perf.domContentLoadedEventStart,
         loadComplete: perf.loadEventEnd - perf.loadEventStart,

@@ -67,9 +67,12 @@ export async function POST(request: NextRequest) {
     switch (type) {
       case 'user.created':
       case 'user.updated': {
-        const primaryEmail = data.email_addresses.find(
-          (email) => email.email_address
-        )?.email_address;
+        // Find the primary email first, fallback to first available email
+        const primaryEmailObj = data.email_addresses?.find(
+          (email) => email.primary === true || email.is_primary === true
+        );
+        const primaryEmail = primaryEmailObj?.email_address || 
+          data.email_addresses?.find((email) => email.email_address)?.email_address;
 
         if (!primaryEmail) {
           console.error('No primary email found for user:', data.id);
@@ -113,4 +116,5 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
 

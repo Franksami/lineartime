@@ -102,10 +102,10 @@ export const DragToCreate = React.memo(function DragToCreate({
     const scrollTop = scrollRef.current.scrollTop
     
     if (isFullYearZoom) {
-      // Full year grid positioning
-      const jan1DayOfWeek = yearStart.getDay()
-      const dayOfYear = differenceInDays(date, yearStart) + 1
-      const col = jan1DayOfWeek + dayOfYear - 1
+      // Full year grid positioning - calculate position within the month's grid
+      const monthStart = startOfMonth(date)
+      const monthStartDayOfWeek = monthStart.getDay()
+      const col = monthStartDayOfWeek + differenceInDays(date, monthStart)
       const row = date.getMonth()
       
       return {

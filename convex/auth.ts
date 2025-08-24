@@ -33,14 +33,34 @@ export const requireAuth = async (ctx: any) => {
     throw new Error("Authentication required");
   }
 
-  const user = await ctx.runQuery(internal.clerk.getUserByClerkId, {
-    clerkUserId: identity.subject,
-  });
+  // Retry logic to handle race condition with signup webhook
+  let user = null;
+  const maxRetries = 3;
+  const retryDelays = [100, 300, 500]; // Exponential backoff delays in ms
+  
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    user = await ctx.runQuery(internal.clerk.getUserByClerkId, {
+      clerkUserId: identity.subject,
+    });
+    
+    if (user) {
+      break; // User found, exit retry loop
+    }
+    
+    if (attempt < maxRetries - 1) {
+      // Wait before retrying (except on last attempt)
+      console.warn(`User not found on attempt ${attempt + 1}, retrying in ${retryDelays[attempt]}ms...`);
+      await new Promise(resolve => setTimeout(resolve, retryDelays[attempt]));
+    }
+  }
 
   if (!user) {
-    throw new Error("User not found in database");
+    // Log warning but consider creating a fallback user record
+    console.error(`User not found after ${maxRetries} attempts for Clerk ID: ${identity.subject}`);
+    throw new Error("User not found in database after retries - signup webhook may be delayed");
   }
 
   return { user, identity };
 };
+
 

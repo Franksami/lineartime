@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ZoomIn, ZoomOut, Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { differenceInDays, startOfYear } from 'date-fns'
+import { differenceInDays, startOfYear, endOfYear } from 'date-fns'
 
 export type ZoomLevel = 'fullYear' | 'year' | 'quarter' | 'month' | 'week' | 'day'
 
@@ -73,7 +73,17 @@ export function ZoomControls({
     if (scrollRef?.current && year && dayWidth) {
       const today = new Date()
       const yearStart = startOfYear(new Date(year, 0, 1))
-      const dayOfYear = differenceInDays(today, yearStart)
+      const yearEnd = endOfYear(new Date(year, 0, 1))
+      
+      // Check if today is within the displayed year
+      let targetDate = today
+      if (today < yearStart) {
+        targetDate = yearStart // Clamp to start of year
+      } else if (today > yearEnd) {
+        targetDate = yearEnd // Clamp to end of year
+      }
+      
+      const dayOfYear = differenceInDays(targetDate, yearStart)
       const scrollPosition = dayOfYear * dayWidth - scrollRef.current.clientWidth / 2
       
       scrollRef.current.scrollTo({

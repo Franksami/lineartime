@@ -55,7 +55,8 @@ let violations = []
 
 for (const bannedPath of banned) {
   try {
-    const rg = run(`rg -n "${bannedPath}" --hidden --glob '!node_modules/**' || true`)
+    // Use fixed-string mode (-F) to treat bannedPath literally, not as regex
+    const rg = run(`rg -n -F "${bannedPath.replace(/"/g, '\\"')}" --hidden --glob '!node_modules/**'`)
     if (!rg.trim()) continue
     const lines = rg.trim().split('\n')
     for (const line of lines) {
@@ -65,6 +66,11 @@ for (const bannedPath of banned) {
       }
     }
   } catch (e) {
+    // ripgrep returns non-zero when no matches found, which is expected
+    if (e.message.includes('exit code') && e.message.includes('1')) {
+      // No matches found, which is good - continue
+      continue
+    }
     console.warn(`Warning: Failed to check banned path "${bannedPath}":`, e.message)
   }
 }

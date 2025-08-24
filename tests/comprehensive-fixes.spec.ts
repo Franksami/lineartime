@@ -3,7 +3,8 @@ import { test, expect, Page } from '@playwright/test'
 // Helper to wait for calendar
 async function waitForCalendar(page: Page) {
   await page.waitForSelector('[role="grid"]', { timeout: 10000 })
-  await page.waitForTimeout(500)
+  // Wait for grid to be fully loaded instead of arbitrary timeout
+  await page.waitForLoadState('networkidle')
 }
 
 // Helper to create event via drag
@@ -38,7 +39,17 @@ test.describe('🎯 Comprehensive Fix Verification', () => {
     
     // Wait for quick title input
     const titleInput = page.locator('input[type="text"]').first()
-    const inputVisible = await titleInput.isVisible({ timeout: 2000 }).catch(() => false)
+    let inputVisible = false
+    try {
+      inputVisible = await titleInput.isVisible({ timeout: 2000 })
+    } catch (error) {
+      // Only suppress timeout errors, rethrow others
+      if (error instanceof Error && error.message.includes('timeout')) {
+        inputVisible = false
+      } else {
+        throw error
+      }
+    }
     
     if (!inputVisible) {
       console.log('Quick title input not found, skipping event creation')

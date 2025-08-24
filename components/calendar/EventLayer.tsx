@@ -92,12 +92,27 @@ export const EventLayer = React.memo(function EventLayer({
       let left, width, top
       
       if (isFullYearZoom) {
-        // For fullYear grid: use column-based positioning
-        const startCol = jan1DayOfWeek + startDay - 1
-        const endCol = jan1DayOfWeek + endDay - 1
-        left = startCol * dayWidth + headerWidth
+        // For fullYear grid: calculate position within the month's grid
+        const monthsPerRow = 1 // Assuming one month per row in full year view
+        const daysPerMonthGridWidth = 42 // 7 days * 6 weeks
+        const monthRow = Math.floor(eventMonth / monthsPerRow)
+        const monthCol = eventMonth % monthsPerRow
+        
+        // Get the first day of week for the specific month
+        const monthStart = new Date(year, eventMonth, 1)
+        const monthFirstDayOfWeek = monthStart.getDay()
+        
+        // Calculate start and end columns within the month's grid
+        const monthColOffset = monthCol * daysPerMonthGridWidth
+        const startDayOfMonth = event.startDate.getDate()
+        const endDayOfMonth = event.endDate.getMonth() === eventMonth ? event.endDate.getDate() : new Date(year, eventMonth + 1, 0).getDate()
+        
+        const startCol = monthFirstDayOfWeek + startDayOfMonth - 1
+        const endCol = monthFirstDayOfWeek + endDayOfMonth - 1
+        
+        left = (monthCol * daysPerMonthGridWidth + startCol) * dayWidth + headerWidth
         width = (endCol - startCol + 1) * dayWidth - 2
-        top = eventMonth * monthHeight + headerHeight + 4
+        top = monthRow * monthHeight + headerHeight + 4
       } else {
         // Normal horizontal layout
         left = (startDay - 1) * dayWidth + headerWidth

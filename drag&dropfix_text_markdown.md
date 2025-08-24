@@ -35,8 +35,14 @@ export const useCalendarDrag = () => {
     const element = elementRef.current;
     if (!element) return;
 
-    // CRITICAL: Capture pointer to receive all events
-    element.setPointerCapture(e.pointerId);
+    // CRITICAL: Capture pointer to receive all events (with safety check)
+    if (typeof element.setPointerCapture === 'function' && element.isConnected && e.pointerId !== undefined) {
+      try {
+        element.setPointerCapture(e.pointerId);
+      } catch (err) {
+        console.warn('Pointer capture not supported:', err);
+      }
+    }
     e.preventDefault();
     
     dragStateRef.current = {
@@ -71,8 +77,14 @@ export const useCalendarDrag = () => {
     
     const element = elementRef.current;
     if (element) {
-      // CRITICAL: Release pointer capture
-      element.releasePointerCapture(e.pointerId);
+      // CRITICAL: Release pointer capture (with safety check)
+      if (typeof element.releasePointerCapture === 'function') {
+        try {
+          element.releasePointerCapture(e.pointerId);
+        } catch (err) {
+          // Ignore if already released
+        }
+      }
       element.style.transform = '';
     }
     
@@ -94,7 +106,13 @@ export const useCalendarDrag = () => {
     // Force cleanup
     setIsDragging(false);
     if (elementRef.current) {
-      elementRef.current.releasePointerCapture(e.pointerId);
+      if (typeof elementRef.current.releasePointerCapture === 'function') {
+        try {
+          elementRef.current.releasePointerCapture(e.pointerId);
+        } catch (err) {
+          // Ignore if already released
+        }
+      }
       elementRef.current.style.transform = '';
     }
     
@@ -106,8 +124,20 @@ export const useCalendarDrag = () => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && dragStateRef.current.isDragging) {
         if (elementRef.current && dragStateRef.current.pointerId !== null) {
-          elementRef.current.releasePointerCapture(dragStateRef.current.pointerId);
-          elementRef.current.style.transform = '';
+          const element = elementRef.current;
+          const pointerId = dragStateRef.current.pointerId;
+          
+          // Check if element has pointer capture before releasing
+          if (typeof element.releasePointerCapture === 'function' && 
+              typeof element.hasPointerCapture === 'function' &&
+              element.hasPointerCapture(pointerId)) {
+            try {
+              element.releasePointerCapture(pointerId);
+            } catch (err) {
+              // Ignore if already released
+            }
+          }
+          element.style.transform = '';
         }
         dragStateRef.current.isDragging = false;
         setIsDragging(false);
@@ -268,7 +298,58 @@ const FloatingEventToolbar: React.FC<FloatingEventToolbarProps> = ({
     ]
   });
   
+  // Helper function for WCAG contrast ratio calculation
+  const getContrastRatio = (color1: string, color2: string): number => {
+    // Convert hex to RGB
+    const hexToRgb = (hex: string) => {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16) / 255,
+        g: parseInt(result[2], 16) / 255,
+        b: parseInt(result[3], 16) / 255
+      } : null;
+    };
+    
+    // Calculate relative luminance
+    const getLuminance = (r: number, g: number, b: number) => {
+      const [rs, gs, bs] = [r, g, b].map(c => 
+        c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+      );
+      return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+    };
+    
+    const rgb1 = hexToRgb(color1);
+    const rgb2 = hexToRgb(color2);
+    if (!rgb1 || !rgb2) return 1;
+    
+    const l1 = getLuminance(rgb1.r, rgb1.g, rgb1.b);
+    const l2 = getLuminance(rgb2.r, rgb2.g, rgb2.b);
+    const lighter = Math.max(l1, l2);
+    const darker = Math.min(l1, l2);
+    
+    return (lighter + 0.05) / (darker + 0.05);
+  };
+
   const handleColorChange = useCallback((color: string) => {
+    // WCAG 2.1 AA contrast check
+    const backgroundColors = ['#ffffff', '#f8f9fa']; // Common backgrounds
+    const minContrastRatio = 4.5; // WCAG AA standard
+    
+    let passesContrast = false;
+    for (const bg of backgroundColors) {
+      const ratio = getContrastRatio(color, bg);
+      if (ratio >= minContrastRatio) {
+        passesContrast = true;
+        break;
+      }
+    }
+    
+    if (!passesContrast) {
+      console.warn(`Color ${color} fails WCAG AA contrast requirements (ratio < ${minContrastRatio})`);
+      // Optionally show user feedback or auto-adjust to darker shade
+      // For now, just log the warning
+    }
+    
     onEventUpdate({ ...event, color });
   }, [event, onEventUpdate]);
   
@@ -606,7 +687,14 @@ export const useTouchGestures = () => {
       setGesture('longPress');
       // Haptic feedback on mobile
       if ('vibrate' in navigator) {
-        navigator.vibrate(50);
+        // Vibration feedback (with feature check)
+        if (navigator && typeof navigator.vibrate === 'function') {
+          try {
+            navigator.vibrate(50);
+          } catch (err) {
+            // Vibration not supported or failed
+          }
+        }
       }
     }, 600);
   }, []);

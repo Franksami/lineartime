@@ -339,18 +339,41 @@ export const InteractionLayer = React.memo(function InteractionLayer({
       />
       
       {/* Keyboard focus indicator */}
-      {keyboardMode && focusedDate && (
-        <div 
-          className="absolute pointer-events-none border-2 border-blue-500 rounded-sm z-30"
-          style={{
-            left: headerWidth + ((focusedDate.getTime() - new Date(year, 0, 1).getTime()) / (1000 * 60 * 60 * 24)) * dayWidth,
-            top: focusedDate.getMonth() * 60 + 20,
-            width: dayWidth,
-            height: 36
-          }}
-          aria-hidden="true"
-        />
-      )}
+      {keyboardMode && focusedDate && (() => {
+        const MS_PER_DAY = 1000 * 60 * 60 * 24
+        const yearStartDate = new Date(year, 0, 1)
+        const dayOfYear = Math.floor((focusedDate.getTime() - yearStartDate.getTime()) / MS_PER_DAY)
+        
+        // Calculate grid position properly
+        const daysPerRow = 7
+        const gridStartOffset = yearStartDate.getDay() // Day of week for Jan 1
+        const totalOffset = dayOfYear + gridStartOffset
+        const col = totalOffset % daysPerRow
+        const row = Math.floor(totalOffset / daysPerRow)
+        
+        // Define layout constants
+        const rowHeight = 60 // Height of each row
+        const headerOffset = 20 // Top offset for headers
+        const cellHeight = 36 // Height of the focus box
+        
+        // Bounds check to ensure we're within valid range
+        if (dayOfYear < 0 || dayOfYear >= 365 + (year % 4 === 0 ? 1 : 0)) {
+          return null
+        }
+        
+        return (
+          <div 
+            className="absolute pointer-events-none border-2 border-blue-500 rounded-sm z-30"
+            style={{
+              left: headerWidth + col * dayWidth,
+              top: row * rowHeight + headerOffset,
+              width: dayWidth,
+              height: cellHeight
+            }}
+            aria-hidden="true"
+          />
+        )
+      })()}
       
       {children}
     </div>

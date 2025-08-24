@@ -35,10 +35,6 @@ export const CalendarGrid = React.memo(function CalendarGrid({
   isFullYearZoom,
   isMobile
 }: CalendarGridProps) {
-  // Calculate year details
-  const yearStart = new Date(year, 0, 1)
-  const jan1DayOfWeek = yearStart.getDay() // 0 = Sunday, 6 = Saturday
-  
   // Helper function to get date for a specific cell in each month row
   const getDateForCell = React.useCallback((monthRow: number, col: number): Date | null => {
     // Create date for first day of this month

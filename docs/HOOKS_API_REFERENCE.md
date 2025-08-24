@@ -241,7 +241,7 @@ function CalendarToolbar() {
       await syncEvents()
       dispatch({ type: 'SET_SYNC_STATUS', payload: 'idle' })
     } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: error.message })
+      dispatch({ type: 'SET_ERROR', payload: error instanceof Error ? error.message : String(error) })
       dispatch({ type: 'SET_SYNC_STATUS', payload: 'error' })
     }
   }
@@ -714,7 +714,7 @@ function SyncManager() {
       
       toast.success(`Synced: ${result.added} added, ${result.updated} updated`)
     } catch (error) {
-      toast.error('Sync failed: ' + error.message)
+      toast.error('Sync failed: ' + (error instanceof Error ? error.message : String(error)))
     }
   }
   

@@ -12,7 +12,7 @@ import { PerformanceMonitor } from "@/components/ui/performance-monitor";
 import { AssistantPanel } from "@/components/ai/AssistantPanel";
 import { SettingsDialog } from "@/components/settings/SettingsDialog";
 import { NavigationHeader } from "@/components/layout/NavigationHeader";
-import type { Event } from "@/types/calendar";
+import type { Event } from "@/components/ui/calendar";
 
 export default function Page() {
   const currentYear = new Date().getFullYear();

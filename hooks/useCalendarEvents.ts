@@ -37,7 +37,6 @@ export function useCalendarEvents({
   const events = useMemo(() => {
     if (!dbEvents) return []
     
-    const yearStart = new Date(state.year, 0, 1).getTime()
     const yearEnd = new Date(state.year, 11, 31, 23, 59, 59).getTime()
     
     // Base events from database
@@ -260,11 +259,8 @@ export function useCalendarEvents({
       if (enableOptimisticUpdates) {
         setOptimisticEvents(prev => {
           const next = new Map(prev)
-          // Mark as deleted rather than removing to handle rollback
-          const existingEvent = events.find(e => e.id === eventId)
-          if (existingEvent) {
-            next.set(eventId, { ...existingEvent, id: `deleted-${eventId}` })
-          }
+          // Remove the event entirely for proper optimistic deletion
+          next.delete(eventId)
           return next
         })
         setPendingOperations(prev => new Set(prev).add(eventId))
@@ -338,44 +334,50 @@ export function useCalendarEvents({
   }, [events])
   
   // Smart scheduling suggestion
-  const suggestAvailableSlot = useCallback((duration: number, preferredStart?: Date) => {
-    const start = preferredStart || new Date()
-    const dayStart = new Date(start)
-    dayStart.setHours(9, 0, 0, 0) // 9 AM start
-    const dayEnd = new Date(start)
-    dayEnd.setHours(17, 0, 0, 0) // 5 PM end
+  const suggestAvailableSlot = useCallback((duration: number, preferredStart?: Date, maxDays: number = 30) => {
+    const initialStart = preferredStart || new Date()
     
-    // Get events for the day
-    const dayEvents = getEventsInRange(dayStart, dayEnd)
-      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-    
-    // Find gaps between events
-    let currentTime = dayStart.getTime()
-    
-    for (const event of dayEvents) {
-      const gap = event.startDate.getTime() - currentTime
-      if (gap >= duration) {
+    // Prevent infinite recursion with a maximum search limit
+    for (let dayOffset = 0; dayOffset < maxDays; dayOffset++) {
+      const currentDay = new Date(initialStart)
+      currentDay.setDate(currentDay.getDate() + dayOffset)
+      
+      const dayStart = new Date(currentDay)
+      dayStart.setHours(9, 0, 0, 0) // 9 AM start
+      const dayEnd = new Date(currentDay)
+      dayEnd.setHours(17, 0, 0, 0) // 5 PM end
+      
+      // Get events for the day
+      const dayEvents = getEventsInRange(dayStart, dayEnd)
+        .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+      
+      // Find gaps between events
+      let currentTime = dayStart.getTime()
+      
+      for (const event of dayEvents) {
+        const gap = event.startDate.getTime() - currentTime
+        if (gap >= duration) {
+          return {
+            start: new Date(currentTime),
+            end: new Date(currentTime + duration)
+          }
+        }
+        currentTime = Math.max(currentTime, event.endDate.getTime())
+      }
+      
+      // Check if there's space at the end of the day
+      const remainingTime = dayEnd.getTime() - currentTime
+      if (remainingTime >= duration) {
         return {
           start: new Date(currentTime),
           end: new Date(currentTime + duration)
         }
       }
-      currentTime = Math.max(currentTime, event.endDate.getTime())
     }
     
-    // Check if there's space at the end of the day
-    const remainingTime = dayEnd.getTime() - currentTime
-    if (remainingTime >= duration) {
-      return {
-        start: new Date(currentTime),
-        end: new Date(currentTime + duration)
-      }
-    }
-    
-    // No slot available today, try next day
-    const nextDay = new Date(dayStart)
-    nextDay.setDate(nextDay.getDate() + 1)
-    return suggestAvailableSlot(duration, nextDay)
+    // No slot found within the search window
+    console.warn(`No available slot found within ${maxDays} days for duration ${duration}ms`)
+    return null
   }, [getEventsInRange])
   
   return {

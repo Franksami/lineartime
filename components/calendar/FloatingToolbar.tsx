@@ -162,10 +162,29 @@ export function FloatingToolbar({
   }
   
   // Calculate toolbar position
-  const toolbarStyle = position ? {
-    left: `${position.x}px`,
-    top: `${position.y - 60}px`, // Position above the event
-  } : {}
+  // Adjust toolbar position to avoid being hidden behind header
+  const calculateToolbarPosition = () => {
+    if (!position) return {}
+    
+    // Get viewport height and minimum top position (below header)
+    const minTop = 120 // NavigationHeader (~60px) + Calendar header (~60px)
+    const toolbarHeight = 60
+    
+    // Calculate desired position (above the event)
+    let desiredTop = position.y - toolbarHeight
+    
+    // If toolbar would be hidden behind header, position it below the event instead
+    if (desiredTop < minTop) {
+      desiredTop = position.y + 40 // Position below the event
+    }
+    
+    return {
+      left: `${position.x}px`,
+      top: `${desiredTop}px`,
+    }
+  }
+  
+  const toolbarStyle = calculateToolbarPosition()
   
   return (
     <AnimatePresence>
@@ -178,13 +197,13 @@ export function FloatingToolbar({
           exit={{ opacity: 0, y: 10, scale: 0.95 }}
           transition={{ duration: 0.15 }}
           className={cn(
-            "absolute bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg p-1",
+            "fixed bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg p-1",
             "flex items-center gap-1",
             className
           )}
           style={{
             ...toolbarStyle,
-            zIndex: 20 // CALENDAR_LAYERS.FLOATING_TOOLBAR
+            zIndex: 9999 // Ensure toolbar is always on top
           }}
         >
           {/* Title Editing */}

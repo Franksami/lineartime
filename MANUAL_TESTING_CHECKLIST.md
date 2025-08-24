@@ -170,7 +170,7 @@ Test the consistent event handling:
 - Cross-browser compatibility confirmed
 
 ### **Bug Report Template**
-```
+```markdown
 **Bug Title**: [Descriptive title]
 **Steps to Reproduce**: 
 1. 

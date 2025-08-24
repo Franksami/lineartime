@@ -7,6 +7,7 @@ import { ViewSwitcher, CalendarView } from '@/components/dashboard/ViewSwitcher'
 import { HighContrastToggle } from '@/components/ui/high-contrast-toggle'
 import { SettingsDialog } from '@/components/settings/SettingsDialog'
 import { CommandBar } from '@/components/CommandBar'
+import { ThemeSelector } from '@/components/theme/theme-selector'
 import {
   Calendar,
   CalendarDays,
@@ -15,7 +16,8 @@ import {
   X,
   Search,
   Bell,
-  User
+  User,
+  Palette
 } from 'lucide-react'
 import {
   Sheet,
@@ -45,6 +47,7 @@ export function NavigationHeader({
   className
 }: NavigationHeaderProps) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
+  const [showThemeSelector, setShowThemeSelector] = React.useState(false)
   
   return (
     <header className={cn('border-b bg-background/95 backdrop-blur-sm', className)}>
@@ -179,6 +182,18 @@ export function NavigationHeader({
           
           {/* Settings & Profile */}
           <HighContrastToggle />
+          
+          {/* Theme Selector */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowThemeSelector(!showThemeSelector)}
+            aria-label="Theme selector"
+            className="relative"
+          >
+            <Palette className="h-4 w-4" />
+          </Button>
+          
           <SettingsDialog />
           
           {/* User Avatar */}
@@ -193,12 +208,21 @@ export function NavigationHeader({
         </div>
       </div>
       
-      {/* Command Bar */}
-      <CommandBar
+            {/* Command Bar */}
+      <CommandBar 
         onEventCreate={onEventCreate}
         onEventDelete={onEventDelete}
         events={events}
       />
+      
+      {/* Theme Selector Popup */}
+      {showThemeSelector && (
+        <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowThemeSelector(false)}>
+          <div className="absolute top-20 right-4" onClick={(e) => e.stopPropagation()}>
+            <ThemeSelector onClose={() => setShowThemeSelector(false)} />
+          </div>
+        </div>
+      )}
     </header>
   )
 }

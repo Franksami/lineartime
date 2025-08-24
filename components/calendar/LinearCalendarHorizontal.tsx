@@ -17,11 +17,18 @@ import {
   addDays,
   startOfMonth
 } from 'date-fns'
-import { Plus, Minus, GripVertical, Menu, X } from 'lucide-react'
+import { Plus, Minus, GripVertical, Menu, X, Activity } from 'lucide-react'
 import { FloatingToolbar } from './FloatingToolbar'
 import { EventModal } from './EventModal'
 import { DragToCreate } from './DragToCreate'
 import { useMediaQuery } from '@/hooks/use-media-query'
+// 🚀 NEW: Performance monitoring integration
+import { usePerformanceMonitor } from '@/hooks/use-performance-monitor'
+import { PerformanceOverlay } from './performance-overlay'
+import { useObjectPool } from '@/hooks/use-object-pool'
+// 🚀 NEW: AI-enhanced drag & drop integration
+import { useAIEnhancedDragDrop } from '@/hooks/use-ai-enhanced-drag-drop'
+import { AISuggestionsPanel } from './ai-suggestions-panel'
 
 interface LinearCalendarHorizontalProps {
   year: number
@@ -364,6 +371,36 @@ export function LinearCalendarHorizontal({
   const [isPinching, setIsPinching] = useState(false)
   const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null)
   
+  // 🚀 NEW: Performance monitoring integration
+  const [showPerformanceOverlay, setShowPerformanceOverlay] = useState(false)
+  const { metrics, startRenderMeasurement, endRenderMeasurement } = usePerformanceMonitor(events.length)
+  // Simple object pool for calendar events
+  const objectPool = useObjectPool(
+    () => ({ id: '', title: '', startDate: new Date(), endDate: new Date(), category: 'personal' }),
+    (obj) => { obj.id = ''; obj.title = ''; obj.startDate = new Date(); obj.endDate = new Date(); obj.category = 'personal' },
+    50
+  )
+  const poolStats = objectPool.getPoolStats()
+  
+  // 🚀 NEW: AI-enhanced drag & drop integration
+  const [showAISuggestions, setShowAISuggestions] = useState(false)
+  const {
+    aiSuggestions,
+    isAnalyzing,
+    dragFeedback,
+    handleDragStart: handleAIDragStart,
+    handleDragMove: handleAIDragMove,
+    handleDrop: handleAIDrop,
+    clearAISuggestions
+  } = useAIEnhancedDragDrop(events as any, (updatedEvents) => {
+    // Handle AI-optimized event updates
+    console.log('AI suggested event updates:', updatedEvents)
+    // You can implement custom logic here for AI suggestions
+  }, {
+    enableAI: true,
+    realTimeAnalysis: true,
+    autoOptimize: false
+  })
   
   // SIMPLIFIED: No complex drag creation state needed for click-to-create
   
@@ -396,6 +433,18 @@ export function LinearCalendarHorizontal({
     }
     // Reset any pan/zoom drift on initial mount
   }, [])
+  
+  // 🚀 NEW: Performance measurement for event rendering
+  useEffect(() => {
+    if (events.length > 0) {
+      startRenderMeasurement()
+      // Use requestAnimationFrame to measure after render
+      const rafId = requestAnimationFrame(() => {
+        endRenderMeasurement()
+      })
+      return () => cancelAnimationFrame(rafId)
+    }
+  }, [events, startRenderMeasurement, endRenderMeasurement])
   
   // Calculate day width for fullYear zoom (42 columns per month row)
   const calculateFullYearDayWidth = () => {
@@ -895,7 +944,7 @@ export function LinearCalendarHorizontal({
       {/* Main Calendar Container */}
       <div 
         ref={scrollRef}
-        className="h-full relative"
+        className="h-full relative overflow-hidden"
         style={{ 
           cursor: enableInfiniteCanvas ? 'grab' : 'default',
           paddingTop: '60px' // Account for header height
@@ -917,7 +966,7 @@ export function LinearCalendarHorizontal({
         <div 
           className="relative"
           style={{ 
-            width: totalWidth,
+            width: isFullYearZoom ? '100%' : totalWidth,
             height: isFullYearZoom ? (12 * monthHeight + headerHeight * 2) : (12 * monthHeight),
             minWidth: '100%'
           }}
@@ -1200,6 +1249,35 @@ export function LinearCalendarHorizontal({
         checkOverlaps={checkForOverlaps}
         events={events}
       />
+      
+      {/* 🚀 NEW: Performance Overlay */}
+      <PerformanceOverlay
+        metrics={metrics}
+        poolStats={poolStats}
+        visible={showPerformanceOverlay}
+        onClose={() => setShowPerformanceOverlay(false)}
+      />
+      
+      {/* 🚀 NEW: AI Suggestions Panel */}
+      <AISuggestionsPanel
+        suggestions={aiSuggestions}
+        dragFeedback={dragFeedback}
+        isAnalyzing={isAnalyzing}
+        onClear={clearAISuggestions}
+        className="mb-20" // Position above performance toggle button
+      />
+      
+      {/* Performance Toggle Button */}
+      {process.env.NODE_ENV === 'development' && (
+        <button
+          onClick={() => setShowPerformanceOverlay(!showPerformanceOverlay)}
+          className="fixed bottom-4 left-4 z-50 bg-primary text-primary-foreground p-2 rounded-full shadow-lg hover:bg-primary/90 transition-colors"
+          title="Toggle Performance Monitor"
+          aria-label="Toggle Performance Monitor"
+        >
+          <Activity className="w-4 h-4" />
+        </button>
+      )}
     </div>
   )
 }

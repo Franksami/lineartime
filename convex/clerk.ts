@@ -93,65 +93,62 @@ export const deleteFromClerk = internalMutation({
       return;
     }
 
-    // Delete user's events
+    // Batch delete user's events
     const events = await ctx.db
       .query("events")
       .withIndex("by_user", (q) => q.eq("userId", user._id))
       .collect();
     
-    for (const event of events) {
-      await ctx.db.delete(event._id);
+    // Process deletions in parallel batches for better performance
+    const BATCH_SIZE = 100;
+    for (let i = 0; i < events.length; i += BATCH_SIZE) {
+      const batch = events.slice(i, i + BATCH_SIZE);
+      await Promise.all(batch.map(event => ctx.db.delete(event._id)));
     }
 
-    // Delete user's categories
+    // Batch delete user's categories
     const categories = await ctx.db
       .query("categories")
       .withIndex("by_user", (q) => q.eq("userId", user._id))
       .collect();
     
-    for (const category of categories) {
-      await ctx.db.delete(category._id);
-    }
+    await Promise.all(categories.map(category => ctx.db.delete(category._id)));
 
-    // Delete user's calendars
+    // Batch delete user's calendars
     const calendars = await ctx.db
       .query("calendars")
       .withIndex("by_user", (q) => q.eq("userId", user._id))
       .collect();
     
-    for (const calendar of calendars) {
-      await ctx.db.delete(calendar._id);
-    }
+    await Promise.all(calendars.map(calendar => ctx.db.delete(calendar._id)));
 
-    // Delete user's calendar providers
+    // Batch delete user's calendar providers
     const providers = await ctx.db
       .query("calendarProviders")
       .withIndex("by_user", (q) => q.eq("userId", user._id))
       .collect();
     
-    for (const provider of providers) {
-      await ctx.db.delete(provider._id);
-    }
+    await Promise.all(providers.map(provider => ctx.db.delete(provider._id)));
 
-    // Delete user's sync queue items
+    // Batch delete user's sync queue items
     const syncItems = await ctx.db
       .query("syncQueue")
       .withIndex("by_user", (q) => q.eq("userId", user._id))
       .collect();
     
-    for (const item of syncItems) {
-      await ctx.db.delete(item._id);
+    // Process in batches if large
+    for (let i = 0; i < syncItems.length; i += BATCH_SIZE) {
+      const batch = syncItems.slice(i, i + BATCH_SIZE);
+      await Promise.all(batch.map(item => ctx.db.delete(item._id)));
     }
 
-    // Delete user's AI scheduling sessions
+    // Batch delete user's AI scheduling sessions
     const aiSessions = await ctx.db
       .query("aiSchedulingSessions")
       .withIndex("by_user", (q) => q.eq("userId", user._id))
       .collect();
     
-    for (const session of aiSessions) {
-      await ctx.db.delete(session._id);
-    }
+    await Promise.all(aiSessions.map(session => ctx.db.delete(session._id)));
 
     // Finally, delete the user
     await ctx.db.delete(user._id);
@@ -172,4 +169,5 @@ export const getUserByClerkId = internalQuery({
       .first();
   },
 });
+
 

@@ -15,9 +15,10 @@ import { cn } from "@/lib/utils"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
-import type { Event, EventCategory } from "@/types/calendar"
+import type { Event, EventCategory, EventPriority } from "@/types/calendar"
 import { useReducedMotion } from "@/hooks/useReducedMotion"
 import { announceToScreenReader } from "@/lib/accessibility"
+import { CategoryTagManager } from "./category-tag-manager"
 
 interface DateRange {
   from: Date
@@ -56,23 +57,41 @@ export function EventModal({
   const [formData, setFormData] = React.useState<Partial<Event>>({
     title: '',
     category: 'personal',
+    priority: 'medium',
     startDate: selectedDate || new Date(),
     endDate: selectedDate || new Date(),
-    description: ''
+    description: '',
+    tags: []
   })
+  
+  // Available tags for the tag manager (in real app, this would come from a database)
+  const [availableTags, setAvailableTags] = React.useState<string[]>([
+    'meeting', 'urgent', 'project', 'personal', 'health', 'learning', 'travel', 'family'
+  ])
   
   const [showSmartSchedule, setShowSmartSchedule] = React.useState(false)
   
   const conflicts = React.useMemo(() => {
-    if (formData.startDate && formData.endDate) {
-      return checkOverlaps(
+    if (formData.startDate && formData.endDate && formData.title) {
+      // Filter out duplicate "New Event" entries and only show unique conflicts
+      const overlaps = checkOverlaps(
         formData.startDate,
         formData.endDate,
         event?.id
       )
+      
+      // Remove duplicates and limit to 5 conflicts max
+      const uniqueConflicts = overlaps.filter((conflict, index, self) => 
+        index === self.findIndex(c => 
+          c.title === conflict.title && 
+          c.startDate.getTime() === conflict.startDate.getTime()
+        )
+      ).slice(0, 5)
+      
+      return uniqueConflicts
     }
     return []
-  }, [formData.startDate, formData.endDate, checkOverlaps, event])
+  }, [formData.startDate, formData.endDate, formData.title, checkOverlaps, event])
 
   React.useEffect(() => {
     if (event) {
@@ -188,53 +207,22 @@ export function EventModal({
             />
           </div>
 
-          {/* Category and Time Row */}
-          <div className="grid grid-cols-2 gap-4">
-            {/* Category */}
-            <div className="space-y-2">
-              <Label htmlFor="category" className="text-sm font-medium flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-muted">
-                  <Tag className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
-                </div>
-                Category
-              </Label>
-              <Select
-                value={formData.category}
-                onValueChange={(value: EventCategory) => 
-                  setFormData({ ...formData, category: value })
-                }
-              >
-                <SelectTrigger data-testid="category-select" className="bg-background/90 backdrop-blur-sm border-input">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-popover/95 backdrop-blur-sm border-border">
-                  <SelectItem value="personal">
-                    <span className="flex items-center">
-                      <span className={cn("w-3 h-3 rounded-full mr-2 shadow-sm", categoryColors.personal)} />
-                      Personal
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="work">
-                    <span className="flex items-center">
-                      <span className={cn("w-3 h-3 rounded-full mr-2 shadow-sm", categoryColors.work)} />
-                      Work
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="effort">
-                    <span className="flex items-center">
-                      <span className={cn("w-3 h-3 rounded-full mr-2 shadow-sm", categoryColors.effort)} />
-                      Effort
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="note">
-                    <span className="flex items-center">
-                      <span className={cn("w-3 h-3 rounded-full mr-2 shadow-sm", categoryColors.note)} />
-                      Note
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          {/* Enhanced Category, Priority & Tags Management */}
+          <div className="space-y-4">
+            <CategoryTagManager
+              selectedCategory={formData.category as EventCategory}
+              selectedPriority={formData.priority as EventPriority}
+              selectedTags={formData.tags || []}
+              availableTags={availableTags}
+              onCategoryChange={(category) => setFormData({ ...formData, category })}
+              onPriorityChange={(priority) => setFormData({ ...formData, priority })}
+              onTagsChange={(tags) => setFormData({ ...formData, tags })}
+              onCreateTag={(tag) => setAvailableTags(prev => [...prev, tag])}
+            />
+          </div>
+
+          {/* Time Section */}
+          <div className="space-y-4">
 
             {/* All Day Toggle */}
             <div className="space-y-2">

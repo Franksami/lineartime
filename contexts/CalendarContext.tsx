@@ -429,17 +429,19 @@ export function useCalendarUI() {
   } = useCalendarContext()
   
   return {
-    showEventModal: state.showEventModal,
-    showFloatingToolbar: state.showFloatingToolbar,
+    // State properties
+    showEventModalState: state.showEventModal,
+    showFloatingToolbarState: state.showFloatingToolbar,
     toolbarPosition: state.toolbarPosition,
     keyboardMode: state.keyboardMode,
-    announceMessage: state.announceMessage,
+    announceMessageState: state.announceMessage,
     isMobileMenuOpen: state.isMobileMenuOpen,
-    showEventModal: showEventModal,
+    // Action functions
+    showEventModal,
     hideEventModal,
     showFloatingToolbar,
     hideFloatingToolbar,
-    announceMessage: announceMessage,
+    announceMessage,
   }
 }
 
