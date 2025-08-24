@@ -6,8 +6,9 @@ import { fetchMutation } from 'convex/nextjs';
 
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
 
-if (!webhookSecret) {
-  throw new Error('Please add CLERK_WEBHOOK_SECRET to your environment variables');
+// Only enforce webhook secret in production/runtime, not during build
+if (!webhookSecret && process.env.NODE_ENV === 'production') {
+  console.warn('CLERK_WEBHOOK_SECRET not found - webhook functionality disabled');
 }
 
 type ClerkWebhookEvent = {
@@ -41,6 +42,12 @@ export async function POST(request: NextRequest) {
     const payload = await request.text();
 
     // Create a new Svix instance with your webhook secret
+    if (!webhookSecret) {
+      return NextResponse.json(
+        { error: 'Webhook secret not configured' },
+        { status: 500 }
+      );
+    }
     const wh = new Webhook(webhookSecret);
 
     let evt: ClerkWebhookEvent;

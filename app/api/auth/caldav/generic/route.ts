@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
           serverUrl,
           username,
           providerName, // Custom name for the provider
-          calendars: calendars.map((cal: any) => ({
+          calendars: calendars.map((cal: { url: string; displayName?: string; color?: string }) => ({
             id: cal.url,
             name: cal.displayName || 'Calendar',
             color: cal.calendarColor || '#4A90E2',

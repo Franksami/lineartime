@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
         settings: {
           serverUrl: 'https://caldav.icloud.com',
           username: email,
-          calendars: calendars.map((cal: any) => ({
+          calendars: calendars.map((cal: { url: string; displayName?: string; color?: string }) => ({
             id: cal.url,
             name: cal.displayName || 'Calendar',
             color: cal.calendarColor || '#1BADF8', // Apple blue

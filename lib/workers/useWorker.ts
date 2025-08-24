@@ -1,26 +1,27 @@
 // Web Worker Hook - Manages worker lifecycle and communication
 import { useEffect, useRef, useCallback, useState } from 'react'
+import type { Event } from '@/types/calendar'
 
-interface WorkerMessage {
+interface WorkerMessage<T = unknown> {
   type: string
-  data?: any
+  data?: T
   id: string
-  result?: any
+  result?: T
   error?: string
 }
 
-interface UseWorkerOptions {
-  onMessage?: (message: WorkerMessage) => void
+interface UseWorkerOptions<T = unknown> {
+  onMessage?: (message: WorkerMessage<T>) => void
   onError?: (error: Error) => void
   onReady?: () => void
 }
 
-export function useWorker(
+export function useWorker<T = unknown>(
   workerPath: string,
-  options: UseWorkerOptions = {}
+  options: UseWorkerOptions<T> = {}
 ) {
   const workerRef = useRef<Worker | null>(null)
-  const pendingMessages = useRef<Map<string, (result: any) => void>>(new Map())
+  const pendingMessages = useRef<Map<string, (result: T) => void>>(new Map())
   const [isReady, setIsReady] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const messageIdCounter = useRef(0)
@@ -83,13 +84,13 @@ export function useWorker(
       }
       pendingMessages.current.clear()
     }
-  }, [workerPath])
+  }, [workerPath, options])
   
   // Send message to worker
-  const sendMessage = useCallback(async <T = any>(
+  const sendMessage = useCallback(async <U = T>(
     type: string,
-    data?: any
-  ): Promise<T> => {
+    data?: U
+  ): Promise<U> => {
     return new Promise((resolve, reject) => {
       if (!workerRef.current) {
         reject(new Error('Worker not initialized'))
@@ -145,22 +146,22 @@ export function useWorker(
 export function useCalendarWorker() {
   const worker = useWorker('/calendar-worker-v2.js') // Updated to use V2 with column-based layout
   
-  const calculateLayout = useCallback(async (events: any[]) => {
+  const calculateLayout = useCallback(async (events: Event[]) => {
     return worker.sendMessage('CALCULATE_LAYOUT', { events })
-  }, [worker.sendMessage])
+  }, [worker])
   
-  const detectConflicts = useCallback(async (events: any[]) => {
+  const detectConflicts = useCallback(async (events: Event[]) => {
     return worker.sendMessage('DETECT_CONFLICTS', { events })
-  }, [worker.sendMessage])
+  }, [worker])
   
-  const optimizePositions = useCallback(async (events: any[], layouts: any[]) => {
+  const optimizePositions = useCallback(async (events: Event[], layouts: unknown[]) => {
     return worker.sendMessage('OPTIMIZE_POSITIONS', { events, layouts })
-  }, [worker.sendMessage])
+  }, [worker])
   
   // New column-based layout method using Google Calendar algorithm
-  const layoutEventsV2 = useCallback(async (events: any[], containerWidth?: number) => {
+  const layoutEventsV2 = useCallback(async (events: Event[], containerWidth?: number) => {
     return worker.sendMessage('LAYOUT_EVENTS_V2', { events, containerWidth })
-  }, [worker.sendMessage])
+  }, [worker])
   
   return {
     ...worker,

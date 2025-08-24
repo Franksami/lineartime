@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Calendar, TrendingUp, Activity } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import type { Event } from '@/types/calendar'
+import type { Event, EventPriority } from '@/types/calendar'
 
 // Mock events for demonstration - in real app, this would come from your database
 const generateMockEvents = (year: number): Event[] => {
@@ -32,7 +32,7 @@ const generateMockEvents = (year: number): Event[] => {
         startDate,
         endDate,
         category: categories[Math.floor(Math.random() * categories.length)],
-        priority: priorities[Math.floor(Math.random() * priorities.length)] as any,
+        priority: priorities[Math.floor(Math.random() * priorities.length)] as EventPriority,
         description: `Sample event for analytics demonstration`,
         color: '#3b82f6'
       })
@@ -116,7 +116,7 @@ export default function AnalyticsPage() {
 
       {/* Analytics Dashboard */}
       <AnalyticsDashboard 
-        events={events as any} 
+        events={events} 
         year={selectedYear} 
       />
       

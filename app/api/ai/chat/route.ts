@@ -78,11 +78,7 @@ export async function POST(request: Request) {
     // Add events to interval tree for conflict detection
     events.forEach((event: Event) => {
       if (event.startDate && event.endDate) {
-        intervalTree.insert({
-          start: new Date(event.startDate).getTime(),
-          end: new Date(event.endDate).getTime(),
-          data: event
-        })
+        intervalTree.insert(event)
       }
     })
     
@@ -90,7 +86,6 @@ export async function POST(request: Request) {
     const result = streamText({
       model: openai('gpt-4o-mini'), // Using mini for cost efficiency
       messages,
-      maxTokens: 1000,
       temperature: 0.7,
       tools: {
         suggestSchedule: tool({
