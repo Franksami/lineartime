@@ -1,9 +1,11 @@
+"use node";
+
 import { v } from "convex/values";
 import { action, internalAction } from "../_generated/server";
 import { api, internal } from "../_generated/api";
 import { google } from 'googleapis';
 import { Doc, Id } from "../_generated/dataModel";
-import { decryptToken } from '@/lib/encryption';
+import { decryptToken } from '../utils/encryption';
 
 /**
  * Create OAuth2 client with decrypted tokens

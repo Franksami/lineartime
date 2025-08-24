@@ -1,9 +1,9 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requireAuth } from "./auth";
 
 export const createEvent = mutation({
   args: {
-    userId: v.id("users"),
     title: v.string(),
     description: v.optional(v.string()),
     startTime: v.number(),
@@ -34,8 +34,12 @@ export const createEvent = mutation({
     metadata: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
+    // Require authentication and get user
+    const { user } = await requireAuth(ctx);
+    
     const eventId = await ctx.db.insert("events", {
       ...args,
+      userId: user._id,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     });
@@ -46,15 +50,17 @@ export const createEvent = mutation({
 
 export const getEvents = query({
   args: {
-    userId: v.id("users"),
     startTime: v.optional(v.number()),
     endTime: v.optional(v.number()),
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    // Require authentication and get user
+    const { user } = await requireAuth(ctx);
+    
     let q = ctx.db
       .query("events")
-      .withIndex("by_user_and_time", (qb) => qb.eq("userId", args.userId));
+      .withIndex("by_user_and_time", (qb) => qb.eq("userId", user._id));
 
     if (args.startTime !== undefined) {
       q = q.filter((fb) => fb.gte(fb.field("startTime"), args.startTime!));

@@ -1,9 +1,11 @@
+"use node";
+
 import { v } from "convex/values";
 import { action, internalAction, internalMutation, internalQuery } from "../_generated/server";
 import { api, internal } from "../_generated/api";
 import { Doc, Id } from "../_generated/dataModel";
 import { createDAVClient } from 'tsdav';
-import { decryptToken } from '../../lib/encryption';
+import { decryptToken } from '../utils/encryption';
 import ICAL from 'ical.js';
 
 /**
@@ -25,11 +27,11 @@ export const performFullSync = internalAction({
     }
 
     // Decrypt credentials
-    const password = decryptToken(
-      provider.accessToken.encrypted,
-      provider.accessToken.iv,
-      provider.accessToken.tag
-    );
+    const password = decryptToken({
+      encrypted: provider.accessToken.encrypted,
+      iv: provider.accessToken.iv,
+      tag: provider.accessToken.tag
+    });
 
     // Create CalDAV client
     const client = new createDAVClient({
@@ -183,11 +185,11 @@ export const performIncrementalSync = internalAction({
     }
 
     // Decrypt credentials
-    const password = decryptToken(
-      provider.accessToken.encrypted,
-      provider.accessToken.iv,
-      provider.accessToken.tag
-    );
+    const password = decryptToken({
+      encrypted: provider.accessToken.encrypted,
+      iv: provider.accessToken.iv,
+      tag: provider.accessToken.tag
+    });
 
     // Create CalDAV client
     const client = new createDAVClient({
@@ -306,11 +308,11 @@ export const createOrUpdateEvent = internalAction({
     }
 
     // Decrypt credentials
-    const password = decryptToken(
-      provider.accessToken.encrypted,
-      provider.accessToken.iv,
-      provider.accessToken.tag
-    );
+    const password = decryptToken({
+      encrypted: provider.accessToken.encrypted,
+      iv: provider.accessToken.iv,
+      tag: provider.accessToken.tag
+    });
 
     // Create CalDAV client
     const client = new createDAVClient({
@@ -410,11 +412,11 @@ export const deleteEvent = internalAction({
     }
 
     // Decrypt credentials
-    const password = decryptToken(
-      provider.accessToken.encrypted,
-      provider.accessToken.iv,
-      provider.accessToken.tag
-    );
+    const password = decryptToken({
+      encrypted: provider.accessToken.encrypted,
+      iv: provider.accessToken.iv,
+      tag: provider.accessToken.tag
+    });
 
     // Create CalDAV client
     const client = new createDAVClient({

@@ -73,6 +73,25 @@ export default function CalendarPage() {
 }
 ```
 
+## Component Status Catalog
+
+### Active (Foundation-safe)
+- [`LinearCalendarHorizontal`](mdc:components/calendar/LinearCalendarHorizontal.tsx)
+- [`EventManagement`](mdc:components/calendar/EventManagement.tsx)
+- [`EventModal`](mdc:components/calendar/EventModal.tsx)
+- [`FilterPanel`](mdc:components/calendar/FilterPanel.tsx)
+- [`ReflectionModal`](mdc:components/calendar/ReflectionModal.tsx)
+- [`ZoomControls`](mdc:components/calendar/ZoomControls.tsx)
+
+### Experimental (kept for tests and research)
+- [`HybridCalendar`](mdc:components/calendar/HybridCalendar.tsx) — used in test pages
+- [`VirtualCalendar`](mdc:components/calendar/VirtualCalendar.tsx) — performance lane
+- [`RealtimeCalendarView`](mdc:components/calendar/RealtimeCalendarView.tsx) — future collab
+
+### Archived (do not import; kept for history)
+- [`LinearCalendarVertical`](mdc:components/calendar/_archive/LinearCalendarVertical.tsx)
+- [`MobileCalendarView`](mdc:components/mobile/_archive/MobileCalendarView.tsx)
+
 **🔒 Foundation Features (LOCKED):**
 - **12 Horizontal Month Rows**: Complete Jan-Dec display  
 - **Week Day Headers**: Top and bottom "Su Mo Tu We Th Fr Sa" spanning full width

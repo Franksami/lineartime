@@ -100,6 +100,16 @@ const config: Config = {
       borderRadius: {
         glass: '24px',
       },
+      zIndex: {
+        'calendar-grid': '0',
+        'calendar-events': '1',
+        'calendar-drag': '10',
+        'calendar-toolbar': '20',
+        'calendar-dropdown': '30',
+        'calendar-tooltip': '40',
+        'calendar-modal': '50',
+        'calendar-toast': '60',
+      },
       boxShadow: {
         glass: '0 8px 32px 0 oklch(10% 0.02 240 / 0.18)',
         'glass-hover': '0 12px 48px 0 oklch(10% 0.02 240 / 0.25)',
