@@ -431,7 +431,7 @@ export class SchedulingEngine {
       return {
         slot,
         score: slot.score,
-        reasoning,
+        reasoningText,
         constraints: {
           satisfied: slot.violations.length === 0 
             ? ['All hard constraints satisfied'] 

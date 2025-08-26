@@ -105,6 +105,116 @@ export const syncEvents = internalMutation({
 });
 
 /**
+ * Process webhook update from a provider
+ */
+export const processWebhookUpdate = internalMutation({
+  args: {
+    providerId: v.id("calendarProviders"),
+    eventData: v.object({
+      providerEventId: v.string(),
+      title: v.string(),
+      description: v.optional(v.string()),
+      startDate: v.string(),
+      endDate: v.string(),
+      location: v.optional(v.string()),
+      attendees: v.optional(v.array(v.any())),
+      category: v.optional(v.string()),
+      lastModified: v.number(),
+      provider: v.string(),
+    }),
+    operation: v.union(
+      v.literal("created"),
+      v.literal("updated"),
+      v.literal("deleted")
+    ),
+  },
+  handler: async (ctx, args) => {
+    const now = Date.now();
+
+    if (args.operation === 'deleted') {
+      // Delete local event
+      const existingSync = await ctx.db
+        .query("eventSync")
+        .withIndex("by_provider", (q) =>
+          q.eq("provider", args.eventData.provider).eq("providerEventId", args.eventData.providerEventId)
+        )
+        .first();
+
+      if (existingSync) {
+        await ctx.db.delete(existingSync.localEventId);
+        await ctx.db.delete(existingSync._id);
+      }
+      return;
+    }
+
+    // Convert dates
+    const startDate = new Date(args.eventData.startDate);
+    const endDate = new Date(args.eventData.endDate);
+
+    // Check if event already exists
+    const existingSync = await ctx.db
+      .query("eventSync")
+      .withIndex("by_provider", (q) =>
+        q.eq("provider", args.eventData.provider).eq("providerEventId", args.eventData.providerEventId)
+      )
+      .first();
+
+    if (existingSync) {
+      // Update existing event
+      const localEvent = await ctx.db.get(existingSync.localEventId);
+      if (localEvent) {
+        await ctx.db.patch(localEvent._id, {
+          title: args.eventData.title,
+          description: args.eventData.description,
+          startTime: startDate.getTime(),
+          endTime: endDate.getTime(),
+          location: args.eventData.location,
+          attendees: args.eventData.attendees?.map((a: any) => a.email || a),
+          metadata: args.eventData,
+          updatedAt: now,
+        });
+
+        // Update sync mapping
+        await ctx.db.patch(existingSync._id, {
+          lastModifiedRemote: args.eventData.lastModified,
+          syncStatus: "synced",
+          updatedAt: now,
+        });
+      }
+    } else {
+      // Create new event
+      const newEventId = await ctx.db.insert("events", {
+        userId: (await ctx.db.get(args.providerId))!.userId,
+        title: args.eventData.title,
+        description: args.eventData.description,
+        startTime: startDate.getTime(),
+        endTime: endDate.getTime(),
+        allDay: false,
+        color: args.eventData.provider === 'microsoft' ? '#0078d4' : '#4285F4',
+        location: args.eventData.location,
+        attendees: args.eventData.attendees?.map((a: any) => a.email || a),
+        metadata: args.eventData,
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      // Create sync mapping
+      await ctx.db.insert("eventSync", {
+        localEventId: newEventId,
+        providerId: args.providerId,
+        providerEventId: args.eventData.providerEventId,
+        provider: args.eventData.provider,
+        lastModifiedLocal: now,
+        lastModifiedRemote: args.eventData.lastModified,
+        syncStatus: "synced",
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+  },
+});
+
+/**
  * Process incremental changes from a provider
  */
 export const processIncrementalChanges = internalMutation({

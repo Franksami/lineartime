@@ -77,8 +77,8 @@ export function RealtimeCalendarView({
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2 text-blue-600" />
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">
             Loading calendar data...
           </p>
         </div>
@@ -91,12 +91,12 @@ export function RealtimeCalendarView({
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <WifiOff className="h-8 w-8 mx-auto mb-2 text-red-600" />
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <WifiOff className="h-8 w-8 mx-auto mb-2 text-destructive" />
+          <p className="text-sm text-muted-foreground">
             No connection to real-time updates
           </p>
           <button 
-            className="mt-2 text-sm text-blue-600 hover:text-blue-700"
+            className="mt-2 text-sm text-primary hover:underline"
             onClick={() => window.location.reload()}
           >
             Retry Connection
@@ -111,8 +111,8 @@ export function RealtimeCalendarView({
       {/* Header with sync status */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <Calendar className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <Calendar className="h-6 w-6 text-muted-foreground" />
+          <h2 className="text-xl font-semibold text-foreground">
             {format(selectedDate, view === "week" ? "'Week of' MMM d, yyyy" : "MMMM yyyy")}
           </h2>
         </div>
@@ -120,7 +120,7 @@ export function RealtimeCalendarView({
         <div className="flex items-center gap-3">
           {/* Sync indicator */}
           {isSyncing && (
-            <div className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <RefreshCw className="h-4 w-4 animate-spin" />
               <span>Syncing...</span>
             </div>
@@ -128,7 +128,7 @@ export function RealtimeCalendarView({
           
           {/* Conflict indicator */}
           {hasConflicts && (
-            <button className="flex items-center gap-2 text-sm text-orange-600 dark:text-orange-400 hover:underline">
+            <button className="flex items-center gap-2 text-sm text-secondary hover:underline">
               <AlertTriangle className="h-4 w-4" />
               <span>{conflicts.length} conflicts</span>
             </button>
@@ -138,10 +138,10 @@ export function RealtimeCalendarView({
           <div className="flex items-center gap-1">
             <div className={`h-2 w-2 rounded-full ${
               connectionState === "connected" 
-                ? "bg-green-500" 
-                : "bg-gray-400"
+                ? "bg-primary" 
+                : "bg-muted-foreground"
             }`} />
-            <span className="text-xs text-gray-500 dark:text-gray-400">
+            <span className="text-xs text-muted-foreground">
               {connectionState}
             </span>
           </div>
@@ -150,69 +150,69 @@ export function RealtimeCalendarView({
 
       {/* Calendar info cards */}
       <div className="grid grid-cols-4 gap-4 mb-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="bg-card rounded-lg p-4 border border-border">
+          <div className="text-2xl font-bold text-foreground">
             {events?.length || 0}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="text-sm text-muted-foreground">
             Total Events
           </div>
         </div>
         
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="bg-card rounded-lg p-4 border border-border">
+          <div className="text-2xl font-bold text-foreground">
             {calendars?.length || 0}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="text-sm text-muted-foreground">
             Calendars
           </div>
         </div>
         
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="bg-card rounded-lg p-4 border border-border">
+          <div className="text-2xl font-bold text-foreground">
             {categories?.length || 0}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="text-sm text-muted-foreground">
             Categories
           </div>
         </div>
         
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="bg-card rounded-lg p-4 border border-border">
+          <div className="text-2xl font-bold text-foreground">
             {syncStatus?.providers?.length || 0}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="text-sm text-muted-foreground">
             Connected Accounts
           </div>
         </div>
       </div>
 
       {/* Events list (simplified) */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+      <div className="bg-card rounded-lg border border-border">
+        <div className="p-4 border-b border-border">
+          <h3 className="font-semibold text-foreground">
             Upcoming Events
           </h3>
         </div>
         
-        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+        <div className="divide-y divide-border/50">
           {events && events.length > 0 ? (
             events.slice(0, 10).map((event) => {
               const category = event.categoryId ? categoriesById[event.categoryId] : null;
               
               return (
-                <div key={event._id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                <div key={event._id} className="p-4 hover:bg-muted/30 transition-colors">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h4 className="font-medium text-gray-900 dark:text-white">
+                      <h4 className="font-medium text-foreground">
                         {event.title}
                       </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         {format(new Date(event.startTime), "MMM d, h:mm a")}
                         {event.endTime && ` - ${format(new Date(event.endTime), "h:mm a")}`}
                       </p>
                       {event.location && (
-                        <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                           📍 {event.location}
                         </p>
                       )}
@@ -234,7 +234,7 @@ export function RealtimeCalendarView({
               );
             })
           ) : (
-            <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+            <div className="p-8 text-center text-muted-foreground">
               No events in this {view}
             </div>
           )}
@@ -243,22 +243,22 @@ export function RealtimeCalendarView({
 
       {/* User preferences display */}
       {preferences && (
-        <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <div className="mt-4 p-4 bg-muted/30 rounded-lg">
+          <h4 className="text-sm font-medium text-foreground mb-2">
             Calendar Settings
           </h4>
           <div className="grid grid-cols-3 gap-4 text-sm">
             <div>
-              <span className="text-gray-500 dark:text-gray-400">Theme:</span>{" "}
-              <span className="text-gray-900 dark:text-white">{preferences.theme}</span>
+              <span className="text-muted-foreground">Theme:</span>{" "}
+              <span className="text-foreground">{preferences.theme}</span>
             </div>
             <div>
-              <span className="text-gray-500 dark:text-gray-400">Time Format:</span>{" "}
-              <span className="text-gray-900 dark:text-white">{preferences.timeFormat}h</span>
+              <span className="text-muted-foreground">Time Format:</span>{" "}
+              <span className="text-foreground">{preferences.timeFormat}h</span>
             </div>
             <div>
-              <span className="text-gray-500 dark:text-gray-400">Timezone:</span>{" "}
-              <span className="text-gray-900 dark:text-white">{preferences.timezone}</span>
+              <span className="text-muted-foreground">Timezone:</span>{" "}
+              <span className="text-foreground">{preferences.timezone}</span>
             </div>
           </div>
         </div>
@@ -278,9 +278,9 @@ export function RealtimeEventCounter({ userId }: { userId: Id<"users"> | undefin
   const { events } = useRealtimeCalendarData(userId, now, endOfToday);
   
   return (
-    <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 dark:bg-blue-900 rounded-full">
-      <div className="h-2 w-2 bg-blue-500 rounded-full animate-pulse" />
-      <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+    <div className="inline-flex items-center gap-2 px-3 py-1 bg-muted rounded-full">
+      <div className="h-2 w-2 bg-primary rounded-full animate-pulse" />
+      <span className="text-sm font-medium text-primary">
         {events?.length || 0} events today
       </span>
     </div>

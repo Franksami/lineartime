@@ -5,8 +5,25 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { Calendar, Clock, TrendingUp, Activity, Download, Filter } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Calendar, Clock, TrendingUp, Activity, Download, Filter, Mouse, Database } from "lucide-react"
 import type { Event } from "@/types/calendar"
+import { exportAnalyticsToCSV, generateAnalyticsReport } from "@/lib/utils/exportUtils"
+import { DragDropMetricsPanel } from "@/components/analytics/DragDropMetricsPanel"
+import { AnalyticsSyncMonitor } from "@/components/analytics/AnalyticsSyncMonitor"
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend
+} from "recharts"
 
 interface CalendarEvent extends Event {
   priority?: 'critical' | 'high' | 'medium' | 'low' | 'optional'
@@ -117,6 +134,32 @@ export function AnalyticsDashboard({ events, year }: AnalyticsDashboardProps) {
     color: priorityColors[priority as keyof typeof priorityColors] || priorityColors.medium,
   }))
 
+  // Export handlers
+  const handleExportCSV = () => {
+    try {
+      exportAnalyticsToCSV(analytics, year)
+    } catch (error) {
+      console.error('Failed to export analytics:', error)
+    }
+  }
+
+  const handleExportReport = () => {
+    try {
+      const reportContent = generateAnalyticsReport(analytics, year)
+      const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `calendar-analytics-report-${year}.txt`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Failed to export report:', error)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -127,16 +170,55 @@ export function AnalyticsDashboard({ events, year }: AnalyticsDashboardProps) {
             <p className="text-muted-foreground">Insights into your {year} calendar usage and productivity</p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
-              <Filter className="w-4 h-4 mr-2" />
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => alert('Filter functionality coming soon! Use this to filter analytics by date range, categories, or priorities.')}
+              aria-label="Filter analytics data"
+            >
+              <Filter className="w-4 h-4 mr-2" aria-hidden="true" />
               Filter
             </Button>
-            <Button size="sm">
-              <Download className="w-4 h-4 mr-2" />
+            <Button 
+              size="sm"
+              onClick={handleExportCSV}
+              aria-label="Export analytics data as CSV file"
+              title="Download analytics data as CSV spreadsheet"
+            >
+              <Download className="w-4 h-4 mr-2" aria-hidden="true" />
+              Export CSV
+            </Button>
+            <Button 
+              variant="outline"
+              size="sm"
+              onClick={handleExportReport}
+              aria-label="Export analytics report as text file"
+              title="Download detailed analytics report"
+            >
+              <Download className="w-4 h-4 mr-2" aria-hidden="true" />
               Export Report
             </Button>
           </div>
         </div>
+
+        {/* Analytics Tabs */}
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              Event Analytics
+            </TabsTrigger>
+            <TabsTrigger value="dragdrop" className="flex items-center gap-2">
+              <Mouse className="w-4 h-4" />
+              Drag & Drop Analytics
+            </TabsTrigger>
+            <TabsTrigger value="sync" className="flex items-center gap-2">
+              <Database className="w-4 h-4" />
+              Background Sync
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6">
 
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -196,8 +278,40 @@ export function AnalyticsDashboard({ events, year }: AnalyticsDashboardProps) {
               <CardDescription>Events scheduled throughout the year</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-[300px] flex items-center justify-center bg-muted rounded-lg">
-                <p className="text-muted-foreground">Chart visualization coming soon</p>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={analytics.monthlyStats} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis 
+                      dataKey="month" 
+                      className="text-xs fill-muted-foreground"
+                      tick={{ fontSize: 12 }}
+                    />
+                    <YAxis 
+                      className="text-xs fill-muted-foreground"
+                      tick={{ fontSize: 12 }}
+                    />
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: 'hsl(var(--popover))',
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '6px',
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                      }}
+                      labelStyle={{ color: 'hsl(var(--foreground))' }}
+                      formatter={(value: number, name: string) => [
+                        `${value} ${name.toLowerCase()}`,
+                        name === 'events' ? 'Events' : 'Days'
+                      ]}
+                    />
+                    <Bar 
+                      dataKey="events" 
+                      fill="hsl(var(--chart-1))"
+                      radius={[2, 2, 0, 0]}
+                      name="Events"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
@@ -208,8 +322,38 @@ export function AnalyticsDashboard({ events, year }: AnalyticsDashboardProps) {
               <CardDescription>Distribution by event type</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-[300px] flex items-center justify-center bg-muted rounded-lg mb-4">
-                <p className="text-muted-foreground">Chart visualization coming soon</p>
+              <div className="h-[300px] mb-4">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={categoryData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                      label={({ name, value, percent }) => 
+                        `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
+                      }
+                      labelLine={false}
+                    >
+                      {categoryData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: 'hsl(var(--popover))',
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '6px',
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                        color: 'hsl(var(--foreground))',
+                      }}
+                      formatter={(value: number, name: string) => [`${value} events`, 'Count']}
+                      labelFormatter={(label: string) => `Category: ${label}`}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
               <div className="flex flex-wrap gap-2">
                 {categoryData.map((category) => (
@@ -230,24 +374,68 @@ export function AnalyticsDashboard({ events, year }: AnalyticsDashboardProps) {
             <CardDescription>Events by priority level</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {priorityData.map((priority) => {
-                const percentage = Math.round((priority.value / analytics.totalEvents) * 100)
-                return (
-                  <div key={priority.name} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: priority.color }} />
-                        <span className="text-sm font-medium capitalize">{priority.name}</span>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Chart */}
+              <div className="h-[250px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={priorityData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={40}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {priorityData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: 'hsl(var(--popover))',
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '6px',
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                        color: 'hsl(var(--foreground))',
+                      }}
+                      formatter={(value: number) => [`${value} events`, 'Count']}
+                      labelFormatter={(label: string) => `Priority: ${label}`}
+                    />
+                    <Legend 
+                      verticalAlign="bottom" 
+                      height={36}
+                      formatter={(value: string) => (
+                        <span className="text-sm capitalize" style={{ color: 'hsl(var(--foreground))' }}>
+                          {value}
+                        </span>
+                      )}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              
+              {/* Progress bars */}
+              <div className="space-y-4">
+                {priorityData.map((priority) => {
+                  const percentage = Math.round((priority.value / analytics.totalEvents) * 100)
+                  return (
+                    <div key={priority.name} className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: priority.color }} />
+                          <span className="text-sm font-medium capitalize">{priority.name}</span>
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {priority.value} ({percentage}%)
+                        </span>
                       </div>
-                      <span className="text-sm text-muted-foreground">
-                        {priority.value} ({percentage}%)
-                      </span>
+                      <Progress value={percentage} className="h-2" />
                     </div>
-                    <Progress value={percentage} className="h-2" />
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -283,6 +471,20 @@ export function AnalyticsDashboard({ events, year }: AnalyticsDashboardProps) {
             </div>
           </CardContent>
         </Card>
+          </TabsContent>
+
+          <TabsContent value="dragdrop" className="space-y-6">
+            <DragDropMetricsPanel 
+              calendarAnalytics={analytics}
+              events={events}
+              year={year}
+            />
+          </TabsContent>
+
+          <TabsContent value="sync" className="space-y-6">
+            <AnalyticsSyncMonitor />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   )

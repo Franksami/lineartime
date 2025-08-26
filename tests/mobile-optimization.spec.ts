@@ -47,7 +47,7 @@ test.describe('Mobile Optimization', () => {
         await menuButton.click()
       } else {
         // Desktop/tablet view - check regular zoom controls
-        const zoomControls = await page.locator('div[class*="z-20"][class*="backdrop-blur"]')
+        const zoomControls = await page.locator('[role="group"][aria-label="Zoom controls"]')
         await expect(zoomControls).toBeVisible()
       }
       

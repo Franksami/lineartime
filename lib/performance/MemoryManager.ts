@@ -66,11 +66,18 @@ export class MemoryManager {
       this.handleResourceCleanup(id);
     });
 
-    // Start monitoring
-    this.startMonitoring();
+    // Start monitoring (only on client side)
+    if (typeof window !== 'undefined') {
+      this.startMonitoring();
+    }
   }
 
   static getInstance(): MemoryManager {
+    // Skip instantiation if running on server side
+    if (typeof window === 'undefined') {
+      return {} as MemoryManager; // Return empty object for server-side compatibility
+    }
+    
     if (!MemoryManager.instance) {
       MemoryManager.instance = new MemoryManager();
     }
@@ -133,8 +140,12 @@ export class MemoryManager {
       metrics.external = memory.jsHeapSizeLimit / 1048576;
     }
     
-    // Count DOM nodes
-    metrics.domNodes = document.getElementsByTagName('*').length;
+    // Count DOM nodes (skip on server side)
+    if (typeof document !== 'undefined') {
+      metrics.domNodes = document.getElementsByTagName('*').length;
+    } else {
+      metrics.domNodes = 0;
+    }
     
     // Count event listeners (approximate)
     metrics.eventListeners = this.countEventListeners();

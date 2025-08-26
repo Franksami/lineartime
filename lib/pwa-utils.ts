@@ -196,6 +196,9 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
 
 // Check if app is running as PWA
 export function isPWA(): boolean {
+  if (typeof window === 'undefined') {
+    return false
+  }
   return window.matchMedia("(display-mode: standalone)").matches || (window.navigator as any).standalone
 }
 

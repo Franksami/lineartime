@@ -50,7 +50,7 @@ export function NavigationHeader({
   const [showThemeSelector, setShowThemeSelector] = React.useState(false)
   
   return (
-    <header className={cn('border-b bg-background/95 backdrop-blur-sm', className)}>
+    <header className={cn('border-b border-border bg-background', className)}>
       <div className="flex h-16 items-center px-4 gap-4">
         {/* Mobile Menu Button */}
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
@@ -59,8 +59,9 @@ export function NavigationHeader({
               variant="ghost"
               size="icon"
               className="md:hidden"
+              aria-label="Open navigation menu"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5" aria-hidden="true" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-80">
@@ -74,34 +75,40 @@ export function NavigationHeader({
               <Button
                 variant={currentView === 'year' ? 'default' : 'ghost'}
                 className="w-full justify-start"
+                aria-label="Switch to year view"
+                aria-current={currentView === 'year' ? 'page' : undefined}
                 onClick={() => {
                   onViewChange('year')
                   setSidebarOpen(false)
                 }}
               >
-                <Calendar className="mr-2 h-4 w-4" />
+                <Calendar className="mr-2 h-4 w-4" aria-hidden="true" />
                 Year View
               </Button>
               <Button
                 variant={currentView === 'timeline' ? 'default' : 'ghost'}
                 className="w-full justify-start"
+                aria-label="Switch to timeline view"
+                aria-current={currentView === 'timeline' ? 'page' : undefined}
                 onClick={() => {
                   onViewChange('timeline')
                   setSidebarOpen(false)
                 }}
               >
-                <CalendarDays className="mr-2 h-4 w-4" />
+                <CalendarDays className="mr-2 h-4 w-4" aria-hidden="true" />
                 Timeline View
               </Button>
               <Button
                 variant={currentView === 'manage' ? 'default' : 'ghost'}
                 className="w-full justify-start"
+                aria-label="Switch to event management view"
+                aria-current={currentView === 'manage' ? 'page' : undefined}
                 onClick={() => {
                   onViewChange('manage')
                   setSidebarOpen(false)
                 }}
               >
-                <LayoutList className="mr-2 h-4 w-4" />
+                <LayoutList className="mr-2 h-4 w-4" aria-hidden="true" />
                 Event Management
               </Button>
             </div>
@@ -122,27 +129,30 @@ export function NavigationHeader({
             variant={currentView === 'year' ? 'default' : 'ghost'}
             size="sm"
             onClick={() => onViewChange('year')}
+            aria-label="Switch to year view"
             aria-current={currentView === 'year' ? 'page' : undefined}
           >
-            <Calendar className="mr-2 h-4 w-4" />
+            <Calendar className="mr-2 h-4 w-4" aria-hidden="true" />
             Year
           </Button>
           <Button
             variant={currentView === 'timeline' ? 'default' : 'ghost'}
             size="sm"
             onClick={() => onViewChange('timeline')}
+            aria-label="Switch to timeline view"
             aria-current={currentView === 'timeline' ? 'page' : undefined}
           >
-            <CalendarDays className="mr-2 h-4 w-4" />
+            <CalendarDays className="mr-2 h-4 w-4" aria-hidden="true" />
             Timeline
           </Button>
           <Button
             variant={currentView === 'manage' ? 'default' : 'ghost'}
             size="sm"
             onClick={() => onViewChange('manage')}
+            aria-label="Switch to event management view"
             aria-current={currentView === 'manage' ? 'page' : undefined}
           >
-            <LayoutList className="mr-2 h-4 w-4" />
+            <LayoutList className="mr-2 h-4 w-4" aria-hidden="true" />
             Manage
           </Button>
         </nav>
@@ -154,6 +164,7 @@ export function NavigationHeader({
             variant="ghost"
             size="icon"
             className="hidden sm:flex"
+            aria-label="Search events (Ctrl+K)"
             onClick={() => {
               // Trigger command bar
               const event = new KeyboardEvent('keydown', {
@@ -164,7 +175,7 @@ export function NavigationHeader({
               window.dispatchEvent(event)
             }}
           >
-            <Search className="h-4 w-4" />
+            <Search className="h-4 w-4" aria-hidden="true" />
           </Button>
           
           {/* Notifications */}
@@ -174,9 +185,9 @@ export function NavigationHeader({
             className="relative"
             aria-label="Notifications"
           >
-            <Bell className="h-4 w-4" />
+            <Bell className="h-4 w-4" aria-hidden="true" />
             {events.length > 0 && (
-              <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500" />
+              <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-destructive" />
             )}
           </Button>
           
@@ -191,7 +202,7 @@ export function NavigationHeader({
             aria-label="Theme selector"
             className="relative"
           >
-            <Palette className="h-4 w-4" />
+            <Palette className="h-4 w-4" aria-hidden="true" />
           </Button>
           
           <SettingsDialog />
@@ -203,7 +214,7 @@ export function NavigationHeader({
             className="rounded-full"
             aria-label="User profile"
           >
-            <User className="h-4 w-4" />
+            <User className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       </div>

@@ -217,7 +217,7 @@ test.describe('Performance with Improved Layout', () => {
       
       const startTime = performance.now();
       let frameCount = 0;
-      let lastFrameTime = startTime;
+      const lastFrameTime = startTime;
       
       // Create animation frame counter
       const countFrames = () => {
@@ -253,7 +253,8 @@ test.describe('Performance with Improved Layout', () => {
     
     // Get memory usage if available
     const metrics = await page.evaluate(() => {
-      // @ts-ignore - performance.memory is Chrome-specific
+      // performance.memory is Chrome-specific API not in standard TypeScript definitions
+      // @ts-expect-error - Chrome-specific memory API
       if (performance.memory) {
         return {
           usedJSHeapSize: performance.memory.usedJSHeapSize / 1048576, // Convert to MB

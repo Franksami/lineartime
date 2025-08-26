@@ -1,13 +1,17 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { registerServiceWorker, registerBackgroundSync, setupPushNotifications } from '@/lib/pwa-utils'
+import { notify } from '@/components/ui/notify'
 
 interface PWAProviderProps {
   children: React.ReactNode
 }
 
 export function PWAProvider({ children }: PWAProviderProps) {
+  const onlineToastId = useRef<string | number | null>(null)
+  const offlineToastId = useRef<string | number | null>(null)
+
   useEffect(() => {
     // Register service worker
     registerServiceWorker()
@@ -22,7 +26,13 @@ export function PWAProvider({ children }: PWAProviderProps) {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         console.log('App has been updated! Please refresh to see the latest version.')
-        // You could show a toast notification here
+        notify.info('App updated! Please refresh to see the latest version.', {
+          duration: 8000,
+          action: {
+            label: 'Refresh',
+            onClick: () => window.location.reload(),
+          },
+        })
       })
     }
     

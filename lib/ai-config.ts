@@ -1,11 +1,17 @@
-import { xai } from "@ai-sdk/xai"
-import { groq } from "@ai-sdk/groq"
+import { anthropic } from "@ai-sdk/anthropic"
+import { calendarTools } from "./ai/tools/calendar"
 
-// Default model configurations
+// Default model configurations - Using Anthropic Claude
 export const AI_MODELS = {
-  CHAT: xai("grok-beta"), // Use Grok for chat interactions
-  PARSING: groq("llama-3.1-70b-versatile"), // Use Groq for fast parsing
-  SCHEDULING: xai("grok-beta"), // Use Grok for complex scheduling
+  CHAT: anthropic("claude-3-5-sonnet-20241022"), // Use Claude for chat interactions
+  PARSING: anthropic("claude-3-haiku-20240307"), // Use Claude Haiku for fast parsing
+  SCHEDULING: anthropic("claude-3-5-sonnet-20241022"), // Use Claude for complex scheduling
+} as const
+
+// AI Tools configuration for Vercel AI SDK v5
+export const AI_TOOLS = {
+  // Calendar-specific tools
+  ...calendarTools,
 } as const
 
 // AI prompt templates

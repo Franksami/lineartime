@@ -60,6 +60,11 @@ export class AnimationLoop {
   }
 
   static getInstance(): AnimationLoop {
+    // Skip instantiation if running on server side
+    if (typeof window === 'undefined') {
+      return {} as AnimationLoop; // Return empty object for server-side compatibility
+    }
+    
     if (!AnimationLoop.instance) {
       AnimationLoop.instance = new AnimationLoop();
     }
@@ -70,6 +75,9 @@ export class AnimationLoop {
    * Detect display refresh rate
    */
   private async detectRefreshRate(): Promise<void> {
+    // Skip detection if running on server side
+    if (typeof window === 'undefined') return;
+    
     if ('getScreenDetails' in window) {
       try {
         // Use Screen Details API if available

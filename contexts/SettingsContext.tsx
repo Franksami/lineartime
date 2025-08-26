@@ -1,8 +1,9 @@
 'use client'
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useEffect } from 'react';
 import { useSettings } from '@/hooks/useSettings';
 import { UserSettings } from '@/lib/settings/types';
+import { initializeSoundService, useSoundEffects, SoundType } from '@/lib/sound-service';
 
 /**
  * Settings Context Type
@@ -28,9 +29,16 @@ interface SettingsContextType {
   setTimeFormat: (format: UserSettings['time']['format']) => void;
   setDateFormat: (dateFormat: UserSettings['time']['dateFormat']) => void;
   setDefaultView: (defaultView: UserSettings['calendar']['defaultView']) => void;
+  setCalendarDayStyle: (style: UserSettings['calendar']['calendarDayStyle']) => void;
+  toggleDaysLeftCounter: () => void;
   isHighContrast: boolean;
   isReducedMotion: boolean;
   getEffectiveTheme: () => 'light' | 'dark';
+  // Sound methods
+  playSound: (type: SoundType) => void;
+  toggleSound: () => void;
+  setSoundVolume: (volume: number) => void;
+  toggleSoundType: (type: SoundType) => void;
 }
 
 /**
@@ -51,9 +59,44 @@ interface SettingsProviderProps {
  */
 export function SettingsProvider({ children }: SettingsProviderProps) {
   const settingsHook = useSettings();
+  const { playSound } = useSoundEffects(settingsHook.settings.notifications);
+
+  // Initialize sound service when settings change
+  useEffect(() => {
+    initializeSoundService(settingsHook.settings.notifications);
+  }, [settingsHook.settings.notifications]);
+
+  // Sound convenience methods
+  const toggleSound = () => {
+    settingsHook.updateCategory('notifications', { 
+      sound: !settingsHook.settings.notifications.sound 
+    });
+  };
+
+  const setSoundVolume = (soundVolume: number) => {
+    settingsHook.updateCategory('notifications', { soundVolume });
+  };
+
+  const toggleSoundType = (type: SoundType) => {
+    const currentValue = settingsHook.settings.notifications.soundTypes[type];
+    settingsHook.updateCategory('notifications', {
+      soundTypes: {
+        ...settingsHook.settings.notifications.soundTypes,
+        [type]: !currentValue
+      }
+    });
+  };
+
+  const contextValue = {
+    ...settingsHook,
+    playSound,
+    toggleSound,
+    setSoundVolume,
+    toggleSoundType,
+  };
 
   return (
-    <SettingsContext.Provider value={settingsHook}>
+    <SettingsContext.Provider value={contextValue}>
       {children}
     </SettingsContext.Provider>
   );

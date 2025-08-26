@@ -100,6 +100,11 @@ export class PerformanceMonitor {
   }
 
   static getInstance(): PerformanceMonitor {
+    // Skip instantiation if running on server side
+    if (typeof window === 'undefined') {
+      return {} as PerformanceMonitor; // Return empty object for server-side compatibility
+    }
+    
     if (!PerformanceMonitor.instance) {
       PerformanceMonitor.instance = new PerformanceMonitor();
     }
@@ -110,6 +115,9 @@ export class PerformanceMonitor {
    * Initialize monitoring
    */
   private init(): void {
+    // Skip initialization if running on server side
+    if (typeof window === 'undefined') return;
+    
     // Subscribe to subsystem metrics
     this.subscribeToSubsystems();
     
@@ -400,6 +408,9 @@ export class PerformanceMonitor {
    * Measure network latency
    */
   private measureNetworkLatency(): number {
+    // Skip measurement if running on server side
+    if (typeof window === 'undefined') return 0;
+    
     // Use Navigation Timing API if available
     if ('performance' in window && 'timing' in performance) {
       const timing = performance.timing;

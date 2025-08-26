@@ -12,7 +12,8 @@ import { format, parseISO } from 'date-fns';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
-import { toast } from 'sonner';
+import { notify } from '@/components/ui/notify';
+import { useAutoAnimate, useAutoAnimateModal } from '@/hooks/useAutoAnimate';
 
 interface ConflictEvent {
   id?: string;
@@ -57,6 +58,10 @@ export function ConflictResolutionModal({
   const [selectedStrategy, setSelectedStrategy] = useState<ResolutionStrategy>('merge');
   const [mergedEvent, setMergedEvent] = useState<ConflictEvent | null>(null);
   const resolveConflict = useMutation(api.calendar.events.resolveSyncConflict);
+  
+  // AutoAnimate refs for smooth transitions
+  const [modalContentRef] = useAutoAnimateModal();
+  const [radioGroupRef] = useAutoAnimate({ duration: 200 });
 
   if (!localEvent || !remoteEvent || !conflictId || !providerId) {
     return null;
@@ -100,12 +105,12 @@ export function ConflictResolutionModal({
         resolution,
       });
 
-      toast.success('Conflict resolved successfully');
+      notify.success('Conflict resolved successfully');
       onResolved?.();
       onClose();
     } catch (error) {
       console.error('Error resolving conflict:', error);
-      toast.error('Failed to resolve conflict');
+      notify.error('Failed to resolve conflict');
     }
   };
 
@@ -172,7 +177,7 @@ export function ConflictResolutionModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4">
+        <div ref={modalContentRef} className="grid gap-4">
           {/* Show conflicting versions */}
           <div className="grid md:grid-cols-2 gap-4">
             <EventCard event={localEvent} source="Local" />
@@ -183,7 +188,7 @@ export function ConflictResolutionModal({
           <div className="space-y-4">
             <Label>Resolution Strategy</Label>
             <RadioGroup value={selectedStrategy} onValueChange={(value) => setSelectedStrategy(value as ResolutionStrategy)}>
-              <div className="space-y-3">
+              <div ref={radioGroupRef} className="space-y-3">
                 <div className="flex items-start space-x-3">
                   <RadioGroupItem value="local" id="local" />
                   <div className="grid gap-0.5">

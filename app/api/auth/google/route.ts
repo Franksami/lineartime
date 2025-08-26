@@ -3,7 +3,8 @@ import { google } from 'googleapis';
 import { currentUser } from '@clerk/nextjs/server';
 import { api } from '@/convex/_generated/api';
 import { ConvexHttpClient } from 'convex/browser';
-import { encryptToken } from '@/lib/encryption';
+// TODO: Move token encryption to Convex function
+// import { encryptToken } from '@/lib/encryption';
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
@@ -116,15 +117,9 @@ export async function POST(request: NextRequest) {
     const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
     const { data: calendarList } = await calendar.calendarList.list();
 
-    // Encrypt tokens
-    const encryptedAccessToken = encryptToken(tokens.access_token!);
-    const encryptedRefreshToken = tokens.refresh_token 
-      ? encryptToken(tokens.refresh_token)
-      : undefined;
-
-    // Store provider connection in Convex
+    // Store provider connection with server-side encryption
     const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-    
+
     // Get Convex user ID
     const convexUser = await convex.query(api.users.getUserByClerkId, {
       clerkId: user.id
@@ -136,12 +131,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Store the provider connection
-    await convex.mutation(api.calendar.providers.connectProvider, {
-      userId: convexUser._id,
+    // Store the provider connection using server-side encryption
+    await convex.action(api.calendar.encryption.connectProviderWithTokens, {
       provider: 'google',
-      accessToken: encryptedAccessToken,
-      refreshToken: encryptedRefreshToken,
+      accessToken: tokens.access_token!,
+      refreshToken: tokens.refresh_token || undefined,
       expiresAt: tokens.expiry_date || undefined,
       providerAccountId: userInfo.id!,
       settings: {
@@ -149,7 +143,7 @@ export async function POST(request: NextRequest) {
           id: cal.id!,
           name: cal.summary!,
           color: cal.backgroundColor || '#4285F4',
-          syncEnabled: cal.id === userInfo.email, // Enable primary calendar by default
+          syncEnabled: cal.primary || false, // Enable primary calendar by default
           isPrimary: cal.primary || false
         })) || [],
         syncDirection: 'bidirectional',

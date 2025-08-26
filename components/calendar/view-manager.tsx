@@ -19,7 +19,7 @@ export function ViewManager({ currentView, onViewChange }: ViewManagerProps) {
 
   return (
     <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
-      <div className="bg-white/80 backdrop-blur-md border border-gray-200 rounded-full px-2 py-2 shadow-lg">
+      <div className="bg-card border border-border rounded-full px-2 py-2 shadow-sm">
         <div className="flex items-center gap-1">
           {views.map((view) => {
             const Icon = view.icon
@@ -31,14 +31,11 @@ export function ViewManager({ currentView, onViewChange }: ViewManagerProps) {
                 onClick={() => onViewChange(view.id)}
                 variant={isActive ? "default" : "ghost"}
                 size="sm"
-                className={`
-                  rounded-full px-4 py-2 transition-all duration-200
-                  ${
-                    isActive
-                      ? "bg-gray-900 text-white shadow-md"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                  }
-                `}
+                className={
+                  isActive
+                    ? "rounded-full px-4 py-2 bg-primary text-primary-foreground shadow-sm"
+                    : "rounded-full px-4 py-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                }
                 title={view.description}
               >
                 <Icon className="w-4 h-4 mr-2" />

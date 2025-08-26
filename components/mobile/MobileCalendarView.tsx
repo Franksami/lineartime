@@ -93,10 +93,10 @@ export function MobileCalendarView({
   }
   
   const categoryColors = {
-    personal: 'bg-blue-500',
-    work: 'bg-green-500',
-    effort: 'bg-purple-500',
-    notes: 'bg-yellow-500'
+    personal: 'bg-primary',
+    work: 'bg-secondary',
+    effort: 'bg-accent',
+    notes: 'bg-muted'
   }
   
   return (
@@ -117,7 +117,7 @@ export function MobileCalendarView({
       )}
       
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b">
+      <div className="sticky top-0 z-10 bg-background border-b border-border">
         <div className="flex items-center justify-between p-4">
           <Button
             size="icon"
@@ -213,7 +213,7 @@ export function MobileCalendarView({
       {/* Gesture feedback overlay */}
       {gestureState.isGesturing && (
         <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-          <div className="bg-background/80 backdrop-blur-sm rounded-lg px-4 py-2">
+          <div className="bg-card rounded-lg px-4 py-2 border border-border shadow-sm">
             <p className="text-sm">
               {gestureState.currentGesture === 'swipe' && 'Swiping...'}
               {gestureState.currentGesture === 'pinch' && `Zoom: ${Math.round(zoomLevel * 100)}%`}

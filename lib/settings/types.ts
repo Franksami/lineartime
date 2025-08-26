@@ -16,6 +16,8 @@ export interface CalendarSettings {
   defaultView: 'year' | 'timeline' | 'manage';
   showWeekNumbers: boolean;
   showWeekends: boolean;
+  calendarDayStyle: 'number' | 'dot'; // Display style for day cells
+  showDaysLeft: boolean; // Show days remaining counter in dot mode
   eventDefaultDuration: number; // in minutes
   workingHours: {
     enabled: boolean;
@@ -39,6 +41,12 @@ export interface NotificationSettings {
   eventReminders: boolean;
   reminderMinutes: number[]; // [5, 15, 30, 60] minutes before event
   sound: boolean;
+  soundVolume: number; // 0-1, default 0.3
+  soundTypes: {
+    success: boolean;    // Event creation, updates
+    error: boolean;      // Failures, sync errors  
+    notification: boolean; // Sync complete, reminders
+  };
   desktop: boolean;
   email: boolean;
   dailyDigest: boolean;
@@ -94,6 +102,8 @@ export const createDefaultSettings = (): UserSettings => ({
     defaultView: 'year',
     showWeekNumbers: false,
     showWeekends: true,
+    calendarDayStyle: 'dot', // Default to dot view
+    showDaysLeft: true, // Show days left counter in dot mode
     eventDefaultDuration: 60,
     workingHours: {
       enabled: false,
@@ -114,6 +124,12 @@ export const createDefaultSettings = (): UserSettings => ({
     eventReminders: true,
     reminderMinutes: [15],
     sound: false,
+    soundVolume: 0.3,
+    soundTypes: {
+      success: true,
+      error: true,
+      notification: true,
+    },
     desktop: false,
     email: false,
     dailyDigest: false,
@@ -155,3 +171,6 @@ export const isValidDateFormat = (format: string): format is TimeSettings['dateF
 
 export const isValidCalendarView = (view: string): view is CalendarSettings['defaultView'] =>
   ['year', 'timeline', 'manage'].includes(view);
+
+export const isValidCalendarDayStyle = (style: string): style is CalendarSettings['calendarDayStyle'] =>
+  ['number', 'dot'].includes(style);

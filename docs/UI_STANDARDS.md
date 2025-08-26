@@ -45,29 +45,25 @@ The oklch color space provides perceptually uniform colors, meaning that changes
 }
 ```
 
-### Color Usage Guidelines
+### Color Usage Guidelines (Token-Only)
 
-1. **Never use hardcoded colors** - Always use theme variables
-2. **Backgrounds**: 
-   - Primary: `bg-background` (pure black)
+1. **Use only shadcn/Vercel tokens** - Do not use brand Tailwind utilities (e.g., `bg-blue-500`, `text-red-600`).
+2. **Backgrounds**:
+   - Primary: `bg-background`
    - Cards/Elevated: `bg-card`
-   - Interactive: `bg-muted`
+   - Interactive: `bg-muted`, `bg-accent`
 3. **Text Colors**:
    - Primary: `text-foreground`
    - Secondary: `text-muted-foreground`
-   - Accent: Theme-specific colors
-4. **Borders**: Always use `border-border`
+4. **Borders & Rings**: Use `border-border`, `ring-ring`
 
 ### Category-Specific Colors
 
 ```typescript
 // Event categories with oklch alpha blending
-const categoryColors = {
-  personal: 'bg-green-500/10 border-green-500/20',
-  work: 'bg-blue-500/10 border-blue-500/20',
-  effort: 'bg-orange-500/10 border-orange-500/20',
-  note: 'bg-purple-500/10 border-purple-500/20'
-}
+// Use token surfaces for badges/cards and chart vars for small dot indicators
+// Surfaces: bg-primary/bg-secondary/bg-accent/bg-muted
+// Dots: hsl(var(--chart-1..5)) if needed for visual differentiation
 ```
 
 ## 📐 Layout Standards
@@ -100,6 +96,68 @@ const categoryColors = {
    - Desktop: > 1024px
 
 ## 🧩 Component Patterns
+
+### Toast Notifications
+
+We use a unified toast system built on Sonner with token-only theming. The system provides consistent notifications across the app.
+
+#### Usage Guidelines
+
+**Preferred API**: Use the `notify` wrapper from `@/components/ui/notify`:
+
+```tsx
+import { notify } from '@/components/ui/notify'
+
+// Success notifications
+notify.success('Settings saved successfully')
+
+// Error notifications (persist longer)
+notify.error('Failed to save settings')
+
+// Info notifications
+notify.info('Syncing calendar data...')
+
+// Warning notifications
+notify.warning('Conflict detected: Review required')
+
+// Loading states with update pattern
+const id = notify.loading('Saving...')
+// Later...
+notify.update(id, 'Saved successfully', true) // true = success
+```
+
+**Direct Toast API**: For advanced features like actions, use the raw toast:
+
+```tsx
+import { toast } from '@/components/ui/sonner'
+
+toast('Message', {
+  action: {
+    label: 'Undo',
+    onClick: () => handleUndo()
+  }
+})
+```
+
+**Deprecated**: The old `hooks/use-toast.tsx` is deprecated. Migrate to `notify` for consistency.
+
+#### Toast Positioning & Styling
+
+- **Position**: Top-right (configurable in `components/ui/sonner.tsx`)
+- **Theme**: Automatic light/dark mode based on system preference
+- **Z-index**: Uses `CALENDAR_LAYERS.TOAST` for proper layering
+- **Styling**: Token-only classes (`bg-card`, `text-foreground`, `border-border`)
+
+#### Best Practices
+
+1. **Keep messages concise** - Combine title/description when possible
+2. **Use appropriate durations**:
+   - Success: 4 seconds
+   - Error: 6 seconds (or persistent for critical errors)
+   - Info: 3-4 seconds
+   - Warning: 5 seconds
+3. **Provide actions** for user interaction when appropriate
+4. **Avoid toast spam** - Use IDs for coalescing repeated notifications
 
 ### Glass Morphism (Optional)
 

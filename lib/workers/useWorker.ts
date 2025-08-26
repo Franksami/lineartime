@@ -26,6 +26,25 @@ export function useWorker<T = unknown>(
   const [isLoading, setIsLoading] = useState(true)
   const messageIdCounter = useRef(0)
   
+  // Extract stable callback references to prevent infinite re-renders
+  const { onMessage, onError, onReady } = options
+  const onMessageRef = useRef(onMessage)
+  const onErrorRef = useRef(onError)
+  const onReadyRef = useRef(onReady)
+  
+  // Update refs when callbacks change
+  useEffect(() => {
+    onMessageRef.current = onMessage
+  }, [onMessage])
+  
+  useEffect(() => {
+    onErrorRef.current = onError
+  }, [onError])
+  
+  useEffect(() => {
+    onReadyRef.current = onReady
+  }, [onReady])
+  
   // Initialize worker
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -41,7 +60,7 @@ export function useWorker<T = unknown>(
         if (message.type === 'READY') {
           setIsReady(true)
           setIsLoading(false)
-          options.onReady?.()
+          onReadyRef.current?.()
         } else if (message.type === 'SUCCESS') {
           // Resolve pending promise
           const resolver = pendingMessages.current.get(message.id)
@@ -56,9 +75,9 @@ export function useWorker<T = unknown>(
             resolver(Promise.reject(new Error(message.error)))
             pendingMessages.current.delete(message.id)
           }
-          options.onError?.(new Error(message.error))
+          onErrorRef.current?.(new Error(message.error))
         } else {
-          options.onMessage?.(message)
+          onMessageRef.current?.(message)
         }
       })
       
@@ -66,14 +85,14 @@ export function useWorker<T = unknown>(
       worker.addEventListener('error', (error) => {
         console.error('Worker error:', error)
         setIsLoading(false)
-        options.onError?.(error)
+        onErrorRef.current?.(error)
       })
       
       workerRef.current = worker
     } catch (error) {
       console.error('Failed to create worker:', error)
       setIsLoading(false)
-      options.onError?.(error as Error)
+      onErrorRef.current?.(error as Error)
     }
     
     // Cleanup
@@ -84,7 +103,7 @@ export function useWorker<T = unknown>(
       }
       pendingMessages.current.clear()
     }
-  }, [workerPath, options])
+  }, [workerPath]) // Only depend on workerPath, not the entire options object
   
   // Send message to worker
   const sendMessage = useCallback(async <U = T>(

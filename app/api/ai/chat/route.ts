@@ -1,8 +1,12 @@
 import { streamText, tool } from 'ai'
-import { openai } from '@ai-sdk/openai'
+import { api } from '@/convex/_generated/api'
+import { ConvexHttpClient } from 'convex/browser'
+import { anthropic } from '@ai-sdk/anthropic'
 import { z } from 'zod'
 import { SchedulingEngine } from '@/lib/ai/SchedulingEngine'
+import { TimeSlotFinder } from '@/lib/ai/TimeSlotFinder'
 import { IntervalTree } from '@/lib/data-structures/IntervalTree'
+import { AI_TOOLS } from '@/lib/ai-config'
 import type { Event } from '@/types/calendar'
 import { addDays, startOfDay, endOfDay, format } from 'date-fns'
 
@@ -64,7 +68,7 @@ export async function POST(request: Request) {
       return new Response('Rate limit exceeded', { status: 429 })
     }
     
-    const { messages, events = [] } = await request.json()
+    const { messages, events = [], userId: bodyUserId, model, webSearch } = await request.json()
     
     // Validate input
     if (!messages || !Array.isArray(messages)) {
@@ -83,67 +87,68 @@ export async function POST(request: Request) {
     })
     
     // Stream response using AI SDK v5
+    // Choose model if provided like "anthropic/claude-3-5-sonnet"
+    let modelId = 'claude-3-haiku-20240307' // Default to faster, cheaper model
+    if (typeof model === 'string') {
+      const parts = model.split('/')
+      if (parts.length === 2 && parts[0] === 'anthropic') {
+        modelId = parts[1]
+      } else if (parts.length === 1) {
+        modelId = model
+      }
+    }
+
     const result = streamText({
-      model: openai('gpt-4o-mini'), // Using mini for cost efficiency
+      model: anthropic(modelId),
       messages,
       temperature: 0.7,
       tools: {
+        // Enhanced AI calendar tools using Vercel AI SDK v5
+        ...AI_TOOLS,
+        
+        // Legacy tools for backward compatibility
         suggestSchedule: tool({
-          description: 'Suggest optimal time slots for a new event',
-          parameters: suggestScheduleSchema,
+          description: 'Legacy: Suggest optimal time slots for a new event (use suggestTimes instead)',
+          inputSchema: suggestScheduleSchema,
           execute: async ({ title, duration, preferences }) => {
-            const suggestions = schedulingEngine.suggestTimeSlots({
+            const scheduleResult = await schedulingEngine.schedule({
               title,
               duration,
-              startDate: new Date(),
-              endDate: addDays(new Date(), 7),
-              constraints: [],
-              preferences: {
-                workingHours: {
-                  start: 9,
-                  end: 17,
-                  workDays: [1, 2, 3, 4, 5]
-                },
-                preferredTimes: preferences?.timeOfDay ? 
-                  [preferences.timeOfDay] : ['morning', 'afternoon'],
-                bufferTime: 15,
-                focusTime: {
-                  enabled: true,
-                  minDuration: 120,
-                  preferredTimes: ['morning']
-                }
-              }
+              preferredTimes: [],
+              priority: 3
             })
-            
+
             return {
-              suggestions: suggestions.suggestions.slice(0, 3).map(s => ({
+              suggestions: scheduleResult.suggestions.slice(0, 3).map(s => ({
                 start: format(s.slot.start, 'PPpp'),
                 end: format(s.slot.end, 'PPpp'),
+                startISO: s.slot.start.toISOString(),
+                endISO: s.slot.end.toISOString(),
                 score: s.score,
-                reasons: s.reasoning
+                reasons: s.reasoningText
               }))
-            }
+            };
           }
         }),
         
         explainConflicts: tool({
-          description: 'Explain scheduling conflicts for a specific date or event',
-          parameters: explainConflictsSchema,
+          description: 'Legacy: Explain scheduling conflicts (use findConflicts instead)',
+          inputSchema: explainConflictsSchema,
           execute: async ({ date }) => {
             const targetDate = date ? new Date(date) : new Date()
-            const dayStart = startOfDay(targetDate).getTime()
-            const dayEnd = endOfDay(targetDate).getTime()
+            const dayStart = startOfDay(targetDate)
+            const dayEnd = endOfDay(targetDate)
             
-            const conflicts = intervalTree.query(dayStart, dayEnd)
+            const conflicts = intervalTree.findOverlapping(dayStart, dayEnd)
             
             if (conflicts.length === 0) {
               return { message: 'No conflicts found for this date' }
             }
             
             const conflictDetails = conflicts.map(c => ({
-              title: c.data.title,
-              time: `${format(new Date(c.start), 'p')} - ${format(new Date(c.end), 'p')}`,
-              overlaps: intervalTree.query(c.start, c.end).length - 1
+              title: c.title,
+              time: `${format(new Date(c.startDate), 'p')} - ${format(new Date(c.endDate), 'p')}`,
+              overlaps: intervalTree.findOverlapping(c.startDate, c.endDate).length - 1
             }))
             
             return {
@@ -154,14 +159,18 @@ export async function POST(request: Request) {
         }),
         
         listOpenSlots: tool({
-          description: 'List available time slots for a specific date',
-          parameters: listOpenSlotsSchema,
+          description: 'Legacy: List available time slots (use getAvailability instead)',
+          inputSchema: listOpenSlotsSchema,
           execute: async ({ date, minDuration }) => {
             const targetDate = new Date(date)
-            const slots = schedulingEngine.findAvailableSlots(
-              targetDate,
-              targetDate,
-              minDuration
+            const dayStart = startOfDay(targetDate)
+            const dayEnd = endOfDay(targetDate)
+            const finder = new TimeSlotFinder(events)
+            const slots = finder.findAvailableSlots(
+              dayStart,
+              dayEnd,
+              minDuration,
+              { respectWorkingHours: true, includeWeekends: false }
             )
             
             return {
@@ -177,7 +186,7 @@ export async function POST(request: Request) {
         
         summarizePeriod: tool({
           description: 'Summarize calendar activity for a time period',
-          parameters: summarizePeriodSchema,
+          inputSchema: summarizePeriodSchema,
           execute: async ({ startDate, endDate }) => {
             const start = new Date(startDate)
             const end = new Date(endDate)
@@ -208,14 +217,52 @@ export async function POST(request: Request) {
           }
         })
       },
-      system: `You are an AI scheduling assistant for a calendar application. 
-        Help users manage their time effectively by suggesting optimal scheduling, 
-        identifying conflicts, and providing insights about their calendar.
-        Be concise and helpful. Use the available tools to provide accurate information.
+      system: `You are an AI scheduling assistant for LinearTime, a revolutionary year-at-a-glance calendar application.
+        
+        Philosophy: "Life is bigger than a week" - Help users think beyond weekly planning and optimize their entire year.
+        
+        Enhanced AI Tools Available:
+        - getAvailability: Find available time slots with intelligent filtering
+        - createEvent: Create events with conflict detection and smart placement
+        - findConflicts: Advanced conflict analysis with severity assessment
+        - suggestTimes: AI-powered time suggestions based on context and preferences
+        - rescheduleEvent: Intelligent rescheduling with alternative options
+        
+        Core Capabilities:
+        • Intelligent scheduling optimization using AI analysis
+        • Cross-calendar conflict detection and resolution
+        • Natural language event creation and management
+        • Productivity insights and calendar analytics
+        • Focus time protection and workload balancing
+        
+        Be proactive, insightful, and focus on helping users optimize their time across months and years, not just days and weeks.
+        Always consider the user's long-term productivity and work-life balance.
+        
         Current date: ${format(new Date(), 'PPP')}`
     })
     
-    return result.toUIMessageStreamResponse()
+    const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL
+    const convex = convexUrl ? new ConvexHttpClient(convexUrl) : null
+    const finalUserId = bodyUserId || userId
+
+    return result.toUIMessageStreamResponse({
+      sendSources: true,
+      sendReasoning: true,
+      originalMessages: messages,
+      async onFinish({ messages: uiMessages, responseMessage }) {
+        try {
+          if (convex && finalUserId !== 'anonymous') {
+            const chatId = await convex.mutation(api.aiChat.ensureChat, { userId: finalUserId })
+            await convex.mutation(api.aiChat.appendMessages, {
+              chatId,
+              messages: [responseMessage]
+            })
+          }
+        } catch (e) {
+          console.error('Convex save failed', e)
+        }
+      }
+    })
     
   } catch (error) {
     console.error('AI Chat API Error:', error)

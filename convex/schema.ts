@@ -65,7 +65,11 @@ export default defineSchema({
     .index("by_category", ["categoryId"])
     .index("by_user_and_category", ["userId", "categoryId"])
     .index("by_updated", ["updatedAt"])
-    .index("by_user_updated", ["userId", "updatedAt"]),
+    .index("by_user_updated", ["userId", "updatedAt"])
+    // Performance optimization indexes
+    .index("by_user_time_range", ["userId", "startTime", "endTime"])
+    .index("by_user_category_time", ["userId", "categoryId", "startTime"])
+    .index("by_user_all_day", ["userId", "allDay", "startTime"]),
 
   categories: defineTable({
     userId: v.id("users"),
@@ -168,6 +172,8 @@ export default defineSchema({
         color: v.string(),
         syncEnabled: v.boolean(),
         isPrimary: v.optional(v.boolean()),
+        ctag: v.optional(v.string()), // For CalDAV sync
+        syncToken: v.optional(v.string()), // Per-calendar sync token
       })),
       syncDirection: v.optional(v.union(
         v.literal("pull"), // Only pull from provider
@@ -180,6 +186,19 @@ export default defineSchema({
         v.literal("newest"), // Most recent change wins
         v.literal("manual") // Ask user
       )),
+      // CalDAV-specific settings
+      serverUrl: v.optional(v.string()),
+      username: v.optional(v.string()),
+      // Google/Microsoft-specific settings
+      domain: v.optional(v.string()),
+      timezone: v.optional(v.string()),
+      // Microsoft Graph subscription settings
+      subscriptions: v.optional(v.array(v.object({
+        id: v.string(),
+        resource: v.string(),
+        expirationDateTime: v.string(),
+        createdAt: v.number(),
+      }))),
     }),
     createdAt: v.number(),
     updatedAt: v.number(),
@@ -196,6 +215,7 @@ export default defineSchema({
       v.literal("full_sync"),
       v.literal("incremental_sync"),
       v.literal("webhook_update"),
+      v.literal("webhook_renewal"),
       v.literal("event_create"),
       v.literal("event_update"),
       v.literal("event_delete")
@@ -221,7 +241,10 @@ export default defineSchema({
     .index("by_provider", ["provider", "status"])
     .index("by_next_retry", ["nextRetry", "status"])
     .index("by_priority_pending", ["priority", "status"])
-    .index("by_created", ["createdAt"]),
+    .index("by_created", ["createdAt"])
+    // Performance optimization indexes for sync operations
+    .index("by_user_provider_status", ["userId", "provider", "status"])
+    .index("by_provider_created", ["provider", "createdAt"]),
 
   // Event sync mapping for conflict resolution
   eventSync: defineTable({
@@ -251,7 +274,10 @@ export default defineSchema({
     .index("by_provider", ["provider", "providerEventId"])
     .index("by_local_event", ["localEventId"])
     .index("by_sync_status", ["syncStatus"])
-    .index("by_provider_id", ["providerId"]),
+    .index("by_provider_id", ["providerId"])
+    // Performance optimization indexes
+    .index("by_provider_status", ["provider", "syncStatus"])
+    .index("by_user_provider", ["providerId", "syncStatus"]),
 
   // Webhook verification tokens
   webhookTokens: defineTable({
@@ -264,4 +290,188 @@ export default defineSchema({
   })
     .index("by_token", ["token"])
     .index("by_expiry", ["expiresAt"]),
+
+  // Billing and subscription management
+  subscriptions: defineTable({
+    userId: v.id("users"),
+    // Stripe identifiers
+    stripeCustomerId: v.string(),
+    stripePriceId: v.string(),
+    stripeSubscriptionId: v.string(),
+    stripeProductId: v.optional(v.string()),
+    // Subscription status
+    status: v.union(
+      v.literal("active"),
+      v.literal("canceled"),
+      v.literal("incomplete"),
+      v.literal("incomplete_expired"),
+      v.literal("past_due"),
+      v.literal("paused"),
+      v.literal("trialing"),
+      v.literal("unpaid")
+    ),
+    // Plan details
+    planName: v.string(), // "Free", "Pro", "Enterprise"
+    planType: v.union(
+      v.literal("free"),
+      v.literal("monthly"),
+      v.literal("yearly")
+    ),
+    // Billing periods
+    currentPeriodStart: v.number(),
+    currentPeriodEnd: v.number(),
+    // Cancellation
+    cancelAtPeriodEnd: v.boolean(),
+    canceledAt: v.optional(v.number()),
+    // Trial information
+    trialStart: v.optional(v.number()),
+    trialEnd: v.optional(v.number()),
+    // Usage limits based on plan
+    limits: v.object({
+      maxEvents: v.number(), // -1 for unlimited
+      maxCalendars: v.number(),
+      maxProviders: v.number(), // Calendar sync providers
+      aiSchedulingRequests: v.number(), // Per month
+      storageGB: v.number(),
+    }),
+    // Usage tracking
+    usage: v.object({
+      currentEvents: v.number(),
+      currentCalendars: v.number(),
+      currentProviders: v.number(),
+      aiRequestsThisMonth: v.number(),
+      storageUsedMB: v.number(),
+    }),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_stripe_customer", ["stripeCustomerId"])
+    .index("by_stripe_subscription", ["stripeSubscriptionId"])
+    .index("by_status", ["status"])
+    .index("by_plan", ["planType", "status"]),
+
+  // Payment history and invoices
+  payments: defineTable({
+    userId: v.id("users"),
+    subscriptionId: v.id("subscriptions"),
+    // Stripe payment details
+    stripePaymentIntentId: v.string(),
+    stripeInvoiceId: v.optional(v.string()),
+    // Payment information
+    amount: v.number(), // Amount in cents
+    currency: v.string(),
+    status: v.union(
+      v.literal("succeeded"),
+      v.literal("failed"),
+      v.literal("pending"),
+      v.literal("canceled"),
+      v.literal("refunded")
+    ),
+    paymentMethod: v.optional(v.string()), // "card", "bank_account", etc.
+    // Metadata
+    description: v.optional(v.string()),
+    failureReason: v.optional(v.string()),
+    refundedAmount: v.optional(v.number()),
+    refundedAt: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_subscription", ["subscriptionId"])
+    .index("by_stripe_payment_intent", ["stripePaymentIntentId"])
+    .index("by_status", ["status"])
+    .index("by_date", ["createdAt"]),
+
+  // AI chat persistence
+  aiChats: defineTable({
+    userId: v.id("users"),
+    title: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_updated", ["userId", "updatedAt"]),
+
+  aiMessages: defineTable({
+    chatId: v.id("aiChats"),
+    role: v.union(v.literal("user"), v.literal("assistant"), v.literal("system")),
+    parts: v.array(v.any()),
+    createdAt: v.number(),
+  })
+    .index("by_chat", ["chatId"])
+    .index("by_chat_created", ["chatId", "createdAt"]),
+
+  aiEvents: defineTable({
+    userId: v.optional(v.id("users")),
+    chatId: v.optional(v.id("aiChats")),
+    eventType: v.string(), // e.g. "rate", "copy", "regenerate", "applySuggestion"
+    data: v.optional(v.any()),
+    createdAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_event", ["eventType"])
+    .index("by_user_event", ["userId", "eventType"])
+    .index("by_user_created", ["userId", "createdAt"]),
+
+  // Usage analytics and limits enforcement
+  usageAnalytics: defineTable({
+    userId: v.id("users"),
+    // Time period (YYYY-MM format for monthly tracking)
+    period: v.string(),
+    // Usage metrics
+    eventsCreated: v.number(),
+    eventsUpdated: v.number(),
+    eventsDeleted: v.number(),
+    aiSchedulingRequests: v.number(),
+    calendarSyncOperations: v.number(),
+    storageUsedMB: v.number(),
+    // API usage
+    apiRequestsTotal: v.number(),
+    webhookEventsProcessed: v.number(),
+    // Feature usage
+    featuresUsed: v.array(v.string()), // ["calendar_sync", "ai_scheduling", "analytics"]
+    // Timestamps
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_period", ["period"])
+    .index("by_user_period", ["userId", "period"]),
+
+  // Feature flags and plan permissions
+  planPermissions: defineTable({
+    planType: v.union(
+      v.literal("free"),
+      v.literal("monthly"),
+      v.literal("yearly")
+    ), // Changed from v.string() to match subscriptions table
+    // Feature permissions
+    features: v.object({
+      maxEvents: v.number(),
+      maxCalendars: v.number(),
+      maxProviders: v.number(),
+      aiScheduling: v.boolean(),
+      calendarSync: v.boolean(),
+      analytics: v.boolean(),
+      prioritySupport: v.boolean(),
+      customThemes: v.boolean(),
+      exportData: v.boolean(),
+      teamSharing: v.boolean(),
+      apiAccess: v.boolean(),
+    }),
+    // Pricing
+    priceMonthly: v.optional(v.number()), // In cents
+    priceYearly: v.optional(v.number()),
+    stripePriceId: v.optional(v.string()),
+    stripePriceIdYearly: v.optional(v.string()),
+    // Metadata
+    displayName: v.string(),
+    description: v.string(),
+    popular: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_plan", ["planType"])
+    .index("by_popular", ["popular"]),
 });

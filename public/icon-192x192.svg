@@ -1,0 +1,8 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" rx="24" fill="#2196F3"/>
+  <rect x="24" y="48" width="144" height="16" rx="8" fill="white" opacity="0.9"/>
+  <rect x="24" y="80" width="144" height="16" rx="8" fill="white" opacity="0.7"/>
+  <rect x="24" y="112" width="144" height="16" rx="8" fill="white" opacity="0.5"/>
+  <circle cx="156" cy="144" r="12" fill="white"/>
+  <text x="96" y="36" text-anchor="middle" font-family="system-ui" font-size="14" font-weight="bold" fill="white">LinearTime</text>
+</svg>

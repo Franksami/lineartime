@@ -12,9 +12,10 @@ LinearTime supports bidirectional synchronization with multiple calendar provide
 - **Setup Time**: ~2 minutes
 
 ### 2. Microsoft Outlook
-- **Authentication**: OAuth 2.0 (MSAL)
-- **Features**: Delta sync, real-time updates, Microsoft 365 integration
-- **Setup Time**: ~2 minutes
+- **Authentication**: OAuth 2.0 (MSAL) with Azure AD
+- **Features**: Full Graph API integration, delta sync, real-time webhook updates, bidirectional sync
+- **Setup Time**: ~3 minutes
+- **Supported**: Outlook.com, Office 365, Microsoft 365
 
 ### 3. Apple iCloud
 - **Authentication**: CalDAV with app-specific passwords
@@ -57,21 +58,125 @@ LinearTime supports bidirectional synchronization with multiple calendar provide
    - Check for the green "Connected" status
    - Your events will begin syncing automatically
 
-### Microsoft Outlook
+### Microsoft Outlook Setup
+
+#### Prerequisites
+- Microsoft account (Outlook.com, Office 365, or Microsoft 365)
+- Azure subscription (for application registration)
+
+#### Step 1: Create Azure AD Application
+
+1. **Access Azure Portal**
+   - Go to [Azure Portal](https://portal.azure.com/)
+   - Sign in with your Microsoft account
+
+2. **Register Application**
+   - Navigate to **Azure Active Directory** > **App registrations**
+   - Click **New registration**
+   - **Name**: "LinearTime Calendar"
+   - **Supported account types**: "Accounts in any organizational directory (Any Azure AD directory - Multitenant)"
+   - **Redirect URI**: `http://localhost:3000/api/auth/microsoft/callback` (for development)
+   - Click **Register**
+
+3. **Record Application Details**
+   - Copy the **Application (client) ID** - this is your `MICROSOFT_CLIENT_ID`
+
+#### Step 2: Configure API Permissions
+
+1. **Add Permissions**
+   - In your app registration, go to **API permissions**
+   - Click **Add a permission**
+   - Select **Microsoft Graph**
+
+2. **Select Delegated Permissions**
+   - **Calendars** > `Calendars.ReadWrite`
+   - **Calendars** > `Calendars.ReadWrite.Shared`
+   - **User** > `User.Read`
+   - Click **Add permissions**
+
+3. **Grant Admin Consent** (if applicable)
+   - If you're an admin, grant consent for your organization
+   - Otherwise, users will be prompted for consent during login
+
+#### Step 3: Create Client Secret
+
+1. **Generate Secret**
+   - Go to **Certificates & secrets** in your app
+   - Click **New client secret**
+   - **Description**: "LinearTime Calendar Secret"
+   - **Expires**: "24 months" (recommended)
+   - Click **Add**
+
+2. **Copy Secret Value**
+   - Immediately copy the **Value** (not the Secret ID)
+   - This is your `MICROSOFT_CLIENT_SECRET` - store it securely
+
+#### Step 4: Configure Environment Variables
+
+Add these to your `.env.local` file:
+
+```env
+# Microsoft Calendar Integration
+MICROSOFT_CLIENT_ID=your_application_id_here
+MICROSOFT_CLIENT_SECRET=your_client_secret_value_here
+MICROSOFT_TENANT_ID=common
+MICROSOFT_REDIRECT_URI=http://localhost:3000/api/auth/microsoft/callback
+
+# Webhook Security (generate random secret)
+MICROSOFT_WEBHOOK_SECRET=your_random_webhook_secret
+```
+
+#### Step 5: Connect in LinearTime
 
 1. **Navigate to Settings**
-   - Go to `/settings/integrations`
-   - Find the Microsoft Outlook card
+   - Go to `/settings/integrations` in LinearTime
+   - Find the **Microsoft Outlook** card
 
-2. **Authorize Access**
-   - Click "Connect Microsoft Outlook"
+2. **Initiate Connection**
+   - Click **"Connect Microsoft Outlook"**
+   - You'll be redirected to Microsoft authorization
+
+3. **Authorize Access**
    - Sign in with your Microsoft account
-   - Accept the permissions request
+   - Review and accept the permissions:
+     - Read and write to your calendars
+     - Access your basic profile information
+   - You'll be redirected back to LinearTime
 
-3. **Configure Sync**
-   - Select calendars to sync
-   - Choose sync direction (bidirectional by default)
-   - Events will sync automatically
+4. **Configure Sync Settings**
+   - Select which calendars to synchronize
+   - Choose your primary calendar for new events
+   - Set sync preferences (bidirectional by default)
+   - Click **"Save Settings"**
+
+#### Step 6: Verify Connection
+
+1. **Check Status**
+   - Look for green "Connected" status
+   - Initial sync may take a few minutes for large calendars
+
+2. **Test Sync**
+   - Create an event in LinearTime - it should appear in Outlook
+   - Create an event in Outlook - it should appear in LinearTime
+   - Changes sync in real-time via Microsoft Graph webhooks
+
+#### Troubleshooting
+
+**Connection Issues**
+- Verify Azure application configuration
+- Check environment variables are correct
+- Ensure redirect URI matches exactly
+- Check browser console for authentication errors
+
+**Sync Problems**
+- Verify calendar permissions in Outlook
+- Check Convex function logs: `npx convex logs`
+- Ensure webhook endpoint is accessible (for production)
+
+**Permission Errors**
+- Review Azure AD permissions are granted
+- Check user has calendar access in Microsoft 365
+- Verify tenant settings allow third-party apps
 
 ### Apple iCloud
 

@@ -1,0 +1,372 @@
+# LinearTime Calendar Integration Platform - Cursor IDE Rules
+
+## Project Overview
+
+LinearTime is an enterprise-grade calendar integration platform with 4-provider synchronization (Google, Microsoft, Apple CalDAV, Generic CalDAV) and 10 calendar library support. The core philosophy is "Life is bigger than a week" with a horizontal 12-month timeline as the immutable foundation.
+
+**Current Version**: v2.6.0 (Phase 2.6 Foundation - Calendar Integration Platform)  
+**Architecture**: React + Next.js + TypeScript + Convex + Clerk + shadcn/ui
+
+## 🚨 CRITICAL: IMMUTABLE FOUNDATION RULES
+
+### NEVER MODIFY THE HORIZONTAL LINEAR CALENDAR FOUNDATION
+- The 12-month horizontal layout is the **CORE PRODUCT IDENTITY**
+- Any changes to `LinearCalendarHorizontal.tsx` **BREAKS THE ENTIRE PRODUCT**
+- All development must build **ON TOP OF** this locked foundation
+- The foundation is protected by mandatory tests that must pass before commits
+
+### Foundation Components (NEVER CHANGE)
+```typescript
+// ✅ ONLY USE THIS COMPONENT:
+<LinearCalendarHorizontal
+  year={currentYear}
+  events={calendarEvents}
+  className="h-full w-full"
+  onEventCreate={handleEventCreate}
+  onEventUpdate={handleEventUpdate}
+  onEventDelete={handleEventDelete}
+  enableInfiniteCanvas={true}
+/>
+```
+
+### Protected Foundation Structure
+- **12 HORIZONTAL MONTH ROWS**: January-December as complete horizontal strips
+- **COMPLETE DAY NUMBERS**: 01-31 for each month with proper week alignment
+- **WEEK DAY HEADERS**: "Su Mo Tu We Th Fr Sa" at top AND bottom
+- **MONTH LABELS**: On BOTH left AND right sides of each row
+- **YEAR HEADER**: "2025 Linear Calendar" + "Life is bigger than a week" tagline
+- **BORDERED GRID**: Clean cell structure with visual hierarchy
+
+## 📋 Development Guidelines
+
+### Code Style & Architecture
+- Use **TypeScript** for all new code with strict type checking
+- Follow **Next.js App Router** patterns for routing and API routes
+- Use **shadcn/ui components** - NO custom styled components
+- Implement **semantic design tokens** only (bg-background, bg-card, text-foreground)
+- Use **Convex** for backend operations and real-time data
+- Follow **React Server Components** patterns where appropriate
+
+### Calendar Integration Platform Rules
+- All provider integrations go through the **CalendarProvider** system
+- Use **server-side AES-256-GCM encryption** for all provider tokens via Convex
+- Never store credentials client-side - always use encrypted server-side storage
+- Implement **webhook signature verification** for all provider webhooks
+- Use the **sync queue system** for background processing with exponential backoff
+
+### Component Architecture
+- Build new calendar views by extending the **CalendarProvider** system
+- Register new calendar libraries in `CalendarRegistry.tsx`
+- Use the **unified event format** for all event operations
+- Implement **bidirectional event transformation** for provider compatibility
+
+### Security Requirements
+- **NEVER** store provider tokens client-side
+- Always use **signature verification** for webhook endpoints
+- Implement **proper error handling** without exposing sensitive data
+- Use **audit logging** for all security-relevant operations
+- Follow **zero-trust architecture** principles
+
+## 🏗 Integration Development Patterns
+
+### Adding New Calendar Providers
+1. Create provider-specific integration in `convex/calendar/[provider].ts`
+2. Implement OAuth 2.0 or authentication flow with server-side token storage
+3. Add webhook endpoint in `app/api/webhooks/[provider]/route.ts`
+4. Implement event transformation functions for unified format
+5. Add comprehensive test coverage for the new provider
+6. Update provider configuration in `CalendarRegistry.tsx`
+
+### Adding New Calendar Libraries
+1. Create new view component: `[LibraryName]CalendarView.tsx`
+2. Implement `CalendarViewProps` interface for consistency
+3. Add library adapter in `CalendarRegistry.tsx`
+4. Implement event transformation functions
+5. Create comprehensive test suite with 50+ test cases
+6. Ensure mobile responsiveness and accessibility compliance
+
+### Event Management Patterns
+```typescript
+// ✅ Use unified event format
+interface UnifiedEvent {
+  id: string;
+  title: string;
+  start: Date;
+  end: Date;
+  description?: string;
+  location?: string;
+  attendees?: string[];
+  providerId: string;
+  providerEventId: string;
+  // ... other standard fields
+}
+
+// ✅ Use CalendarProvider for CRUD operations
+const { handleEventCreate, handleEventUpdate, handleEventDelete } = useCalendarContext();
+
+// ❌ DON'T directly call provider APIs
+// ❌ DON'T bypass the unified event system
+```
+
+### Webhook Implementation Pattern
+```typescript
+// ✅ Proper webhook handler structure
+export async function POST(request: NextRequest) {
+  try {
+    // 1. Verify webhook signature
+    const isValid = await verifyWebhookSignature(request, body);
+    if (!isValid) {
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+    }
+
+    // 2. Process webhook payload
+    const payload = await request.json();
+    
+    // 3. Queue sync job (don't process inline)
+    await queueSyncJob({
+      userId: subscription.userId,
+      providerId: 'provider-name',
+      type: 'incremental_sync',
+      priority: 'high',
+      metadata: payload
+    });
+
+    return NextResponse.json({ status: 'processed' });
+  } catch (error) {
+    // 4. Log security events
+    await logSecurityEvent({
+      eventType: 'webhook_error',
+      providerId: 'provider-name',
+      error: error.message
+    });
+    
+    return NextResponse.json({ error: 'Processing failed' }, { status: 500 });
+  }
+}
+```
+
+## 🧪 Testing Requirements
+
+### Mandatory Testing Workflow
+```bash
+# REQUIRED before every commit
+npm run test:foundation         # Must pass - validates locked foundation
+npx playwright test            # Feature tests
+npm run build                  # Build validation
+npm run lint                   # Code quality
+```
+
+### Test Coverage Requirements
+- **Foundation Tests**: Must maintain 100% pass rate
+- **Integration Tests**: Each provider needs 50+ test cases
+- **Calendar Library Tests**: Each library needs comprehensive testing
+- **Security Tests**: Token encryption and webhook verification
+- **Performance Tests**: Load testing with 10,000+ events
+- **Mobile Tests**: Cross-device responsive validation
+- **Accessibility Tests**: WCAG 2.1 AA compliance
+
+### Test File Organization
+```
+tests/
+├── foundation/              # Foundation protection (NEVER MODIFY)
+├── integration/            # Provider integration tests
+│   ├── google-calendar-integration.spec.ts
+│   ├── microsoft-graph-integration.spec.ts
+│   └── caldav-integration.spec.ts
+├── calendar-libraries/     # Library-specific tests
+├── security/              # Security validation tests
+└── performance/           # Performance benchmarks
+```
+
+## 🔐 Security Development Guidelines
+
+### Token Management
+- **ALWAYS** use server-side AES-256-GCM encryption via Convex
+- **NEVER** store tokens in localStorage, cookies, or client-side state
+- Use `getDecryptedTokens(userId, providerId)` for API calls
+- Implement automatic token refresh with secure storage
+
+### Webhook Security
+- **ALWAYS** verify webhook signatures before processing
+- Use timing-safe comparison for signature verification
+- Implement rate limiting for webhook endpoints
+- Log all security events with proper context
+
+### API Security
+- Implement proper **input validation** using Zod schemas
+- Use **rate limiting** per user and provider
+- Sanitize all user inputs to prevent XSS
+- Never expose internal system details in error messages
+
+## 📱 Mobile & Responsive Development
+
+### Mobile-First Guidelines
+- Use **Tailwind CSS** responsive breakpoints (sm:, md:, lg:, xl:)
+- Implement **touch gestures** for calendar interactions
+- Ensure **minimum touch target size** of 44px
+- Test on actual devices, not just browser dev tools
+- Use **PWA features** for native-like experience
+
+### Touch Interaction Patterns
+```typescript
+// ✅ Use react-use-gesture for touch handling
+import { useGesture } from '@use-gesture/react';
+
+const bind = useGesture({
+  onDrag: ({ offset: [x, y] }) => {
+    // Handle drag for event creation/movement
+  },
+  onPinch: ({ scale }) => {
+    // Handle pinch-to-zoom for calendar
+  }
+});
+```
+
+## 🎨 Design System Rules
+
+### Color & Theming
+- **ONLY** use semantic design tokens: `bg-background`, `bg-card`, `text-foreground`
+- **NO** hardcoded colors or glass effects (removed in v0.3.1)
+- Use `shadcn/ui` components exclusively
+- Follow **CI enforcement** via `scripts/ci-guard.js`
+
+### Component Design Patterns
+```typescript
+// ✅ Proper shadcn/ui usage
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+// ✅ Use semantic tokens
+className="bg-background text-foreground border-border"
+
+// ❌ DON'T use hardcoded colors
+className="bg-blue-500 text-white"
+
+// ❌ DON'T use glass effects (removed)
+className="backdrop-blur-md bg-white/10"
+```
+
+## 🔄 Git Workflow Rules
+
+### Branch Naming Convention
+```bash
+feature/task-[ID]-[description]     # New features
+fix/task-[ID]-[description]         # Bug fixes
+security/task-[ID]-[description]    # Security updates
+integration/[provider]-[feature]    # Provider integrations
+```
+
+### Commit Requirements
+- **Foundation tests MUST pass** before committing
+- Use conventional commit format: `feat:`, `fix:`, `security:`
+- Include test validation in commit message
+- Reference task ID in commit message
+
+### Pull Request Requirements
+- Create PR with descriptive title: "Task #[ID]: [Feature]"
+- Include testing details in PR body
+- Wait for **CodeRabbit review** before merging
+- Ensure all CI checks pass
+
+## 🚀 Performance Guidelines
+
+### Performance Targets
+| Metric | Target | Critical |
+|--------|--------|----------|
+| Initial Load | <500ms | Yes |
+| Max Events | 10,000+ | Yes |
+| Scroll FPS | 60 | Yes |
+| Memory Usage | <100MB | Yes |
+| Event Operations | <100ms | No |
+
+### Performance Optimization Patterns
+- Use **React.memo** for expensive calendar components
+- Implement **virtualization** for large event lists
+- Use **Web Workers** for heavy computations
+- Implement **smart caching** for provider data
+- Use **batch processing** for sync operations
+
+## 📚 Documentation Requirements
+
+### Code Documentation
+- Use **TSDoc** comments for all public functions
+- Document **complex algorithms** and **business logic**
+- Include **examples** in component documentation
+- Maintain **API documentation** for integration endpoints
+
+### Architecture Documentation
+- Update `INTEGRATION_PLATFORM_ARCHITECTURE.md` for system changes
+- Document new provider integrations
+- Update security documentation for new auth flows
+- Maintain deployment guides for production changes
+
+## 🔧 Environment Setup
+
+### Required Environment Variables
+```bash
+# Core Platform
+NEXT_PUBLIC_CONVEX_URL=https://incredible-ibis-307.convex.cloud
+CLERK_WEBHOOK_SECRET=whsec_[configured]
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_[configured]
+
+# Calendar Integration Platform
+CONVEX_ENCRYPTION_MASTER_KEY=[AES-256-GCM-key]
+GOOGLE_CLIENT_ID=[oauth-client-id]
+GOOGLE_CLIENT_SECRET=[oauth-client-secret]
+MICROSOFT_CLIENT_ID=[azure-app-id]
+MICROSOFT_CLIENT_SECRET=[azure-app-secret]
+
+# Development
+NODE_ENV=development
+NEXT_PUBLIC_CALENDAR_LAYOUT=horizontal  # LOCKED - DON'T CHANGE
+```
+
+### Development Commands
+```bash
+npm run dev                    # Start development server
+npm run test:foundation        # MANDATORY before commits
+npx playwright test           # Run all tests
+npm run build                 # Production build
+npm run lint                  # Code quality check
+```
+
+## 🚫 What NOT to Do
+
+### Forbidden Patterns
+- **NEVER** modify `LinearCalendarHorizontal.tsx` or the 12-month layout
+- **DON'T** store provider credentials client-side
+- **DON'T** bypass webhook signature verification
+- **DON'T** use hardcoded colors or glass effects
+- **DON'T** push directly to main branch
+- **DON'T** skip foundation tests before commits
+- **DON'T** use deprecated components (`LinearCalendarVertical`, `VirtualCalendar`)
+
+### Deprecated Components
+- `AdvancedCalendarToolbar.tsx` → Use `EnhancedCalendarToolbar.tsx`
+- Direct provider API calls → Use `CalendarProvider` system
+- Manual sync triggers → Use webhook/queue system
+
+## 🎯 Phase 2.6 Foundation Success Criteria
+
+### Integration Platform Requirements
+- ✅ 4 calendar providers fully integrated (Google, Microsoft, Apple CalDAV, Generic CalDAV)
+- ✅ 10 calendar library support with unified switching
+- ✅ Server-side AES-256-GCM encryption for all provider tokens
+- ✅ Real-time webhook system with automatic renewal
+- ✅ Background sync queue with intelligent retry logic
+- ✅ Comprehensive security architecture with audit logging
+- ✅ Enterprise-grade performance with 10,000+ event support
+- ✅ Complete test coverage (300+ tests)
+- ✅ Production-ready deployment documentation
+
+### Quality Gates
+- All foundation tests pass (100% success rate)
+- Security tests validate encryption and webhook verification
+- Performance tests meet enterprise benchmarks
+- Mobile responsiveness verified across devices
+- Accessibility compliance (WCAG 2.1 AA)
+- Code coverage above 85% for critical paths
+
+---
+
+This .cursorrules file ensures consistent development practices while maintaining the integrity of LinearTime's Phase 2.6 foundation as an enterprise calendar integration platform. Follow these rules to contribute effectively to the codebase while preserving the core architecture and security requirements.

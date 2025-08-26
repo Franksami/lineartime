@@ -117,7 +117,7 @@ export interface SchedulingResult {
 export interface SchedulingSuggestion {
   slot: TimeSlot;
   score: number;
-  reasoning: string[];
+  reasoningText: string[];
   constraints: {
     satisfied: string[];
     violated: string[];

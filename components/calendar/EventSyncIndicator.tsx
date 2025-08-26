@@ -57,31 +57,31 @@ const statusConfig: Record<SyncStatus, {
 }> = {
   synced: {
     icon: CheckCircle,
-    color: 'text-green-500',
+    color: 'text-primary',
     label: 'Synced',
     description: 'Event is synced with external calendar',
   },
   pending: {
     icon: RefreshCw,
-    color: 'text-blue-500',
+    color: 'text-muted-foreground',
     label: 'Syncing',
     description: 'Event is being synced',
   },
   conflict: {
     icon: AlertCircle,
-    color: 'text-amber-500',
+    color: 'text-secondary',
     label: 'Conflict',
     description: 'Event has sync conflicts that need resolution',
   },
   local: {
     icon: CloudOff,
-    color: 'text-gray-400',
+    color: 'text-muted-foreground',
     label: 'Local Only',
     description: 'Event exists only locally',
   },
   error: {
     icon: AlertCircle,
-    color: 'text-red-500',
+    color: 'text-destructive',
     label: 'Sync Error',
     description: 'Failed to sync this event',
   },
@@ -202,12 +202,12 @@ export function SyncStatusBar({
       <div className="flex items-center gap-2">
         {isSyncing ? (
           <>
-            <RefreshCw className="w-4 h-4 animate-spin text-blue-500" />
+            <RefreshCw className="w-4 h-4 animate-spin text-muted-foreground" />
             <span className="text-sm text-muted-foreground">Syncing...</span>
           </>
         ) : (
           <>
-            <Cloud className="w-4 h-4 text-green-500" />
+            <Cloud className="w-4 h-4 text-primary" />
             <span className="text-sm text-muted-foreground">
               {lastSync ? `Last sync: ${formatTime(lastSync)}` : 'Never synced'}
             </span>

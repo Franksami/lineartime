@@ -48,10 +48,10 @@ interface EventLayerProps {
 }
 
 const CATEGORY_COLORS = {
-  personal: 'bg-green-500 hover:bg-green-600',
-  work: 'bg-blue-500 hover:bg-blue-600',
-  effort: 'bg-orange-500 hover:bg-orange-600',
-  note: 'bg-purple-500 hover:bg-purple-600'
+  personal: 'bg-primary hover:bg-primary/80 text-primary-foreground',
+  work: 'bg-secondary hover:bg-secondary/80 text-secondary-foreground',
+  effort: 'bg-accent hover:bg-accent/80 text-accent-foreground',
+  note: 'bg-muted hover:bg-muted/80 text-muted-foreground'
 } as const
 
 export const EventLayer = React.memo(function EventLayer({
@@ -210,9 +210,9 @@ export const EventLayer = React.memo(function EventLayer({
           <div
             key={event.id || index}
             className={cn(
-              "absolute pointer-events-auto rounded-sm flex items-center text-white transition-all group",
-              CATEGORY_COLORS[event.category as keyof typeof CATEGORY_COLORS] || 'bg-gray-500 hover:bg-gray-600',
-              isSelected && "ring-2 ring-blue-400 ring-offset-1 ring-offset-background z-20 shadow-lg",
+              "absolute pointer-events-auto rounded-sm flex items-center transition-all group",
+              CATEGORY_COLORS[event.category as keyof typeof CATEGORY_COLORS] || 'bg-accent hover:bg-accent/80 text-accent-foreground',
+              isSelected && "ring-2 ring-primary ring-offset-1 ring-offset-background z-20 shadow-lg",
               isDragging && "opacity-50 cursor-grabbing",
               !isDragging && "cursor-grab hover:shadow-md hover:z-10"
             )}

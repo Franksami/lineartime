@@ -3,7 +3,8 @@ import { currentUser } from '@clerk/nextjs/server';
 import { createDAVClient } from 'tsdav';
 import { api } from '@/convex/_generated/api';
 import { ConvexHttpClient } from 'convex/browser';
-import { encryptToken } from '@/lib/encryption';
+// TODO: Move token encryption to Convex function
+// import { encryptToken } from '@/lib/encryption';
 
 /**
  * POST /api/auth/caldav/apple
@@ -64,12 +65,9 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Encrypt credentials
-      const encryptedPassword = encryptToken(password);
-      
-      // Store provider connection in Convex
+      // Store provider connection with server-side encryption
       const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-      
+
       // Get Convex user
       const convexUser = await convex.query(api.users.getUserByClerkId, {
         clerkId: user.id
@@ -84,12 +82,24 @@ export async function POST(request: NextRequest) {
           lastName: user.lastName || undefined,
           imageUrl: user.imageUrl || undefined,
         });
+
+        // Re-fetch user
+        const newUser = await convex.query(api.users.getUserByClerkId, {
+          clerkId: user.id
+        });
+
+        if (!newUser) {
+          return NextResponse.json(
+            { error: 'Failed to create user account' },
+            { status: 500 }
+          );
+        }
       }
 
-      // Store the provider connection
-      await convex.mutation(api.calendar.providers.connectProvider, {
+      // Store the provider connection using server-side encryption
+      await convex.action(api.calendar.encryption.connectProviderWithTokens, {
         provider: 'apple',
-        accessToken: encryptedPassword, // Using password field for CalDAV
+        accessToken: password, // App-specific password for CalDAV
         providerAccountId: email,
         settings: {
           serverUrl: 'https://caldav.icloud.com',

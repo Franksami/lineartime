@@ -54,7 +54,8 @@ test.describe('Performance with Improved Layout', () => {
       if (!scrollContainer) return { fps: 0, memoryBefore: 0, memoryAfter: 0 };
       
       // Get initial memory
-      // @ts-ignore
+      // performance.memory is Chrome-specific API not in standard TypeScript definitions
+      // @ts-expect-error - Chrome-specific memory API
       const memoryBefore = performance.memory?.usedJSHeapSize || 0;
       
       // Measure FPS during scroll
@@ -78,7 +79,8 @@ test.describe('Performance with Improved Layout', () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Get final memory
-      // @ts-ignore
+      // performance.memory is Chrome-specific API not in standard TypeScript definitions
+      // @ts-expect-error - Chrome-specific memory API
       const memoryAfter = performance.memory?.usedJSHeapSize || 0;
       
       const duration = performance.now() - startTime;
@@ -119,14 +121,14 @@ test.describe('Performance with Improved Layout', () => {
         let startTime = performance.now();
         (zoomIn as HTMLElement).click();
         await new Promise(resolve => setTimeout(resolve, 500));
-        let zoomInTime = performance.now() - startTime;
+        const zoomInTime = performance.now() - startTime;
         results.push({ action: 'zoom-in', time: zoomInTime });
         
         // Measure zoom out
         startTime = performance.now();
         (zoomOut as HTMLElement).click();
         await new Promise(resolve => setTimeout(resolve, 500));
-        let zoomOutTime = performance.now() - startTime;
+        const zoomOutTime = performance.now() - startTime;
         results.push({ action: 'zoom-out', time: zoomOutTime });
       }
       

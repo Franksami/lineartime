@@ -5,7 +5,7 @@ import { action, internalAction, internalMutation, internalQuery } from "../_gen
 import { api, internal } from "../_generated/api";
 import { Doc, Id } from "../_generated/dataModel";
 import { createDAVClient } from 'tsdav';
-import { decryptToken } from '../utils/encryption';
+// Removed: import { decryptToken } from '../utils/encryption'; - now using inline decryption
 import ICAL from 'ical.js';
 
 /**
@@ -27,17 +27,16 @@ export const performFullSync = internalAction({
     }
 
     // Decrypt credentials
-    const password = decryptToken({
-      encrypted: provider.accessToken.encrypted,
-      iv: provider.accessToken.iv,
-      tag: provider.accessToken.tag
+    const password = await ctx.runAction(internal.calendar.encryption.decryptToken, {
+      encryptedToken: provider.accessToken
     });
 
     // Create CalDAV client
-    const client = new createDAVClient({
-      serverUrl: provider.settings.serverUrl,
+    const { createDAVClient } = await import('tsdav');
+    const client = createDAVClient({
+      serverUrl: provider.settings.serverUrl!,
       credentials: {
-        username: provider.settings.username,
+        username: provider.settings.username!,
         password,
       },
       authMethod: 'Basic',
@@ -45,10 +44,14 @@ export const performFullSync = internalAction({
     });
 
     try {
-      await client.login();
+      // Note: CalDAV client login method requires type assertion due to library typing
+      // The login method exists but is not exposed in TypeScript definitions
+      if ((client as any).login) {
+        await (client as any).login();
+      }
       
       // Fetch all calendars
-      const calendars = await client.fetchCalendars();
+      const calendars = await (client as any).fetchCalendars();
       
       // Process each calendar
       for (const calendar of calendars) {
@@ -62,7 +65,7 @@ export const performFullSync = internalAction({
         }
 
         // Fetch events from this calendar
-        const events = await client.fetchCalendarObjects({
+        const events = await (client as any).fetchCalendarObjects({
           calendar,
         });
 
@@ -89,7 +92,7 @@ export const performFullSync = internalAction({
                 endDate: icalEvent.endDate.toJSDate().toISOString(),
                 allDay: icalEvent.startDate.isDate,
                 location: icalEvent.location || undefined,
-                status: mapICalStatus(icalEvent.status),
+                status: mapICalStatus((icalEvent as any).status || 'confirmed'),
                 recurrence: icalEvent.isRecurring() ? {
                   rule: vevent.getFirstPropertyValue('rrule')?.toString(),
                   exceptions: vevent.getAllProperties('exdate').map(
@@ -99,7 +102,7 @@ export const performFullSync = internalAction({
                 reminders: extractReminders(vevent),
                 attendees: extractAttendees(vevent),
                 organizer: extractOrganizer(vevent),
-                transparency: icalEvent.transparency,
+                transparency: (icalEvent as any).transparency || 'opaque',
                 created: event.etag ? new Date().toISOString() : undefined,
                 updated: event.etag ? new Date().toISOString() : undefined,
                 etag: event.etag,
@@ -126,15 +129,14 @@ export const performFullSync = internalAction({
         // Store the changes
         if (changes.length > 0) {
           await ctx.runMutation(internal.calendar.events.syncEvents, {
+            events: changes,
             providerId: args.providerId,
-            changes,
-            syncToken: calendar.syncToken || undefined,
           });
         }
 
         // Update calendar sync token
         await ctx.runMutation(
-          internal.calendar.providers.updateProviderSettings,
+          internal.calendar.providers.updateProviderSettingsInternal,
           {
             providerId: args.providerId,
             settings: {
@@ -151,7 +153,7 @@ export const performFullSync = internalAction({
 
       // Update last sync time
       await ctx.runMutation(
-        internal.calendar.providers.updateLastSync,
+        internal.calendar.providers.updateLastSyncInternal,
         {
           providerId: args.providerId,
           lastSyncAt: Date.now(),
@@ -185,17 +187,16 @@ export const performIncrementalSync = internalAction({
     }
 
     // Decrypt credentials
-    const password = decryptToken({
-      encrypted: provider.accessToken.encrypted,
-      iv: provider.accessToken.iv,
-      tag: provider.accessToken.tag
+    const password = await ctx.runAction(internal.calendar.encryption.decryptToken, {
+      encryptedToken: provider.accessToken
     });
 
     // Create CalDAV client
-    const client = new createDAVClient({
-      serverUrl: provider.settings.serverUrl,
+    const { createDAVClient } = await import('tsdav');
+    const client = createDAVClient({
+      serverUrl: provider.settings.serverUrl!,
       credentials: {
-        username: provider.settings.username,
+        username: provider.settings.username!,
         password,
       },
       authMethod: 'Basic',
@@ -203,7 +204,9 @@ export const performIncrementalSync = internalAction({
     });
 
     try {
-      await client.login();
+      if ((client as any).login) {
+        await (client as any).login();
+      }
       
       // Fetch calendars to check for changes
       const calendars = await client.fetchCalendars();
@@ -226,8 +229,10 @@ export const performIncrementalSync = internalAction({
         if (calendarConfig.syncToken) {
           try {
             // Perform sync-collection report for changes
-            const syncResults = await client.syncCollection({
+            // Note: syncCollection requires props parameter for CalDAV library compatibility
+            const syncResults: any = await (client as any).syncCollection({
               url: calendar.url,
+              props: {}, // Required parameter for CalDAV sync protocol
               syncToken: calendarConfig.syncToken,
             });
 
@@ -236,14 +241,14 @@ export const performIncrementalSync = internalAction({
             
             // Update sync token
             await ctx.runMutation(
-              internal.calendar.providers.updateProviderSettings,
+              internal.calendar.providers.updateProviderSettingsInternal,
               {
                 providerId: args.providerId,
                 settings: {
                   ...provider.settings,
                   calendars: provider.settings.calendars.map((cal: any) =>
                     cal.id === calendar.url
-                      ? { ...cal, syncToken: syncResults.syncToken, ctag: calendar.ctag }
+                      ? { ...cal, syncToken: syncResults?.syncToken, ctag: calendar.ctag }
                       : cal
                   ),
                 },
@@ -252,19 +257,19 @@ export const performIncrementalSync = internalAction({
           } catch (syncError) {
             console.error('Incremental sync failed, falling back to full sync:', syncError);
             // Fall back to full sync for this calendar
-            await performFullSync(ctx, args);
+            await ctx.runAction(internal.calendar.caldav.performFullSync, args);
             return { success: true };
           }
         } else {
           // No sync token, perform full sync
-          await performFullSync(ctx, args);
+          await ctx.runAction(internal.calendar.caldav.performFullSync, args);
           return { success: true };
         }
       }
 
       // Update last sync time
       await ctx.runMutation(
-        internal.calendar.providers.updateLastSync,
+        internal.calendar.providers.updateLastSyncInternal,
         {
           providerId: args.providerId,
           lastSyncAt: Date.now(),
@@ -308,17 +313,16 @@ export const createOrUpdateEvent = internalAction({
     }
 
     // Decrypt credentials
-    const password = decryptToken({
-      encrypted: provider.accessToken.encrypted,
-      iv: provider.accessToken.iv,
-      tag: provider.accessToken.tag
+    const password = await ctx.runAction(internal.calendar.encryption.decryptToken, {
+      encryptedToken: provider.accessToken
     });
 
     // Create CalDAV client
-    const client = new createDAVClient({
-      serverUrl: provider.settings.serverUrl,
+    const { createDAVClient } = await import('tsdav');
+    const client = createDAVClient({
+      serverUrl: provider.settings.serverUrl!,
       credentials: {
-        username: provider.settings.username,
+        username: provider.settings.username!,
         password,
       },
       authMethod: 'Basic',
@@ -326,10 +330,12 @@ export const createOrUpdateEvent = internalAction({
     });
 
     try {
-      await client.login();
+      if ((client as any).login) {
+        await (client as any).login();
+      }
 
       // Determine which calendar to use
-      const calendarId = args.event.calendarId || 
+      const calendarId: string = args.event.calendarId || 
         provider.settings.calendars.find((cal: any) => cal.isPrimary)?.id ||
         provider.settings.calendars[0]?.id;
 
@@ -372,9 +378,9 @@ export const createOrUpdateEvent = internalAction({
       vcalendar.addSubcomponent(vevent);
 
       // Create or update the event
-      const eventUrl = `${calendarId}${uid}.ics`;
+      const eventUrl: string = `${calendarId}${uid}.ics`;
       
-      await client.createCalendarObject({
+      await (client as any).createCalendarObject({
         calendar: { url: calendarId },
         filename: `${uid}.ics`,
         iCalString: vcalendar.toString(),
@@ -395,6 +401,168 @@ export const createOrUpdateEvent = internalAction({
 /**
  * Delete an event from CalDAV server
  */
+/**
+ * Create a new event on CalDAV server
+ */
+export const createEvent = internalAction({
+  args: {
+    providerId: v.id("calendarProviders"),
+    eventData: v.object({
+      title: v.string(),
+      description: v.optional(v.string()),
+      startDate: v.string(),
+      endDate: v.string(),
+      allDay: v.optional(v.boolean()),
+      location: v.optional(v.string()),
+      attendees: v.optional(v.array(v.string())),
+    }),
+    calendarId: v.optional(v.string()),
+  },
+  handler: async (ctx, args): Promise<{
+    success: boolean;
+    providerEventId: string;
+  }> => {
+    const provider = await ctx.runQuery(
+      internal.calendar.providers.getProviderById,
+      { providerId: args.providerId }
+    );
+
+    if (!provider) {
+      throw new Error("Provider not found");
+    }
+
+    // Decrypt credentials
+    const password = await ctx.runAction(internal.calendar.encryption.decryptToken, {
+      encryptedToken: provider.accessToken
+    });
+
+    // Create CalDAV client
+    const { createDAVClient } = await import('tsdav');
+    const client = createDAVClient({
+      serverUrl: provider.settings.serverUrl!,
+      credentials: {
+        username: provider.settings.username!,
+        password,
+      },
+      authMethod: 'Basic',
+      defaultAccountType: 'caldav',
+    });
+
+    try {
+      if ((client as any).login) {
+        await (client as any).login();
+      }
+
+      const calendarId = args.calendarId || 
+        provider.settings.calendars.find((cal: any) => cal.isPrimary)?.id ||
+        provider.settings.calendars[0]?.id;
+
+      if (!calendarId) {
+        throw new Error("No calendar available");
+      }
+
+      // Generate unique event ID
+      const eventId = `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Create iCal content
+      const icalContent = createICalEvent(args.eventData, eventId);
+      
+      // Create event on server
+      await (client as any).createCalendarObject({
+        calendar: { url: calendarId },
+        filename: `${eventId}.ics`,
+        iCalString: icalContent,
+      });
+
+      return { success: true, providerEventId: eventId };
+    } catch (error) {
+      console.error('CalDAV create event error:', error);
+      throw error;
+    }
+  },
+});
+
+/**
+ * Update an existing event on CalDAV server
+ */
+export const updateEvent = internalAction({
+  args: {
+    providerId: v.id("calendarProviders"),
+    providerEventId: v.string(),
+    eventData: v.object({
+      title: v.string(),
+      description: v.optional(v.string()),
+      startDate: v.string(),
+      endDate: v.string(),
+      allDay: v.optional(v.boolean()),
+      location: v.optional(v.string()),
+      attendees: v.optional(v.array(v.string())),
+    }),
+    calendarId: v.optional(v.string()),
+  },
+  handler: async (ctx, args): Promise<{
+    success: boolean;
+    providerEventId: string;
+  }> => {
+    const provider = await ctx.runQuery(
+      internal.calendar.providers.getProviderById,
+      { providerId: args.providerId }
+    );
+
+    if (!provider) {
+      throw new Error("Provider not found");
+    }
+
+    // Decrypt credentials
+    const password = await ctx.runAction(internal.calendar.encryption.decryptToken, {
+      encryptedToken: provider.accessToken
+    });
+
+    // Create CalDAV client
+    const { createDAVClient } = await import('tsdav');
+    const client = createDAVClient({
+      serverUrl: provider.settings.serverUrl!,
+      credentials: {
+        username: provider.settings.username!,
+        password,
+      },
+      authMethod: 'Basic',
+      defaultAccountType: 'caldav',
+    });
+
+    try {
+      if ((client as any).login) {
+        await (client as any).login();
+      }
+
+      const calendarId = args.calendarId || 
+        provider.settings.calendars.find((cal: any) => cal.isPrimary)?.id ||
+        provider.settings.calendars[0]?.id;
+
+      if (!calendarId) {
+        throw new Error("No calendar available");
+      }
+
+      // Create updated iCal content
+      const icalContent = createICalEvent(args.eventData, args.providerEventId);
+      
+      // Update event on server
+      await (client as any).updateCalendarObject({
+        calendarObject: {
+          url: `${calendarId}${args.providerEventId}.ics`,
+          data: icalContent,
+          etag: '', // Will be updated by server
+        },
+      });
+
+      return { success: true, providerEventId: args.providerEventId };
+    } catch (error) {
+      console.error('CalDAV update event error:', error);
+      throw error;
+    }
+  },
+});
+
 export const deleteEvent = internalAction({
   args: {
     providerId: v.id("calendarProviders"),
@@ -412,17 +580,16 @@ export const deleteEvent = internalAction({
     }
 
     // Decrypt credentials
-    const password = decryptToken({
-      encrypted: provider.accessToken.encrypted,
-      iv: provider.accessToken.iv,
-      tag: provider.accessToken.tag
+    const password = await ctx.runAction(internal.calendar.encryption.decryptToken, {
+      encryptedToken: provider.accessToken
     });
 
     // Create CalDAV client
-    const client = new createDAVClient({
-      serverUrl: provider.settings.serverUrl,
+    const { createDAVClient } = await import('tsdav');
+    const client = createDAVClient({
+      serverUrl: provider.settings.serverUrl!,
       credentials: {
-        username: provider.settings.username,
+        username: provider.settings.username!,
         password,
       },
       authMethod: 'Basic',
@@ -430,7 +597,9 @@ export const deleteEvent = internalAction({
     });
 
     try {
-      await client.login();
+      if ((client as any).login) {
+        await (client as any).login();
+      }
 
       const calendarId = args.calendarId || 
         provider.settings.calendars.find((cal: any) => cal.isPrimary)?.id ||
@@ -442,7 +611,7 @@ export const deleteEvent = internalAction({
 
       const eventUrl = `${calendarId}${args.providerEventId}.ics`;
       
-      await client.deleteCalendarObject({
+      await (client as any).deleteCalendarObject({
         calendarObject: { url: eventUrl, etag: '' },
       });
 
@@ -493,7 +662,7 @@ function extractAttendees(vevent: ICAL.Component): any[] {
     const params = prop.toJSON()[1];
     
     attendees.push({
-      email: value.replace('mailto:', ''),
+      email: typeof value === 'string' ? value.replace('mailto:', '') : String(value).replace('mailto:', ''),
       name: params.cn,
       status: mapAttendeeStatus(params.partstat),
       optional: params.role === 'OPT-PARTICIPANT',
@@ -510,7 +679,7 @@ function extractOrganizer(vevent: ICAL.Component): any {
     const params = organizer.toJSON()[1];
     
     return {
-      email: value.replace('mailto:', ''),
+      email: typeof value === 'string' ? value.replace('mailto:', '') : String(value).replace('mailto:', ''),
       name: params.cn,
     };
   }
@@ -524,6 +693,58 @@ function mapAttendeeStatus(partstat?: string): 'accepted' | 'declined' | 'tentat
     case 'TENTATIVE': return 'tentative';
     default: return 'needsAction';
   }
+}
+
+/**
+ * Create iCal content for an event
+ */
+function createICalEvent(eventData: any, eventId: string): string {
+  const startDate = new Date(eventData.startDate);
+  const endDate = new Date(eventData.endDate);
+  
+  // Format dates for iCal
+  const formatICalDate = (date: Date, allDay: boolean = false): string => {
+    if (allDay) {
+      return date.toISOString().split('T')[0].replace(/-/g, '');
+    }
+    return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  };
+
+  const now = new Date();
+  const dtstamp = formatICalDate(now);
+  const dtstart = formatICalDate(startDate, eventData.allDay);
+  const dtend = formatICalDate(endDate, eventData.allDay);
+
+  let icalContent = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//LinearTime//Calendar//EN',
+    'BEGIN:VEVENT',
+    `UID:${eventId}@lineartime.app`,
+    `DTSTAMP:${dtstamp}${eventData.allDay ? '' : 'Z'}`,
+    `DTSTART${eventData.allDay ? ';VALUE=DATE' : ''}:${dtstart}${eventData.allDay ? '' : 'Z'}`,
+    `DTEND${eventData.allDay ? ';VALUE=DATE' : ''}:${dtend}${eventData.allDay ? '' : 'Z'}`,
+    `SUMMARY:${eventData.title.replace(/[,;\\]/g, '\\$&')}`,
+  ];
+
+  if (eventData.description) {
+    icalContent.push(`DESCRIPTION:${eventData.description.replace(/[,;\\]/g, '\\$&')}`);
+  }
+
+  if (eventData.location) {
+    icalContent.push(`LOCATION:${eventData.location.replace(/[,;\\]/g, '\\$&')}`);
+  }
+
+  if (eventData.attendees && eventData.attendees.length > 0) {
+    eventData.attendees.forEach((email: string) => {
+      icalContent.push(`ATTENDEE:mailto:${email}`);
+    });
+  }
+
+  icalContent.push('END:VEVENT');
+  icalContent.push('END:VCALENDAR');
+
+  return icalContent.join('\r\n');
 }
 
 async function processCalDAVSyncResults(

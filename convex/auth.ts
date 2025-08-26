@@ -1,12 +1,13 @@
 import { query } from "./_generated/server";
 import { internal } from "./_generated/api";
+import { Doc } from "./_generated/dataModel";
 
 /**
  * Get the current authenticated user
  */
 export const getCurrentUser = query({
   args: {},
-  handler: async (ctx) => {
+  handler: async (ctx): Promise<Doc<'users'> | null> => {
     // Get the user identity from Clerk JWT
     const identity = await ctx.auth.getUserIdentity();
     
@@ -15,7 +16,7 @@ export const getCurrentUser = query({
     }
 
     // Get user from our database using Clerk ID
-    const user = await ctx.runQuery(internal.clerk.getUserByClerkId, {
+    const user: Doc<'users'> | null = await ctx.runQuery(internal.clerk.getUserByClerkId, {
       clerkUserId: identity.subject,
     });
 
@@ -26,7 +27,7 @@ export const getCurrentUser = query({
 /**
  * Require authentication - throws if user is not authenticated
  */
-export const requireAuth = async (ctx: any) => {
+export const requireAuth = async (ctx: any): Promise<{ user: Doc<'users'>; identity: any }> => {
   const identity = await ctx.auth.getUserIdentity();
   
   if (!identity) {
@@ -34,7 +35,7 @@ export const requireAuth = async (ctx: any) => {
   }
 
   // Retry logic to handle race condition with signup webhook
-  let user = null;
+  let user: Doc<'users'> | null = null;
   const maxRetries = 3;
   const retryDelays = [100, 300, 500]; // Exponential backoff delays in ms
   

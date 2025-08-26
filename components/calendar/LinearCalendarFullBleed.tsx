@@ -81,7 +81,7 @@ function DroppableCell({
         isWeekend && 'bg-muted/5',
         isTodayCell && 'bg-primary/20 font-bold text-primary today',
         displayDay && 'cursor-pointer hover:bg-accent/10 transition-colors',
-        isOver && 'bg-blue-500/20'
+        isOver && 'bg-primary/20'
       )}
       onClick={() => {
         if (displayDay && date) {
@@ -185,7 +185,7 @@ function DraggableEventItem({
           className={cn(
             'h-full rounded-sm px-1 text-white text-[10px] truncate flex items-center',
             isResizing ? 'cursor-ew-resize' : 'cursor-move',
-            categoryColors[event.category as keyof typeof categoryColors] || 'bg-gray-500'
+            categoryColors[event.category as keyof typeof categoryColors] || 'bg-muted'
           )}
           {...(!isResizing ? listeners : {})}
           {...(!isResizing ? attributes : {})}
@@ -362,7 +362,7 @@ export function LinearCalendarFullBleed({
     >
       <div ref={containerRef} data-testid="calendar-fullbleed" className={cn('h-screen w-screen overflow-hidden bg-background text-foreground flex flex-col relative', className)}>
       {/* Zoom Controls */}
-      <div data-testid="zoom-controls" className="absolute top-4 right-4 z-50 flex gap-2 bg-background/95 backdrop-blur-sm border rounded-lg p-2 shadow-lg">
+      <div data-testid="zoom-controls" className="absolute top-4 right-4 z-50 flex gap-2 bg-card border border-border rounded-lg p-2 shadow-sm">
         <Button
           size="icon"
           variant="ghost"
@@ -511,10 +511,10 @@ export function LinearCalendarFullBleed({
             const top = HEADER_HEIGHT + (eventMonth * rowHeight) + 20
             
             const categoryColors = {
-              personal: 'bg-green-500',
-              work: 'bg-blue-500',
-              effort: 'bg-orange-500',
-              note: 'bg-purple-500'
+              personal: 'bg-primary',
+              work: 'bg-secondary',
+              effort: 'bg-accent',
+              note: 'bg-muted'
             }
             
             // Calculate event width based on duration

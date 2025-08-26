@@ -3,7 +3,8 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import type { Event, FilterState } from '@/types/calendar';
-import { toast } from 'sonner';
+import { notify } from '@/components/ui/notify';
+import { useSettingsContext } from '@/contexts/SettingsContext';
 
 interface CalendarRange {
   from: Date;
@@ -25,6 +26,7 @@ interface SyncedEvent extends Event {
 }
 
 export function useSyncedCalendar(year: number) {
+  const { playSound } = useSettingsContext();
   const [filters, setFilters] = useState<FilterState>({
     personal: true,
     work: true,
@@ -112,7 +114,8 @@ export function useSyncedCalendar(year: number) {
           operation: 'incremental_sync',
           priority: 5,
         });
-        toast.success(`Syncing ${provider} calendar...`);
+        notify.info(`Syncing ${provider} calendar...`);
+        playSound('notification');
       } else if (providers) {
         // Sync all providers
         for (const p of providers) {
@@ -122,13 +125,15 @@ export function useSyncedCalendar(year: number) {
             priority: 5,
           });
         }
-        toast.success('Syncing all calendars...');
+        notify.info('Syncing all calendars...');
+        playSound('notification');
       }
     } catch (error) {
       console.error('Sync error:', error);
-      toast.error('Failed to start sync');
+      notify.error('Failed to start sync');
+      playSound('error');
     }
-  }, [providers, scheduleSync]);
+  }, [providers, scheduleSync, playSound]);
 
   const handleDateSelect = useCallback((date: Date) => {
     setSelectedDate(date);
@@ -156,7 +161,8 @@ export function useSyncedCalendar(year: number) {
           endDate: event.endDate?.toISOString(),
           category: event.category,
         });
-        toast.success('Event updated');
+        notify.success('Event updated');
+        playSound('success');
         
         // Trigger sync if event is synced
         if (event.providerId) {
@@ -179,7 +185,8 @@ export function useSyncedCalendar(year: number) {
           category: event.category || 'personal',
           description: event.description,
         });
-        toast.success('Event created');
+        notify.success('Event created');
+        playSound('success');
         
         // Trigger sync for new events
         if (providers && providers.length > 0) {
@@ -192,16 +199,18 @@ export function useSyncedCalendar(year: number) {
       }
     } catch (error) {
       console.error('Error saving event:', error);
-      toast.error('Failed to save event');
+      notify.error('Failed to save event');
+      playSound('error');
     }
-  }, [createEvent, updateEvent, providers, scheduleSync]);
+  }, [createEvent, updateEvent, providers, scheduleSync, playSound]);
 
   const handleEventDelete = useCallback(async (id: string) => {
     try {
       const event = events.find(e => e.id === id);
       
       await deleteEvent({ id: id as Id<"events"> });
-      toast.success('Event deleted');
+      notify.success('Event deleted');
+      playSound('success');
       
       // Trigger sync if event was synced
       if (event?.providerId) {
@@ -217,9 +226,10 @@ export function useSyncedCalendar(year: number) {
       }
     } catch (error) {
       console.error('Error deleting event:', error);
-      toast.error('Failed to delete event');
+      notify.error('Failed to delete event');
+      playSound('error');
     }
-  }, [deleteEvent, events, providers, scheduleSync]);
+  }, [deleteEvent, events, providers, scheduleSync, playSound]);
 
   const handleFilterChange = useCallback((newFilters: FilterState | { viewOptions: { compactMode: boolean } }) => {
     if ('viewOptions' in newFilters && newFilters.viewOptions) {
@@ -233,8 +243,9 @@ export function useSyncedCalendar(year: number) {
   const handleConflictResolved = useCallback(() => {
     setShowConflictModal(false);
     setCurrentConflict(null);
-    toast.success('Conflict resolved');
-  }, []);
+    notify.success('Conflict resolved');
+    playSound('success');
+  }, [playSound]);
 
   const startSelection = useCallback((date: Date) => {
     setIsSelecting(true);

@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
-import { toast } from 'sonner';
+import { notify } from '@/components/ui/notify';
 import { CheckCircle, AlertCircle, RefreshCw, CloudOff, Calendar, AlertTriangle } from 'lucide-react';
 
 interface NotificationOptions {
@@ -51,7 +51,7 @@ export function useCalendarNotifications(options: NotificationOptions = {}) {
     // Check for newly completed syncs
     if (prevQueue && syncQueue.completed > prevQueue.completed) {
       const newlyCompleted = syncQueue.completed - prevQueue.completed;
-      toast.success(
+      notify.success(
         `Sync completed`,
         {
           description: `${newlyCompleted} calendar${newlyCompleted > 1 ? 's' : ''} synced successfully`,
@@ -65,11 +65,9 @@ export function useCalendarNotifications(options: NotificationOptions = {}) {
     // Check for new sync errors
     if (prevQueue && syncQueue.failed > prevQueue.failed) {
       const newErrors = syncQueue.failed - prevQueue.failed;
-      const errorToast = toast.error(
-        `Sync failed`,
+      const errorToast = notify.error(
+        `Sync failed: ${newErrors} operation${newErrors > 1 ? 's' : ''} failed. Click to retry.`,
         {
-          description: `${newErrors} sync operation${newErrors > 1 ? 's' : ''} failed. Click to retry.`,
-          icon: <AlertCircle className="h-4 w-4" />,
           duration: persistentErrors ? Infinity : 6000,
           action: {
             label: 'Retry',
@@ -85,11 +83,9 @@ export function useCalendarNotifications(options: NotificationOptions = {}) {
 
     // Check for ongoing syncs
     if (syncQueue.processing > 0 && (!prevQueue || prevQueue.processing === 0)) {
-      toast.info(
-        `Syncing calendars...`,
+      notify.info(
+        `Syncing calendars... Processing ${syncQueue.processing} calendar${syncQueue.processing > 1 ? 's' : ''}`,
         {
-          description: `Processing ${syncQueue.processing} calendar${syncQueue.processing > 1 ? 's' : ''}`,
-          icon: <RefreshCw className="h-4 w-4 animate-spin" />,
           duration: 3000,
         }
       );
@@ -107,11 +103,9 @@ export function useCalendarNotifications(options: NotificationOptions = {}) {
     // Check for new conflicts
     if (prevConflicts && conflicts.length > prevConflicts.length) {
       const newConflicts = conflicts.length - prevConflicts.length;
-      toast.warning(
-        `Sync conflict detected`,
+      notify.warning(
+        `Sync conflict detected: ${newConflicts} event${newConflicts > 1 ? 's have' : ' has'} conflicting changes. Review required.`,
         {
-          description: `${newConflicts} event${newConflicts > 1 ? 's have' : ' has'} conflicting changes. Review required.`,
-          icon: <AlertTriangle className="h-4 w-4" />,
           duration: Infinity,
           action: {
             label: 'Review',
@@ -141,7 +135,7 @@ export function useCalendarNotifications(options: NotificationOptions = {}) {
       );
       
       newProviders.forEach(provider => {
-        toast.success(
+        notify.success(
           `Calendar connected`,
           {
             description: `${provider.provider} calendar connected successfully`,
@@ -158,11 +152,9 @@ export function useCalendarNotifications(options: NotificationOptions = {}) {
       );
       
       removedProviders.forEach(provider => {
-        toast.info(
-          `Calendar disconnected`,
+        notify.info(
+          `Calendar disconnected: ${provider.provider} calendar has been disconnected`,
           {
-            description: `${provider.provider} calendar has been disconnected`,
-            icon: <CloudOff className="h-4 w-4" />,
             duration: 4000,
           }
         );
@@ -172,11 +164,9 @@ export function useCalendarNotifications(options: NotificationOptions = {}) {
       providers.forEach(provider => {
         const prevProvider = prevProviders.find(p => p._id === provider._id);
         if (prevProvider && provider.tokenExpired && !prevProvider.tokenExpired) {
-          toast.error(
-            `Authentication expired`,
+          notify.error(
+            `Authentication expired: ${provider.provider} requires re-authentication`,
             {
-              description: `${provider.provider} requires re-authentication`,
-              icon: <AlertCircle className="h-4 w-4" />,
               duration: Infinity,
               action: {
                 label: 'Reconnect',
@@ -213,9 +203,7 @@ export function useCalendarNotifications(options: NotificationOptions = {}) {
 
   // Manual notification triggers
   const notifySuccess = useCallback((message: string, description?: string) => {
-    toast.success(message, {
-      description,
-      icon: <CheckCircle className="h-4 w-4" />,
+    notify.success(description ? `${message}: ${description}` : message, {
       duration: 4000,
     });
     playSound();
@@ -223,25 +211,20 @@ export function useCalendarNotifications(options: NotificationOptions = {}) {
 
   const notifyError = useCallback((message: string, error?: any) => {
     const description = error ? getSyncErrorSuggestion(error.toString()) : undefined;
-    toast.error(message, {
-      description,
-      icon: <AlertCircle className="h-4 w-4" />,
+    notify.error(description ? `${message}: ${description}` : message, {
       duration: persistentErrors ? Infinity : 6000,
     });
     playSound();
   }, [getSyncErrorSuggestion, persistentErrors, playSound]);
 
   const notifyInfo = useCallback((message: string, description?: string) => {
-    toast.info(message, {
-      description,
+    notify.info(description ? `${message}: ${description}` : message, {
       duration: 3000,
     });
   }, []);
 
   const notifyWarning = useCallback((message: string, description?: string) => {
-    toast.warning(message, {
-      description,
-      icon: <AlertTriangle className="h-4 w-4" />,
+    notify.warning(description ? `${message}: ${description}` : message, {
       duration: 5000,
     });
     playSound();
@@ -275,24 +258,17 @@ export function setupCalendarNotifications() {
 
   // Listen for custom sync events
   window.addEventListener('calendar:sync:start', (event: CustomEvent) => {
-    toast.info('Starting calendar sync...', {
-      icon: <RefreshCw className="h-4 w-4 animate-spin" />,
-    });
+    notify.info('Starting calendar sync...');
   });
 
   window.addEventListener('calendar:sync:complete', (event: CustomEvent) => {
     const { provider, eventCount } = event.detail;
-    toast.success(`${provider} sync complete`, {
-      description: `${eventCount} events synced`,
-      icon: <CheckCircle className="h-4 w-4" />,
-    });
+    notify.success(`${provider} sync complete: ${eventCount} events synced`);
   });
 
   window.addEventListener('calendar:sync:error', (event: CustomEvent) => {
     const { provider, error } = event.detail;
-    toast.error(`${provider} sync failed`, {
-      description: error,
-      icon: <AlertCircle className="h-4 w-4" />,
+    notify.error(`${provider} sync failed: ${error}`, {
       action: {
         label: 'Retry',
         onClick: () => {
@@ -306,9 +282,7 @@ export function setupCalendarNotifications() {
 
   window.addEventListener('calendar:conflict', (event: CustomEvent) => {
     const { eventTitle } = event.detail;
-    toast.warning(`Conflict detected: ${eventTitle}`, {
-      description: 'Click to resolve',
-      icon: <AlertTriangle className="h-4 w-4" />,
+    notify.warning(`Conflict detected: ${eventTitle}. Click to resolve`, {
       action: {
         label: 'Resolve',
         onClick: () => {

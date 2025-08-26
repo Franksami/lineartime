@@ -16,7 +16,7 @@ interface TimeSlotSuggestion {
     end: Date
   }
   score: number
-  reasoning: string[]
+  reasoningText: string[]
   conflicts: Event[]
 }
 
@@ -183,9 +183,9 @@ export function SchedulingSuggestions({
               </div>
             </div>
             
-            {suggestion.reasoning.length > 0 && (
+            {suggestion.reasoningText.length > 0 && (
               <div className="mt-3 space-y-1">
-                {suggestion.reasoning.map((reason, i) => (
+                {suggestion.reasoningText.map((reason, i) => (
                   <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                     <CheckCircle className="h-3 w-3 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
                     <span>{reason}</span>
@@ -237,5 +237,5 @@ export function SchedulingSuggestions({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

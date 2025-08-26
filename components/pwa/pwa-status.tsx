@@ -59,7 +59,7 @@ export function PWAStatus() {
   }
 
   return (
-    <div className="fixed top-4 left-4 z-40 flex flex-col gap-2">
+    <div className="fixed top-4 right-4 z-30 flex flex-col gap-2 sm:top-16 sm:right-4">
       {/* Online/Offline Status */}
       <Badge variant={isOnline ? "default" : "destructive"} className="flex items-center gap-1">
         {isOnline ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}

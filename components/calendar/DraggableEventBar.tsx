@@ -19,10 +19,10 @@ interface DraggableEventBarProps {
 }
 
 const categoryColors = {
-  personal: 'bg-green-500 hover:bg-green-600 text-white',
-  work: 'bg-blue-500 hover:bg-blue-600 text-white',
-  effort: 'bg-orange-500 hover:bg-orange-600 text-white',
-  note: 'bg-purple-500 hover:bg-purple-600 text-white',
+  personal: 'bg-primary hover:bg-primary/80 text-primary-foreground',
+  work: 'bg-secondary hover:bg-secondary/80 text-secondary-foreground',
+  effort: 'bg-accent hover:bg-accent/80 text-accent-foreground',
+  note: 'bg-muted hover:bg-muted/80 text-muted-foreground',
 } as const
 
 export function DraggableEventBar({

@@ -181,8 +181,8 @@ export function DayDetailView({
   const hourSlots = Array.from({ length: 24 }, (_, i) => i)
 
   return (
-    <div className={cn("fixed inset-0 z-50 bg-background/80 backdrop-blur-sm", className)}>
-      <div className="fixed inset-4 md:inset-8 bg-background border rounded-lg shadow-2xl flex flex-col">
+    <div className={cn("fixed inset-0 z-50 bg-background/80", className)}>
+      <div className="fixed inset-4 md:inset-8 bg-background border border-border rounded-lg shadow-sm flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-xl font-semibold">

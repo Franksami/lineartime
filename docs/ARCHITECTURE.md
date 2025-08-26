@@ -1,53 +1,96 @@
-# Linear Calendar Architecture
+# Linear Calendar Architecture (v0.3.2)
 
 ## Overview
 
-Linear Calendar is built as a modern React application using Next.js 15 with a component-based architecture. The application follows a unidirectional data flow pattern with local state management through React hooks.
+Linear Calendar has evolved into an AI-powered enterprise-grade React application with complete multi-calendar integration in v0.3.2. The architecture now features Anthropic Claude AI integration, Microsoft Graph API synchronization, Google Calendar webhooks, real-time data synchronization, advanced performance optimizations, and comprehensive calendar provider management while maintaining the core horizontal 12-month layout foundation.
 
-## Architecture Principles
+## Architecture Principles (v0.3.2)
 
-1. **Component Composition**: Small, focused components that compose into larger features
-2. **Separation of Concerns**: Clear boundaries between UI, state management, and data persistence
-3. **Type Safety**: Full TypeScript coverage for compile-time safety
-4. **Performance First**: Optimized rendering with React memoization and efficient data structures
-5. **Progressive Enhancement**: Core functionality works without optional services (auth, backend)
-6. **Design System Compliance**: Consistent use of oklch color system and theme variables
-7. **Accessibility by Default**: WCAG 2.1 AA compliance in all components
+1. **AI-First Calendar**: Anthropic Claude integration for intelligent scheduling and event management
+2. **Multi-Calendar Integration**: Unified interface for Google Calendar, Microsoft Outlook, and local events
+3. **Backend-First Architecture**: Convex provides real-time data synchronization as the primary data layer
+4. **Performance Optimized**: Advanced indexing, lazy loading, and memoization for sub-second page loads
+5. **Component Composition**: Small, focused components that compose into larger features
+6. **Separation of Concerns**: Clear boundaries between UI, state management, and backend integration
+7. **Type Safety**: Full TypeScript coverage including Convex integration types
+8. **Graceful Degradation**: APIs degrade gracefully when services not configured (development-friendly)
+9. **Token-Only Design**: Pure semantic design tokens (glass effects completely removed)
+10. **Security by Default**: Webhook signature verification and secure user lifecycle management
+11. **Real-time Synchronization**: Webhook-driven updates across all calendar providers
+12. **Accessibility by Default**: WCAG 2.1 AA compliance maintained across all components
 
-## System Architecture
+## System Architecture (v0.3.2)
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                         Browser                             │
-├─────────────────────────────────────────────────────────────┤
-│                    Next.js Application                      │
-├──────────────────┬──────────────────┬──────────────────────┤
-│   Presentation   │  State Management │   Data Persistence   │
-│   Layer          │      Layer        │       Layer          │
-├──────────────────┼──────────────────┼──────────────────────┤
-│ • Components     │ • React Hooks     │ • LocalStorage       │
-│ • shadcn/ui      │ • Local State     │ • Convex (optional)  │
-│ • Tailwind CSS   │ • Context         │ • Clerk Auth         │
-│ • oklch colors   │ • Event Handlers  │ • IndexedDB          │
-└──────────────────┴──────────────────┴──────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                              Browser                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                         Next.js Application                             │
+├─────────────────┬───────────────────┬─────────────────────────────────────┤
+│   Presentation  │  State Management │      Backend Integration            │
+│   Layer         │      Layer        │            Layer                    │
+├─────────────────┼───────────────────┼─────────────────────────────────────┤
+│ • Components    │ • React Hooks     │ • Convex Real-time DB              │
+│ • shadcn/ui     │ • Local State     │ • Clerk Authentication             │
+│ • Token-only    │ • Context         │ • Anthropic Claude AI              │
+│   theming       │ • Event Handlers  │ • Google Calendar API              │
+│ • WCAG AA       │ • Real-time sync  │ • Microsoft Graph API              │
+│ • Performance   │ • AI Integration  │ • Stripe Billing (with fallbacks)  │
+│   Optimized     │ • Calendar Sync   │ • Webhook Security (Svix)          │
+└─────────────────┴───────────────────┴─────────────────────────────────────┘
+                                      ↕
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           Backend Services                              │
+├──────────────────┬──────────────────┬─────────────────────────────────────┤
+│    Convex        │     Clerk        │            AI & Calendar            │
+│  (Primary DB)    │  (Auth Provider) │            Providers                │
+├──────────────────┼──────────────────┼─────────────────────────────────────┤
+│ • HTTP Endpoints │ • User Lifecycle │ • Anthropic Claude 3.5 Sonnet      │
+│ • Real-time Sync │ • Webhooks       │ • Google Calendar Webhooks         │
+│ • Data Storage   │ • Authentication │ • Microsoft Graph API              │
+│ • Query/Mutation │ • Session Mgmt   │ • Conflict Resolution Engine       │
+│ • Performance    │ • Security       │ • Smart Scheduling Engine          │
+│   Optimized      │                  │ • Real-time Synchronization         │
+└──────────────────┴──────────────────┴─────────────────────────────────────┘
+                                      ↕
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         External Services                               │
+├──────────────────┬──────────────────┬─────────────────────────────────────┤
+│   Stripe         │   Anthropic      │         Calendar APIs               │
+│  (Billing)       │   Claude AI      │   (Google + Microsoft)              │
+├──────────────────┼──────────────────┼─────────────────────────────────────┤
+│ • Subscriptions  │ • AI Chat        │ • Event Synchronization             │
+│ • Customer Portal│ • Smart Scheduling│ • Real-time Webhooks              │
+│ • Usage Tracking │ • Conflict       │ • Calendar Permissions             │
+│ • Graceful       │   Resolution     │ • Provider Management              │
+│   Fallbacks      │                  │                                    │
+└──────────────────┴──────────────────┴─────────────────────────────────────┘
 ```
 
-## Design System Architecture
+## Design System Architecture (v0.3.1 - BREAKING CHANGES)
 
-### Color System (oklch)
-The application uses the oklch color space for perceptually uniform colors:
+### Token-Only Design System (Glass Effects REMOVED)
+The application now uses pure semantic design tokens from shadcn/Vercel theme:
 
 ```css
-/* Core color variables defined in globals.css */
+/* Core semantic tokens - ALL components MUST use these */
 --background: oklch(0 0 0);        /* Pure black background */
 --foreground: oklch(1 0 0);        /* White text */
 --card: oklch(0.14 0 0);           /* Elevated surfaces */
 --border: oklch(0.26 0 0);         /* Subtle borders */
 --muted: oklch(0.23 0 0);          /* Secondary surfaces */
+
+/* PROHIBITED in v0.3.1 - CI Guard will block these */
+/* backdrop-blur-* classes - REMOVED */
+/* glass morphism effects - REMOVED */
+/* hardcoded color values - BLOCKED */
 ```
 
-### Theme Architecture
-- **Vercel Theme**: Base design system via shadcn/ui
+### Theme Architecture (Updated v0.3.1)
+- **shadcn/Vercel Tokens**: Complete semantic design token system
+- **CI Enforcement**: `scripts/ci-guard.js` prevents non-token colors
+- **Breaking Change**: Glass effects and backdrop-blur completely removed
+- **Consistency**: All components use `bg-background`, `bg-card`, `text-foreground`, `border-border`
 - **CSS Variables**: Dynamic theming support
 - **Dark Mode First**: Optimized for dark environments
 - **SSR Compatible**: Safe for server-side rendering
@@ -58,82 +101,193 @@ The application uses the oklch color space for perceptually uniform colors:
 - **Overflow Management**: Explicit scroll containers
 - **Z-Index Layers**: Consistent stacking contexts
 
-## Component Hierarchy
+## Component Hierarchy (v0.3.1)
 
 ```
 App (page.tsx)
-└── LinearCalendarVertical
+└── LinearCalendarHorizontal (IMMUTABLE FOUNDATION)
     ├── Header
     │   ├── Year Selector
+    │   ├── Sync Status (Convex connection)
     │   └── Navigation Controls
-    ├── FilterPanel
-    │   ├── Category Toggles
-    │   └── View Options
-    ├── Calendar Grid
+    ├── FilterPanel (UPDATED - fixed props)
+    │   ├── Category Toggles (token-based styling)
+    │   └── View Options (viewOptions interface)
+    ├── Calendar Grid (12-month horizontal - PRESERVED)
     │   └── Month Rows (12)
     │       └── Day Cells (42 per month)
-    │           └── Event Indicators
+    │           ├── Event Indicators (token-based colors)
+    │           └── Sync Status Indicators (NEW)
     ├── ZoomControls
-    ├── EventModal
-    │   ├── Event Form
+    ├── EventModal (Enhanced with Convex)
+    │   ├── Event Form (real-time validation)
     │   └── Category Selector
-    └── ReflectionModal
-        └── Reflection Prompts
+    └── Additional Views
+        ├── TimelineView (NEW - Vertical month-by-month, read-only)
+        ├── BillingSettings (NEW - Stripe integration)
+        └── ConflictResolutionModal (NEW - sync conflicts)
+
+Timeline Route (/timeline) - SEPARATE ARCHITECTURE
+└── TimelineView (Vertical layout, editing disabled)
+    ├── Month Cards (organized by month)
+    ├── Event Cards (read-only display)
+    └── Filter Integration (preserved functionality)
+
+Manage Route (/manage) - CENTRALIZED EDITING
+└── Event Management Interface
+    ├── Event List (CRUD operations)
+    ├── Command Bar Integration
+    └── Bulk Operations
 ```
 
-## Data Flow
+## Backend Integration Architecture (v0.3.1)
 
-### Event Creation Flow
-1. User clicks on a day cell
-2. `LinearCalendarVertical` handles click event
-3. Opens `EventModal` with selected date
-4. User fills form and submits
-5. `useLinearCalendar` hook processes the event
-6. Event saved to LocalStorage
-7. Component re-renders with new event
-
-### State Management
-
-The application uses a custom hook `useLinearCalendar` for centralized state management:
+### Convex HTTP Endpoints
+The application now uses direct HTTP endpoints in Convex for webhook handling:
 
 ```typescript
-interface CalendarState {
-  currentYear: number
-  events: Map<string, Event[]>  // Indexed by date string
-  filters: FilterState
-  selectedDates: Set<string>
-  hoveredDate: Date | null
-  selectedRange: DateRange | null
-  reflections: Reflection[]
+// convex/http.ts - Direct webhook handling
+const http = httpRouter();
+
+http.route({
+  path: "/clerk-user-webhook", 
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    // Svix signature verification for security
+    const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+    const evt = wh.verify(payload, svixHeaders);
+    
+    // Handle user lifecycle events
+    await ctx.runMutation(internal.clerk.upsertFromClerk, {
+      clerkUserId: evt.data.id,
+      // ... user data
+    });
+  }),
+});
+```
+
+### User Lifecycle Management
+User management now flows through Convex with cascading operations:
+
+1. **User Created (Clerk)** → Webhook → Convex → `initializeUserSubscription`
+2. **User Updated (Clerk)** → Webhook → Convex → Update user data
+3. **User Deleted (Clerk)** → Webhook → Convex → Cascade deletion across 7 tables
+
+### Billing Integration Flow
+```typescript
+// Graceful Stripe API fallbacks
+const isStripeConfigured = () => {
+  const key = process.env.STRIPE_SECRET_KEY;
+  return key && key !== 'sk_test_placeholder' && key.startsWith('sk_');
+};
+
+if (!isStripeConfigured()) {
+  return NextResponse.json(
+    { error: 'Billing system not configured' }, 
+    { status: 503 }
+  );
 }
 ```
 
-Key features:
-- Events stored in a Map for O(1) lookup by date
-- Filters managed as boolean flags per category
-- Selected dates tracked in a Set for efficient membership testing
-- All state changes trigger LocalStorage persistence
+### Real-time Data Synchronization
+- **Convex Queries**: Reactive data fetching with automatic updates
+- **Convex Mutations**: Optimistic updates with conflict resolution  
+- **IndexedDB Cache**: Local persistence for offline support
+- **Webhook Security**: Svix signature verification for all external webhooks
 
-## Styling Architecture
+## Data Flow (Updated v0.3.1)
 
-### Design System
+### Enhanced Event Creation Flow
+1. User clicks on a day cell in `LinearCalendarHorizontal` (IMMUTABLE FOUNDATION)
+2. Calendar handles click event with real-time validation
+3. Opens `EventModal` with selected date and Convex context
+4. User fills form with real-time sync validation
+5. Event processed through Convex mutations with optimistic updates
+6. Event saved to Convex DB with IndexedDB cache fallback
+7. Real-time updates propagate to all connected clients
+8. Component re-renders with new event and sync status indicators
 
-The application uses a layered styling approach:
+### Timeline View Flow (NEW - Read-Only)
+1. User navigates to `/timeline` route
+2. `TimelineView` component loads with vertical month-by-month layout
+3. Events displayed as organized cards (editing disabled)
+4. Filter functionality preserved but editing redirects to `/manage`
+5. All event modifications happen in Manage view or Command Bar
 
-1. **Tailwind CSS**: Utility-first base styles
-2. **OKLCH Color Space**: Perceptually uniform colors
-3. **CSS Custom Properties**: Dynamic theming
-4. **Glass Morphism**: Modern translucent UI effects
+### State Management (v0.3.1 - Convex Integration)
 
-### Theme Structure
+The application now uses Convex for real-time state management with local optimization:
+
+```typescript
+// Enhanced state with Convex integration
+interface CalendarState {
+  currentYear: number
+  events: Map<string, Event[]>        // Real-time from Convex
+  filters: FilterState                // Local state with persistence
+  selectedDates: Set<string>          // Local UI state
+  hoveredDate: Date | null            // Local UI state
+  selectedRange: DateRange | null     // Local UI state
+  syncStatus: SyncStatus              // NEW - Convex connection status
+  userSubscription: Subscription      // NEW - Billing integration
+  conflicts: ConflictResolution[]     // NEW - Sync conflict tracking
+}
+
+// Convex integration state
+interface SyncStatus {
+  isConnected: boolean
+  lastSync: Date | null
+  pendingOperations: number
+  conflicts: number
+}
+```
+
+Key features (Enhanced v0.3.1):
+- **Real-time Events**: Synced from Convex with automatic updates
+- **Optimistic Updates**: Local changes applied immediately with server reconciliation
+- **Offline Support**: IndexedDB cache with sync on reconnection
+- **Conflict Resolution**: Automatic and manual conflict resolution
+- **User Management**: Integrated subscription and billing status
+- **Performance**: Efficient data structures maintained with real-time updates
+
+## Styling Architecture (v0.3.1 - BREAKING CHANGES)
+
+### Token-Only Design System (Glass Effects REMOVED)
+
+The application now uses a pure semantic token approach:
+
+1. **shadcn/Vercel Tokens**: Semantic design token system
+2. **OKLCH Color Space**: Perceptually uniform colors (maintained)
+3. **CSS Custom Properties**: Dynamic theming with tokens only
+4. **CI Enforcement**: `scripts/ci-guard.js` prevents non-token usage
+5. **BREAKING**: Glass morphism and backdrop-blur completely removed
+
+### Token Structure (Enforced)
 
 ```css
+/* REQUIRED - All components must use these semantic tokens */
 :root {
-  --background: oklch(0 0 0)
-  --foreground: oklch(0.9328 0.0025 228.7857)
-  --primary: oklch(0.6692 0.1607 245.0110)
-  /* ... additional color tokens */
+  --background: oklch(0 0 0);           /* bg-background */
+  --foreground: oklch(1 0 0);           /* text-foreground */
+  --card: oklch(0.14 0 0);              /* bg-card */
+  --border: oklch(0.26 0 0);            /* border-border */
+  --muted: oklch(0.23 0 0);             /* bg-muted */
 }
+
+/* PROHIBITED - CI Guard will block these in builds */
+/* .backdrop-blur-* { ... }  ← REMOVED */
+/* .glass-* { ... }          ← REMOVED */
+/* background: #123456;       ← BLOCKED */
+```
+
+### CI Guard Enforcement
+```javascript
+// scripts/ci-guard.js - Automated token enforcement
+const prohibitedPatterns = [
+  /backdrop-blur-/,
+  /bg-\w+\/\d+/,           // Glass opacity patterns
+  /#[0-9a-fA-F]{3,6}/,     // Hex colors
+  /rgb\([\d\s,]+\)/,       // RGB colors
+];
 ```
 
 ### Layout System

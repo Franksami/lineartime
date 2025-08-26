@@ -16,7 +16,7 @@ export default function ThemesPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-border bg-card sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -69,7 +69,7 @@ export default function ThemesPage() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Palette className="w-5 h-5 text-blue-500" />
+                <Palette className="w-5 h-5 text-primary" />
                 Preset Themes
               </CardTitle>
             </CardHeader>
@@ -83,7 +83,7 @@ export default function ThemesPage() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-purple-500" />
+                <Sparkles className="w-5 h-5 text-accent" />
                 Custom Creation
               </CardTitle>
             </CardHeader>
@@ -97,7 +97,7 @@ export default function ThemesPage() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Download className="w-5 h-5 text-green-500" />
+                <Download className="w-5 h-5 text-secondary" />
                 Persistent Storage
               </CardTitle>
             </CardHeader>

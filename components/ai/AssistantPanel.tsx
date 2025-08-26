@@ -5,7 +5,10 @@ import { useChat } from '@ai-sdk/react'
 import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { X, Minimize2, Maximize2, Bot, Calendar, Clock, AlertTriangle, Wand2, Sparkles } from 'lucide-react'
+import { X, Minimize2, Maximize2, Bot, Calendar as CalendarIcon, Clock as ClockIcon, AlertTriangle, Wand2, Sparkles, Copy, RotateCcw, Share, ThumbsUp, ThumbsDown } from 'lucide-react'
+import { api } from '@/convex/_generated/api'
+import { useMutation, useQuery } from 'convex/react'
+import { useUser } from '@clerk/nextjs'
 import { 
   Conversation, 
   ConversationContent, 
@@ -17,12 +20,25 @@ import {
   PromptInputTextarea,
   PromptInputSubmit,
   PromptInputToolbar,
-  PromptInputTools
+  PromptInputTools,
+  PromptInputButton,
+  PromptInputModelSelect,
+  PromptInputModelSelectTrigger,
+  PromptInputModelSelectContent,
+  PromptInputModelSelectItem,
+  PromptInputModelSelectValue
 } from '@/components/ai-elements/prompt-input'
 import { Suggestions, Suggestion } from '@/components/ai-elements/suggestion'
-import { Tool } from '@/components/ai-elements/tool'
+import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from '@/components/ai-elements/tool'
 import { Response } from '@/components/ai-elements/response'
 import { Loader } from '@/components/ai-elements/loader'
+import { Actions, Action } from '@/components/ai-elements/actions'
+import { CodeBlock } from '@/components/ai-elements/code-block'
+import { InlineCitation } from '@/components/ai-elements/inline-citation'
+import { Sources, SourcesContent, SourcesTrigger, Source } from '@/components/ai-elements/source'
+import { Image } from '@/components/ai-elements/image'
+import { WebPreview } from '@/components/ai-elements/web-preview'
+import { Reasoning, ReasoningTrigger, ReasoningContent } from '@/components/ai-elements/reasoning'
 // 🚀 NEW: Enhanced AI features from v0
 import { NaturalLanguageParser } from './natural-language-parser'
 import { AIChatInterface } from './ai-chat-interface'
@@ -48,6 +64,26 @@ export function AssistantPanel({
   const [isMinimized, setIsMinimized] = React.useState(false)
   const [input, setInput] = React.useState('')
   const [isMobile, setIsMobile] = React.useState(false)
+  const [webSearch, setWebSearch] = React.useState(false)
+  const [model, setModel] = React.useState<string>('openai/gpt-4o-mini')
+  const [includeCalendar, setIncludeCalendar] = React.useState(true)
+  const logEvent = useMutation(api.aiChat.logEvent)
+  const { user } = useUser()
+  const currentUser = useQuery(api.users.getCurrentUser, {})
+  const ensureChat = useMutation(api.aiChat.ensureChat)
+  const [chatId, setChatId] = React.useState<string | null>(null)
+  const chats = useQuery(api.aiChat.listChatsWithStats as any, currentUser?._id ? { userId: currentUser._id } as any : "skip")
+  const createChat = useMutation(api.aiChat.createChat)
+  const renameChat = useMutation(api.aiChat.renameChat)
+  const deleteChat = useMutation(api.aiChat.deleteChat)
+
+  React.useEffect(() => {
+    if (currentUser?._id && !chatId) {
+      ensureChat({ userId: currentUser._id }).then(setChatId).catch(() => {})
+    }
+  }, [currentUser?._id, chatId, ensureChat])
+
+  const chatData = useQuery(api.aiChat.getChat as any, chatId ? { chatId } as any : "skip")
   
   // 🚀 NEW: Enhanced AI features state
   const [activeTab, setActiveTab] = React.useState<'chat' | 'parser' | 'ai-chat'>('chat')
@@ -65,7 +101,19 @@ export function AssistantPanel({
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
   
-  const { messages, sendMessage, status } = useChat()
+  const { messages, sendMessage, status, input: chatInput, setInput: setChatInput, handleSubmit: handleChatSubmit } = useChat({
+    api: '/api/ai/chat',
+    body: { model, webSearch, events: includeCalendar ? events : [], userId: currentUser?._id || 'anonymous' },
+    onFinish() {
+      try { localStorage.setItem('lt_last_chat', JSON.stringify(messages)) } catch {}
+    },
+    initialMessages: (() => {
+      if (chatData?.messages?.length) {
+        return chatData.messages.map((m: any) => ({ role: m.role, parts: m.parts }))
+      }
+      try { return JSON.parse(localStorage.getItem('lt_last_chat') || '[]') } catch { return [] }
+    })()
+  })
   
   // 🚀 NEW: Enhanced AI event parsing
   const handleNaturalLanguageParse = async (text: string) => {
@@ -149,13 +197,23 @@ export function AssistantPanel({
     } as React.FormEvent
     handleSubmit(syntheticEvent)
   }
+
+  const handleApplySuggestion = (s: { startISO: string; endISO: string; title?: string }) => {
+    if (!onEventCreate) return
+    const start = new Date(s.startISO)
+    const end = new Date(s.endISO)
+    onEventCreate({ title: s.title || 'Scheduled time', startDate: start, endDate: end })
+    sendMessage({ text: `Added event on ${start.toLocaleString()} – ${end.toLocaleString()}` })
+  }
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (input.trim() && status !== 'streaming') {
-      sendMessage({ text: input })
-      setInput('')
-    }
+    if (!input.trim() || status === 'streaming') return
+    sendMessage(
+      { text: input },
+      { body: { model, webSearch, events: includeCalendar ? events : [] } }
+    )
+    setInput('')
   }
   
   if (!isOpen) {
@@ -199,7 +257,63 @@ export function AssistantPanel({
           <Bot className="h-5 w-5 text-primary" />
           <h3 className="font-semibold text-sm">AI Assistant</h3>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
+          {currentUser?._id && (
+            <div className="flex items-center gap-2">
+              <select
+                className="h-7 rounded border bg-background text-xs"
+                value={chatId ?? ''}
+                onChange={(e) => setChatId(e.target.value || null)}
+              >
+                <option value="">Current</option>
+                {(chats || []).map((c: any) => (
+                  <option key={c._id} value={c._id}>
+                    {(c.title || 'Chat')} · {c.messageCount} msgs · {new Date(c.updatedAt).toLocaleDateString()}
+                  </option>
+                ))}
+              </select>
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-7 px-2 text-xs"
+                onClick={async () => {
+                  if (!currentUser?._id) return
+                  const id = await createChat({ userId: currentUser._id })
+                  setChatId(id)
+                }}
+              >
+                New Chat
+              </Button>
+              {chatId && (
+                <>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 px-2 text-xs"
+                    onClick={async () => {
+                      const title = prompt('Rename chat to:')
+                      if (title) await renameChat({ chatId, title })
+                    }}
+                  >
+                    Rename
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    className="h-7 px-2 text-xs"
+                    onClick={async () => {
+                      if (confirm('Delete this chat?')) {
+                        await deleteChat({ chatId })
+                        setChatId(null)
+                      }
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
           <Button
             size="icon"
             variant="ghost"
@@ -288,9 +402,99 @@ export function AssistantPanel({
                       <div key={message.id}>
                         <Message from={message.role} key={message.id}>
                           <MessageContent>
-                            <Response>
-                              {typeof message === 'object' && 'content' in message ? message.content : 'Message content unavailable'}
-                            </Response>
+                            {(message.parts || []).map((part: any, i: number) => {
+                              if (part.type === 'text') return <Response key={i}>{part.text}</Response>
+                              if (part.type === 'reasoning') return (
+                                <Reasoning key={i} isStreaming={status === 'streaming'}>
+                                  <ReasoningTrigger />
+                                  <ReasoningContent>{part.text}</ReasoningContent>
+                                </Reasoning>
+                              )
+                              if (part.type === 'code') return <CodeBlock key={i} language={part.language || 'tsx'}>{part.text}</CodeBlock>
+                              if (part.type === 'citation') return <InlineCitation key={i} index={part.index} href={part.url} />
+                              if (part.type === 'source-url') return (
+                                <Sources key={i}>
+                                  <SourcesTrigger count={1} />
+                                  <SourcesContent>
+                                    <Source href={part.url} title={part.url} />
+                                  </SourcesContent>
+                                </Sources>
+                              )
+                              if (part.type === 'image') return <Image key={i} src={part.url} alt={part.alt || 'Image'} />
+                              if (part.type === 'link-preview') return (
+                                <WebPreview key={i} defaultUrl={part.url} />
+                              )
+                              if (part.type === 'tool-invocation') {
+                                const output = part.result
+                                const isSuggest = part.toolName === 'suggestSchedule'
+                                return (
+                                  <Tool key={i} defaultOpen>
+                                    <ToolHeader type={part.toolName} state={part.state} />
+                                    <ToolContent>
+                                      <ToolInput input={part.args} />
+                                      <ToolOutput
+                                        output={
+                                          isSuggest && output?.suggestions?.length ? (
+                                            <div className="p-2">
+                                              {output.suggestions.map((s: any, idx: number) => (
+                                                <div key={idx} className="flex items-center justify-between gap-3 border-b last:border-0 p-2">
+                                                  <div className="text-sm">
+                                                    <div className="font-medium">{s.start} → {s.end}</div>
+                                                    <div className="text-muted-foreground text-xs">Score: {Math.round((s.score || 0) * 100) / 100}</div>
+                                                    {Array.isArray(s.reasons) && s.reasons.length > 0 && (
+                                                      <div className="text-xs mt-1">{s.reasons.join('; ')}</div>
+                                                    )}
+                                                  </div>
+                                                  <Button size="sm" onClick={() => handleApplySuggestion(s)}>
+                                                    Apply
+                                                  </Button>
+                                                </div>
+                                              ))}
+                                            </div>
+                                          ) : output ? (
+                                            <pre className="text-xs p-2">{JSON.stringify(output, null, 2)}</pre>
+                                          ) : null
+                                        }
+                                        errorText={part.errorText}
+                                      />
+                                    </ToolContent>
+                                  </Tool>
+                                )
+                              }
+                              return null
+                            })}
+
+                            {message.role === 'assistant' && (
+                              <Actions className="mt-2">
+                                <Action tooltip="Copy response" onClick={() => {
+                                  const txt = (message.parts || []).map((p: any) => p.text).filter(Boolean).join('\n')
+                                  navigator.clipboard.writeText(txt)
+                                  logEvent({ eventType: 'copy' }).catch(() => {})
+                                }}>
+                                  <Copy className="h-4 w-4" />
+                                </Action>
+                                <Action tooltip="Regenerate" onClick={() => {
+                                  const lastUser = [...messages].reverse().find((m: any) => m.role === 'user')
+                                  if (lastUser?.content) sendMessage({ text: lastUser.content })
+                                  logEvent({ eventType: 'regenerate' }).catch(() => {})
+                                }}>
+                                  <RotateCcw className="h-4 w-4" />
+                                </Action>
+                                <Action tooltip="Share" onClick={() => {
+                                  const txt = (message.parts || []).map((p: any) => p.text).filter(Boolean).join('\n')
+                                  navigator.share?.({ text: txt }).catch(() => {})
+                                  logEvent({ eventType: 'share' }).catch(() => {})
+                                }}>
+                                  <Share className="h-4 w-4" />
+                                </Action>
+                                <Action tooltip="Like" onClick={() => { logEvent({ eventType: 'like' }).catch(() => {}) }}>
+                                  <ThumbsUp className="h-4 w-4" />
+                                </Action>
+                                <Action tooltip="Dislike" onClick={() => { logEvent({ eventType: 'dislike' }).catch(() => {}) }}>
+                                  <ThumbsDown className="h-4 w-4" />
+                                </Action>
+                              </Actions>
+                            )}
                           </MessageContent>
                         </Message>
                       </div>
@@ -377,7 +581,27 @@ export function AssistantPanel({
               />
               <PromptInputToolbar className="px-2 pb-2">
                 <PromptInputTools>
-                  {/* Tool buttons could go here */}
+                  <PromptInputButton
+                    variant={webSearch ? 'default' : 'ghost'}
+                    onClick={() => setWebSearch(!webSearch)}
+                  >
+                    <span>Search</span>
+                  </PromptInputButton>
+                  <PromptInputModelSelect value={model} onValueChange={setModel}>
+                    <PromptInputModelSelectTrigger>
+                      <PromptInputModelSelectValue />
+                    </PromptInputModelSelectTrigger>
+                    <PromptInputModelSelectContent>
+                      <PromptInputModelSelectItem value="openai/gpt-4o-mini">GPT-4o Mini</PromptInputModelSelectItem>
+                      <PromptInputModelSelectItem value="openai/gpt-4o">GPT-4o</PromptInputModelSelectItem>
+                    </PromptInputModelSelectContent>
+                  </PromptInputModelSelect>
+                  <PromptInputButton
+                    variant={includeCalendar ? 'default' : 'ghost'}
+                    onClick={() => setIncludeCalendar(!includeCalendar)}
+                  >
+                    <span>Calendar</span>
+                  </PromptInputButton>
                 </PromptInputTools>
                 <PromptInputSubmit 
                   disabled={!input.trim()} 

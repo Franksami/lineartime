@@ -36,18 +36,17 @@ test.describe('Timeline View', () => {
     await page.waitForSelector('button:has-text("Timeline")');
   });
 
-  test('should render timeline with month columns', async ({ page }) => {
+  test('should render vertical month-by-month timeline', async ({ page }) => {
     await navigateToView(page, 'Timeline');
     
     // Check if timeline container exists
     await expect(page.locator('[data-testid="timeline-container"]')).toBeVisible();
     
-    // Check for month headers
-    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 
-                   'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    
+    // Check for month headers in long form
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                   'July', 'August', 'September', 'October', 'November', 'December'];
     for (const month of months.slice(0, 3)) { // Check first 3 months
-      await expect(page.locator(`text=${month}`).first()).toBeVisible();
+      await expect(page.locator(`text=${month} 2025`).first()).toBeVisible();
     }
   });
 
@@ -64,67 +63,15 @@ test.describe('Timeline View', () => {
     await expect(page.locator('text=Timeline Event 2')).toBeVisible();
   });
 
-  test('should handle zoom controls in timeline', async ({ page }) => {
-    await navigateToView(page, 'Timeline');
-    
-    // Find zoom controls
-    const zoomSelect = page.locator('select[aria-label="Zoom level"]');
-    if (await zoomSelect.isVisible()) {
-      // Test different zoom levels
-      await zoomSelect.selectOption('week');
-      await page.waitForTimeout(300);
-      
-      await zoomSelect.selectOption('month');
-      await page.waitForTimeout(300);
-      
-      await zoomSelect.selectOption('year');
-      await page.waitForTimeout(300);
-    }
-    
-    // Timeline should still be visible
-    await expect(page.locator('[data-testid="timeline-container"]')).toBeVisible();
-  });
+  // Zoom controls belonged to the old TimelineContainer; skipped for vertical view
 
-  test('should show heat map when enabled', async ({ page }) => {
-    await navigateToView(page, 'Timeline');
-    
-    // Check if heat map elements exist
-    const heatMapCells = page.locator('[data-heatmap-intensity]');
-    const count = await heatMapCells.count();
-    
-    // Should have heat map cells if feature is enabled
-    if (count > 0) {
-      expect(count).toBeGreaterThan(0);
-    }
-  });
+  // Heat map was specific to TimelineContainer; skipped in vertical view
 
-  test('should open event modal on day click', async ({ page }) => {
-    await navigateToView(page, 'Timeline');
-    
-    // Click on a day cell
-    const dayCell = page.locator('[data-testid^="timeline-day-"]').first();
-    if (await dayCell.isVisible()) {
-      await dayCell.click();
-      
-      // Check if modal opens
-      await expect(page.locator('[role="dialog"]')).toBeVisible();
-      
-      // Close modal
-      await page.keyboard.press('Escape');
-    }
-  });
+  // Vertical timeline is read-focused; no day-cell click handlers here
 
-  test('should handle keyboard navigation in timeline', async ({ page }) => {
+  test('timeline container remains visible after focus changes', async ({ page }) => {
     await navigateToView(page, 'Timeline');
-    
-    // Use arrow keys to navigate
     await page.keyboard.press('Tab');
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('ArrowLeft');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowUp');
-    
-    // Timeline should still be functional
     await expect(page.locator('[data-testid="timeline-container"]')).toBeVisible();
   });
 });

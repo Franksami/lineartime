@@ -4,6 +4,8 @@ import { Inter, JetBrains_Mono } from "next/font/google"
 import { Providers } from "./providers"
 import { PWAInstallPrompt } from "@/components/pwa/pwa-install-prompt"
 import { PWAStatus } from "@/components/pwa/pwa-status"
+import { ReactScan } from "@/components/performance/ReactScan"
+import { PerformanceDashboard } from "@/components/performance/PerformanceDashboard"
 import "./globals.css"
 
 const fontSans = Inter({
@@ -84,10 +86,12 @@ export default function RootLayout({
 				<link rel="apple-touch-icon" href="/icon-192x192.png" />
 			</head>
 			<body className="font-sans antialiased bg-background text-foreground min-h-screen">
+				<ReactScan />
 				<Providers>
 					{children}
 					<PWAInstallPrompt />
 					<PWAStatus />
+					<PerformanceDashboard />
 				</Providers>
 			</body>
 		</html>

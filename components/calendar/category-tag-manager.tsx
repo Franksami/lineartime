@@ -112,14 +112,14 @@ export function CategoryTagManager({
                   <div
                     className={`w-2 h-2 rounded-full ${
                       priority.value === "critical"
-                        ? "bg-red-500"
+                        ? "bg-destructive"
                         : priority.value === "high"
-                          ? "bg-orange-500"
+                          ? "bg-secondary"
                           : priority.value === "medium"
-                            ? "bg-blue-500"
+                            ? "bg-primary"
                             : priority.value === "low"
-                              ? "bg-gray-400"
-                              : "bg-gray-300"
+                              ? "bg-muted-foreground/50"
+                              : "bg-muted/50"
                     }`}
                   />
                   <span>{priority.label}</span>

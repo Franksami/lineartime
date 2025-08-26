@@ -5,23 +5,30 @@ const WEEKDAYS = ['Su','Mo','Tu','We','Th','Fr','Sa']
 
 test.describe('Foundation validation (horizontal year timeline)', () => {
   test('renders the LinearTime application container', async ({ page }) => {
-    await page.goto('/')
+    // Navigate to dashboard where the calendar now lives
+    await page.goto('/dashboard')
+    // Wait for potential auth redirects to settle
+    await page.waitForLoadState('networkidle', { timeout: 10000 })
     await expect(
       page.getByRole('application', { name: /Linear Calendar/i })
     ).toBeVisible()
   })
 
   test('shows all twelve month labels', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/dashboard')
+    await page.waitForLoadState('networkidle', { timeout: 10000 })
     for (const month of MONTHS) {
-      await expect(page.getByText(new RegExp(`^${month}$`))).toBeVisible()
+      // Use first() to handle multiple occurrences (left and right sides)
+      await expect(page.getByText(new RegExp(`^${month}$`)).first()).toBeVisible()
     }
   })
 
   test('shows weekday headers somewhere in the view', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/dashboard')
+    await page.waitForLoadState('networkidle', { timeout: 10000 })
     for (const wd of WEEKDAYS) {
-      await expect(page.getByText(new RegExp(`^${wd}$`))).toBeVisible()
+      // Use first() to handle multiple occurrences (top and bottom headers)
+      await expect(page.getByText(new RegExp(`^${wd}$`)).first()).toBeVisible()
     }
   })
 })
@@ -60,7 +67,8 @@ async function verifyFoundationStructure(page: Page) {
 test.describe('🔒 Foundation Validation - LOCKED STRUCTURE', () => {
   
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/dashboard');
+    await page.waitForLoadState('networkidle', { timeout: 10000 });
     await waitForFoundation(page);
   });
 
@@ -105,16 +113,29 @@ test.describe('🔒 Foundation Validation - LOCKED STRUCTURE', () => {
   });
 
   test('should display complete day numbers for each month', async ({ page }) => {
-    // Test January (31 days)
-    const jan01 = page.locator('text=01').first();
-    await expect(jan01).toBeVisible();
+    // Check if we're in dot mode or number mode
+    const isDotMode = await page.locator('.rounded-full[style*="dot-size"]').first().isVisible().catch(() => false);
     
-    const jan31 = page.locator('text=31').first();
-    await expect(jan31).toBeVisible();
-    
-    // Test February (28 days in 2025)
-    const feb28 = page.locator('text=28').first();
-    await expect(feb28).toBeVisible();
+    if (isDotMode) {
+      // In dot mode, check for dots instead of numbers
+      const dots = page.locator('.rounded-full[style*="dot-size"]');
+      await expect(dots.first()).toBeVisible();
+      
+      // Should have at least 300+ dots (rough estimate for a year)
+      const dotCount = await dots.count();
+      expect(dotCount).toBeGreaterThan(300);
+    } else {
+      // In number mode, check for day numbers
+      const jan01 = page.locator('text=01').first();
+      await expect(jan01).toBeVisible();
+      
+      const jan31 = page.locator('text=31').first();
+      await expect(jan31).toBeVisible();
+      
+      // Test February (28 days in 2025)
+      const feb28 = page.locator('text=28').first();
+      await expect(feb28).toBeVisible();
+    }
   });
 
   test('should maintain performance benchmarks', async ({ page }) => {
@@ -234,7 +255,8 @@ test.describe('🔒 Cross-Platform Foundation Validation', () => {
   devices.forEach(device => {
     test(`should maintain foundation structure on ${device.name}`, async ({ page }) => {
       await page.setViewportSize({ width: device.width, height: device.height });
-      await page.goto('/');
+      await page.goto('/dashboard');
+      await page.waitForLoadState('networkidle', { timeout: 10000 });
       await waitForFoundation(page);
       
       // Verify foundation elements present regardless of screen size
@@ -259,7 +281,8 @@ test.describe('🧪 Foundation Performance Validation', () => {
   test('should render foundation within performance targets', async ({ page }) => {
     const startTime = Date.now();
     
-    await page.goto('/');
+    await page.goto('/dashboard');
+    await page.waitForLoadState('networkidle', { timeout: 10000 });
     await waitForFoundation(page);
     
     const loadTime = Date.now() - startTime;

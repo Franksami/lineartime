@@ -7,7 +7,10 @@ import {
   LayoutGrid, 
   List, 
   Settings,
-  ChevronDown
+  ChevronDown,
+  Grid3X3,
+  CircleDot,
+  Zap
 } from 'lucide-react'
 import {
   DropdownMenu,
@@ -17,8 +20,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
+import { useAutoAnimate, useAutoAnimateDropdown } from '@/hooks/useAutoAnimate'
 
-export type CalendarView = 'year' | 'timeline' | 'manage'
+export type CalendarView = 'year' | 'fullcalendar' | 'toast-ui' | 'progress' | 'timeline' | 'manage'
 
 interface ViewSwitcherProps {
   currentView: CalendarView
@@ -28,18 +32,33 @@ interface ViewSwitcherProps {
 
 const viewConfig = {
   year: {
-    label: 'Year View',
+    label: 'Linear View',
     icon: Calendar,
-    description: 'Full year calendar view'
+    description: 'Horizontal 12-month linear timeline'
+  },
+  fullcalendar: {
+    label: 'Pro Calendar',
+    icon: Zap,
+    description: 'Professional FullCalendar with advanced features'
+  },
+  'toast-ui': {
+    label: 'Toast UI',
+    icon: Grid3X3,
+    description: 'Toast UI Calendar with month/week/day views'
+  },
+  progress: {
+    label: 'Progress Dots',
+    icon: CircleDot,
+    description: 'Progress visualization with dot indicators'
   },
   timeline: {
     label: 'Timeline',
-    icon: LayoutGrid,
-    description: 'Horizontal timeline view'
+    icon: List,
+    description: 'Vertical month-by-month timeline view'
   },
   manage: {
     label: 'Manage',
-    icon: List,
+    icon: Settings,
     description: 'Event management dashboard'
   }
 }
@@ -49,12 +68,15 @@ export function ViewSwitcher({
   onViewChange,
   className 
 }: ViewSwitcherProps) {
+  const [tabsRef] = useAutoAnimate({ duration: 200 })
+  const [dropdownRef] = useAutoAnimateDropdown()
   const CurrentIcon = viewConfig[currentView].icon
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
       {/* Desktop View - Tab Style */}
       <div 
+        ref={tabsRef}
         className="hidden md:flex items-center gap-1 p-1 rounded-lg bg-card border border-border"
         role="tablist"
         aria-label="View selection"
@@ -100,6 +122,7 @@ export function ViewSwitcher({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent 
+          ref={dropdownRef}
           align="end" 
           className="w-56 bg-card border-border"
         >

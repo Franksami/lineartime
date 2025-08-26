@@ -28,20 +28,20 @@ export function PerformanceOverlay({ metrics, poolStats, onClose, visible }: Per
   if (!visible) return null
 
   const getFPSColor = (fps: number) => {
-    if (fps >= 55) return "text-green-600"
-    if (fps >= 30) return "text-yellow-600"
-    return "text-red-600"
+    if (fps >= 55) return "text-primary"
+    if (fps >= 30) return "text-muted-foreground"
+    return "text-destructive"
   }
 
   const getMemoryColor = (memory: number) => {
-    if (memory < 50) return "text-green-600"
-    if (memory < 100) return "text-yellow-600"
-    return "text-red-600"
+    if (memory < 50) return "text-primary"
+    if (memory < 100) return "text-muted-foreground"
+    return "text-destructive"
   }
 
   return (
     <div className="fixed top-4 right-4 z-50 w-80">
-      <Card className="bg-card/95 backdrop-blur-sm border shadow-lg">
+      <Card className="bg-card border border-border shadow-sm">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm flex items-center gap-2">
@@ -104,11 +104,11 @@ export function PerformanceOverlay({ metrics, poolStats, onClose, visible }: Per
                   <div className="text-muted-foreground">Total</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-blue-600">{poolStats.inUse}</div>
+                  <div className="font-medium text-primary">{poolStats.inUse}</div>
                   <div className="text-muted-foreground">In Use</div>
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-green-600">{poolStats.available}</div>
+                  <div className="font-medium text-secondary">{poolStats.available}</div>
                   <div className="text-muted-foreground">Available</div>
                 </div>
               </div>
@@ -119,12 +119,12 @@ export function PerformanceOverlay({ metrics, poolStats, onClose, visible }: Per
           <div className="pt-2 border-t border-border">
             <div className="text-xs text-muted-foreground mb-2">Tips</div>
             <div className="space-y-1 text-xs">
-              {metrics.fps < 30 && <div className="text-red-600">• Low FPS detected - consider reducing events</div>}
+              {metrics.fps < 30 && <div className="text-destructive">• Low FPS detected - consider reducing events</div>}
               {metrics.memoryUsage > 100 && (
-                <div className="text-yellow-600">• High memory usage - consider cleanup</div>
+                <div className="text-muted-foreground">• High memory usage - consider cleanup</div>
               )}
               {metrics.renderTime > 16 && (
-                <div className="text-yellow-600">• Slow rendering - enable virtualization</div>
+                <div className="text-muted-foreground">• Slow rendering - enable virtualization</div>
               )}
             </div>
           </div>

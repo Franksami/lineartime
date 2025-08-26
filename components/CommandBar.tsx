@@ -26,6 +26,7 @@ import {
   CommandItem,
   CommandSeparator,
 } from '@/components/ui/command'
+import { useAutoAnimate, useAutoAnimateList } from '@/hooks/useAutoAnimate'
 
 interface CommandBarProps {
   onEventCreate?: (event: Partial<Event>) => void;
@@ -51,12 +52,16 @@ export function CommandBar({
   const parser = useRef(new EventParser());
   const inputRef = useRef<HTMLInputElement>(null);
   
+  // AutoAnimate refs for smooth transitions
+  const [commandListRef] = useAutoAnimateList({ duration: 200 });
+  const [resultsRef] = useAutoAnimate({ duration: 250, easing: 'ease-out' });
+  
   // Global keyboard shortcut
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        setOpen(true);
+        setOpen(prev => !prev); // Toggle open/close
       }
       
       // Quick add with CMD+N
@@ -168,11 +173,10 @@ export function CommandBar({
     <CommandDialog
       open={open}
       onOpenChange={setOpen}
-      className="fixed top-20 left-1/2 -translate-x-1/2 w-[600px] z-50"
+      className="w-[600px] z-50"
     >
-      <div className="bg-popover/95 backdrop-blur-sm border border-border rounded-lg shadow-2xl overflow-hidden">
+      <div className="bg-popover border border-border rounded-lg shadow-sm overflow-hidden">
         <div className="flex items-center border-b border-border px-4">
-          <Search className="w-4 h-4 text-muted-foreground mr-2" />
           <CommandInput
             ref={inputRef}
             value={input}
@@ -192,7 +196,7 @@ export function CommandBar({
           </div>
         </div>
         
-        <CommandList className="max-h-[400px] overflow-y-auto p-2">
+        <CommandList ref={commandListRef} className="max-h-[400px] overflow-y-auto p-2">
           {/* Event preview */}
           {preview && intent?.action === 'create' && (
             <div className="p-4 mb-2 bg-accent/10 rounded-lg border border-accent/20">
@@ -219,10 +223,10 @@ export function CommandBar({
                 </div>
                 <div className={cn(
                   "px-2 py-1 rounded-full text-xs font-medium",
-                  preview.category === 'work' && "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
-                  preview.category === 'personal' && "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
-                  preview.category === 'effort' && "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300",
-                  preview.category === 'note' && "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                  preview.category === 'work' && "bg-secondary/20 text-secondary",
+                  preview.category === 'personal' && "bg-primary/20 text-primary",
+                  preview.category === 'effort' && "bg-accent/20 text-accent-foreground",
+                  preview.category === 'note' && "bg-muted text-muted-foreground"
                 )}>
                   {preview.category}
                 </div>
@@ -249,8 +253,8 @@ export function CommandBar({
                 <div className="flex items-center gap-2">
                   <div className={cn(
                     "h-2 w-2 rounded-full",
-                    preview.confidence > 0.7 ? "bg-green-500" : 
-                    preview.confidence > 0.4 ? "bg-yellow-500" : "bg-red-500"
+                    preview.confidence > 0.7 ? "bg-primary" : 
+                    preview.confidence > 0.4 ? "bg-muted-foreground" : "bg-destructive"
                   )} />
                   <span className="text-xs text-muted-foreground">
                     {preview.confidence > 0.7 ? "High" : 
@@ -276,6 +280,7 @@ export function CommandBar({
           {/* Search results */}
           {searchResults.length > 0 && (
             <CommandGroup heading="Search Results">
+              <div ref={resultsRef}>
               {searchResults.map((event) => (
                 <CommandItem
                   key={event.id}
@@ -284,7 +289,7 @@ export function CommandBar({
                     scrollToMonth(event.startDate.getMonth());
                     setOpen(false);
                   }}
-                  className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-accent cursor-pointer"
+                  className="flex items-center justify-between cursor-pointer"
                 >
                   <div>
                     <div className="font-medium">{event.title}</div>
@@ -294,15 +299,16 @@ export function CommandBar({
                   </div>
                   <div className={cn(
                     "px-2 py-1 rounded text-xs",
-                    event.category === 'work' && "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
-                    event.category === 'personal' && "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
-                    event.category === 'effort' && "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300",
-                    event.category === 'note' && "bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300"
+                    event.category === 'work' && "bg-secondary/20 text-secondary",
+                    event.category === 'personal' && "bg-primary/20 text-primary",
+                    event.category === 'effort' && "bg-accent/20 text-accent-foreground",
+                    event.category === 'note' && "bg-muted text-muted-foreground"
                   )}>
                     {event.category}
                   </div>
                 </CommandItem>
               ))}
+              </div>
             </CommandGroup>
           )}
           
@@ -313,7 +319,7 @@ export function CommandBar({
                 <CommandItem
                   value="meeting"
                   onSelect={() => setInput('Meeting tomorrow at 10am')}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent cursor-pointer"
+                  className="flex items-center gap-2 cursor-pointer"
                 >
                   <Calendar className="w-4 h-4 text-muted-foreground" />
                   <span>Schedule a meeting</span>
@@ -321,7 +327,7 @@ export function CommandBar({
                 <CommandItem
                   value="reminder"
                   onSelect={() => setInput('Reminder: ')}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent cursor-pointer"
+                  className="flex items-center gap-2 cursor-pointer"
                 >
                   <Clock className="w-4 h-4 text-muted-foreground" />
                   <span>Set a reminder</span>
@@ -329,7 +335,7 @@ export function CommandBar({
                 <CommandItem
                   value="block"
                   onSelect={() => setInput('Focus time tomorrow 9am to 12pm')}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-accent cursor-pointer"
+                  className="flex items-center gap-2 cursor-pointer"
                 >
                   <Tag className="w-4 h-4 text-muted-foreground" />
                   <span>Block focus time</span>

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState, useCallback, useEffect } from 'react'
+import React, { useRef, useState, useCallback, useEffect, useMemo } from 'react'
 import { useGesture } from '@use-gesture/react'
 import { cn } from '@/lib/utils'
 import type { Event } from '@/types/calendar'
@@ -18,9 +18,7 @@ import {
   startOfMonth
 } from 'date-fns'
 import { Plus, Minus, GripVertical, Menu, X, Activity } from 'lucide-react'
-import { FloatingToolbar } from './FloatingToolbar'
 import { EventModal } from './EventModal'
-import { DragToCreate } from './DragToCreate'
 import { useMediaQuery } from '@/hooks/use-media-query'
 // 🚀 NEW: Performance monitoring integration
 import { usePerformanceMonitor } from '@/hooks/use-performance-monitor'
@@ -29,6 +27,9 @@ import { useObjectPool } from '@/hooks/use-object-pool'
 // 🚀 NEW: AI-enhanced drag & drop integration
 import { useAIEnhancedDragDrop } from '@/hooks/use-ai-enhanced-drag-drop'
 import { AISuggestionsPanel } from './ai-suggestions-panel'
+import { DotDayContent, NumberDayContent, type DayContentContext } from './slots'
+import { useSettingsContext } from '@/contexts/SettingsContext'
+import { RollingDigits } from '@/components/ui/rolling-digits'
 
 interface LinearCalendarHorizontalProps {
   year: number
@@ -40,6 +41,7 @@ interface LinearCalendarHorizontalProps {
   onEventCreate?: (event: Partial<Event>) => void
   onEventDelete?: (id: string) => void
   enableInfiniteCanvas?: boolean
+  dayContent?: (ctx: DayContentContext) => React.ReactNode
 }
 
 const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 
@@ -84,6 +86,8 @@ interface FullYearGridProps {
   handleDayClick: (date: Date) => void
   format: (date: Date, formatString: string) => string
   isSameDay: (dateLeft: Date, dateRight: Date) => boolean
+  dayContent?: (ctx: DayContentContext) => React.ReactNode
+  displayPreviewUpTo?: (date: Date) => boolean
 }
 
 function FullYearGrid({ 
@@ -99,7 +103,9 @@ function FullYearGrid({
   setSelectedDate,
   handleDayClick,
   format,
-  isSameDay
+  isSameDay,
+  dayContent,
+  displayPreviewUpTo
 }: FullYearGridProps) {
   // Calculate year details
   const yearStart = startOfYear(new Date(year, 0, 1))
@@ -261,14 +267,15 @@ function FullYearGrid({
             height: monthHeight
           }}
           onMouseEnter={() => {
-            if (date) {
+            if (date && !isEmpty) {
               setHoveredDate(date)
             }
           }}
           onMouseLeave={() => setHoveredDate(null)}
           onClick={(e) => {
             e.preventDefault()
-            if (date) {
+            e.stopPropagation()
+            if (date && !isEmpty) {
               // Route through onDateSelect to unify keyboard and mouse behavior
               onDateSelect?.(date)
               handleDayClick(date)
@@ -286,14 +293,30 @@ function FullYearGrid({
             aria-hidden
           >
             <div className="w-full h-full flex items-center justify-center">
-              {!isEmpty && (
-                <span className={cn(
-                  "text-[10px] leading-none text-muted-foreground",
-                  isCurrentDay && "font-semibold text-primary"
-                )}>
-                  {format(date!, 'dd')}
-                </span>
-              )}
+              {dayContent && dayContent({
+                date,
+                isEmpty,
+                isToday: isCurrentDay,
+                isSelected: !!isSelected,
+                isWeekend,
+                isHovered: !!isHovered,
+                displayPreviewUpTo: displayPreviewUpTo && date ? displayPreviewUpTo(date) : false,
+                onSelect: () => {
+                  if (date && !isEmpty) {
+                    setSelectedDate(date)
+                    onDateSelect?.(date)
+                  }
+                },
+                onPreview: () => {
+                  if (date && !isEmpty) {
+                    setHoveredDate(date)
+                  }
+                },
+                dataAttrs: {
+                  'data-date': date ? format(date, 'yyyy-MM-dd') : undefined,
+                  'data-day': date ? format(date, 'd') : undefined
+                }
+              })}
             </div>
           </div>
         </div>
@@ -340,7 +363,8 @@ export function LinearCalendarHorizontal({
   onEventUpdate,
   onEventCreate,
   onEventDelete,
-  enableInfiniteCanvas = true
+  enableInfiniteCanvas = true,
+  dayContent: customDayContent
 }: LinearCalendarHorizontalProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -348,7 +372,7 @@ export function LinearCalendarHorizontal({
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
-  const [toolbarPosition, setToolbarPosition] = useState<{ x: number; y: number } | null>(null)
+  const [eventManagementPosition, setEventManagementPosition] = useState<{ x: number; y: number } | null>(null)
   const [showEventModal, setShowEventModal] = useState(false)
   const [isDraggingEvent, setIsDraggingEvent] = useState(false)
   const [draggedEvent, setDraggedEvent] = useState<Event | null>(null)
@@ -359,6 +383,83 @@ export function LinearCalendarHorizontal({
   // Accessibility state
   const [announceMessage, setAnnounceMessage] = useState<string>('')
   const [focusedDate, setFocusedDate] = useState<Date | null>(null)
+  
+  // Settings context for day content style
+  const { settings } = useSettingsContext()
+  
+  // Day content renderer logic
+  const dayContent = useMemo(() => {
+    if (customDayContent) {
+      return customDayContent
+    }
+    
+    // Use settings to determine which renderer to use
+    const style = settings.calendar.calendarDayStyle
+    if (style === 'dot') {
+      return (ctx: DayContentContext) => <DotDayContent context={ctx} />
+    } else {
+      return (ctx: DayContentContext) => <NumberDayContent context={ctx} />
+    }
+  }, [customDayContent, settings.calendar.calendarDayStyle])
+  
+  // Display preview logic for dot mode (which days show as filled)
+  const displayPreviewUpTo = useCallback((date: Date): boolean => {
+    if (settings.calendar.calendarDayStyle !== 'dot' || !date) {
+      return true // In number mode, this is irrelevant or date is null
+    }
+    
+    const today = startOfDay(new Date())
+    const targetDate = startOfDay(date)
+    
+    // Current year logic
+    if (date.getFullYear() === today.getFullYear()) {
+      // Show filled dots up to today, or hovered future date
+      const compareDate = hoveredDate && hoveredDate > today ? startOfDay(hoveredDate) : today
+      return targetDate <= compareDate
+    }
+    
+    // Past years: all filled
+    if (date.getFullYear() < today.getFullYear()) {
+      return true
+    }
+    
+    // Future years: only filled if hovered
+    if (hoveredDate && hoveredDate.getFullYear() === date.getFullYear()) {
+      return targetDate <= startOfDay(hoveredDate)
+    }
+    
+    return false
+  }, [settings.calendar.calendarDayStyle, hoveredDate])
+  
+  // Days left calculation for dot mode
+  const daysLeft = useMemo(() => {
+    if (settings.calendar.calendarDayStyle !== 'dot') {
+      return 0
+    }
+    
+    const today = new Date()
+    const currentYear = today.getFullYear()
+    
+    // Only show days left for current year
+    if (year !== currentYear) {
+      return 0
+    }
+    
+    const isLeapYear = currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0)
+    const totalDays = isLeapYear ? 366 : 365
+    
+    // Calculate day of year more reliably using differenceInDays
+    const startOfCurrentYear = new Date(currentYear, 0, 1)
+    const dayOfYear = differenceInDays(startOfDay(today), startOfDay(startOfCurrentYear)) + 1
+    
+    // If hovering over a future date, use that as the reference
+    if (hoveredDate && hoveredDate > today && hoveredDate.getFullYear() === currentYear) {
+      const hoveredDayOfYear = differenceInDays(startOfDay(hoveredDate), startOfDay(startOfCurrentYear)) + 1
+      return Math.max(0, totalDays - hoveredDayOfYear)
+    }
+    
+    return Math.max(0, totalDays - dayOfYear)
+  }, [settings.calendar.calendarDayStyle, year, hoveredDate])
   const [keyboardMode, setKeyboardMode] = useState(false)
   const liveRegionRef = useRef<HTMLDivElement>(null)
   
@@ -370,6 +471,10 @@ export function LinearCalendarHorizontal({
   const [lastTapTime, setLastTapTime] = useState<number | null>(null)
   const [isPinching, setIsPinching] = useState(false)
   const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null)
+  
+  // 🚀 PERFORMANCE: Scroll position tracking for virtual scrolling
+  const [scrollLeft, setScrollLeft] = useState(0)
+  const [scrollTop, setScrollTop] = useState(0)
   
   // 🚀 NEW: Performance monitoring integration
   const [showPerformanceOverlay, setShowPerformanceOverlay] = useState(false)
@@ -553,6 +658,51 @@ export function LinearCalendarHorizontal({
       }
     })
   }, [events, dayWidth, year, isFullYearZoom])
+
+  // 🚀 PERFORMANCE: Virtual Event Rendering - Only render visible events
+  const visibleEvents = React.useMemo(() => {
+    // Safety check: return all events if no container or few events
+    if (!containerRef.current || processedEvents.length === 0) return processedEvents
+    
+    // Performance threshold: if we have fewer than 100 events, render all
+    if (processedEvents.length < 100) return processedEvents
+    
+    try {
+      const containerRect = containerRef.current.getBoundingClientRect()
+      const containerScrollLeft = containerRef.current.scrollLeft
+      const containerScrollTop = containerRef.current.scrollTop
+      const viewportWidth = containerRect.width
+      const viewportHeight = containerRect.height
+      
+      // Use tracked scroll state as fallback
+      const actualScrollLeft = containerScrollLeft !== undefined ? containerScrollLeft : scrollLeft
+      const actualScrollTop = containerScrollTop !== undefined ? containerScrollTop : scrollTop
+      
+      // Calculate visible bounds with buffer for smooth scrolling
+      const buffer = Math.max(viewportWidth * 0.5, 1000) // 50% viewport width buffer
+      const leftBound = actualScrollLeft - buffer
+      const rightBound = actualScrollLeft + viewportWidth + buffer
+      const topBound = actualScrollTop - buffer  
+      const bottomBound = actualScrollTop + viewportHeight + buffer
+      
+      // Filter events that intersect with the visible bounds
+      return processedEvents.filter(event => {
+        const eventLeft = event.left
+        const eventRight = event.left + event.width
+        const eventTop = event.top
+        const eventBottom = event.top + event.height
+        
+        const horizontalVisible = eventRight >= leftBound && eventLeft <= rightBound
+        const verticalVisible = eventBottom >= topBound && eventTop <= bottomBound
+        
+        return horizontalVisible && verticalVisible
+      })
+    } catch (error) {
+      // Fallback to all events if there's any error
+      console.warn('Virtual scrolling calculation failed, falling back to all events:', error)
+      return processedEvents
+    }
+  }, [processedEvents, scrollLeft, scrollTop])
   
   
   // Pan and zoom handlers
@@ -660,7 +810,7 @@ export function LinearCalendarHorizontal({
   
   const handleEventDelete = (eventId: string) => {
     setSelectedEvent(null)
-    setToolbarPosition(null)
+    setEventManagementPosition(null)
     // Call onEventDelete if provided
     if (onEventDelete) {
       onEventDelete(eventId)
@@ -699,7 +849,7 @@ export function LinearCalendarHorizontal({
   const handleDayClick = (date: Date) => {
     // Clear any existing selections
     setSelectedEvent(null)
-    setToolbarPosition(null)
+    setEventManagementPosition(null)
     setSelectedDate(date)
     setShowEventModal(true)
   }
@@ -795,6 +945,27 @@ export function LinearCalendarHorizontal({
     }
   }, [announceMessage])
 
+  // 🚀 PERFORMANCE: Track scroll position for virtual event rendering
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const handleScroll = () => {
+      if (!containerRef.current) return
+      setScrollLeft(containerRef.current.scrollLeft)
+      setScrollTop(containerRef.current.scrollTop)
+    }
+
+    const container = containerRef.current
+    container.addEventListener('scroll', handleScroll, { passive: true })
+    
+    // Initial scroll position
+    handleScroll()
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   return (
     <div 
       className={cn("relative bg-background focus:outline-none focus:ring-2 focus:ring-ring/50", className)}
@@ -810,10 +981,27 @@ export function LinearCalendarHorizontal({
             {year} Linear Calendar
           </h1>
           
-          {/* Tagline (top-right) */}
-          <p className="text-sm text-muted-foreground italic">
-            Life is bigger than a week.
-          </p>
+          {/* Right side content */}
+          <div className="flex items-center gap-6">
+            {/* Days left counter (dot mode only) */}
+            {settings.calendar.calendarDayStyle === 'dot' && 
+             settings.calendar.showDaysLeft && 
+             year === new Date().getFullYear() && (
+              <div className="flex items-baseline gap-2">
+                <RollingDigits
+                  value={daysLeft}
+                  className="text-base font-medium text-foreground"
+                  aria-label={`${daysLeft} days remaining in ${year}`}
+                />
+                <span className="text-sm text-muted-foreground">days left</span>
+              </div>
+            )}
+            
+            {/* Tagline */}
+            <p className="text-sm text-muted-foreground italic">
+              Life is bigger than a week.
+            </p>
+          </div>
         </div>
       </div>
       {/* Screen reader announcements */}
@@ -824,30 +1012,21 @@ export function LinearCalendarHorizontal({
         aria-live="polite"
         aria-atomic="true"
       />
-      {/* Floating Toolbar */}
-      {selectedEvent && toolbarPosition && (
-        <FloatingToolbar
-          event={selectedEvent}
-          position={toolbarPosition}
-          onUpdate={handleEventUpdate}
-          onDelete={handleEventDelete}
-          onDuplicate={handleEventDuplicate}
-          onEdit={(event) => {
-            setSelectedEvent(event)
-            setShowEventModal(true)
-          }}
-          onClose={() => {
-            setSelectedEvent(null)
-            setToolbarPosition(null)
-          }}
-        />
-      )}
+      {/* Calendar Toolbar - Simplified for now */}
+      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b p-2">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">{year} Linear Calendar</h2>
+          <div className="text-sm text-muted-foreground">
+            {events.length} events
+          </div>
+        </div>
+      </div>
       
       {/* Mobile Menu Button */}
       {isMobile && (
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="absolute top-4 right-4 z-30 p-2 bg-background/95 backdrop-blur-sm border rounded-lg hover:bg-accent transition-colors"
+          className="absolute top-4 right-4 z-30 p-2 bg-card border border-border rounded-lg hover:bg-accent/10 transition-colors"
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={isMobileMenuOpen}
           aria-controls="mobile-menu"
@@ -861,11 +1040,11 @@ export function LinearCalendarHorizontal({
       <div 
         id="mobile-menu"
         className={cn(
-          "absolute z-20 bg-background/95 backdrop-blur-sm border rounded-lg",
+          "absolute z-20 bg-card border border-border rounded-lg",
           isFullYearZoom ? "hidden" : (
             isMobile ? (
-              isMobileMenuOpen ? "top-16 right-4 flex flex-col gap-2 p-3 shadow-lg" : "hidden"
-            ) : "top-4 right-4 flex items-center gap-2 p-1"
+              isMobileMenuOpen ? "top-16 right-4 flex flex-col gap-2 p-3 shadow-sm" : "hidden"
+            ) : "top-4 right-4 flex items-center gap-2 p-1 shadow-sm"
           )
         )}
         role="toolbar"
@@ -874,7 +1053,7 @@ export function LinearCalendarHorizontal({
         <button
           onClick={handleZoomOut}
           className={cn(
-            "hover:bg-accent rounded transition-colors",
+            "hover:bg-accent/10 rounded transition-colors",
             isMobile ? "p-2 w-full flex items-center justify-center gap-2" : "p-1"
           )}
           disabled={zoomLevel === 'fullYear'}
@@ -898,7 +1077,7 @@ export function LinearCalendarHorizontal({
         <button
           onClick={handleZoomIn}
           className={cn(
-            "hover:bg-accent rounded transition-colors",
+            "hover:bg-accent/10 rounded transition-colors",
             isMobile ? "p-2 w-full flex items-center justify-center gap-2" : "p-1"
           )}
           disabled={zoomLevel === 'day'}
@@ -928,7 +1107,7 @@ export function LinearCalendarHorizontal({
                 }
                 setIsMobileMenuOpen(false)
               }}
-              className="p-2 w-full bg-background border border-border rounded-md hover:bg-accent transition-colors text-sm"
+              className="p-2 w-full bg-background border border-border rounded-md hover:bg-accent/10 transition-colors text-sm"
             >
               Go to Today
             </button>
@@ -955,7 +1134,7 @@ export function LinearCalendarHorizontal({
           if ((e.target as HTMLElement).closest('[role="grid"]') && 
               !(e.target as HTMLElement).closest('[class*="bg-"]')) {
             setSelectedEvent(null)
-            setToolbarPosition(null)
+            setEventManagementPosition(null)
           }
         }}
         role="grid"
@@ -988,6 +1167,8 @@ export function LinearCalendarHorizontal({
               handleDayClick={handleDayClick}
               format={format}
               isSameDay={isSameDay}
+              dayContent={dayContent}
+              displayPreviewUpTo={displayPreviewUpTo}
             />
           ) : (
             // Normal horizontal month rows
@@ -1035,9 +1216,9 @@ export function LinearCalendarHorizontal({
                       key={day}
                       className={cn(
                         "absolute top-0 border-r border-border/30 hover:bg-accent/10 transition-colors cursor-pointer",
-                        isCurrentDay && "bg-blue-500/10 border-blue-500",
-                        isSelected && "bg-blue-500/20",
-                        isHovered && "bg-accent/20"
+                        isCurrentDay && "bg-primary/10 border-primary",
+                        isSelected && "bg-primary/20",
+                        isHovered && "bg-accent/10"
                       )}
                       style={{
                         left: (dayOfYear - month.startDayOfYear) * dayWidth,
@@ -1063,7 +1244,7 @@ export function LinearCalendarHorizontal({
                       
                       {/* Tiny indicator for narrow views */}
                       {dayWidth < 20 && isCurrentDay && (
-                        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full" />
+                        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full" />
                       )}
                     </div>
                   )
@@ -1076,33 +1257,45 @@ export function LinearCalendarHorizontal({
           
           {/* SIMPLIFIED: No complex drag preview needed for click-to-create */}
           
-          {/* Drag to Create Layer */}
+          {/* Drag & Drop Layer - Simplified for now */}
           {!isFullYearZoom && (
-            <DragToCreate
-              year={year}
-              dayWidth={dayWidth}
-              monthHeight={monthHeight}
-              headerWidth={headerWidth}
-              headerHeight={headerHeight}
-              isFullYearZoom={isFullYearZoom}
-              scrollRef={scrollRef}
-              onEventCreate={(eventData) => {
-                onEventCreate?.(eventData)
+            <div
+              className="absolute inset-0 z-10"
+              style={{ marginLeft: headerWidth }}
+              onClick={(e) => {
+                // Simple click-to-create functionality
+                const rect = e.currentTarget.getBoundingClientRect()
+                const x = e.clientX - rect.left
+                const y = e.clientY - rect.top
+                
+                // Calculate which day was clicked
+                const dayIndex = Math.floor(x / dayWidth)
+                const monthIndex = Math.floor(y / monthHeight)
+                
+                if (monthIndex >= 0 && monthIndex < 12 && dayIndex >= 0) {
+                  const eventData = {
+                    id: Date.now().toString(),
+                    title: 'New Event',
+                    date: new Date(year, monthIndex, dayIndex + 1),
+                    startTime: '09:00',
+                    endTime: '10:00'
+                  }
+                  onEventCreate?.(eventData)
+                }
               }}
-              className="z-10"
             />
           )}
           
           {/* Event Bars */}
           <div className="absolute inset-0 pointer-events-none" style={{ marginLeft: isFullYearZoom ? 0 : headerWidth }}>
-            {processedEvents.map((event, index) => {
+            {visibleEvents.map((event, index) => {
               const stackRow = (event as any).stackRow || 0
               const categoryColors = {
-                personal: 'bg-green-500 hover:bg-green-600',
-                work: 'bg-blue-500 hover:bg-blue-600',
-                effort: 'bg-orange-500 hover:bg-orange-600',
-                note: 'bg-purple-500 hover:bg-purple-600'
-              }
+                personal: 'bg-primary hover:bg-primary/80 text-primary-foreground',
+                work: 'bg-secondary hover:bg-secondary/80 text-secondary-foreground',
+                effort: 'bg-accent hover:bg-accent/80 text-accent-foreground',
+                note: 'bg-muted hover:bg-muted/80 text-muted-foreground'
+              } as const
               
               const isSelected = selectedEvent?.id === event.id
               const isDragging = draggedEvent?.id === event.id
@@ -1111,9 +1304,9 @@ export function LinearCalendarHorizontal({
                 <div
                   key={event.id || index}
                   className={cn(
-                    "absolute pointer-events-auto rounded-sm flex items-center text-white transition-all group",
-                    categoryColors[event.category as keyof typeof categoryColors] || 'bg-gray-500 hover:bg-gray-600',
-                    isSelected && "ring-2 ring-blue-400 ring-offset-1 ring-offset-background z-20 shadow-lg",
+                    "absolute pointer-events-auto rounded-sm flex items-center transition-all group",
+                    categoryColors[event.category as keyof typeof categoryColors] || 'bg-accent hover:bg-accent/80 text-accent-foreground',
+                    isSelected && "ring-2 ring-primary ring-offset-1 ring-offset-background z-20 shadow-lg",
                     isDragging && "opacity-50 cursor-grabbing",
                     !isDragging && "cursor-grab hover:shadow-md hover:z-10"
                   )}
@@ -1157,7 +1350,7 @@ export function LinearCalendarHorizontal({
                     
                     // Calculate toolbar position (absolute positioning)
                     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-                    setToolbarPosition({
+                    setEventManagementPosition({
                       x: rect.left + rect.width / 2,
                       y: rect.top
                     })
@@ -1214,27 +1407,50 @@ export function LinearCalendarHorizontal({
         </div>
       </div>
       
-      {/* FloatingToolbar for event editing */}
-      {selectedEvent && toolbarPosition && (
-        <FloatingToolbar
-          event={selectedEvent}
-          position={toolbarPosition}
-          onUpdate={async (updatedEvent) => {
-            // Update the event
-            onEventUpdate?.(updatedEvent)
-            setSelectedEvent(updatedEvent)
+      {/* Simple Event Management for selected event */}
+      {selectedEvent && eventManagementPosition && (
+        <div
+          className="fixed bg-card border rounded-lg shadow-lg p-3 z-50"
+          style={{
+            left: eventManagementPosition.x,
+            top: eventManagementPosition.y
           }}
-          onDelete={async (eventId) => {
-            // Delete the event
-            onEventDelete?.(eventId)
-            setSelectedEvent(null)
-            setToolbarPosition(null)
-          }}
-          onClose={() => {
-            setSelectedEvent(null)
-            setToolbarPosition(null)
-          }}
-        />
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <h4 className="font-medium">{selectedEvent.title}</h4>
+            <button
+              onClick={() => {
+                setSelectedEvent(null)
+                setEventManagementPosition(null)
+              }}
+              className="ml-auto text-muted-foreground hover:text-foreground"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                // Edit event (show modal)
+                setShowEventModal(true)
+              }}
+              className="px-2 py-1 text-xs bg-primary text-primary-foreground rounded hover:bg-primary/90"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                // Delete event
+                onEventDelete?.(selectedEvent.id)
+                setSelectedEvent(null)
+                setEventManagementPosition(null)
+              }}
+              className="px-2 py-1 text-xs bg-destructive text-destructive-foreground rounded hover:bg-destructive/90"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       )}
       
       {/* EventModal */}

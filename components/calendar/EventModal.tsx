@@ -19,6 +19,9 @@ import type { Event, EventCategory, EventPriority } from "@/types/calendar"
 import { useReducedMotion } from "@/hooks/useReducedMotion"
 import { announceToScreenReader } from "@/lib/accessibility"
 import { CategoryTagManager } from "./category-tag-manager"
+import { EnhancedDateTimePicker } from "./EnhancedDateTimePicker"
+import { EnhancedDateRangePicker } from "./EnhancedDateRangePicker"
+import { ConstraintSystem } from "./ConstraintSystem"
 
 interface DateRange {
   from: Date
@@ -162,31 +165,47 @@ export function EventModal({
   }
 
   const categoryColors = {
-    personal: 'bg-green-500',
-    work: 'bg-blue-500',
-    effort: 'bg-orange-500',
-    note: 'bg-purple-500'
+    personal: 'bg-primary text-primary-foreground',
+    work: 'bg-secondary text-secondary-foreground',
+    effort: 'bg-accent text-accent-foreground',
+    note: 'bg-muted text-muted-foreground'
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
         className={cn(
-          "sm:max-w-[600px] bg-card/95 backdrop-blur-sm border-border shadow-2xl overflow-visible",
+          // Responsive width: mobile-first approach
+          "w-[calc(100vw-1rem)] max-w-[95vw]", // Mobile: almost full width with small margin
+          "sm:w-auto sm:max-w-[580px]",        // Small tablets: comfortable width
+          "md:max-w-[680px]",                  // Medium screens: more space for content
+          "lg:max-w-[780px]",                  // Large screens: spacious layout
+          // Responsive height with proper constraints
+          "max-h-[90vh] min-h-[300px]",       // Height between 300px and 90% viewport
+          "sm:max-h-[85vh]",                   // Slightly smaller on larger screens
+          // Overflow and scrolling
+          "overflow-hidden",                   // Hide overflow on main container
+          // Mobile positioning improvements
+          "top-[5%] sm:top-[50%]",            // Higher position on mobile, centered on desktop
+          "translate-y-0 sm:translate-y-[-50%]", // No Y translation on mobile, centered on desktop
+          // Styling
+          "bg-card border border-border shadow-lg",
           prefersReducedMotion && "transition-none"
         )}
         aria-labelledby="event-dialog-title"
         aria-describedby="event-dialog-description">
-        <DialogTitle id="event-dialog-title" className="sr-only">
-          {event ? 'Edit Event' : 'Create New Event'}
-        </DialogTitle>
-        <DialogHeader className="bg-muted/50 backdrop-blur-sm rounded-t-lg p-6 -m-6 mb-4 border-b border-border">
-          <div className="text-xl font-semibold">
+        <DialogHeader className="bg-muted/30 rounded-t-lg p-4 sm:p-6 -m-6 mb-4 border-b border-border flex-shrink-0">
+          <DialogTitle id="event-dialog-title" className="sr-only">
+            {event ? 'Edit Event' : 'Create New Event'}
+          </DialogTitle>
+          <div className="text-lg sm:text-xl font-semibold">
             {event ? 'Edit Event' : 'Create New Event'}
           </div>
         </DialogHeader>
 
-        <div className="grid gap-5 py-4">
+        {/* Scrollable content area */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="grid gap-4 py-3 px-1 sm:gap-5 sm:py-4">
           {/* Title */}
           <div className="space-y-2">
             <Label htmlFor="title" className="text-sm font-medium flex items-center gap-2">
@@ -200,7 +219,7 @@ export function EventModal({
               id="title"
               value={formData.title || ''}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="bg-background/90 backdrop-blur-sm border-input focus:bg-background transition-all"
+              className="bg-background border-input focus:bg-background transition-all"
               placeholder="Enter event title..."
               aria-label="Event title"
               aria-required="true"
@@ -232,7 +251,7 @@ export function EventModal({
                 </div>
                 All Day Event
               </Label>
-              <div className="flex items-center space-x-2 h-10 px-3 bg-background/90 backdrop-blur-sm border border-input rounded-md">
+              <div className="flex items-center space-x-2 h-10 px-3 bg-background border border-input rounded-md">
                 <Switch
                   id="all-day"
                   checked={formData.allDay || false}
@@ -247,69 +266,78 @@ export function EventModal({
 
           {/* Date Range */}
           <div className="grid grid-cols-2 gap-4">
-            {/* Start Date */}
+            {/* Enhanced Start Date & Time */}
             <div className="space-y-2">
               <Label htmlFor="start-date" className="text-sm font-medium flex items-center gap-2">
                 <div className="p-1.5 rounded-lg bg-muted">
-                  <CalendarIcon className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
+                  <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                 </div>
-                Start Date
+                Start Date & Time
               </Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "justify-start text-left font-normal bg-background/90 backdrop-blur-sm border-input hover:bg-accent hover:text-accent-foreground",
-                      !formData.startDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {formData.startDate ? format(formData.startDate, "PPP") : "Pick a date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-popover/95 backdrop-blur-sm border-border">
-                  <Calendar
-                    mode="single"
-                    selected={formData.startDate}
-                    onSelect={(date) => date && setFormData({ ...formData, startDate: date })}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <EnhancedDateTimePicker
+                value={formData.startDate || undefined}
+                onChange={(date) => {
+                  if (date) {
+                    setFormData(prev => ({ 
+                      ...prev, 
+                      startDate: date,
+                      // Auto-adjust end date if it's before start date
+                      endDate: prev.endDate && prev.endDate < date ? date : prev.endDate
+                    }))
+                  }
+                }}
+                placeholder="Select start date and time..."
+                showTimeSelect={true}
+                showPresets={true}
+                showQuickActions={true}
+                eventTitle={formData.title || 'New Event'}
+                eventCategory={formData.category}
+                eventDuration={formData.endDate && formData.startDate ? 
+                  Math.round((formData.endDate.getTime() - formData.startDate.getTime()) / 60000) : 60
+                }
+                onEventCreate={(eventData) => {
+                  // Quick create from within date picker
+                  setFormData(prev => ({
+                    ...prev,
+                    title: eventData.title || prev.title,
+                    startDate: eventData.startDate || prev.startDate,
+                    endDate: eventData.endDate || prev.endDate,
+                    category: eventData.category || prev.category,
+                    description: eventData.description || prev.description
+                  }))
+                }}
+              />
             </div>
 
-            {/* End Date */}
+            {/* Enhanced End Date & Time */}
             <div className="space-y-2">
               <Label htmlFor="end-date" className="text-sm font-medium flex items-center gap-2">
                 <div className="p-1.5 rounded-lg bg-muted">
-                  <CalendarIcon className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
+                  <Clock className="h-3.5 w-3.5 text-destructive" />
                 </div>
-                End Date
+                End Date & Time
               </Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal bg-background/90 backdrop-blur-sm border-input hover:bg-accent hover:text-accent-foreground",
-                      !formData.endDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {formData.endDate ? format(formData.endDate, "PPP") : "Pick a date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-popover/95 backdrop-blur-sm border-border">
-                  <Calendar
-                    mode="single"
-                    selected={formData.endDate}
-                    onSelect={(date) => date && setFormData({ ...formData, endDate: date })}
-                    disabled={(date) => formData.startDate ? date < formData.startDate : false}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <EnhancedDateTimePicker
+                value={formData.endDate || undefined}
+                onChange={(date) => {
+                  if (date) {
+                    setFormData(prev => ({ ...prev, endDate: date }))
+                  }
+                }}
+                placeholder="Select end date and time..."
+                showTimeSelect={true}
+                showPresets={true}
+                showQuickActions={false} // Don't show quick actions for end date
+                minDate={formData.startDate || undefined}
+                filterTime={(time) => {
+                  // For end date, filter out times before start time if same day
+                  if (formData.startDate && formData.endDate && 
+                      format(formData.startDate, 'yyyy-MM-dd') === format(time, 'yyyy-MM-dd')) {
+                    return time.getTime() > formData.startDate.getTime()
+                  }
+                  return true
+                }}
+              />
             </div>
           </div>
 
@@ -317,7 +345,7 @@ export function EventModal({
           <div className="space-y-2">
             <Label htmlFor="location" className="text-sm font-medium flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-muted">
-                <MapPin className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
+                <MapPin className="h-3.5 w-3.5 text-secondary" />
               </div>
               Location
             </Label>
@@ -325,7 +353,7 @@ export function EventModal({
               id="location"
               value={formData.location || ''}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              className="bg-background/90 backdrop-blur-sm border-input focus:bg-background transition-all"
+              className="bg-background border-input focus:bg-background transition-all"
               placeholder="Add location (optional)"
             />
           </div>
@@ -334,7 +362,7 @@ export function EventModal({
           <div className="space-y-2">
             <Label htmlFor="description" className="text-sm font-medium flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-muted">
-                <Tag className="h-3.5 w-3.5 text-cyan-600 dark:text-cyan-400" />
+                <Tag className="h-3.5 w-3.5 text-accent-foreground" />
               </div>
               Description
             </Label>
@@ -342,74 +370,81 @@ export function EventModal({
               id="description"
               value={formData.description || ''}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="bg-background/90 backdrop-blur-sm border-input focus:bg-background transition-all resize-none"
+              className="bg-background border-input focus:bg-background transition-all resize-none"
               placeholder="Add description (optional)"
               rows={3}
             />
           </div>
 
-          {/* Conflict Warning */}
-          {conflicts.length > 0 && (
-            <Alert className="bg-destructive/10 border-destructive/30">
-              <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
-              <AlertDescription className="text-red-900 dark:text-red-100">
-                <strong>Schedule Conflict Detected</strong>
-                <ul className="mt-2 text-sm space-y-1">
-                  {conflicts.map((conflict, idx) => (
-                    <li key={idx} className="flex items-center gap-2">
-                      <span className={cn("w-2 h-2 rounded-full", categoryColors[conflict.category as EventCategory])} />
-                      {conflict.title}
-                    </li>
-                  ))}
-                </ul>
-              </AlertDescription>
-            </Alert>
-          )}
+          {/* Business Rules & Constraint Validation */}
+          <div className="space-y-3">
+            <ConstraintSystem
+              event={formData}
+              existingEvents={events}
+              onAutoFix={(fixedEvent) => setFormData(fixedEvent)}
+              showSuggestions={true}
+              compactMode={false}
+            />
+          </div>
+          </div>
         </div>
 
-        <DialogFooter className="bg-muted/30 backdrop-blur-sm rounded-b-lg p-6 -m-6 mt-4 border-t border-border">
-          {event && (
-            <Button
-              variant="ghost"
-              onClick={handleDelete}
-              className="mr-auto hover:bg-red-500/20 hover:text-red-600 dark:hover:text-red-400 transition-all"
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              Delete
-            </Button>
-          )}
-          {!event && onSmartSchedule && (
-            <Button
-              variant="outline"
-              onClick={() => {
-                const duration = formData.endDate && formData.startDate
-                  ? Math.round((formData.endDate.getTime() - formData.startDate.getTime()) / 60000)
-                  : 60; // Default to 60 minutes
-                onSmartSchedule(formData.title || 'New Event', duration)
-                onOpenChange(false)
-              }}
-              disabled={!formData.title}
-              className="mr-auto hover:bg-primary/10 hover:text-primary transition-all"
-            >
-              <Sparkles className="h-4 w-4 mr-2" />
-              Smart Schedule
-            </Button>
-          )}
-          <Button 
-            variant="ghost" 
-            onClick={() => onOpenChange(false)}
-            className="hover:bg-accent hover:text-accent-foreground"
-          >
-            Cancel
-          </Button>
-          <Button 
-            onClick={handleSave} 
-            disabled={!formData.title}
-            variant="default"
-            className="shadow-sm"
-          >
-            {conflicts.length > 0 ? 'Save Anyway' : event ? 'Update Event' : 'Create Event'}
-          </Button>
+        <DialogFooter className="bg-muted/30 rounded-b-lg p-4 sm:p-6 -m-6 mt-4 border-t border-border flex-shrink-0">
+          <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-2 w-full">
+            {/* Left side buttons */}
+            <div className="flex gap-2 sm:mr-auto">
+              {event && (
+                <Button
+                  variant="ghost"
+                  onClick={handleDelete}
+                  size="sm"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10 transition-all"
+                >
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </Button>
+              )}
+              {!event && onSmartSchedule && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    const duration = formData.endDate && formData.startDate
+                      ? Math.round((formData.endDate.getTime() - formData.startDate.getTime()) / 60000)
+                      : 60; // Default to 60 minutes
+                    onSmartSchedule(formData.title || 'New Event', duration)
+                    onOpenChange(false)
+                  }}
+                  disabled={!formData.title}
+                  size="sm"
+                  className="hover:bg-primary/10 hover:text-primary transition-all"
+                >
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Smart Schedule
+                </Button>
+              )}
+            </div>
+            
+            {/* Right side buttons */}
+            <div className="flex gap-2 sm:ml-auto">
+              <Button 
+                variant="ghost" 
+                onClick={() => onOpenChange(false)}
+                size="sm"
+                className="flex-1 sm:flex-none hover:bg-accent/10"
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleSave} 
+                disabled={!formData.title}
+                variant="default"
+                size="sm"
+                className="flex-1 sm:flex-none shadow-sm"
+              >
+{event ? 'Update Event' : 'Create Event'}
+              </Button>
+            </div>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

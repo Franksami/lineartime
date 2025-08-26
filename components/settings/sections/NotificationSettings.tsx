@@ -7,10 +7,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useSettingsContext } from '@/contexts/SettingsContext'
-import { Bell, BellOff } from 'lucide-react'
+import { Bell, BellOff, Volume2, VolumeX, Volume1, Play } from 'lucide-react'
 
 export function NotificationSettings() {
-  const { settings, updateCategory } = useSettingsContext()
+  const { settings, updateCategory, playSound, toggleSound, setSoundVolume, toggleSoundType } = useSettingsContext()
   const notifications = settings.notifications
 
   const toggleNotifications = () => {
@@ -21,9 +21,26 @@ export function NotificationSettings() {
     updateCategory('notifications', { eventReminders: !notifications.eventReminders })
   }
 
-  const toggleSound = () => {
-    updateCategory('notifications', { sound: !notifications.sound })
+  // Volume control
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const volume = parseFloat(e.target.value)
+    setSoundVolume(volume)
   }
+
+  // Test sound playback
+  const testSound = (type: 'success' | 'error' | 'notification') => {
+    playSound(type)
+  }
+
+  // Get volume icon based on level
+  const getVolumeIcon = () => {
+    const volume = notifications.soundVolume
+    if (volume === 0) return VolumeX
+    if (volume < 0.5) return Volume1
+    return Volume2
+  }
+
+  const VolumeIcon = getVolumeIcon()
 
   const toggleDesktop = () => {
     updateCategory('notifications', { desktop: !notifications.desktop })
@@ -160,19 +177,138 @@ export function NotificationSettings() {
               )}
 
               {/* Sound Notifications */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="sound">Sound Alerts</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Play sound for notifications
-                  </p>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="sound" className="flex items-center gap-2">
+                      <VolumeIcon className="h-4 w-4" />
+                      Sound Effects
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Play sounds for different notification types
+                    </p>
+                  </div>
+                  <Switch
+                    id="sound"
+                    checked={notifications.sound}
+                    onCheckedChange={toggleSound}
+                    aria-label="Toggle sound effects"
+                  />
                 </div>
-                <Switch
-                  id="sound"
-                  checked={notifications.sound}
-                  onCheckedChange={toggleSound}
-                  aria-label="Toggle sound alerts"
-                />
+
+                {notifications.sound && (
+                  <div className="space-y-4 ml-4 border-l border-border pl-4">
+                    {/* Volume Control */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="volume">Volume</Label>
+                        <span className="text-sm text-muted-foreground">
+                          {Math.round(notifications.soundVolume * 100)}%
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <VolumeX className="h-4 w-4 text-muted-foreground" />
+                        <Input
+                          id="volume"
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.1"
+                          value={notifications.soundVolume}
+                          onChange={handleVolumeChange}
+                          className="flex-1"
+                          aria-label="Sound volume"
+                        />
+                        <Volume2 className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                    </div>
+
+                    {/* Sound Types */}
+                    <div className="space-y-3">
+                      <Label>Sound Types</Label>
+                      
+                      {/* Success Sounds */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Label htmlFor="sound-success" className="text-sm">
+                            Success sounds
+                          </Label>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                            onClick={() => testSound('success')}
+                            disabled={!notifications.soundTypes.success}
+                            aria-label="Test success sound"
+                          >
+                            <Play className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <Switch
+                          id="sound-success"
+                          checked={notifications.soundTypes.success}
+                          onCheckedChange={() => toggleSoundType('success')}
+                          aria-label="Toggle success sounds"
+                        />
+                      </div>
+
+                      {/* Error Sounds */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Label htmlFor="sound-error" className="text-sm">
+                            Error sounds
+                          </Label>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                            onClick={() => testSound('error')}
+                            disabled={!notifications.soundTypes.error}
+                            aria-label="Test error sound"
+                          >
+                            <Play className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <Switch
+                          id="sound-error"
+                          checked={notifications.soundTypes.error}
+                          onCheckedChange={() => toggleSoundType('error')}
+                          aria-label="Toggle error sounds"
+                        />
+                      </div>
+
+                      {/* Notification Sounds */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Label htmlFor="sound-notification" className="text-sm">
+                            General notifications
+                          </Label>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                            onClick={() => testSound('notification')}
+                            disabled={!notifications.soundTypes.notification}
+                            aria-label="Test notification sound"
+                          >
+                            <Play className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <Switch
+                          id="sound-notification"
+                          checked={notifications.soundTypes.notification}
+                          onCheckedChange={() => toggleSoundType('notification')}
+                          aria-label="Toggle notification sounds"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Accessibility Note */}
+                    <p className="text-xs text-muted-foreground">
+                      Sound effects respect your system's reduced motion preferences and require user interaction to play.
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Desktop Notifications */}

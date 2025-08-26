@@ -4,7 +4,7 @@ import { Client } from '@microsoft/microsoft-graph-client';
 import { currentUser } from '@clerk/nextjs/server';
 import { api } from '@/convex/_generated/api';
 import { ConvexHttpClient } from 'convex/browser';
-import { encryptToken } from '@/lib/encryption';
+// Removed: import { encryptToken } from '@/lib/encryption'; - now handled server-side
 
 const msalConfig = {
   auth: {
@@ -109,11 +109,7 @@ export async function GET(request: NextRequest) {
       .select('id,name,color,isDefaultCalendar,canEdit')
       .get();
 
-    // Encrypt tokens
-    const encryptedAccessToken = encryptToken(response.accessToken);
-    const encryptedRefreshToken = response.refreshToken 
-      ? encryptToken(response.refreshToken)
-      : undefined;
+    // Tokens will be encrypted server-side in Convex function
 
     // Store provider connection in Convex
     const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
@@ -144,11 +140,11 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Store the provider connection
-    await convex.mutation(api.calendar.providers.connectProvider, {
+    // Store the provider connection with plain tokens (encrypted server-side)
+    await convex.action(api.calendar.encryption.connectProviderWithTokens, {
       provider: 'microsoft',
-      accessToken: encryptedAccessToken,
-      refreshToken: encryptedRefreshToken,
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken || undefined,
       expiresAt: response.expiresOn ? response.expiresOn.getTime() : undefined,
       providerAccountId: msUser.id,
       settings: {

@@ -24,6 +24,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import type { Event, EventCategory } from '@/types/calendar'
+import { useAutoAnimateDropdown } from '@/hooks/useAutoAnimate'
 
 interface EventCardProps {
   event: Event
@@ -37,17 +38,17 @@ interface EventCardProps {
 }
 
 const categoryColors: Record<EventCategory, string> = {
-  personal: 'bg-green-500/10 border-green-500/20',
-  work: 'bg-blue-500/10 border-blue-500/20',
-  effort: 'bg-orange-500/10 border-orange-500/20',
-  note: 'bg-purple-500/10 border-purple-500/20'
+  personal: 'bg-primary/10 border-primary/20',
+  work: 'bg-secondary/10 border-secondary/20',
+  effort: 'bg-accent/10 border-accent/20',
+  note: 'bg-muted border-border'
 }
 
 const categoryAccents: Record<EventCategory, string> = {
-  personal: 'bg-green-500',
-  work: 'bg-blue-500',
-  effort: 'bg-orange-500',
-  note: 'bg-purple-500'
+  personal: 'bg-primary',
+  work: 'bg-secondary',
+  effort: 'bg-accent',
+  note: 'bg-muted'
 }
 
 export function EventCard({
@@ -60,6 +61,7 @@ export function EventCard({
   className,
   compact = false
 }: EventCardProps) {
+  const [dropdownRef] = useAutoAnimateDropdown()
   const isMultiDay = event.startDate && event.endDate && 
     format(event.startDate, 'yyyy-MM-dd') !== format(event.endDate, 'yyyy-MM-dd')
 
@@ -77,9 +79,9 @@ export function EventCard({
           'group relative px-2 py-1 rounded-md cursor-pointer transition-all duration-200',
           categoryColors[event.category],
           'border',
-          'hover:scale-[1.02] hover:shadow-lg',
+          'hover:scale-[1.02] hover:shadow-sm',
           isDragging && 'opacity-50 scale-95',
-          isSelected && 'ring-2 ring-blue-500 ring-offset-1',
+          isSelected && 'ring-2 ring-primary ring-offset-1',
           className
         )}
       >
@@ -98,11 +100,11 @@ export function EventCard({
         'group relative p-4 rounded-xl cursor-pointer transition-all duration-200',
         categoryColors[event.category],
         'border',
-        'shadow-lg',
-        'hover:shadow-xl',
+        'shadow-sm',
+        'hover:shadow-md',
         'hover:scale-[1.02] hover:-translate-y-0.5',
         isDragging && 'opacity-50 scale-95 rotate-2',
-        isSelected && 'ring-2 ring-blue-500 ring-offset-2',
+        isSelected && 'ring-2 ring-primary ring-offset-2',
         className
       )}
     >
@@ -137,8 +139,9 @@ export function EventCard({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent 
+              ref={dropdownRef}
               align="end" 
-              className="bg-card backdrop-blur-xl border-border"
+              className="bg-card border border-border shadow-sm"
             >
               {onEdit && (
                 <DropdownMenuItem onClick={(e) => {
@@ -165,7 +168,7 @@ export function EventCard({
                     e.stopPropagation()
                     onDelete(event.id)
                   }}
-                  className="text-red-600 dark:text-red-400"
+                  className="text-destructive"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete
@@ -179,7 +182,7 @@ export function EventCard({
         <div className="space-y-2 text-sm text-muted-foreground">
           {/* Date/Time */}
           <div className="flex items-center gap-2">
-            <div className="p-1 rounded-md bg-muted/30 backdrop-blur-sm">
+            <div className="p-1 rounded-md bg-muted/30">
               <Calendar className="h-3.5 w-3.5" />
             </div>
             <span className="text-xs">
@@ -191,7 +194,7 @@ export function EventCard({
           {/* Time */}
           {!event.allDay && event.startDate && (
             <div className="flex items-center gap-2">
-              <div className="p-1 rounded-md bg-muted/30 backdrop-blur-sm">
+              <div className="p-1 rounded-md bg-muted/30">
                 <Clock className="h-3.5 w-3.5" />
               </div>
               <span className="text-xs">
@@ -204,7 +207,7 @@ export function EventCard({
           {/* Location */}
           {event.location && (
             <div className="flex items-center gap-2">
-              <div className="p-1 rounded-md bg-muted/30 backdrop-blur-sm">
+              <div className="p-1 rounded-md bg-muted/30">
                 <MapPin className="h-3.5 w-3.5" />
               </div>
               <span className="text-xs truncate">{event.location}</span>

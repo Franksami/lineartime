@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useCalendarContext } from '@/contexts/CalendarContext'
+import { useSettingsContext } from '@/contexts/SettingsContext'
 import { useOfflineEvents } from './useIndexedDB'
 import type { Event } from '@/types/calendar'
 
@@ -21,6 +22,7 @@ export function useCalendarEvents({
   enableConflictDetection = true 
 }: UseCalendarEventsOptions) {
   const { state } = useCalendarContext()
+  const { playSound } = useSettingsContext()
   const { 
     events: dbEvents, 
     createEvent: dbCreateEvent, 
@@ -155,6 +157,9 @@ export function useCalendarEvents({
       
       await dbCreateEvent(dbEventData)
       
+      // Play success sound
+      playSound('success')
+      
       // Clean up optimistic state
       if (enableOptimisticUpdates) {
         setOptimisticEvents(prev => {
@@ -171,6 +176,9 @@ export function useCalendarEvents({
       
       return optimisticEvent
     } catch (error) {
+      // Play error sound
+      playSound('error')
+      
       // Rollback optimistic update on error
       if (enableOptimisticUpdates) {
         setOptimisticEvents(prev => {
@@ -186,7 +194,7 @@ export function useCalendarEvents({
       }
       throw error
     }
-  }, [userId, dbCreateEvent, enableOptimisticUpdates])
+  }, [userId, dbCreateEvent, enableOptimisticUpdates, playSound])
   
   // Update event with optimistic update
   const updateEvent = useCallback(async (eventId: string, updates: Partial<Event>) => {
@@ -219,6 +227,9 @@ export function useCalendarEvents({
         updatedAt: Date.now()
       })
       
+      // Play success sound
+      playSound('success')
+      
       // Clean up optimistic state
       if (enableOptimisticUpdates) {
         setOptimisticEvents(prev => {
@@ -235,6 +246,9 @@ export function useCalendarEvents({
       
       return optimisticEvent
     } catch (error) {
+      // Play error sound
+      playSound('error')
+      
       // Rollback optimistic update on error
       if (enableOptimisticUpdates) {
         setOptimisticEvents(prev => {
@@ -250,7 +264,7 @@ export function useCalendarEvents({
       }
       throw error
     }
-  }, [events, dbEvents, dbUpdateEvent, enableOptimisticUpdates])
+  }, [events, dbEvents, dbUpdateEvent, enableOptimisticUpdates, playSound])
   
   // Delete event with optimistic update
   const deleteEvent = useCallback(async (eventId: string) => {
@@ -273,6 +287,9 @@ export function useCalendarEvents({
       // Database operation
       await dbDeleteEvent(dbEvent.id)
       
+      // Play success sound
+      playSound('success')
+      
       // Clean up optimistic state
       if (enableOptimisticUpdates) {
         setOptimisticEvents(prev => {
@@ -288,6 +305,9 @@ export function useCalendarEvents({
       }
       
     } catch (error) {
+      // Play error sound
+      playSound('error')
+      
       // Rollback optimistic update on error
       if (enableOptimisticUpdates) {
         setOptimisticEvents(prev => {
@@ -303,7 +323,7 @@ export function useCalendarEvents({
       }
       throw error
     }
-  }, [events, dbEvents, dbDeleteEvent, enableOptimisticUpdates])
+  }, [events, dbEvents, dbDeleteEvent, enableOptimisticUpdates, playSound])
   
   // Check for overlapping events
   const checkOverlaps = useCallback((start: Date, end: Date, excludeId?: string) => {

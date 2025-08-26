@@ -105,7 +105,7 @@ export function ZoomControls({
       aria-label="Zoom controls"
       className={cn(
         "fixed bottom-4 right-4 z-50 flex flex-col gap-1",
-        "bg-card/80 backdrop-blur-sm border rounded-lg p-1.5 shadow-lg",
+        "bg-card border border-border rounded-lg p-1.5 shadow-sm",
         "pointer-events-auto",
         className
       )}
@@ -122,7 +122,7 @@ export function ZoomControls({
         className="h-8 w-8 p-0"
         title="Zoom In (Ctrl/Cmd +)"
       >
-        <ZoomIn className="h-4 w-4" />
+        <ZoomIn className="h-4 w-4" aria-hidden="true" />
       </Button>
       
       <Button 
@@ -144,7 +144,7 @@ export function ZoomControls({
         className="h-8 w-8 p-0"
         title="Zoom Out (Ctrl/Cmd -)"
       >
-        <ZoomOut className="h-4 w-4" />
+        <ZoomOut className="h-4 w-4" aria-hidden="true" />
       </Button>
     </div>
   )
@@ -154,7 +154,7 @@ export function ZoomControls({
     
     const desktopControls = (
       <div 
-        className="flex items-center gap-2 p-1 bg-background/95 backdrop-blur-sm border rounded-lg shadow-sm"
+        className="flex items-center gap-2 p-1 bg-card border border-border rounded-lg shadow-sm"
         role="toolbar"
         aria-label="Zoom controls"
       >
@@ -166,7 +166,7 @@ export function ZoomControls({
           aria-label="Zoom out"
           className="h-8 w-8 p-0"
         >
-          <ZoomOut className="h-4 w-4" />
+          <ZoomOut className="h-4 w-4" aria-hidden="true" />
         </Button>
         
         <span 
@@ -185,7 +185,7 @@ export function ZoomControls({
           aria-label="Zoom in"
           className="h-8 w-8 p-0"
         >
-          <ZoomIn className="h-4 w-4" />
+          <ZoomIn className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
     )
@@ -198,14 +198,14 @@ export function ZoomControls({
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={isMobileMenuOpen}
-          className="bg-background/95 backdrop-blur-sm border shadow-sm"
+          className="bg-card border border-border shadow-sm"
         >
-          {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          {isMobileMenuOpen ? <X className="h-4 w-4" aria-hidden="true" /> : <Menu className="h-4 w-4" aria-hidden="true" />}
         </Button>
 
         {isMobileMenuOpen && (
           <div 
-            className="absolute top-12 right-0 flex flex-col gap-2 p-3 bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg z-30 min-w-[200px]"
+            className="absolute top-12 right-0 flex flex-col gap-2 p-3 bg-card border border-border rounded-lg shadow-sm z-30 min-w-[200px]"
             role="menu"
           >
             <Button
@@ -216,13 +216,14 @@ export function ZoomControls({
                 setIsMobileMenuOpen(false)
               }}
               disabled={!canZoomOut}
+              aria-label="Zoom out to see more of the calendar"
               className="justify-start gap-2"
             >
-              <ZoomOut className="h-4 w-4" />
+              <ZoomOut className="h-4 w-4" aria-hidden="true" />
               Zoom Out
             </Button>
             
-            <div className="text-center py-1 text-sm font-medium capitalize border rounded bg-muted/50">
+            <div className="text-center py-1 text-sm font-medium capitalize border border-border rounded bg-muted/30">
               {zoomLevel}
             </div>
             
@@ -234,9 +235,10 @@ export function ZoomControls({
                 setIsMobileMenuOpen(false)
               }}
               disabled={!canZoomIn}
+              aria-label="Zoom in to see calendar details"
               className="justify-start gap-2"
             >
-              <ZoomIn className="h-4 w-4" />
+              <ZoomIn className="h-4 w-4" aria-hidden="true" />
               Zoom In
             </Button>
 
@@ -246,6 +248,7 @@ export function ZoomControls({
               size="sm"
               variant="outline"
               onClick={handleGoToToday}
+              aria-label="Navigate to today's date"
               className="text-sm"
             >
               Go to Today

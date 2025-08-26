@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { requireAuth } from "./auth";
+import { Id } from "./_generated/dataModel";
 
 export const createEvent = mutation({
   args: {
@@ -33,11 +34,11 @@ export const createEvent = mutation({
     attendees: v.optional(v.array(v.string())),
     metadata: v.optional(v.any()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<Id<"events">> => {
     // Require authentication and get user
     const { user } = await requireAuth(ctx);
     
-    const eventId = await ctx.db.insert("events", {
+    const eventId: Id<"events"> = await ctx.db.insert("events", {
       ...args,
       userId: user._id,
       createdAt: Date.now(),

@@ -3,7 +3,7 @@ import { google } from 'googleapis';
 import { currentUser } from '@clerk/nextjs/server';
 import { api } from '@/convex/_generated/api';
 import { ConvexHttpClient } from 'convex/browser';
-import { encryptToken } from '@/lib/encryption';
+// Removed: import { encryptToken } from '@/lib/encryption'; - now handled server-side
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
@@ -80,11 +80,7 @@ export async function GET(request: NextRequest) {
     const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
     const { data: calendarList } = await calendar.calendarList.list();
 
-    // Encrypt tokens
-    const encryptedAccessToken = encryptToken(tokens.access_token);
-    const encryptedRefreshToken = tokens.refresh_token 
-      ? encryptToken(tokens.refresh_token)
-      : undefined;
+    // Tokens will be encrypted server-side in Convex function
 
     // Store provider connection in Convex
     const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
@@ -115,11 +111,11 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Store the provider connection
-    await convex.mutation(api.calendar.providers.connectProvider, {
+    // Store the provider connection with plain tokens (encrypted server-side)
+    await convex.action(api.calendar.encryption.connectProviderWithTokens, {
       provider: 'google',
-      accessToken: encryptedAccessToken,
-      refreshToken: encryptedRefreshToken,
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token || undefined,
       expiresAt: tokens.expiry_date || undefined,
       providerAccountId: userInfo.id!,
       settings: {

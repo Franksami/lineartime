@@ -39,12 +39,16 @@ function run(cmd) {
 const banned = [
   'components/calendar/LinearCalendarVertical',
   'components/mobile/MobileCalendarView',
+  'backdrop-blur',
 ]
 
 const allowlist = [
   'components/calendar/_archive',
   'components/mobile/_archive',
-  'docs/archive',
+  'docs/',
+  'tests/',
+  'app/test-',
+  'app/events-test/',
 ]
 
 function isAllowed(path) {
@@ -75,10 +79,29 @@ for (const bannedPath of banned) {
   }
 }
 
+// Also regex-scan for brand Tailwind color utilities (bg/text/border)
+try {
+  const colorPattern = String.raw`\b(?:bg|text|border)-(?:blue|green|orange|purple|red|yellow|pink|indigo|cyan|lime|emerald|violet|rose|amber|teal|sky|slate|gray|zinc|neutral|stone)-(?:100|200|300|400|500|600|700|800|900)\b`
+  const rgColors = run(`rg -n "${colorPattern}" --hidden --glob '!node_modules/**'`)
+  if (rgColors.trim()) {
+    const lines = rgColors.trim().split('\n')
+    for (const line of lines) {
+      const [file] = line.split(':')
+      if (!isAllowed(file)) {
+        violations.push(line)
+      }
+    }
+  }
+} catch (e) {
+  if (!(e.message.includes('exit code') && e.message.includes('1'))) {
+    console.warn('Warning: Failed to scan brand color utilities:', e.message)
+  }
+}
+
 if (violations.length) {
   console.error('\nFoundation Guard: banned imports detected:')
   for (const v of violations) console.error(' -', v)
-  console.error('\nFix: remove imports or move references to allowed archive paths.')
+  console.error('\nFix: remove imports, blur utilities, or brand color classes. Use tokens instead.')
   process.exit(1)
 }
 

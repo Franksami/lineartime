@@ -18,8 +18,8 @@ export interface CalendarState {
   
   // UI State
   showEventModal: boolean
-  showFloatingToolbar: boolean
-  toolbarPosition: { x: number; y: number } | null
+  showEventManagement: boolean
+  eventManagementPosition: { x: number; y: number } | null
   keyboardMode: boolean
   announceMessage: string
   
@@ -48,8 +48,8 @@ export type CalendarAction =
   | { type: 'SET_FOCUSED_DATE'; payload: Date | null }
   | { type: 'SHOW_EVENT_MODAL'; payload?: boolean }
   | { type: 'HIDE_EVENT_MODAL' }
-  | { type: 'SHOW_FLOATING_TOOLBAR'; payload: { x: number; y: number } }
-  | { type: 'HIDE_FLOATING_TOOLBAR' }
+  | { type: 'SHOW_EVENT_MANAGEMENT'; payload: { x: number; y: number } }
+  | { type: 'HIDE_EVENT_MANAGEMENT' }
   | { type: 'SET_KEYBOARD_MODE'; payload: boolean }
   | { type: 'ANNOUNCE_MESSAGE'; payload: string }
   | { type: 'START_DRAG_EVENT'; payload: Event }
@@ -71,8 +71,8 @@ const initialState: CalendarState = {
   hoveredDate: null,
   focusedDate: null,
   showEventModal: false,
-  showFloatingToolbar: false,
-  toolbarPosition: null,
+  showEventManagement: false,
+  eventManagementPosition: null,
   keyboardMode: false,
   announceMessage: '',
   isDraggingEvent: false,
@@ -112,8 +112,8 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         selectedDate: action.payload,
         // Clear event selection when selecting date
         selectedEvent: action.payload ? null : state.selectedEvent,
-        showFloatingToolbar: false,
-        toolbarPosition: null,
+        showEventManagement: false,
+        eventManagementPosition: null,
       }
       
     case 'SET_SELECTED_EVENT':
@@ -141,8 +141,8 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         ...state,
         showEventModal: action.payload !== false,
         // Hide floating toolbar when modal opens
-        showFloatingToolbar: false,
-        toolbarPosition: null,
+        showEventManagement: false,
+        eventManagementPosition: null,
       }
       
     case 'HIDE_EVENT_MODAL':
@@ -151,20 +151,20 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         showEventModal: false,
       }
       
-    case 'SHOW_FLOATING_TOOLBAR':
+    case 'SHOW_EVENT_MANAGEMENT':
       return {
         ...state,
-        showFloatingToolbar: true,
-        toolbarPosition: action.payload,
+        showEventManagement: true,
+        eventManagementPosition: action.payload,
         // Hide modal when toolbar shows
         showEventModal: false,
       }
       
-    case 'HIDE_FLOATING_TOOLBAR':
+    case 'HIDE_EVENT_MANAGEMENT':
       return {
         ...state,
-        showFloatingToolbar: false,
-        toolbarPosition: null,
+        showEventManagement: false,
+        eventManagementPosition: null,
         selectedEvent: null,
       }
       
@@ -188,8 +188,8 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         isDraggingEvent: true,
         draggedEvent: action.payload,
         // Hide toolbar during drag
-        showFloatingToolbar: false,
-        toolbarPosition: null,
+        showEventManagement: false,
+        eventManagementPosition: null,
       }
       
     case 'END_DRAG_EVENT':
@@ -206,8 +206,8 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         resizingEvent: action.payload.event,
         resizeDirection: action.payload.direction,
         // Hide toolbar during resize
-        showFloatingToolbar: false,
-        toolbarPosition: null,
+        showEventManagement: false,
+        eventManagementPosition: null,
       }
       
     case 'END_RESIZE_EVENT':
@@ -243,8 +243,8 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         selectedEvent: null,
         hoveredDate: null,
         showEventModal: false,
-        showFloatingToolbar: false,
-        toolbarPosition: null,
+        showEventManagement: false,
+        eventManagementPosition: null,
       }
       
     case 'BATCH_UPDATE':
@@ -271,8 +271,8 @@ interface CalendarContextType {
   setHoveredDate: (date: Date | null) => void
   showEventModal: (show?: boolean) => void
   hideEventModal: () => void
-  showFloatingToolbar: (position: { x: number; y: number }) => void
-  hideFloatingToolbar: () => void
+  showEventManagement: (position: { x: number; y: number }) => void
+  hideEventManagement: () => void
   announceMessage: (message: string) => void
   startDragEvent: (event: Event) => void
   endDragEvent: () => void
@@ -331,12 +331,12 @@ export function CalendarProvider({
     dispatch({ type: 'HIDE_EVENT_MODAL' })
   }, [])
   
-  const showFloatingToolbar = useCallback((position: { x: number; y: number }) => {
-    dispatch({ type: 'SHOW_FLOATING_TOOLBAR', payload: position })
+  const showEventManagement = useCallback((position: { x: number; y: number }) => {
+    dispatch({ type: 'SHOW_EVENT_MANAGEMENT', payload: position })
   }, [])
   
-  const hideFloatingToolbar = useCallback(() => {
-    dispatch({ type: 'HIDE_FLOATING_TOOLBAR' })
+  const hideEventManagement = useCallback(() => {
+    dispatch({ type: 'HIDE_EVENT_MANAGEMENT' })
   }, [])
   
   const announceMessage = useCallback((message: string) => {
@@ -377,8 +377,8 @@ export function CalendarProvider({
     setHoveredDate,
     showEventModal,
     hideEventModal,
-    showFloatingToolbar,
-    hideFloatingToolbar,
+    showEventManagement,
+    hideEventManagement,
     announceMessage,
     startDragEvent,
     endDragEvent,
@@ -423,24 +423,24 @@ export function useCalendarUI() {
     state,
     showEventModal,
     hideEventModal,
-    showFloatingToolbar,
-    hideFloatingToolbar,
+    showEventManagement,
+    hideEventManagement,
     announceMessage,
   } = useCalendarContext()
   
   return {
     // State properties
     showEventModalState: state.showEventModal,
-    showFloatingToolbarState: state.showFloatingToolbar,
-    toolbarPosition: state.toolbarPosition,
+    showEventManagementState: state.showEventManagement,
+    eventManagementPosition: state.eventManagementPosition,
     keyboardMode: state.keyboardMode,
     announceMessageState: state.announceMessage,
     isMobileMenuOpen: state.isMobileMenuOpen,
     // Action functions
     showEventModal,
     hideEventModal,
-    showFloatingToolbar,
-    hideFloatingToolbar,
+    showEventManagement,
+    hideEventManagement,
     announceMessage,
   }
 }

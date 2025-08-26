@@ -158,6 +158,16 @@ export function useSettings() {
     updateCategory('calendar', { defaultView });
   }, [updateCategory]);
 
+  // Update calendar day style (convenience method)
+  const setCalendarDayStyle = useCallback((calendarDayStyle: UserSettings['calendar']['calendarDayStyle']) => {
+    updateCategory('calendar', { calendarDayStyle });
+  }, [updateCategory]);
+
+  // Toggle days left counter (convenience method)
+  const toggleDaysLeftCounter = useCallback(() => {
+    updateCategory('calendar', { showDaysLeft: !settings.calendar.showDaysLeft });
+  }, [updateCategory, settings.calendar.showDaysLeft]);
+
   // Check if high contrast is enabled
   const isHighContrast = settings.appearance.highContrast;
 
@@ -190,6 +200,8 @@ export function useSettings() {
     setTimeFormat,
     setDateFormat,
     setDefaultView,
+    setCalendarDayStyle,
+    toggleDaysLeftCounter,
     isHighContrast,
     isReducedMotion,
     getEffectiveTheme,

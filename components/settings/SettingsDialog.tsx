@@ -12,12 +12,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Settings, X } from 'lucide-react'
 import { useSettingsContext } from '@/contexts/SettingsContext'
+import { useAutoAnimate, useAutoAnimateModal } from '@/hooks/useAutoAnimate'
 import { AppearanceSettings } from './sections/AppearanceSettings'
 import { CalendarSettings } from './sections/CalendarSettings'
 import { TimeSettings } from './sections/TimeSettings'
 import { NotificationSettings } from './sections/NotificationSettings'
 import { ShortcutSettings } from './sections/ShortcutSettings'
 import { PrivacySettings } from './sections/PrivacySettings'
+import { BillingSettings } from './sections/BillingSettings'
 
 interface SettingsDialogProps {
   open?: boolean
@@ -32,6 +34,10 @@ export function SettingsDialog({
 }: SettingsDialogProps) {
   const [internalOpen, setInternalOpen] = React.useState(false)
   const { resetSettings, exportSettings, importSettings } = useSettingsContext()
+  
+  // AutoAnimate refs for smooth transitions
+  const [modalContentRef] = useAutoAnimateModal()
+  const [tabsContentRef] = useAutoAnimate({ duration: 300, easing: 'ease-in-out' })
   
   // Use controlled state if provided, otherwise use internal state
   const open = controlledOpen !== undefined ? controlledOpen : internalOpen
@@ -68,7 +74,7 @@ export function SettingsDialog({
         </Button>
       )}
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
+        <DialogContent ref={modalContentRef} className="max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle>Settings</DialogTitle>
             <DialogDescription>
@@ -77,16 +83,17 @@ export function SettingsDialog({
           </DialogHeader>
           
           <Tabs defaultValue="appearance" className="flex-1 overflow-hidden flex flex-col">
-            <TabsList className="grid w-full grid-cols-6">
+            <TabsList className="grid w-full grid-cols-7">
               <TabsTrigger value="appearance">Appearance</TabsTrigger>
               <TabsTrigger value="calendar">Calendar</TabsTrigger>
               <TabsTrigger value="time">Time</TabsTrigger>
               <TabsTrigger value="notifications">Notifications</TabsTrigger>
               <TabsTrigger value="shortcuts">Shortcuts</TabsTrigger>
               <TabsTrigger value="privacy">Privacy</TabsTrigger>
+              <TabsTrigger value="billing">Billing</TabsTrigger>
             </TabsList>
             
-            <div className="flex-1 overflow-y-auto mt-4">
+            <div ref={tabsContentRef} className="flex-1 overflow-y-auto mt-4">
               <TabsContent value="appearance" className="space-y-4">
                 <AppearanceSettings />
               </TabsContent>
@@ -109,6 +116,10 @@ export function SettingsDialog({
               
               <TabsContent value="privacy" className="space-y-4">
                 <PrivacySettings />
+              </TabsContent>
+              
+              <TabsContent value="billing" className="space-y-4">
+                <BillingSettings />
               </TabsContent>
             </div>
           </Tabs>

@@ -95,13 +95,13 @@ export function PerformanceMonitor({
   const getMetricColor = (metric: string, value: number) => {
     switch (metric) {
       case 'fps':
-        return value >= 60 ? 'text-green-500' : value >= 30 ? 'text-yellow-500' : 'text-red-500';
+        return value >= 60 ? 'text-primary' : value >= 30 ? 'text-muted-foreground' : 'text-destructive';
       case 'memory':
-        return value < 100 ? 'text-green-500' : value < 200 ? 'text-yellow-500' : 'text-red-500';
+        return value < 100 ? 'text-primary' : value < 200 ? 'text-muted-foreground' : 'text-destructive';
       case 'renderTime':
-        return value < 16 ? 'text-green-500' : value < 50 ? 'text-yellow-500' : 'text-red-500';
+        return value < 16 ? 'text-primary' : value < 50 ? 'text-muted-foreground' : 'text-destructive';
       case 'events':
-        return value < 1000 ? 'text-green-500' : value < 5000 ? 'text-yellow-500' : 'text-red-500';
+        return value < 1000 ? 'text-primary' : value < 5000 ? 'text-muted-foreground' : 'text-destructive';
       default:
         return 'text-foreground';
     }
@@ -109,7 +109,7 @@ export function PerformanceMonitor({
 
   return (
     <div className={cn(
-      "fixed z-50 bg-background/90 backdrop-blur-sm border rounded-lg p-3 shadow-lg",
+      "fixed z-50 bg-card border border-border rounded-lg p-3 shadow-sm",
       "font-mono text-xs space-y-1 min-w-[180px]",
       positionClasses[position],
       className

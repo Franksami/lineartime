@@ -363,7 +363,7 @@ export const InteractionLayer = React.memo(function InteractionLayer({
         
         return (
           <div 
-            className="absolute pointer-events-none border-2 border-blue-500 rounded-sm z-30"
+            className="absolute pointer-events-none border-2 border-primary rounded-sm z-30"
             style={{
               left: headerWidth + col * dayWidth,
               top: row * rowHeight + headerOffset,

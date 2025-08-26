@@ -13,6 +13,7 @@ export const scheduleSync = mutation({
       v.literal("full_sync"),
       v.literal("incremental_sync"),
       v.literal("webhook_update"),
+      v.literal("webhook_renewal"),
       v.literal("event_create"),
       v.literal("event_update"),
       v.literal("event_delete")
@@ -92,6 +93,9 @@ export const processSyncQueue = internalMutation({
         case "webhook_update":
           await processWebhookUpdate(ctx, queueItem);
           break;
+        case "webhook_renewal":
+          await processWebhookRenewal(ctx, queueItem);
+          break;
         case "event_create":
         case "event_update":
         case "event_delete":
@@ -142,16 +146,30 @@ async function processFullSync(
 ) {
   const provider = await ctx.db
     .query("calendarProviders")
-    .withIndex("by_user", (q) => q.eq("userId", queueItem.userId))
-    .filter((q) => q.eq(q.field("provider"), queueItem.provider))
+    .withIndex("by_user", (q: any) => q.eq("userId", queueItem.userId))
+    .filter((q: any) => q.eq(q.field("provider"), queueItem.provider))
     .first();
 
   if (!provider) {
     throw new Error("Provider not found");
   }
 
-  // This would call the appropriate provider-specific sync function
-  // For now, we'll just update the last sync time
+  // Call the appropriate provider-specific sync function
+  if (queueItem.provider === 'google') {
+    await ctx.runAction(internal.calendar.google.performFullSync, {
+      providerId: provider._id
+    });
+  } else if (queueItem.provider === 'microsoft') {
+    await handleMicrosoftFullSync(ctx, provider);
+  } else if (queueItem.provider === 'apple' || queueItem.provider === 'caldav') {
+    await ctx.runAction(internal.calendar.caldav.performFullSync, {
+      providerId: provider._id
+    });
+  } else {
+    throw new Error(`Unsupported provider: ${queueItem.provider}`);
+  }
+
+  // Update last sync time
   await ctx.db.patch(provider._id, {
     lastSyncAt: Date.now(),
     updatedAt: Date.now(),
@@ -167,16 +185,30 @@ async function processIncrementalSync(
 ) {
   const provider = await ctx.db
     .query("calendarProviders")
-    .withIndex("by_user", (q) => q.eq("userId", queueItem.userId))
-    .filter((q) => q.eq(q.field("provider"), queueItem.provider))
+    .withIndex("by_user", (q: any) => q.eq("userId", queueItem.userId))
+    .filter((q: any) => q.eq(q.field("provider"), queueItem.provider))
     .first();
 
   if (!provider) {
     throw new Error("Provider not found");
   }
 
-  // Use sync token or delta link for incremental sync
-  // This would call the appropriate provider-specific sync function
+  // Call the appropriate provider-specific sync function
+  if (queueItem.provider === 'google') {
+    await ctx.runAction(internal.calendar.google.performIncrementalSync, {
+      providerId: provider._id
+    });
+  } else if (queueItem.provider === 'microsoft') {
+    await handleMicrosoftIncrementalSync(ctx, provider);
+  } else if (queueItem.provider === 'apple' || queueItem.provider === 'caldav') {
+    await ctx.runAction(internal.calendar.caldav.performIncrementalSync, {
+      providerId: provider._id
+    });
+  } else {
+    throw new Error(`Unsupported provider: ${queueItem.provider}`);
+  }
+
+  // Update last sync time
   await ctx.db.patch(provider._id, {
     lastSyncAt: Date.now(),
     updatedAt: Date.now(),
@@ -192,14 +224,75 @@ async function processWebhookUpdate(
 ) {
   // Process webhook data
   const webhookData = queueItem.data;
-  
+
   if (!webhookData) {
     throw new Error("No webhook data provided");
   }
 
-  // This would process the webhook update
-  // For now, we'll just log it
-  console.log("Processing webhook update:", webhookData);
+  // Find the provider that received this webhook
+  const provider = await ctx.db
+    .query("calendarProviders")
+    .withIndex("by_user", (q: any) => q.eq("userId", queueItem.userId))
+    .filter((q: any) => q.eq(q.field("provider"), queueItem.provider))
+    .first();
+
+  if (!provider) {
+    throw new Error("Provider not found for webhook");
+  }
+
+  // Call the appropriate provider-specific webhook handler
+  if (queueItem.provider === 'google') {
+    // Process Google webhook - typically triggers incremental sync
+    await ctx.runAction(internal.calendar.google.performIncrementalSync, {
+      providerId: provider._id
+    });
+  } else if (queueItem.provider === 'microsoft') {
+    await handleMicrosoftWebhookUpdate(ctx, queueItem, webhookData);
+  } else {
+    throw new Error(`Unsupported provider for webhook: ${queueItem.provider}`);
+  }
+
+  console.log(`Successfully processed ${queueItem.provider} webhook:`, webhookData);
+}
+
+/**
+ * Process webhook renewal
+ */
+async function processWebhookRenewal(
+  ctx: any,
+  queueItem: Doc<"syncQueue">
+) {
+  const { providerId, webhookId } = queueItem.data;
+
+  if (!providerId || !webhookId) {
+    throw new Error("Missing providerId or webhookId for renewal");
+  }
+
+  // Get provider details
+  const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
+    providerId
+  });
+
+  if (!provider) {
+    throw new Error("Provider not found for renewal");
+  }
+
+  // Call the appropriate provider-specific renewal handler
+  if (provider.provider === 'google') {
+    await ctx.runAction(internal.calendar.google.renewWebhookChannel, {
+      providerId,
+      channelId: webhookId
+    });
+  } else if (provider.provider === 'microsoft') {
+    await ctx.runAction(internal.calendar.microsoft.renewSubscription, {
+      providerId,
+      subscriptionId: webhookId
+    });
+  } else {
+    throw new Error(`Unsupported provider for renewal: ${provider.provider}`);
+  }
+
+  console.log(`Successfully renewed ${provider.provider} webhook:`, webhookId);
 }
 
 /**
@@ -210,13 +303,407 @@ async function processEventOperation(
   queueItem: Doc<"syncQueue">
 ) {
   const eventData = queueItem.data;
-  
+
   if (!eventData) {
     throw new Error("No event data provided");
   }
 
-  // This would sync the event operation to the provider
-  console.log(`Processing ${queueItem.operation}:`, eventData);
+  // Find the provider
+  const provider = await ctx.db
+    .query("calendarProviders")
+    .withIndex("by_user", (q: any) => q.eq("userId", queueItem.userId))
+    .filter((q: any) => q.eq(q.field("provider"), queueItem.provider))
+    .first();
+
+  if (!provider) {
+    throw new Error("Provider not found for event operation");
+  }
+
+  // Call the appropriate provider-specific event operation handler
+  if (queueItem.provider === 'google') {
+    await handleGoogleEventOperation(ctx, queueItem.operation, eventData, provider);
+  } else if (queueItem.provider === 'microsoft') {
+    await handleMicrosoftEventOperation(ctx, queueItem.operation, eventData, provider);
+  } else if (queueItem.provider === 'apple' || queueItem.provider === 'caldav') {
+    await handleCalDAVEventOperation(ctx, queueItem.operation, eventData, provider);
+  } else {
+    throw new Error(`Unsupported provider for event operation: ${queueItem.provider}`);
+  }
+
+  console.log(`Successfully processed ${queueItem.operation} for ${queueItem.provider}:`, eventData);
+}
+
+/**
+ * Handle Google Calendar event operations
+ */
+async function handleGoogleEventOperation(
+  ctx: any,
+  operation: string,
+  eventData: any,
+  provider: Doc<"calendarProviders">
+) {
+  // Create OAuth2 client
+  const oauth2Client = await ctx.runAction(internal.calendar.google.createOAuth2Client, {
+    providerId: provider._id
+  });
+
+  // Call Google Calendar API based on operation
+  switch (operation) {
+    case 'event_create':
+      // Create event in Google Calendar
+      const createResponse = await ctx.runAction(internal.calendar.google.createEvent, {
+        providerId: provider._id,
+        eventData: eventData
+      });
+      console.log('Created Google event:', createResponse);
+      break;
+
+    case 'event_update':
+      // Update event in Google Calendar
+      const updateResponse = await ctx.runAction(internal.calendar.google.updateEvent, {
+        providerId: provider._id,
+        eventData: eventData
+      });
+      console.log('Updated Google event:', updateResponse);
+      break;
+
+    case 'event_delete':
+      // Delete event from Google Calendar
+      const deleteResponse = await ctx.runAction(internal.calendar.google.deleteEvent, {
+        providerId: provider._id,
+        eventId: eventData.eventId
+      });
+      console.log('Deleted Google event:', deleteResponse);
+      break;
+
+    default:
+      throw new Error(`Unsupported event operation: ${operation}`);
+  }
+}
+
+/**
+ * Handle Microsoft full sync
+ */
+async function handleMicrosoftFullSync(
+  ctx: any,
+  provider: Doc<"calendarProviders">
+) {
+  // Decrypt the access token
+  const accessToken = await ctx.runAction(internal.calendar.providers.decryptToken, {
+    encryptedToken: provider.accessToken
+  });
+
+  // Create Microsoft Graph client
+  const { Client } = await import('@microsoft/microsoft-graph-client');
+  const graphClient = Client.init({
+    authProvider: (done) => {
+      done(null, accessToken);
+    },
+  });
+
+  // Get all calendars
+  const calendars = await graphClient
+    .api('/me/calendars')
+    .get();
+
+  // Sync events from each calendar
+  for (const calendar of calendars.value || []) {
+    if (!provider.settings?.calendars?.some((c: any) => c.syncEnabled && c.id === calendar.id)) {
+      continue; // Skip disabled calendars
+    }
+
+    // Get events from the last 30 days to current + 90 days
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 90);
+
+    const events = await graphClient
+      .api(`/me/calendars/${calendar.id}/events`)
+      .query({
+        startDateTime: startDate.toISOString(),
+        endDateTime: endDate.toISOString(),
+        $top: 1000
+      })
+      .get();
+
+    // Process and store events
+    for (const event of events.value || []) {
+      await processMicrosoftEvent(ctx, event, provider);
+    }
+  }
+}
+
+/**
+ * Handle Microsoft incremental sync
+ */
+async function handleMicrosoftIncrementalSync(
+  ctx: any,
+  provider: Doc<"calendarProviders">
+) {
+  // Decrypt the access token
+  const accessToken = await ctx.runAction(internal.calendar.providers.decryptToken, {
+    encryptedToken: provider.accessToken
+  });
+
+  // Create Microsoft Graph client
+  const { Client } = await import('@microsoft/microsoft-graph-client');
+  const graphClient = Client.init({
+    authProvider: (done) => {
+      done(null, accessToken);
+    },
+  });
+
+  // Use delta link if available, otherwise fall back to full sync
+  if (provider.deltaLink) {
+    try {
+      const deltaResponse = await graphClient
+        .api(provider.deltaLink)
+        .get();
+
+      // Process delta changes
+      for (const change of deltaResponse.value || []) {
+        if (change['@removed']) {
+          // Event was deleted
+          const syncMapping = await ctx.db
+            .query("eventSync")
+            .withIndex("by_provider_event", (q: any) =>
+              q.eq("providerId", provider._id).eq("providerEventId", change.id)
+            )
+            .first();
+
+          if (syncMapping) {
+            await ctx.db.delete(syncMapping._id);
+          }
+        } else {
+          // Event was created or updated
+          await processMicrosoftEvent(ctx, change, provider);
+        }
+      }
+
+      // Store new delta link
+      if (deltaResponse['@odata.deltaLink']) {
+        await ctx.db.patch(provider._id, {
+          deltaLink: deltaResponse['@odata.deltaLink'],
+          lastSyncAt: Date.now(),
+          updatedAt: Date.now()
+        });
+      }
+    } catch (error) {
+      console.error('Delta sync failed, falling back to full sync:', error);
+      await handleMicrosoftFullSync(ctx, provider);
+    }
+  } else {
+    await handleMicrosoftFullSync(ctx, provider);
+  }
+}
+
+/**
+ * Process a single Microsoft Graph event
+ */
+async function processMicrosoftEvent(
+  ctx: any,
+  msEvent: any,
+  provider: Doc<"calendarProviders">
+) {
+  // Check if event already exists
+  const existingSync = await ctx.db
+    .query("eventSync")
+    .withIndex("by_provider_event", (q: any) =>
+      q.eq("providerId", provider._id).eq("providerEventId", msEvent.id)
+    )
+    .first();
+
+  // Convert Microsoft event to our format
+  const eventData = {
+    title: msEvent.subject || 'Untitled Event',
+    description: msEvent.body?.content || '',
+    startDate: new Date(msEvent.start.dateTime).toISOString(),
+    endDate: new Date(msEvent.end.dateTime).toISOString(),
+    location: msEvent.location?.displayName || '',
+    category: msEvent.categories?.[0] || 'personal',
+    provider: 'microsoft' as const,
+    providerEventId: msEvent.id,
+    lastModified: new Date(msEvent.lastModifiedDateTime).getTime()
+  };
+
+  if (existingSync) {
+    // Update existing event
+    await ctx.db.patch(existingSync.localEventId, eventData);
+    await ctx.db.patch(existingSync._id, {
+      lastSyncAt: Date.now(),
+      syncStatus: 'synced'
+    });
+  } else {
+    // Create new event
+    const eventId = await ctx.db.insert("events", {
+      ...eventData,
+      userId: provider.userId,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    });
+
+    // Create sync mapping
+    await ctx.db.insert("eventSync", {
+      localEventId: eventId,
+      providerId: provider._id,
+      providerEventId: msEvent.id,
+      syncStatus: 'synced',
+      lastSyncAt: Date.now(),
+      createdAt: Date.now()
+    });
+  }
+}
+
+/**
+ * Handle Microsoft Graph event operations
+ */
+async function handleMicrosoftEventOperation(
+  ctx: any,
+  operation: string,
+  eventData: any,
+  provider: Doc<"calendarProviders">
+) {
+  // Decrypt the access token
+  const accessToken = await ctx.runAction(internal.calendar.providers.decryptToken, {
+    encryptedToken: provider.accessToken
+  });
+
+  // Create Microsoft Graph client
+  const { Client } = await import('@microsoft/microsoft-graph-client');
+  const graphClient = Client.init({
+    authProvider: (done) => {
+      done(null, accessToken);
+    },
+  });
+
+  // Call Microsoft Graph API based on operation
+  switch (operation) {
+    case 'event_create':
+      const createResponse = await graphClient
+        .api('/me/events')
+        .post({
+          subject: eventData.title,
+          body: {
+            contentType: 'text',
+            content: eventData.description || ''
+          },
+          start: {
+            dateTime: eventData.startDate,
+            timeZone: 'UTC'
+          },
+          end: {
+            dateTime: eventData.endDate,
+            timeZone: 'UTC'
+          },
+          location: eventData.location ? {
+            displayName: eventData.location
+          } : undefined,
+          categories: eventData.category ? [eventData.category] : []
+        });
+      console.log('Created Microsoft event:', createResponse.id);
+      break;
+
+    case 'event_update':
+      const updateResponse = await graphClient
+        .api(`/me/events/${eventData.eventId}`)
+        .patch({
+          subject: eventData.title,
+          body: {
+            contentType: 'text',
+            content: eventData.description || ''
+          },
+          start: {
+            dateTime: eventData.startDate,
+            timeZone: 'UTC'
+          },
+          end: {
+            dateTime: eventData.endDate,
+            timeZone: 'UTC'
+          },
+          location: eventData.location ? {
+            displayName: eventData.location
+          } : undefined,
+          categories: eventData.category ? [eventData.category] : []
+        });
+      console.log('Updated Microsoft event:', eventData.eventId);
+      break;
+
+    case 'event_delete':
+      await graphClient
+        .api(`/me/events/${eventData.eventId}`)
+        .delete();
+      console.log('Deleted Microsoft event:', eventData.eventId);
+      break;
+
+    default:
+      throw new Error(`Unsupported Microsoft event operation: ${operation}`);
+  }
+}
+
+/**
+ * Handle CalDAV event operations
+ */
+async function handleCalDAVEventOperation(
+  ctx: any,
+  operation: string,
+  eventData: any,
+  provider: Doc<"calendarProviders">
+) {
+  switch (operation) {
+    case 'event_create':
+      await ctx.runAction(internal.calendar.caldav.createEvent, {
+        providerId: provider._id,
+        eventData,
+        calendarId: eventData.calendarId
+      });
+      break;
+    
+    case 'event_update':
+      await ctx.runAction(internal.calendar.caldav.updateEvent, {
+        providerId: provider._id,
+        providerEventId: eventData.providerEventId,
+        eventData,
+        calendarId: eventData.calendarId
+      });
+      break;
+    
+    case 'event_delete':
+      await ctx.runAction(internal.calendar.caldav.deleteEvent, {
+        providerId: provider._id,
+        providerEventId: eventData.providerEventId,
+        calendarId: eventData.calendarId
+      });
+      break;
+    
+    default:
+      throw new Error(`Unsupported CalDAV operation: ${operation}`);
+  }
+}
+
+/**
+ * Handle Microsoft webhook updates
+ */
+async function handleMicrosoftWebhookUpdate(
+  ctx: any,
+  queueItem: Doc<"syncQueue">,
+  webhookData: any
+) {
+  // For Microsoft webhooks, we typically trigger an incremental sync
+  // since the webhook indicates that data has changed
+  const provider = await ctx.db
+    .query("calendarProviders")
+    .withIndex("by_user", (q: any) => q.eq("userId", queueItem.userId))
+    .filter((q: any) => q.eq(q.field("provider"), queueItem.provider))
+    .first();
+
+  if (!provider) {
+    throw new Error("Provider not found for webhook");
+  }
+
+  // Trigger incremental sync to get the latest changes
+  await handleMicrosoftIncrementalSync(ctx, provider);
 }
 
 /**

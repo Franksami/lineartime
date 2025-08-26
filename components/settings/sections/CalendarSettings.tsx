@@ -57,6 +57,14 @@ export function CalendarSettings() {
     updateCategory('calendar', { showWeekends: !calendar.showWeekends })
   }
 
+  const handleCalendarDayStyleChange = (calendarDayStyle: UserSettings['calendar']['calendarDayStyle']) => {
+    updateCategory('calendar', { calendarDayStyle })
+  }
+
+  const toggleDaysLeftCounter = () => {
+    updateCategory('calendar', { showDaysLeft: !calendar.showDaysLeft })
+  }
+
   const weekDays = [
     { value: '0', label: 'Sunday' },
     { value: '1', label: 'Monday' },
@@ -167,6 +175,43 @@ export function CalendarSettings() {
               aria-label="Toggle weekends"
             />
           </div>
+
+          {/* Calendar Day Style */}
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label htmlFor="calendarDayStyle">Calendar Day Style</Label>
+              <p className="text-sm text-muted-foreground">
+                Choose how days are displayed in calendar view
+              </p>
+            </div>
+            <Select value={calendar.calendarDayStyle} onValueChange={handleCalendarDayStyleChange}>
+              <SelectTrigger id="calendarDayStyle" className="w-[180px]">
+                <SelectValue placeholder="Select style" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="number">Numbers</SelectItem>
+                <SelectItem value="dot">Progress Dots</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Days Left Counter (only show in dot mode) */}
+          {calendar.calendarDayStyle === 'dot' && (
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="daysLeft">Show Days Left Counter</Label>
+                <p className="text-sm text-muted-foreground">
+                  Display remaining days counter in dot mode
+                </p>
+              </div>
+              <Switch
+                id="daysLeft"
+                checked={calendar.showDaysLeft}
+                onCheckedChange={toggleDaysLeftCounter}
+                aria-label="Toggle days left counter"
+              />
+            </div>
+          )}
 
           {/* Working Hours */}
           <div className="space-y-3">

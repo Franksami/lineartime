@@ -118,13 +118,13 @@ function LinearCalendarContent({
         key={date.toString()}
         className={cn(
           "aspect-square relative group cursor-pointer transition-all duration-200",
-          "border border-gray-100 dark:border-gray-800",
-          "hover:bg-accent hover:shadow-md hover:z-10",
+          "border border-border",
+          "hover:bg-accent/10 hover:shadow-sm hover:z-10",
           !isCurrentMonth && "opacity-40",
           isToday(date) && "ring-2 ring-primary ring-offset-1",
           isSelected && "bg-primary/10 ring-2 ring-primary",
           isInRange && "bg-primary/5",
-          isHovered && "bg-accent shadow-lg",
+          isHovered && "bg-accent/10",
           hasEvents && "font-semibold"
         )}
         style={{ 
@@ -155,10 +155,10 @@ function LinearCalendarContent({
                         key={idx}
                         className={cn(
                           "w-1 h-1 rounded-full",
-                          event.category === 'personal' && "bg-blue-500",
-                          event.category === 'work' && "bg-green-500",
-                          event.category === 'effort' && "bg-purple-500",
-                          event.category === 'note' && "bg-yellow-500"
+                          event.category === 'personal' && "bg-primary",
+                          event.category === 'work' && "bg-secondary",
+                          event.category === 'effort' && "bg-accent",
+                          event.category === 'note' && "bg-muted"
                         )}
                       />
                     ))}
@@ -194,10 +194,10 @@ function LinearCalendarContent({
                         <div key={idx} className="text-xs flex items-center gap-1">
                           <div className={cn(
                             "w-2 h-2 rounded-full",
-                            event.category === 'personal' && "bg-blue-500",
-                            event.category === 'work' && "bg-green-500",
-                            event.category === 'effort' && "bg-purple-500",
-                            event.category === 'note' && "bg-yellow-500"
+                            event.category === 'personal' && "bg-primary",
+                            event.category === 'work' && "bg-secondary",
+                            event.category === 'effort' && "bg-accent",
+                            event.category === 'note' && "bg-muted"
                           )} />
                           <span className="truncate max-w-[150px]">{event.title}</span>
                           {enableSync && event.syncStatus && (
@@ -338,8 +338,13 @@ function LinearCalendarContent({
           
           <FilterPanel 
             filters={filters} 
+            viewOptions={{
+              showWeekends: true,
+              showToday: true,
+              compactMode: viewMode === 'compact'
+            }}
             onFilterChange={handleFilterChange}
-            viewMode={viewMode}
+            onClose={() => {}}
           />
           <ZoomControls 
             zoomLevel={zoomLevel} 

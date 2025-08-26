@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { AlertCircle, Calendar, Check, ChevronRight, Cloud, CloudOff, ExternalLink, Loader2, Plus, RefreshCw, Settings, Trash2, X } from 'lucide-react';
-import { toast } from 'sonner';
+import { notify } from '@/components/ui/notify';
 import { format } from 'date-fns';
 
 type Provider = 'google' | 'microsoft' | 'apple' | 'caldav' | 'notion' | 'obsidian';
@@ -190,13 +190,13 @@ export function CalendarIntegrations() {
           
         case 'notion':
         case 'obsidian':
-          toast.info(`${providerConfigs[provider].name} integration coming soon!`);
+          notify.info(`${providerConfigs[provider].name} integration coming soon!`);
           setIsConnecting(false);
           break;
       }
     } catch (error) {
       console.error('Connection error:', error);
-      toast.error('Failed to connect provider');
+      notify.error('Failed to connect provider');
       setIsConnecting(false);
     }
   };
@@ -214,15 +214,15 @@ export function CalendarIntegrations() {
       const data = await response.json();
       
       if (response.ok) {
-        toast.success('Apple iCloud calendar connected!');
+        notify.success('Apple iCloud calendar connected!');
         setShowConnectDialog(false);
         setAppleForm({ email: '', password: '' });
       } else {
-        toast.error(data.error || 'Failed to connect Apple calendar');
+        notify.error(data.error || 'Failed to connect Apple calendar');
       }
     } catch (error) {
       console.error('Apple connection error:', error);
-      toast.error('Failed to connect Apple calendar');
+      notify.error('Failed to connect Apple calendar');
     } finally {
       setIsConnecting(false);
     }
@@ -241,15 +241,15 @@ export function CalendarIntegrations() {
       const data = await response.json();
       
       if (response.ok) {
-        toast.success(`${caldavForm.providerName} connected!`);
+        notify.success(`${caldavForm.providerName} connected!`);
         setShowConnectDialog(false);
         setCaldavForm({ serverUrl: '', username: '', password: '', providerName: 'CalDAV' });
       } else {
-        toast.error(data.error || 'Failed to connect CalDAV server');
+        notify.error(data.error || 'Failed to connect CalDAV server');
       }
     } catch (error) {
       console.error('CalDAV connection error:', error);
-      toast.error('Failed to connect CalDAV server');
+      notify.error('Failed to connect CalDAV server');
     } finally {
       setIsConnecting(false);
     }
@@ -258,10 +258,10 @@ export function CalendarIntegrations() {
   const handleDisconnect = async (provider: Provider) => {
     try {
       await disconnectProvider({ provider });
-      toast.success(`${providerConfigs[provider].name} disconnected`);
+      notify.success(`${providerConfigs[provider].name} disconnected`);
     } catch (error) {
       console.error('Disconnect error:', error);
-      toast.error('Failed to disconnect provider');
+      notify.error('Failed to disconnect provider');
     }
   };
 
@@ -272,30 +272,30 @@ export function CalendarIntegrations() {
         operation: 'incremental_sync',
         priority: 5
       });
-      toast.success(`Syncing ${providerConfigs[provider].name}...`);
+      notify.info(`Syncing ${providerConfigs[provider].name}...`);
     } catch (error) {
       console.error('Sync error:', error);
-      toast.error('Failed to start sync');
+      notify.error('Failed to start sync');
     }
   };
 
   const handleClearCompleted = async () => {
     try {
       const count = await clearCompletedSyncItems();
-      toast.success(`Cleared ${count} completed sync items`);
+      notify.success(`Cleared ${count} completed sync items`);
     } catch (error) {
       console.error('Clear error:', error);
-      toast.error('Failed to clear sync items');
+      notify.error('Failed to clear sync items');
     }
   };
 
   const handleRetryFailed = async () => {
     try {
       const count = await retryFailedSyncItems();
-      toast.success(`Retrying ${count} failed sync items`);
+      notify.success(`Retrying ${count} failed sync items`);
     } catch (error) {
       console.error('Retry error:', error);
-      toast.error('Failed to retry sync items');
+      notify.error('Failed to retry sync items');
     }
   };
 
