@@ -1,80 +1,84 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { 
-  Mouse, 
-  Target, 
-  Clock, 
-  TrendingUp, 
-  Zap, 
-  Brain, 
-  Shield, 
-  Activity,
-  Download,
-  RefreshCw
-} from 'lucide-react'
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import {
-  BarChart,
+  type DragDropHeatmapData,
+  type DragDropMetrics,
+  useDragDropAnalytics,
+} from '@/lib/analytics/dragDropAnalytics';
+import {
+  Activity,
+  Brain,
+  Clock,
+  Download,
+  Mouse,
+  RefreshCw,
+  Shield,
+  Target,
+  TrendingUp,
+  Zap,
+} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  Area,
+  AreaChart,
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
   Cell,
   Legend,
-  AreaChart,
-  Area,
+  Line,
   LineChart,
-  Line
-} from 'recharts'
-import { useDragDropAnalytics, type DragDropMetrics, type DragDropHeatmapData } from '@/lib/analytics/dragDropAnalytics'
-import { AdvancedExportDialog } from './AdvancedExportDialog'
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
+import { AdvancedExportDialog } from './AdvancedExportDialog';
 
 interface DragDropMetricsPanelProps {
-  startDate?: Date
-  endDate?: Date
-  className?: string
-  calendarAnalytics?: any
-  events?: any[]
-  year?: number
+  startDate?: Date;
+  endDate?: Date;
+  className?: string;
+  calendarAnalytics?: any;
+  events?: any[];
+  year?: number;
 }
 
-export function DragDropMetricsPanel({ 
-  startDate, 
-  endDate, 
+export function DragDropMetricsPanel({
+  startDate,
+  endDate,
   className,
   calendarAnalytics = null,
   events = [],
-  year = new Date().getFullYear()
+  year = new Date().getFullYear(),
 }: DragDropMetricsPanelProps) {
-  const analytics = useDragDropAnalytics()
-  const [metrics, setMetrics] = useState<DragDropMetrics | null>(null)
-  const [heatmapData, setHeatmapData] = useState<DragDropHeatmapData[]>([])
-  const [recentActivity, setRecentActivity] = useState<any[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [showExportDialog, setShowExportDialog] = useState(false)
+  const analytics = useDragDropAnalytics();
+  const [metrics, setMetrics] = useState<DragDropMetrics | null>(null);
+  const [heatmapData, setHeatmapData] = useState<DragDropHeatmapData[]>([]);
+  const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showExportDialog, setShowExportDialog] = useState(false);
 
   const loadAnalytics = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const [metricsData, heatmapData, recentData] = await Promise.all([
         analytics.generateMetrics(startDate, endDate),
         analytics.generateHeatmapData(startDate, endDate),
-        analytics.getRecentActivity(24) // Last 24 hours
-      ])
-      
-      setMetrics(metricsData)
-      setHeatmapData(heatmapData)
-      setRecentActivity(recentData)
+        analytics.getRecentActivity(24), // Last 24 hours
+      ]);
+
+      setMetrics(metricsData);
+      setHeatmapData(heatmapData);
+      setRecentActivity(recentData);
     } catch (error) {
-      console.error('Failed to load drag & drop analytics:', error)
+      console.error('Failed to load drag & drop analytics:', error);
       // Set empty metrics for graceful fallback
       setMetrics({
         totalDragOperations: 0,
@@ -86,88 +90,104 @@ export function DragDropMetricsPanel({
         conflictResolutionRate: 0,
         optimizationAcceptanceRate: 0,
         dragsByDayOfWeek: {
-          'Sunday': 0, 'Monday': 0, 'Tuesday': 0, 'Wednesday': 0,
-          'Thursday': 0, 'Friday': 0, 'Saturday': 0
+          Sunday: 0,
+          Monday: 0,
+          Tuesday: 0,
+          Wednesday: 0,
+          Thursday: 0,
+          Friday: 0,
+          Saturday: 0,
         },
         dragsByTimeOfDay: {
           'Morning (6-12)': 0,
           'Afternoon (12-17)': 0,
           'Evening (17-22)': 0,
-          'Night (22-6)': 0
+          'Night (22-6)': 0,
         },
-        dragEfficiencyScore: 0
-      })
-      setHeatmapData([])
-      setRecentActivity([])
+        dragEfficiencyScore: 0,
+      });
+      setHeatmapData([]);
+      setRecentActivity([]);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    loadAnalytics()
-  }, [startDate, endDate])
+    loadAnalytics();
+  }, [startDate, endDate]);
 
-  const handleExportData = () => {
+  const _handleExportData = () => {
     try {
-      const data = analytics.exportData()
-      const blob = new Blob([data], { type: 'application/json' })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `drag-drop-analytics-${new Date().toISOString().split('T')[0]}.json`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
+      const data = analytics.exportData();
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `drag-drop-analytics-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to export drag & drop data:', error)
+      console.error('Failed to export drag & drop data:', error);
     }
-  }
+  };
 
   const handleClearData = () => {
-    if (confirm('Are you sure you want to clear all drag & drop analytics data? This cannot be undone.')) {
-      analytics.clearData()
-      loadAnalytics()
+    if (
+      confirm(
+        'Are you sure you want to clear all drag & drop analytics data? This cannot be undone.'
+      )
+    ) {
+      analytics.clearData();
+      loadAnalytics();
     }
-  }
+  };
 
   const handleGenerateSampleData = () => {
     // Generate sample drag & drop events for testing
-    const categories = ['work', 'personal', 'effort', 'note']
-    const eventTitles = ['Team Meeting', 'Lunch Break', 'Project Review', 'Doctor Appointment', 'Workout', 'Call with Client']
-    
-    const now = new Date()
-    
+    const categories = ['work', 'personal', 'effort', 'note'];
+    const eventTitles = [
+      'Team Meeting',
+      'Lunch Break',
+      'Project Review',
+      'Doctor Appointment',
+      'Workout',
+      'Call with Client',
+    ];
+
+    const now = new Date();
+
     // Generate 20 sample drag operations over the past week
     for (let i = 0; i < 20; i++) {
-      const eventId = `sample-${i}`
-      const eventTitle = eventTitles[Math.floor(Math.random() * eventTitles.length)]
-      const category = categories[Math.floor(Math.random() * categories.length)]
-      
+      const eventId = `sample-${i}`;
+      const eventTitle = eventTitles[Math.floor(Math.random() * eventTitles.length)];
+      const category = categories[Math.floor(Math.random() * categories.length)];
+
       // Random date within past week
-      const daysAgo = Math.floor(Math.random() * 7)
-      const sourceDate = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000)
-      const targetDate = new Date(sourceDate.getTime() + Math.random() * 3 * 60 * 60 * 1000) // Up to 3 hours later
-      
+      const daysAgo = Math.floor(Math.random() * 7);
+      const sourceDate = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+      const targetDate = new Date(sourceDate.getTime() + Math.random() * 3 * 60 * 60 * 1000); // Up to 3 hours later
+
       // 80% success rate
-      const isSuccessful = Math.random() > 0.2
-      
-      analytics.trackDragStart(eventId, eventTitle, sourceDate, category)
-      
+      const isSuccessful = Math.random() > 0.2;
+
+      analytics.trackDragStart(eventId, eventTitle, sourceDate, category);
+
       if (isSuccessful) {
         analytics.trackDropSuccess(eventId, eventTitle, sourceDate, targetDate, category, {
           aiSuggestionUsed: Math.random() > 0.6, // 40% use AI suggestions
           conflictResolved: Math.random() > 0.8, // 20% had conflicts
-          optimizedTimeSlot: Math.random() > 0.5  // 50% accepted optimizations
-        })
+          optimizedTimeSlot: Math.random() > 0.5, // 50% accepted optimizations
+        });
       } else {
-        analytics.trackDragCancel(eventId, eventTitle, sourceDate, category)
+        analytics.trackDragCancel(eventId, eventTitle, sourceDate, category);
       }
     }
-    
-    loadAnalytics()
-  }
+
+    loadAnalytics();
+  };
 
   if (isLoading || !metrics) {
     return (
@@ -179,22 +199,26 @@ export function DragDropMetricsPanel({
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   // Prepare chart data
   const dayOfWeekData = Object.entries(metrics.dragsByDayOfWeek).map(([day, count]) => ({
     day: day.substring(0, 3), // Abbreviate day names
-    count
-  }))
+    count,
+  }));
 
   const timeOfDayData = Object.entries(metrics.dragsByTimeOfDay).map(([time, count]) => ({
     time,
-    count
-  }))
+    count,
+  }));
 
-  const efficiencyColor = metrics.dragEfficiencyScore >= 80 ? '#10b981' : 
-                         metrics.dragEfficiencyScore >= 60 ? '#f59e0b' : '#ef4444'
+  const efficiencyColor =
+    metrics.dragEfficiencyScore >= 80
+      ? '#10b981'
+      : metrics.dragEfficiencyScore >= 60
+        ? '#f59e0b'
+        : '#ef4444';
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -202,7 +226,9 @@ export function DragDropMetricsPanel({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-foreground">Drag & Drop Analytics</h2>
-          <p className="text-muted-foreground">Insights into your drag-and-drop interaction patterns</p>
+          <p className="text-muted-foreground">
+            Insights into your drag-and-drop interaction patterns
+          </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={loadAnalytics}>
@@ -232,9 +258,7 @@ export function DragDropMetricsPanel({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{metrics.totalDragOperations}</div>
-            <p className="text-xs text-muted-foreground">
-              {metrics.successfulDrops} successful
-            </p>
+            <p className="text-xs text-muted-foreground">{metrics.successfulDrops} successful</p>
           </CardContent>
         </Card>
 
@@ -245,14 +269,17 @@ export function DragDropMetricsPanel({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {metrics.totalDragOperations > 0 
+              {metrics.totalDragOperations > 0
                 ? Math.round((metrics.successfulDrops / metrics.totalDragOperations) * 100)
-                : 0}%
+                : 0}
+              %
             </div>
-            <Progress 
-              value={metrics.totalDragOperations > 0 
-                ? (metrics.successfulDrops / metrics.totalDragOperations) * 100 
-                : 0} 
+            <Progress
+              value={
+                metrics.totalDragOperations > 0
+                  ? (metrics.successfulDrops / metrics.totalDragOperations) * 100
+                  : 0
+              }
               className="mt-2"
             />
           </CardContent>
@@ -267,9 +294,7 @@ export function DragDropMetricsPanel({
             <div className="text-2xl font-bold">
               {(metrics.averageDragDuration / 1000).toFixed(1)}s
             </div>
-            <p className="text-xs text-muted-foreground">
-              Per drag operation
-            </p>
+            <p className="text-xs text-muted-foreground">Per drag operation</p>
           </CardContent>
         </Card>
 
@@ -282,10 +307,7 @@ export function DragDropMetricsPanel({
             <div className="text-2xl font-bold" style={{ color: efficiencyColor }}>
               {metrics.dragEfficiencyScore}
             </div>
-            <Progress 
-              value={metrics.dragEfficiencyScore} 
-              className="mt-2"
-            />
+            <Progress value={metrics.dragEfficiencyScore} className="mt-2" />
           </CardContent>
         </Card>
       </div>
@@ -301,13 +323,8 @@ export function DragDropMetricsPanel({
             <div className="text-2xl font-bold">
               {Math.round(metrics.aiSuggestionUsageRate * 100)}%
             </div>
-            <p className="text-xs text-muted-foreground">
-              Of successful drops
-            </p>
-            <Progress 
-              value={metrics.aiSuggestionUsageRate * 100} 
-              className="mt-2"
-            />
+            <p className="text-xs text-muted-foreground">Of successful drops</p>
+            <Progress value={metrics.aiSuggestionUsageRate * 100} className="mt-2" />
           </CardContent>
         </Card>
 
@@ -320,13 +337,8 @@ export function DragDropMetricsPanel({
             <div className="text-2xl font-bold">
               {Math.round(metrics.conflictResolutionRate * 100)}%
             </div>
-            <p className="text-xs text-muted-foreground">
-              Auto-resolved conflicts
-            </p>
-            <Progress 
-              value={metrics.conflictResolutionRate * 100} 
-              className="mt-2"
-            />
+            <p className="text-xs text-muted-foreground">Auto-resolved conflicts</p>
+            <Progress value={metrics.conflictResolutionRate * 100} className="mt-2" />
           </CardContent>
         </Card>
 
@@ -339,13 +351,8 @@ export function DragDropMetricsPanel({
             <div className="text-2xl font-bold">
               {Math.round(metrics.optimizationAcceptanceRate * 100)}%
             </div>
-            <p className="text-xs text-muted-foreground">
-              Smart time slot suggestions
-            </p>
-            <Progress 
-              value={metrics.optimizationAcceptanceRate * 100} 
-              className="mt-2"
-            />
+            <p className="text-xs text-muted-foreground">Smart time slot suggestions</p>
+            <Progress value={metrics.optimizationAcceptanceRate * 100} className="mt-2" />
           </CardContent>
         </Card>
       </div>
@@ -363,16 +370,13 @@ export function DragDropMetricsPanel({
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={dayOfWeekData}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                  <XAxis 
-                    dataKey="day" 
+                  <XAxis
+                    dataKey="day"
                     className="text-xs fill-muted-foreground"
                     tick={{ fontSize: 12 }}
                   />
-                  <YAxis 
-                    className="text-xs fill-muted-foreground"
-                    tick={{ fontSize: 12 }}
-                  />
-                  <Tooltip 
+                  <YAxis className="text-xs fill-muted-foreground" tick={{ fontSize: 12 }} />
+                  <Tooltip
                     contentStyle={{
                       backgroundColor: 'hsl(var(--popover))',
                       border: '1px solid hsl(var(--border))',
@@ -380,11 +384,7 @@ export function DragDropMetricsPanel({
                     }}
                     formatter={(value: number) => [`${value} drags`, 'Count']}
                   />
-                  <Bar 
-                    dataKey="count" 
-                    fill="hsl(var(--chart-1))"
-                    radius={[2, 2, 0, 0]}
-                  />
+                  <Bar dataKey="count" fill="hsl(var(--chart-1))" radius={[2, 2, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -410,11 +410,11 @@ export function DragDropMetricsPanel({
                     paddingAngle={5}
                     dataKey="count"
                   >
-                    {timeOfDayData.map((entry, index) => (
+                    {timeOfDayData.map((_entry, index) => (
                       <Cell key={`cell-${index}`} fill={`hsl(var(--chart-${(index % 5) + 1}))`} />
                     ))}
                   </Pie>
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{
                       backgroundColor: 'hsl(var(--popover))',
                       border: '1px solid hsl(var(--border))',
@@ -442,28 +442,29 @@ export function DragDropMetricsPanel({
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={heatmapData}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                  <XAxis 
-                    dataKey="date" 
+                  <XAxis
+                    dataKey="date"
                     className="text-xs fill-muted-foreground"
                     tick={{ fontSize: 10 }}
                   />
-                  <YAxis 
-                    className="text-xs fill-muted-foreground"
-                    tick={{ fontSize: 12 }}
-                  />
-                  <Tooltip 
+                  <YAxis className="text-xs fill-muted-foreground" tick={{ fontSize: 12 }} />
+                  <Tooltip
                     contentStyle={{
                       backgroundColor: 'hsl(var(--popover))',
                       border: '1px solid hsl(var(--border))',
                       borderRadius: '6px',
                     }}
                     formatter={(value: number, name: string) => [
-                      name === 'dragCount' ? `${value} drags` :
-                      name === 'successRate' ? `${Math.round(value * 100)}% success` :
-                      `${Math.round(value)}ms avg`,
-                      name === 'dragCount' ? 'Drags' :
-                      name === 'successRate' ? 'Success Rate' :
-                      'Avg Duration'
+                      name === 'dragCount'
+                        ? `${value} drags`
+                        : name === 'successRate'
+                          ? `${Math.round(value * 100)}% success`
+                          : `${Math.round(value)}ms avg`,
+                      name === 'dragCount'
+                        ? 'Drags'
+                        : name === 'successRate'
+                          ? 'Success Rate'
+                          : 'Avg Duration',
                     ]}
                   />
                   <Area
@@ -492,9 +493,15 @@ export function DragDropMetricsPanel({
               {recentActivity.slice(0, 10).map((event, index) => (
                 <div key={index} className="flex items-center gap-3 p-3 bg-muted rounded-lg">
                   <div className="p-2 rounded-full bg-background">
-                    {event.eventType === 'drop_success' && <Target className="w-4 h-4 text-green-600" />}
-                    {event.eventType === 'drop_cancel' && <Mouse className="w-4 h-4 text-red-600" />}
-                    {event.eventType === 'drag_start' && <Activity className="w-4 h-4 text-blue-600" />}
+                    {event.eventType === 'drop_success' && (
+                      <Target className="w-4 h-4 text-green-600" />
+                    )}
+                    {event.eventType === 'drop_cancel' && (
+                      <Mouse className="w-4 h-4 text-red-600" />
+                    )}
+                    {event.eventType === 'drag_start' && (
+                      <Activity className="w-4 h-4 text-blue-600" />
+                    )}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
@@ -504,11 +511,13 @@ export function DragDropMetricsPanel({
                       </Badge>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {event.timestamp.toLocaleTimeString()} • 
-                      {event.eventType === 'drop_success' ? ' Successfully moved' :
-                       event.eventType === 'drop_cancel' ? ' Cancelled' :
-                       ' Started drag'} • 
-                      {event.duration}ms
+                      {event.timestamp.toLocaleTimeString()} •
+                      {event.eventType === 'drop_success'
+                        ? ' Successfully moved'
+                        : event.eventType === 'drop_cancel'
+                          ? ' Cancelled'
+                          : ' Started drag'}{' '}
+                      •{event.duration}ms
                     </div>
                   </div>
                 </div>
@@ -531,9 +540,7 @@ export function DragDropMetricsPanel({
                 <div className="text-3xl font-bold text-primary capitalize">
                   {metrics.mostDraggedCategory}
                 </div>
-                <p className="text-muted-foreground mt-2">
-                  Most frequently dragged category
-                </p>
+                <p className="text-muted-foreground mt-2">Most frequently dragged category</p>
               </div>
             </div>
           </CardContent>
@@ -549,5 +556,5 @@ export function DragDropMetricsPanel({
         year={year}
       />
     </div>
-  )
+  );
 }

@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { useDroppable } from '@dnd-kit/core'
-import { cn } from '@/lib/utils'
-import { isToday } from 'date-fns'
+import { cn } from '@/lib/utils';
+import { useDroppable } from '@dnd-kit/core';
+import { isToday } from 'date-fns';
+import type React from 'react';
 
 interface DroppableCalendarDayProps {
-  date: Date
-  day: number
-  isCurrentDay?: boolean
-  onDateSelect?: (date: Date) => void
-  children?: React.ReactNode
-  className?: string
-  style?: React.CSSProperties
+  date: Date;
+  day: number;
+  isCurrentDay?: boolean;
+  onDateSelect?: (date: Date) => void;
+  children?: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export function DroppableCalendarDay({
@@ -30,27 +30,29 @@ export function DroppableCalendarDay({
       date,
       type: 'calendar-day',
     },
-  })
+  });
 
   return (
     <button
       ref={setNodeRef}
       onClick={() => onDateSelect?.(date)}
       className={cn(
-        "relative bg-background",
-        "border-t border-border",
-        "p-1 transition-colors",
-        isOver && "bg-primary/10",
-        !isOver && "hover:bg-muted/30",
-        isCurrentDay && "ring-2 ring-primary ring-inset",
+        'relative bg-background',
+        'border-t border-border',
+        'p-1 transition-colors',
+        isOver && 'bg-primary/10',
+        !isOver && 'hover:bg-muted/30',
+        isCurrentDay && 'ring-2 ring-primary ring-inset',
         className
       )}
       style={style}
     >
-      <span className={cn(
-        "absolute top-1 left-1 text-xs z-0",
-        isCurrentDay ? "font-bold text-primary" : "text-muted-foreground"
-      )}>
+      <span
+        className={cn(
+          'absolute top-1 left-1 text-xs z-0',
+          isCurrentDay ? 'font-bold text-primary' : 'text-muted-foreground'
+        )}
+      >
         {day}
       </span>
       {isOver && (
@@ -58,5 +60,5 @@ export function DroppableCalendarDay({
       )}
       {children}
     </button>
-  )
+  );
 }

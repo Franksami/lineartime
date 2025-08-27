@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { cn } from '@/lib/utils'
-import type { Event } from '@/types/calendar'
-import { differenceInDays, startOfDay, endOfDay, format } from 'date-fns'
+import { cn } from '@/lib/utils';
+import type { Event } from '@/types/calendar';
+import { differenceInDays, endOfDay, format, startOfDay } from 'date-fns';
+import React from 'react';
 
 interface MultiDayEventBarProps {
-  event: Event
-  startColumn: number
-  endColumn: number
-  row: number
-  onEventClick?: (event: Event) => void
-  cellWidth?: number
-  cellHeight?: number
+  event: Event;
+  startColumn: number;
+  endColumn: number;
+  row: number;
+  onEventClick?: (event: Event) => void;
+  cellWidth?: number;
+  cellHeight?: number;
 }
 
 const categoryColors = {
@@ -20,7 +20,7 @@ const categoryColors = {
   work: 'bg-secondary hover:bg-secondary/80 text-secondary-foreground',
   effort: 'bg-accent hover:bg-accent/80 text-accent-foreground',
   note: 'bg-muted hover:bg-muted/80 text-muted-foreground',
-} as const
+} as const;
 
 export function MultiDayEventBar({
   event,
@@ -31,14 +31,12 @@ export function MultiDayEventBar({
   cellWidth = 40,
   cellHeight = 36,
 }: MultiDayEventBarProps) {
-  const width = (endColumn - startColumn + 1) * cellWidth - 4 // -4 for padding
-  const left = startColumn * cellWidth + 2 // +2 for padding
-  const top = row * 20 + 18 // Position below day number
-  
-  const duration = differenceInDays(endOfDay(event.endDate), startOfDay(event.startDate)) + 1
-  const timeText = duration === 1 
-    ? format(event.startDate, 'HH:mm')
-    : `${duration}d`
+  const width = (endColumn - startColumn + 1) * cellWidth - 4; // -4 for padding
+  const left = startColumn * cellWidth + 2; // +2 for padding
+  const top = row * 20 + 18; // Position below day number
+
+  const duration = differenceInDays(endOfDay(event.endDate), startOfDay(event.startDate)) + 1;
+  const timeText = duration === 1 ? format(event.startDate, 'HH:mm') : `${duration}d`;
 
   return (
     <div
@@ -55,55 +53,55 @@ export function MultiDayEventBar({
         height: '18px',
       }}
       onClick={(e) => {
-        e.stopPropagation()
-        onEventClick?.(event)
+        e.stopPropagation();
+        onEventClick?.(event);
       }}
       title={`${event.title} (${format(event.startDate, 'MMM d')} - ${format(event.endDate, 'MMM d')})`}
     >
       <span className="truncate flex-1">{event.title}</span>
       <span className="text-[10px] opacity-80">{timeText}</span>
     </div>
-  )
+  );
 }
 
 // Stacking algorithm to prevent overlapping events
 export function calculateEventStacks(events: Event[]): Map<Event, number> {
-  const stacks = new Map<Event, number>()
+  const stacks = new Map<Event, number>();
   const sortedEvents = [...events].sort((a, b) => {
     // Sort by start date, then by duration (longer events first)
-    const startDiff = a.startDate.getTime() - b.startDate.getTime()
-    if (startDiff !== 0) return startDiff
-    
-    const durationA = a.endDate.getTime() - a.startDate.getTime()
-    const durationB = b.endDate.getTime() - b.startDate.getTime()
-    return durationB - durationA
-  })
-  
-  const occupiedRows: { start: number; end: number; row: number }[] = []
-  
-  sortedEvents.forEach(event => {
-    const eventStart = startOfDay(event.startDate).getTime()
-    const eventEnd = endOfDay(event.endDate).getTime()
-    
+    const startDiff = a.startDate.getTime() - b.startDate.getTime();
+    if (startDiff !== 0) return startDiff;
+
+    const durationA = a.endDate.getTime() - a.startDate.getTime();
+    const durationB = b.endDate.getTime() - b.startDate.getTime();
+    return durationB - durationA;
+  });
+
+  const occupiedRows: { start: number; end: number; row: number }[] = [];
+
+  sortedEvents.forEach((event) => {
+    const eventStart = startOfDay(event.startDate).getTime();
+    const eventEnd = endOfDay(event.endDate).getTime();
+
     // Find the first available row
-    let row = 0
-    let foundRow = false
-    
+    let row = 0;
+    let foundRow = false;
+
     while (!foundRow) {
-      const hasConflict = occupiedRows.some(occupied => 
-        occupied.row === row &&
-        !(eventEnd < occupied.start || eventStart > occupied.end)
-      )
-      
+      const hasConflict = occupiedRows.some(
+        (occupied) =>
+          occupied.row === row && !(eventEnd < occupied.start || eventStart > occupied.end)
+      );
+
       if (!hasConflict) {
-        foundRow = true
-        occupiedRows.push({ start: eventStart, end: eventEnd, row })
-        stacks.set(event, row)
+        foundRow = true;
+        occupiedRows.push({ start: eventStart, end: eventEnd, row });
+        stacks.set(event, row);
       } else {
-        row++
+        row++;
       }
     }
-  })
-  
-  return stacks
+  });
+
+  return stacks;
 }

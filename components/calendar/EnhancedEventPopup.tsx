@@ -1,53 +1,61 @@
-'use client'
+'use client';
 
-import React, { useState, useRef, useEffect } from 'react'
-import { useFloating, autoUpdate, offset, flip, shift, arrow, FloatingArrow } from '@floating-ui/react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { format, addDays, startOfDay, endOfDay } from 'date-fns'
-import DatePicker from 'react-datepicker'
-import { cn } from '@/lib/utils'
-import type { Event } from '@/types/calendar'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Badge } from '@/components/ui/badge'
-import { 
-  Calendar, 
-  Clock, 
-  Tag, 
-  Trash2, 
-  Copy, 
-  Edit2, 
-  Check, 
-  X,
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { notify } from '@/components/ui/notify';
+import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
+import { CALENDAR_LAYERS } from '@/lib/z-index';
+import type { Event } from '@/types/calendar';
+import {
+  FloatingArrow,
+  arrow,
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useFloating,
+} from '@floating-ui/react';
+import { addDays, endOfDay, format, startOfDay } from 'date-fns';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Bell,
+  Calendar,
+  Check,
+  Clock,
+  Copy,
+  Edit2,
   MapPin,
-  Users,
   Repeat,
-  Bell
-} from 'lucide-react'
-import { notify } from '@/components/ui/notify'
-import { CALENDAR_LAYERS } from '@/lib/z-index'
+  Tag,
+  Trash2,
+  Users,
+  X,
+} from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import DatePicker from 'react-datepicker';
 
 // TUI Calendar-inspired professional interface
-import "react-datepicker/dist/react-datepicker.css"
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface EnhancedEventPopupProps {
-  event: Event | null
-  isOpen: boolean
-  anchorElement?: HTMLElement | null
-  onClose: () => void
-  onUpdate?: (event: Event) => void
-  onDelete?: (eventId: string) => void
-  onDuplicate?: (event: Event) => void
-  className?: string
+  event: Event | null;
+  isOpen: boolean;
+  anchorElement?: HTMLElement | null;
+  onClose: () => void;
+  onUpdate?: (event: Event) => void;
+  onDelete?: (eventId: string) => void;
+  onDuplicate?: (event: Event) => void;
+  className?: string;
 }
 
 const categoryOptions = [
   { value: 'personal', label: 'Personal', color: 'bg-primary' },
   { value: 'work', label: 'Work', color: 'bg-secondary' },
   { value: 'effort', label: 'Effort', color: 'bg-accent' },
-  { value: 'note', label: 'Note', color: 'bg-muted' }
-]
+  { value: 'note', label: 'Note', color: 'bg-muted' },
+];
 
 export function EnhancedEventPopup({
   event,
@@ -57,11 +65,11 @@ export function EnhancedEventPopup({
   onUpdate,
   onDelete,
   onDuplicate,
-  className
+  className,
 }: EnhancedEventPopupProps) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [editedEvent, setEditedEvent] = useState<Event | null>(null)
-  const arrowRef = useRef<SVGSVGElement>(null)
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedEvent, setEditedEvent] = useState<Event | null>(null);
+  const arrowRef = useRef<SVGSVGElement>(null);
 
   // Professional floating positioning with Floating UI
   const { refs, floatingStyles, context } = useFloating({
@@ -70,7 +78,7 @@ export function EnhancedEventPopup({
     middleware: [
       offset(10),
       flip({
-        fallbackAxisSideDirection: "start",
+        fallbackAxisSideDirection: 'start',
       }),
       shift({ padding: 8 }),
       arrow({
@@ -78,51 +86,51 @@ export function EnhancedEventPopup({
       }),
     ],
     whileElementsMounted: autoUpdate,
-  })
+  });
 
   // Update floating reference when anchor element changes
   useEffect(() => {
     if (anchorElement) {
-      refs.setReference(anchorElement)
+      refs.setReference(anchorElement);
     }
-  }, [anchorElement, refs])
+  }, [anchorElement, refs]);
 
   // Initialize edit form when event changes
   useEffect(() => {
     if (event) {
-      setEditedEvent({ ...event })
-      setIsEditing(false)
+      setEditedEvent({ ...event });
+      setIsEditing(false);
     }
-  }, [event])
+  }, [event]);
 
-  if (!event || !editedEvent) return null
+  if (!event || !editedEvent) return null;
 
   const handleSave = () => {
     if (!editedEvent.title.trim()) {
-      notify.error('Event title is required')
-      return
+      notify.error('Event title is required');
+      return;
     }
 
     if (onUpdate) {
-      onUpdate(editedEvent)
+      onUpdate(editedEvent);
     }
-    setIsEditing(false)
-    onClose()
-    notify.success('Event updated successfully')
-  }
+    setIsEditing(false);
+    onClose();
+    notify.success('Event updated successfully');
+  };
 
   const handleCancel = () => {
-    setEditedEvent({ ...event })
-    setIsEditing(false)
-  }
+    setEditedEvent({ ...event });
+    setIsEditing(false);
+  };
 
   const handleDelete = () => {
     if (onDelete) {
-      onDelete(event.id)
+      onDelete(event.id);
     }
-    onClose()
-    notify.success('Event deleted')
-  }
+    onClose();
+    notify.success('Event deleted');
+  };
 
   const handleDuplicate = () => {
     if (onDuplicate) {
@@ -131,29 +139,29 @@ export function EnhancedEventPopup({
         id: `${event.id}-copy-${Date.now()}`,
         title: `${event.title} (Copy)`,
         startDate: addDays(event.startDate, 1),
-        endDate: addDays(event.endDate, 1)
-      }
-      onDuplicate(duplicatedEvent)
+        endDate: addDays(event.endDate, 1),
+      };
+      onDuplicate(duplicatedEvent);
     }
-    onClose()
-    notify.success('Event duplicated')
-  }
+    onClose();
+    notify.success('Event duplicated');
+  };
 
   const updateField = (field: keyof Event, value: any) => {
-    setEditedEvent(prev => prev ? { ...prev, [field]: value } : null)
-  }
+    setEditedEvent((prev) => (prev ? { ...prev, [field]: value } : null));
+  };
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
           {/* Backdrop */}
-          <div 
+          <div
             className="fixed inset-0 bg-black/20 backdrop-blur-sm"
             style={{ zIndex: CALENDAR_LAYERS.POPOVER - 1 }}
             onClick={onClose}
           />
-          
+
           {/* Professional Popup */}
           <div
             ref={refs.setFloating}
@@ -161,10 +169,7 @@ export function EnhancedEventPopup({
               ...floatingStyles,
               zIndex: CALENDAR_LAYERS.POPOVER,
             }}
-            className={cn(
-              "w-96 max-w-[90vw]",
-              className
-            )}
+            className={cn('w-96 max-w-[90vw]', className)}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: -10 }}
@@ -173,11 +178,7 @@ export function EnhancedEventPopup({
               transition={{ duration: 0.15 }}
               className="bg-card border border-border rounded-lg shadow-lg overflow-hidden"
             >
-              <FloatingArrow
-                ref={arrowRef}
-                context={context}
-                className="fill-card stroke-border"
-              />
+              <FloatingArrow ref={arrowRef} context={context} className="fill-card stroke-border" />
 
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-border bg-muted/30">
@@ -216,12 +217,7 @@ export function EnhancedEventPopup({
                       </Button>
                     </>
                   )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={onClose}
-                    className="h-8 w-8 p-0"
-                  >
+                  <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0">
                     <X className="h-3 w-3" />
                   </Button>
                 </div>
@@ -231,9 +227,7 @@ export function EnhancedEventPopup({
               <div className="p-4 space-y-4 max-h-96 overflow-y-auto">
                 {/* Title */}
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-muted-foreground">
-                    Event Title
-                  </label>
+                  <label className="text-xs font-medium text-muted-foreground">Event Title</label>
                   {isEditing ? (
                     <Input
                       value={editedEvent.title}
@@ -278,9 +272,9 @@ export function EnhancedEventPopup({
                   ) : (
                     <div className="text-sm text-muted-foreground">
                       {format(event.startDate, 'MMM d, yyyy')}
-                      {format(event.startDate, 'yyyy-MM-dd') !== format(event.endDate, 'yyyy-MM-dd') && 
-                        ` - ${format(event.endDate, 'MMM d, yyyy')}`
-                      }
+                      {format(event.startDate, 'yyyy-MM-dd') !==
+                        format(event.endDate, 'yyyy-MM-dd') &&
+                        ` - ${format(event.endDate, 'MMM d, yyyy')}`}
                     </div>
                   )}
                 </div>
@@ -293,31 +287,30 @@ export function EnhancedEventPopup({
                   </label>
                   {isEditing ? (
                     <div className="grid grid-cols-2 gap-2">
-                      {categoryOptions.map(option => (
+                      {categoryOptions.map((option) => (
                         <Button
                           key={option.value}
-                          variant={editedEvent.category === option.value ? "default" : "outline"}
+                          variant={editedEvent.category === option.value ? 'default' : 'outline'}
                           size="sm"
                           onClick={() => updateField('category', option.value)}
                           className="justify-start"
                         >
-                          <div className={cn("w-2 h-2 rounded-full mr-2", option.color)} />
+                          <div className={cn('w-2 h-2 rounded-full mr-2', option.color)} />
                           {option.label}
                         </Button>
                       ))}
                     </div>
                   ) : (
                     <Badge variant="default" className="w-fit">
-                      {categoryOptions.find(cat => cat.value === event.category)?.label || event.category}
+                      {categoryOptions.find((cat) => cat.value === event.category)?.label ||
+                        event.category}
                     </Badge>
                   )}
                 </div>
 
                 {/* Description */}
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-muted-foreground">
-                    Description
-                  </label>
+                  <label className="text-xs font-medium text-muted-foreground">Description</label>
                   {isEditing ? (
                     <Textarea
                       value={editedEvent.description || ''}
@@ -335,9 +328,7 @@ export function EnhancedEventPopup({
                 {/* Advanced Options - Future Enhancement */}
                 {!isEditing && (
                   <div className="space-y-2 pt-2 border-t border-border">
-                    <div className="text-xs font-medium text-muted-foreground">
-                      Quick Actions
-                    </div>
+                    <div className="text-xs font-medium text-muted-foreground">Quick Actions</div>
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" disabled>
                         <MapPin className="h-3 w-3 mr-1" />
@@ -363,18 +354,11 @@ export function EnhancedEventPopup({
               {/* Footer */}
               {isEditing && (
                 <div className="flex items-center justify-end gap-2 p-4 border-t border-border bg-muted/30">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleCancel}
-                  >
+                  <Button variant="outline" size="sm" onClick={handleCancel}>
                     <X className="h-3 w-3 mr-1" />
                     Cancel
                   </Button>
-                  <Button
-                    size="sm"
-                    onClick={handleSave}
-                  >
+                  <Button size="sm" onClick={handleSave}>
                     <Check className="h-3 w-3 mr-1" />
                     Save
                   </Button>
@@ -385,5 +369,5 @@ export function EnhancedEventPopup({
         </>
       )}
     </AnimatePresence>
-  )
+  );
 }

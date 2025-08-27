@@ -1,0 +1,34 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔒 Running governance quality gates..."
+
+# 1. Token validation
+echo "🎨 Validating design tokens..."
+npm run tokens:validate
+
+# 2. Foundation protection
+echo "🏗️ Validating foundation structure..."
+npm run ci:guard
+
+# 3. Accessibility compliance
+echo "♿ Running accessibility compliance check..."
+node scripts/accessibility-check.js
+
+# 4. Performance validation
+echo "⚡ Validating performance budgets..."
+node scripts/performance-check.js
+
+# 5. i18n completeness
+echo "🌍 Validating internationalization..."
+node scripts/i18n-check.js
+
+# 6. Motion system compliance
+echo "🎬 Validating motion system..."
+node scripts/motion-check.js
+
+# 7. Code quality check
+echo "✨ Running code quality validation..."
+npm run lint
+
+echo "✅ All governance quality gates passed!"

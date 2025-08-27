@@ -1,13 +1,13 @@
-"use client"
+'use client';
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface PerformanceMetrics {
-  fps: number
-  renderTime: number
-  memoryUsage: number
-  eventCount: number
-  lastUpdate: number
+  fps: number;
+  renderTime: number;
+  memoryUsage: number;
+  eventCount: number;
+  lastUpdate: number;
 }
 
 export function usePerformanceMonitor(eventCount: number) {
@@ -17,27 +17,27 @@ export function usePerformanceMonitor(eventCount: number) {
     memoryUsage: 0,
     eventCount: 0,
     lastUpdate: Date.now(),
-  })
+  });
 
-  const frameCount = useRef(0)
-  const lastTime = useRef(performance.now())
-  const renderStartTime = useRef(0)
+  const frameCount = useRef(0);
+  const lastTime = useRef(performance.now());
+  const renderStartTime = useRef(0);
 
   useEffect(() => {
-    let animationId: number
+    let animationId: number;
 
     const measurePerformance = () => {
-      const now = performance.now()
-      frameCount.current++
+      const now = performance.now();
+      frameCount.current++;
 
       // Calculate FPS every second
       if (now - lastTime.current >= 1000) {
-        const fps = Math.round((frameCount.current * 1000) / (now - lastTime.current))
+        const fps = Math.round((frameCount.current * 1000) / (now - lastTime.current));
 
         // Get memory usage if available
         const memoryUsage = (performance as any).memory
           ? Math.round((performance as any).memory.usedJSHeapSize / 1024 / 1024)
-          : 0
+          : 0;
 
         setMetrics((prev) => ({
           ...prev,
@@ -45,36 +45,36 @@ export function usePerformanceMonitor(eventCount: number) {
           memoryUsage,
           eventCount,
           lastUpdate: Date.now(),
-        }))
+        }));
 
-        frameCount.current = 0
-        lastTime.current = now
+        frameCount.current = 0;
+        lastTime.current = now;
       }
 
-      animationId = requestAnimationFrame(measurePerformance)
-    }
+      animationId = requestAnimationFrame(measurePerformance);
+    };
 
-    measurePerformance()
+    measurePerformance();
 
     return () => {
       if (animationId) {
-        cancelAnimationFrame(animationId)
+        cancelAnimationFrame(animationId);
       }
-    }
-  }, [eventCount])
+    };
+  }, [eventCount]);
 
   const startRenderMeasurement = useCallback(() => {
-    renderStartTime.current = performance.now()
-  }, [])
+    renderStartTime.current = performance.now();
+  }, []);
 
   const endRenderMeasurement = useCallback(() => {
-    const renderTime = performance.now() - renderStartTime.current
-    setMetrics((prev) => ({ ...prev, renderTime }))
-  }, [])
+    const renderTime = performance.now() - renderStartTime.current;
+    setMetrics((prev) => ({ ...prev, renderTime }));
+  }, []);
 
   return {
     metrics,
     startRenderMeasurement,
     endRenderMeasurement,
-  }
+  };
 }

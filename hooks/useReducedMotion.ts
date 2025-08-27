@@ -66,7 +66,7 @@ export function getAnimationDuration(
 export function getTransition(
   property: string,
   duration: number,
-  easing: string = 'ease',
+  easing: string,
   prefersReducedMotion: boolean
 ): string {
   if (prefersReducedMotion) {

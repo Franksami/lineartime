@@ -1,47 +1,47 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { cn } from '@/lib/utils';
+import {
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Event as EventIcon,
+  LocationOn as LocationIcon,
+  People as PeopleIcon,
+  Schedule as ScheduleIcon,
+  Settings as SettingsIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
+} from '@mui/icons-material';
+import {
+  Avatar,
+  Badge,
+  Box,
+  Card,
+  CardContent,
+  Chip,
+  Divider,
+  Fab,
+  IconButton,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  Paper,
+  ToggleButton,
+  ToggleButtonGroup,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { PickersDay, type PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-import {
-  Box,
-  Paper,
-  Typography,
-  Chip,
-  IconButton,
-  ToggleButton,
-  ToggleButtonGroup,
-  Card,
-  CardContent,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  Divider,
-  Badge,
-  Fab,
-  Tooltip,
-  Avatar,
-} from '@mui/material';
-import {
-  Add as AddIcon,
-  Delete as DeleteIcon,
-  Settings as SettingsIcon,
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
-  Event as EventIcon,
-  Schedule as ScheduleIcon,
-  LocationOn as LocationIcon,
-  People as PeopleIcon,
-} from '@mui/icons-material';
-import { CalendarViewProps, CalendarEvent } from './providers/types';
-import { cn } from '@/lib/utils';
+import React, { useState, useCallback, useMemo } from 'react';
+import type { CalendarEvent, CalendarViewProps } from './providers/types';
 
 interface MUIXCalendarViewProps extends CalendarViewProps {
   pickerVariant?: 'calendar' | 'date' | 'dateTime' | 'range' | 'static';
@@ -56,68 +56,71 @@ interface CustomDayProps extends PickersDayProps<Date> {
   dayEvents?: CalendarEvent[];
 }
 
-const CustomPickersDay = React.forwardRef<HTMLButtonElement, CustomDayProps>(
-  (props, ref) => {
-    const { dayEvents = [], day, ...other } = props;
-    
-    const getPriorityColor = (priority?: string): string => {
-      switch (priority) {
-        case 'critical': return '#d32f2f';
-        case 'high': return '#f57c00';
-        case 'medium': return '#fbc02d';
-        case 'low': return '#388e3c';
-        default: return '#1976d2';
-      }
-    };
+const CustomPickersDay = React.forwardRef<HTMLButtonElement, CustomDayProps>((props, ref) => {
+  const { dayEvents = [], day, ...other } = props;
 
-    return (
-      <Box sx={{ position: 'relative' }}>
-        <PickersDay {...other} ref={ref} day={day} />
-        {dayEvents.length > 0 && (
-          <Box
-            sx={{
-              position: 'absolute',
-              bottom: 2,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              display: 'flex',
-              gap: 0.5,
-            }}
-          >
-            {dayEvents.slice(0, 3).map((event, index) => (
-              <Box
-                key={index}
-                sx={{
-                  width: 4,
-                  height: 4,
-                  borderRadius: '50%',
-                  backgroundColor: getPriorityColor(event.priority),
-                }}
-              />
-            ))}
-            {dayEvents.length > 3 && (
-              <Box
-                sx={{
-                  width: 4,
-                  height: 4,
-                  borderRadius: '50%',
-                  backgroundColor: 'grey.500',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Typography variant="caption" sx={{ fontSize: 6, color: 'white' }}>
-                  +
-                </Typography>
-              </Box>
-            )}
-          </Box>
-        )}
-      </Box>
-    );
-  }
-);
+  const getPriorityColor = (priority?: string): string => {
+    switch (priority) {
+      case 'critical':
+        return '#d32f2f';
+      case 'high':
+        return '#f57c00';
+      case 'medium':
+        return '#fbc02d';
+      case 'low':
+        return '#388e3c';
+      default:
+        return '#1976d2';
+    }
+  };
+
+  return (
+    <Box sx={{ position: 'relative' }}>
+      <PickersDay {...other} ref={ref} day={day} />
+      {dayEvents.length > 0 && (
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: 2,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: 0.5,
+          }}
+        >
+          {dayEvents.slice(0, 3).map((event, index) => (
+            <Box
+              key={index}
+              sx={{
+                width: 4,
+                height: 4,
+                borderRadius: '50%',
+                backgroundColor: getPriorityColor(event.priority),
+              }}
+            />
+          ))}
+          {dayEvents.length > 3 && (
+            <Box
+              sx={{
+                width: 4,
+                height: 4,
+                borderRadius: '50%',
+                backgroundColor: 'grey.500',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant="caption" sx={{ fontSize: 6, color: 'white' }}>
+                +
+              </Typography>
+            </Box>
+          )}
+        </Box>
+      )}
+    </Box>
+  );
+});
 CustomPickersDay.displayName = 'CustomPickersDay';
 
 const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
@@ -144,60 +147,63 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
   // Process events by date
   const eventsByDate = useMemo(() => {
     const eventMap = new Map<string, CalendarEvent[]>();
-    
-    events.forEach(event => {
+
+    events.forEach((event) => {
       const dateKey = event.start.toISOString().split('T')[0];
       if (!eventMap.has(dateKey)) {
         eventMap.set(dateKey, []);
       }
-      eventMap.get(dateKey)!.push(event);
+      eventMap.get(dateKey)?.push(event);
     });
-    
+
     return eventMap;
   }, [events]);
 
   // Handle date selection
-  const handleDateChange = useCallback((date: Date | null) => {
-    if (date) {
-      setCurrentDate(date);
-      onDateChange(date);
-    }
-  }, [onDateChange]);
+  const handleDateChange = useCallback(
+    (date: Date | null) => {
+      if (date) {
+        setCurrentDate(date);
+        onDateChange(date);
+      }
+    },
+    [onDateChange]
+  );
 
   // Handle event creation
-  const handleCreateEvent = useCallback(async (date?: Date) => {
-    try {
-      const eventDate = date || currentDate;
-      const start = new Date(eventDate);
-      const end = new Date(eventDate);
-      
-      start.setHours(9, 0, 0, 0);
-      end.setHours(10, 0, 0, 0);
-      
-      await onEventCreate({
-        title: 'New Event',
-        start,
-        end,
-        allDay: false,
-      });
-    } catch (error) {
-      console.error('Failed to create event:', error);
-    }
-  }, [currentDate, onEventCreate]);
+  const handleCreateEvent = useCallback(
+    async (date?: Date) => {
+      try {
+        const eventDate = date || currentDate;
+        const start = new Date(eventDate);
+        const end = new Date(eventDate);
+
+        start.setHours(9, 0, 0, 0);
+        end.setHours(10, 0, 0, 0);
+
+        await onEventCreate({
+          title: 'New Event',
+          start,
+          end,
+          allDay: false,
+        });
+      } catch (error) {
+        console.error('Failed to create event:', error);
+      }
+    },
+    [currentDate, onEventCreate]
+  );
 
   // Custom day renderer
-  const renderDay = useCallback((day: Date, selectedDays: Date[], pickersDayProps: PickersDayProps<Date>) => {
-    const dateKey = day.toISOString().split('T')[0];
-    const dayEvents = eventsByDate.get(dateKey) || [];
+  const renderDay = useCallback(
+    (day: Date, _selectedDays: Date[], pickersDayProps: PickersDayProps<Date>) => {
+      const dateKey = day.toISOString().split('T')[0];
+      const dayEvents = eventsByDate.get(dateKey) || [];
 
-    return (
-      <CustomPickersDay
-        {...pickersDayProps}
-        dayEvents={dayEvents}
-        day={day}
-      />
-    );
-  }, [eventsByDate]);
+      return <CustomPickersDay {...pickersDayProps} dayEvents={dayEvents} day={day} />;
+    },
+    [eventsByDate]
+  );
 
   // Get events for selected date
   const selectedDateEvents = useMemo(() => {
@@ -207,11 +213,16 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
 
   const getPriorityColor = useCallback((priority?: string) => {
     switch (priority) {
-      case 'critical': return 'error';
-      case 'high': return 'warning';
-      case 'medium': return 'info';
-      case 'low': return 'success';
-      default: return 'primary';
+      case 'critical':
+        return 'error';
+      case 'high':
+        return 'warning';
+      case 'medium':
+        return 'info';
+      case 'low':
+        return 'success';
+      default:
+        return 'primary';
     }
   }, []);
 
@@ -234,7 +245,7 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
             sx={{ width: '100%' }}
           />
         );
-      
+
       case 'date':
         return (
           <DatePicker
@@ -248,7 +259,7 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
             }}
           />
         );
-      
+
       case 'dateTime':
         return (
           <DateTimePicker
@@ -262,7 +273,7 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
             }}
           />
         );
-      
+
       case 'range':
         return (
           <DateRangePicker
@@ -272,7 +283,7 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
             disabled={loading}
           />
         );
-      
+
       case 'static':
         return (
           <StaticDatePicker
@@ -281,7 +292,7 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
             renderDay={renderDay}
           />
         );
-      
+
       default:
         return (
           <DateCalendar
@@ -345,13 +356,9 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
                 <Typography variant="h5" component="h2">
                   MUI X Date Pickers
                 </Typography>
-                <Chip
-                  label={events.length}
-                  color="primary"
-                  size="small"
-                />
+                <Chip label={events.length} color="primary" size="small" />
               </Box>
-              
+
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <ToggleButtonGroup
                   value={currentVariant}
@@ -365,7 +372,7 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
                   <ToggleButton value="dateTime">DateTime</ToggleButton>
                   <ToggleButton value="static">Static</ToggleButton>
                 </ToggleButtonGroup>
-                
+
                 <IconButton
                   onClick={() => setShowEvents(!showEvents)}
                   disabled={loading}
@@ -383,7 +390,7 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
           <Box sx={{ flex: showEvents ? 2 : 1 }}>
             <Paper sx={{ p: 2 }}>
               {renderCalendarVariant()}
-              
+
               {/* Today Button */}
               <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
                 <Fab
@@ -412,16 +419,21 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
             <Box sx={{ flex: 1, minWidth: 320 }}>
               <Card>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                  >
                     <EventIcon />
-                    Events for {currentDate.toLocaleDateString('en-US', {
+                    Events for{' '}
+                    {currentDate.toLocaleDateString('en-US', {
                       weekday: 'long',
                       month: 'long',
                       day: 'numeric',
                     })}
                     <Chip size="small" label={selectedDateEvents.length} color="primary" />
                   </Typography>
-                  
+
                   {selectedDateEvents.length === 0 ? (
                     <Box sx={{ textAlign: 'center', py: 4, color: 'text.secondary' }}>
                       <EventIcon sx={{ fontSize: 48, opacity: 0.5, mb: 2 }} />
@@ -443,7 +455,7 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
                           <ListItem sx={{ px: 0 }}>
                             <Avatar
                               sx={{
-                                backgroundColor: getPriorityColor(event.priority) + '.main',
+                                backgroundColor: `${getPriorityColor(event.priority)}.main`,
                                 width: 32,
                                 height: 32,
                                 mr: 2,
@@ -454,9 +466,7 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
                             <ListItemText
                               primary={
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                  <Typography variant="subtitle2">
-                                    {event.title}
-                                  </Typography>
+                                  <Typography variant="subtitle2">{event.title}</Typography>
                                   {event.priority && (
                                     <Chip
                                       label={event.priority}
@@ -474,35 +484,42 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
                                       {event.description}
                                     </Typography>
                                   )}
-                                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: 2,
+                                      flexWrap: 'wrap',
+                                    }}
+                                  >
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                       <ScheduleIcon fontSize="small" />
                                       <Typography variant="caption">
-                                        {event.allDay ? (
-                                          'All day'
-                                        ) : (
-                                          `${event.start.toLocaleTimeString('en-US', { 
-                                            hour: 'numeric', 
-                                            minute: '2-digit' 
-                                          })} - ${event.end.toLocaleTimeString('en-US', { 
-                                            hour: 'numeric', 
-                                            minute: '2-digit' 
-                                          })}`
-                                        )}
+                                        {event.allDay
+                                          ? 'All day'
+                                          : `${event.start.toLocaleTimeString('en-US', {
+                                              hour: 'numeric',
+                                              minute: '2-digit',
+                                            })} - ${event.end.toLocaleTimeString('en-US', {
+                                              hour: 'numeric',
+                                              minute: '2-digit',
+                                            })}`}
                                       </Typography>
                                     </Box>
-                                    
+
                                     {event.location && (
                                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                         <LocationIcon fontSize="small" />
                                         <Typography variant="caption">{event.location}</Typography>
                                       </Box>
                                     )}
-                                    
+
                                     {event.attendees && event.attendees.length > 0 && (
                                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                                         <PeopleIcon fontSize="small" />
-                                        <Typography variant="caption">{event.attendees.length}</Typography>
+                                        <Typography variant="caption">
+                                          {event.attendees.length}
+                                        </Typography>
                                       </Box>
                                     )}
                                   </Box>
@@ -528,7 +545,7 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
                   )}
                 </CardContent>
               </Card>
-              
+
               {/* Statistics Card */}
               <Card sx={{ mt: 2 }}>
                 <CardContent>
@@ -536,31 +553,56 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
                     Statistics
                   </Typography>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
                       <Typography variant="body2" color="text.secondary">
                         Total Events
                       </Typography>
                       <Chip label={events.length} size="small" color="info" />
                     </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
                       <Typography variant="body2" color="text.secondary">
                         High Priority
                       </Typography>
                       <Chip
-                        label={events.filter(e => e.priority === 'high' || e.priority === 'critical').length}
+                        label={
+                          events.filter((e) => e.priority === 'high' || e.priority === 'critical')
+                            .length
+                        }
                         size="small"
                         color="warning"
                       />
                     </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
                       <Typography variant="body2" color="text.secondary">
                         This Month
                       </Typography>
                       <Chip
-                        label={events.filter(event => {
-                          return event.start.getMonth() === currentDate.getMonth() &&
-                                 event.start.getFullYear() === currentDate.getFullYear();
-                        }).length}
+                        label={
+                          events.filter((event) => {
+                            return (
+                              event.start.getMonth() === currentDate.getMonth() &&
+                              event.start.getFullYear() === currentDate.getFullYear()
+                            );
+                          }).length
+                        }
                         size="small"
                         color="success"
                       />

@@ -1,37 +1,38 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  ResponsiveContainer, 
-  LineChart, 
-  Line, 
-  AreaChart, 
-  Area, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend,
-  PieChart,
-  Pie,
-  Cell
-} from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Activity, 
-  Clock, 
-  Users, 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Activity,
   Calendar,
+  Clock,
+  RefreshCw,
+  TrendingDown,
+  TrendingUp,
+  Users,
   Zap,
-  RefreshCw
 } from 'lucide-react';
+import type React from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 // Mock data for real-time analytics
 const generateSyncData = () => {
@@ -45,11 +46,11 @@ const generateSyncData = () => {
       microsoft: Math.floor(Math.random() * 40) + 40,
       apple: Math.floor(Math.random() * 30) + 30,
       caldav: Math.floor(Math.random() * 20) + 10,
-      total: 0
+      total: 0,
     };
-  }).map(item => ({
+  }).map((item) => ({
     ...item,
-    total: item.google + item.microsoft + item.apple + item.caldav
+    total: item.google + item.microsoft + item.apple + item.caldav,
   }));
 };
 
@@ -62,7 +63,7 @@ const generatePerformanceData = () => {
       responseTime: Math.floor(Math.random() * 200) + 100,
       successRate: Math.random() * 10 + 90,
       errorRate: Math.random() * 5,
-      throughput: Math.floor(Math.random() * 1000) + 500
+      throughput: Math.floor(Math.random() * 1000) + 500,
     };
   });
 };
@@ -71,7 +72,7 @@ const generateProviderDistribution = () => [
   { name: 'Google Calendar', value: 1247, fill: '#4285f4' },
   { name: 'Microsoft Outlook', value: 892, fill: '#00a1f1' },
   { name: 'Apple CalDAV', value: 634, fill: '#007aff' },
-  { name: 'Generic CalDAV', value: 156, fill: '#6b7280' }
+  { name: 'Generic CalDAV', value: 156, fill: '#6b7280' },
 ];
 
 interface AnalyticsMetrics {
@@ -92,17 +93,19 @@ const IntegrationAnalyticsCharts: React.FC = () => {
 
   const metrics = useMemo<AnalyticsMetrics>(() => {
     const totalSyncs = syncData.reduce((sum, item) => sum + item.total, 0);
-    const avgResponseTime = performanceData.reduce((sum, item) => sum + item.responseTime, 0) / performanceData.length;
-    const successRate = performanceData.reduce((sum, item) => sum + item.successRate, 0) / performanceData.length;
+    const avgResponseTime =
+      performanceData.reduce((sum, item) => sum + item.responseTime, 0) / performanceData.length;
+    const successRate =
+      performanceData.reduce((sum, item) => sum + item.successRate, 0) / performanceData.length;
     const totalEvents = providerDistribution.reduce((sum, item) => sum + item.value, 0);
-    
+
     return {
       totalSyncs,
       successRate: Math.round(successRate * 10) / 10,
       avgResponseTime: Math.round(avgResponseTime),
       totalEvents,
       activeSessions: Math.floor(Math.random() * 50) + 200,
-      growthRate: Math.random() * 20 + 5
+      growthRate: Math.random() * 20 + 5,
     };
   }, [syncData, performanceData, providerDistribution]);
 
@@ -119,7 +122,7 @@ const IntegrationAnalyticsCharts: React.FC = () => {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setSyncData(generateSyncData());
     setPerformanceData(generatePerformanceData());
     setProviderDistribution(generateProviderDistribution());
@@ -166,8 +169,8 @@ const IntegrationAnalyticsCharts: React.FC = () => {
               <TabsTrigger value="30d">30D</TabsTrigger>
             </TabsList>
           </Tabs>
-          <Button 
-            onClick={handleRefresh} 
+          <Button
+            onClick={handleRefresh}
             disabled={isRefreshing}
             className="flex items-center gap-2"
             variant="outline"
@@ -189,8 +192,7 @@ const IntegrationAnalyticsCharts: React.FC = () => {
                 <p className="text-lg font-semibold text-foreground">{metrics.totalSyncs}</p>
               </div>
               <Badge variant="secondary" className="text-xs">
-                <TrendingUp className="w-3 h-3 mr-1" />
-                +{metrics.growthRate.toFixed(1)}%
+                <TrendingUp className="w-3 h-3 mr-1" />+{metrics.growthRate.toFixed(1)}%
               </Badge>
             </div>
           </CardContent>
@@ -232,7 +234,9 @@ const IntegrationAnalyticsCharts: React.FC = () => {
               <Calendar className="w-4 h-4 text-purple-500" />
               <div className="flex-1">
                 <p className="text-xs text-muted-foreground">Total Events</p>
-                <p className="text-lg font-semibold text-foreground">{metrics.totalEvents.toLocaleString()}</p>
+                <p className="text-lg font-semibold text-foreground">
+                  {metrics.totalEvents.toLocaleString()}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -275,18 +279,42 @@ const IntegrationAnalyticsCharts: React.FC = () => {
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={syncData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                <XAxis 
-                  dataKey="time" 
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                />
+                <XAxis dataKey="time" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                 <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend />
-                <Area type="monotone" dataKey="google" stackId="1" stroke="#4285f4" fill="#4285f4" fillOpacity={0.6} />
-                <Area type="monotone" dataKey="microsoft" stackId="1" stroke="#00a1f1" fill="#00a1f1" fillOpacity={0.6} />
-                <Area type="monotone" dataKey="apple" stackId="1" stroke="#007aff" fill="#007aff" fillOpacity={0.6} />
-                <Area type="monotone" dataKey="caldav" stackId="1" stroke="#6b7280" fill="#6b7280" fillOpacity={0.6} />
+                <Area
+                  type="monotone"
+                  dataKey="google"
+                  stackId="1"
+                  stroke="#4285f4"
+                  fill="#4285f4"
+                  fillOpacity={0.6}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="microsoft"
+                  stackId="1"
+                  stroke="#00a1f1"
+                  fill="#00a1f1"
+                  fillOpacity={0.6}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="apple"
+                  stackId="1"
+                  stroke="#007aff"
+                  fill="#007aff"
+                  fillOpacity={0.6}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="caldav"
+                  stackId="1"
+                  stroke="#6b7280"
+                  fill="#6b7280"
+                  fillOpacity={0.6}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
@@ -331,29 +359,22 @@ const IntegrationAnalyticsCharts: React.FC = () => {
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={performanceData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                <XAxis 
-                  dataKey="date" 
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                />
+                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                 <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                <Tooltip 
-                  content={<CustomTooltip />}
-                  formatter={formatTooltip}
-                />
+                <Tooltip content={<CustomTooltip />} formatter={formatTooltip} />
                 <Legend />
-                <Line 
-                  type="monotone" 
-                  dataKey="responseTime" 
-                  stroke="#f59e0b" 
+                <Line
+                  type="monotone"
+                  dataKey="responseTime"
+                  stroke="#f59e0b"
                   strokeWidth={2}
                   dot={{ r: 3 }}
                   activeDot={{ r: 5 }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="successRate" 
-                  stroke="#10b981" 
+                <Line
+                  type="monotone"
+                  dataKey="successRate"
+                  stroke="#10b981"
                   strokeWidth={2}
                   dot={{ r: 3 }}
                   activeDot={{ r: 5 }}
@@ -373,25 +394,14 @@ const IntegrationAnalyticsCharts: React.FC = () => {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={performanceData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                <XAxis 
-                  dataKey="date" 
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                />
+                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                 <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                <Tooltip 
-                  content={<CustomTooltip />}
-                  formatter={formatTooltip}
-                />
-                <Bar 
-                  dataKey="throughput" 
-                  fill="url(#throughputGradient)" 
-                  radius={[4, 4, 0, 0]}
-                />
+                <Tooltip content={<CustomTooltip />} formatter={formatTooltip} />
+                <Bar dataKey="throughput" fill="url(#throughputGradient)" radius={[4, 4, 0, 0]} />
                 <defs>
                   <linearGradient id="throughputGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.3} />
                   </linearGradient>
                 </defs>
               </BarChart>

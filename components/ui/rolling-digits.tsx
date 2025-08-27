@@ -1,37 +1,33 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
+import * as React from 'react';
 
 interface RollingDigitsProps {
-  value: number
-  className?: string
-  'aria-label'?: string
+  value: number;
+  className?: string;
+  'aria-label'?: string;
 }
 
 export function RollingDigits({ value, className, 'aria-label': ariaLabel }: RollingDigitsProps) {
-  const [digits, setDigits] = React.useState<string[]>(String(value).split(''))
+  const [digits, setDigits] = React.useState<string[]>(String(value).split(''));
 
   React.useEffect(() => {
-    setDigits(String(value).split(''))
-  }, [value])
+    setDigits(String(value).split(''));
+  }, [value]);
 
   return (
     <>
       <span className={className} aria-label={ariaLabel || `${value}`}>
         {digits.map((digit, idx) => (
-          <span 
-            key={`${idx}-${digit}`} 
-            className="rollingDigit inline-block" 
-            aria-hidden="true"
-          >
-            <span 
+          <span key={`${idx}-${digit}`} className="rollingDigit inline-block" aria-hidden="true">
+            <span
               className="inline-block"
-              style={{ 
+              style={{
                 animationDelay: `${idx * 0.06}s`,
                 transform: 'translateY(10%)',
                 opacity: 0,
-                animation: 'rollIn 0.18s ease forwards'
+                animation: 'rollIn 0.18s ease forwards',
               }}
             >
               {digit}
@@ -59,5 +55,5 @@ export function RollingDigits({ value, className, 'aria-label': ariaLabel }: Rol
         }
       `}</style>
     </>
-  )
+  );
 }

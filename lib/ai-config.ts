@@ -1,18 +1,18 @@
-import { anthropic } from "@ai-sdk/anthropic"
-import { calendarTools } from "./ai/tools/calendar"
+import { anthropic } from '@ai-sdk/anthropic';
+import { calendarTools } from './ai/tools/calendar';
 
 // Default model configurations - Using Anthropic Claude
 export const AI_MODELS = {
-  CHAT: anthropic("claude-3-5-sonnet-20241022"), // Use Claude for chat interactions
-  PARSING: anthropic("claude-3-haiku-20240307"), // Use Claude Haiku for fast parsing
-  SCHEDULING: anthropic("claude-3-5-sonnet-20241022"), // Use Claude for complex scheduling
-} as const
+  CHAT: anthropic('claude-3-5-sonnet-20241022'), // Use Claude for chat interactions
+  PARSING: anthropic('claude-3-haiku-20240307'), // Use Claude Haiku for fast parsing
+  SCHEDULING: anthropic('claude-3-5-sonnet-20241022'), // Use Claude for complex scheduling
+} as const;
 
 // AI Tools configuration for Vercel AI SDK v5
 export const AI_TOOLS = {
   // Calendar-specific tools
   ...calendarTools,
-} as const
+} as const;
 
 // AI prompt templates
 export const AI_PROMPTS = {
@@ -53,4 +53,4 @@ Current calendar context: {context}
 User message: {message}
 
 Provide a helpful response:`,
-} as const
+} as const;

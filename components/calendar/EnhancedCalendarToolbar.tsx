@@ -1,43 +1,56 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Calendar, 
-  ChevronLeft, 
-  ChevronRight, 
-  Plus, 
-  Search, 
-  Filter, 
-  Settings, 
-  Sun, 
-  Moon, 
-  Wifi, 
-  WifiOff, 
-  RefreshCw, 
-  Grid3X3, 
-  List, 
-  Clock,
-  Menu,
-  Keyboard,
-  MoreHorizontal,
-  Layers
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
-import { useCalendarProvider } from './providers/CalendarProvider';
-import { CalendarLibrary, CalendarView, CalendarTheme } from './providers/types';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Filter,
+  Grid3X3,
+  Keyboard,
+  Layers,
+  List,
+  Menu,
+  Moon,
+  MoreHorizontal,
+  Plus,
+  RefreshCw,
+  Search,
+  Settings,
+  Sun,
+  Wifi,
+  WifiOff,
+} from 'lucide-react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
+import { useCalendarProvider } from './providers/CalendarProvider';
+import { type CalendarLibrary, CalendarTheme, type CalendarView } from './providers/types';
 
 interface EnhancedCalendarToolbarProps {
   className?: string;
@@ -90,8 +103,8 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+  const [_showFilters, _setShowFilters] = useState(false);
+  const [_showSettings, _setShowSettings] = useState(false);
   const [showQuickEvent, setShowQuickEvent] = useState(false);
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -104,7 +117,7 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
     priority: 'medium',
     category: '',
   });
-  const [filters, setFilters] = useState<FilterOptions>({
+  const [_filters, _setFilters] = useState<FilterOptions>({
     categories: [],
     dateRange: 'all',
     priority: 'all',
@@ -162,7 +175,7 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
         }
       }
     };
-    
+
     window.addEventListener('keydown', handleKeyboard);
     return () => window.removeEventListener('keydown', handleKeyboard);
   }, [enableKeyboardShortcuts, navigateToDate, switchView]);
@@ -204,9 +217,9 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
     try {
       const [year, month, day] = quickEventData.date.split('-').map(Number);
       const [hour, minute] = quickEventData.time.split(':').map(Number);
-      
+
       const start = new Date(year, month - 1, day, hour, minute);
-      const end = new Date(start.getTime() + parseInt(quickEventData.duration) * 60 * 1000);
+      const end = new Date(start.getTime() + Number.parseInt(quickEventData.duration) * 60 * 1000);
 
       await onEventCreate({
         title: quickEventData.title,
@@ -247,14 +260,14 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
   };
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { 
-      month: 'long', 
+    return date.toLocaleDateString('en-US', {
+      month: 'long',
       year: 'numeric',
       ...(currentView === 'day' && { day: 'numeric' }),
     });
   };
 
-  const getLibraryDisplayName = (library: CalendarLibrary): string => {
+  const _getLibraryDisplayName = (library: CalendarLibrary): string => {
     const names: Record<CalendarLibrary, string> = {
       linear: 'Linear Calendar',
       fullcalendar: 'FullCalendar Pro',
@@ -292,7 +305,12 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
 
   if (isMobile) {
     return (
-      <div className={cn('w-full bg-background/80 backdrop-blur-xl border-b border-border/50 sticky top-0 z-50', className)}>
+      <div
+        className={cn(
+          'w-full bg-background/80 backdrop-blur-xl border-b border-border/50 sticky top-0 z-50',
+          className
+        )}
+      >
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-2">
             <Button
@@ -313,11 +331,9 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
-            <h2 className="text-sm font-semibold text-foreground">
-              {formatDate(selectedDate)}
-            </h2>
+            <h2 className="text-sm font-semibold text-foreground">{formatDate(selectedDate)}</h2>
           </div>
-          
+
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
@@ -341,10 +357,13 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>View</Label>
-                  <Select value={currentView} onValueChange={(value) => switchView(value as CalendarView)}>
+                  <Select
+                    value={currentView}
+                    onValueChange={(value) => switchView(value as CalendarView)}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -357,11 +376,14 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 {showLibrarySelector && (
                   <div className="space-y-2">
                     <Label>Calendar Library</Label>
-                    <Select value={selectedLibrary} onValueChange={(value) => switchLibrary(value as CalendarLibrary)}>
+                    <Select
+                      value={selectedLibrary}
+                      onValueChange={(value) => switchLibrary(value as CalendarLibrary)}
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -376,16 +398,20 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                     </Select>
                   </div>
                 )}
-                
+
                 <div className="flex items-center justify-between">
                   <Label>Dark Mode</Label>
-                  <Switch 
-                    checked={theme === 'dark'} 
-                    onCheckedChange={() => switchTheme(theme === 'dark' ? 'light' : 'dark')} 
+                  <Switch
+                    checked={theme === 'dark'}
+                    onCheckedChange={() => switchTheme(theme === 'dark' ? 'light' : 'dark')}
                   />
                 </div>
-                
-                <Button onClick={() => setShowQuickEvent(true)} className="w-full" disabled={loading}>
+
+                <Button
+                  onClick={() => setShowQuickEvent(true)}
+                  className="w-full"
+                  disabled={loading}
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   Quick Event
                 </Button>
@@ -399,7 +425,7 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
 
   return (
     <TooltipProvider>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className={cn(
@@ -408,7 +434,12 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
           className
         )}
       >
-        <div className={cn('flex items-center justify-between gap-4', compactMode ? 'px-4 py-2' : 'p-4')}>
+        <div
+          className={cn(
+            'flex items-center justify-between gap-4',
+            compactMode ? 'px-4 py-2' : 'p-4'
+          )}
+        >
           {/* Left Section - Navigation */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
@@ -426,7 +457,7 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                 </TooltipTrigger>
                 <TooltipContent>Previous</TooltipContent>
               </Tooltip>
-              
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -441,7 +472,7 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                 </TooltipTrigger>
                 <TooltipContent>Next</TooltipContent>
               </Tooltip>
-              
+
               <Button
                 variant="outline"
                 size="sm"
@@ -452,10 +483,10 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                 Today
               </Button>
             </div>
-            
+
             {!compactMode && <Separator orientation="vertical" className="h-6" />}
-            
-            <motion.h1 
+
+            <motion.h1
               key={selectedDate.toISOString()}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -463,7 +494,7 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
             >
               {formatDate(selectedDate)}
             </motion.h1>
-            
+
             {events.length > 0 && (
               <Badge variant="secondary" className="ml-2">
                 {events.length} events
@@ -474,11 +505,13 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
           {/* Center Section - Search */}
           {!compactMode && (
             <div className="flex-1 max-w-md mx-4">
-              <motion.div 
+              <motion.div
                 className="relative"
-                animate={{ 
+                animate={{
                   scale: isSearchFocused ? 1.02 : 1,
-                  boxShadow: isSearchFocused ? '0 0 0 2px hsl(var(--primary))' : '0 0 0 0px transparent',
+                  boxShadow: isSearchFocused
+                    ? '0 0 0 2px hsl(var(--primary))'
+                    : '0 0 0 0px transparent',
                 }}
                 transition={{ duration: 0.2 }}
               >
@@ -507,7 +540,7 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                   <Tooltip key={viewOption}>
                     <TooltipTrigger asChild>
                       <Button
-                        variant={currentView === viewOption ? "default" : "ghost"}
+                        variant={currentView === viewOption ? 'default' : 'ghost'}
                         size="sm"
                         onClick={() => switchView(viewOption)}
                         className="h-8 w-8 p-0 transition-all duration-200"
@@ -516,7 +549,9 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                         <Icon className="h-4 w-4" />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>{viewOption.charAt(0).toUpperCase() + viewOption.slice(1)}</TooltipContent>
+                    <TooltipContent>
+                      {viewOption.charAt(0).toUpperCase() + viewOption.slice(1)}
+                    </TooltipContent>
                   </Tooltip>
                 );
               })}
@@ -526,7 +561,10 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
 
             {/* Library Selector */}
             {showLibrarySelector && (
-              <Select value={selectedLibrary} onValueChange={(value) => switchLibrary(value as CalendarLibrary)}>
+              <Select
+                value={selectedLibrary}
+                onValueChange={(value) => switchLibrary(value as CalendarLibrary)}
+              >
                 <SelectTrigger className="w-40 bg-background/50 border-border/50">
                   <SelectValue placeholder="Select library" />
                 </SelectTrigger>
@@ -569,7 +607,9 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                       <Input
                         id="title"
                         value={quickEventData.title}
-                        onChange={(e) => setQuickEventData(prev => ({ ...prev, title: e.target.value }))}
+                        onChange={(e) =>
+                          setQuickEventData((prev) => ({ ...prev, title: e.target.value }))
+                        }
                         placeholder="Event title"
                       />
                     </div>
@@ -578,7 +618,9 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                       <Textarea
                         id="description"
                         value={quickEventData.description}
-                        onChange={(e) => setQuickEventData(prev => ({ ...prev, description: e.target.value }))}
+                        onChange={(e) =>
+                          setQuickEventData((prev) => ({ ...prev, description: e.target.value }))
+                        }
                         placeholder="Event description"
                         rows={3}
                       />
@@ -590,7 +632,9 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                           id="date"
                           type="date"
                           value={quickEventData.date}
-                          onChange={(e) => setQuickEventData(prev => ({ ...prev, date: e.target.value }))}
+                          onChange={(e) =>
+                            setQuickEventData((prev) => ({ ...prev, date: e.target.value }))
+                          }
                         />
                       </div>
                       <div>
@@ -599,16 +643,20 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                           id="time"
                           type="time"
                           value={quickEventData.time}
-                          onChange={(e) => setQuickEventData(prev => ({ ...prev, time: e.target.value }))}
+                          onChange={(e) =>
+                            setQuickEventData((prev) => ({ ...prev, time: e.target.value }))
+                          }
                         />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="duration">Duration (minutes)</Label>
-                        <Select 
-                          value={quickEventData.duration} 
-                          onValueChange={(value) => setQuickEventData(prev => ({ ...prev, duration: value }))}
+                        <Select
+                          value={quickEventData.duration}
+                          onValueChange={(value) =>
+                            setQuickEventData((prev) => ({ ...prev, duration: value }))
+                          }
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -623,9 +671,11 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                       </div>
                       <div>
                         <Label htmlFor="priority">Priority</Label>
-                        <Select 
-                          value={quickEventData.priority} 
-                          onValueChange={(value) => setQuickEventData(prev => ({ ...prev, priority: value as any }))}
+                        <Select
+                          value={quickEventData.priority}
+                          onValueChange={(value) =>
+                            setQuickEventData((prev) => ({ ...prev, priority: value as any }))
+                          }
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -664,9 +714,7 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
                       {getSyncIcon()}
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>
-                    Sync Status: {syncStatus}
-                  </TooltipContent>
+                  <TooltipContent>Sync Status: {syncStatus}</TooltipContent>
                 </Tooltip>
               )}
 

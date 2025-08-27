@@ -7,35 +7,49 @@ LinearTime is an enterprise-grade calendar integration platform with 4-provider 
 **Current Version**: v2.6.0 (Phase 2.6 Foundation - Calendar Integration Platform)  
 **Architecture**: React + Next.js + TypeScript + Convex + Clerk + shadcn/ui
 
-## 🚨 CRITICAL: IMMUTABLE FOUNDATION RULES
+## 🚨 CRITICAL: FOUNDATION IS LOCKED
 
-### NEVER MODIFY THE HORIZONTAL LINEAR CALENDAR FOUNDATION
-- The 12-month horizontal layout is the **CORE PRODUCT IDENTITY**
-- Any changes to `LinearCalendarHorizontal.tsx` **BREAKS THE ENTIRE PRODUCT**
-- All development must build **ON TOP OF** this locked foundation
-- The foundation is protected by mandatory tests that must pass before commits
+### PROTECTED: Linear Calendar Foundation Layout
+Definitive spec: see `docs/LINEAR_CALENDAR_FOUNDATION_SPEC.md`. The following diagram illustrates the format; the spec document governs.
 
-### Foundation Components (NEVER CHANGE)
-```typescript
-// ✅ ONLY USE THIS COMPONENT:
-<LinearCalendarHorizontal
-  year={currentYear}
-  events={calendarEvents}
-  className="h-full w-full"
-  onEventCreate={handleEventCreate}
-  onEventUpdate={handleEventUpdate}
-  onEventDelete={handleEventDelete}
-  enableInfiniteCanvas={true}
-/>
+```
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                              [YEAR] Linear Calendar                                                                                                         │
+│                                                                           "Life is bigger than a week"                                                                                                      │
+├─────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─────┤
+│     │ Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu │     │
+├─────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────┤
+│ Jan │ [--] [--] [--] [01] [02] [03] [04] [05] [06] [07] [08] [09] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31] [--] [--] [--] [--] [--] [--] [--] [--] [--] [--] │ Jan │
+├─────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────┤
+│ Feb │ [dates aligned to correct day-of-week with empty cells where dates don't exist - ONE CONTINUOUS ROW]                                                                                      │ Feb │
+├─────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────┤
+│ ... │ [same pattern for all 12 months - each month is ONE horizontal row]                                                                                                                        │ ... │
+├─────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────┤
+│ Dec │ [dates aligned to correct day-of-week with empty cells where dates don't exist - ONE CONTINUOUS ROW]                                                                                      │ Dec │
+├─────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┼─────┤
+│     │ Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu  We  Th  Fr  Sa  Su  Mo  Tu │     │
+└─────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴─────┘
 ```
 
-### Protected Foundation Structure
-- **12 HORIZONTAL MONTH ROWS**: January-December as complete horizontal strips
-- **COMPLETE DAY NUMBERS**: 01-31 for each month with proper week alignment
-- **WEEK DAY HEADERS**: "Su Mo Tu We Th Fr Sa" at top AND bottom
-- **MONTH LABELS**: On BOTH left AND right sides of each row
-- **YEAR HEADER**: "2025 Linear Calendar" + "Life is bigger than a week" tagline
-- **BORDERED GRID**: Clean cell structure with visual hierarchy
+### 🔒 IMMUTABLE FOUNDATION ELEMENTS:
+- **12 SINGLE HORIZONTAL ROWS**: One row per month (Jan→Dec vertically stacked)
+- **CORRECT DAY-OF-WEEK ALIGNMENT**: Each date must align to proper day column for ANY year
+- **CONTINUOUS MONTH ROWS**: All days of each month in ONE horizontal line (no wrapping)
+- **EMPTY CELLS**: Show as empty/disabled where dates don't exist
+- **DUAL MONTH LABELS**: Month names on LEFT and RIGHT sides (vertical stack)
+- **WEEK HEADERS**: "Su Mo Tu We Th Fr Sa" at TOP and BOTTOM
+- **YEAR HEADER**: "[YEAR] Linear Calendar" + "Life is bigger than a week" tagline
+- **42-CELL GRID**: Each month row has exactly 42 cells (6 weeks × 7 days)
+
+### ✅ ALLOWED: Implementation Improvements
+- Performance optimizations and code quality improvements
+- Design system integration (semantic tokens only, shadcn/ui)
+- Responsive design that fits in viewport (no infinite scrolling)
+- Accessibility enhancements (AAA compliance)
+- Mobile touch optimization
+- Motion/animation integration
+- Modern React patterns and TypeScript improvements
+- AI overlays (conflict indicators, capacity ribbons) that do not alter the locked layout
 
 ## 📋 Development Guidelines
 
@@ -333,7 +347,7 @@ npm run lint                  # Code quality check
 ## 🚫 What NOT to Do
 
 ### Forbidden Patterns
-- **NEVER** modify `LinearCalendarHorizontal.tsx` or the 12-month layout
+- **NEVER** break the locked layout defined in `docs/LINEAR_CALENDAR_FOUNDATION_SPEC.md`
 - **DON'T** store provider credentials client-side
 - **DON'T** bypass webhook signature verification
 - **DON'T** use hardcoded colors or glass effects

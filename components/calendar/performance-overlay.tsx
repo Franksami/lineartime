@@ -1,43 +1,48 @@
-"use client"
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Activity, Cpu, HardDrive, Zap, X } from "lucide-react"
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Activity, Cpu, HardDrive, X, Zap } from 'lucide-react';
 
 interface PerformanceMetrics {
-  fps: number
-  renderTime: number
-  memoryUsage: number
-  eventCount: number
-  lastUpdate: number
+  fps: number;
+  renderTime: number;
+  memoryUsage: number;
+  eventCount: number;
+  lastUpdate: number;
 }
 
 interface PerformanceOverlayProps {
-  metrics: PerformanceMetrics
+  metrics: PerformanceMetrics;
   poolStats?: {
-    total: number
-    inUse: number
-    available: number
-  }
-  onClose: () => void
-  visible: boolean
+    total: number;
+    inUse: number;
+    available: number;
+  };
+  onClose: () => void;
+  visible: boolean;
 }
 
-export function PerformanceOverlay({ metrics, poolStats, onClose, visible }: PerformanceOverlayProps) {
-  if (!visible) return null
+export function PerformanceOverlay({
+  metrics,
+  poolStats,
+  onClose,
+  visible,
+}: PerformanceOverlayProps) {
+  if (!visible) return null;
 
   const getFPSColor = (fps: number) => {
-    if (fps >= 55) return "text-primary"
-    if (fps >= 30) return "text-muted-foreground"
-    return "text-destructive"
-  }
+    if (fps >= 55) return 'text-primary';
+    if (fps >= 30) return 'text-muted-foreground';
+    return 'text-destructive';
+  };
 
   const getMemoryColor = (memory: number) => {
-    if (memory < 50) return "text-primary"
-    if (memory < 100) return "text-muted-foreground"
-    return "text-destructive"
-  }
+    if (memory < 50) return 'text-primary';
+    if (memory < 100) return 'text-muted-foreground';
+    return 'text-destructive';
+  };
 
   return (
     <div className="fixed top-4 right-4 z-50 w-80">
@@ -119,17 +124,23 @@ export function PerformanceOverlay({ metrics, poolStats, onClose, visible }: Per
           <div className="pt-2 border-t border-border">
             <div className="text-xs text-muted-foreground mb-2">Tips</div>
             <div className="space-y-1 text-xs">
-              {metrics.fps < 30 && <div className="text-destructive">• Low FPS detected - consider reducing events</div>}
+              {metrics.fps < 30 && (
+                <div className="text-destructive">
+                  • Low FPS detected - consider reducing events
+                </div>
+              )}
               {metrics.memoryUsage > 100 && (
                 <div className="text-muted-foreground">• High memory usage - consider cleanup</div>
               )}
               {metrics.renderTime > 16 && (
-                <div className="text-muted-foreground">• Slow rendering - enable virtualization</div>
+                <div className="text-muted-foreground">
+                  • Slow rendering - enable virtualization
+                </div>
               )}
             </div>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

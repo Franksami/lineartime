@@ -1,77 +1,86 @@
-'use client'
+'use client';
 
-import React, { useState, useRef } from 'react'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { 
-  Calendar,
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { useUnifiedTheme } from '@/hooks/useUnifiedTheme';
+import {
+  Text as ChakraText,
+  CircularProgress,
+  CircularProgressLabel,
+  HStack,
+  VStack,
+} from '@chakra-ui/react';
+import { Avatar, Group, Text as MantineText, ThemeIcon, Timeline } from '@mantine/core';
+import { Rate, Space, Statistic, Steps } from 'antd';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import {
+  ArrowRight,
+  BarChart3,
   Brain,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Cloud,
+  Play,
+  Settings,
+  Shield,
+  Smartphone,
+  Star,
+  Target,
+  TrendingUp,
   Users,
   Zap,
-  Shield,
-  BarChart3,
-  Smartphone,
-  Cloud,
-  Target,
-  Clock,
-  TrendingUp,
-  Settings,
-  ArrowRight,
-  Play,
-  CheckCircle,
-  Star
-} from 'lucide-react'
-import { Group, Text as MantineText, Avatar, Timeline, ThemeIcon } from '@mantine/core'
-import { HStack, VStack, Text as ChakraText, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
-import { Space, Statistic, Rate, Steps } from 'antd'
-import { useUnifiedTheme } from '@/hooks/useUnifiedTheme'
+} from 'lucide-react';
+import React, { useState, useRef } from 'react';
 
-const { Step } = Steps
+const { Step } = Steps;
 
 export function FeaturesSection() {
-  const [hoveredFeature, setHoveredFeature] = useState<number | null>(null)
-  const [activeDemo, setActiveDemo] = useState(0)
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
+  const [activeDemo, setActiveDemo] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ['start end', 'end start']
-  })
-  const { utils, isClient } = useUnifiedTheme()
+    offset: ['start end', 'end start'],
+  });
+  const { utils, isClient } = useUnifiedTheme();
 
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100])
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const _opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   const mainFeatures = [
     {
       icon: Calendar,
       title: 'Year-at-a-Glance View',
-      description: 'See your entire year in one horizontal layout. No more switching between months.',
+      description:
+        'See your entire year in one horizontal layout. No more switching between months.',
       benefit: 'See patterns and plan long-term',
       demo: 'Interactive calendar demo',
       color: 'from-blue-500 to-blue-600',
-      stats: { label: 'Wider perspective', value: '12x', unit: 'months visible' }
+      stats: { label: 'Wider perspective', value: '12x', unit: 'months visible' },
     },
     {
       icon: Brain,
       title: 'AI-Powered Insights',
-      description: 'Smart suggestions for optimal scheduling, conflict resolution, and productivity optimization.',
+      description:
+        'Smart suggestions for optimal scheduling, conflict resolution, and productivity optimization.',
       benefit: 'Save 2+ hours per week',
       demo: 'AI suggestion preview',
       color: 'from-purple-500 to-purple-600',
-      stats: { label: 'Time saved', value: '40', unit: '% average' }
+      stats: { label: 'Time saved', value: '40', unit: '% average' },
     },
     {
       icon: Users,
       title: 'Team Collaboration',
-      description: 'Seamless coordination across teams with shared calendars and real-time updates.',
+      description:
+        'Seamless coordination across teams with shared calendars and real-time updates.',
       benefit: 'Perfect team synchronization',
       demo: 'Team sharing demo',
       color: 'from-green-500 to-green-600',
-      stats: { label: 'Team adoption', value: '95', unit: '% satisfaction' }
+      stats: { label: 'Team adoption', value: '95', unit: '% satisfaction' },
     },
     {
       icon: Zap,
@@ -80,7 +89,7 @@ export function FeaturesSection() {
       benefit: 'No lag, even with massive data',
       demo: 'Performance benchmark',
       color: 'from-yellow-500 to-orange-500',
-      stats: { label: 'Performance', value: '60', unit: 'fps smooth' }
+      stats: { label: 'Performance', value: '60', unit: 'fps smooth' },
     },
     {
       icon: Shield,
@@ -89,27 +98,32 @@ export function FeaturesSection() {
       benefit: 'Your data is always safe',
       demo: 'Security features',
       color: 'from-red-500 to-red-600',
-      stats: { label: 'Uptime', value: '99.9', unit: '% guaranteed' }
+      stats: { label: 'Uptime', value: '99.9', unit: '% guaranteed' },
     },
     {
       icon: BarChart3,
       title: 'Advanced Analytics',
-      description: 'Deep insights into your productivity patterns, time allocation, and goal achievement.',
+      description:
+        'Deep insights into your productivity patterns, time allocation, and goal achievement.',
       benefit: 'Data-driven optimization',
       demo: 'Analytics dashboard',
       color: 'from-indigo-500 to-indigo-600',
-      stats: { label: 'Insights', value: '50+', unit: 'data points' }
-    }
-  ]
+      stats: { label: 'Insights', value: '50+', unit: 'data points' },
+    },
+  ];
 
   const secondaryFeatures = [
     { icon: Smartphone, title: 'Mobile First', description: 'Perfect experience on any device' },
     { icon: Cloud, title: 'Cloud Sync', description: 'Access your calendar anywhere' },
     { icon: Target, title: 'Goal Tracking', description: 'Monitor progress on objectives' },
     { icon: Clock, title: 'Time Blocking', description: 'Focus time protection' },
-    { icon: TrendingUp, title: 'Productivity Metrics', description: 'Track improvements over time' },
+    {
+      icon: TrendingUp,
+      title: 'Productivity Metrics',
+      description: 'Track improvements over time',
+    },
     { icon: Settings, title: 'Deep Customization', description: 'Tailored to your workflow' },
-  ]
+  ];
 
   if (!isClient) {
     return (
@@ -128,16 +142,13 @@ export function FeaturesSection() {
           </div>
         </div>
       </section>
-    )
+    );
   }
 
   return (
     <section ref={ref} className="py-20 bg-muted/20 relative overflow-hidden">
       {/* Background Elements */}
-      <motion.div
-        style={{ y }}
-        className="absolute inset-0 -z-10"
-      >
+      <motion.div style={{ y }} className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 right-0 w-96 h-96 rounded-full bg-primary/5 blur-3xl" />
         <div className="absolute bottom-1/4 left-0 w-96 h-96 rounded-full bg-accent/5 blur-3xl" />
       </motion.div>
@@ -162,8 +173,8 @@ export function FeaturesSection() {
             <span className="text-foreground">to master your time</span>
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed">
-            A comprehensive suite of tools designed to transform how you plan, 
-            schedule, and optimize your time. Built for individuals and teams who demand excellence.
+            A comprehensive suite of tools designed to transform how you plan, schedule, and
+            optimize your time. Built for individuals and teams who demand excellence.
           </p>
         </motion.div>
 
@@ -217,7 +228,11 @@ export function FeaturesSection() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Statistic
-                          title={<span className="text-xs text-muted-foreground">{feature.stats.label}</span>}
+                          title={
+                            <span className="text-xs text-muted-foreground">
+                              {feature.stats.label}
+                            </span>
+                          }
                           value={feature.stats.value}
                           suffix={feature.stats.unit}
                           className="text-sm"
@@ -225,7 +240,7 @@ export function FeaturesSection() {
                         />
                       </div>
                       <CircularProgress
-                        value={parseInt(feature.stats.value)}
+                        value={Number.parseInt(feature.stats.value)}
                         size="40px"
                         color="blue.500"
                         trackColor="gray.200"
@@ -238,9 +253,9 @@ export function FeaturesSection() {
                   </div>
 
                   {/* Demo Link */}
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="w-full text-primary hover:text-primary/80 hover:bg-primary/5 transition-all"
                   >
                     <Play className="w-3 h-3 mr-2" />
@@ -314,23 +329,23 @@ export function FeaturesSection() {
                 {
                   title: 'Setup',
                   description: 'Connect your calendars',
-                  icon: <Settings className="w-4 h-4" />
+                  icon: <Settings className="w-4 h-4" />,
                 },
                 {
                   title: 'Organize',
                   description: 'See your year-at-a-glance',
-                  icon: <Calendar className="w-4 h-4" />
+                  icon: <Calendar className="w-4 h-4" />,
                 },
                 {
                   title: 'Optimize',
                   description: 'Get AI insights',
-                  icon: <Brain className="w-4 h-4" />
+                  icon: <Brain className="w-4 h-4" />,
                 },
                 {
                   title: 'Achieve',
                   description: 'Reach your goals',
-                  icon: <Target className="w-4 h-4" />
-                }
+                  icon: <Target className="w-4 h-4" />,
+                },
               ]}
             />
 
@@ -356,10 +371,14 @@ export function FeaturesSection() {
                   {activeDemo === 3 && 'Achieve Your Goals'}
                 </h4>
                 <p className="text-muted-foreground text-sm">
-                  {activeDemo === 0 && 'Import from Google Calendar, Outlook, and 100+ other tools in minutes.'}
-                  {activeDemo === 1 && 'See patterns, plan ahead, and understand your time like never before.'}
-                  {activeDemo === 2 && 'AI analyzes your habits and suggests optimizations for maximum productivity.'}
-                  {activeDemo === 3 && 'Track progress on goals and celebrate achievements along the way.'}
+                  {activeDemo === 0 &&
+                    'Import from Google Calendar, Outlook, and 100+ other tools in minutes.'}
+                  {activeDemo === 1 &&
+                    'See patterns, plan ahead, and understand your time like never before.'}
+                  {activeDemo === 2 &&
+                    'AI analyzes your habits and suggests optimizations for maximum productivity.'}
+                  {activeDemo === 3 &&
+                    'Track progress on goals and celebrate achievements along the way.'}
                 </p>
               </motion.div>
             </div>
@@ -367,5 +386,5 @@ export function FeaturesSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

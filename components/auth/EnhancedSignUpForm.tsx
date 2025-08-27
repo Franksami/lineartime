@@ -1,43 +1,52 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { SignUp } from '@clerk/nextjs'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Separator } from '@/components/ui/separator'
-import { CheckCircle, GalleryVerticalEnd, Star, TrendingUp, Calendar, Users, Zap, Shield } from 'lucide-react'
-import Link from 'next/link'
-import { useUnifiedTheme } from '@/hooks/useUnifiedTheme'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { useUnifiedTheme } from '@/hooks/useUnifiedTheme';
+import { SignUp } from '@clerk/nextjs';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Calendar,
+  CheckCircle,
+  GalleryVerticalEnd,
+  Shield,
+  Star,
+  TrendingUp,
+  Users,
+  Zap,
+} from 'lucide-react';
+import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
 
 interface EnhancedSignUpFormProps {
-  onModeSwitch?: () => void
+  onModeSwitch?: () => void;
 }
 
 export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
-  const [currentStep, setCurrentStep] = useState(0)
-  const [isLoading, setIsLoading] = useState(false)
-  const [completionProgress, setCompletionProgress] = useState(0)
-  const [showWelcome, setShowWelcome] = useState(false)
-  const { utils, isClient } = useUnifiedTheme()
+  const [_currentStep, _setCurrentStep] = useState(0);
+  const [isLoading, _setIsLoading] = useState(false);
+  const [completionProgress, setCompletionProgress] = useState(0);
+  const [showWelcome, setShowWelcome] = useState(false);
+  const { utils, isClient } = useUnifiedTheme();
 
   // Simulate progress tracking
   useEffect(() => {
     const timer = setInterval(() => {
-      setCompletionProgress(prev => {
-        const newProgress = Math.min(prev + Math.random() * 10, 100)
+      setCompletionProgress((prev) => {
+        const newProgress = Math.min(prev + Math.random() * 10, 100);
         if (newProgress === 100) {
-          setTimeout(() => setShowWelcome(true), 500)
+          setTimeout(() => setShowWelcome(true), 500);
         }
-        return newProgress
-      })
-    }, 500)
+        return newProgress;
+      });
+    }, 500);
 
-    return () => clearInterval(timer)
-  }, [])
+    return () => clearInterval(timer);
+  }, []);
 
   if (!isClient) {
     return (
@@ -55,7 +64,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   const features = [
@@ -63,20 +72,23 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
     { icon: TrendingUp, text: 'Analytics', color: 'bg-green-500' },
     { icon: Users, text: 'Team Sync', color: 'bg-purple-500' },
     { icon: Shield, text: 'Secure', color: 'bg-orange-500' },
-  ]
+  ];
 
   const benefits = [
     { title: 'Intelligent Scheduling', description: 'AI-powered time management' },
     { title: 'Team Collaboration', description: 'Seamless team coordination' },
     { title: 'Advanced Analytics', description: 'Deep insights into your productivity' },
     { title: 'Calendar Integration', description: 'Sync with Google, Outlook, and more' },
-  ]
+  ];
 
-  const testimonials = [
-    { text: "LinearTime revolutionized how we manage our team's schedule", author: "Sarah Chen, Product Manager" },
-    { text: "The AI suggestions saved me hours every week", author: "David Rodriguez, CEO" },
-    { text: "Best calendar app I've ever used", author: "Emma Thompson, Designer" },
-  ]
+  const _testimonials = [
+    {
+      text: "LinearTime revolutionized how we manage our team's schedule",
+      author: 'Sarah Chen, Product Manager',
+    },
+    { text: 'The AI suggestions saved me hours every week', author: 'David Rodriguez, CEO' },
+    { text: "Best calendar app I've ever used", author: 'Emma Thompson, Designer' },
+  ];
 
   return (
     <div className="w-full max-w-md space-y-6">
@@ -115,7 +127,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                 <GalleryVerticalEnd className="w-6 h-6 text-primary-foreground" />
               </div>
             </motion.div>
-            
+
             <div className="space-y-2">
               <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
                 Join LinearTime
@@ -159,9 +171,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                   <div key={i} className="w-3 h-3 bg-yellow-400 rounded-full" />
                 ))}
               </div>
-              <span className="text-xs text-muted-foreground">
-                Rated 5/5 by 10,000+ users
-              </span>
+              <span className="text-xs text-muted-foreground">Rated 5/5 by 10,000+ users</span>
             </motion.div>
           </CardHeader>
 
@@ -174,9 +184,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
               className="space-y-2"
             >
               <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">
-                  Account Setup Progress
-                </span>
+                <span className="text-sm text-muted-foreground">Account Setup Progress</span>
                 <span className="text-sm text-muted-foreground">
                   {Math.round(completionProgress)}%
                 </span>
@@ -193,10 +201,10 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
               <SignUp
                 appearance={{
                   elements: {
-                    rootBox: "w-full",
-                    card: "bg-transparent shadow-none border-none",
-                    headerTitle: "hidden",
-                    headerSubtitle: "hidden",
+                    rootBox: 'w-full',
+                    card: 'bg-transparent shadow-none border-none',
+                    headerTitle: 'hidden',
+                    headerSubtitle: 'hidden',
                     formButtonPrimary: `
                       bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 
                       text-primary-foreground shadow-md hover:shadow-lg transition-all duration-300
@@ -207,29 +215,29 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                       focus:border-ring focus:ring-2 focus:ring-ring/20
                       hover:border-accent/50
                     `,
-                    footerActionLink: "text-primary hover:text-primary/80 transition-colors",
-                    dividerLine: "bg-gradient-to-r from-transparent via-border to-transparent",
-                    dividerText: "text-muted-foreground text-sm bg-background px-2",
+                    footerActionLink: 'text-primary hover:text-primary/80 transition-colors',
+                    dividerLine: 'bg-gradient-to-r from-transparent via-border to-transparent',
+                    dividerText: 'text-muted-foreground text-sm bg-background px-2',
                     socialButtonsBlockButton: `
                       bg-card hover:bg-accent border-border shadow-sm 
                       hover:shadow-md transition-all duration-200
                       hover:scale-[1.02] active:scale-[0.98]
                       hover:border-accent/50
                     `,
-                    socialButtonsBlockButtonText: "font-medium",
-                    identityPreviewEditButton: "text-primary hover:text-primary/80",
-                    formFieldLabel: "text-foreground font-medium",
-                    formFieldAction: "text-primary hover:text-primary/80",
-                    alertText: "text-destructive-foreground",
-                    formResendCodeLink: "text-primary hover:text-primary/80",
+                    socialButtonsBlockButtonText: 'font-medium',
+                    identityPreviewEditButton: 'text-primary hover:text-primary/80',
+                    formFieldLabel: 'text-foreground font-medium',
+                    formFieldAction: 'text-primary hover:text-primary/80',
+                    alertText: 'text-destructive-foreground',
+                    formResendCodeLink: 'text-primary hover:text-primary/80',
                     otpCodeFieldInput: `
                       bg-background border-input transition-colors duration-200
                       focus:border-ring focus:ring-2 focus:ring-ring/20
                     `,
                   },
                   layout: {
-                    socialButtonsPlacement: "top",
-                    socialButtonsVariant: "blockButton",
+                    socialButtonsPlacement: 'top',
+                    socialButtonsVariant: 'blockButton',
                   },
                 }}
                 routing="path"
@@ -246,13 +254,13 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
               className="space-y-4"
             >
               <Separator className="my-4" />
-              
+
               {/* Benefits timeline */}
               <div className="space-y-3">
                 <h5 className="text-base font-semibold text-center text-foreground mb-3">
                   What you'll get:
                 </h5>
-                
+
                 <div className="grid grid-cols-1 gap-2">
                   {benefits.map((benefit, index) => (
                     <motion.div
@@ -264,12 +272,8 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                     >
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                       <div>
-                        <p className="text-sm font-semibold text-foreground">
-                          {benefit.title}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {benefit.description}
-                        </p>
+                        <p className="text-sm font-semibold text-foreground">{benefit.title}</p>
+                        <p className="text-xs text-muted-foreground">{benefit.description}</p>
                       </div>
                     </motion.div>
                   ))}
@@ -283,9 +287,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                 transition={{ delay: 1.4 }}
                 className="text-center space-y-2"
               >
-                <p className="text-xs text-muted-foreground">
-                  Trusted by professionals worldwide
-                </p>
+                <p className="text-xs text-muted-foreground">Trusted by professionals worldwide</p>
                 <div className="flex justify-center space-x-1">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
@@ -303,8 +305,8 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
             >
               <p className="text-sm text-muted-foreground">
                 Already have an account?{' '}
-                <Link 
-                  href="/sign-in" 
+                <Link
+                  href="/sign-in"
                   className="text-primary hover:text-primary/80 font-medium transition-colors"
                 >
                   Sign in here
@@ -332,14 +334,14 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
             >
               <div className="flex flex-col items-center space-y-4">
                 <div className="relative w-16 h-16">
-                  <div className="absolute inset-0 rounded-full border-4 border-muted"></div>
-                  <div 
+                  <div className="absolute inset-0 rounded-full border-4 border-muted" />
+                  <div
                     className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin"
-                    style={{ 
-                      clipPath: `circle(50% at 50% 50%)`,
-                      transform: `rotate(${completionProgress * 3.6}deg)` 
+                    style={{
+                      clipPath: 'circle(50% at 50% 50%)',
+                      transform: `rotate(${completionProgress * 3.6}deg)`,
                     }}
-                  ></div>
+                  />
                   <div className="absolute inset-0 flex items-center justify-center text-sm font-medium">
                     {Math.round(completionProgress)}%
                   </div>
@@ -351,5 +353,5 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }

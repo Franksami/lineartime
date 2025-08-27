@@ -3,8 +3,8 @@
  * Provides real-time performance metrics and utilities for animation tracking
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { animationMonitor, type PerformanceMetrics } from '@/lib/performance/AnimationMonitor';
+import { type PerformanceMetrics, animationMonitor } from '@/lib/performance/AnimationMonitor';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface AnimationPerformanceHook {
   metrics: PerformanceMetrics | null;
@@ -51,12 +51,9 @@ export function useAnimationPerformance(): AnimationPerformanceHook {
     }
   }, [isMonitoring]);
 
-  const measureAnimation = useCallback(
-    <T>(name: string, fn: () => Promise<T>): Promise<T> => {
-      return animationMonitor.measureAnimation(name, fn);
-    },
-    []
-  );
+  const measureAnimation = useCallback(<T>(name: string, fn: () => Promise<T>): Promise<T> => {
+    return animationMonitor.measureAnimation(name, fn);
+  }, []);
 
   const clearMetrics = useCallback(() => {
     animationMonitor.clearMetrics();
@@ -93,7 +90,7 @@ export function useComponentPerformance(componentName: string) {
 
   useEffect(() => {
     renderCountRef.current++;
-    
+
     // Log excessive renders in development
     if (process.env.NODE_ENV === 'development' && renderCountRef.current > 10) {
       console.warn(`🎬 High render count for ${componentName}: ${renderCountRef.current}`);

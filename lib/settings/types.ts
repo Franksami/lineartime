@@ -22,7 +22,7 @@ export interface CalendarSettings {
   workingHours: {
     enabled: boolean;
     start: string; // "09:00"
-    end: string;   // "17:00"
+    end: string; // "17:00"
     days: number[]; // [1,2,3,4,5] for Mon-Fri
   };
   defaultEventCategory: 'personal' | 'work' | 'effort' | 'note';
@@ -43,8 +43,8 @@ export interface NotificationSettings {
   sound: boolean;
   soundVolume: number; // 0-1, default 0.3
   soundTypes: {
-    success: boolean;    // Event creation, updates
-    error: boolean;      // Failures, sync errors  
+    success: boolean; // Event creation, updates
+    error: boolean; // Failures, sync errors
     notification: boolean; // Sync complete, reminders
   };
   desktop: boolean;
@@ -57,16 +57,16 @@ export interface KeyboardShortcuts {
   enabled: boolean;
   customBindings: Record<string, string>;
   defaultBindings: {
-    newEvent: string;        // "n" or "cmd+n"
-    search: string;          // "/" or "cmd+k"
-    toggleView: string;      // "v"
-    nextPeriod: string;      // "j" or "ArrowRight"
-    prevPeriod: string;      // "k" or "ArrowLeft"
-    today: string;           // "t"
-    delete: string;          // "Delete" or "Backspace"
-    escape: string;          // "Escape"
-    save: string;            // "cmd+s" or "ctrl+s"
-    settings: string;        // ","
+    newEvent: string; // "n" or "cmd+n"
+    search: string; // "/" or "cmd+k"
+    toggleView: string; // "v"
+    nextPeriod: string; // "j" or "ArrowRight"
+    prevPeriod: string; // "k" or "ArrowLeft"
+    today: string; // "t"
+    delete: string; // "Delete" or "Backspace"
+    escape: string; // "Escape"
+    save: string; // "cmd+s" or "ctrl+s"
+    settings: string; // ","
   };
 }
 
@@ -172,5 +172,6 @@ export const isValidDateFormat = (format: string): format is TimeSettings['dateF
 export const isValidCalendarView = (view: string): view is CalendarSettings['defaultView'] =>
   ['year', 'timeline', 'manage'].includes(view);
 
-export const isValidCalendarDayStyle = (style: string): style is CalendarSettings['calendarDayStyle'] =>
-  ['number', 'dot'].includes(style);
+export const isValidCalendarDayStyle = (
+  style: string
+): style is CalendarSettings['calendarDayStyle'] => ['number', 'dot'].includes(style);

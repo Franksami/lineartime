@@ -1,130 +1,131 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { 
-  RefreshCw, 
-  CheckCircle, 
-  AlertTriangle, 
-  XCircle, 
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import {
+  type EventConflict,
+  type SyncConfig,
+  type SyncResult,
+  offlineSyncManager,
+} from '@/lib/offline-sync/OfflineSyncManager';
+import {
+  AlertCircle,
+  AlertTriangle,
+  CheckCircle,
   Clock,
+  RefreshCw,
+  Settings,
   Wifi,
   WifiOff,
-  Settings,
-  AlertCircle
-} from 'lucide-react'
-import { 
-  offlineSyncManager, 
-  type SyncResult, 
-  type EventConflict, 
-  type SyncConfig 
-} from '@/lib/offline-sync/OfflineSyncManager'
+  XCircle,
+} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 
 interface OfflineSyncStatusProps {
-  className?: string
-  showDetails?: boolean
+  className?: string;
+  showDetails?: boolean;
 }
 
 export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyncStatusProps) {
-  const [syncStatus, setSyncStatus] = useState(offlineSyncManager.getSyncStatus())
-  const [lastSyncResult, setLastSyncResult] = useState<SyncResult | null>(null)
-  const [conflicts, setConflicts] = useState<EventConflict[]>([])
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
-  const [showConfig, setShowConfig] = useState(false)
+  const [syncStatus, setSyncStatus] = useState(offlineSyncManager.getSyncStatus());
+  const [lastSyncResult, setLastSyncResult] = useState<SyncResult | null>(null);
+  const [conflicts, setConflicts] = useState<EventConflict[]>([]);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [_showConfig, _setShowConfig] = useState(false);
 
   useEffect(() => {
     // Subscribe to sync events
     const handleSyncComplete = (result: SyncResult) => {
-      setLastSyncResult(result)
-      setSyncStatus(offlineSyncManager.getSyncStatus())
-    }
+      setLastSyncResult(result);
+      setSyncStatus(offlineSyncManager.getSyncStatus());
+    };
 
     const handleConflicts = (newConflicts: EventConflict[]) => {
-      setConflicts(newConflicts)
-    }
+      setConflicts(newConflicts);
+    };
 
-    offlineSyncManager.onSyncComplete(handleSyncComplete)
-    offlineSyncManager.onConflictsDetected(handleConflicts)
+    offlineSyncManager.onSyncComplete(handleSyncComplete);
+    offlineSyncManager.onConflictsDetected(handleConflicts);
 
     // Load pending conflicts
-    offlineSyncManager.getPendingConflicts().then(setConflicts)
+    offlineSyncManager.getPendingConflicts().then(setConflicts);
 
     // Listen for online/offline events
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     // Update status periodically
     const statusInterval = setInterval(() => {
-      setSyncStatus(offlineSyncManager.getSyncStatus())
-    }, 1000)
+      setSyncStatus(offlineSyncManager.getSyncStatus());
+    }, 1000);
 
     return () => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-      clearInterval(statusInterval)
-    }
-  }, [])
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+      clearInterval(statusInterval);
+    };
+  }, []);
 
   const handleForceSync = async () => {
     try {
-      await offlineSyncManager.forcSync()
+      await offlineSyncManager.forcSync();
     } catch (error) {
-      console.error('Force sync failed:', error)
+      console.error('Force sync failed:', error);
     }
-  }
+  };
 
   const formatTime = (timestamp: number) => {
-    if (!timestamp) return 'Never'
-    const date = new Date(timestamp)
-    const now = new Date()
-    const diff = now.getTime() - date.getTime()
-    
-    if (diff < 60000) return 'Just now'
-    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`
-    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`
-    return date.toLocaleDateString()
-  }
+    if (!timestamp) return 'Never';
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+
+    if (diff < 60000) return 'Just now';
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+    return date.toLocaleDateString();
+  };
 
   const getSyncStatusIcon = () => {
     if (syncStatus.inProgress) {
-      return <RefreshCw className="h-4 w-4 animate-spin text-blue-500" />
+      return <RefreshCw className="h-4 w-4 animate-spin text-blue-500" />;
     }
-    
+
     if (!isOnline) {
-      return <WifiOff className="h-4 w-4 text-gray-500" />
+      return <WifiOff className="h-4 w-4 text-gray-500" />;
     }
-    
+
     if (lastSyncResult?.success) {
-      return <CheckCircle className="h-4 w-4 text-green-500" />
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
     }
-    
+
     if (lastSyncResult?.errorCount && lastSyncResult.errorCount > 0) {
-      return <XCircle className="h-4 w-4 text-red-500" />
+      return <XCircle className="h-4 w-4 text-red-500" />;
     }
-    
-    return <Clock className="h-4 w-4 text-yellow-500" />
-  }
+
+    return <Clock className="h-4 w-4 text-yellow-500" />;
+  };
 
   const getSyncStatusText = () => {
-    if (syncStatus.inProgress) return 'Syncing...'
-    if (!isOnline) return 'Offline'
-    if (lastSyncResult?.success) return 'Up to date'
-    if (lastSyncResult?.errorCount && lastSyncResult.errorCount > 0) return 'Sync errors'
-    return 'Ready to sync'
-  }
+    if (syncStatus.inProgress) return 'Syncing...';
+    if (!isOnline) return 'Offline';
+    if (lastSyncResult?.success) return 'Up to date';
+    if (lastSyncResult?.errorCount && lastSyncResult.errorCount > 0) return 'Sync errors';
+    return 'Ready to sync';
+  };
 
   const getSyncStatusVariant = (): 'default' | 'secondary' | 'destructive' => {
-    if (syncStatus.inProgress) return 'secondary'
-    if (!isOnline || (lastSyncResult?.errorCount && lastSyncResult.errorCount > 0)) return 'destructive'
-    return 'default'
-  }
+    if (syncStatus.inProgress) return 'secondary';
+    if (!isOnline || (lastSyncResult?.errorCount && lastSyncResult.errorCount > 0))
+      return 'destructive';
+    return 'default';
+  };
 
   return (
     <div className={className}>
@@ -141,14 +142,14 @@ export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyn
             </span>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {conflicts.length > 0 && (
             <Badge variant="destructive" className="text-xs">
               {conflicts.length} conflicts
             </Badge>
           )}
-          
+
           <Button
             variant="ghost"
             size="sm"
@@ -169,9 +170,7 @@ export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyn
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">Last Sync Results</CardTitle>
-                <CardDescription>
-                  Completed in {lastSyncResult.duration}ms
-                </CardDescription>
+                <CardDescription>Completed in {lastSyncResult.duration}ms</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="grid grid-cols-3 gap-4 text-center">
@@ -199,8 +198,8 @@ export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyn
                   <Alert>
                     <AlertTriangle className="h-4 w-4" />
                     <AlertDescription>
-                      {lastSyncResult.errorCount} events failed to sync. 
-                      Check your connection and try again.
+                      {lastSyncResult.errorCount} events failed to sync. Check your connection and
+                      try again.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -223,24 +222,20 @@ export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyn
               <CardContent>
                 <div className="space-y-2">
                   {conflicts.slice(0, 5).map((conflict) => (
-                    <div 
+                    <div
                       key={conflict.eventId}
                       className="flex items-center justify-between p-2 bg-muted rounded"
                     >
                       <div>
-                        <div className="font-medium text-sm">
-                          {conflict.localEvent.title}
-                        </div>
+                        <div className="font-medium text-sm">{conflict.localEvent.title}</div>
                         <div className="text-xs text-muted-foreground">
                           {conflict.conflictType} conflict
                         </div>
                       </div>
-                      <Badge variant="outline">
-                        {conflict.suggested.strategy}
-                      </Badge>
+                      <Badge variant="outline">{conflict.suggested.strategy}</Badge>
                     </div>
                   ))}
-                  
+
                   {conflicts.length > 5 && (
                     <div className="text-center text-sm text-muted-foreground pt-2">
                       +{conflicts.length - 5} more conflicts
@@ -278,7 +273,7 @@ export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyn
                   </code>
                 </div>
               </div>
-              
+
               {!isOnline && (
                 <Alert className="mt-3">
                   <WifiOff className="h-4 w-4" />
@@ -310,7 +305,7 @@ export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyn
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default OfflineSyncStatus
+export default OfflineSyncStatus;

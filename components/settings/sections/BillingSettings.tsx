@@ -1,63 +1,66 @@
-'use client'
+'use client';
 
 // BillingSettings component integrated with Clerk Billing
 // Subscription data comes from Clerk via Convex webhook events
 // User subscription management is handled by Clerk's PricingTable component
 
-import * as React from 'react'
-import { useUser } from '@clerk/nextjs'
-import { useQuery, useMutation } from 'convex/react'
-import { api } from '@/convex/_generated/api'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Separator } from '@/components/ui/separator'
-import { 
-  CreditCard, 
-  Calendar, 
-  CheckCircle, 
-  AlertCircle, 
-  Users, 
-  Zap,
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { api } from '@/convex/_generated/api';
+import { useUser } from '@clerk/nextjs';
+import { useMutation, useQuery } from 'convex/react';
+import { formatDistanceToNow } from 'date-fns';
+import {
+  AlertCircle,
+  Calendar,
+  CheckCircle,
+  CreditCard,
   Crown,
+  Download,
   ExternalLink,
-  Download
-} from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
+  Users,
+  Zap,
+} from 'lucide-react';
+import * as React from 'react';
 
 export function BillingSettings() {
-  const { user, isLoaded } = useUser()
-  const subscriptionStatus = useQuery(api.billing.getSubscriptionStatus)
-  const usageAnalytics = useQuery(api.billing.getUserUsageAnalytics)
-  const planPermissions = useQuery(api.billing.getPlanPermissions, 
-    subscriptionStatus?.subscription ? { planType: subscriptionStatus.subscription.planType } : 'skip'
-  )
+  const { user, isLoaded } = useUser();
+  const subscriptionStatus = useQuery(api.billing.getSubscriptionStatus);
+  const usageAnalytics = useQuery(api.billing.getUserUsageAnalytics);
+  const planPermissions = useQuery(
+    api.billing.getPlanPermissions,
+    subscriptionStatus?.subscription
+      ? { planType: subscriptionStatus.subscription.planType }
+      : 'skip'
+  );
 
-  const initializeSubscription = useMutation(api.billing.initializeUserSubscription)
-  const [isInitializing, setIsInitializing] = React.useState(false)
+  const initializeSubscription = useMutation(api.billing.initializeUserSubscription);
+  const [isInitializing, setIsInitializing] = React.useState(false);
 
   // Initialize subscription for new users
   React.useEffect(() => {
     if (user && subscriptionStatus === null && !isInitializing) {
-      setIsInitializing(true)
+      setIsInitializing(true);
       initializeSubscription({
         clerkUserId: user.id,
-        stripeCustomerId: "", // Will be set when user subscribes
-      }).finally(() => setIsInitializing(false))
+        stripeCustomerId: '', // Will be set when user subscribes
+      }).finally(() => setIsInitializing(false));
     }
-  }, [user, subscriptionStatus, initializeSubscription, isInitializing])
+  }, [user, subscriptionStatus, initializeSubscription, isInitializing]);
 
   if (!isLoaded) {
     return (
       <div className="space-y-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-4 bg-muted rounded w-1/4"></div>
-          <div className="h-32 bg-muted rounded"></div>
+          <div className="h-4 bg-muted rounded w-1/4" />
+          <div className="h-32 bg-muted rounded" />
         </div>
       </div>
-    )
+    );
   }
 
   if (!user) {
@@ -68,55 +71,63 @@ export function BillingSettings() {
           <p className="text-sm text-muted-foreground">Please sign in to manage billing</p>
         </div>
       </div>
-    )
+    );
   }
 
-  const subscription = subscriptionStatus?.subscription
-  const permissions = planPermissions
+  const subscription = subscriptionStatus?.subscription;
+  const permissions = planPermissions;
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-secondary text-secondary-foreground'
-      case 'trialing': return 'bg-accent text-accent-foreground'
-      case 'past_due': return 'bg-muted text-muted-foreground'
-      case 'canceled': return 'bg-destructive text-destructive-foreground'
-      default: return 'bg-muted text-muted-foreground'
+      case 'active':
+        return 'bg-secondary text-secondary-foreground';
+      case 'trialing':
+        return 'bg-accent text-accent-foreground';
+      case 'past_due':
+        return 'bg-muted text-muted-foreground';
+      case 'canceled':
+        return 'bg-destructive text-destructive-foreground';
+      default:
+        return 'bg-muted text-muted-foreground';
     }
-  }
+  };
 
   const getPlanIcon = (planName: string) => {
     switch (planName.toLowerCase()) {
-      case 'pro': return <Crown className="h-4 w-4" />
-      case 'enterprise': return <Users className="h-4 w-4" />
-      default: return <Zap className="h-4 w-4" />
+      case 'pro':
+        return <Crown className="h-4 w-4" />;
+      case 'enterprise':
+        return <Users className="h-4 w-4" />;
+      default:
+        return <Zap className="h-4 w-4" />;
     }
-  }
+  };
 
   const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString()
-  }
+    return new Date(timestamp).toLocaleDateString();
+  };
 
   const calculateUsagePercentage = (current: number, max: number) => {
-    if (max === -1) return 0 // Unlimited
-    return Math.min((current / max) * 100, 100)
-  }
+    if (max === -1) return 0; // Unlimited
+    return Math.min((current / max) * 100, 100);
+  };
 
   const handleManageBilling = () => {
     // With Clerk billing, users manage subscriptions through Clerk's built-in UI
     // The billing portal is handled directly by Clerk's PricingTable component
-    window.location.href = '/pricing'
-  }
+    window.location.href = '/pricing';
+  };
 
   const handleUpgrade = () => {
     // Navigate to pricing page with Clerk's PricingTable component
-    window.location.href = '/pricing'
-  }
+    window.location.href = '/pricing';
+  };
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium mb-4">Billing & Subscription</h3>
-        
+
         {/* Current Plan */}
         <Card className="mb-6">
           <CardHeader>
@@ -139,9 +150,7 @@ export function BillingSettings() {
               {subscription?.status === 'canceled' && subscription?.canceledAt && (
                 <>Canceled: {formatDate(subscription.canceledAt)}</>
               )}
-              {!subscription?.status && (
-                <>Get more features with a paid plan</>
-              )}
+              {!subscription?.status && 'Get more features with a paid plan'}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -182,16 +191,15 @@ export function BillingSettings() {
                 <div className="flex justify-between text-sm mb-1">
                   <span>Events</span>
                   <span>
-                    {subscription?.usage?.currentEvents || 0} / {
-                      permissions.features.maxEvents === -1 ? '∞' : permissions.features.maxEvents
-                    }
+                    {subscription?.usage?.currentEvents || 0} /{' '}
+                    {permissions.features.maxEvents === -1 ? '∞' : permissions.features.maxEvents}
                   </span>
                 </div>
-                <Progress 
+                <Progress
                   value={calculateUsagePercentage(
-                    subscription?.usage?.currentEvents || 0, 
+                    subscription?.usage?.currentEvents || 0,
                     permissions.features.maxEvents
-                  )} 
+                  )}
                   className="h-2"
                 />
               </div>
@@ -201,14 +209,15 @@ export function BillingSettings() {
                 <div className="flex justify-between text-sm mb-1">
                   <span>Calendars</span>
                   <span>
-                    {subscription?.usage?.currentCalendars || 0} / {permissions.features.maxCalendars}
+                    {subscription?.usage?.currentCalendars || 0} /{' '}
+                    {permissions.features.maxCalendars}
                   </span>
                 </div>
-                <Progress 
+                <Progress
                   value={calculateUsagePercentage(
-                    subscription?.usage?.currentCalendars || 0, 
+                    subscription?.usage?.currentCalendars || 0,
                     permissions.features.maxCalendars
-                  )} 
+                  )}
                   className="h-2"
                 />
               </div>
@@ -218,13 +227,11 @@ export function BillingSettings() {
                 <div className="flex justify-between text-sm mb-1">
                   <span>AI Scheduling (this month)</span>
                   <span>
-                    {subscription?.usage?.aiRequestsThisMonth || 0} / {permissions.features.aiScheduling ? '∞' : '0'}
+                    {subscription?.usage?.aiRequestsThisMonth || 0} /{' '}
+                    {permissions.features.aiScheduling ? '∞' : '0'}
                   </span>
                 </div>
-                <Progress 
-                  value={permissions.features.aiScheduling ? 0 : 100} 
-                  className="h-2"
-                />
+                <Progress value={permissions.features.aiScheduling ? 0 : 100} className="h-2" />
               </div>
 
               {/* Calendar Sync Providers */}
@@ -232,14 +239,15 @@ export function BillingSettings() {
                 <div className="flex justify-between text-sm mb-1">
                   <span>Calendar Sync Providers</span>
                   <span>
-                    {subscription?.usage?.currentProviders || 0} / {permissions.features.maxProviders}
+                    {subscription?.usage?.currentProviders || 0} /{' '}
+                    {permissions.features.maxProviders}
                   </span>
                 </div>
-                <Progress 
+                <Progress
                   value={calculateUsagePercentage(
-                    subscription?.usage?.currentProviders || 0, 
+                    subscription?.usage?.currentProviders || 0,
                     permissions.features.maxProviders
-                  )} 
+                  )}
                   className="h-2"
                 />
               </div>
@@ -252,9 +260,7 @@ export function BillingSettings() {
           <Card className="mb-6">
             <CardHeader>
               <CardTitle>Plan Features</CardTitle>
-              <CardDescription>
-                Available features with your current plan
-              </CardDescription>
+              <CardDescription>Available features with your current plan</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
@@ -266,7 +272,7 @@ export function BillingSettings() {
                   )}
                   <span className="text-sm">AI Scheduling</span>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   {permissions.features.calendarSync ? (
                     <CheckCircle className="h-4 w-4 text-primary" />
@@ -275,7 +281,7 @@ export function BillingSettings() {
                   )}
                   <span className="text-sm">Calendar Sync</span>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   {permissions.features.analytics ? (
                     <CheckCircle className="h-4 w-4 text-primary" />
@@ -284,7 +290,7 @@ export function BillingSettings() {
                   )}
                   <span className="text-sm">Analytics</span>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   {permissions.features.prioritySupport ? (
                     <CheckCircle className="h-4 w-4 text-primary" />
@@ -293,7 +299,7 @@ export function BillingSettings() {
                   )}
                   <span className="text-sm">Priority Support</span>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   {permissions.features.customThemes ? (
                     <CheckCircle className="h-4 w-4 text-primary" />
@@ -302,7 +308,7 @@ export function BillingSettings() {
                   )}
                   <span className="text-sm">Custom Themes</span>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   {permissions.features.exportData ? (
                     <CheckCircle className="h-4 w-4 text-primary" />
@@ -311,7 +317,7 @@ export function BillingSettings() {
                   )}
                   <span className="text-sm">Data Export</span>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   {permissions.features.teamSharing ? (
                     <CheckCircle className="h-4 w-4 text-primary" />
@@ -320,7 +326,7 @@ export function BillingSettings() {
                   )}
                   <span className="text-sm">Team Sharing</span>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   {permissions.features.apiAccess ? (
                     <CheckCircle className="h-4 w-4 text-green-500" />
@@ -341,9 +347,7 @@ export function BillingSettings() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle>Usage Analytics</CardTitle>
-                  <CardDescription>
-                    Historical usage data
-                  </CardDescription>
+                  <CardDescription>Historical usage data</CardDescription>
                 </div>
                 <Button variant="outline" size="sm">
                   <Download className="h-4 w-4 mr-2" />
@@ -375,5 +379,5 @@ export function BillingSettings() {
         )}
       </div>
     </div>
-  )
+  );
 }

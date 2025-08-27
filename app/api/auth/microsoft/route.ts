@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { ConfidentialClientApplication } from '@azure/msal-node';
 import { currentUser } from '@clerk/nextjs/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 // Microsoft OAuth configuration
 const msalConfig = {
@@ -27,23 +27,17 @@ const REDIRECT_URI = `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/
  * GET /api/auth/microsoft
  * Initiates the Microsoft OAuth flow
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Check if user is authenticated with Clerk
     const user = await currentUser();
     if (!user) {
-      return NextResponse.json(
-        { error: 'User not authenticated' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'User not authenticated' }, { status: 401 });
     }
 
     // Check if Microsoft credentials are configured
     if (!process.env.MICROSOFT_CLIENT_ID || !process.env.MICROSOFT_CLIENT_SECRET) {
-      return NextResponse.json(
-        { error: 'Microsoft OAuth not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Microsoft OAuth not configured' }, { status: 500 });
     }
 
     // Create MSAL application
@@ -54,7 +48,7 @@ export async function GET(request: NextRequest) {
       JSON.stringify({
         userId: user.id,
         timestamp: Date.now(),
-        nonce: Math.random().toString(36).substring(7)
+        nonce: Math.random().toString(36).substring(7),
       })
     ).toString('base64');
 
@@ -67,13 +61,10 @@ export async function GET(request: NextRequest) {
     };
 
     const authUrl = await cca.getAuthCodeUrl(authCodeUrlParameters);
-    
+
     return NextResponse.redirect(authUrl);
   } catch (error) {
     console.error('Error initiating Microsoft OAuth:', error);
-    return NextResponse.json(
-      { error: 'Failed to initiate Microsoft OAuth' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to initiate Microsoft OAuth' }, { status: 500 });
   }
 }

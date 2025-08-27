@@ -3,17 +3,17 @@
  * Handles theme application and system preference detection
  */
 
-import { UserSettings } from './types';
+import type { UserSettings } from './types';
 
 /**
  * Apply theme to the document
  */
 export function applyTheme(theme: UserSettings['appearance']['theme']) {
   const root = document.documentElement;
-  
+
   // Remove existing theme classes
   root.classList.remove('light', 'dark');
-  
+
   if (theme === 'system') {
     // Check system preference
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -28,7 +28,7 @@ export function applyTheme(theme: UserSettings['appearance']['theme']) {
  */
 export function applyHighContrast(enabled: boolean) {
   const root = document.documentElement;
-  
+
   if (enabled) {
     root.classList.add('high-contrast');
   } else {
@@ -41,7 +41,7 @@ export function applyHighContrast(enabled: boolean) {
  */
 export function applyReducedMotion(enabled: boolean) {
   const root = document.documentElement;
-  
+
   if (enabled) {
     root.classList.add('reduce-motion');
   } else {
@@ -54,10 +54,10 @@ export function applyReducedMotion(enabled: boolean) {
  */
 export function applyFontSize(size: UserSettings['appearance']['fontSize']) {
   const root = document.documentElement;
-  
+
   // Remove existing font size classes
   root.classList.remove('font-small', 'font-medium', 'font-large');
-  
+
   // Apply new font size class
   root.classList.add(`font-${size}`);
 }
@@ -67,10 +67,16 @@ export function applyFontSize(size: UserSettings['appearance']['fontSize']) {
  */
 export function applyColorScheme(scheme: UserSettings['appearance']['colorScheme']) {
   const root = document.documentElement;
-  
+
   // Remove existing color scheme classes
-  root.classList.remove('theme-default', 'theme-blue', 'theme-green', 'theme-purple', 'theme-orange');
-  
+  root.classList.remove(
+    'theme-default',
+    'theme-blue',
+    'theme-green',
+    'theme-purple',
+    'theme-orange'
+  );
+
   // Apply new color scheme class
   root.classList.add(`theme-${scheme}`);
 }
@@ -95,19 +101,19 @@ export function setupThemeListener(
 ) {
   if (currentTheme === 'system') {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
+
     // Modern browsers
     if (mediaQuery.addEventListener) {
       mediaQuery.addEventListener('change', onSystemThemeChange);
       return () => mediaQuery.removeEventListener('change', onSystemThemeChange);
     }
     // Legacy browsers
-    else if (mediaQuery.addListener) {
+    if (mediaQuery.addListener) {
       mediaQuery.addListener(onSystemThemeChange);
       return () => mediaQuery.removeListener(onSystemThemeChange);
     }
   }
-  
+
   return () => {}; // No-op cleanup
 }
 
@@ -116,22 +122,22 @@ export function setupThemeListener(
  */
 export function setupReducedMotionListener(onReducedMotionChange: (prefers: boolean) => void) {
   const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  
+
   const handler = (e: MediaQueryListEvent | MediaQueryList) => {
     onReducedMotionChange(e.matches);
   };
-  
+
   // Modern browsers
   if (mediaQuery.addEventListener) {
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }
   // Legacy browsers
-  else if (mediaQuery.addListener) {
+  if (mediaQuery.addListener) {
     mediaQuery.addListener(handler);
     return () => mediaQuery.removeListener(handler);
   }
-  
+
   return () => {}; // No-op cleanup
 }
 

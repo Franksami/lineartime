@@ -3,7 +3,7 @@
  * Handles LocalStorage persistence with migration support
  */
 
-import { UserSettings, createDefaultSettings } from './types';
+import { type UserSettings, createDefaultSettings } from './types';
 
 const STORAGE_KEY = 'lineartime-settings';
 const CURRENT_VERSION = 1;
@@ -53,10 +53,12 @@ function migrateSettings(settings: any): UserSettings {
   };
 
   // Deep merge nested objects
-  Object.keys(defaults).forEach(key => {
-    if (typeof defaults[key as keyof UserSettings] === 'object' && 
-        defaults[key as keyof UserSettings] !== null &&
-        !Array.isArray(defaults[key as keyof UserSettings])) {
+  Object.keys(defaults).forEach((key) => {
+    if (
+      typeof defaults[key as keyof UserSettings] === 'object' &&
+      defaults[key as keyof UserSettings] !== null &&
+      !Array.isArray(defaults[key as keyof UserSettings])
+    ) {
       currentSettings[key] = {
         ...defaults[key as keyof UserSettings],
         ...(currentSettings[key] || {}),
@@ -97,7 +99,7 @@ export class SettingsStorage {
     if (typeof window === 'undefined') {
       return createDefaultSettings();
     }
-    
+
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -107,7 +109,7 @@ export class SettingsStorage {
     } catch (error) {
       console.error('Failed to load settings:', error);
     }
-    
+
     // Check for legacy settings to migrate
     const defaults = createDefaultSettings();
     const migrated = migrateSettings(defaults);
@@ -120,7 +122,7 @@ export class SettingsStorage {
    */
   private save(settings: UserSettings): void {
     if (typeof window === 'undefined') return;
-    
+
     try {
       settings.lastUpdated = new Date().toISOString();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
@@ -139,7 +141,7 @@ export class SettingsStorage {
    */
   private setupStorageListener(): void {
     if (typeof window === 'undefined') return;
-    
+
     window.addEventListener('storage', (e) => {
       if (e.key === STORAGE_KEY && e.newValue) {
         try {
@@ -157,7 +159,7 @@ export class SettingsStorage {
    * Notify all listeners of settings changes
    */
   private notifyListeners(settings: UserSettings): void {
-    this.listeners.forEach(listener => listener(settings));
+    this.listeners.forEach((listener) => listener(settings));
   }
 
   /**

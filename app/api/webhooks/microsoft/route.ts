@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { Client } from '@microsoft/microsoft-graph-client';
-import { api } from '@/convex/_generated/api';
-import { ConvexHttpClient } from 'convex/browser';
 // TODO: Move webhook processing to Convex action for server-side token decryption
 // import { decryptToken } from '@/lib/encryption';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
+import { api } from '@/convex/_generated/api';
+import { Client } from '@microsoft/microsoft-graph-client';
+import { ConvexHttpClient } from 'convex/browser';
+import { type NextRequest, NextResponse } from 'next/server';
 
 /**
  * POST /api/webhooks/microsoft
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       if (validationToken) {
         return new NextResponse(validationToken, {
           status: 200,
-          headers: { 'Content-Type': 'text/plain' }
+          headers: { 'Content-Type': 'text/plain' },
         });
       }
     }
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 
         // Find the provider by subscription ID or client state
         const provider = await convex.query(api.calendar.providers.getProviderBySubscriptionId, {
-          subscriptionId: notification.subscriptionId || notification.clientState
+          subscriptionId: notification.subscriptionId || notification.clientState,
         });
 
         if (!provider) {
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
         // Process Microsoft webhook notification using Convex action
         await convex.action(api.calendar.microsoft.processWebhookNotification, {
           notification,
-          providerId: provider._id
+          providerId: provider._id,
         });
 
         // Schedule sync operation for real-time processing
@@ -86,12 +86,14 @@ export async function POST(request: NextRequest) {
             providerId: provider._id,
             notification,
             changeType: notification.changeType,
-            resource: notification.resource
-          }
+            resource: notification.resource,
+          },
         });
 
-        console.log('Successfully processed Microsoft webhook notification:', notification.subscriptionId);
-
+        console.log(
+          'Successfully processed Microsoft webhook notification:',
+          notification.subscriptionId
+        );
       } catch (error) {
         console.error('Error processing Microsoft notification:', error);
         // Continue processing other notifications
@@ -99,13 +101,9 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ status: 'ok' });
-
   } catch (error) {
     console.error('Error handling Microsoft webhook:', error);
-    return NextResponse.json(
-      { error: 'Webhook processing failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
   }
 }
 
@@ -121,8 +119,8 @@ export async function GET(request: NextRequest) {
     return new NextResponse(validationToken, {
       status: 200,
       headers: {
-        'Content-Type': 'text/plain'
-      }
+        'Content-Type': 'text/plain',
+      },
     });
   }
 

@@ -57,7 +57,7 @@ export class ErrorBoundarySystem {
   private observers: Set<(error: ErrorInfo) => void> = new Set();
   private sessionId: string;
   private isRecovering = false;
-  
+
   // Error patterns for categorization
   private errorPatterns = {
     render: /ReactDOM|Component|render|setState|props/i,
@@ -97,7 +97,7 @@ export class ErrorBoundarySystem {
       name: 'network-retry',
       condition: (error) => error.category === 'network',
       recover: async (error) => {
-        await this.delay(1000 * Math.pow(2, error.recoveryAttempts)); // Exponential backoff
+        await this.delay(1000 * 2 ** error.recoveryAttempts); // Exponential backoff
         return true; // Signal to retry
       },
       maxAttempts: 3,
@@ -107,7 +107,7 @@ export class ErrorBoundarySystem {
     this.addRecoveryStrategy({
       name: 'component-remount',
       condition: (error) => error.category === 'render' && error.severity !== 'critical',
-      recover: async (error) => {
+      recover: async (_error) => {
         // Component will handle remount
         await this.delay(100);
         return true;
@@ -119,10 +119,10 @@ export class ErrorBoundarySystem {
     this.addRecoveryStrategy({
       name: 'clear-cache',
       condition: (error) => error.recoveryAttempts >= 2,
-      recover: async (error) => {
+      recover: async (_error) => {
         if ('caches' in window) {
           const cacheNames = await caches.keys();
-          await Promise.all(cacheNames.map(name => caches.delete(name)));
+          await Promise.all(cacheNames.map((name) => caches.delete(name)));
         }
         localStorage.clear();
         sessionStorage.clear();
@@ -135,7 +135,7 @@ export class ErrorBoundarySystem {
     this.addRecoveryStrategy({
       name: 'fallback-ui',
       condition: (error) => error.severity === 'critical',
-      recover: async (error) => {
+      recover: async (_error) => {
         // Signal to show fallback UI
         return false; // Don't retry, show fallback
       },
@@ -182,15 +182,19 @@ export class ErrorBoundarySystem {
     };
 
     // Track clicks
-    document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-      const selector = this.getElementSelector(target);
-      this.addBreadcrumb({
-        type: 'click',
-        message: `Click on ${selector}`,
-        data: { selector, text: target.textContent?.substring(0, 50) },
-      });
-    }, true);
+    document.addEventListener(
+      'click',
+      (event) => {
+        const target = event.target as HTMLElement;
+        const selector = this.getElementSelector(target);
+        this.addBreadcrumb({
+          type: 'click',
+          message: `Click on ${selector}`,
+          data: { selector, text: target.textContent?.substring(0, 50) },
+        });
+      },
+      true
+    );
 
     // Track console errors
     const originalConsoleError = console.error;
@@ -198,7 +202,7 @@ export class ErrorBoundarySystem {
       this.addBreadcrumb({
         type: 'console',
         message: 'Console error',
-        data: { args: args.map(arg => String(arg).substring(0, 100)) },
+        data: { args: args.map((arg) => String(arg).substring(0, 100)) },
       });
       return originalConsoleError.apply(console, args);
     };
@@ -216,7 +220,7 @@ export class ErrorBoundarySystem {
     window.fetch = async (...args) => {
       const url = args[0] instanceof Request ? args[0].url : String(args[0]);
       const method = args[1]?.method || 'GET';
-      
+
       this.addBreadcrumb({
         type: 'xhr',
         message: `${method} ${url}`,
@@ -271,10 +275,7 @@ export class ErrorBoundarySystem {
   /**
    * Capture error
    */
-  captureError(
-    error: Error,
-    context?: Partial<ErrorInfo>
-  ): ErrorInfo {
+  captureError(error: Error, context?: Partial<ErrorInfo>): ErrorInfo {
     const errorInfo: ErrorInfo = {
       id: `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: Date.now(),
@@ -296,7 +297,7 @@ export class ErrorBoundarySystem {
 
     // Store error
     this.errors.set(errorInfo.id, errorInfo);
-    
+
     // Trim errors
     if (this.errors.size > this.maxErrors) {
       const firstKey = this.errors.keys().next().value;
@@ -317,7 +318,7 @@ export class ErrorBoundarySystem {
    */
   private determineSeverity(error: Error): ErrorInfo['severity'] {
     const errorMessage = error.message.toLowerCase();
-    
+
     if (errorMessage.includes('critical') || errorMessage.includes('fatal')) {
       return 'critical';
     }
@@ -335,13 +336,13 @@ export class ErrorBoundarySystem {
    */
   private categorizeError(error: Error): ErrorInfo['category'] {
     const errorString = `${error.message} ${error.stack}`;
-    
+
     for (const [category, pattern] of Object.entries(this.errorPatterns)) {
       if (pattern.test(errorString)) {
         return category as ErrorInfo['category'];
       }
     }
-    
+
     return 'unknown';
   }
 
@@ -362,20 +363,17 @@ export class ErrorBoundarySystem {
    */
   private async attemptRecovery(errorInfo: ErrorInfo): Promise<boolean> {
     if (this.isRecovering) return false;
-    
+
     this.isRecovering = true;
-    
+
     try {
       for (const strategy of this.recoveryStrategies) {
-        if (
-          strategy.condition(errorInfo) &&
-          errorInfo.recoveryAttempts < strategy.maxAttempts
-        ) {
+        if (strategy.condition(errorInfo) && errorInfo.recoveryAttempts < strategy.maxAttempts) {
           errorInfo.recoveryAttempts++;
-          
+
           console.log(`Attempting recovery strategy: ${strategy.name}`);
           const recovered = await strategy.recover(errorInfo);
-          
+
           if (recovered) {
             errorInfo.recovered = true;
             this.errors.set(errorInfo.id, errorInfo);
@@ -389,7 +387,7 @@ export class ErrorBoundarySystem {
     } finally {
       this.isRecovering = false;
     }
-    
+
     return false;
   }
 
@@ -412,7 +410,7 @@ export class ErrorBoundarySystem {
    * Notify observers
    */
   private notifyObservers(error: ErrorInfo): void {
-    this.observers.forEach(observer => observer(error));
+    this.observers.forEach((observer) => observer(error));
   }
 
   /**
@@ -420,34 +418,33 @@ export class ErrorBoundarySystem {
    */
   getMetrics(): ErrorMetrics {
     const errors = Array.from(this.errors.values());
-    
+
     // Count by category
     const errorsByCategory: Record<string, number> = {};
-    errors.forEach(error => {
+    errors.forEach((error) => {
       errorsByCategory[error.category] = (errorsByCategory[error.category] || 0) + 1;
     });
-    
+
     // Count by severity
     const errorsBySeverity: Record<string, number> = {};
-    errors.forEach(error => {
+    errors.forEach((error) => {
       errorsBySeverity[error.severity] = (errorsBySeverity[error.severity] || 0) + 1;
     });
-    
+
     // Calculate recovery rate
-    const recoveredCount = errors.filter(e => e.recovered).length;
+    const recoveredCount = errors.filter((e) => e.recovered).length;
     const recoveryRate = errors.length > 0 ? recoveredCount / errors.length : 0;
-    
+
     // Calculate average recovery time
-    const recoveryTimes = errors
-      .filter(e => e.recovered)
-      .map(e => e.recoveryAttempts * 1000); // Approximate
-    const averageRecoveryTime = recoveryTimes.length > 0
-      ? recoveryTimes.reduce((a, b) => a + b, 0) / recoveryTimes.length
-      : 0;
-    
+    const recoveryTimes = errors.filter((e) => e.recovered).map((e) => e.recoveryAttempts * 1000); // Approximate
+    const averageRecoveryTime =
+      recoveryTimes.length > 0
+        ? recoveryTimes.reduce((a, b) => a + b, 0) / recoveryTimes.length
+        : 0;
+
     // Get top errors
     const errorCounts: Record<string, number> = {};
-    errors.forEach(error => {
+    errors.forEach((error) => {
       const key = error.error.message;
       errorCounts[key] = (errorCounts[key] || 0) + 1;
     });
@@ -455,17 +452,17 @@ export class ErrorBoundarySystem {
       .map(([error, count]) => ({ error, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
-    
+
     // Get error trend (last 10 minutes)
     const now = Date.now();
     const trend: Array<{ timestamp: number; count: number }> = [];
     for (let i = 9; i >= 0; i--) {
       const start = now - (i + 1) * 60000;
       const end = now - i * 60000;
-      const count = errors.filter(e => e.timestamp >= start && e.timestamp < end).length;
+      const count = errors.filter((e) => e.timestamp >= start && e.timestamp < end).length;
       trend.push({ timestamp: end, count });
     }
-    
+
     return {
       totalErrors: errors.length,
       errorsByCategory,
@@ -504,7 +501,7 @@ export class ErrorBoundarySystem {
    * Delay utility
    */
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -513,19 +510,23 @@ export class ErrorBoundarySystem {
   exportErrorLog(): string {
     const errors = Array.from(this.errors.values());
     const metrics = this.getMetrics();
-    
-    return JSON.stringify({
-      sessionId: this.sessionId,
-      timestamp: Date.now(),
-      metrics,
-      errors: errors.map(e => ({
-        ...e,
-        error: {
-          message: e.error.message,
-          stack: e.error.stack,
-        },
-      })),
-    }, null, 2);
+
+    return JSON.stringify(
+      {
+        sessionId: this.sessionId,
+        timestamp: Date.now(),
+        metrics,
+        errors: errors.map((e) => ({
+          ...e,
+          error: {
+            message: e.error.message,
+            stack: e.error.stack,
+          },
+        })),
+      },
+      null,
+      2
+    );
   }
 }
 

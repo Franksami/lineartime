@@ -1,8 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { performanceMonitor, PerformanceMetrics, PerformanceAlert } from '@/lib/performance/PerformanceMonitor';
+import {
+  type PerformanceAlert,
+  type PerformanceMetrics,
+  performanceMonitor,
+} from '@/lib/performance/PerformanceMonitor';
 import { cn } from '@/lib/utils';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 
 interface MetricCardProps {
   label: string;
@@ -67,7 +72,12 @@ const HealthIndicator: React.FC<HealthIndicatorProps> = ({ health, score }) => {
           />
         </div>
       </div>
-      <div className={cn('px-3 py-1 rounded-full text-white text-sm font-medium', healthColors[health])}>
+      <div
+        className={cn(
+          'px-3 py-1 rounded-full text-white text-sm font-medium',
+          healthColors[health]
+        )}
+      >
         {health.toUpperCase()}
       </div>
     </div>
@@ -146,7 +156,10 @@ export const PerformanceDashboard: React.FC = () => {
     return null;
   }
 
-  const getMetricStatus = (value: number, thresholds: { good: number; warning: number; bad: number }): 'good' | 'warning' | 'error' => {
+  const getMetricStatus = (
+    value: number,
+    thresholds: { good: number; warning: number; bad: number }
+  ): 'good' | 'warning' | 'error' => {
     if (value <= thresholds.good) return 'good';
     if (value <= thresholds.warning) return 'warning';
     return 'error';
@@ -280,8 +293,12 @@ export const PerformanceDashboard: React.FC = () => {
               Generate Report
             </button>
             <div className="flex space-x-2">
-              <span className="text-xs text-gray-500">Perf: {metrics.performanceScore.toFixed(0)}</span>
-              <span className="text-xs text-gray-500">Quality: {metrics.qualityScore.toFixed(0)}</span>
+              <span className="text-xs text-gray-500">
+                Perf: {metrics.performanceScore.toFixed(0)}
+              </span>
+              <span className="text-xs text-gray-500">
+                Quality: {metrics.qualityScore.toFixed(0)}
+              </span>
             </div>
           </div>
         </div>

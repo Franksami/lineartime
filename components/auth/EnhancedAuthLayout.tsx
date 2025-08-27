@@ -1,88 +1,88 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { EnhancedSignInForm } from './EnhancedSignInForm'
-import { EnhancedSignUpForm } from './EnhancedSignUpForm'
-import { 
-  Calendar, 
-  TrendingUp, 
-  Users, 
-  Zap, 
-  Shield, 
-  Star,
-  Clock,
-  Target,
-  BarChart3,
-  Sparkles,
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { useUnifiedTheme } from '@/hooks/useUnifiedTheme';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
   ArrowRight,
-  CheckCircle
-} from 'lucide-react'
-import { useUnifiedTheme } from '@/hooks/useUnifiedTheme'
+  BarChart3,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Shield,
+  Sparkles,
+  Star,
+  Target,
+  TrendingUp,
+  Users,
+  Zap,
+} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { EnhancedSignInForm } from './EnhancedSignInForm';
+import { EnhancedSignUpForm } from './EnhancedSignUpForm';
 
 interface EnhancedAuthLayoutProps {
-  mode: 'signin' | 'signup'
-  onModeChange: (mode: 'signin' | 'signup') => void
+  mode: 'signin' | 'signup';
+  onModeChange: (mode: 'signin' | 'signup') => void;
 }
 
 export function EnhancedAuthLayout({ mode, onModeChange }: EnhancedAuthLayoutProps) {
-  const [currentFeature, setCurrentFeature] = useState(0)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const { utils, isClient } = useUnifiedTheme()
+  const [currentFeature, setCurrentFeature] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { utils, isClient } = useUnifiedTheme();
 
   // Rotate featured benefits
   const features = [
-    { 
-      icon: Calendar, 
-      title: 'AI-Powered Scheduling', 
+    {
+      icon: Calendar,
+      title: 'AI-Powered Scheduling',
       description: 'Smart suggestions for optimal time management',
       stat: '40% time saved',
-      color: 'from-blue-500 to-blue-600'
+      color: 'from-blue-500 to-blue-600',
     },
-    { 
-      icon: TrendingUp, 
-      title: 'Advanced Analytics', 
+    {
+      icon: TrendingUp,
+      title: 'Advanced Analytics',
       description: 'Deep insights into productivity patterns',
       stat: '95% accuracy',
-      color: 'from-green-500 to-green-600'
+      color: 'from-green-500 to-green-600',
     },
-    { 
-      icon: Users, 
-      title: 'Team Collaboration', 
+    {
+      icon: Users,
+      title: 'Team Collaboration',
       description: 'Seamless coordination across teams',
       stat: '10K+ teams',
-      color: 'from-purple-500 to-purple-600'
+      color: 'from-purple-500 to-purple-600',
     },
-    { 
-      icon: Shield, 
-      title: 'Enterprise Security', 
+    {
+      icon: Shield,
+      title: 'Enterprise Security',
       description: 'Bank-grade security for your data',
       stat: '99.9% uptime',
-      color: 'from-orange-500 to-orange-600'
+      color: 'from-orange-500 to-orange-600',
     },
-  ]
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentFeature(prev => (prev + 1) % features.length)
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [features.length])
+      setCurrentFeature((prev) => (prev + 1) % features.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [features.length]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
         y: (e.clientY / window.innerHeight) * 100,
-      })
-    }
+      });
+    };
 
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   if (!isClient) {
     return (
@@ -99,7 +99,7 @@ export function EnhancedAuthLayout({ mode, onModeChange }: EnhancedAuthLayoutPro
           </Card>
         </div>
       </div>
-    )
+    );
   }
 
   const stats = [
@@ -107,13 +107,13 @@ export function EnhancedAuthLayout({ mode, onModeChange }: EnhancedAuthLayoutPro
     { title: 'Time Saved', value: '2M hrs', icon: Clock },
     { title: 'Satisfaction', value: '98%', icon: Target },
     { title: 'Integrations', value: '100+', icon: BarChart3 },
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0 -z-10">
-        <motion.div 
+        <motion.div
           className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5"
           style={{
             background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, var(--primary) 0%, transparent 50%)`,
@@ -127,7 +127,7 @@ export function EnhancedAuthLayout({ mode, onModeChange }: EnhancedAuthLayoutPro
           }}
           transition={{
             duration: 20,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             ease: 'linear',
           }}
           className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-primary/10 blur-3xl"
@@ -139,12 +139,12 @@ export function EnhancedAuthLayout({ mode, onModeChange }: EnhancedAuthLayoutPro
           }}
           transition={{
             duration: 25,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             ease: 'linear',
           }}
           className="absolute bottom-1/4 left-1/4 w-96 h-96 rounded-full bg-accent/10 blur-3xl"
         />
-        
+
         {/* Floating particles */}
         {[...Array(20)].map((_, i) => (
           <motion.div
@@ -160,7 +160,7 @@ export function EnhancedAuthLayout({ mode, onModeChange }: EnhancedAuthLayoutPro
             }}
             transition={{
               duration: 3 + Math.random() * 2,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               delay: Math.random() * 2,
             }}
           />
@@ -195,7 +195,7 @@ export function EnhancedAuthLayout({ mode, onModeChange }: EnhancedAuthLayoutPro
                   than a week
                 </h1>
                 <p className="text-xl text-muted-foreground mt-4 leading-relaxed">
-                  Transform how you manage time with our revolutionary year-at-a-glance calendar. 
+                  Transform how you manage time with our revolutionary year-at-a-glance calendar.
                   Powered by AI for smarter scheduling and deeper insights.
                 </p>
               </motion.div>
@@ -244,7 +244,9 @@ export function EnhancedAuthLayout({ mode, onModeChange }: EnhancedAuthLayoutPro
                       transition={{ delay: 0.2, type: 'spring' }}
                       className={`p-3 rounded-lg bg-gradient-to-r ${features[currentFeature].color}`}
                     >
-                      {React.createElement(features[currentFeature].icon, { className: "w-6 h-6 text-white" })}
+                      {React.createElement(features[currentFeature].icon, {
+                        className: 'w-6 h-6 text-white',
+                      })}
                     </motion.div>
                     <div className="flex-1 space-y-2">
                       <div className="flex items-center justify-between">
@@ -271,9 +273,7 @@ export function EnhancedAuthLayout({ mode, onModeChange }: EnhancedAuthLayoutPro
               transition={{ delay: 0.8 }}
               className="space-y-4"
             >
-              <p className="text-sm text-muted-foreground">
-                Trusted by teams at:
-              </p>
+              <p className="text-sm text-muted-foreground">Trusted by teams at:</p>
               <div className="flex flex-wrap gap-6">
                 {['Google', 'Microsoft', 'Spotify', 'Netflix', 'Uber'].map((company) => (
                   <motion.div
@@ -337,5 +337,5 @@ export function EnhancedAuthLayout({ mode, onModeChange }: EnhancedAuthLayoutPro
         </div>
       </div>
     </div>
-  )
+  );
 }

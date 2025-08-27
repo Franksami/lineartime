@@ -1,7 +1,14 @@
-import { v } from "convex/values";
-import { mutation, query, internalQuery, internalMutation, action, internalAction } from "../_generated/server";
-import { Doc } from "../_generated/dataModel";
-import { internal } from "../_generated/api";
+import { v } from 'convex/values';
+import { internal } from '../_generated/api';
+import type { Doc } from '../_generated/dataModel';
+import {
+  action,
+  internalAction,
+  internalMutation,
+  internalQuery,
+  mutation,
+  query,
+} from '../_generated/server';
 // Note: encryptToken import moved to dynamic import inside action
 
 // Encryption functions moved to convex/calendar/encryption.ts
@@ -13,63 +20,60 @@ export const connectProviderInternal = internalMutation({
   args: {
     clerkId: v.string(),
     provider: v.union(
-      v.literal("google"),
-      v.literal("microsoft"),
-      v.literal("apple"),
-      v.literal("caldav"),
-      v.literal("notion"),
-      v.literal("obsidian")
+      v.literal('google'),
+      v.literal('microsoft'),
+      v.literal('apple'),
+      v.literal('caldav'),
+      v.literal('notion'),
+      v.literal('obsidian')
     ),
     accessToken: v.object({
       encrypted: v.string(),
       iv: v.string(),
       tag: v.string(),
     }),
-    refreshToken: v.optional(v.object({
-      encrypted: v.string(),
-      iv: v.string(),
-      tag: v.string(),
-    })),
+    refreshToken: v.optional(
+      v.object({
+        encrypted: v.string(),
+        iv: v.string(),
+        tag: v.string(),
+      })
+    ),
     expiresAt: v.optional(v.number()),
     providerAccountId: v.string(),
     settings: v.object({
-      calendars: v.array(v.object({
-        id: v.string(),
-        name: v.string(),
-        color: v.string(),
-        syncEnabled: v.boolean(),
-        isPrimary: v.optional(v.boolean()),
-      })),
-      syncDirection: v.optional(v.union(
-        v.literal("pull"),
-        v.literal("push"),
-        v.literal("bidirectional")
-      )),
-      conflictResolution: v.optional(v.union(
-        v.literal("local"),
-        v.literal("remote"),
-        v.literal("newest"),
-        v.literal("manual")
-      )),
+      calendars: v.array(
+        v.object({
+          id: v.string(),
+          name: v.string(),
+          color: v.string(),
+          syncEnabled: v.boolean(),
+          isPrimary: v.optional(v.boolean()),
+        })
+      ),
+      syncDirection: v.optional(
+        v.union(v.literal('pull'), v.literal('push'), v.literal('bidirectional'))
+      ),
+      conflictResolution: v.optional(
+        v.union(v.literal('local'), v.literal('remote'), v.literal('newest'), v.literal('manual'))
+      ),
     }),
   },
   handler: async (ctx, args) => {
     // Get user by Clerk ID
     const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+      .query('users')
+      .withIndex('by_clerk_id', (q) => q.eq('clerkId', args.clerkId))
       .first();
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     // Check if provider already exists
     const existingProvider = await ctx.db
-      .query("calendarProviders")
-      .withIndex("by_provider", (q) =>
-        q.eq("userId", user._id).eq("provider", args.provider)
-      )
+      .query('calendarProviders')
+      .withIndex('by_provider', (q) => q.eq('userId', user._id).eq('provider', args.provider))
       .first();
 
     const now = Date.now();
@@ -84,24 +88,23 @@ export const connectProviderInternal = internalMutation({
         settings: args.settings,
         updatedAt: now,
       });
-      
+
       return existingProvider._id;
-    } else {
-      // Create new provider connection
-      const providerId = await ctx.db.insert("calendarProviders", {
-        userId: user._id,
-        provider: args.provider,
-        accessToken: args.accessToken,
-        refreshToken: args.refreshToken,
-        expiresAt: args.expiresAt,
-        providerAccountId: args.providerAccountId,
-        settings: args.settings,
-        createdAt: now,
-        updatedAt: now,
-      });
-      
-      return providerId;
     }
+    // Create new provider connection
+    const providerId = await ctx.db.insert('calendarProviders', {
+      userId: user._id,
+      provider: args.provider,
+      accessToken: args.accessToken,
+      refreshToken: args.refreshToken,
+      expiresAt: args.expiresAt,
+      providerAccountId: args.providerAccountId,
+      settings: args.settings,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    return providerId;
   },
 });
 
@@ -111,68 +114,65 @@ export const connectProviderInternal = internalMutation({
 export const connectProvider = mutation({
   args: {
     provider: v.union(
-      v.literal("google"),
-      v.literal("microsoft"),
-      v.literal("apple"),
-      v.literal("caldav"),
-      v.literal("notion"),
-      v.literal("obsidian")
+      v.literal('google'),
+      v.literal('microsoft'),
+      v.literal('apple'),
+      v.literal('caldav'),
+      v.literal('notion'),
+      v.literal('obsidian')
     ),
     accessToken: v.object({
       encrypted: v.string(),
       iv: v.string(),
       tag: v.string(),
     }),
-    refreshToken: v.optional(v.object({
-      encrypted: v.string(),
-      iv: v.string(),
-      tag: v.string(),
-    })),
+    refreshToken: v.optional(
+      v.object({
+        encrypted: v.string(),
+        iv: v.string(),
+        tag: v.string(),
+      })
+    ),
     expiresAt: v.optional(v.number()),
     providerAccountId: v.string(),
     settings: v.object({
-      calendars: v.array(v.object({
-        id: v.string(),
-        name: v.string(),
-        color: v.string(),
-        syncEnabled: v.boolean(),
-        isPrimary: v.optional(v.boolean()),
-      })),
-      syncDirection: v.optional(v.union(
-        v.literal("pull"),
-        v.literal("push"),
-        v.literal("bidirectional")
-      )),
-      conflictResolution: v.optional(v.union(
-        v.literal("local"),
-        v.literal("remote"),
-        v.literal("newest"),
-        v.literal("manual")
-      )),
+      calendars: v.array(
+        v.object({
+          id: v.string(),
+          name: v.string(),
+          color: v.string(),
+          syncEnabled: v.boolean(),
+          isPrimary: v.optional(v.boolean()),
+        })
+      ),
+      syncDirection: v.optional(
+        v.union(v.literal('pull'), v.literal('push'), v.literal('bidirectional'))
+      ),
+      conflictResolution: v.optional(
+        v.union(v.literal('local'), v.literal('remote'), v.literal('newest'), v.literal('manual'))
+      ),
     }),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      throw new Error("Not authenticated");
+      throw new Error('Not authenticated');
     }
 
     // Get user by Clerk ID
     const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .query('users')
+      .withIndex('by_clerk_id', (q) => q.eq('clerkId', identity.subject))
       .first();
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     // Check if provider already exists
     const existingProvider = await ctx.db
-      .query("calendarProviders")
-      .withIndex("by_provider", (q) =>
-        q.eq("userId", user._id).eq("provider", args.provider)
-      )
+      .query('calendarProviders')
+      .withIndex('by_provider', (q) => q.eq('userId', user._id).eq('provider', args.provider))
       .first();
 
     const now = Date.now();
@@ -187,24 +187,23 @@ export const connectProvider = mutation({
         settings: args.settings,
         updatedAt: now,
       });
-      
+
       return existingProvider._id;
-    } else {
-      // Create new provider connection
-      const providerId = await ctx.db.insert("calendarProviders", {
-        userId: user._id,
-        provider: args.provider,
-        accessToken: args.accessToken,
-        refreshToken: args.refreshToken,
-        expiresAt: args.expiresAt,
-        providerAccountId: args.providerAccountId,
-        settings: args.settings,
-        createdAt: now,
-        updatedAt: now,
-      });
-      
-      return providerId;
     }
+    // Create new provider connection
+    const providerId = await ctx.db.insert('calendarProviders', {
+      userId: user._id,
+      provider: args.provider,
+      accessToken: args.accessToken,
+      refreshToken: args.refreshToken,
+      expiresAt: args.expiresAt,
+      providerAccountId: args.providerAccountId,
+      settings: args.settings,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    return providerId;
   },
 });
 
@@ -214,43 +213,41 @@ export const connectProvider = mutation({
 export const disconnectProvider = mutation({
   args: {
     provider: v.union(
-      v.literal("google"),
-      v.literal("microsoft"),
-      v.literal("apple"),
-      v.literal("caldav"),
-      v.literal("notion"),
-      v.literal("obsidian")
+      v.literal('google'),
+      v.literal('microsoft'),
+      v.literal('apple'),
+      v.literal('caldav'),
+      v.literal('notion'),
+      v.literal('obsidian')
     ),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      throw new Error("Not authenticated");
+      throw new Error('Not authenticated');
     }
 
     const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .query('users')
+      .withIndex('by_clerk_id', (q) => q.eq('clerkId', identity.subject))
       .first();
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     const provider = await ctx.db
-      .query("calendarProviders")
-      .withIndex("by_provider", (q) =>
-        q.eq("userId", user._id).eq("provider", args.provider)
-      )
+      .query('calendarProviders')
+      .withIndex('by_provider', (q) => q.eq('userId', user._id).eq('provider', args.provider))
       .first();
 
     if (provider) {
       // Delete all event sync mappings for this provider
       const eventSyncs = await ctx.db
-        .query("eventSync")
-        .withIndex("by_provider_id", (q) => q.eq("providerId", provider._id))
+        .query('eventSync')
+        .withIndex('by_provider_id', (q) => q.eq('providerId', provider._id))
         .collect();
-      
+
       for (const sync of eventSyncs) {
         await ctx.db.delete(sync._id);
       }
@@ -273,8 +270,8 @@ export const getConnectedProviders = query({
     }
 
     const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .query('users')
+      .withIndex('by_clerk_id', (q) => q.eq('clerkId', identity.subject))
       .first();
 
     if (!user) {
@@ -282,12 +279,12 @@ export const getConnectedProviders = query({
     }
 
     const providers = await ctx.db
-      .query("calendarProviders")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .query('calendarProviders')
+      .withIndex('by_user', (q) => q.eq('userId', user._id))
       .collect();
 
     // Don't return encrypted tokens to the client
-    return providers.map(provider => ({
+    return providers.map((provider) => ({
       _id: provider._id,
       provider: provider.provider,
       providerAccountId: provider.providerAccountId,
@@ -308,58 +305,53 @@ export const getConnectedProviders = query({
 export const updateProviderSettings = mutation({
   args: {
     provider: v.union(
-      v.literal("google"),
-      v.literal("microsoft"),
-      v.literal("apple"),
-      v.literal("caldav"),
-      v.literal("notion"),
-      v.literal("obsidian")
+      v.literal('google'),
+      v.literal('microsoft'),
+      v.literal('apple'),
+      v.literal('caldav'),
+      v.literal('notion'),
+      v.literal('obsidian')
     ),
     settings: v.object({
-      calendars: v.array(v.object({
-        id: v.string(),
-        name: v.string(),
-        color: v.string(),
-        syncEnabled: v.boolean(),
-        isPrimary: v.optional(v.boolean()),
-      })),
-      syncDirection: v.optional(v.union(
-        v.literal("pull"),
-        v.literal("push"),
-        v.literal("bidirectional")
-      )),
-      conflictResolution: v.optional(v.union(
-        v.literal("local"),
-        v.literal("remote"),
-        v.literal("newest"),
-        v.literal("manual")
-      )),
+      calendars: v.array(
+        v.object({
+          id: v.string(),
+          name: v.string(),
+          color: v.string(),
+          syncEnabled: v.boolean(),
+          isPrimary: v.optional(v.boolean()),
+        })
+      ),
+      syncDirection: v.optional(
+        v.union(v.literal('pull'), v.literal('push'), v.literal('bidirectional'))
+      ),
+      conflictResolution: v.optional(
+        v.union(v.literal('local'), v.literal('remote'), v.literal('newest'), v.literal('manual'))
+      ),
     }),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      throw new Error("Not authenticated");
+      throw new Error('Not authenticated');
     }
 
     const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .query('users')
+      .withIndex('by_clerk_id', (q) => q.eq('clerkId', identity.subject))
       .first();
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     const provider = await ctx.db
-      .query("calendarProviders")
-      .withIndex("by_provider", (q) =>
-        q.eq("userId", user._id).eq("provider", args.provider)
-      )
+      .query('calendarProviders')
+      .withIndex('by_provider', (q) => q.eq('userId', user._id).eq('provider', args.provider))
       .first();
 
     if (!provider) {
-      throw new Error("Provider not connected");
+      throw new Error('Provider not connected');
     }
 
     await ctx.db.patch(provider._id, {
@@ -381,30 +373,35 @@ export const updateSyncToken = mutation({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      throw new Error("Not authenticated");
+      throw new Error('Not authenticated');
     }
 
     const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .query('users')
+      .withIndex('by_clerk_id', (q) => q.eq('clerkId', identity.subject))
       .first();
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     const provider = await ctx.db
-      .query("calendarProviders")
-      .withIndex("by_provider", (q) =>
-        q.eq("userId", user._id).eq("provider", args.provider as "google" | "microsoft" | "apple" | "caldav" | "notion" | "obsidian")
+      .query('calendarProviders')
+      .withIndex('by_provider', (q) =>
+        q
+          .eq('userId', user._id)
+          .eq(
+            'provider',
+            args.provider as 'google' | 'microsoft' | 'apple' | 'caldav' | 'notion' | 'obsidian'
+          )
       )
       .first();
 
     if (!provider) {
-      throw new Error("Provider not connected");
+      throw new Error('Provider not connected');
     }
 
-    const updates: Partial<Doc<"calendarProviders">> = {
+    const updates: Partial<Doc<'calendarProviders'>> = {
       lastSyncAt: Date.now(),
       updatedAt: Date.now(),
     };
@@ -412,7 +409,7 @@ export const updateSyncToken = mutation({
     if (args.syncToken !== undefined) {
       updates.syncToken = args.syncToken;
     }
-    
+
     if (args.deltaLink !== undefined) {
       updates.deltaLink = args.deltaLink;
     }
@@ -426,7 +423,7 @@ export const updateSyncToken = mutation({
  */
 export const getProviderById = internalQuery({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
   },
   handler: async (ctx, args) => {
     const provider = await ctx.db.get(args.providerId);
@@ -439,7 +436,7 @@ export const getProviderById = internalQuery({
  */
 export const updateSyncTokenInternal = internalMutation({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     syncToken: v.optional(v.string()),
     deltaLink: v.optional(v.string()),
   },
@@ -452,7 +449,7 @@ export const updateSyncTokenInternal = internalMutation({
     if (args.syncToken !== undefined) {
       updates.syncToken = args.syncToken;
     }
-    
+
     if (args.deltaLink !== undefined) {
       updates.deltaLink = args.deltaLink;
     }
@@ -466,7 +463,7 @@ export const updateSyncTokenInternal = internalMutation({
  */
 export const updateProviderSettingsInternal = internalMutation({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     settings: v.any(),
   },
   handler: async (ctx, args) => {
@@ -482,7 +479,7 @@ export const updateProviderSettingsInternal = internalMutation({
  */
 export const updateLastSyncInternal = internalMutation({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     lastSyncAt: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
@@ -499,12 +496,12 @@ export const updateLastSyncInternal = internalMutation({
 export const getProviderByType = query({
   args: {
     provider: v.union(
-      v.literal("google"),
-      v.literal("microsoft"),
-      v.literal("apple"),
-      v.literal("caldav"),
-      v.literal("notion"),
-      v.literal("obsidian")
+      v.literal('google'),
+      v.literal('microsoft'),
+      v.literal('apple'),
+      v.literal('caldav'),
+      v.literal('notion'),
+      v.literal('obsidian')
     ),
   },
   handler: async (ctx, args) => {
@@ -514,8 +511,8 @@ export const getProviderByType = query({
     }
 
     const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .query('users')
+      .withIndex('by_clerk_id', (q) => q.eq('clerkId', identity.subject))
       .first();
 
     if (!user) {
@@ -523,10 +520,8 @@ export const getProviderByType = query({
     }
 
     const provider = await ctx.db
-      .query("calendarProviders")
-      .withIndex("by_provider", (q) =>
-        q.eq("userId", user._id).eq("provider", args.provider)
-      )
+      .query('calendarProviders')
+      .withIndex('by_provider', (q) => q.eq('userId', user._id).eq('provider', args.provider))
       .first();
 
     if (!provider) {
@@ -558,8 +553,8 @@ export const getProviderBySubscriptionId = internalQuery({
   handler: async (ctx, args) => {
     // First try to find by subscription ID in settings
     const providers = await ctx.db
-      .query("calendarProviders")
-      .filter((q) => q.eq(q.field("provider"), "microsoft"))
+      .query('calendarProviders')
+      .filter((q) => q.eq(q.field('provider'), 'microsoft'))
       .collect();
 
     for (const provider of providers) {
@@ -581,7 +576,7 @@ export const getProviderBySubscriptionId = internalQuery({
  */
 export const updateMicrosoftSubscription = internalMutation({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     subscriptionId: v.string(),
     expirationDateTime: v.string(),
     resource: v.string(),
@@ -599,7 +594,7 @@ export const updateMicrosoftSubscription = internalMutation({
       id: args.subscriptionId,
       resource: args.resource,
       expirationDateTime: args.expirationDateTime,
-      createdAt: Date.now()
+      createdAt: Date.now(),
     };
 
     if (existingIndex >= 0) {
@@ -611,9 +606,9 @@ export const updateMicrosoftSubscription = internalMutation({
     await ctx.db.patch(args.providerId, {
       settings: {
         ...provider.settings,
-        subscriptions
+        subscriptions,
       },
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     });
   },
 });
@@ -623,17 +618,19 @@ export const updateMicrosoftSubscription = internalMutation({
  */
 export const updateProviderTokensInternal = internalMutation({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     accessToken: v.object({
       encrypted: v.string(),
       iv: v.string(),
       tag: v.string(),
     }),
-    refreshToken: v.optional(v.object({
-      encrypted: v.string(),
-      iv: v.string(),
-      tag: v.string(),
-    })),
+    refreshToken: v.optional(
+      v.object({
+        encrypted: v.string(),
+        iv: v.string(),
+        tag: v.string(),
+      })
+    ),
     expiresAt: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
@@ -651,7 +648,7 @@ export const updateProviderTokensInternal = internalMutation({
  */
 export const updateProviderWebhookExpiry = internalMutation({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     webhookId: v.string(),
     webhookExpiry: v.number(),
   },

@@ -1,18 +1,24 @@
-"use client"
-import type { ZoomLevel, EventFilters } from "@/components/ui/calendar"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ZoomIn, ZoomOut, Filter, Search } from "lucide-react"
+'use client';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import type { EventFilters, ZoomLevel } from '@/components/ui/calendar';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Filter, Search, ZoomIn, ZoomOut } from 'lucide-react';
 
 interface CalendarHeaderProps {
-  year: number
-  zoomLevel: ZoomLevel
-  onZoomChange: (level: ZoomLevel) => void
-  eventCount: number
-  filters: EventFilters
-  onFiltersChange: (filters: EventFilters) => void
+  year: number;
+  zoomLevel: ZoomLevel;
+  onZoomChange: (level: ZoomLevel) => void;
+  eventCount: number;
+  filters: EventFilters;
+  onFiltersChange: (filters: EventFilters) => void;
 }
 
 export function CalendarHeader({
@@ -24,11 +30,11 @@ export function CalendarHeader({
   onFiltersChange,
 }: CalendarHeaderProps) {
   const zoomLevels: { value: ZoomLevel; label: string }[] = [
-    { value: "month", label: "Month" },
-    { value: "quarter", label: "Quarter" },
-    { value: "year", label: "Year" },
-    { value: "fullYear", label: "Full Year" },
-  ]
+    { value: 'month', label: 'Month' },
+    { value: 'quarter', label: 'Quarter' },
+    { value: 'year', label: 'Year' },
+    { value: 'fullYear', label: 'Full Year' },
+  ];
 
   return (
     <div className="flex items-center justify-between p-4 border-b border-border bg-background">
@@ -75,12 +81,12 @@ export function CalendarHeader({
           variant="outline"
           size="sm"
           onClick={() => {
-            const currentIndex = zoomLevels.findIndex((z) => z.value === zoomLevel)
+            const currentIndex = zoomLevels.findIndex((z) => z.value === zoomLevel);
             if (currentIndex > 0) {
-              onZoomChange(zoomLevels[currentIndex - 1].value)
+              onZoomChange(zoomLevels[currentIndex - 1].value);
             }
           }}
-          disabled={zoomLevel === "month"}
+          disabled={zoomLevel === 'month'}
         >
           <ZoomIn className="h-4 w-4" />
         </Button>
@@ -89,16 +95,16 @@ export function CalendarHeader({
           variant="outline"
           size="sm"
           onClick={() => {
-            const currentIndex = zoomLevels.findIndex((z) => z.value === zoomLevel)
+            const currentIndex = zoomLevels.findIndex((z) => z.value === zoomLevel);
             if (currentIndex < zoomLevels.length - 1) {
-              onZoomChange(zoomLevels[currentIndex + 1].value)
+              onZoomChange(zoomLevels[currentIndex + 1].value);
             }
           }}
-          disabled={zoomLevel === "fullYear"}
+          disabled={zoomLevel === 'fullYear'}
         >
           <ZoomOut className="h-4 w-4" />
         </Button>
       </div>
     </div>
-  )
+  );
 }

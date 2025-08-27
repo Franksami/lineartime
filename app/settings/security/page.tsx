@@ -1,9 +1,18 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useUser } from '@clerk/nextjs';
-import { Shield, Smartphone, Key, AlertCircle, CheckCircle, Lock, Activity, Monitor } from 'lucide-react';
 import { SessionActivityMonitor } from '@/lib/security/session-manager';
+import { useUser } from '@clerk/nextjs';
+import {
+  Activity,
+  AlertCircle,
+  CheckCircle,
+  Key,
+  Lock,
+  Monitor,
+  Shield,
+  Smartphone,
+} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 
 export default function SecuritySettingsPage() {
   const { user, isLoaded } = useUser();
@@ -15,7 +24,7 @@ export default function SecuritySettingsPage() {
     lastActive: string;
     current: boolean;
   }
-  
+
   const [activeSessions, setActiveSessions] = useState<SessionInfo[]>([]);
   const [isEnablingMFA, setIsEnablingMFA] = useState(false);
   const [showMFASetup, setShowMFASetup] = useState(false);
@@ -30,33 +39,33 @@ export default function SecuritySettingsPage() {
       // This would integrate with Clerk's API
       checkMFAStatus();
       fetchActiveSessions();
-      
+
       // Initialize activity monitor
       const monitor = new SessionActivityMonitor(
         idleTimeout * 60 * 1000,
         60000 // 1 minute warning
       );
-      
+
       monitor.onWarning(() => {
         console.log('Session timeout warning');
         // Show warning notification
       });
-      
+
       monitor.onTimeout(() => {
         console.log('Session timed out');
         // Handle session timeout
         window.location.href = '/sign-in';
       });
-      
+
       setActivityMonitor(monitor);
-      
+
       // Update time until timeout every second
       const interval = setInterval(() => {
         if (monitor) {
           setTimeUntilTimeout(monitor.getTimeUntilTimeout());
         }
       }, 1000);
-      
+
       return () => {
         clearInterval(interval);
         monitor.destroy();
@@ -94,12 +103,12 @@ export default function SecuritySettingsPage() {
   const enableMFA = async () => {
     setIsEnablingMFA(true);
     setShowMFASetup(true);
-    
+
     try {
       // This would integrate with Clerk's MFA setup
       // For now, simulating the process
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // In production, this would trigger Clerk's MFA setup flow
       console.log('MFA setup initiated');
     } catch (error) {
@@ -123,7 +132,7 @@ export default function SecuritySettingsPage() {
     try {
       // Call backend to terminate session
       console.log('Terminating session:', sessionId);
-      setActiveSessions(sessions => sessions.filter(s => s.id !== sessionId));
+      setActiveSessions((sessions) => sessions.filter((s) => s.id !== sessionId));
     } catch (error) {
       console.error('Failed to terminate session:', error);
     }
@@ -138,7 +147,7 @@ export default function SecuritySettingsPage() {
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
       </div>
     );
   }
@@ -153,24 +162,26 @@ export default function SecuritySettingsPage() {
       </div>
 
       {/* Session Activity Monitor */}
-      {timeUntilTimeout !== null && timeUntilTimeout < 120000 && ( // Show when less than 2 minutes
-        <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <div className="flex items-center">
-            <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2" />
-            <div className="flex-1">
-              <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                Your session will timeout in {formatTimeRemaining(timeUntilTimeout)} due to inactivity
-              </p>
+      {timeUntilTimeout !== null &&
+        timeUntilTimeout < 120000 && ( // Show when less than 2 minutes
+          <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+            <div className="flex items-center">
+              <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+              <div className="flex-1">
+                <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                  Your session will timeout in {formatTimeRemaining(timeUntilTimeout)} due to
+                  inactivity
+                </p>
+              </div>
+              <button
+                onClick={() => activityMonitor?.destroy()}
+                className="text-sm text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300"
+              >
+                Keep me signed in
+              </button>
             </div>
-            <button
-              onClick={() => activityMonitor?.destroy()}
-              className="text-sm text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300"
-            >
-              Keep me signed in
-            </button>
           </div>
-        </div>
-      )}
+        )}
 
       {/* Two-Factor Authentication */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
@@ -182,9 +193,10 @@ export default function SecuritySettingsPage() {
                 Two-Factor Authentication (2FA)
               </h2>
               <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Add an extra layer of security to your account by requiring a verification code in addition to your password
+                Add an extra layer of security to your account by requiring a verification code in
+                addition to your password
               </p>
-              
+
               {mfaEnabled ? (
                 <div className="mt-4 flex items-center text-sm text-green-600 dark:text-green-400">
                   <CheckCircle className="h-4 w-4 mr-1" />
@@ -198,7 +210,7 @@ export default function SecuritySettingsPage() {
               )}
             </div>
           </div>
-          
+
           <button
             onClick={mfaEnabled ? disableMFA : enableMFA}
             disabled={isEnablingMFA}
@@ -225,7 +237,8 @@ export default function SecuritySettingsPage() {
               <li>4. Save your backup codes in a secure location</li>
             </ol>
             <p className="mt-3 text-xs text-blue-700 dark:text-blue-400">
-              Note: This feature will be fully functional once Clerk MFA is configured in the dashboard.
+              Note: This feature will be fully functional once Clerk MFA is configured in the
+              dashboard.
             </p>
           </div>
         )}
@@ -242,7 +255,7 @@ export default function SecuritySettingsPage() {
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 mb-4">
               Configure automatic logout after periods of inactivity
             </p>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -253,14 +266,14 @@ export default function SecuritySettingsPage() {
                   min="5"
                   max="120"
                   value={sessionTimeout}
-                  onChange={(e) => setSessionTimeout(parseInt(e.target.value))}
+                  onChange={(e) => setSessionTimeout(Number.parseInt(e.target.value))}
                   className="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                 />
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                   Maximum time a session can remain active
                 </p>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Idle Timeout (minutes)
@@ -270,7 +283,7 @@ export default function SecuritySettingsPage() {
                   min="5"
                   max="60"
                   value={idleTimeout}
-                  onChange={(e) => setIdleTimeout(parseInt(e.target.value))}
+                  onChange={(e) => setIdleTimeout(Number.parseInt(e.target.value))}
                   className="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                 />
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -287,9 +300,7 @@ export default function SecuritySettingsPage() {
         <div className="flex items-start mb-4">
           <Monitor className="h-6 w-6 text-blue-600 dark:text-blue-400 mt-1 mr-3" />
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Active Sessions
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Active Sessions</h2>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
               Manage devices and locations where you&apos;re currently signed in
             </p>
@@ -314,11 +325,12 @@ export default function SecuritySettingsPage() {
                     )}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {session.location} • Last active: {new Date(session.lastActive).toLocaleString()}
+                    {session.location} • Last active:{' '}
+                    {new Date(session.lastActive).toLocaleString()}
                   </p>
                 </div>
               </div>
-              
+
               {!session.current && (
                 <button
                   onClick={() => terminateSession(session.id)}

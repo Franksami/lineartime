@@ -3,8 +3,15 @@
  * Provides CRUD operations and utilities for offline storage
  */
 
-import { db, StoredEvent, StoredCategory, StoredCalendar, StoredPreferences, SyncQueueItem } from './schema';
 import { Collection } from 'dexie';
+import {
+  type StoredCalendar,
+  type StoredCategory,
+  type StoredEvent,
+  type StoredPreferences,
+  type SyncQueueItem,
+  db,
+} from './schema';
 
 /**
  * Event Operations
@@ -17,7 +24,7 @@ export class EventOperations {
     const start = performance.now();
     try {
       const id = await db.events.add(event);
-      
+
       // Log performance metric
       await db.metrics.add({
         operation: 'event.create',
@@ -26,7 +33,7 @@ export class EventOperations {
         success: true,
         recordCount: 1,
       });
-      
+
       return id;
     } catch (error) {
       await db.metrics.add({
@@ -51,21 +58,18 @@ export class EventOperations {
     return await db.events
       .where('[userId+startTime]')
       .between([userId, startTime], [userId, endTime])
-      .and(event => !event.isDeleted)
+      .and((event) => !event.isDeleted)
       .toArray();
   }
 
   /**
    * Get events by category
    */
-  static async getByCategory(
-    userId: string,
-    categoryId: string
-  ): Promise<StoredEvent[]> {
+  static async getByCategory(userId: string, categoryId: string): Promise<StoredEvent[]> {
     return await db.events
       .where('[userId+categoryId]')
       .equals([userId, categoryId])
-      .and(event => !event.isDeleted)
+      .and((event) => !event.isDeleted)
       .toArray();
   }
 
@@ -88,7 +92,7 @@ export class EventOperations {
     const start = performance.now();
     try {
       await db.events.update(id, updates);
-      
+
       await db.metrics.add({
         operation: 'event.update',
         duration: performance.now() - start,
@@ -122,21 +126,18 @@ export class EventOperations {
   /**
    * Search events by title
    */
-  static async search(
-    userId: string,
-    searchTerm: string,
-    limit = 20
-  ): Promise<StoredEvent[]> {
+  static async search(userId: string, searchTerm: string, limit = 20): Promise<StoredEvent[]> {
     const searchLower = searchTerm.toLowerCase();
-    
+
     return await db.events
       .where('userId')
       .equals(userId)
-      .filter(event => 
-        !event.isDeleted &&
-        (event.title.toLowerCase().includes(searchLower) ||
-         event.description?.toLowerCase().includes(searchLower) ||
-         event.location?.toLowerCase().includes(searchLower))
+      .filter(
+        (event) =>
+          !event.isDeleted &&
+          (event.title.toLowerCase().includes(searchLower) ||
+            event.description?.toLowerCase().includes(searchLower) ||
+            event.location?.toLowerCase().includes(searchLower))
       )
       .limit(limit)
       .toArray();
@@ -149,7 +150,7 @@ export class EventOperations {
     return await db.events
       .where('userId')
       .equals(userId)
-      .filter(event => !event.isDeleted && event.recurrence !== undefined)
+      .filter((event) => !event.isDeleted && event.recurrence !== undefined)
       .toArray();
   }
 }
@@ -169,10 +170,7 @@ export class CategoryOperations {
    * Get all categories for a user
    */
   static async getByUser(userId: string): Promise<StoredCategory[]> {
-    return await db.categories
-      .where('userId')
-      .equals(userId)
-      .toArray();
+    return await db.categories.where('userId').equals(userId).toArray();
   }
 
   /**
@@ -185,10 +183,7 @@ export class CategoryOperations {
   /**
    * Delete a category and optionally reassign events
    */
-  static async delete(
-    id: number,
-    reassignToCategory?: string
-  ): Promise<void> {
+  static async delete(id: number, reassignToCategory?: string): Promise<void> {
     await db.transaction('rw', db.categories, db.events, async () => {
       const category = await db.categories.get(id);
       if (!category) return;
@@ -226,7 +221,7 @@ export class CalendarOperations {
         .equals([calendar.userId, true])
         .modify({ isDefault: false });
     }
-    
+
     return await db.calendars.add(calendar);
   }
 
@@ -234,29 +229,20 @@ export class CalendarOperations {
    * Get all calendars for a user
    */
   static async getByUser(userId: string): Promise<StoredCalendar[]> {
-    return await db.calendars
-      .where('userId')
-      .equals(userId)
-      .toArray();
+    return await db.calendars.where('userId').equals(userId).toArray();
   }
 
   /**
    * Get default calendar
    */
   static async getDefault(userId: string): Promise<StoredCalendar | undefined> {
-    const calendars = await db.calendars
-      .where('[userId+isDefault]')
-      .equals([userId, true])
-      .first();
-    
+    const calendars = await db.calendars.where('[userId+isDefault]').equals([userId, true]).first();
+
     // If no default, return the first calendar
     if (!calendars) {
-      return await db.calendars
-        .where('userId')
-        .equals(userId)
-        .first();
+      return await db.calendars.where('userId').equals(userId).first();
     }
-    
+
     return calendars;
   }
 
@@ -274,7 +260,7 @@ export class CalendarOperations {
           .modify({ isDefault: false });
       }
     }
-    
+
     await db.calendars.update(id, updates);
   }
 }
@@ -287,19 +273,16 @@ export class PreferencesOperations {
    * Get user preferences
    */
   static async get(userId: string): Promise<StoredPreferences | undefined> {
-    return await db.preferences
-      .where('userId')
-      .equals(userId)
-      .first();
+    return await db.preferences.where('userId').equals(userId).first();
   }
 
   /**
    * Save user preferences
    */
   static async save(preferences: StoredPreferences): Promise<void> {
-    const existing = await this.get(preferences.userId);
-    
-    if (existing && existing.id) {
+    const existing = await PreferencesOperations.get(preferences.userId);
+
+    if (existing?.id) {
       await db.preferences.update(existing.id, preferences);
     } else {
       await db.preferences.add(preferences);
@@ -309,17 +292,14 @@ export class PreferencesOperations {
   /**
    * Update specific preference fields
    */
-  static async update(
-    userId: string,
-    updates: Partial<StoredPreferences>
-  ): Promise<void> {
-    const existing = await this.get(userId);
-    
-    if (existing && existing.id) {
+  static async update(userId: string, updates: Partial<StoredPreferences>): Promise<void> {
+    const existing = await PreferencesOperations.get(userId);
+
+    if (existing?.id) {
       await db.preferences.update(existing.id, updates);
     } else {
       await db.preferences.add({
-        ...this.getDefaults(),
+        ...PreferencesOperations.getDefaults(),
         ...updates,
         userId,
       });
@@ -370,7 +350,7 @@ export class SyncQueueOperations {
     return await db.syncQueue
       .where('userId')
       .equals(userId)
-      .filter(item => item.attempts < 3)
+      .filter((item) => item.attempts < 3)
       .limit(limit)
       .toArray();
   }
@@ -378,10 +358,7 @@ export class SyncQueueOperations {
   /**
    * Mark sync item as attempted
    */
-  static async markAttempted(
-    id: number,
-    error?: string
-  ): Promise<void> {
+  static async markAttempted(id: number, error?: string): Promise<void> {
     const item = await db.syncQueue.get(id);
     if (!item) return;
 
@@ -403,10 +380,7 @@ export class SyncQueueOperations {
    * Clear all sync items for a user
    */
   static async clearAll(userId: string): Promise<void> {
-    await db.syncQueue
-      .where('userId')
-      .equals(userId)
-      .delete();
+    await db.syncQueue.where('userId').equals(userId).delete();
   }
 
   /**
@@ -418,22 +392,19 @@ export class SyncQueueOperations {
     failed: number;
     byOperation: Record<string, number>;
   }> {
-    const items = await db.syncQueue
-      .where('userId')
-      .equals(userId)
-      .toArray();
+    const items = await db.syncQueue.where('userId').equals(userId).toArray();
 
     const byOperation: Record<string, number> = {};
     let failed = 0;
 
-    items.forEach(item => {
+    items.forEach((item) => {
       if (item.attempts >= 3) failed++;
       byOperation[item.operation] = (byOperation[item.operation] || 0) + 1;
     });
 
     return {
       total: items.length,
-      pending: items.filter(i => i.attempts < 3).length,
+      pending: items.filter((i) => i.attempts < 3).length,
       failed,
       byOperation,
     };
@@ -448,10 +419,7 @@ export class CacheOperations {
    * Get cached data
    */
   static async get<T = any>(key: string): Promise<T | null> {
-    const entry = await db.cache
-      .where('key')
-      .equals(key)
-      .first();
+    const entry = await db.cache.where('key').equals(key).first();
 
     if (!entry) return null;
 
@@ -473,10 +441,7 @@ export class CacheOperations {
     ttl = 300000, // 5 minutes default
     tags?: string[]
   ): Promise<void> {
-    const existing = await db.cache
-      .where('key')
-      .equals(key)
-      .first();
+    const existing = await db.cache.where('key').equals(key).first();
 
     const entry = {
       key,
@@ -486,7 +451,7 @@ export class CacheOperations {
       tags,
     };
 
-    if (existing && existing.id) {
+    if (existing?.id) {
       await db.cache.update(existing.id, entry);
     } else {
       await db.cache.add(entry);
@@ -497,12 +462,9 @@ export class CacheOperations {
    * Invalidate cache by tags
    */
   static async invalidateByTags(tags: string[]): Promise<void> {
-    const entries = await db.cache
-      .where('tags')
-      .anyOf(tags)
-      .toArray();
+    const entries = await db.cache.where('tags').anyOf(tags).toArray();
 
-    await db.cache.bulkDelete(entries.map(e => e.id!));
+    await db.cache.bulkDelete(entries.map((e) => e.id!));
   }
 
   /**
@@ -520,19 +482,13 @@ export class PerformanceMonitor {
   /**
    * Get performance metrics
    */
-  static async getMetrics(
-    operation?: string,
-    limit = 100
-  ): Promise<any[]> {
+  static async getMetrics(operation?: string, limit = 100): Promise<any[]> {
     let query = db.metrics.orderBy('timestamp').reverse();
-    
+
     if (operation) {
-      query = db.metrics
-        .where('operation')
-        .equals(operation)
-        .reverse();
+      query = db.metrics.where('operation').equals(operation).reverse();
     }
-    
+
     return await query.limit(limit).toArray();
   }
 
@@ -543,7 +499,7 @@ export class PerformanceMonitor {
     const metrics = await db.metrics
       .where('operation')
       .equals(operation)
-      .and(m => m.success)
+      .and((m) => m.success)
       .toArray();
 
     if (metrics.length === 0) return 0;
@@ -556,11 +512,8 @@ export class PerformanceMonitor {
    * Clear old metrics
    */
   static async clearOld(daysToKeep = 7): Promise<void> {
-    const cutoff = Date.now() - (daysToKeep * 24 * 60 * 60 * 1000);
-    
-    await db.metrics
-      .where('timestamp')
-      .below(cutoff)
-      .delete();
+    const cutoff = Date.now() - daysToKeep * 24 * 60 * 60 * 1000;
+
+    await db.metrics.where('timestamp').below(cutoff).delete();
   }
 }

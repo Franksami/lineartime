@@ -1,53 +1,54 @@
-'use client'
+'use client';
 
-import React, { useState, useCallback, useRef, useEffect } from 'react'
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
-import { format, addMinutes, differenceInMinutes, isSameDay, isAfter } from 'date-fns'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { 
-  Brain, 
-  Zap, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
-  Target, 
-  Lightbulb,
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import type { Event } from '@/types/calendar';
+import { DragDropContext, Draggable, type DropResult, Droppable } from '@hello-pangea/dnd';
+import { addMinutes, differenceInMinutes, format, isAfter, isSameDay } from 'date-fns';
+import {
+  AlertTriangle,
   ArrowRight,
-  RefreshCw
-} from 'lucide-react'
-import { cn } from '@/lib/utils'
-import type { Event } from '@/types/calendar'
+  Brain,
+  CheckCircle,
+  Clock,
+  Lightbulb,
+  RefreshCw,
+  Target,
+  Zap,
+} from 'lucide-react';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface DragSuggestion {
-  id: string
-  type: 'time-optimization' | 'conflict-resolution' | 'productivity-boost' | 'balance-improvement'
-  title: string
-  description: string
-  confidence: number
-  suggestedTime?: Date
-  reasons: string[]
-  icon: React.ComponentType<{ className?: string }>
-  color: string
+  id: string;
+  type: 'time-optimization' | 'conflict-resolution' | 'productivity-boost' | 'balance-improvement';
+  title: string;
+  description: string;
+  confidence: number;
+  suggestedTime?: Date;
+  reasons: string[];
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
 }
 
 interface AIDragDropState {
-  isDragging: boolean
-  draggedEvent: Event | null
-  dropZone: string | null
-  suggestions: DragSuggestion[]
-  hoverFeedback: string
+  isDragging: boolean;
+  draggedEvent: Event | null;
+  dropZone: string | null;
+  suggestions: DragSuggestion[];
+  hoverFeedback: string;
 }
 
 interface AIDragDropIntegrationProps {
-  events: Event[]
-  onEventMove: (eventId: string, newStartTime: Date) => void
-  onEventResize: (eventId: string, newStartTime: Date, newEndTime: Date) => void
-  onSuggestionApply: (suggestion: DragSuggestion) => void
-  timeSlots: { id: string; time: Date; available: boolean }[]
-  className?: string
+  events: Event[];
+  onEventMove: (eventId: string, newStartTime: Date) => void;
+  onEventResize: (eventId: string, newStartTime: Date, newEndTime: Date) => void;
+  onSuggestionApply: (suggestion: DragSuggestion) => void;
+  timeSlots: { id: string; time: Date; available: boolean }[];
+  className?: string;
 }
 
 // AI-powered drag suggestions logic
@@ -56,22 +57,28 @@ const generateDragSuggestions = (
   targetTime: Date,
   allEvents: Event[]
 ): DragSuggestion[] => {
-  const suggestions: DragSuggestion[] = []
-  const eventDuration = differenceInMinutes(draggedEvent.endDate, draggedEvent.startDate)
-  const newEndTime = addMinutes(targetTime, eventDuration)
-  
+  const suggestions: DragSuggestion[] = [];
+  const eventDuration = differenceInMinutes(draggedEvent.endDate, draggedEvent.startDate);
+  const newEndTime = addMinutes(targetTime, eventDuration);
+
   // Check for conflicts
-  const conflicts = allEvents.filter(event => 
-    event.id !== draggedEvent.id &&
-    isSameDay(event.startDate, targetTime) &&
-    ((isAfter(targetTime, event.startDate) && targetTime < event.endDate) ||
-     (newEndTime > event.startDate && newEndTime <= event.endDate) ||
-     (targetTime <= event.startDate && newEndTime >= event.endDate))
-  )
-  
+  const conflicts = allEvents.filter(
+    (event) =>
+      event.id !== draggedEvent.id &&
+      isSameDay(event.startDate, targetTime) &&
+      ((isAfter(targetTime, event.startDate) && targetTime < event.endDate) ||
+        (newEndTime > event.startDate && newEndTime <= event.endDate) ||
+        (targetTime <= event.startDate && newEndTime >= event.endDate))
+  );
+
   if (conflicts.length > 0) {
     // Conflict resolution suggestion
-    const nextAvailable = findNextAvailableSlot(targetTime, eventDuration, allEvents, draggedEvent.id)
+    const nextAvailable = findNextAvailableSlot(
+      targetTime,
+      eventDuration,
+      allEvents,
+      draggedEvent.id
+    );
     if (nextAvailable) {
       suggestions.push({
         id: 'conflict-resolution',
@@ -83,18 +90,18 @@ const generateDragSuggestions = (
         reasons: [
           `Conflicts with ${conflicts.length} event${conflicts.length > 1 ? 's' : ''}`,
           `Next available: ${format(nextAvailable, 'h:mm a')}`,
-          'Maintains meeting buffer time'
+          'Maintains meeting buffer time',
         ],
         icon: AlertTriangle,
-        color: 'text-orange-600'
-      })
+        color: 'text-orange-600',
+      });
     }
   }
-  
+
   // Time optimization suggestions
-  const hour = targetTime.getHours()
+  const hour = targetTime.getHours();
   if (draggedEvent.category === 'work' && hour >= 16) {
-    const morningSlot = findMorningSlot(targetTime, eventDuration, allEvents, draggedEvent.id)
+    const morningSlot = findMorningSlot(targetTime, eventDuration, allEvents, draggedEvent.id);
     if (morningSlot) {
       suggestions.push({
         id: 'morning-optimization',
@@ -106,19 +113,19 @@ const generateDragSuggestions = (
         reasons: [
           'Morning meetings tend to be more productive',
           'Avoids late-day meeting fatigue',
-          'Better for team focus and decision making'
+          'Better for team focus and decision making',
         ],
         icon: Lightbulb,
-        color: 'text-blue-600'
-      })
+        color: 'text-blue-600',
+      });
     }
   }
-  
+
   // Productivity boost suggestions
   if (draggedEvent.category === 'effort') {
-    const focusHours = [9, 10, 14, 15] // Prime focus hours
+    const focusHours = [9, 10, 14, 15]; // Prime focus hours
     if (!focusHours.includes(hour)) {
-      const focusSlot = findFocusTimeSlot(targetTime, eventDuration, allEvents, draggedEvent.id)
+      const focusSlot = findFocusTimeSlot(targetTime, eventDuration, allEvents, draggedEvent.id);
       if (focusSlot) {
         suggestions.push({
           id: 'focus-optimization',
@@ -130,22 +137,23 @@ const generateDragSuggestions = (
           reasons: [
             'Aligns with natural productivity peaks',
             'Reduces distractions and interruptions',
-            'Maximizes deep work potential'
+            'Maximizes deep work potential',
           ],
           icon: Target,
-          color: 'text-green-600'
-        })
+          color: 'text-green-600',
+        });
       }
     }
   }
-  
+
   // Balance improvement suggestions
-  const dayEvents = allEvents.filter(event => isSameDay(event.startDate, targetTime))
+  const dayEvents = allEvents.filter((event) => isSameDay(event.startDate, targetTime));
   const dayMeetingTime = dayEvents
-    .filter(e => e.category === 'work')
-    .reduce((acc, e) => acc + differenceInMinutes(e.endDate, e.startDate), 0)
-  
-  if (dayMeetingTime > 5 * 60) { // More than 5 hours of meetings
+    .filter((e) => e.category === 'work')
+    .reduce((acc, e) => acc + differenceInMinutes(e.endDate, e.startDate), 0);
+
+  if (dayMeetingTime > 5 * 60) {
+    // More than 5 hours of meetings
     suggestions.push({
       id: 'balance-improvement',
       type: 'balance-improvement',
@@ -155,100 +163,118 @@ const generateDragSuggestions = (
       reasons: [
         `${Math.round(dayMeetingTime / 60)} hours of meetings on this day`,
         'Risk of meeting fatigue and reduced productivity',
-        'Consider spreading meetings across multiple days'
+        'Consider spreading meetings across multiple days',
       ],
       icon: RefreshCw,
-      color: 'text-purple-600'
-    })
+      color: 'text-purple-600',
+    });
   }
-  
-  return suggestions.sort((a, b) => b.confidence - a.confidence)
-}
+
+  return suggestions.sort((a, b) => b.confidence - a.confidence);
+};
 
 // Helper functions for finding optimal time slots
-const findNextAvailableSlot = (targetTime: Date, duration: number, events: Event[], excludeId: string): Date | null => {
-  let checkTime = new Date(targetTime)
-  const endOfDay = new Date(targetTime)
-  endOfDay.setHours(18, 0, 0, 0) // Check until 6 PM
-  
+const findNextAvailableSlot = (
+  targetTime: Date,
+  duration: number,
+  events: Event[],
+  excludeId: string
+): Date | null => {
+  let checkTime = new Date(targetTime);
+  const endOfDay = new Date(targetTime);
+  endOfDay.setHours(18, 0, 0, 0); // Check until 6 PM
+
   while (checkTime < endOfDay) {
-    const checkEndTime = addMinutes(checkTime, duration)
-    const hasConflict = events.some(event => 
-      event.id !== excludeId &&
-      isSameDay(event.startDate, checkTime) &&
-      ((checkTime >= event.startDate && checkTime < event.endDate) ||
-       (checkEndTime > event.startDate && checkEndTime <= event.endDate) ||
-       (checkTime <= event.startDate && checkEndTime >= event.endDate))
-    )
-    
-    if (!hasConflict) {
-      return checkTime
-    }
-    
-    checkTime = addMinutes(checkTime, 15) // Check every 15 minutes
-  }
-  
-  return null
-}
+    const checkEndTime = addMinutes(checkTime, duration);
+    const hasConflict = events.some(
+      (event) =>
+        event.id !== excludeId &&
+        isSameDay(event.startDate, checkTime) &&
+        ((checkTime >= event.startDate && checkTime < event.endDate) ||
+          (checkEndTime > event.startDate && checkEndTime <= event.endDate) ||
+          (checkTime <= event.startDate && checkEndTime >= event.endDate))
+    );
 
-const findMorningSlot = (targetTime: Date, duration: number, events: Event[], excludeId: string): Date | null => {
-  const morningStart = new Date(targetTime)
-  morningStart.setHours(9, 0, 0, 0)
-  const morningEnd = new Date(targetTime)
-  morningEnd.setHours(12, 0, 0, 0)
-  
-  let checkTime = new Date(morningStart)
+    if (!hasConflict) {
+      return checkTime;
+    }
+
+    checkTime = addMinutes(checkTime, 15); // Check every 15 minutes
+  }
+
+  return null;
+};
+
+const findMorningSlot = (
+  targetTime: Date,
+  duration: number,
+  events: Event[],
+  excludeId: string
+): Date | null => {
+  const morningStart = new Date(targetTime);
+  morningStart.setHours(9, 0, 0, 0);
+  const morningEnd = new Date(targetTime);
+  morningEnd.setHours(12, 0, 0, 0);
+
+  let checkTime = new Date(morningStart);
   while (checkTime < morningEnd) {
-    const checkEndTime = addMinutes(checkTime, duration)
-    const hasConflict = events.some(event => 
-      event.id !== excludeId &&
-      isSameDay(event.startDate, checkTime) &&
-      ((checkTime >= event.startDate && checkTime < event.endTime) ||
-       (checkEndTime > event.startDate && checkEndTime <= event.endTime))
-    )
-    
-    if (!hasConflict) {
-      return checkTime
-    }
-    
-    checkTime = addMinutes(checkTime, 30)
-  }
-  
-  return null
-}
-
-const findFocusTimeSlot = (targetTime: Date, duration: number, events: Event[], excludeId: string): Date | null => {
-  const focusSlots = [
-    { start: 9, end: 11 },   // Morning focus
-    { start: 14, end: 16 }   // Afternoon focus
-  ]
-  
-  for (const slot of focusSlots) {
-    const slotStart = new Date(targetTime)
-    slotStart.setHours(slot.start, 0, 0, 0)
-    const slotEnd = new Date(targetTime)
-    slotEnd.setHours(slot.end, 0, 0, 0)
-    
-    let checkTime = new Date(slotStart)
-    while (addMinutes(checkTime, duration) <= slotEnd) {
-      const checkEndTime = addMinutes(checkTime, duration)
-      const hasConflict = events.some(event => 
+    const checkEndTime = addMinutes(checkTime, duration);
+    const hasConflict = events.some(
+      (event) =>
         event.id !== excludeId &&
         isSameDay(event.startDate, checkTime) &&
         ((checkTime >= event.startDate && checkTime < event.endTime) ||
-         (checkEndTime > event.startDate && checkEndTime <= event.endTime))
-      )
-      
+          (checkEndTime > event.startDate && checkEndTime <= event.endTime))
+    );
+
+    if (!hasConflict) {
+      return checkTime;
+    }
+
+    checkTime = addMinutes(checkTime, 30);
+  }
+
+  return null;
+};
+
+const findFocusTimeSlot = (
+  targetTime: Date,
+  duration: number,
+  events: Event[],
+  excludeId: string
+): Date | null => {
+  const focusSlots = [
+    { start: 9, end: 11 }, // Morning focus
+    { start: 14, end: 16 }, // Afternoon focus
+  ];
+
+  for (const slot of focusSlots) {
+    const slotStart = new Date(targetTime);
+    slotStart.setHours(slot.start, 0, 0, 0);
+    const slotEnd = new Date(targetTime);
+    slotEnd.setHours(slot.end, 0, 0, 0);
+
+    let checkTime = new Date(slotStart);
+    while (addMinutes(checkTime, duration) <= slotEnd) {
+      const checkEndTime = addMinutes(checkTime, duration);
+      const hasConflict = events.some(
+        (event) =>
+          event.id !== excludeId &&
+          isSameDay(event.startDate, checkTime) &&
+          ((checkTime >= event.startDate && checkTime < event.endTime) ||
+            (checkEndTime > event.startDate && checkEndTime <= event.endTime))
+      );
+
       if (!hasConflict) {
-        return checkTime
+        return checkTime;
       }
-      
-      checkTime = addMinutes(checkTime, 30)
+
+      checkTime = addMinutes(checkTime, 30);
     }
   }
-  
-  return null
-}
+
+  return null;
+};
 
 export function AIDragDropIntegration({
   events,
@@ -256,131 +282,145 @@ export function AIDragDropIntegration({
   onEventResize,
   onSuggestionApply,
   timeSlots,
-  className
+  className,
 }: AIDragDropIntegrationProps) {
   const [dragState, setDragState] = useState<AIDragDropState>({
     isDragging: false,
     draggedEvent: null,
     dropZone: null,
     suggestions: [],
-    hoverFeedback: ''
-  })
-  
-  const draggedEventRef = useRef<Event | null>(null)
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+    hoverFeedback: '',
+  });
+
+  const draggedEventRef = useRef<Event | null>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Handle drag start
-  const handleDragStart = useCallback((eventId: string) => {
-    const event = events.find(e => e.id === eventId)
-    if (!event) return
+  const handleDragStart = useCallback(
+    (eventId: string) => {
+      const event = events.find((e) => e.id === eventId);
+      if (!event) return;
 
-    draggedEventRef.current = event
-    setDragState(prev => ({
-      ...prev,
-      isDragging: true,
-      draggedEvent: event,
-      suggestions: []
-    }))
-  }, [events])
+      draggedEventRef.current = event;
+      setDragState((prev) => ({
+        ...prev,
+        isDragging: true,
+        draggedEvent: event,
+        suggestions: [],
+      }));
+    },
+    [events]
+  );
 
   // Handle drag over with AI suggestions
-  const handleDragOver = useCallback((timeSlotId: string) => {
-    const timeSlot = timeSlots.find(ts => ts.id === timeSlotId)
-    const draggedEvent = draggedEventRef.current
-    
-    if (!timeSlot || !draggedEvent) return
+  const handleDragOver = useCallback(
+    (timeSlotId: string) => {
+      const timeSlot = timeSlots.find((ts) => ts.id === timeSlotId);
+      const draggedEvent = draggedEventRef.current;
 
-    // Clear previous timeout
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current)
-    }
+      if (!timeSlot || !draggedEvent) return;
 
-    // Generate hover feedback immediately
-    const conflicts = events.filter(event => 
-      event.id !== draggedEvent.id &&
-      isSameDay(event.startDate, timeSlot.time) &&
-      Math.abs(differenceInMinutes(event.startDate, timeSlot.time)) < 60
-    )
+      // Clear previous timeout
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
 
-    const feedback = conflicts.length > 0 
-      ? `⚠️ ${conflicts.length} potential conflict${conflicts.length > 1 ? 's' : ''}`
-      : timeSlot.available 
-        ? '✅ Available slot'
-        : '❌ Unavailable'
+      // Generate hover feedback immediately
+      const conflicts = events.filter(
+        (event) =>
+          event.id !== draggedEvent.id &&
+          isSameDay(event.startDate, timeSlot.time) &&
+          Math.abs(differenceInMinutes(event.startDate, timeSlot.time)) < 60
+      );
 
-    setDragState(prev => ({
-      ...prev,
-      dropZone: timeSlotId,
-      hoverFeedback: feedback
-    }))
+      const feedback =
+        conflicts.length > 0
+          ? `⚠️ ${conflicts.length} potential conflict${conflicts.length > 1 ? 's' : ''}`
+          : timeSlot.available
+            ? '✅ Available slot'
+            : '❌ Unavailable';
 
-    // Generate AI suggestions after a brief delay
-    hoverTimeoutRef.current = setTimeout(() => {
-      const suggestions = generateDragSuggestions(draggedEvent, timeSlot.time, events)
-      setDragState(prev => ({
+      setDragState((prev) => ({
         ...prev,
-        suggestions
-      }))
-    }, 500)
-  }, [timeSlots, events])
+        dropZone: timeSlotId,
+        hoverFeedback: feedback,
+      }));
+
+      // Generate AI suggestions after a brief delay
+      hoverTimeoutRef.current = setTimeout(() => {
+        const suggestions = generateDragSuggestions(draggedEvent, timeSlot.time, events);
+        setDragState((prev) => ({
+          ...prev,
+          suggestions,
+        }));
+      }, 500);
+    },
+    [timeSlots, events]
+  );
 
   // Handle drag end
-  const handleDragEnd = useCallback((result: DropResult) => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current)
-    }
+  const handleDragEnd = useCallback(
+    (result: DropResult) => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
 
-    const { destination, source } = result
-    const draggedEvent = draggedEventRef.current
+      const { destination, source } = result;
+      const draggedEvent = draggedEventRef.current;
 
-    if (!destination || !draggedEvent) {
-      // Reset state
-      setDragState({
-        isDragging: false,
-        draggedEvent: null,
-        dropZone: null,
-        suggestions: [],
-        hoverFeedback: ''
-      })
-      draggedEventRef.current = null
-      return
-    }
+      if (!destination || !draggedEvent) {
+        // Reset state
+        setDragState({
+          isDragging: false,
+          draggedEvent: null,
+          dropZone: null,
+          suggestions: [],
+          hoverFeedback: '',
+        });
+        draggedEventRef.current = null;
+        return;
+      }
 
-    const targetTimeSlot = timeSlots.find(ts => ts.id === destination.droppableId)
-    if (targetTimeSlot) {
-      onEventMove(draggedEvent.id, targetTimeSlot.time)
-    }
+      const targetTimeSlot = timeSlots.find((ts) => ts.id === destination.droppableId);
+      if (targetTimeSlot) {
+        onEventMove(draggedEvent.id, targetTimeSlot.time);
+      }
 
-    // Keep suggestions visible briefly for user to see
-    setTimeout(() => {
-      setDragState({
-        isDragging: false,
-        draggedEvent: null,
-        dropZone: null,
-        suggestions: [],
-        hoverFeedback: ''
-      })
-      draggedEventRef.current = null
-    }, 2000)
-  }, [timeSlots, onEventMove])
+      // Keep suggestions visible briefly for user to see
+      setTimeout(() => {
+        setDragState({
+          isDragging: false,
+          draggedEvent: null,
+          dropZone: null,
+          suggestions: [],
+          hoverFeedback: '',
+        });
+        draggedEventRef.current = null;
+      }, 2000);
+    },
+    [timeSlots, onEventMove]
+  );
 
   // Apply AI suggestion
-  const applySuggestion = useCallback((suggestion: DragSuggestion) => {
-    if (suggestion.suggestedTime && dragState.draggedEvent) {
-      onEventMove(dragState.draggedEvent.id, suggestion.suggestedTime)
-      onSuggestionApply(suggestion)
-      
-      // Remove applied suggestion
-      setDragState(prev => ({
-        ...prev,
-        suggestions: prev.suggestions.filter(s => s.id !== suggestion.id)
-      }))
-    }
-  }, [dragState.draggedEvent, onEventMove, onSuggestionApply])
+  const applySuggestion = useCallback(
+    (suggestion: DragSuggestion) => {
+      if (suggestion.suggestedTime && dragState.draggedEvent) {
+        onEventMove(dragState.draggedEvent.id, suggestion.suggestedTime);
+        onSuggestionApply(suggestion);
+
+        // Remove applied suggestion
+        setDragState((prev) => ({
+          ...prev,
+          suggestions: prev.suggestions.filter((s) => s.id !== suggestion.id),
+        }));
+      }
+    },
+    [dragState.draggedEvent, onEventMove, onSuggestionApply]
+  );
 
   return (
     <div className={cn('ai-drag-drop-integration', className)}>
-      <DragDropContext 
+      <DragDropContext
         onDragStart={(initial) => handleDragStart(initial.draggableId)}
         onDragEnd={handleDragEnd}
       >
@@ -406,7 +446,7 @@ export function AIDragDropIntegration({
             {dragState.suggestions.length > 0 && (
               <div className="space-y-2 max-w-sm">
                 {dragState.suggestions.slice(0, 3).map((suggestion) => {
-                  const IconComponent = suggestion.icon
+                  const IconComponent = suggestion.icon;
                   return (
                     <Card key={suggestion.id} className="bg-background/95 backdrop-blur shadow-lg">
                       <CardContent className="p-3">
@@ -421,18 +461,18 @@ export function AIDragDropIntegration({
                                 {suggestion.confidence}%
                               </Badge>
                             </div>
-                            
+
                             <div className="text-xs text-muted-foreground mb-2">
                               {suggestion.description}
                             </div>
-                            
+
                             {suggestion.suggestedTime && (
                               <div className="text-xs text-primary">
                                 Suggested: {format(suggestion.suggestedTime, 'h:mm a')}
                               </div>
                             )}
                           </div>
-                          
+
                           {suggestion.suggestedTime && (
                             <Button
                               size="sm"
@@ -444,11 +484,14 @@ export function AIDragDropIntegration({
                             </Button>
                           )}
                         </div>
-                        
+
                         {suggestion.reasons.length > 0 && (
                           <div className="mt-2 space-y-1">
                             {suggestion.reasons.slice(0, 2).map((reason, index) => (
-                              <div key={index} className="text-xs text-muted-foreground flex items-center gap-1">
+                              <div
+                                key={index}
+                                className="text-xs text-muted-foreground flex items-center gap-1"
+                              >
                                 <div className="w-1 h-1 bg-muted-foreground rounded-full" />
                                 {reason}
                               </div>
@@ -457,7 +500,7 @@ export function AIDragDropIntegration({
                         )}
                       </CardContent>
                     </Card>
-                  )
+                  );
                 })}
               </div>
             )}
@@ -474,22 +517,18 @@ export function AIDragDropIntegration({
                   {...provided.droppableProps}
                   className={cn(
                     'min-h-[60px] border-2 border-dashed rounded-lg p-2 transition-colors',
-                    snapshot.isDraggedOver 
-                      ? 'border-primary bg-primary/5' 
-                      : 'border-muted',
+                    snapshot.isDraggedOver ? 'border-primary bg-primary/5' : 'border-muted',
                     !timeSlot.available && 'opacity-50 bg-muted/20'
                   )}
                   onMouseEnter={() => {
                     if (dragState.isDragging) {
-                      handleDragOver(timeSlot.id)
+                      handleDragOver(timeSlot.id);
                     }
                   }}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">
-                      {format(timeSlot.time, 'h:mm a')}
-                    </span>
-                    
+                    <span className="text-sm font-medium">{format(timeSlot.time, 'h:mm a')}</span>
+
                     {snapshot.isDraggedOver && (
                       <div className="flex items-center gap-1">
                         <Brain className="h-3 w-3 text-primary animate-pulse" />
@@ -497,11 +536,14 @@ export function AIDragDropIntegration({
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Show existing events */}
                   {events
-                    .filter(event => isSameDay(event.startDate, timeSlot.time) && 
-                             Math.abs(differenceInMinutes(event.startDate, timeSlot.time)) < 30)
+                    .filter(
+                      (event) =>
+                        isSameDay(event.startDate, timeSlot.time) &&
+                        Math.abs(differenceInMinutes(event.startDate, timeSlot.time)) < 30
+                    )
                     .map((event) => (
                       <Draggable key={event.id} draggableId={event.id} index={0}>
                         {(provided, snapshot) => (
@@ -519,7 +561,7 @@ export function AIDragDropIntegration({
                         )}
                       </Draggable>
                     ))}
-                  
+
                   {provided.placeholder}
                 </div>
               )}
@@ -554,7 +596,7 @@ export function AIDragDropIntegration({
         </Alert>
       )}
     </div>
-  )
+  );
 }
 
-export default AIDragDropIntegration
+export default AIDragDropIntegration;

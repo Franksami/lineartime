@@ -1,38 +1,41 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Switch } from '@/components/ui/switch'
-import { Label } from '@/components/ui/label'
-import { 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
+import { Switch } from '@/components/ui/switch';
+import {
+  type BackgroundSyncConfig,
+  analyticsBackgroundSync,
+} from '@/lib/analytics/AnalyticsBackgroundSync';
+import {
   Activity,
-  Database,
-  RefreshCw,
-  Wifi,
-  WifiOff,
-  TrendingUp,
-  Clock,
   AlertTriangle,
   CheckCircle2,
+  Clock,
+  Database,
+  RefreshCw,
   Settings,
-  Trash2
-} from 'lucide-react'
-import { analyticsBackgroundSync, type BackgroundSyncConfig } from '@/lib/analytics/AnalyticsBackgroundSync'
+  Trash2,
+  TrendingUp,
+  Wifi,
+  WifiOff,
+} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 
 interface AnalyticsSyncMonitorProps {
-  className?: string
-  compact?: boolean
+  className?: string;
+  compact?: boolean;
 }
 
 interface SyncStats {
-  size: number
-  byPriority: { high: number, medium: number, low: number }
-  oldestItem: number | null
-  isOnline: boolean
-  syncInProgress: boolean
+  size: number;
+  byPriority: { high: number; medium: number; low: number };
+  oldestItem: number | null;
+  isOnline: boolean;
+  syncInProgress: boolean;
 }
 
 export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSyncMonitorProps) {
@@ -41,92 +44,93 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
     byPriority: { high: 0, medium: 0, low: 0 },
     oldestItem: null,
     isOnline: navigator.onLine,
-    syncInProgress: false
-  })
-  const [lastSyncTime, setLastSyncTime] = useState<number>(Date.now())
-  const [syncEnabled, setSyncEnabled] = useState(true)
-  const [showSettings, setShowSettings] = useState(false)
+    syncInProgress: false,
+  });
+  const [_lastSyncTime, setLastSyncTime] = useState<number>(Date.now());
+  const [syncEnabled, setSyncEnabled] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     // Update stats periodically
     const updateStats = () => {
-      const queueStatus = analyticsBackgroundSync.getQueueStatus()
-      setStats(queueStatus)
-    }
+      const queueStatus = analyticsBackgroundSync.getQueueStatus();
+      setStats(queueStatus);
+    };
 
     // Initial update
-    updateStats()
+    updateStats();
 
     // Set up polling
-    const interval = setInterval(updateStats, 2000)
+    const interval = setInterval(updateStats, 2000);
 
     // Listen for online/offline events
-    const handleOnline = () => setStats(prev => ({ ...prev, isOnline: true }))
-    const handleOffline = () => setStats(prev => ({ ...prev, isOnline: false }))
+    const handleOnline = () => setStats((prev) => ({ ...prev, isOnline: true }));
+    const handleOffline = () => setStats((prev) => ({ ...prev, isOnline: false }));
 
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     return () => {
-      clearInterval(interval)
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    }
-  }, [])
+      clearInterval(interval);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   const handleForceSync = async () => {
     try {
-      setLastSyncTime(Date.now())
-      await analyticsBackgroundSync.forceSync()
+      setLastSyncTime(Date.now());
+      await analyticsBackgroundSync.forceSync();
     } catch (error) {
-      console.error('Force sync failed:', error)
+      console.error('Force sync failed:', error);
     }
-  }
+  };
 
   const handleClearQueue = () => {
-    analyticsBackgroundSync.clearQueue()
-  }
+    analyticsBackgroundSync.clearQueue();
+  };
 
   const handleToggleSync = (enabled: boolean) => {
-    setSyncEnabled(enabled)
+    setSyncEnabled(enabled);
     // In a real implementation, you'd disable/enable the sync intervals
-  }
+  };
 
   const formatTimeAgo = (timestamp: number | null) => {
-    if (!timestamp) return 'Never'
-    
-    const diff = Date.now() - timestamp
-    if (diff < 60000) return 'Just now'
-    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`
-    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`
-    return new Date(timestamp).toLocaleDateString()
-  }
+    if (!timestamp) return 'Never';
+
+    const diff = Date.now() - timestamp;
+    if (diff < 60000) return 'Just now';
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+    return new Date(timestamp).toLocaleDateString();
+  };
 
   const getSyncHealthStatus = () => {
-    if (!stats.isOnline) return { status: 'offline', color: 'text-gray-500', icon: WifiOff }
-    if (stats.syncInProgress) return { status: 'syncing', color: 'text-blue-500', icon: RefreshCw }
-    if (stats.size === 0) return { status: 'healthy', color: 'text-green-500', icon: CheckCircle2 }
-    if (stats.size > 100) return { status: 'warning', color: 'text-yellow-500', icon: AlertTriangle }
-    return { status: 'normal', color: 'text-green-500', icon: Activity }
-  }
+    if (!stats.isOnline) return { status: 'offline', color: 'text-gray-500', icon: WifiOff };
+    if (stats.syncInProgress) return { status: 'syncing', color: 'text-blue-500', icon: RefreshCw };
+    if (stats.size === 0) return { status: 'healthy', color: 'text-green-500', icon: CheckCircle2 };
+    if (stats.size > 100)
+      return { status: 'warning', color: 'text-yellow-500', icon: AlertTriangle };
+    return { status: 'normal', color: 'text-green-500', icon: Activity };
+  };
 
-  const health = getSyncHealthStatus()
+  const health = getSyncHealthStatus();
 
   if (compact) {
     return (
       <div className={`flex items-center gap-2 p-2 bg-card border rounded-lg ${className}`}>
         <div className="flex items-center gap-2">
-          <health.icon className={`h-4 w-4 ${health.color} ${stats.syncInProgress ? 'animate-spin' : ''}`} />
+          <health.icon
+            className={`h-4 w-4 ${health.color} ${stats.syncInProgress ? 'animate-spin' : ''}`}
+          />
           <div className="flex flex-col">
             <Badge variant="outline" className="text-xs">
               {stats.size} queued
             </Badge>
-            <span className="text-xs text-muted-foreground">
-              Analytics sync
-            </span>
+            <span className="text-xs text-muted-foreground">Analytics sync</span>
           </div>
         </div>
-        
+
         <Button
           variant="ghost"
           size="sm"
@@ -137,7 +141,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
           <RefreshCw className={`h-3 w-3 ${stats.syncInProgress ? 'animate-spin' : ''}`} />
         </Button>
       </div>
-    )
+    );
   }
 
   return (
@@ -146,25 +150,21 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="space-y-1">
             <CardTitle className="text-base flex items-center gap-2">
-              <health.icon className={`h-4 w-4 ${health.color} ${stats.syncInProgress ? 'animate-spin' : ''}`} />
+              <health.icon
+                className={`h-4 w-4 ${health.color} ${stats.syncInProgress ? 'animate-spin' : ''}`}
+              />
               Analytics Background Sync
             </CardTitle>
-            <CardDescription>
-              Real-time analytics data synchronization
-            </CardDescription>
+            <CardDescription>Real-time analytics data synchronization</CardDescription>
           </div>
-          
+
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowSettings(!showSettings)}
-            >
+            <Button variant="ghost" size="sm" onClick={() => setShowSettings(!showSettings)}>
               <Settings className="h-4 w-4" />
             </Button>
           </div>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {/* Status Overview */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -173,42 +173,32 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <Database className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Queue Size</span>
               </div>
-              <div className="text-2xl font-bold">
-                {stats.size}
-              </div>
-              {stats.size > 50 && (
-                <Progress value={(stats.size / 100) * 100} className="h-2" />
-              )}
+              <div className="text-2xl font-bold">{stats.size}</div>
+              {stats.size > 50 && <Progress value={(stats.size / 100) * 100} className="h-2" />}
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">High Priority</span>
               </div>
-              <div className="text-2xl font-bold text-red-600">
-                {stats.byPriority.high}
-              </div>
+              <div className="text-2xl font-bold text-red-600">{stats.byPriority.high}</div>
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Activity className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Medium Priority</span>
               </div>
-              <div className="text-2xl font-bold text-yellow-600">
-                {stats.byPriority.medium}
-              </div>
+              <div className="text-2xl font-bold text-yellow-600">{stats.byPriority.medium}</div>
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Low Priority</span>
               </div>
-              <div className="text-2xl font-bold text-green-600">
-                {stats.byPriority.low}
-              </div>
+              <div className="text-2xl font-bold text-green-600">{stats.byPriority.low}</div>
             </div>
           </div>
 
@@ -233,7 +223,9 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
             <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <RefreshCw className={`h-4 w-4 ${stats.syncInProgress ? 'animate-spin text-blue-500' : 'text-muted-foreground'}`} />
+                  <RefreshCw
+                    className={`h-4 w-4 ${stats.syncInProgress ? 'animate-spin text-blue-500' : 'text-muted-foreground'}`}
+                  />
                   <span className="text-sm font-medium">Sync Status</span>
                 </div>
                 <div className="text-xs text-muted-foreground">
@@ -258,11 +250,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
           {/* Controls */}
           <div className="flex items-center justify-between pt-2">
             <div className="flex items-center space-x-2">
-              <Switch
-                id="sync-enabled"
-                checked={syncEnabled}
-                onCheckedChange={handleToggleSync}
-              />
+              <Switch id="sync-enabled" checked={syncEnabled} onCheckedChange={handleToggleSync} />
               <Label htmlFor="sync-enabled" className="text-sm">
                 Auto-sync enabled
               </Label>
@@ -280,14 +268,16 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                   Clear Queue
                 </Button>
               )}
-              
+
               <Button
                 variant="default"
                 size="sm"
                 onClick={handleForceSync}
                 disabled={stats.syncInProgress || !stats.isOnline}
               >
-                <RefreshCw className={`h-4 w-4 mr-2 ${stats.syncInProgress ? 'animate-spin' : ''}`} />
+                <RefreshCw
+                  className={`h-4 w-4 mr-2 ${stats.syncInProgress ? 'animate-spin' : ''}`}
+                />
                 Force Sync
               </Button>
             </div>
@@ -303,7 +293,8 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 </span>
               </div>
               <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                You have {stats.size} items queued for sync. Consider forcing a sync or checking your connection.
+                You have {stats.size} items queued for sync. Consider forcing a sync or checking
+                your connection.
               </p>
             </div>
           )}
@@ -329,9 +320,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
         <Card className="mt-4">
           <CardHeader>
             <CardTitle className="text-base">Sync Configuration</CardTitle>
-            <CardDescription>
-              Adjust background sync behavior and intervals
-            </CardDescription>
+            <CardDescription>Adjust background sync behavior and intervals</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -348,7 +337,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <div className="text-sm text-muted-foreground">10 minutes</div>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Batch Size</Label>
@@ -359,7 +348,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <div className="text-sm text-muted-foreground">1000 events maximum</div>
               </div>
             </div>
-            
+
             <div className="text-xs text-muted-foreground pt-2">
               Configuration changes require app restart
             </div>
@@ -367,7 +356,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
         </Card>
       )}
     </div>
-  )
+  );
 }
 
-export default AnalyticsSyncMonitor
+export default AnalyticsSyncMonitor;

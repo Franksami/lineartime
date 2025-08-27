@@ -1,12 +1,9 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 /**
  * Generate HMAC signature for webhook verification
  */
-export function generateHMACSignature(
-  payload: string | Buffer,
-  secret: string
-): string {
+export function generateHMACSignature(payload: string | Buffer, secret: string): string {
   const hmac = crypto.createHmac('sha256', secret);
   hmac.update(payload);
   return hmac.digest('hex');
@@ -21,15 +18,15 @@ export function verifyHMACSignature(
   secret: string
 ): boolean {
   const expectedSignature = generateHMACSignature(payload, secret);
-  
+
   // Use timingSafeEqual to prevent timing attacks
   const expectedBuffer = Buffer.from(expectedSignature);
   const signatureBuffer = Buffer.from(signature);
-  
+
   if (expectedBuffer.length !== signatureBuffer.length) {
     return false;
   }
-  
+
   return crypto.timingSafeEqual(expectedBuffer, signatureBuffer);
 }
 
@@ -58,10 +55,10 @@ export function createWebhookVerificationToken(
   const expiresAt = Date.now() + expiresInMs;
   const data = `${userId}:${provider}:${expiresAt}`;
   const token = generateHMACSignature(data, process.env.WEBHOOK_SECRET || 'default-secret');
-  
+
   return {
     token,
-    expiresAt
+    expiresAt,
   };
 }
 
@@ -76,16 +73,16 @@ export function verifyWebhookVerificationToken(
 ): boolean {
   const data = `${userId}:${provider}:${expiresAt}`;
   const expectedToken = generateHMACSignature(data, process.env.WEBHOOK_SECRET || 'default-secret');
-  
+
   // Check if token matches
   if (!crypto.timingSafeEqual(Buffer.from(token), Buffer.from(expectedToken))) {
     return false;
   }
-  
+
   // Check if token has expired
   if (Date.now() > expiresAt) {
     return false;
   }
-  
+
   return true;
 }

@@ -1,35 +1,41 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { useSettingsContext } from '@/contexts/SettingsContext'
-import { UserSettings } from '@/lib/settings/types'
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useSettingsContext } from '@/contexts/SettingsContext';
+import type { UserSettings } from '@/lib/settings/types';
+import type * as React from 'react';
 
 export function TimeSettings() {
-  const { settings, updateCategory } = useSettingsContext()
-  const time = settings.time
+  const { settings, updateCategory } = useSettingsContext();
+  const time = settings.time;
 
   const handleFormatChange = (format: UserSettings['time']['format']) => {
-    updateCategory('time', { format })
-  }
+    updateCategory('time', { format });
+  };
 
   const handleDateFormatChange = (dateFormat: UserSettings['time']['dateFormat']) => {
-    updateCategory('time', { dateFormat })
-  }
+    updateCategory('time', { dateFormat });
+  };
 
   const handleTimezoneChange = (timezone: string) => {
-    updateCategory('time', { timezone })
-  }
+    updateCategory('time', { timezone });
+  };
 
   const handleFirstDayOfYearChange = (firstDayOfYear: UserSettings['time']['firstDayOfYear']) => {
-    updateCategory('time', { firstDayOfYear })
-  }
+    updateCategory('time', { firstDayOfYear });
+  };
 
   const handleFiscalYearStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateCategory('time', { fiscalYearStart: e.target.value })
-  }
+    updateCategory('time', { fiscalYearStart: e.target.value });
+  };
 
   // Get list of common timezones
   const timezones = [
@@ -57,13 +63,13 @@ export function TimeSettings() {
     'Australia/Sydney',
     'Australia/Melbourne',
     'Pacific/Auckland',
-  ]
+  ];
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium mb-4">Time & Date Preferences</h3>
-        
+
         <div className="space-y-4">
           {/* Time Format */}
           <div className="flex items-center justify-between">
@@ -105,7 +111,7 @@ export function TimeSettings() {
                 <SelectItem value={Intl.DateTimeFormat().resolvedOptions().timeZone}>
                   System Default
                 </SelectItem>
-                {timezones.map(tz => (
+                {timezones.map((tz) => (
                   <SelectItem key={tz} value={tz}>
                     {tz.replace(/_/g, ' ')}
                   </SelectItem>
@@ -151,15 +157,14 @@ export function TimeSettings() {
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Current format examples:</p>
               <div className="space-y-1">
+                <p className="text-sm">Time: {time.format === '12h' ? '2:30 PM' : '14:30'}</p>
                 <p className="text-sm">
-                  Time: {time.format === '12h' ? '2:30 PM' : '14:30'}
-                </p>
-                <p className="text-sm">
-                  Date: {
-                    time.dateFormat === 'MM/DD/YYYY' ? '12/25/2024' :
-                    time.dateFormat === 'DD/MM/YYYY' ? '25/12/2024' :
-                    '2024-12-25'
-                  }
+                  Date:{' '}
+                  {time.dateFormat === 'MM/DD/YYYY'
+                    ? '12/25/2024'
+                    : time.dateFormat === 'DD/MM/YYYY'
+                      ? '25/12/2024'
+                      : '2024-12-25'}
                 </p>
               </div>
             </div>
@@ -167,5 +172,5 @@ export function TimeSettings() {
         </div>
       </div>
     </div>
-  )
+  );
 }

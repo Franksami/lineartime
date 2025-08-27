@@ -1,67 +1,71 @@
 'use client';
 
 import React, { lazy } from 'react';
-import { CalendarLibrary, CalendarLibraryAdapter, CalendarLibraryConfig, CalendarEvent } from './types';
+import type {
+  CalendarEvent,
+  CalendarLibrary,
+  CalendarLibraryAdapter,
+  CalendarLibraryConfig,
+} from './types';
 
 // Lazy load all calendar components for performance
-const LinearCalendarHorizontal = lazy(() => 
-  import('@/components/calendar/LinearCalendarHorizontal').then(module => ({
-    default: module.LinearCalendarHorizontal
+const LinearCalendarHorizontal = lazy(() =>
+  import('@/components/calendar/LinearCalendarHorizontal').then((module) => ({
+    default: module.LinearCalendarHorizontal,
   }))
 );
 
-const FullCalendarView = lazy(() => 
-  import('@/components/calendar/FullCalendarView').then(module => ({
-    default: module.default
+const FullCalendarView = lazy(() =>
+  import('@/components/calendar/FullCalendarView').then((module) => ({
+    default: module.default,
   }))
 );
 
-
-const ReactBigCalendarView = lazy(() => 
-  import('@/components/calendar/ReactBigCalendarView').then(module => ({
-    default: module.default
+const ReactBigCalendarView = lazy(() =>
+  import('@/components/calendar/ReactBigCalendarView').then((module) => ({
+    default: module.default,
   }))
 );
 
-const ReactInfiniteCalendarView = lazy(() => 
-  import('@/components/calendar/ReactInfiniteCalendarView').then(module => ({
-    default: module.default
+const ReactInfiniteCalendarView = lazy(() =>
+  import('@/components/calendar/ReactInfiniteCalendarView').then((module) => ({
+    default: module.default,
   }))
 );
 
-const PrimeReactCalendarView = lazy(() => 
-  import('@/components/calendar/PrimeReactCalendarView').then(module => ({
-    default: module.default
+const PrimeReactCalendarView = lazy(() =>
+  import('@/components/calendar/PrimeReactCalendarView').then((module) => ({
+    default: module.default,
   }))
 );
 
-const MUIXCalendarView = lazy(() => 
-  import('@/components/calendar/MUIXCalendarView').then(module => ({
-    default: module.default
+const MUIXCalendarView = lazy(() =>
+  import('@/components/calendar/MUIXCalendarView').then((module) => ({
+    default: module.default,
   }))
 );
 
-const ReactCalendarView = lazy(() => 
-  import('@/components/calendar/ReactCalendarView').then(module => ({
-    default: module.default
+const ReactCalendarView = lazy(() =>
+  import('@/components/calendar/ReactCalendarView').then((module) => ({
+    default: module.default,
   }))
 );
 
-const ReactDatePickerView = lazy(() => 
-  import('@/components/calendar/ReactDatePickerView').then(module => ({
-    default: module.default
+const ReactDatePickerView = lazy(() =>
+  import('@/components/calendar/ReactDatePickerView').then((module) => ({
+    default: module.default,
   }))
 );
 
-const ReactDayPickerView = lazy(() => 
-  import('@/components/calendar/ReactDayPickerView').then(module => ({
-    default: module.default
+const ReactDayPickerView = lazy(() =>
+  import('@/components/calendar/ReactDayPickerView').then((module) => ({
+    default: module.default,
   }))
 );
 
-const ToastUICalendarView = lazy(() => 
-  import('@/components/calendar/ToastUICalendarView').then(module => ({
-    default: module.default
+const ToastUICalendarView = lazy(() =>
+  import('@/components/calendar/ToastUICalendarView').then((module) => ({
+    default: module.default,
   }))
 );
 
@@ -374,9 +378,9 @@ const transformEventsForLibrary = (events: CalendarEvent[], library: CalendarLib
   switch (library) {
     case 'linear':
       return events; // Already in correct format
-    
+
     case 'fullcalendar':
-      return events.map(event => ({
+      return events.map((event) => ({
         id: event.id,
         title: event.title,
         start: event.start,
@@ -393,9 +397,9 @@ const transformEventsForLibrary = (events: CalendarEvent[], library: CalendarLib
           ...event.extendedProps,
         },
       }));
-    
+
     case 'reactbigcalendar':
-      return events.map(event => ({
+      return events.map((event) => ({
         id: event.id,
         title: event.title,
         start: event.start,
@@ -404,9 +408,9 @@ const transformEventsForLibrary = (events: CalendarEvent[], library: CalendarLib
         resource: event.resourceId,
         color: event.backgroundColor,
       }));
-    
+
     case 'toastui':
-      return events.map(event => ({
+      return events.map((event) => ({
         id: event.id,
         calendarId: event.category || 'primary',
         title: event.title,
@@ -423,9 +427,9 @@ const transformEventsForLibrary = (events: CalendarEvent[], library: CalendarLib
         dragBackgroundColor: event.backgroundColor,
         isReadOnly: !event.editable,
         isPrivate: event.isPrivate,
-        state: 'Busy'
+        state: 'Busy',
       }));
-    
+
     default:
       return events;
   }
@@ -453,14 +457,14 @@ const transformEventBackFromLibrary = (event: any, library: CalendarLibrary): Ca
         editable: event.editable,
         extendedProps: event.extendedProps,
       };
-    
+
     case 'reactbigcalendar':
       return {
         ...baseEvent,
         resourceId: event.resource,
         backgroundColor: event.color,
       };
-    
+
     case 'toastui':
       return {
         ...baseEvent,
@@ -475,7 +479,7 @@ const transformEventBackFromLibrary = (event: any, library: CalendarLibrary): Ca
         isPrivate: event.isPrivate,
         allDay: event.isAllday,
       };
-    
+
     default:
       return baseEvent;
   }

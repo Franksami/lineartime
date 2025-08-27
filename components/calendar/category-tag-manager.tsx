@@ -1,23 +1,29 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { type EventCategory, type EventPriority, CATEGORY_COLORS } from "@/components/ui/calendar"
-import { Plus, X, Tag, Palette } from "lucide-react"
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { CATEGORY_COLORS, type EventCategory, type EventPriority } from '@/components/ui/calendar';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Palette, Plus, Tag, X } from 'lucide-react';
+import { useState } from 'react';
 
 interface CategoryTagManagerProps {
-  selectedCategory: EventCategory
-  selectedPriority: EventPriority
-  selectedTags: string[]
-  availableTags: string[]
-  onCategoryChange: (category: EventCategory) => void
-  onPriorityChange: (priority: EventPriority) => void
-  onTagsChange: (tags: string[]) => void
-  onCreateTag: (tag: string) => void
+  selectedCategory: EventCategory;
+  selectedPriority: EventPriority;
+  selectedTags: string[];
+  availableTags: string[];
+  onCategoryChange: (category: EventCategory) => void;
+  onPriorityChange: (priority: EventPriority) => void;
+  onTagsChange: (tags: string[]) => void;
+  onCreateTag: (tag: string) => void;
 }
 
 export function CategoryTagManager({
@@ -30,44 +36,44 @@ export function CategoryTagManager({
   onTagsChange,
   onCreateTag,
 }: CategoryTagManagerProps) {
-  const [newTag, setNewTag] = useState("")
+  const [newTag, setNewTag] = useState('');
 
   const categories: { value: EventCategory; label: string; description: string }[] = [
-    { value: "personal", label: "Personal", description: "Personal events and activities" },
-    { value: "work", label: "Work", description: "Professional meetings and tasks" },
-    { value: "effort", label: "Effort", description: "Active projects and initiatives" },
-    { value: "note", label: "Note", description: "Important reminders and notes" },
-    { value: "meeting", label: "Meeting", description: "Scheduled meetings and calls" },
-    { value: "deadline", label: "Deadline", description: "Important deadlines and due dates" },
-    { value: "milestone", label: "Milestone", description: "Project milestones and achievements" },
-  ]
+    { value: 'personal', label: 'Personal', description: 'Personal events and activities' },
+    { value: 'work', label: 'Work', description: 'Professional meetings and tasks' },
+    { value: 'effort', label: 'Effort', description: 'Active projects and initiatives' },
+    { value: 'note', label: 'Note', description: 'Important reminders and notes' },
+    { value: 'meeting', label: 'Meeting', description: 'Scheduled meetings and calls' },
+    { value: 'deadline', label: 'Deadline', description: 'Important deadlines and due dates' },
+    { value: 'milestone', label: 'Milestone', description: 'Project milestones and achievements' },
+  ];
 
   const priorities: { value: EventPriority; label: string; description: string }[] = [
-    { value: "critical", label: "Critical", description: "Urgent and important" },
-    { value: "high", label: "High", description: "Important but not urgent" },
-    { value: "medium", label: "Medium", description: "Normal priority" },
-    { value: "low", label: "Low", description: "Nice to have" },
-    { value: "optional", label: "Optional", description: "Can be skipped if needed" },
-  ]
+    { value: 'critical', label: 'Critical', description: 'Urgent and important' },
+    { value: 'high', label: 'High', description: 'Important but not urgent' },
+    { value: 'medium', label: 'Medium', description: 'Normal priority' },
+    { value: 'low', label: 'Low', description: 'Nice to have' },
+    { value: 'optional', label: 'Optional', description: 'Can be skipped if needed' },
+  ];
 
   const handleAddTag = () => {
     if (newTag.trim() && !availableTags.includes(newTag.trim())) {
-      onCreateTag(newTag.trim())
-      setNewTag("")
+      onCreateTag(newTag.trim());
+      setNewTag('');
     }
-  }
+  };
 
   const handleToggleTag = (tag: string) => {
     if (selectedTags.includes(tag)) {
-      onTagsChange(selectedTags.filter((t) => t !== tag))
+      onTagsChange(selectedTags.filter((t) => t !== tag));
     } else {
-      onTagsChange([...selectedTags, tag])
+      onTagsChange([...selectedTags, tag]);
     }
-  }
+  };
 
   const handleRemoveTag = (tag: string) => {
-    onTagsChange(selectedTags.filter((t) => t !== tag))
-  }
+    onTagsChange(selectedTags.filter((t) => t !== tag));
+  };
 
   return (
     <div className="space-y-6">
@@ -81,13 +87,16 @@ export function CategoryTagManager({
           {categories.map((category) => (
             <Button
               key={category.value}
-              variant={selectedCategory === category.value ? "default" : "outline"}
+              variant={selectedCategory === category.value ? 'default' : 'outline'}
               size="sm"
               onClick={() => onCategoryChange(category.value)}
               className="justify-start h-auto p-3"
             >
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: CATEGORY_COLORS[category.value] }} />
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: CATEGORY_COLORS[category.value] }}
+                />
                 <div className="text-left">
                   <div className="font-medium">{category.label}</div>
                   <div className="text-xs text-muted-foreground">{category.description}</div>
@@ -101,7 +110,10 @@ export function CategoryTagManager({
       {/* Priority Selection */}
       <div className="space-y-3">
         <Label className="text-sm font-medium">Priority</Label>
-        <Select value={selectedPriority} onValueChange={(value: EventPriority) => onPriorityChange(value)}>
+        <Select
+          value={selectedPriority}
+          onValueChange={(value: EventPriority) => onPriorityChange(value)}
+        >
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -111,15 +123,15 @@ export function CategoryTagManager({
                 <div className="flex items-center gap-2">
                   <div
                     className={`w-2 h-2 rounded-full ${
-                      priority.value === "critical"
-                        ? "bg-destructive"
-                        : priority.value === "high"
-                          ? "bg-secondary"
-                          : priority.value === "medium"
-                            ? "bg-primary"
-                            : priority.value === "low"
-                              ? "bg-muted-foreground/50"
-                              : "bg-muted/50"
+                      priority.value === 'critical'
+                        ? 'bg-destructive'
+                        : priority.value === 'high'
+                          ? 'bg-secondary'
+                          : priority.value === 'medium'
+                            ? 'bg-primary'
+                            : priority.value === 'low'
+                              ? 'bg-muted-foreground/50'
+                              : 'bg-muted/50'
                     }`}
                   />
                   <span>{priority.label}</span>
@@ -162,7 +174,7 @@ export function CategoryTagManager({
             placeholder="Add new tag..."
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleAddTag()}
+            onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
             className="flex-1"
           />
           <Button onClick={handleAddTag} size="sm" disabled={!newTag.trim()}>
@@ -193,5 +205,5 @@ export function CategoryTagManager({
         )}
       </div>
     </div>
-  )
+  );
 }

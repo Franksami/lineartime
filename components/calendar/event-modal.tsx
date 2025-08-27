@@ -1,74 +1,95 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
+import { Button } from '@/components/ui/button';
 import {
+  CATEGORY_COLORS,
   type CalendarEvent,
   type EventCategory,
   type EventPriority,
   type EventStatus,
-  CATEGORY_COLORS,
-} from "@/components/ui/calendar"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { format } from "date-fns"
+} from '@/components/ui/calendar';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
 
 interface EventModalProps {
-  isOpen: boolean
-  mode: "create" | "edit" | "view"
-  event: CalendarEvent | null
-  date: Date | null
-  onClose: () => void
-  onCreate?: (event: Partial<CalendarEvent>) => void
-  onUpdate?: (id: string, updates: Partial<CalendarEvent>) => void
-  onDelete?: (id: string) => void
+  isOpen: boolean;
+  mode: 'create' | 'edit' | 'view';
+  event: CalendarEvent | null;
+  date: Date | null;
+  onClose: () => void;
+  onCreate?: (event: Partial<CalendarEvent>) => void;
+  onUpdate?: (id: string, updates: Partial<CalendarEvent>) => void;
+  onDelete?: (id: string) => void;
 }
 
-export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpdate, onDelete }: EventModalProps) {
+export function EventModal({
+  isOpen,
+  mode,
+  event,
+  date,
+  onClose,
+  onCreate,
+  onUpdate,
+  onDelete,
+}: EventModalProps) {
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    startDate: "",
-    endDate: "",
+    title: '',
+    description: '',
+    startDate: '',
+    endDate: '',
     allDay: false,
-    category: "personal" as EventCategory,
-    priority: "medium" as EventPriority,
-    status: "confirmed" as EventStatus,
-  })
+    category: 'personal' as EventCategory,
+    priority: 'medium' as EventPriority,
+    status: 'confirmed' as EventStatus,
+  });
 
   useEffect(() => {
-    if (mode === "create" && date) {
-      const dateStr = format(date, "yyyy-MM-dd")
+    if (mode === 'create' && date) {
+      const dateStr = format(date, 'yyyy-MM-dd');
       setFormData({
-        title: "",
-        description: "",
+        title: '',
+        description: '',
         startDate: dateStr,
         endDate: dateStr,
         allDay: true,
-        category: "personal",
-        priority: "medium",
-        status: "confirmed",
-      })
-    } else if (mode === "edit" && event) {
+        category: 'personal',
+        priority: 'medium',
+        status: 'confirmed',
+      });
+    } else if (mode === 'edit' && event) {
       setFormData({
         title: event.title,
-        description: event.description || "",
-        startDate: format(new Date(event.startDate), "yyyy-MM-dd"),
-        endDate: format(new Date(event.endDate), "yyyy-MM-dd"),
+        description: event.description || '',
+        startDate: format(new Date(event.startDate), 'yyyy-MM-dd'),
+        endDate: format(new Date(event.endDate), 'yyyy-MM-dd'),
         allDay: event.allDay,
         category: event.category,
         priority: event.priority,
         status: event.status,
-      })
+      });
     }
-  }, [mode, event, date])
+  }, [mode, event, date]);
 
   const handleSubmit = () => {
-    if (mode === "create") {
+    if (mode === 'create') {
       onCreate?.({
         title: formData.title,
         description: formData.description,
@@ -85,12 +106,12 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
         reminders: [],
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: "user",
-        lastModifiedBy: "user",
-        syncStatus: "synced",
+        createdBy: 'user',
+        lastModifiedBy: 'user',
+        syncStatus: 'synced',
         customFields: {},
-      })
-    } else if (mode === "edit" && event) {
+      });
+    } else if (mode === 'edit' && event) {
       onUpdate?.(event.id, {
         title: formData.title,
         description: formData.description,
@@ -101,25 +122,25 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
         priority: formData.priority,
         status: formData.status,
         updatedAt: new Date(),
-        lastModifiedBy: "user",
-      })
+        lastModifiedBy: 'user',
+      });
     }
-    onClose()
-  }
+    onClose();
+  };
 
   const handleDelete = () => {
     if (event) {
-      onDelete?.(event.id)
-      onClose()
+      onDelete?.(event.id);
+      onClose();
     }
-  }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {mode === "create" ? "Create Event" : mode === "edit" ? "Edit Event" : "View Event"}
+            {mode === 'create' ? 'Create Event' : mode === 'edit' ? 'Edit Event' : 'View Event'}
           </DialogTitle>
         </DialogHeader>
 
@@ -131,7 +152,7 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
               value={formData.title}
               onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
               placeholder="Event title"
-              disabled={mode === "view"}
+              disabled={mode === 'view'}
             />
           </div>
 
@@ -142,7 +163,7 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
               value={formData.description}
               onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
               placeholder="Event description"
-              disabled={mode === "view"}
+              disabled={mode === 'view'}
             />
           </div>
 
@@ -154,7 +175,7 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => setFormData((prev) => ({ ...prev, startDate: e.target.value }))}
-                disabled={mode === "view"}
+                disabled={mode === 'view'}
               />
             </div>
 
@@ -165,7 +186,7 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => setFormData((prev) => ({ ...prev, endDate: e.target.value }))}
-                disabled={mode === "view"}
+                disabled={mode === 'view'}
               />
             </div>
           </div>
@@ -175,7 +196,7 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
               id="allDay"
               checked={formData.allDay}
               onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, allDay: checked }))}
-              disabled={mode === "view"}
+              disabled={mode === 'view'}
             />
             <Label htmlFor="allDay">All day</Label>
           </div>
@@ -185,8 +206,10 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
               <Label htmlFor="category">Category</Label>
               <Select
                 value={formData.category}
-                onValueChange={(value: EventCategory) => setFormData((prev) => ({ ...prev, category: value }))}
-                disabled={mode === "view"}
+                onValueChange={(value: EventCategory) =>
+                  setFormData((prev) => ({ ...prev, category: value }))
+                }
+                disabled={mode === 'view'}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -208,8 +231,10 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
               <Label htmlFor="priority">Priority</Label>
               <Select
                 value={formData.priority}
-                onValueChange={(value: EventPriority) => setFormData((prev) => ({ ...prev, priority: value }))}
-                disabled={mode === "view"}
+                onValueChange={(value: EventPriority) =>
+                  setFormData((prev) => ({ ...prev, priority: value }))
+                }
+                disabled={mode === 'view'}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -228,8 +253,10 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
               <Label htmlFor="status">Status</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value: EventStatus) => setFormData((prev) => ({ ...prev, status: value }))}
-                disabled={mode === "view"}
+                onValueChange={(value: EventStatus) =>
+                  setFormData((prev) => ({ ...prev, status: value }))
+                }
+                disabled={mode === 'view'}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -247,7 +274,7 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
         </div>
 
         <DialogFooter>
-          {mode === "edit" && (
+          {mode === 'edit' && (
             <Button variant="destructive" onClick={handleDelete}>
               Delete
             </Button>
@@ -255,9 +282,11 @@ export function EventModal({ isOpen, mode, event, date, onClose, onCreate, onUpd
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          {mode !== "view" && <Button onClick={handleSubmit}>{mode === "create" ? "Create" : "Update"}</Button>}
+          {mode !== 'view' && (
+            <Button onClick={handleSubmit}>{mode === 'create' ? 'Create' : 'Update'}</Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

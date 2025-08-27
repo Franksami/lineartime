@@ -1,41 +1,51 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { SignIn } from '@clerk/nextjs'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Loader2, Eye, EyeOff, GalleryVerticalEnd, Sparkles, Shield, Zap, Users } from 'lucide-react'
-import Link from 'next/link'
-import { useUnifiedTheme } from '@/hooks/useUnifiedTheme'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { useUnifiedTheme } from '@/hooks/useUnifiedTheme';
+import { SignIn } from '@clerk/nextjs';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Eye,
+  EyeOff,
+  GalleryVerticalEnd,
+  Loader2,
+  Shield,
+  Sparkles,
+  Users,
+  Zap,
+} from 'lucide-react';
+import Link from 'next/link';
+import type React from 'react';
+import { useState } from 'react';
 
 interface EnhancedSignInFormProps {
-  onModeSwitch?: () => void
+  onModeSwitch?: () => void;
 }
 
 export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showSuccess, setShowSuccess] = useState(false)
-  const { utils, isClient } = useUnifiedTheme()
+  const [isLoading, setIsLoading] = useState(false);
+  const [_showPassword, _setShowPassword] = useState(false);
+  const [_email, _setEmail] = useState('');
+  const [_password, _setPassword] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
+  const { utils, isClient } = useUnifiedTheme();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+  const _handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
-      setIsLoading(false)
-      setShowSuccess(true)
-    }, 2000)
-  }
+      setIsLoading(false);
+      setShowSuccess(true);
+    }, 2000);
+  };
 
   if (!isClient) {
     return (
@@ -53,14 +63,14 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   const features = [
     { icon: Shield, text: 'Enterprise Security', color: 'bg-green-500' },
     { icon: Zap, text: 'Lightning Fast', color: 'bg-blue-500' },
     { icon: Users, text: 'Team Collaboration', color: 'bg-purple-500' },
-  ]
+  ];
 
   return (
     <div className="w-full max-w-md space-y-6">
@@ -98,7 +108,7 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
                 <GalleryVerticalEnd className="w-6 h-6 text-primary-foreground" />
               </div>
             </motion.div>
-            
+
             <div className="space-y-2">
               <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 Welcome Back
@@ -141,10 +151,10 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
               <SignIn
                 appearance={{
                   elements: {
-                    rootBox: "w-full",
-                    card: "bg-transparent shadow-none border-none",
-                    headerTitle: "hidden",
-                    headerSubtitle: "hidden",
+                    rootBox: 'w-full',
+                    card: 'bg-transparent shadow-none border-none',
+                    headerTitle: 'hidden',
+                    headerSubtitle: 'hidden',
                     formButtonPrimary: `
                       bg-primary hover:bg-primary/90 text-primary-foreground 
                       shadow-md hover:shadow-lg transition-all duration-200
@@ -154,28 +164,28 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
                       bg-background border-input transition-colors duration-200
                       focus:border-ring focus:ring-2 focus:ring-ring/20
                     `,
-                    footerActionLink: "text-primary hover:text-primary/80 transition-colors",
-                    dividerLine: "bg-border",
-                    dividerText: "text-muted-foreground text-sm",
+                    footerActionLink: 'text-primary hover:text-primary/80 transition-colors',
+                    dividerLine: 'bg-border',
+                    dividerText: 'text-muted-foreground text-sm',
                     socialButtonsBlockButton: `
                       bg-card hover:bg-accent border-border shadow-sm 
                       hover:shadow-md transition-all duration-200
                       hover:scale-[1.02] active:scale-[0.98]
                     `,
-                    socialButtonsBlockButtonText: "font-medium",
-                    identityPreviewEditButton: "text-primary hover:text-primary/80",
-                    formFieldLabel: "text-foreground font-medium",
-                    formFieldAction: "text-primary hover:text-primary/80",
-                    alertText: "text-destructive-foreground",
-                    formResendCodeLink: "text-primary hover:text-primary/80",
+                    socialButtonsBlockButtonText: 'font-medium',
+                    identityPreviewEditButton: 'text-primary hover:text-primary/80',
+                    formFieldLabel: 'text-foreground font-medium',
+                    formFieldAction: 'text-primary hover:text-primary/80',
+                    alertText: 'text-destructive-foreground',
+                    formResendCodeLink: 'text-primary hover:text-primary/80',
                     otpCodeFieldInput: `
                       bg-background border-input transition-colors duration-200
                       focus:border-ring focus:ring-2 focus:ring-ring/20
                     `,
                   },
                   layout: {
-                    socialButtonsPlacement: "top",
-                    socialButtonsVariant: "blockButton",
+                    socialButtonsPlacement: 'top',
+                    socialButtonsVariant: 'blockButton',
                   },
                 }}
                 routing="path"
@@ -192,12 +202,12 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
               className="space-y-4"
             >
               <Separator className="my-4" />
-              
+
               <div className="text-center space-y-3">
                 <p className="text-sm text-muted-foreground">
                   Powered by enterprise-grade authentication
                 </p>
-                
+
                 <div className="flex justify-center items-center flex-wrap gap-2">
                   <Button size="sm" variant="ghost" className="h-auto px-2 py-1">
                     <Sparkles className="w-3 h-3 mr-1" />
@@ -220,8 +230,8 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
             >
               <p className="text-sm text-muted-foreground">
                 Don't have an account?{' '}
-                <Link 
-                  href="/sign-up" 
+                <Link
+                  href="/sign-up"
                   className="text-primary hover:text-primary/80 font-medium transition-colors"
                 >
                   Sign up for free
@@ -256,5 +266,5 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }

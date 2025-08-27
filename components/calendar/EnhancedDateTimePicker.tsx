@@ -1,73 +1,79 @@
-'use client'
+'use client';
 
-import React, { forwardRef, useState, useCallback, useMemo } from 'react'
-import DatePicker from 'react-datepicker'
-import { format, addDays, addWeeks, addMonths, startOfDay, endOfDay, setHours, setMinutes } from 'date-fns'
-import { Calendar, Clock, X, Plus, ArrowRight, Zap, Target, CheckCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
-import type { Event, EventCategory } from '@/types/calendar'
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+import type { Event, EventCategory } from '@/types/calendar';
+import {
+  addDays,
+  addMonths,
+  addWeeks,
+  endOfDay,
+  format,
+  setHours,
+  setMinutes,
+  startOfDay,
+} from 'date-fns';
+import { ArrowRight, Calendar, CheckCircle, Clock, Plus, Target, X, Zap } from 'lucide-react';
+import type React from 'react';
+import { forwardRef, useCallback, useMemo, useState } from 'react';
+import DatePicker from 'react-datepicker';
 
 // Import CSS for react-datepicker
-import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface TimePreset {
-  label: string
-  value: number // hours in 24-hour format
-  description: string
-  icon: React.ComponentType<{ className?: string }>
+  label: string;
+  value: number; // hours in 24-hour format
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
 interface DatePreset {
-  label: string
-  getValue: () => Date
-  description: string
-  category: 'today' | 'this-week' | 'next-week' | 'this-month' | 'next-month'
+  label: string;
+  getValue: () => Date;
+  description: string;
+  category: 'today' | 'this-week' | 'next-week' | 'this-month' | 'next-month';
 }
 
 interface RecurrenceRule {
-  frequency: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly'
-  interval: number
-  endDate?: Date
-  occurrences?: number
+  frequency: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+  interval: number;
+  endDate?: Date;
+  occurrences?: number;
 }
 
 interface EnhancedDateTimePickerProps {
-  value?: Date
-  onChange: (date: Date | null) => void
-  onEventCreate?: (event: Partial<Event>) => void
-  placeholder?: string
-  disabled?: boolean
-  className?: string
-  showTimeSelect?: boolean
-  showRecurrence?: boolean
-  showPresets?: boolean
-  showQuickActions?: boolean
-  minDate?: Date
-  maxDate?: Date
-  excludeDates?: Date[]
-  includeTimes?: Date[]
-  filterTime?: (time: Date) => boolean
-  eventTitle?: string
-  eventCategory?: EventCategory
-  eventDuration?: number // minutes
+  value?: Date;
+  onChange: (date: Date | null) => void;
+  onEventCreate?: (event: Partial<Event>) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+  showTimeSelect?: boolean;
+  showRecurrence?: boolean;
+  showPresets?: boolean;
+  showQuickActions?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
+  excludeDates?: Date[];
+  includeTimes?: Date[];
+  filterTime?: (time: Date) => boolean;
+  eventTitle?: string;
+  eventCategory?: EventCategory;
+  eventDuration?: number; // minutes
 }
 
 // Predefined time presets for common scheduling
@@ -76,33 +82,33 @@ const TIME_PRESETS: TimePreset[] = [
     label: '9:00 AM',
     value: 9,
     description: 'Standard work start',
-    icon: Target
+    icon: Target,
   },
   {
     label: '12:00 PM',
     value: 12,
     description: 'Lunch time',
-    icon: Clock
+    icon: Clock,
   },
   {
     label: '2:00 PM',
     value: 14,
     description: 'Afternoon focus',
-    icon: Zap
+    icon: Zap,
   },
   {
     label: '5:00 PM',
     value: 17,
     description: 'End of workday',
-    icon: CheckCircle
+    icon: CheckCircle,
   },
   {
     label: '7:00 PM',
     value: 19,
     description: 'Evening time',
-    icon: Clock
-  }
-]
+    icon: Clock,
+  },
+];
 
 // Predefined date presets for quick selection
 const DATE_PRESETS: DatePreset[] = [
@@ -110,54 +116,54 @@ const DATE_PRESETS: DatePreset[] = [
     label: 'Today',
     getValue: () => new Date(),
     description: 'Schedule for today',
-    category: 'today'
+    category: 'today',
   },
   {
     label: 'Tomorrow',
     getValue: () => addDays(new Date(), 1),
     description: 'Schedule for tomorrow',
-    category: 'today'
+    category: 'today',
   },
   {
     label: 'This Monday',
     getValue: () => {
-      const today = new Date()
-      const monday = addDays(today, (1 - today.getDay() + 7) % 7)
-      return monday <= today ? addWeeks(monday, 1) : monday
+      const today = new Date();
+      const monday = addDays(today, (1 - today.getDay() + 7) % 7);
+      return monday <= today ? addWeeks(monday, 1) : monday;
     },
     description: 'Start of this/next week',
-    category: 'this-week'
+    category: 'this-week',
   },
   {
     label: 'This Friday',
     getValue: () => {
-      const today = new Date()
-      const friday = addDays(today, (5 - today.getDay() + 7) % 7)
-      return friday <= today ? addWeeks(friday, 1) : friday
+      const today = new Date();
+      const friday = addDays(today, (5 - today.getDay() + 7) % 7);
+      return friday <= today ? addWeeks(friday, 1) : friday;
     },
     description: 'End of this/next week',
-    category: 'this-week'
+    category: 'this-week',
   },
   {
     label: 'Next Monday',
     getValue: () => {
-      const today = new Date()
-      const nextMonday = addDays(today, (1 - today.getDay() + 7) % 7 + 7)
-      return nextMonday
+      const today = new Date();
+      const nextMonday = addDays(today, ((1 - today.getDay() + 7) % 7) + 7);
+      return nextMonday;
     },
     description: 'Start of next week',
-    category: 'next-week'
+    category: 'next-week',
   },
   {
     label: '1st Next Month',
     getValue: () => {
-      const nextMonth = addMonths(new Date(), 1)
-      return new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 1)
+      const nextMonth = addMonths(new Date(), 1);
+      return new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 1);
     },
     description: 'First day of next month',
-    category: 'next-month'
-  }
-]
+    category: 'next-month',
+  },
+];
 
 // Duration presets for quick event creation
 const DURATION_PRESETS = [
@@ -167,19 +173,19 @@ const DURATION_PRESETS = [
   { label: '1.5 hours', value: 90 },
   { label: '2 hours', value: 120 },
   { label: '4 hours', value: 240 },
-  { label: 'All day', value: 1440 } // 24 hours
-]
+  { label: 'All day', value: 1440 }, // 24 hours
+];
 
 // Custom input component for react-datepicker
 const CustomDateInput = forwardRef<
   HTMLInputElement,
   {
-    value?: string
-    onClick?: () => void
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
-    placeholder?: string
-    className?: string
-    disabled?: boolean
+    value?: string;
+    onClick?: () => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    placeholder?: string;
+    className?: string;
+    disabled?: boolean;
   }
 >(({ value, onClick, onChange, placeholder, className, disabled }, ref) => (
   <div className="relative">
@@ -195,8 +201,8 @@ const CustomDateInput = forwardRef<
     />
     <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
   </div>
-))
-CustomDateInput.displayName = 'CustomDateInput'
+));
+CustomDateInput.displayName = 'CustomDateInput';
 
 export function EnhancedDateTimePicker({
   value,
@@ -216,66 +222,76 @@ export function EnhancedDateTimePicker({
   filterTime,
   eventTitle = 'New Event',
   eventCategory = 'personal',
-  eventDuration = 60
+  eventDuration = 60,
 }: EnhancedDateTimePickerProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedDuration, setSelectedDuration] = useState(eventDuration)
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedDuration, setSelectedDuration] = useState(eventDuration);
   const [recurrence, setRecurrence] = useState<RecurrenceRule>({
     frequency: 'none',
-    interval: 1
-  })
-  const [quickEventTitle, setQuickEventTitle] = useState(eventTitle)
+    interval: 1,
+  });
+  const [quickEventTitle, setQuickEventTitle] = useState(eventTitle);
 
   // Handle date selection with smart time setting
-  const handleDateChange = useCallback((date: Date | null) => {
-    if (date) {
-      // If no time is set, default to next available hour
-      if (showTimeSelect && date.getHours() === 0 && date.getMinutes() === 0) {
-        const now = new Date()
-        const nextHour = now.getHours() + 1
-        date = setHours(setMinutes(date, 0), nextHour)
+  const handleDateChange = useCallback(
+    (date: Date | null) => {
+      if (date) {
+        // If no time is set, default to next available hour
+        if (showTimeSelect && date.getHours() === 0 && date.getMinutes() === 0) {
+          const now = new Date();
+          const nextHour = now.getHours() + 1;
+          date = setHours(setMinutes(date, 0), nextHour);
+        }
       }
-    }
-    onChange(date)
-  }, [onChange, showTimeSelect])
+      onChange(date);
+    },
+    [onChange, showTimeSelect]
+  );
 
   // Handle preset time selection
-  const handleTimePreset = useCallback((preset: TimePreset) => {
-    if (value) {
-      const newDate = setHours(setMinutes(value, 0), preset.value)
-      onChange(newDate)
-    } else {
-      const today = new Date()
-      const newDate = setHours(setMinutes(today, 0), preset.value)
-      onChange(newDate)
-    }
-  }, [value, onChange])
+  const handleTimePreset = useCallback(
+    (preset: TimePreset) => {
+      if (value) {
+        const newDate = setHours(setMinutes(value, 0), preset.value);
+        onChange(newDate);
+      } else {
+        const today = new Date();
+        const newDate = setHours(setMinutes(today, 0), preset.value);
+        onChange(newDate);
+      }
+    },
+    [value, onChange]
+  );
 
   // Handle preset date selection
-  const handleDatePreset = useCallback((preset: DatePreset) => {
-    const newDate = preset.getValue()
-    
-    // Preserve time if already set
-    if (value && showTimeSelect) {
-      newDate.setHours(value.getHours(), value.getMinutes())
-    } else if (showTimeSelect) {
-      // Set to next reasonable time
-      const currentHour = new Date().getHours()
-      const nextHour = currentHour < 17 ? currentHour + 1 : 9
-      newDate.setHours(nextHour, 0)
-    }
-    
-    onChange(newDate)
-  }, [value, onChange, showTimeSelect])
+  const handleDatePreset = useCallback(
+    (preset: DatePreset) => {
+      const newDate = preset.getValue();
+
+      // Preserve time if already set
+      if (value && showTimeSelect) {
+        newDate.setHours(value.getHours(), value.getMinutes());
+      } else if (showTimeSelect) {
+        // Set to next reasonable time
+        const currentHour = new Date().getHours();
+        const nextHour = currentHour < 17 ? currentHour + 1 : 9;
+        newDate.setHours(nextHour, 0);
+      }
+
+      onChange(newDate);
+    },
+    [value, onChange, showTimeSelect]
+  );
 
   // Create event with selected parameters
   const handleCreateEvent = useCallback(() => {
-    if (!value || !onEventCreate) return
+    if (!value || !onEventCreate) return;
 
-    const startDate = value
-    const endDate = selectedDuration === 1440 
-      ? endOfDay(value)
-      : new Date(value.getTime() + selectedDuration * 60 * 1000)
+    const startDate = value;
+    const endDate =
+      selectedDuration === 1440
+        ? endOfDay(value)
+        : new Date(value.getTime() + selectedDuration * 60 * 1000);
 
     const event: Partial<Event> = {
       title: quickEventTitle,
@@ -285,34 +301,40 @@ export function EnhancedDateTimePicker({
       isRecurring: recurrence.frequency !== 'none',
       description: `Created via Enhanced Date/Time Picker${
         recurrence.frequency !== 'none' ? ` (${recurrence.frequency})` : ''
-      }`
-    }
+      }`,
+    };
 
-    onEventCreate(event)
-    setIsOpen(false)
-  }, [value, onEventCreate, selectedDuration, quickEventTitle, eventCategory, recurrence])
+    onEventCreate(event);
+    setIsOpen(false);
+  }, [value, onEventCreate, selectedDuration, quickEventTitle, eventCategory, recurrence]);
 
   // Filter past times for today
-  const timeFilter = useCallback((time: Date) => {
-    if (filterTime) return filterTime(time)
-    
-    if (value && format(value, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')) {
-      // For today, filter out past times
-      return time.getTime() > new Date().getTime()
-    }
-    return true
-  }, [value, filterTime])
+  const timeFilter = useCallback(
+    (time: Date) => {
+      if (filterTime) return filterTime(time);
+
+      if (value && format(value, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')) {
+        // For today, filter out past times
+        return time.getTime() > new Date().getTime();
+      }
+      return true;
+    },
+    [value, filterTime]
+  );
 
   // Grouped presets for better UX
   const groupedDatePresets = useMemo(() => {
-    return DATE_PRESETS.reduce((acc, preset) => {
-      if (!acc[preset.category]) {
-        acc[preset.category] = []
-      }
-      acc[preset.category].push(preset)
-      return acc
-    }, {} as Record<string, DatePreset[]>)
-  }, [])
+    return DATE_PRESETS.reduce(
+      (acc, preset) => {
+        if (!acc[preset.category]) {
+          acc[preset.category] = [];
+        }
+        acc[preset.category].push(preset);
+        return acc;
+      },
+      {} as Record<string, DatePreset[]>
+    );
+  }, []);
 
   return (
     <div className={cn('enhanced-datetime-picker', className)}>
@@ -327,18 +349,10 @@ export function EnhancedDateTimePicker({
             disabled={disabled}
           >
             <Calendar className="mr-2 h-4 w-4" />
-            {value ? (
-              showTimeSelect ? (
-                format(value, 'PPP p')
-              ) : (
-                format(value, 'PPP')
-              )
-            ) : (
-              placeholder
-            )}
+            {value ? (showTimeSelect ? format(value, 'PPP p') : format(value, 'PPP')) : placeholder}
           </Button>
         </PopoverTrigger>
-        
+
         <PopoverContent className="w-auto p-0" align="start">
           <div className="flex">
             {/* Main DatePicker */}
@@ -371,9 +385,9 @@ export function EnhancedDateTimePicker({
                   <Label className="text-sm font-medium mb-2 block">Quick Times</Label>
                   <div className="grid grid-cols-2 gap-2">
                     {TIME_PRESETS.map((preset) => {
-                      const IconComponent = preset.icon
-                      const isSelected = value && value.getHours() === preset.value
-                      
+                      const IconComponent = preset.icon;
+                      const isSelected = value && value.getHours() === preset.value;
+
                       return (
                         <Button
                           key={preset.value}
@@ -385,7 +399,7 @@ export function EnhancedDateTimePicker({
                           <IconComponent className="h-3 w-3" />
                           {preset.label}
                         </Button>
-                      )
+                      );
                     })}
                   </div>
                 </div>
@@ -439,10 +453,13 @@ export function EnhancedDateTimePicker({
                         className="h-8 text-xs"
                       />
                     </div>
-                    
+
                     <div>
                       <Label className="text-xs">Duration</Label>
-                      <Select value={selectedDuration.toString()} onValueChange={(value) => setSelectedDuration(Number(value))}>
+                      <Select
+                        value={selectedDuration.toString()}
+                        onValueChange={(value) => setSelectedDuration(Number(value))}
+                      >
                         <SelectTrigger className="h-8 text-xs">
                           <SelectValue />
                         </SelectTrigger>
@@ -460,9 +477,11 @@ export function EnhancedDateTimePicker({
                     {showRecurrence && (
                       <div>
                         <Label className="text-xs">Repeat</Label>
-                        <Select 
-                          value={recurrence.frequency} 
-                          onValueChange={(value) => setRecurrence(prev => ({ ...prev, frequency: value as any }))}
+                        <Select
+                          value={recurrence.frequency}
+                          onValueChange={(value) =>
+                            setRecurrence((prev) => ({ ...prev, frequency: value as any }))
+                          }
                         >
                           <SelectTrigger className="h-8 text-xs">
                             <SelectValue />
@@ -593,9 +612,9 @@ export function EnhancedDateTimePicker({
         }
       `}</style>
     </div>
-  )
+  );
 }
 
 // Export presets for use in other components
-export { TIME_PRESETS, DATE_PRESETS, DURATION_PRESETS }
-export type { TimePreset, DatePreset, RecurrenceRule }
+export { TIME_PRESETS, DATE_PRESETS, DURATION_PRESETS };
+export type { TimePreset, DatePreset, RecurrenceRule };

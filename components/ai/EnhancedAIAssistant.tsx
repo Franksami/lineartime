@@ -1,57 +1,63 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { useChat } from '@ai-sdk/react'
-import { cn } from '@/lib/utils'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { 
-  X, 
-  Minimize2, 
-  Maximize2, 
-  Bot, 
-  Calendar as CalendarIcon, 
-  Clock as ClockIcon, 
-  AlertTriangle, 
-  Wand2, 
-  Sparkles, 
-  Brain, 
-  Lightbulb,
-  Target,
-  TrendingUp,
-  Zap,
-  Settings
-} from 'lucide-react'
-import { 
-  Conversation, 
-  ConversationContent, 
-  ConversationScrollButton 
-} from '@/components/ai-elements/conversation'
-import { Message, MessageContent } from '@/components/ai-elements/message'
-import { 
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from '@/components/ai-elements/conversation';
+import { Loader } from '@/components/ai-elements/loader';
+import { Message, MessageContent } from '@/components/ai-elements/message';
+import {
   PromptInput,
-  PromptInputTextarea,
+  PromptInputButton,
   PromptInputSubmit,
+  PromptInputTextarea,
   PromptInputToolbar,
   PromptInputTools,
-  PromptInputButton,
-} from '@/components/ai-elements/prompt-input'
-import { Suggestions, Suggestion } from '@/components/ai-elements/suggestion'
-import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from '@/components/ai-elements/tool'
-import { Response } from '@/components/ai-elements/response'
-import { Loader } from '@/components/ai-elements/loader'
-import { CalendarAI } from '@/lib/ai/CalendarAI'
-import { EnhancedSchedulingEngine } from '@/lib/ai/EnhancedSchedulingEngine'
-import type { Event } from '@/types/calendar'
-import { addDays, format } from 'date-fns'
+} from '@/components/ai-elements/prompt-input';
+import { Response } from '@/components/ai-elements/response';
+import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion';
+import {
+  Tool,
+  ToolContent,
+  ToolHeader,
+  ToolInput,
+  ToolOutput,
+} from '@/components/ai-elements/tool';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { CalendarAI } from '@/lib/ai/CalendarAI';
+import { EnhancedSchedulingEngine } from '@/lib/ai/EnhancedSchedulingEngine';
+import { cn } from '@/lib/utils';
+import type { Event } from '@/types/calendar';
+import { useChat } from '@ai-sdk/react';
+import { addDays, format } from 'date-fns';
+import {
+  AlertTriangle,
+  Bot,
+  Brain,
+  Calendar as CalendarIcon,
+  Clock as ClockIcon,
+  Lightbulb,
+  Maximize2,
+  Minimize2,
+  Settings,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Wand2,
+  X,
+  Zap,
+} from 'lucide-react';
+import * as React from 'react';
 
 interface EnhancedAIAssistantProps {
-  events?: Event[]
-  onEventCreate?: (event: Partial<Event>) => void
-  onEventUpdate?: (id: string, event: Partial<Event>) => void
-  onEventDelete?: (id: string) => void
-  className?: string
+  events?: Event[];
+  onEventCreate?: (event: Partial<Event>) => void;
+  onEventUpdate?: (id: string, event: Partial<Event>) => void;
+  onEventDelete?: (id: string) => void;
+  className?: string;
 }
 
 export function EnhancedAIAssistant({
@@ -59,196 +65,198 @@ export function EnhancedAIAssistant({
   onEventCreate,
   onEventUpdate,
   onEventDelete,
-  className
+  className,
 }: EnhancedAIAssistantProps) {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [isMinimized, setIsMinimized] = React.useState(false)
-  const [input, setInput] = React.useState('')
-  const [isMobile, setIsMobile] = React.useState(false)
-  const [activeTab, setActiveTab] = React.useState<'chat' | 'insights' | 'tools' | 'settings'>('chat')
-  
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isMinimized, setIsMinimized] = React.useState(false);
+  const [input, setInput] = React.useState('');
+  const [isMobile, setIsMobile] = React.useState(false);
+  const [activeTab, setActiveTab] = React.useState<'chat' | 'insights' | 'tools' | 'settings'>(
+    'chat'
+  );
+
   // AI instances
-  const [calendarAI, setCalendarAI] = React.useState<CalendarAI | null>(null)
-  const [isProcessing, setIsProcessing] = React.useState(false)
-  const [aiInsights, setAiInsights] = React.useState<any>(null)
-  const [smartSuggestions, setSmartSuggestions] = React.useState<string[]>([])
+  const [calendarAI, setCalendarAI] = React.useState<CalendarAI | null>(null);
+  const [isProcessing, setIsProcessing] = React.useState(false);
+  const [aiInsights, setAiInsights] = React.useState<any>(null);
+  const [smartSuggestions, setSmartSuggestions] = React.useState<string[]>([]);
 
   // Initialize CalendarAI
   React.useEffect(() => {
     if (events.length > 0) {
-      const ai = new CalendarAI(events)
-      setCalendarAI(ai)
+      const ai = new CalendarAI(events);
+      setCalendarAI(ai);
     }
-  }, [events])
+  }, [events]);
 
   // Enhanced chat with AI capabilities
   const { messages, sendMessage, status } = useChat({
     api: '/api/ai/chat',
-    body: { 
+    body: {
       model: 'anthropic/claude-3-5-sonnet-20241022',
       events,
-      enhancedAI: true // Flag to use new AI tools
+      enhancedAI: true, // Flag to use new AI tools
     },
-    onFinish: async (message) => {
+    onFinish: async (_message) => {
       // Update AI insights after each conversation
       if (calendarAI) {
         try {
-          const insights = await calendarAI.getCalendarInsights('week')
-          setAiInsights(insights)
+          const insights = await calendarAI.getCalendarInsights('week');
+          setAiInsights(insights);
         } catch (error) {
-          console.error('Failed to update insights:', error)
+          console.error('Failed to update insights:', error);
         }
       }
-    }
-  })
+    },
+  });
 
   // Detect mobile viewport
   React.useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Load initial insights
   React.useEffect(() => {
     const loadInsights = async () => {
       if (calendarAI) {
         try {
-          const insights = await calendarAI.getCalendarInsights('week')
-          setAiInsights(insights)
+          const insights = await calendarAI.getCalendarInsights('week');
+          setAiInsights(insights);
         } catch (error) {
-          console.error('Failed to load insights:', error)
+          console.error('Failed to load insights:', error);
         }
       }
-    }
-    loadInsights()
-  }, [calendarAI])
+    };
+    loadInsights();
+  }, [calendarAI]);
 
   // Smart suggestions based on current context
   const suggestions = React.useMemo(() => {
     const baseSuggestions = [
-      'What\'s my availability this week?',
+      "What's my availability this week?",
       'Find conflicts in my schedule',
       'Suggest optimal meeting times',
       'Create an event: "Team standup tomorrow at 9am"',
       'Analyze my productivity patterns',
-      'Optimize my schedule for focus time'
-    ]
+      'Optimize my schedule for focus time',
+    ];
 
     if (smartSuggestions.length > 0) {
-      return [...smartSuggestions, ...baseSuggestions.slice(0, 3)]
+      return [...smartSuggestions, ...baseSuggestions.slice(0, 3)];
     }
 
-    return baseSuggestions
-  }, [smartSuggestions])
+    return baseSuggestions;
+  }, [smartSuggestions]);
 
   const handleAIRequest = async (userInput: string) => {
-    if (!calendarAI) return
+    if (!calendarAI) return;
 
-    setIsProcessing(true)
+    setIsProcessing(true);
     try {
       const result = await calendarAI.processRequest(userInput, {
         currentDate: new Date(),
-        recentEvents: events.slice(-10)
-      })
+        recentEvents: events.slice(-10),
+      });
 
       // Send AI response to chat
-      sendMessage({ text: result.response })
+      sendMessage({ text: result.response });
 
       // Execute any actions
       for (const action of result.actions) {
         switch (action.type) {
           case 'create_event':
             if (action.data.event && onEventCreate) {
-              onEventCreate(action.data.event)
+              onEventCreate(action.data.event);
             }
-            break
-          
+            break;
+
           case 'suggest_times':
             // Show time suggestions in UI
             if (action.data.suggestions) {
-              const suggestionTexts = action.data.suggestions.map((s: any) => 
-                `Available: ${s.startFormatted} - ${s.endFormatted} (${s.reasoning?.join(', ') || 'Good option'})`
-              )
-              setSmartSuggestions(suggestionTexts.slice(0, 3))
+              const suggestionTexts = action.data.suggestions.map(
+                (s: any) =>
+                  `Available: ${s.startFormatted} - ${s.endFormatted} (${s.reasoning?.join(', ') || 'Good option'})`
+              );
+              setSmartSuggestions(suggestionTexts.slice(0, 3));
             }
-            break
+            break;
 
           case 'find_conflicts':
             // Highlight conflicts in the response
             if (action.data.conflicts) {
-              sendMessage({ 
-                text: `Found ${action.data.conflicts.length} conflicts in your schedule. See details above.` 
-              })
+              sendMessage({
+                text: `Found ${action.data.conflicts.length} conflicts in your schedule. See details above.`,
+              });
             }
-            break
+            break;
         }
       }
 
       // Update suggestions with follow-up questions
       if (result.followUp.length > 0) {
-        setSmartSuggestions(result.followUp)
+        setSmartSuggestions(result.followUp);
       }
-
     } catch (error) {
-      console.error('AI request failed:', error)
-      sendMessage({ text: 'I apologize, but I\'m having trouble processing that request. Please try again.' })
+      console.error('AI request failed:', error);
+      sendMessage({
+        text: "I apologize, but I'm having trouble processing that request. Please try again.",
+      });
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!input.trim() || status === 'streaming' || isProcessing) return
+    e.preventDefault();
+    if (!input.trim() || status === 'streaming' || isProcessing) return;
 
     // Use AI-enhanced processing
-    await handleAIRequest(input)
-    setInput('')
-  }
+    await handleAIRequest(input);
+    setInput('');
+  };
 
   const handleSuggestionSelect = (suggestion: string) => {
-    setInput(suggestion)
+    setInput(suggestion);
     // Auto-submit the suggestion
-    handleAIRequest(suggestion)
-  }
+    handleAIRequest(suggestion);
+  };
 
   if (!isOpen) {
     return (
       <Button
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed z-40 rounded-full shadow-lg bg-gradient-to-r from-primary to-accent",
-          isMobile 
-            ? "bottom-20 right-4 h-14 w-14" 
-            : "bottom-4 right-4 h-12 w-12"
+          'fixed z-40 rounded-full shadow-lg bg-gradient-to-r from-primary to-accent',
+          isMobile ? 'bottom-20 right-4 h-14 w-14' : 'bottom-4 right-4 h-12 w-12'
         )}
         size="icon"
       >
         <Brain className="h-5 w-5" />
         <span className="sr-only">Open Enhanced AI Assistant</span>
       </Button>
-    )
+    );
   }
 
   return (
-    <Card className={cn(
-      'fixed z-40 shadow-2xl transition-all duration-300 border-primary/20',
-      isMobile ? (
-        isMinimized 
-          ? 'bottom-0 left-0 right-0 h-14'
-          : 'inset-0 rounded-none'
-      ) : (
-        isMinimized 
-          ? 'bottom-4 right-4 w-80 h-14'
-          : 'bottom-4 right-4 w-[450px] h-[700px] max-h-[85vh]'
-      ),
-      'flex flex-col bg-gradient-to-b from-background to-background/95',
-      className
-    )}>
+    <Card
+      className={cn(
+        'fixed z-40 shadow-2xl transition-all duration-300 border-primary/20',
+        isMobile
+          ? isMinimized
+            ? 'bottom-0 left-0 right-0 h-14'
+            : 'inset-0 rounded-none'
+          : isMinimized
+            ? 'bottom-4 right-4 w-80 h-14'
+            : 'bottom-4 right-4 w-[450px] h-[700px] max-h-[85vh]',
+        'flex flex-col bg-gradient-to-b from-background to-background/95',
+        className
+      )}
+    >
       {/* Enhanced Header */}
       <div className="flex items-center justify-between p-3 border-b border-primary/10 bg-gradient-to-r from-primary/5 to-accent/5">
         <div className="flex items-center gap-3">
@@ -267,14 +275,13 @@ export function EnhancedAIAssistant({
             className="h-7 w-7"
             onClick={() => setIsMinimized(!isMinimized)}
           >
-            {isMinimized ? <Maximize2 className="h-3.5 w-3.5" /> : <Minimize2 className="h-3.5 w-3.5" />}
+            {isMinimized ? (
+              <Maximize2 className="h-3.5 w-3.5" />
+            ) : (
+              <Minimize2 className="h-3.5 w-3.5" />
+            )}
           </Button>
-          <Button
-            size="icon"
-            variant="ghost"
-            className="h-7 w-7"
-            onClick={() => setIsOpen(false)}
-          >
+          <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => setIsOpen(false)}>
             <X className="h-3.5 w-3.5" />
           </Button>
         </div>
@@ -287,16 +294,16 @@ export function EnhancedAIAssistant({
             { id: 'chat', label: 'AI Chat', icon: Bot },
             { id: 'insights', label: 'Insights', icon: TrendingUp },
             { id: 'tools', label: 'Tools', icon: Wand2 },
-            { id: 'settings', label: 'Settings', icon: Settings }
+            { id: 'settings', label: 'Settings', icon: Settings },
           ].map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               onClick={() => setActiveTab(id as any)}
               className={cn(
-                "flex-1 px-2 py-2 text-sm font-medium transition-all duration-200",
-                activeTab === id 
-                  ? "bg-background text-foreground border-b-2 border-primary shadow-sm" 
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                'flex-1 px-2 py-2 text-sm font-medium transition-all duration-200',
+                activeTab === id
+                  ? 'bg-background text-foreground border-b-2 border-primary shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
               )}
             >
               <div className="flex items-center gap-1.5 justify-center">
@@ -319,39 +326,42 @@ export function EnhancedAIAssistant({
                     {messages.map((message) => (
                       <Message from={message.role} key={message.id}>
                         <MessageContent>
-                          {message.content && (
-                            <Response>
-                              {message.content}
-                            </Response>
-                          )}
-                          
+                          {message.content && <Response>{message.content}</Response>}
+
                           {/* Enhanced tool rendering */}
                           {(message as any).toolInvocations?.map((tool: any, i: number) => (
                             <Tool key={i} defaultOpen>
-                              <ToolHeader 
-                                type={tool.toolName} 
+                              <ToolHeader
+                                type={tool.toolName}
                                 state={tool.state}
                                 icon={
-                                  tool.toolName.includes('availability') ? <CalendarIcon className="w-4 h-4" /> :
-                                  tool.toolName.includes('suggest') ? <Lightbulb className="w-4 h-4" /> :
-                                  tool.toolName.includes('conflict') ? <AlertTriangle className="w-4 h-4" /> :
-                                  <Zap className="w-4 h-4" />
+                                  tool.toolName.includes('availability') ? (
+                                    <CalendarIcon className="w-4 h-4" />
+                                  ) : tool.toolName.includes('suggest') ? (
+                                    <Lightbulb className="w-4 h-4" />
+                                  ) : tool.toolName.includes('conflict') ? (
+                                    <AlertTriangle className="w-4 h-4" />
+                                  ) : (
+                                    <Zap className="w-4 h-4" />
+                                  )
                                 }
                               />
                               <ToolContent>
                                 <ToolInput input={tool.args} />
                                 {tool.result && (
-                                  <ToolOutput output={
-                                    <div className="space-y-2">
-                                      {typeof tool.result === 'object' ? (
-                                        <pre className="text-xs p-2 bg-muted/50 rounded overflow-auto max-h-32">
-                                          {JSON.stringify(tool.result, null, 2)}
-                                        </pre>
-                                      ) : (
-                                        <p className="text-sm">{tool.result}</p>
-                                      )}
-                                    </div>
-                                  } />
+                                  <ToolOutput
+                                    output={
+                                      <div className="space-y-2">
+                                        {typeof tool.result === 'object' ? (
+                                          <pre className="text-xs p-2 bg-muted/50 rounded overflow-auto max-h-32">
+                                            {JSON.stringify(tool.result, null, 2)}
+                                          </pre>
+                                        ) : (
+                                          <p className="text-sm">{tool.result}</p>
+                                        )}
+                                      </div>
+                                    }
+                                  />
                                 )}
                               </ToolContent>
                             </Tool>
@@ -404,9 +414,7 @@ export function EnhancedAIAssistant({
                   <>
                     {/* Summary */}
                     <Card className="p-4">
-                      <div className="text-sm leading-relaxed">
-                        {aiInsights.summary}
-                      </div>
+                      <div className="text-sm leading-relaxed">{aiInsights.summary}</div>
                     </Card>
 
                     {/* Key Metrics */}
@@ -417,15 +425,21 @@ export function EnhancedAIAssistant({
                       </Card>
                       <Card className="p-3">
                         <div className="text-xs text-muted-foreground">Productivity</div>
-                        <div className="text-lg font-semibold">{aiInsights.metrics.productivityScore}%</div>
+                        <div className="text-lg font-semibold">
+                          {aiInsights.metrics.productivityScore}%
+                        </div>
                       </Card>
                       <Card className="p-3">
                         <div className="text-xs text-muted-foreground">Meeting Time</div>
-                        <div className="text-lg font-semibold">{aiInsights.metrics.meetingTime}h</div>
+                        <div className="text-lg font-semibold">
+                          {aiInsights.metrics.meetingTime}h
+                        </div>
                       </Card>
                       <Card className="p-3">
                         <div className="text-xs text-muted-foreground">Work-Life Balance</div>
-                        <div className="text-lg font-semibold">{aiInsights.metrics.workLifeBalance}%</div>
+                        <div className="text-lg font-semibold">
+                          {aiInsights.metrics.workLifeBalance}%
+                        </div>
                       </Card>
                     </div>
 
@@ -436,16 +450,26 @@ export function EnhancedAIAssistant({
                         {aiInsights.insights.map((insight: any, index: number) => (
                           <Card key={index} className="p-3">
                             <div className="flex items-start gap-2">
-                              <Badge variant={
-                                insight.impact === 'high' ? 'destructive' :
-                                insight.impact === 'medium' ? 'default' : 'secondary'
-                              } className="text-xs">
+                              <Badge
+                                variant={
+                                  insight.impact === 'high'
+                                    ? 'destructive'
+                                    : insight.impact === 'medium'
+                                      ? 'default'
+                                      : 'secondary'
+                                }
+                                className="text-xs"
+                              >
                                 {insight.type}
                               </Badge>
                               <div className="flex-1">
                                 <div className="font-medium text-sm">{insight.title}</div>
-                                <div className="text-xs text-muted-foreground mt-1">{insight.description}</div>
-                                <div className="text-xs text-primary mt-1">{insight.actionable}</div>
+                                <div className="text-xs text-muted-foreground mt-1">
+                                  {insight.description}
+                                </div>
+                                <div className="text-xs text-primary mt-1">
+                                  {insight.actionable}
+                                </div>
                               </div>
                             </div>
                           </Card>
@@ -491,14 +515,16 @@ export function EnhancedAIAssistant({
                     variant="outline"
                     className="justify-start h-auto p-3"
                     onClick={() => {
-                      setActiveTab('chat')
-                      handleAIRequest('Find all conflicts in my schedule')
+                      setActiveTab('chat');
+                      handleAIRequest('Find all conflicts in my schedule');
                     }}
                   >
                     <AlertTriangle className="w-4 h-4 mr-2 text-orange-500" />
                     <div className="text-left">
                       <div className="font-medium text-sm">Conflict Detection</div>
-                      <div className="text-xs text-muted-foreground">Find and resolve scheduling conflicts</div>
+                      <div className="text-xs text-muted-foreground">
+                        Find and resolve scheduling conflicts
+                      </div>
                     </div>
                   </Button>
 
@@ -506,14 +532,16 @@ export function EnhancedAIAssistant({
                     variant="outline"
                     className="justify-start h-auto p-3"
                     onClick={() => {
-                      setActiveTab('chat')
-                      handleAIRequest('Suggest optimal times for a 1-hour meeting this week')
+                      setActiveTab('chat');
+                      handleAIRequest('Suggest optimal times for a 1-hour meeting this week');
                     }}
                   >
                     <Lightbulb className="w-4 h-4 mr-2 text-yellow-500" />
                     <div className="text-left">
                       <div className="font-medium text-sm">Smart Scheduling</div>
-                      <div className="text-xs text-muted-foreground">AI-powered time suggestions</div>
+                      <div className="text-xs text-muted-foreground">
+                        AI-powered time suggestions
+                      </div>
                     </div>
                   </Button>
 
@@ -521,14 +549,16 @@ export function EnhancedAIAssistant({
                     variant="outline"
                     className="justify-start h-auto p-3"
                     onClick={() => {
-                      setActiveTab('chat')
-                      handleAIRequest('What are my availability slots for next week?')
+                      setActiveTab('chat');
+                      handleAIRequest('What are my availability slots for next week?');
                     }}
                   >
                     <CalendarIcon className="w-4 h-4 mr-2 text-blue-500" />
                     <div className="text-left">
                       <div className="font-medium text-sm">Availability Finder</div>
-                      <div className="text-xs text-muted-foreground">Find free time slots intelligently</div>
+                      <div className="text-xs text-muted-foreground">
+                        Find free time slots intelligently
+                      </div>
                     </div>
                   </Button>
 
@@ -536,14 +566,16 @@ export function EnhancedAIAssistant({
                     variant="outline"
                     className="justify-start h-auto p-3"
                     onClick={() => {
-                      setActiveTab('chat')
-                      handleAIRequest('Create a team standup meeting for tomorrow at 9am')
+                      setActiveTab('chat');
+                      handleAIRequest('Create a team standup meeting for tomorrow at 9am');
                     }}
                   >
                     <Zap className="w-4 h-4 mr-2 text-purple-500" />
                     <div className="text-left">
                       <div className="font-medium text-sm">Quick Event Creation</div>
-                      <div className="text-xs text-muted-foreground">Natural language event creation</div>
+                      <div className="text-xs text-muted-foreground">
+                        Natural language event creation
+                      </div>
                     </div>
                   </Button>
                 </div>
@@ -571,23 +603,23 @@ export function EnhancedAIAssistant({
                   <div className="text-sm font-medium">Available AI Tools</div>
                   <div className="space-y-2 text-xs">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full" />
                       Calendar Availability Analysis
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full" />
                       Intelligent Event Creation
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full" />
                       Conflict Detection & Resolution
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full" />
                       Smart Time Suggestions
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full" />
                       Automated Rescheduling
                     </div>
                   </div>
@@ -597,7 +629,7 @@ export function EnhancedAIAssistant({
                   <div className="text-sm font-medium mb-2">Performance Stats</div>
                   <div className="text-xs text-muted-foreground space-y-1">
                     <div>Events processed: {events.length}</div>
-                    <div>AI responses: {messages.filter(m => m.role === 'assistant').length}</div>
+                    <div>AI responses: {messages.filter((m) => m.role === 'assistant').length}</div>
                     <div>Success rate: 98.5%</div>
                   </div>
                 </Card>
@@ -621,8 +653,8 @@ export function EnhancedAIAssistant({
                     Enhanced AI
                   </div>
                 </PromptInputTools>
-                <PromptInputSubmit 
-                  disabled={!input.trim() || isProcessing} 
+                <PromptInputSubmit
+                  disabled={!input.trim() || isProcessing}
                   status={status}
                   className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
                 />
@@ -632,5 +664,5 @@ export function EnhancedAIAssistant({
         </>
       )}
     </Card>
-  )
+  );
 }

@@ -1,0 +1,23 @@
+{
+  "entry": [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "lib/**/*.{ts,tsx}",
+    "convex/**/*.{ts,tsx}"
+  ],
+  "project": [
+    "**/*.{ts,tsx}"
+  ],
+  "ignore": [
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "tests/**/*",
+    "components/**/_archive/**",
+    "playground/**",
+    ".next/**",
+    "public/**",
+    "**/*.d.ts"
+  ],
+  "ignoreDependencies": ["@types/*"]
+}
+

@@ -3,7 +3,7 @@
 import { LinearCalendarWithSync } from '@/components/calendar/LinearCalendarWithSync';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Settings, Calendar, Info } from 'lucide-react';
+import { Calendar, Info, Settings } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CalendarSyncPage() {
@@ -38,8 +38,8 @@ export default function CalendarSyncPage() {
               <div>
                 <CardTitle className="text-base">Calendar Sync Enabled</CardTitle>
                 <CardDescription className="mt-1">
-                  Your calendar is syncing with external providers. Events will update automatically.
-                  Connect more calendars in{' '}
+                  Your calendar is syncing with external providers. Events will update
+                  automatically. Connect more calendars in{' '}
                   <Link href="/settings/integrations" className="underline">
                     Settings → Integrations
                   </Link>
@@ -52,10 +52,7 @@ export default function CalendarSyncPage() {
 
       {/* Calendar Component */}
       <div className="container max-w-7xl mx-auto px-4 pb-8">
-        <LinearCalendarWithSync 
-          initialYear={new Date().getFullYear()} 
-          enableSync={true}
-        />
+        <LinearCalendarWithSync initialYear={new Date().getFullYear()} enableSync={true} />
       </div>
 
       {/* Features Section */}
@@ -73,7 +70,7 @@ export default function CalendarSyncPage() {
                 </p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm">Conflict Resolution</CardTitle>
@@ -84,7 +81,7 @@ export default function CalendarSyncPage() {
                 </p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm">Multiple Providers</CardTitle>
@@ -95,7 +92,7 @@ export default function CalendarSyncPage() {
                 </p>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm">Secure Storage</CardTitle>

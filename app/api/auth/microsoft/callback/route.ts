@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ConfidentialClientApplication } from '@azure/msal-node';
-import { Client } from '@microsoft/microsoft-graph-client';
-import { currentUser } from '@clerk/nextjs/server';
 import { api } from '@/convex/_generated/api';
+import { ConfidentialClientApplication } from '@azure/msal-node';
+import { currentUser } from '@clerk/nextjs/server';
+import { Client } from '@microsoft/microsoft-graph-client';
 import { ConvexHttpClient } from 'convex/browser';
+import { type NextRequest, NextResponse } from 'next/server';
 // Removed: import { encryptToken } from '@/lib/encryption'; - now handled server-side
 
 const msalConfig = {
@@ -31,40 +31,30 @@ export async function GET(request: NextRequest) {
     // Handle OAuth errors
     if (error) {
       console.error('OAuth error:', error, errorDescription);
-      return NextResponse.redirect(
-        `/settings/integrations?error=${encodeURIComponent(error)}`
-      );
+      return NextResponse.redirect(`/settings/integrations?error=${encodeURIComponent(error)}`);
     }
 
     if (!code || !state) {
-      return NextResponse.redirect(
-        '/settings/integrations?error=missing_parameters'
-      );
+      return NextResponse.redirect('/settings/integrations?error=missing_parameters');
     }
 
     // Verify state token
     let stateData;
     try {
       stateData = JSON.parse(Buffer.from(state, 'base64').toString());
-      
+
       // Check timestamp to prevent replay attacks (5 minute expiry)
       if (Date.now() - stateData.timestamp > 5 * 60 * 1000) {
-        return NextResponse.redirect(
-          '/settings/integrations?error=state_expired'
-        );
+        return NextResponse.redirect('/settings/integrations?error=state_expired');
       }
     } catch {
-      return NextResponse.redirect(
-        '/settings/integrations?error=invalid_state'
-      );
+      return NextResponse.redirect('/settings/integrations?error=invalid_state');
     }
 
     // Check if user is authenticated with Clerk
     const user = await currentUser();
     if (!user || user.id !== stateData.userId) {
-      return NextResponse.redirect(
-        '/settings/integrations?error=unauthorized'
-      );
+      return NextResponse.redirect('/settings/integrations?error=unauthorized');
     }
 
     // Create MSAL application
@@ -86,11 +76,9 @@ export async function GET(request: NextRequest) {
     };
 
     const response = await cca.acquireTokenByCode(tokenRequest);
-    
+
     if (!response || !response.accessToken) {
-      return NextResponse.redirect(
-        '/settings/integrations?error=no_access_token'
-      );
+      return NextResponse.redirect('/settings/integrations?error=no_access_token');
     }
 
     // Create Graph client
@@ -102,7 +90,7 @@ export async function GET(request: NextRequest) {
 
     // Get user info from Microsoft Graph
     const msUser = await graphClient.api('/me').get();
-    
+
     // Get calendar list
     const calendars = await graphClient
       .api('/me/calendars')
@@ -113,10 +101,10 @@ export async function GET(request: NextRequest) {
 
     // Store provider connection in Convex
     const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-    
+
     // Get Convex user ID
     const convexUser = await convex.query(api.users.getUserByClerkId, {
-      clerkId: user.id
+      clerkId: user.id,
     });
 
     if (!convexUser) {
@@ -128,15 +116,13 @@ export async function GET(request: NextRequest) {
         lastName: user.lastName || undefined,
         imageUrl: user.imageUrl || undefined,
       });
-      
+
       const newUser = await convex.query(api.users.getUserByClerkId, {
-        clerkId: user.id
+        clerkId: user.id,
       });
-      
+
       if (!newUser) {
-        return NextResponse.redirect(
-          '/settings/integrations?error=user_creation_failed'
-        );
+        return NextResponse.redirect('/settings/integrations?error=user_creation_failed');
       }
     }
 
@@ -148,44 +134,42 @@ export async function GET(request: NextRequest) {
       expiresAt: response.expiresOn ? response.expiresOn.getTime() : undefined,
       providerAccountId: msUser.id,
       settings: {
-        calendars: calendars.value?.map((cal: any) => ({
-          id: cal.id,
-          name: cal.name,
-          color: cal.color?.toLowerCase() || '#0078d4',
-          syncEnabled: cal.isDefaultCalendar || false,
-          isPrimary: cal.isDefaultCalendar || false
-        })) || [],
+        calendars:
+          calendars.value?.map((cal: any) => ({
+            id: cal.id,
+            name: cal.name,
+            color: cal.color?.toLowerCase() || '#0078d4',
+            syncEnabled: cal.isDefaultCalendar || false,
+            isPrimary: cal.isDefaultCalendar || false,
+          })) || [],
         syncDirection: 'bidirectional',
-        conflictResolution: 'newest'
-      }
+        conflictResolution: 'newest',
+      },
     });
 
     // Schedule initial sync
     await convex.mutation(api.calendar.sync.scheduleSync, {
       provider: 'microsoft',
       operation: 'full_sync',
-      priority: 10
+      priority: 10,
     });
 
     // Redirect to settings with success message
     return NextResponse.redirect(
-      '/settings/integrations?success=microsoft_connected&calendars=' + 
-      encodeURIComponent(calendars.value?.length?.toString() || '0')
+      `/settings/integrations?success=microsoft_connected&calendars=${encodeURIComponent(calendars.value?.length?.toString() || '0')}`
     );
   } catch (error) {
     console.error('Error handling Microsoft OAuth callback:', error);
-    
+
     // Log more details for debugging
     if (error instanceof Error) {
       console.error('Error details:', {
         message: error.message,
         stack: error.stack,
-        name: error.name
+        name: error.name,
       });
     }
-    
-    return NextResponse.redirect(
-      '/settings/integrations?error=callback_failed'
-    );
+
+    return NextResponse.redirect('/settings/integrations?error=callback_failed');
   }
 }

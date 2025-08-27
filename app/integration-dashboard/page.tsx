@@ -1,64 +1,78 @@
 'use client';
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Suspense } from 'react';
 
 // Icons for the integration dashboard
-import { 
-  Shield, 
-  Wifi, 
-  Settings, 
-  BarChart3, 
-  Calendar, 
-  RefreshCw, 
-  CheckCircle, 
-  AlertCircle, 
-  XCircle,
+import {
+  Activity,
+  AlertCircle,
+  BarChart3,
+  Calendar,
+  CheckCircle,
   Clock,
   Database,
-  Lock,
-  Activity,
-  Zap,
-  Globe,
-  Server,
-  Users,
-  TrendingUp,
   Eye,
-  EyeOff
+  EyeOff,
+  Globe,
+  Lock,
+  RefreshCw,
+  Server,
+  Settings,
+  Shield,
+  TrendingUp,
+  Users,
+  Wifi,
+  XCircle,
+  Zap,
 } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 // UI Components
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Enhanced Dashboard Components
-import IntegrationAnalyticsCharts from "@/components/dashboard/IntegrationAnalyticsCharts";
-import SecurityMonitoringDashboard from "@/components/dashboard/SecurityMonitoringDashboard";
-import SyncQueueMonitor from "@/components/dashboard/SyncQueueMonitor";
-import IntegrationTestingCenter from "@/components/dashboard/IntegrationTestingCenter";
+import IntegrationAnalyticsCharts from '@/components/dashboard/IntegrationAnalyticsCharts';
+import IntegrationTestingCenter from '@/components/dashboard/IntegrationTestingCenter';
+import PerformanceMonitoringDashboard from '@/components/dashboard/PerformanceMonitoringDashboard';
+import { PerformanceSLOProvider } from '@/components/dashboard/PerformanceSLOProvider';
+import SecurityMonitoringDashboard from '@/components/dashboard/SecurityMonitoringDashboard';
+import SyncQueueMonitor from '@/components/dashboard/SyncQueueMonitor';
 
 // Lazy load calendar components for performance
 const LinearCalendarHorizontal = dynamic(
-  () => import("@/components/calendar/LinearCalendarHorizontal").then(mod => ({ default: mod.LinearCalendarHorizontal })),
+  () =>
+    import('@/components/calendar/LinearCalendarHorizontal').then((mod) => ({
+      default: mod.LinearCalendarHorizontal,
+    })),
   { loading: () => <div className="h-64 w-full bg-muted animate-pulse rounded-md" /> }
 );
 
 const LinearCalendarPro = dynamic(
-  () => import("@/components/calendar/LinearCalendarPro").then(mod => ({ default: mod.LinearCalendarPro })),
+  () =>
+    import('@/components/calendar/LinearCalendarPro').then((mod) => ({
+      default: mod.LinearCalendarPro,
+    })),
   { loading: () => <div className="h-64 w-full bg-muted animate-pulse rounded-md" /> }
 );
 
 const ToastUICalendarView = dynamic(
-  () => import("@/components/calendar/ToastUICalendarView").then(mod => ({ default: mod.ToastUICalendarView })),
+  () =>
+    import('@/components/calendar/ToastUICalendarView').then((mod) => ({
+      default: mod.ToastUICalendarView,
+    })),
   { loading: () => <div className="h-64 w-full bg-muted animate-pulse rounded-md" /> }
 );
 
 const ProgressCalendarView = dynamic(
-  () => import("@/components/calendar/ProgressCalendarView").then(mod => ({ default: mod.ProgressCalendarView })),
+  () =>
+    import('@/components/calendar/ProgressCalendarView').then((mod) => ({
+      default: mod.ProgressCalendarView,
+    })),
   { loading: () => <div className="h-64 w-full bg-muted animate-pulse rounded-md" /> }
 );
 
@@ -98,7 +112,7 @@ const mockProviders: CalendarProvider[] = [
     tokenExpiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     webhookStatus: 'active',
     eventsCount: 342,
-    syncProgress: 100
+    syncProgress: 100,
   },
   {
     id: 'microsoft-1',
@@ -109,7 +123,7 @@ const mockProviders: CalendarProvider[] = [
     tokenExpiry: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 days
     webhookStatus: 'active',
     eventsCount: 128,
-    syncProgress: 75
+    syncProgress: 75,
   },
   {
     id: 'apple-1',
@@ -118,7 +132,7 @@ const mockProviders: CalendarProvider[] = [
     status: 'connected',
     lastSync: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
     eventsCount: 89,
-    syncProgress: 100
+    syncProgress: 100,
   },
   {
     id: 'caldav-1',
@@ -127,18 +141,18 @@ const mockProviders: CalendarProvider[] = [
     status: 'error',
     lastSync: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago
     eventsCount: 23,
-    syncProgress: 0
-  }
+    syncProgress: 0,
+  },
 ];
 
-const mockSyncQueue: SyncJob[] = [
+const _mockSyncQueue: SyncJob[] = [
   {
     id: 'sync-1',
     provider: 'Google Calendar',
     operation: 'incremental_sync',
     status: 'processing',
     priority: 5,
-    createdAt: new Date(Date.now() - 30 * 1000)
+    createdAt: new Date(Date.now() - 30 * 1000),
   },
   {
     id: 'sync-2',
@@ -146,7 +160,7 @@ const mockSyncQueue: SyncJob[] = [
     operation: 'webhook_update',
     status: 'pending',
     priority: 8,
-    createdAt: new Date(Date.now() - 60 * 1000)
+    createdAt: new Date(Date.now() - 60 * 1000),
   },
   {
     id: 'sync-3',
@@ -155,8 +169,8 @@ const mockSyncQueue: SyncJob[] = [
     status: 'completed',
     priority: 3,
     createdAt: new Date(Date.now() - 5 * 60 * 1000),
-    completedAt: new Date(Date.now() - 2 * 60 * 1000)
-  }
+    completedAt: new Date(Date.now() - 2 * 60 * 1000),
+  },
 ];
 
 const calendarLibraries = [
@@ -169,51 +183,54 @@ const calendarLibraries = [
   { id: 'primereact', name: 'PrimeReact Calendar', component: 'PrimeReactCalendarView' },
   { id: 'mui-x', name: 'MUI X Calendar', component: 'MUIXCalendarView' },
   { id: 'react-calendar', name: 'React Calendar', component: 'ReactCalendarView' },
-  { id: 'react-datepicker', name: 'React DatePicker', component: 'ReactDatePickerView' }
+  { id: 'react-datepicker', name: 'React DatePicker', component: 'ReactDatePickerView' },
 ];
 
 export default function IntegrationDashboardPage() {
   const [selectedLibrary, setSelectedLibrary] = useState('linear');
-  const [showSecurityDetails, setShowSecurityDetails] = useState(false);
+  const [_showSecurityDetails, _setShowSecurityDetails] = useState(false);
   const currentYear = new Date().getFullYear();
 
   // Mock events for calendar demo
-  const mockEvents = useMemo(() => [
-    {
-      id: '1',
-      title: 'Team Meeting',
-      startDate: new Date(2025, 0, 15, 10, 0),
-      endDate: new Date(2025, 0, 15, 11, 0),
-      category: 'work' as const,
-      description: 'Weekly team sync'
-    },
-    {
-      id: '2',
-      title: 'Project Deadline',
-      startDate: new Date(2025, 0, 20, 17, 0),
-      endDate: new Date(2025, 0, 20, 18, 0),
-      category: 'work' as const,
-      description: 'Q1 deliverables due'
-    },
-    {
-      id: '3',
-      title: 'Doctor Appointment',
-      startDate: new Date(2025, 0, 25, 14, 30),
-      endDate: new Date(2025, 0, 25, 15, 30),
-      category: 'personal' as const,
-      description: 'Annual checkup'
-    }
-  ], []);
+  const mockEvents = useMemo(
+    () => [
+      {
+        id: '1',
+        title: 'Team Meeting',
+        startDate: new Date(2025, 0, 15, 10, 0),
+        endDate: new Date(2025, 0, 15, 11, 0),
+        category: 'work' as const,
+        description: 'Weekly team sync',
+      },
+      {
+        id: '2',
+        title: 'Project Deadline',
+        startDate: new Date(2025, 0, 20, 17, 0),
+        endDate: new Date(2025, 0, 20, 18, 0),
+        category: 'work' as const,
+        description: 'Q1 deliverables due',
+      },
+      {
+        id: '3',
+        title: 'Doctor Appointment',
+        startDate: new Date(2025, 0, 25, 14, 30),
+        endDate: new Date(2025, 0, 25, 15, 30),
+        category: 'personal' as const,
+        description: 'Annual checkup',
+      },
+    ],
+    []
+  );
 
   // Calculate system health metrics
   const systemHealth = useMemo(() => {
-    const connectedProviders = mockProviders.filter(p => p.status === 'connected').length;
+    const connectedProviders = mockProviders.filter((p) => p.status === 'connected').length;
     const totalProviders = mockProviders.length;
     const healthPercentage = Math.round((connectedProviders / totalProviders) * 100);
-    
+
     const totalEvents = mockProviders.reduce((sum, p) => sum + p.eventsCount, 0);
-    const activeWebhooks = mockProviders.filter(p => p.webhookStatus === 'active').length;
-    
+    const activeWebhooks = mockProviders.filter((p) => p.webhookStatus === 'active').length;
+
     return {
       providerHealth: healthPercentage,
       connectedProviders,
@@ -221,34 +238,44 @@ export default function IntegrationDashboardPage() {
       totalEvents,
       activeWebhooks,
       encryptionStatus: 'AES-256-GCM Active',
-      lastSecurityScan: new Date(Date.now() - 4 * 60 * 60 * 1000) // 4 hours ago
+      lastSecurityScan: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
     };
   }, []);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'syncing': return <RefreshCw className="h-4 w-4 text-blue-500 animate-spin" />;
-      case 'error': return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'disconnected': return <AlertCircle className="h-4 w-4 text-gray-500" />;
-      default: return <Clock className="h-4 w-4 text-gray-400" />;
+      case 'connected':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'syncing':
+        return <RefreshCw className="h-4 w-4 text-blue-500 animate-spin" />;
+      case 'error':
+        return <XCircle className="h-4 w-4 text-red-500" />;
+      case 'disconnected':
+        return <AlertCircle className="h-4 w-4 text-gray-500" />;
+      default:
+        return <Clock className="h-4 w-4 text-gray-400" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected': return 'bg-green-500/10 text-green-700 border-green-500/20';
-      case 'syncing': return 'bg-blue-500/10 text-blue-700 border-blue-500/20';
-      case 'error': return 'bg-red-500/10 text-red-700 border-red-500/20';
-      case 'disconnected': return 'bg-gray-500/10 text-gray-700 border-gray-500/20';
-      default: return 'bg-gray-500/10 text-gray-700 border-gray-500/20';
+      case 'connected':
+        return 'bg-green-500/10 text-green-700 border-green-500/20';
+      case 'syncing':
+        return 'bg-blue-500/10 text-blue-700 border-blue-500/20';
+      case 'error':
+        return 'bg-red-500/10 text-red-700 border-red-500/20';
+      case 'disconnected':
+        return 'bg-gray-500/10 text-gray-700 border-gray-500/20';
+      default:
+        return 'bg-gray-500/10 text-gray-700 border-gray-500/20';
     }
   };
 
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
+
     if (diffInMinutes < 1) return 'just now';
     if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
     const diffInHours = Math.floor(diffInMinutes / 60);
@@ -311,7 +338,7 @@ export default function IntegrationDashboardPage() {
               <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
               <p className="text-muted-foreground">Calendar library not yet implemented in demo</p>
               <p className="text-sm text-muted-foreground mt-1">
-                {calendarLibraries.find(lib => lib.id === selectedLibrary)?.name}
+                {calendarLibraries.find((lib) => lib.id === selectedLibrary)?.name}
               </p>
             </div>
           </div>
@@ -379,13 +406,13 @@ export default function IntegrationDashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Total Events</p>
-                    <p className="text-2xl font-bold">{systemHealth.totalEvents.toLocaleString()}</p>
+                    <p className="text-2xl font-bold">
+                      {systemHealth.totalEvents.toLocaleString()}
+                    </p>
                   </div>
                   <Database className="h-8 w-8 text-purple-500" />
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Across all providers
-                </p>
+                <p className="text-xs text-muted-foreground mt-2">Across all providers</p>
               </CardContent>
             </Card>
 
@@ -398,9 +425,7 @@ export default function IntegrationDashboardPage() {
                   </div>
                   <Shield className="h-8 w-8 text-green-500" />
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">
-                  AES-256-GCM Active
-                </p>
+                <p className="text-xs text-muted-foreground mt-2">AES-256-GCM Active</p>
               </CardContent>
             </Card>
           </div>
@@ -410,12 +435,13 @@ export default function IntegrationDashboardPage() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
         <Tabs defaultValue="providers" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="providers">Providers</TabsTrigger>
             <TabsTrigger value="libraries">Libraries</TabsTrigger>
             <TabsTrigger value="sync">Sync Monitor</TabsTrigger>
             <TabsTrigger value="security">Security</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="performance">Performance SLO</TabsTrigger>
             <TabsTrigger value="testing">Testing</TabsTrigger>
           </TabsList>
 
@@ -430,9 +456,7 @@ export default function IntegrationDashboardPage() {
                         {provider.name}
                         {getStatusIcon(provider.status)}
                       </CardTitle>
-                      <Badge className={getStatusColor(provider.status)}>
-                        {provider.status}
-                      </Badge>
+                      <Badge className={getStatusColor(provider.status)}>{provider.status}</Badge>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -472,9 +496,7 @@ export default function IntegrationDashboardPage() {
                     {provider.tokenExpiry && (
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">Token Expires</span>
-                        <span className="font-medium">
-                          {formatTimeAgo(provider.tokenExpiry)}
-                        </span>
+                        <span className="font-medium">{formatTimeAgo(provider.tokenExpiry)}</span>
                       </div>
                     )}
 
@@ -482,11 +504,7 @@ export default function IntegrationDashboardPage() {
                       <Button size="sm" variant="outline" className="flex-1">
                         Configure
                       </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        disabled={provider.status === 'syncing'}
-                      >
+                      <Button size="sm" variant="outline" disabled={provider.status === 'syncing'}>
                         Sync Now
                       </Button>
                     </div>
@@ -511,7 +529,7 @@ export default function IntegrationDashboardPage() {
                     {calendarLibraries.map((library) => (
                       <Button
                         key={library.id}
-                        variant={selectedLibrary === library.id ? "default" : "ghost"}
+                        variant={selectedLibrary === library.id ? 'default' : 'ghost'}
                         className="w-full justify-start text-left"
                         onClick={() => setSelectedLibrary(library.id)}
                       >
@@ -519,9 +537,7 @@ export default function IntegrationDashboardPage() {
                           <Calendar className="h-4 w-4" />
                           <div>
                             <div className="font-medium">{library.name}</div>
-                            <div className="text-xs text-muted-foreground">
-                              {library.component}
-                            </div>
+                            <div className="text-xs text-muted-foreground">{library.component}</div>
                           </div>
                         </div>
                       </Button>
@@ -535,7 +551,7 @@ export default function IntegrationDashboardPage() {
                   <CardTitle className="flex items-center gap-2">
                     Live Preview
                     <Badge variant="secondary">
-                      {calendarLibraries.find(lib => lib.id === selectedLibrary)?.name}
+                      {calendarLibraries.find((lib) => lib.id === selectedLibrary)?.name}
                     </Badge>
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">
@@ -544,14 +560,16 @@ export default function IntegrationDashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="h-96 border border-border rounded-md overflow-hidden">
-                    <Suspense fallback={
-                      <div className="h-full w-full bg-muted animate-pulse flex items-center justify-center">
-                        <div className="text-center">
-                          <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
-                          <p className="text-muted-foreground">Loading calendar...</p>
+                    <Suspense
+                      fallback={
+                        <div className="h-full w-full bg-muted animate-pulse flex items-center justify-center">
+                          <div className="text-center">
+                            <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
+                            <p className="text-muted-foreground">Loading calendar...</p>
+                          </div>
                         </div>
-                      </div>
-                    }>
+                      }
+                    >
                       {renderCalendarComponent()}
                     </Suspense>
                   </div>
@@ -573,6 +591,13 @@ export default function IntegrationDashboardPage() {
           {/* Analytics Tab */}
           <TabsContent value="analytics" className="space-y-6">
             <IntegrationAnalyticsCharts />
+          </TabsContent>
+
+          {/* Performance SLO Tab */}
+          <TabsContent value="performance" className="space-y-6">
+            <PerformanceSLOProvider autoStart={true}>
+              <PerformanceMonitoringDashboard />
+            </PerformanceSLOProvider>
           </TabsContent>
 
           {/* Testing Tab */}

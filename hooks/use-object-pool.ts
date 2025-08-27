@@ -1,16 +1,20 @@
-"use client"
+'use client';
 
-import { useRef, useCallback } from "react"
+import { useCallback, useRef } from 'react';
 
 interface PooledObject {
-  id: string
-  inUse: boolean
-  data: any
+  id: string;
+  inUse: boolean;
+  data: any;
 }
 
-export function useObjectPool<T>(createObject: () => T, resetObject: (obj: T) => void, initialSize = 10) {
-  const pool = useRef<PooledObject[]>([])
-  const activeObjects = useRef<Map<string, T>>(new Map())
+export function useObjectPool<T>(
+  createObject: () => T,
+  resetObject: (obj: T) => void,
+  initialSize = 10
+) {
+  const pool = useRef<PooledObject[]>([]);
+  const activeObjects = useRef<Map<string, T>>(new Map());
 
   // Initialize pool
   if (pool.current.length === 0) {
@@ -19,7 +23,7 @@ export function useObjectPool<T>(createObject: () => T, resetObject: (obj: T) =>
         id: `pool-${i}`,
         inUse: false,
         data: createObject(),
-      })
+      });
     }
   }
 
@@ -27,11 +31,11 @@ export function useObjectPool<T>(createObject: () => T, resetObject: (obj: T) =>
     (id: string): T => {
       // Check if object is already active
       if (activeObjects.current.has(id)) {
-        return activeObjects.current.get(id)!
+        return activeObjects.current.get(id)!;
       }
 
       // Find available object in pool
-      let pooledObject = pool.current.find((obj) => !obj.inUse)
+      let pooledObject = pool.current.find((obj) => !obj.inUse);
 
       // If no available object, create new one
       if (!pooledObject) {
@@ -39,56 +43,56 @@ export function useObjectPool<T>(createObject: () => T, resetObject: (obj: T) =>
           id: `pool-${pool.current.length}`,
           inUse: false,
           data: createObject(),
-        }
-        pool.current.push(pooledObject)
+        };
+        pool.current.push(pooledObject);
       }
 
-      pooledObject.inUse = true
-      activeObjects.current.set(id, pooledObject.data)
-      return pooledObject.data
+      pooledObject.inUse = true;
+      activeObjects.current.set(id, pooledObject.data);
+      return pooledObject.data;
     },
-    [createObject],
-  )
+    [createObject]
+  );
 
   const release = useCallback(
     (id: string) => {
-      const obj = activeObjects.current.get(id)
+      const obj = activeObjects.current.get(id);
       if (obj) {
         // Find the pooled object and mark as available
-        const pooledObject = pool.current.find((poolObj) => poolObj.data === obj)
+        const pooledObject = pool.current.find((poolObj) => poolObj.data === obj);
         if (pooledObject) {
-          resetObject(obj)
-          pooledObject.inUse = false
+          resetObject(obj);
+          pooledObject.inUse = false;
         }
-        activeObjects.current.delete(id)
+        activeObjects.current.delete(id);
       }
     },
-    [resetObject],
-  )
+    [resetObject]
+  );
 
   const releaseAll = useCallback(() => {
-    activeObjects.current.forEach((obj, id) => {
-      const pooledObject = pool.current.find((poolObj) => poolObj.data === obj)
+    activeObjects.current.forEach((obj, _id) => {
+      const pooledObject = pool.current.find((poolObj) => poolObj.data === obj);
       if (pooledObject) {
-        resetObject(obj)
-        pooledObject.inUse = false
+        resetObject(obj);
+        pooledObject.inUse = false;
       }
-    })
-    activeObjects.current.clear()
-  }, [resetObject])
+    });
+    activeObjects.current.clear();
+  }, [resetObject]);
 
   const getPoolStats = useCallback(() => {
     return {
       total: pool.current.length,
       inUse: pool.current.filter((obj) => obj.inUse).length,
       available: pool.current.filter((obj) => !obj.inUse).length,
-    }
-  }, [])
+    };
+  }, []);
 
   return {
     acquire,
     release,
     releaseAll,
     getPoolStats,
-  }
+  };
 }

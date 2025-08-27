@@ -1,4 +1,4 @@
-import { Event, EventCategory } from '@/types/calendar';
+import type { Event, EventCategory } from '@/types/calendar';
 
 // Time slot representation
 export interface TimeSlot {

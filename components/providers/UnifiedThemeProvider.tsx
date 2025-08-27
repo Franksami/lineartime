@@ -1,24 +1,29 @@
-'use client'
+'use client';
 
 /**
  * Unified Theme Provider
  * Wraps all UI library providers with consistent theming
  */
 
-import React, { ReactNode, useEffect, useState } from 'react'
-import { MantineProvider } from '@mantine/core'
-import { ConfigProvider } from 'antd'
-import { ChakraProvider } from '@chakra-ui/react'
-import { getCurrentTheme, createMantineTheme, createAntdTheme, createChakraTheme } from '@/lib/theme/unified-theme'
+import {
+  createAntdTheme,
+  createChakraTheme,
+  createMantineTheme,
+  getCurrentTheme,
+} from '@/lib/theme/unified-theme';
+import { ChakraProvider } from '@chakra-ui/react';
+import { MantineProvider } from '@mantine/core';
+import { ConfigProvider } from 'antd';
+import React, { type ReactNode, useEffect, useState } from 'react';
 
 // Import Mantine styles
-import '@mantine/core/styles.css'
-import '@mantine/dates/styles.css'
-import '@mantine/notifications/styles.css'
-import '@mantine/spotlight/styles.css'
+import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
+import '@mantine/spotlight/styles.css';
 
 interface UnifiedThemeProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export function UnifiedThemeProvider({ children }: UnifiedThemeProviderProps) {
@@ -70,29 +75,29 @@ export function UnifiedThemeProvider({ children }: UnifiedThemeProviderProps) {
         xl: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
         '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
       },
-    }
-    
+    };
+
     return {
       mantine: createMantineTheme(defaultTheme),
       antd: createAntdTheme(defaultTheme),
       chakra: createChakraTheme(defaultTheme),
-    }
-  })
+    };
+  });
 
   // Update theme configurations when CSS variables change (client-side only)
   useEffect(() => {
     const updateThemes = () => {
-      if (typeof window === 'undefined') return
-      const baseTheme = getCurrentTheme()
+      if (typeof window === 'undefined') return;
+      const baseTheme = getCurrentTheme();
       setThemeConfig({
         mantine: createMantineTheme(baseTheme),
         antd: createAntdTheme(baseTheme),
         chakra: createChakraTheme(baseTheme),
-      })
-    }
+      });
+    };
 
     // Initial update (client-side only)
-    updateThemes()
+    updateThemes();
 
     // Listen for theme changes
     const observer = new MutationObserver((mutations) => {
@@ -103,45 +108,43 @@ export function UnifiedThemeProvider({ children }: UnifiedThemeProviderProps) {
           mutation.target === document.documentElement
         ) {
           // Theme class changed, update configurations
-          setTimeout(updateThemes, 0) // Defer to next tick
+          setTimeout(updateThemes, 0); // Defer to next tick
         }
-      })
-    })
+      });
+    });
 
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class'],
-    })
+    });
 
     // Listen for CSS variable changes (for dynamic theme switching)
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleThemeChange = () => {
-      setTimeout(updateThemes, 0)
-    }
+      setTimeout(updateThemes, 0);
+    };
 
     if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleThemeChange)
+      mediaQuery.addEventListener('change', handleThemeChange);
     }
 
     return () => {
-      observer.disconnect()
+      observer.disconnect();
       if (mediaQuery.removeEventListener) {
-        mediaQuery.removeEventListener('change', handleThemeChange)
+        mediaQuery.removeEventListener('change', handleThemeChange);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <MantineProvider theme={themeConfig.mantine}>
       <ConfigProvider theme={themeConfig.antd}>
         {themeConfig.chakra ? (
-          <ChakraProvider theme={themeConfig.chakra}>
-            {children}
-          </ChakraProvider>
+          <ChakraProvider theme={themeConfig.chakra}>{children}</ChakraProvider>
         ) : (
           children
         )}
       </ConfigProvider>
     </MantineProvider>
-  )
+  );
 }

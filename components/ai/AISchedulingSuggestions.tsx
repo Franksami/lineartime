@@ -1,89 +1,94 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { CalendarAI } from '@/lib/ai/CalendarAI';
+import { EnhancedSchedulingEngine } from '@/lib/ai/EnhancedSchedulingEngine';
+import { cn } from '@/lib/utils';
+import type { Event } from '@/types/calendar';
+import { addDays, format } from 'date-fns';
 import {
-  Lightbulb,
-  Clock,
   AlertTriangle,
-  CheckCircle,
   Calendar,
-  Users,
+  CheckCircle,
+  Clock,
+  Lightbulb,
   MapPin,
-  Zap,
-  TrendingUp,
+  RefreshCw,
   Target,
-  RefreshCw
-} from 'lucide-react'
-import { CalendarAI } from '@/lib/ai/CalendarAI'
-import { EnhancedSchedulingEngine } from '@/lib/ai/EnhancedSchedulingEngine'
-import type { Event } from '@/types/calendar'
-import { format, addDays } from 'date-fns'
-import { cn } from '@/lib/utils'
+  TrendingUp,
+  Users,
+  Zap,
+} from 'lucide-react';
+import * as React from 'react';
 
 interface AISchedulingSuggestionsProps {
-  events: Event[]
-  onEventCreate?: (event: Partial<Event>) => void
-  onEventUpdate?: (id: string, event: Partial<Event>) => void
-  className?: string
+  events: Event[];
+  onEventCreate?: (event: Partial<Event>) => void;
+  onEventUpdate?: (id: string, event: Partial<Event>) => void;
+  className?: string;
 }
 
 interface AISuggestion {
-  id: string
-  type: 'optimal_time' | 'conflict_resolution' | 'productivity_boost' | 'focus_time' | 'meeting_optimization'
-  title: string
-  description: string
-  confidence: number
-  impact: 'high' | 'medium' | 'low'
+  id: string;
+  type:
+    | 'optimal_time'
+    | 'conflict_resolution'
+    | 'productivity_boost'
+    | 'focus_time'
+    | 'meeting_optimization';
+  title: string;
+  description: string;
+  confidence: number;
+  impact: 'high' | 'medium' | 'low';
   timeSlots?: Array<{
-    start: string
-    end: string
-    startFormatted: string
-    endFormatted: string
-    reasoning: string[]
-    confidence: number
-  }>
+    start: string;
+    end: string;
+    startFormatted: string;
+    endFormatted: string;
+    reasoning: string[];
+    confidence: number;
+  }>;
   action?: {
-    type: 'create_event' | 'reschedule_event' | 'block_time' | 'optimize_schedule'
-    data: any
-  }
+    type: 'create_event' | 'reschedule_event' | 'block_time' | 'optimize_schedule';
+    data: any;
+  };
 }
 
 export function AISchedulingSuggestions({
   events,
   onEventCreate,
   onEventUpdate,
-  className
+  className,
 }: AISchedulingSuggestionsProps) {
-  const [suggestions, setSuggestions] = React.useState<AISuggestion[]>([])
-  const [isLoading, setIsLoading] = React.useState(false)
-  const [calendarAI, setCalendarAI] = React.useState<CalendarAI | null>(null)
-  const [lastUpdated, setLastUpdated] = React.useState<Date>(new Date())
+  const [suggestions, setSuggestions] = React.useState<AISuggestion[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [calendarAI, setCalendarAI] = React.useState<CalendarAI | null>(null);
+  const [lastUpdated, setLastUpdated] = React.useState<Date>(new Date());
 
   // Initialize AI
   React.useEffect(() => {
     if (events.length > 0) {
-      const ai = new CalendarAI(events)
-      setCalendarAI(ai)
-      generateSuggestions(ai)
+      const ai = new CalendarAI(events);
+      setCalendarAI(ai);
+      generateSuggestions(ai);
     }
-  }, [events])
+  }, [events]);
 
   const generateSuggestions = async (ai: CalendarAI) => {
-    if (!ai) return
+    if (!ai) return;
 
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       // Get various types of AI suggestions
-      const [insights, conflicts] = await Promise.all([
+      const [insights, _conflicts] = await Promise.all([
         ai.getCalendarInsights('week'),
-        ai.resolveConflicts([]) // Would pass actual conflicts in real implementation
-      ])
+        ai.resolveConflicts([]), // Would pass actual conflicts in real implementation
+      ]);
 
-      const newSuggestions: AISuggestion[] = []
+      const newSuggestions: AISuggestion[] = [];
 
       // Productivity suggestions
       if (insights.metrics.productivityScore < 75) {
@@ -96,9 +101,9 @@ export function AISchedulingSuggestions({
           impact: 'high',
           action: {
             type: 'optimize_schedule',
-            data: { targetScore: 85, focusTimeIncrease: 2 }
-          }
-        })
+            data: { targetScore: 85, focusTimeIncrease: 2 },
+          },
+        });
       }
 
       // Meeting optimization
@@ -112,15 +117,15 @@ export function AISchedulingSuggestions({
           impact: 'medium',
           action: {
             type: 'optimize_schedule',
-            data: { reduceMeetings: true, targetRatio: 0.6 }
-          }
-        })
+            data: { reduceMeetings: true, targetRatio: 0.6 },
+          },
+        });
       }
 
       // Focus time suggestions
-      const tomorrow = addDays(new Date(), 1)
-      const dayAfter = addDays(new Date(), 2)
-      
+      const tomorrow = addDays(new Date(), 1);
+      const dayAfter = addDays(new Date(), 2);
+
       newSuggestions.push({
         id: 'focus-time-suggestion',
         type: 'focus_time',
@@ -135,7 +140,7 @@ export function AISchedulingSuggestions({
             startFormatted: format(tomorrow, 'EEEE, MMM d, h:mm a'),
             endFormatted: format(addDays(tomorrow, 0), 'h:mm a'),
             reasoning: ['Peak energy time', 'No conflicts', 'Optimal for deep work'],
-            confidence: 0.92
+            confidence: 0.92,
           },
           {
             start: dayAfter.toISOString(),
@@ -143,14 +148,14 @@ export function AISchedulingSuggestions({
             startFormatted: format(dayAfter, 'EEEE, MMM d, h:mm a'),
             endFormatted: format(addDays(dayAfter, 0), 'h:mm a'),
             reasoning: ['Good energy alignment', 'Buffer time available', 'Productive time slot'],
-            confidence: 0.87
-          }
+            confidence: 0.87,
+          },
         ],
         action: {
           type: 'block_time',
-          data: { duration: 120, type: 'focus', priority: 'high' }
-        }
-      })
+          data: { duration: 120, type: 'focus', priority: 'high' },
+        },
+      });
 
       // Optimal meeting time suggestion
       newSuggestions.push({
@@ -167,81 +172,93 @@ export function AISchedulingSuggestions({
             startFormatted: format(addDays(new Date(), 3), 'EEEE, MMM d, 10:00 AM'),
             endFormatted: '11:00 AM',
             reasoning: ['High energy time', 'Good for decision making', 'Team availability'],
-            confidence: 0.88
+            confidence: 0.88,
           },
           {
             start: format(addDays(new Date(), 4), "yyyy-MM-dd'T'14:00:00"),
             end: format(addDays(new Date(), 4), "yyyy-MM-dd'T'15:00:00"),
             startFormatted: format(addDays(new Date(), 4), 'EEEE, MMM d, 2:00 PM'),
             endFormatted: '3:00 PM',
-            reasoning: ['Post-lunch energy peak', 'Less likely to run over', 'Good collaboration time'],
-            confidence: 0.82
-          }
-        ]
-      })
+            reasoning: [
+              'Post-lunch energy peak',
+              'Less likely to run over',
+              'Good collaboration time',
+            ],
+            confidence: 0.82,
+          },
+        ],
+      });
 
-      setSuggestions(newSuggestions)
-      setLastUpdated(new Date())
-
+      setSuggestions(newSuggestions);
+      setLastUpdated(new Date());
     } catch (error) {
-      console.error('Failed to generate AI suggestions:', error)
+      console.error('Failed to generate AI suggestions:', error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleApplySuggestion = async (suggestion: AISuggestion) => {
-    if (!suggestion.action || !onEventCreate) return
+    if (!suggestion.action || !onEventCreate) return;
 
     switch (suggestion.action.type) {
       case 'create_event':
-        onEventCreate(suggestion.action.data)
-        break
-        
+        onEventCreate(suggestion.action.data);
+        break;
+
       case 'block_time':
         if (suggestion.timeSlots && suggestion.timeSlots.length > 0) {
-          const slot = suggestion.timeSlots[0]
+          const slot = suggestion.timeSlots[0];
           onEventCreate({
             title: `${suggestion.action.data.type === 'focus' ? 'Focus Time' : 'Protected Time'}`,
             startDate: new Date(slot.start),
             endDate: new Date(slot.end),
             category: 'personal',
-            description: `AI-suggested ${suggestion.action.data.type} block`
-          })
+            description: `AI-suggested ${suggestion.action.data.type} block`,
+          });
         }
-        break
-        
+        break;
+
       case 'optimize_schedule':
         // In a real implementation, this would trigger schedule optimization
-        console.log('Schedule optimization requested:', suggestion.action.data)
-        break
+        console.log('Schedule optimization requested:', suggestion.action.data);
+        break;
     }
-  }
+  };
 
   const getSuggestionIcon = (type: AISuggestion['type']) => {
     switch (type) {
-      case 'optimal_time': return <Clock className="w-4 h-4" />
-      case 'conflict_resolution': return <AlertTriangle className="w-4 h-4" />
-      case 'productivity_boost': return <TrendingUp className="w-4 h-4" />
-      case 'focus_time': return <Target className="w-4 h-4" />
-      case 'meeting_optimization': return <Users className="w-4 h-4" />
-      default: return <Lightbulb className="w-4 h-4" />
+      case 'optimal_time':
+        return <Clock className="w-4 h-4" />;
+      case 'conflict_resolution':
+        return <AlertTriangle className="w-4 h-4" />;
+      case 'productivity_boost':
+        return <TrendingUp className="w-4 h-4" />;
+      case 'focus_time':
+        return <Target className="w-4 h-4" />;
+      case 'meeting_optimization':
+        return <Users className="w-4 h-4" />;
+      default:
+        return <Lightbulb className="w-4 h-4" />;
     }
-  }
+  };
 
   const getImpactColor = (impact: AISuggestion['impact']) => {
     switch (impact) {
-      case 'high': return 'text-green-600 bg-green-50 border-green-200'
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200'
-      case 'low': return 'text-blue-600 bg-blue-50 border-blue-200'
+      case 'high':
+        return 'text-green-600 bg-green-50 border-green-200';
+      case 'medium':
+        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+      case 'low':
+        return 'text-blue-600 bg-blue-50 border-blue-200';
     }
-  }
+  };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.9) return 'text-green-600'
-    if (confidence >= 0.7) return 'text-yellow-600'
-    return 'text-orange-600'
-  }
+    if (confidence >= 0.9) return 'text-green-600';
+    if (confidence >= 0.7) return 'text-yellow-600';
+    return 'text-orange-600';
+  };
 
   if (suggestions.length === 0 && !isLoading) {
     return (
@@ -251,8 +268,8 @@ export function AISchedulingSuggestions({
         <p className="text-sm text-muted-foreground mb-4">
           Add some events to your calendar to get personalized AI scheduling suggestions.
         </p>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => calendarAI && generateSuggestions(calendarAI)}
           disabled={isLoading}
         >
@@ -260,7 +277,7 @@ export function AISchedulingSuggestions({
           Refresh Suggestions
         </Button>
       </Card>
-    )
+    );
   }
 
   return (
@@ -275,8 +292,8 @@ export function AISchedulingSuggestions({
           <span className="text-xs text-muted-foreground">
             Updated {format(lastUpdated, 'HH:mm')}
           </span>
-          <Button 
-            size="sm" 
+          <Button
+            size="sm"
             variant="outline"
             onClick={() => calendarAI && generateSuggestions(calendarAI)}
             disabled={isLoading}
@@ -291,9 +308,9 @@ export function AISchedulingSuggestions({
         {isLoading ? (
           <Card className="p-4">
             <div className="animate-pulse space-y-3">
-              <div className="h-4 bg-muted rounded w-3/4"></div>
-              <div className="h-3 bg-muted rounded w-1/2"></div>
-              <div className="h-8 bg-muted rounded w-24"></div>
+              <div className="h-4 bg-muted rounded w-3/4" />
+              <div className="h-3 bg-muted rounded w-1/2" />
+              <div className="h-8 bg-muted rounded w-24" />
             </div>
           </Card>
         ) : (
@@ -308,19 +325,22 @@ export function AISchedulingSuggestions({
                     </div>
                     <div className="flex-1">
                       <h3 className="font-medium text-sm">{suggestion.title}</h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {suggestion.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground mt-1">{suggestion.description}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge 
-                      variant="outline" 
+                    <Badge
+                      variant="outline"
                       className={cn('text-xs', getImpactColor(suggestion.impact))}
                     >
                       {suggestion.impact} impact
                     </Badge>
-                    <div className={cn('text-xs font-medium', getConfidenceColor(suggestion.confidence))}>
+                    <div
+                      className={cn(
+                        'text-xs font-medium',
+                        getConfidenceColor(suggestion.confidence)
+                      )}
+                    >
                       {Math.round(suggestion.confidence * 100)}%
                     </div>
                   </div>
@@ -335,7 +355,10 @@ export function AISchedulingSuggestions({
                         Suggested Time Slots
                       </div>
                       {suggestion.timeSlots.map((slot, index) => (
-                        <div key={index} className="flex items-center justify-between p-2 bg-muted/50 rounded-lg">
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-2 bg-muted/50 rounded-lg"
+                        >
                           <div className="flex items-center gap-2">
                             <Calendar className="w-3 h-3 text-muted-foreground" />
                             <div>
@@ -351,8 +374,8 @@ export function AISchedulingSuggestions({
                             <span className={cn('text-xs', getConfidenceColor(slot.confidence))}>
                               {Math.round(slot.confidence * 100)}%
                             </span>
-                            <Button 
-                              size="sm" 
+                            <Button
+                              size="sm"
                               variant="outline"
                               onClick={() => handleApplySuggestion(suggestion)}
                             >
@@ -371,7 +394,7 @@ export function AISchedulingSuggestions({
                   <>
                     <Separator />
                     <div className="flex justify-end">
-                      <Button 
+                      <Button
                         size="sm"
                         onClick={() => handleApplySuggestion(suggestion)}
                         className="bg-gradient-to-r from-primary to-accent"
@@ -393,11 +416,11 @@ export function AISchedulingSuggestions({
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Lightbulb className="w-4 h-4 text-primary" />
           <span>
-            AI suggestions are based on your calendar patterns and productivity insights. 
-            Confidence scores indicate prediction accuracy.
+            AI suggestions are based on your calendar patterns and productivity insights. Confidence
+            scores indicate prediction accuracy.
           </span>
         </div>
       </Card>
     </div>
-  )
+  );
 }

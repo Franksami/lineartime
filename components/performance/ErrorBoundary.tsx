@@ -1,8 +1,8 @@
 'use client';
 
-import React, { Component, ReactNode, ErrorInfo } from 'react';
 import { errorBoundarySystem } from '@/lib/performance/ErrorBoundarySystem';
-import { AlertCircle, RefreshCw, Home, ChevronDown, ChevronUp } from 'lucide-react';
+import { AlertCircle, ChevronDown, ChevronUp, Home, RefreshCw } from 'lucide-react';
+import React, { Component, type ReactNode, type ErrorInfo } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -28,7 +28,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    
+
     this.state = {
       hasError: false,
       error: null,
@@ -78,13 +78,13 @@ export class ErrorBoundary extends Component<Props, State> {
 
   attemptAutoRecovery = () => {
     const { recoveryAttempts } = this.state;
-    
+
     if (recoveryAttempts < 3) {
       this.setState({ isRecovering: true });
-      
+
       // Exponential backoff
-      const delay = Math.pow(2, recoveryAttempts) * 1000;
-      
+      const delay = 2 ** recoveryAttempts * 1000;
+
       this.retryTimeoutId = setTimeout(() => {
         console.log(`Attempting auto-recovery (attempt ${recoveryAttempts + 1})...`);
         this.handleReset();
@@ -142,7 +142,7 @@ export class ErrorBoundary extends Component<Props, State> {
                     <p className="mt-1 text-sm text-red-700 dark:text-red-300">
                       {isRecovering
                         ? 'Attempting to recover...'
-                        : 'An unexpected error occurred. The error has been logged and we\'ll look into it.'}
+                        : "An unexpected error occurred. The error has been logged and we'll look into it."}
                     </p>
                   </div>
                 </div>
@@ -228,7 +228,7 @@ export class ErrorBoundary extends Component<Props, State> {
                     <RefreshCw className={`h-4 w-4 mr-2 ${isRecovering ? 'animate-spin' : ''}`} />
                     {isRecovering ? 'Recovering...' : 'Try Again'}
                   </button>
-                  
+
                   <button
                     onClick={this.handleGoHome}
                     className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -261,12 +261,12 @@ export class ErrorBoundary extends Component<Props, State> {
 }
 
 // Async Error Boundary for handling async errors
-export function AsyncErrorBoundary({ 
-  children, 
+export function AsyncErrorBoundary({
+  children,
   fallback,
   onError,
-}: { 
-  children: ReactNode; 
+}: {
+  children: ReactNode;
   fallback?: ReactNode;
   onError?: (error: Error) => void;
 }) {
@@ -277,7 +277,7 @@ export function AsyncErrorBoundary({
       const error = new Error(event.reason);
       setError(error);
       onError?.(error);
-      
+
       // Capture in error system
       errorBoundarySystem.captureError(error, {
         component: 'AsyncErrorBoundary',
@@ -305,9 +305,7 @@ export function AsyncErrorBoundary({
             <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
               Async Error
             </h3>
-            <p className="mt-1 text-sm text-yellow-700 dark:text-yellow-300">
-              {error.message}
-            </p>
+            <p className="mt-1 text-sm text-yellow-700 dark:text-yellow-300">{error.message}</p>
             <button
               onClick={() => setError(null)}
               className="mt-2 text-sm text-yellow-600 dark:text-yellow-400 hover:text-yellow-500"

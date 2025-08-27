@@ -1,41 +1,42 @@
-'use client'
+'use client';
 
-import React, { createContext, useContext, useReducer, useCallback } from 'react'
-import type { Event } from '@/types/calendar'
-import type { ZoomLevel } from '@/components/calendar/ZoomControls'
+import type { ZoomLevel } from '@/components/calendar/ZoomControls';
+import type { Event } from '@/types/calendar';
+import type React from 'react';
+import { createContext, useCallback, useContext, useReducer } from 'react';
 
 // Calendar State Interface
 export interface CalendarState {
   // View State
-  year: number
-  zoomLevel: ZoomLevel
-  
+  year: number;
+  zoomLevel: ZoomLevel;
+
   // Selection State
-  selectedDate: Date | null
-  selectedEvent: Event | null
-  hoveredDate: Date | null
-  focusedDate: Date | null
-  
+  selectedDate: Date | null;
+  selectedEvent: Event | null;
+  hoveredDate: Date | null;
+  focusedDate: Date | null;
+
   // UI State
-  showEventModal: boolean
-  showEventManagement: boolean
-  eventManagementPosition: { x: number; y: number } | null
-  keyboardMode: boolean
-  announceMessage: string
-  
+  showEventModal: boolean;
+  showEventManagement: boolean;
+  eventManagementPosition: { x: number; y: number } | null;
+  keyboardMode: boolean;
+  announceMessage: string;
+
   // Interaction State
-  isDraggingEvent: boolean
-  draggedEvent: Event | null
-  isResizingEvent: boolean
-  resizingEvent: Event | null
-  resizeDirection: 'start' | 'end' | null
-  
+  isDraggingEvent: boolean;
+  draggedEvent: Event | null;
+  isResizingEvent: boolean;
+  resizingEvent: Event | null;
+  resizeDirection: 'start' | 'end' | null;
+
   // Mobile State
-  isMobileMenuOpen: boolean
-  
+  isMobileMenuOpen: boolean;
+
   // Performance State
-  isVirtualizing: boolean
-  visibleRange: { start: number; end: number } | null
+  isVirtualizing: boolean;
+  visibleRange: { start: number; end: number } | null;
 }
 
 // Calendar Actions
@@ -60,7 +61,7 @@ export type CalendarAction =
   | { type: 'SET_VIRTUALIZING'; payload: boolean }
   | { type: 'SET_VISIBLE_RANGE'; payload: { start: number; end: number } | null }
   | { type: 'RESET_SELECTION' }
-  | { type: 'BATCH_UPDATE'; payload: Partial<CalendarState> }
+  | { type: 'BATCH_UPDATE'; payload: Partial<CalendarState> };
 
 // Initial State
 const initialState: CalendarState = {
@@ -83,7 +84,7 @@ const initialState: CalendarState = {
   isMobileMenuOpen: false,
   isVirtualizing: false,
   visibleRange: null,
-}
+};
 
 // Calendar Reducer
 function calendarReducer(state: CalendarState, action: CalendarAction): CalendarState {
@@ -96,16 +97,16 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         selectedDate: null,
         selectedEvent: null,
         focusedDate: null,
-      }
-      
+      };
+
     case 'SET_ZOOM_LEVEL':
       return {
         ...state,
         zoomLevel: action.payload,
         // Close mobile menu when zoom changes
         isMobileMenuOpen: false,
-      }
-      
+      };
+
     case 'SET_SELECTED_DATE':
       return {
         ...state,
@@ -114,28 +115,28 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         selectedEvent: action.payload ? null : state.selectedEvent,
         showEventManagement: false,
         eventManagementPosition: null,
-      }
-      
+      };
+
     case 'SET_SELECTED_EVENT':
       return {
         ...state,
         selectedEvent: action.payload,
         // Clear date selection when selecting event
         selectedDate: action.payload ? null : state.selectedDate,
-      }
-      
+      };
+
     case 'SET_HOVERED_DATE':
       return {
         ...state,
         hoveredDate: action.payload,
-      }
-      
+      };
+
     case 'SET_FOCUSED_DATE':
       return {
         ...state,
         focusedDate: action.payload,
-      }
-      
+      };
+
     case 'SHOW_EVENT_MODAL':
       return {
         ...state,
@@ -143,14 +144,14 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         // Hide floating toolbar when modal opens
         showEventManagement: false,
         eventManagementPosition: null,
-      }
-      
+      };
+
     case 'HIDE_EVENT_MODAL':
       return {
         ...state,
         showEventModal: false,
-      }
-      
+      };
+
     case 'SHOW_EVENT_MANAGEMENT':
       return {
         ...state,
@@ -158,30 +159,30 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         eventManagementPosition: action.payload,
         // Hide modal when toolbar shows
         showEventModal: false,
-      }
-      
+      };
+
     case 'HIDE_EVENT_MANAGEMENT':
       return {
         ...state,
         showEventManagement: false,
         eventManagementPosition: null,
         selectedEvent: null,
-      }
-      
+      };
+
     case 'SET_KEYBOARD_MODE':
       return {
         ...state,
         keyboardMode: action.payload,
         // Set focus to today when entering keyboard mode
         focusedDate: action.payload && !state.focusedDate ? new Date() : state.focusedDate,
-      }
-      
+      };
+
     case 'ANNOUNCE_MESSAGE':
       return {
         ...state,
         announceMessage: action.payload,
-      }
-      
+      };
+
     case 'START_DRAG_EVENT':
       return {
         ...state,
@@ -190,15 +191,15 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         // Hide toolbar during drag
         showEventManagement: false,
         eventManagementPosition: null,
-      }
-      
+      };
+
     case 'END_DRAG_EVENT':
       return {
         ...state,
         isDraggingEvent: false,
         draggedEvent: null,
-      }
-      
+      };
+
     case 'START_RESIZE_EVENT':
       return {
         ...state,
@@ -208,34 +209,34 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         // Hide toolbar during resize
         showEventManagement: false,
         eventManagementPosition: null,
-      }
-      
+      };
+
     case 'END_RESIZE_EVENT':
       return {
         ...state,
         isResizingEvent: false,
         resizingEvent: null,
         resizeDirection: null,
-      }
-      
+      };
+
     case 'SET_MOBILE_MENU_OPEN':
       return {
         ...state,
         isMobileMenuOpen: action.payload,
-      }
-      
+      };
+
     case 'SET_VIRTUALIZING':
       return {
         ...state,
         isVirtualizing: action.payload,
-      }
-      
+      };
+
     case 'SET_VISIBLE_RANGE':
       return {
         ...state,
         visibleRange: action.payload,
-      }
-      
+      };
+
     case 'RESET_SELECTION':
       return {
         ...state,
@@ -245,128 +246,128 @@ function calendarReducer(state: CalendarState, action: CalendarAction): Calendar
         showEventModal: false,
         showEventManagement: false,
         eventManagementPosition: null,
-      }
-      
+      };
+
     case 'BATCH_UPDATE':
       return {
         ...state,
         ...action.payload,
-      }
-      
+      };
+
     default:
-      return state
+      return state;
   }
 }
 
 // Calendar Context
 interface CalendarContextType {
-  state: CalendarState
-  dispatch: React.Dispatch<CalendarAction>
-  
+  state: CalendarState;
+  dispatch: React.Dispatch<CalendarAction>;
+
   // Convenience action creators
-  setYear: (year: number) => void
-  setZoomLevel: (level: ZoomLevel) => void
-  selectDate: (date: Date | null) => void
-  selectEvent: (event: Event | null) => void
-  setHoveredDate: (date: Date | null) => void
-  showEventModal: (show?: boolean) => void
-  hideEventModal: () => void
-  showEventManagement: (position: { x: number; y: number }) => void
-  hideEventManagement: () => void
-  announceMessage: (message: string) => void
-  startDragEvent: (event: Event) => void
-  endDragEvent: () => void
-  startResizeEvent: (event: Event, direction: 'start' | 'end') => void
-  endResizeEvent: () => void
-  resetSelection: () => void
-  batchUpdate: (updates: Partial<CalendarState>) => void
+  setYear: (year: number) => void;
+  setZoomLevel: (level: ZoomLevel) => void;
+  selectDate: (date: Date | null) => void;
+  selectEvent: (event: Event | null) => void;
+  setHoveredDate: (date: Date | null) => void;
+  showEventModal: (show?: boolean) => void;
+  hideEventModal: () => void;
+  showEventManagement: (position: { x: number; y: number }) => void;
+  hideEventManagement: () => void;
+  announceMessage: (message: string) => void;
+  startDragEvent: (event: Event) => void;
+  endDragEvent: () => void;
+  startResizeEvent: (event: Event, direction: 'start' | 'end') => void;
+  endResizeEvent: () => void;
+  resetSelection: () => void;
+  batchUpdate: (updates: Partial<CalendarState>) => void;
 }
 
-const CalendarContext = createContext<CalendarContextType | undefined>(undefined)
+const CalendarContext = createContext<CalendarContextType | undefined>(undefined);
 
 // Calendar Provider
 interface CalendarProviderProps {
-  children: React.ReactNode
-  initialYear?: number
-  initialZoomLevel?: ZoomLevel
+  children: React.ReactNode;
+  initialYear?: number;
+  initialZoomLevel?: ZoomLevel;
 }
 
-export function CalendarProvider({ 
-  children, 
+export function CalendarProvider({
+  children,
   initialYear = new Date().getFullYear(),
-  initialZoomLevel = 'fullYear'
+  initialZoomLevel = 'fullYear',
 }: CalendarProviderProps) {
   const [state, dispatch] = useReducer(calendarReducer, {
     ...initialState,
     year: initialYear,
     zoomLevel: initialZoomLevel,
-  })
-  
+  });
+
   // Convenience action creators
   const setYear = useCallback((year: number) => {
-    dispatch({ type: 'SET_YEAR', payload: year })
-  }, [])
-  
+    dispatch({ type: 'SET_YEAR', payload: year });
+  }, []);
+
   const setZoomLevel = useCallback((level: ZoomLevel) => {
-    dispatch({ type: 'SET_ZOOM_LEVEL', payload: level })
-  }, [])
-  
+    dispatch({ type: 'SET_ZOOM_LEVEL', payload: level });
+  }, []);
+
   const selectDate = useCallback((date: Date | null) => {
-    dispatch({ type: 'SET_SELECTED_DATE', payload: date })
-  }, [])
-  
+    dispatch({ type: 'SET_SELECTED_DATE', payload: date });
+  }, []);
+
   const selectEvent = useCallback((event: Event | null) => {
-    dispatch({ type: 'SET_SELECTED_EVENT', payload: event })
-  }, [])
-  
+    dispatch({ type: 'SET_SELECTED_EVENT', payload: event });
+  }, []);
+
   const setHoveredDate = useCallback((date: Date | null) => {
-    dispatch({ type: 'SET_HOVERED_DATE', payload: date })
-  }, [])
-  
+    dispatch({ type: 'SET_HOVERED_DATE', payload: date });
+  }, []);
+
   const showEventModal = useCallback((show = true) => {
-    dispatch({ type: 'SHOW_EVENT_MODAL', payload: show })
-  }, [])
-  
+    dispatch({ type: 'SHOW_EVENT_MODAL', payload: show });
+  }, []);
+
   const hideEventModal = useCallback(() => {
-    dispatch({ type: 'HIDE_EVENT_MODAL' })
-  }, [])
-  
+    dispatch({ type: 'HIDE_EVENT_MODAL' });
+  }, []);
+
   const showEventManagement = useCallback((position: { x: number; y: number }) => {
-    dispatch({ type: 'SHOW_EVENT_MANAGEMENT', payload: position })
-  }, [])
-  
+    dispatch({ type: 'SHOW_EVENT_MANAGEMENT', payload: position });
+  }, []);
+
   const hideEventManagement = useCallback(() => {
-    dispatch({ type: 'HIDE_EVENT_MANAGEMENT' })
-  }, [])
-  
+    dispatch({ type: 'HIDE_EVENT_MANAGEMENT' });
+  }, []);
+
   const announceMessage = useCallback((message: string) => {
-    dispatch({ type: 'ANNOUNCE_MESSAGE', payload: message })
-  }, [])
-  
+    dispatch({ type: 'ANNOUNCE_MESSAGE', payload: message });
+  }, []);
+
   const startDragEvent = useCallback((event: Event) => {
-    dispatch({ type: 'START_DRAG_EVENT', payload: event })
-  }, [])
-  
+    dispatch({ type: 'START_DRAG_EVENT', payload: event });
+  }, []);
+
   const endDragEvent = useCallback(() => {
-    dispatch({ type: 'END_DRAG_EVENT' })
-  }, [])
-  
+    dispatch({ type: 'END_DRAG_EVENT' });
+  }, []);
+
   const startResizeEvent = useCallback((event: Event, direction: 'start' | 'end') => {
-    dispatch({ type: 'START_RESIZE_EVENT', payload: { event, direction } })
-  }, [])
-  
+    dispatch({ type: 'START_RESIZE_EVENT', payload: { event, direction } });
+  }, []);
+
   const endResizeEvent = useCallback(() => {
-    dispatch({ type: 'END_RESIZE_EVENT' })
-  }, [])
-  
+    dispatch({ type: 'END_RESIZE_EVENT' });
+  }, []);
+
   const resetSelection = useCallback(() => {
-    dispatch({ type: 'RESET_SELECTION' })
-  }, [])
-  
+    dispatch({ type: 'RESET_SELECTION' });
+  }, []);
+
   const batchUpdate = useCallback((updates: Partial<CalendarState>) => {
-    dispatch({ type: 'BATCH_UPDATE', payload: updates })
-  }, [])
-  
+    dispatch({ type: 'BATCH_UPDATE', payload: updates });
+  }, []);
+
   const contextValue: CalendarContextType = {
     state,
     dispatch,
@@ -386,27 +387,23 @@ export function CalendarProvider({
     endResizeEvent,
     resetSelection,
     batchUpdate,
-  }
-  
-  return (
-    <CalendarContext.Provider value={contextValue}>
-      {children}
-    </CalendarContext.Provider>
-  )
+  };
+
+  return <CalendarContext.Provider value={contextValue}>{children}</CalendarContext.Provider>;
 }
 
 // Custom Hook
 export function useCalendarContext() {
-  const context = useContext(CalendarContext)
+  const context = useContext(CalendarContext);
   if (context === undefined) {
-    throw new Error('useCalendarContext must be used within a CalendarProvider')
+    throw new Error('useCalendarContext must be used within a CalendarProvider');
   }
-  return context
+  return context;
 }
 
 // Specialized Hooks for specific concerns
 export function useCalendarSelection() {
-  const { state, selectDate, selectEvent, setHoveredDate, resetSelection } = useCalendarContext()
+  const { state, selectDate, selectEvent, setHoveredDate, resetSelection } = useCalendarContext();
   return {
     selectedDate: state.selectedDate,
     selectedEvent: state.selectedEvent,
@@ -415,7 +412,7 @@ export function useCalendarSelection() {
     selectEvent,
     setHoveredDate,
     resetSelection,
-  }
+  };
 }
 
 export function useCalendarUI() {
@@ -426,8 +423,8 @@ export function useCalendarUI() {
     showEventManagement,
     hideEventManagement,
     announceMessage,
-  } = useCalendarContext()
-  
+  } = useCalendarContext();
+
   return {
     // State properties
     showEventModalState: state.showEventModal,
@@ -442,18 +439,13 @@ export function useCalendarUI() {
     showEventManagement,
     hideEventManagement,
     announceMessage,
-  }
+  };
 }
 
 export function useCalendarInteraction() {
-  const {
-    state,
-    startDragEvent,
-    endDragEvent,
-    startResizeEvent,
-    endResizeEvent,
-  } = useCalendarContext()
-  
+  const { state, startDragEvent, endDragEvent, startResizeEvent, endResizeEvent } =
+    useCalendarContext();
+
   return {
     isDraggingEvent: state.isDraggingEvent,
     draggedEvent: state.draggedEvent,
@@ -464,5 +456,5 @@ export function useCalendarInteraction() {
     endDragEvent,
     startResizeEvent,
     endResizeEvent,
-  }
+  };
 }

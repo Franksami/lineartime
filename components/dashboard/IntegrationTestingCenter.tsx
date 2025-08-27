@@ -1,38 +1,46 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Activity, 
-  AlertCircle, 
-  CheckCircle, 
-  Clock, 
-  Database, 
-  Globe, 
-  Key, 
-  Play, 
-  Pause, 
-  RefreshCw, 
-  Settings, 
-  Zap,
-  Calendar,
-  Plus,
-  Trash2,
-  Edit,
-  Eye,
-  Server,
-  Shield,
-  TrendingUp,
-  TrendingDown
-} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Switch } from '@/components/ui/switch';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Activity,
+  AlertCircle,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Database,
+  Edit,
+  Eye,
+  Globe,
+  Key,
+  Pause,
+  Play,
+  Plus,
+  RefreshCw,
+  Server,
+  Settings,
+  Shield,
+  Trash2,
+  TrendingDown,
+  TrendingUp,
+  Zap,
+} from 'lucide-react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface CalendarProvider {
   id: string;
@@ -93,13 +101,13 @@ const IntegrationTestingCenter: React.FC = () => {
       endpoints: {
         auth: 'https://accounts.google.com/oauth2/auth',
         events: 'https://www.googleapis.com/calendar/v3/calendars/primary/events',
-        calendars: 'https://www.googleapis.com/calendar/v3/users/me/calendarList'
+        calendars: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
       },
       credentials: {
         clientId: 'your-google-client-id',
         clientSecret: 'your-google-client-secret',
-        accessToken: 'ya29.a0...'
-      }
+        accessToken: 'ya29.a0...',
+      },
     },
     {
       id: '2',
@@ -110,13 +118,13 @@ const IntegrationTestingCenter: React.FC = () => {
       endpoints: {
         auth: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
         events: 'https://graph.microsoft.com/v1.0/me/events',
-        calendars: 'https://graph.microsoft.com/v1.0/me/calendars'
+        calendars: 'https://graph.microsoft.com/v1.0/me/calendars',
       },
       credentials: {
         clientId: 'your-microsoft-client-id',
         clientSecret: 'your-microsoft-client-secret',
-        accessToken: 'eyJ0eXAi...'
-      }
+        accessToken: 'eyJ0eXAi...',
+      },
     },
     {
       id: '3',
@@ -127,13 +135,13 @@ const IntegrationTestingCenter: React.FC = () => {
       endpoints: {
         auth: 'https://caldav.icloud.com',
         events: 'https://caldav.icloud.com/calendar',
-        calendars: 'https://caldav.icloud.com/calendar'
+        calendars: 'https://caldav.icloud.com/calendar',
       },
       credentials: {
         username: 'your-apple-id',
         password: 'app-specific-password',
-        serverUrl: 'https://caldav.icloud.com'
-      }
+        serverUrl: 'https://caldav.icloud.com',
+      },
     },
     {
       id: '4',
@@ -144,18 +152,20 @@ const IntegrationTestingCenter: React.FC = () => {
       endpoints: {
         auth: 'https://your-caldav-server.com',
         events: 'https://your-caldav-server.com/calendar',
-        calendars: 'https://your-caldav-server.com/calendar'
+        calendars: 'https://your-caldav-server.com/calendar',
       },
       credentials: {
         username: 'your-username',
         password: 'your-password',
-        serverUrl: 'https://your-caldav-server.com'
-      }
-    }
+        serverUrl: 'https://your-caldav-server.com',
+      },
+    },
   ]);
 
   const [testResults, setTestResults] = useState<TestResult[]>([]);
-  const [performanceMetrics, setPerformanceMetrics] = useState<Record<string, PerformanceMetric[]>>({});
+  const [performanceMetrics, setPerformanceMetrics] = useState<Record<string, PerformanceMetric[]>>(
+    {}
+  );
   const [selectedProvider, setSelectedProvider] = useState<CalendarProvider | null>(providers[0]);
   const [isMonitoring, setIsMonitoring] = useState(false);
   const [testOperation, setTestOperation] = useState<'GET' | 'POST' | 'PUT' | 'DELETE'>('GET');
@@ -182,11 +192,26 @@ const IntegrationTestingCenter: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'connected':
-        return <Badge className="bg-green-100 text-green-800 border-green-200"><CheckCircle className="h-3 w-3 mr-1" />Connected</Badge>;
+        return (
+          <Badge className="bg-green-100 text-green-800 border-green-200">
+            <CheckCircle className="h-3 w-3 mr-1" />
+            Connected
+          </Badge>
+        );
       case 'error':
-        return <Badge className="bg-red-100 text-red-800 border-red-200"><AlertCircle className="h-3 w-3 mr-1" />Error</Badge>;
+        return (
+          <Badge className="bg-red-100 text-red-800 border-red-200">
+            <AlertCircle className="h-3 w-3 mr-1" />
+            Error
+          </Badge>
+        );
       case 'disconnected':
-        return <Badge className="bg-gray-100 text-gray-800 border-gray-200"><Clock className="h-3 w-3 mr-1" />Disconnected</Badge>;
+        return (
+          <Badge className="bg-gray-100 text-gray-800 border-gray-200">
+            <Clock className="h-3 w-3 mr-1" />
+            Disconnected
+          </Badge>
+        );
       default:
         return <Badge className="bg-gray-100 text-gray-800 border-gray-200">Unknown</Badge>;
     }
@@ -199,34 +224,43 @@ const IntegrationTestingCenter: React.FC = () => {
     body?: any
   ): Promise<TestResult> => {
     const startTime = Date.now();
-    
+
     // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 500));
-    
+    await new Promise((resolve) => setTimeout(resolve, Math.random() * 2000 + 500));
+
     const endTime = Date.now();
     const responseTime = endTime - startTime;
-    
+
     // Simulate different response scenarios
     const isSuccess = Math.random() > 0.2; // 80% success rate
-    const status = isSuccess ? (method === 'POST' ? 201 : 200) : (Math.random() > 0.5 ? 401 : 500);
-    
+    const status = isSuccess ? (method === 'POST' ? 201 : 200) : Math.random() > 0.5 ? 401 : 500;
+
     const mockResponse = {
       status,
       headers: {
         'content-type': 'application/json',
         'x-ratelimit-remaining': '999',
-        'x-response-time': `${responseTime}ms`
+        'x-response-time': `${responseTime}ms`,
       },
-      body: isSuccess ? {
-        data: method === 'GET' ? [
-          { id: '1', title: 'Test Event', start: new Date().toISOString() },
-          { id: '2', title: 'Another Event', start: new Date(Date.now() + 3600000).toISOString() }
-        ] : { id: 'new-event', title: 'Created Event' },
-        success: true
-      } : {
-        error: status === 401 ? 'Unauthorized' : 'Internal Server Error',
-        message: status === 401 ? 'Invalid credentials' : 'Something went wrong'
-      }
+      body: isSuccess
+        ? {
+            data:
+              method === 'GET'
+                ? [
+                    { id: '1', title: 'Test Event', start: new Date().toISOString() },
+                    {
+                      id: '2',
+                      title: 'Another Event',
+                      start: new Date(Date.now() + 3600000).toISOString(),
+                    },
+                  ]
+                : { id: 'new-event', title: 'Created Event' },
+            success: true,
+          }
+        : {
+            error: status === 401 ? 'Unauthorized' : 'Internal Server Error',
+            message: status === 401 ? 'Invalid credentials' : 'Something went wrong',
+          },
     };
 
     const result: TestResult = {
@@ -239,13 +273,15 @@ const IntegrationTestingCenter: React.FC = () => {
       timestamp: new Date(),
       request: {
         headers: {
-          'Authorization': provider.credentials.accessToken ? `Bearer ${provider.credentials.accessToken}` : 'Basic ...',
-          'Content-Type': 'application/json'
+          Authorization: provider.credentials.accessToken
+            ? `Bearer ${provider.credentials.accessToken}`
+            : 'Basic ...',
+          'Content-Type': 'application/json',
         },
-        body
+        body,
       },
       response: mockResponse,
-      error: !isSuccess ? mockResponse.body.message : undefined
+      error: !isSuccess ? mockResponse.body.message : undefined,
     };
 
     return result;
@@ -256,42 +292,42 @@ const IntegrationTestingCenter: React.FC = () => {
 
     const method = operation || testOperation;
     const endpoint = customEndpoint || selectedProvider.endpoints.events;
-    
+
     let body;
     if (method !== 'GET' && requestBody) {
       try {
         body = JSON.parse(requestBody);
-      } catch (e) {
+      } catch (_e) {
         body = requestBody;
       }
     }
 
     const result = await simulateApiCall(selectedProvider, endpoint, method, body);
-    
-    setTestResults(prev => [result, ...prev.slice(0, 49)]); // Keep last 50 results
-    
+
+    setTestResults((prev) => [result, ...prev.slice(0, 49)]); // Keep last 50 results
+
     // Update performance metrics
-    setPerformanceMetrics(prev => ({
+    setPerformanceMetrics((prev) => ({
       ...prev,
       [selectedProvider.id]: [
         ...(prev[selectedProvider.id] || []),
         {
           timestamp: result.timestamp,
           responseTime: result.responseTime,
-          status: result.status
-        }
-      ].slice(-20) // Keep last 20 metrics per provider
+          status: result.status,
+        },
+      ].slice(-20), // Keep last 20 metrics per provider
     }));
   };
 
   const runHealthCheck = async () => {
     if (!selectedProvider) return;
-    
+
     const operations: Array<'GET' | 'POST' | 'PUT' | 'DELETE'> = ['GET', 'POST', 'PUT', 'DELETE'];
-    
+
     for (const op of operations) {
       await runTest(op);
-      await new Promise(resolve => setTimeout(resolve, 500)); // Small delay between tests
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Small delay between tests
     }
   };
 
@@ -320,7 +356,7 @@ const IntegrationTestingCenter: React.FC = () => {
   const getSuccessRate = (providerId: string) => {
     const metrics = performanceMetrics[providerId] || [];
     if (metrics.length === 0) return 100;
-    const successCount = metrics.filter(m => m.status === 'success').length;
+    const successCount = metrics.filter((m) => m.status === 'success').length;
     return Math.round((successCount / metrics.length) * 100);
   };
 
@@ -328,10 +364,12 @@ const IntegrationTestingCenter: React.FC = () => {
     if (autoRefresh) {
       const refreshInterval = setInterval(() => {
         // Update last sync times
-        setProviders(prev => prev.map(p => ({
-          ...p,
-          lastSync: p.status === 'connected' ? new Date() : p.lastSync
-        })));
+        setProviders((prev) =>
+          prev.map((p) => ({
+            ...p,
+            lastSync: p.status === 'connected' ? new Date() : p.lastSync,
+          }))
+        );
       }, 30000); // Every 30 seconds
 
       return () => clearInterval(refreshInterval);
@@ -352,20 +390,20 @@ const IntegrationTestingCenter: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-foreground">Integration Testing Center</h2>
-          <p className="text-muted-foreground">Test and monitor calendar provider API endpoints with real-time health checks</p>
+          <p className="text-muted-foreground">
+            Test and monitor calendar provider API endpoints with real-time health checks
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2">
-            <Label htmlFor="auto-refresh" className="text-sm">Auto Refresh</Label>
-            <Switch
-              id="auto-refresh"
-              checked={autoRefresh}
-              onCheckedChange={setAutoRefresh}
-            />
+            <Label htmlFor="auto-refresh" className="text-sm">
+              Auto Refresh
+            </Label>
+            <Switch id="auto-refresh" checked={autoRefresh} onCheckedChange={setAutoRefresh} />
           </div>
           <Button
             onClick={toggleMonitoring}
-            variant={isMonitoring ? "destructive" : "default"}
+            variant={isMonitoring ? 'destructive' : 'default'}
             className="flex items-center gap-2"
           >
             {isMonitoring ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
@@ -392,7 +430,7 @@ const IntegrationTestingCenter: React.FC = () => {
                 </div>
                 {getStatusBadge(provider.status)}
               </div>
-              
+
               <div className="space-y-2 text-xs text-muted-foreground">
                 <div className="flex items-center justify-between">
                   <span>Avg Response:</span>
@@ -400,7 +438,9 @@ const IntegrationTestingCenter: React.FC = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Success Rate:</span>
-                  <span className={`font-mono ${getSuccessRate(provider.id) >= 95 ? 'text-green-600' : 'text-yellow-600'}`}>
+                  <span
+                    className={`font-mono ${getSuccessRate(provider.id) >= 95 ? 'text-green-600' : 'text-yellow-600'}`}
+                  >
                     {getSuccessRate(provider.id)}%
                   </span>
                 </div>
@@ -433,7 +473,11 @@ const IntegrationTestingCenter: React.FC = () => {
                     <Zap className="h-5 w-5 text-primary" />
                     API Endpoint Testing
                   </CardTitle>
-                  <Button onClick={runHealthCheck} variant="outline" className="flex items-center gap-2">
+                  <Button
+                    onClick={runHealthCheck}
+                    variant="outline"
+                    className="flex items-center gap-2"
+                  >
                     <Activity className="h-4 w-4" />
                     Run Health Check
                   </Button>
@@ -475,11 +519,15 @@ const IntegrationTestingCenter: React.FC = () => {
                           id="request-body"
                           value={requestBody}
                           onChange={(e) => setRequestBody(e.target.value)}
-                          placeholder={JSON.stringify({
-                            title: "Test Event",
-                            start: new Date().toISOString(),
-                            end: new Date(Date.now() + 3600000).toISOString()
-                          }, null, 2)}
+                          placeholder={JSON.stringify(
+                            {
+                              title: 'Test Event',
+                              start: new Date().toISOString(),
+                              end: new Date(Date.now() + 3600000).toISOString(),
+                            },
+                            null,
+                            2
+                          )}
                           rows={6}
                           className="mt-1 font-mono text-sm"
                         />
@@ -557,7 +605,7 @@ const IntegrationTestingCenter: React.FC = () => {
                     Real-time Performance Monitoring
                   </CardTitle>
                   <div className="flex items-center gap-2">
-                    <Badge variant={isMonitoring ? "default" : "secondary"}>
+                    <Badge variant={isMonitoring ? 'default' : 'secondary'}>
                       {isMonitoring ? 'Monitoring Active' : 'Monitoring Stopped'}
                     </Badge>
                     <Button onClick={() => window.location.reload()} variant="outline" size="sm">
@@ -573,31 +621,37 @@ const IntegrationTestingCenter: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-muted-foreground">Avg Response Time</p>
-                          <p className="text-2xl font-bold">{getAverageResponseTime(selectedProvider.id)}ms</p>
+                          <p className="text-2xl font-bold">
+                            {getAverageResponseTime(selectedProvider.id)}ms
+                          </p>
                         </div>
                         <TrendingUp className="h-8 w-8 text-green-500" />
                       </div>
                     </CardContent>
                   </Card>
-                  
+
                   <Card className="bg-card/50 backdrop-blur-sm border-border/50">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-muted-foreground">Success Rate</p>
-                          <p className="text-2xl font-bold">{getSuccessRate(selectedProvider.id)}%</p>
+                          <p className="text-2xl font-bold">
+                            {getSuccessRate(selectedProvider.id)}%
+                          </p>
                         </div>
                         <CheckCircle className="h-8 w-8 text-green-500" />
                       </div>
                     </CardContent>
                   </Card>
-                  
+
                   <Card className="bg-card/50 backdrop-blur-sm border-border/50">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-muted-foreground">Total Requests</p>
-                          <p className="text-2xl font-bold">{performanceMetrics[selectedProvider.id]?.length || 0}</p>
+                          <p className="text-2xl font-bold">
+                            {performanceMetrics[selectedProvider.id]?.length || 0}
+                          </p>
                         </div>
                         <Database className="h-8 w-8 text-blue-500" />
                       </div>
@@ -680,7 +734,7 @@ const IntegrationTestingCenter: React.FC = () => {
                       <Shield className="h-4 w-4" />
                       Credentials
                     </h4>
-                    
+
                     {selectedProvider.credentials.clientId && (
                       <div>
                         <Label htmlFor="client-id">Client ID</Label>
@@ -779,49 +833,63 @@ const IntegrationTestingCenter: React.FC = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {testResults.filter(r => r.providerId === selectedProvider.id).map((result) => (
-                        <TableRow key={result.id}>
-                          <TableCell className="font-mono text-xs">
-                            {result.timestamp.toLocaleTimeString()}
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline" className="font-mono">
-                              {result.method}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="max-w-xs truncate text-xs">
-                            {result.endpoint}
-                          </TableCell>
-                          <TableCell>
-                            <Badge
-                              variant={result.status === 'success' ? 'default' : 'destructive'}
-                              className="flex items-center gap-1"
-                            >
-                              {result.status === 'success' ? (
-                                <CheckCircle className="h-3 w-3" />
-                              ) : (
-                                <AlertCircle className="h-3 w-3" />
-                              )}
-                              {result.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="font-mono">
-                            <span className={result.responseTime > 1000 ? 'text-red-600' : result.responseTime > 500 ? 'text-yellow-600' : 'text-green-600'}>
-                              {result.responseTime}ms
-                            </span>
-                          </TableCell>
-                          <TableCell className="font-mono">
-                            <span className={result.response.status >= 400 ? 'text-red-600' : 'text-green-600'}>
-                              {result.response.status}
-                            </span>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {testResults
+                        .filter((r) => r.providerId === selectedProvider.id)
+                        .map((result) => (
+                          <TableRow key={result.id}>
+                            <TableCell className="font-mono text-xs">
+                              {result.timestamp.toLocaleTimeString()}
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="font-mono">
+                                {result.method}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="max-w-xs truncate text-xs">
+                              {result.endpoint}
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                variant={result.status === 'success' ? 'default' : 'destructive'}
+                                className="flex items-center gap-1"
+                              >
+                                {result.status === 'success' ? (
+                                  <CheckCircle className="h-3 w-3" />
+                                ) : (
+                                  <AlertCircle className="h-3 w-3" />
+                                )}
+                                {result.status}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="font-mono">
+                              <span
+                                className={
+                                  result.responseTime > 1000
+                                    ? 'text-red-600'
+                                    : result.responseTime > 500
+                                      ? 'text-yellow-600'
+                                      : 'text-green-600'
+                                }
+                              >
+                                {result.responseTime}ms
+                              </span>
+                            </TableCell>
+                            <TableCell className="font-mono">
+                              <span
+                                className={
+                                  result.response.status >= 400 ? 'text-red-600' : 'text-green-600'
+                                }
+                              >
+                                {result.response.status}
+                              </span>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </div>
 
-                {testResults.filter(r => r.providerId === selectedProvider.id).length === 0 && (
+                {testResults.filter((r) => r.providerId === selectedProvider.id).length === 0 && (
                   <div className="text-center py-8 text-muted-foreground">
                     <Database className="h-12 w-12 mx-auto mb-2 opacity-50" />
                     <p>No test results yet</p>

@@ -80,7 +80,7 @@ export class ObjectPool<T extends Poolable> {
       this.metrics.created++;
       this.metrics.currentSize++;
       this.metrics.misses++;
-      
+
       if (this.metrics.currentSize > this.metrics.peakSize) {
         this.metrics.peakSize = this.metrics.currentSize;
       }
@@ -95,7 +95,7 @@ export class ObjectPool<T extends Poolable> {
     this.inUse.add(obj);
     this.metrics.acquired++;
     this.config.onAcquire(obj);
-    
+
     return obj;
   }
 
@@ -110,18 +110,18 @@ export class ObjectPool<T extends Poolable> {
 
     this.inUse.delete(obj);
     obj.inUse = false;
-    
+
     if (this.config.resetOnRelease) {
       obj.reset();
     }
-    
+
     this.config.onRelease(obj);
-    
+
     // Only return to pool if under max size
     if (this.available.length + this.inUse.size < this.config.maxSize) {
       this.available.push(obj);
     }
-    
+
     this.metrics.released++;
   }
 
@@ -129,7 +129,7 @@ export class ObjectPool<T extends Poolable> {
    * Release multiple objects at once
    */
   releaseBatch(objects: T[]): void {
-    objects.forEach(obj => this.release(obj));
+    objects.forEach((obj) => this.release(obj));
   }
 
   /**
@@ -150,7 +150,7 @@ export class ObjectPool<T extends Poolable> {
       Math.floor(this.metrics.currentSize * growthFactor),
       this.config.maxSize
     );
-    
+
     while (this.metrics.currentSize < targetSize) {
       const obj = this.factory();
       obj.reset();
@@ -158,7 +158,7 @@ export class ObjectPool<T extends Poolable> {
       this.metrics.created++;
       this.metrics.currentSize++;
     }
-    
+
     if (this.metrics.currentSize > this.metrics.peakSize) {
       this.metrics.peakSize = this.metrics.currentSize;
     }
@@ -208,18 +208,11 @@ export class DOMElementPool<T extends HTMLElement> {
   private elementType: string;
   private className?: string;
 
-  constructor(
-    elementType: string,
-    className?: string,
-    config?: PoolConfig
-  ) {
+  constructor(elementType: string, className?: string, config?: PoolConfig) {
     this.elementType = elementType;
     this.className = className;
-    
-    this.pool = new ObjectPool(
-      () => this.createElement(),
-      config
-    );
+
+    this.pool = new ObjectPool(() => this.createElement(), config);
   }
 
   private createElement() {
@@ -227,7 +220,7 @@ export class DOMElementPool<T extends HTMLElement> {
     if (this.className) {
       element.className = this.className;
     }
-    
+
     return {
       element,
       reset: () => {
@@ -246,9 +239,7 @@ export class DOMElementPool<T extends HTMLElement> {
   }
 
   release(element: T): void {
-    const wrapper = Array.from(this.pool['inUse']).find(
-      w => w.element === element
-    );
+    const wrapper = Array.from(this.pool.inUse).find((w) => w.element === element);
     if (wrapper) {
       this.pool.release(wrapper);
     }
@@ -287,7 +278,7 @@ export class PoolManager {
       console.warn(`Pool '${name}' already exists`);
       return this.pools.get(name)!;
     }
-    
+
     const pool = new ObjectPool(factory, config);
     this.pools.set(name, pool);
     return pool;
@@ -337,13 +328,13 @@ export class PoolManager {
   optimizeAll(): void {
     for (const [name, pool] of this.pools) {
       const metrics = pool.getMetrics();
-      
+
       // Grow pools with high miss rates
       if (metrics.hitRate < 0.8 && metrics.misses > 10) {
         pool.grow();
         console.log(`Growing pool '${name}' due to low hit rate`);
       }
-      
+
       // Shrink pools with many unused objects
       const size = pool.getSize();
       if (size.available > size.inUse * 3 && size.total > 20) {
@@ -361,15 +352,15 @@ export const poolManager = PoolManager.getInstance();
  * Example poolable event object
  */
 export class PoolableEvent implements Poolable {
-  id: string = '';
-  title: string = '';
+  id = '';
+  title = '';
   startDate: Date = new Date();
   endDate: Date = new Date();
-  x: number = 0;
-  y: number = 0;
-  width: number = 0;
-  height: number = 0;
-  color: string = '';
+  x = 0;
+  y = 0;
+  width = 0;
+  height = 0;
+  color = '';
   inUse?: boolean = false;
 
   reset(): void {
@@ -390,12 +381,9 @@ export class PoolableEvent implements Poolable {
 }
 
 // Create event pool
-export const eventPool = new ObjectPool(
-  () => new PoolableEvent(),
-  {
-    initialSize: 100,
-    maxSize: 5000,
-    growthFactor: 2,
-    preWarm: true,
-  }
-);
+export const eventPool = new ObjectPool(() => new PoolableEvent(), {
+  initialSize: 100,
+  maxSize: 5000,
+  growthFactor: 2,
+  preWarm: true,
+});

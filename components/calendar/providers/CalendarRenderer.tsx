@@ -1,9 +1,10 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import type React from 'react';
+import { Suspense } from 'react';
 import { useCalendarProvider } from './CalendarProvider';
 import { getCalendarAdapter } from './CalendarRegistry';
-import { CalendarViewProps } from './types';
+import type { CalendarViewProps } from './types';
 
 interface CalendarRendererProps {
   className?: string;
@@ -13,13 +14,16 @@ interface CalendarRendererProps {
 const DefaultFallback = () => (
   <div className="flex items-center justify-center h-full w-full bg-background border border-border rounded-lg">
     <div className="text-center space-y-4">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto" />
       <div className="text-muted-foreground">Loading calendar...</div>
     </div>
   </div>
 );
 
-export function CalendarRenderer({ className, fallback = <DefaultFallback /> }: CalendarRendererProps) {
+export function CalendarRenderer({
+  className,
+  fallback = <DefaultFallback />,
+}: CalendarRendererProps) {
   const {
     selectedLibrary,
     events,

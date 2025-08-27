@@ -1,23 +1,17 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { Calendar } from 'primereact/calendar';
-import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
-import { Badge } from 'primereact/badge';
-import { Tooltip } from 'primereact/tooltip';
-import { Menu } from 'primereact/menu';
-import { CalendarViewProps, CalendarEvent } from './providers/types';
 import { Button as ShadcnButton } from '@/components/ui/button';
-import { 
-  Plus,
-  Calendar as CalendarIcon,
-  Clock,
-  MapPin,
-  Users,
-  Settings
-} from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Calendar as CalendarIcon, Clock, MapPin, Plus, Settings, Users } from 'lucide-react';
+import { Badge } from 'primereact/badge';
+import { Button } from 'primereact/button';
+import { Calendar } from 'primereact/calendar';
+import { Card } from 'primereact/card';
+import { Menu } from 'primereact/menu';
+import { Tooltip } from 'primereact/tooltip';
+import type React from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import type { CalendarEvent, CalendarViewProps } from './providers/types';
 
 // Import PrimeReact CSS
 import 'primereact/resources/themes/lara-light-blue/theme.css';
@@ -59,107 +53,119 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
   // Process events by date for easy lookup
   const eventsByDate = useMemo(() => {
     const eventMap = new Map<string, CalendarEvent[]>();
-    
-    events.forEach(event => {
+
+    events.forEach((event) => {
       const dateKey = event.start.toISOString().split('T')[0];
       if (!eventMap.has(dateKey)) {
         eventMap.set(dateKey, []);
       }
-      eventMap.get(dateKey)!.push(event);
+      eventMap.get(dateKey)?.push(event);
     });
-    
+
     return eventMap;
   }, [events]);
 
   // Handle date selection
-  const handleDateSelect = useCallback((e: { value: Date | Date[] | null }) => {
-    setSelectedDates(e.value);
-    
-    if (e.value && !Array.isArray(e.value)) {
-      onDateChange(e.value);
-    }
-  }, [onDateChange]);
+  const handleDateSelect = useCallback(
+    (e: { value: Date | Date[] | null }) => {
+      setSelectedDates(e.value);
+
+      if (e.value && !Array.isArray(e.value)) {
+        onDateChange(e.value);
+      }
+    },
+    [onDateChange]
+  );
 
   // Handle event creation
-  const handleCreateEvent = useCallback(async (date?: Date) => {
-    try {
-      const eventDate = date || (Array.isArray(selectedDates) ? selectedDates[0] : selectedDates) || new Date();
-      const start = new Date(eventDate);
-      const end = new Date(eventDate);
-      
-      if (showTime) {
-        end.setHours(start.getHours() + 1);
-      } else {
-        end.setDate(start.getDate());
-        start.setHours(9, 0, 0, 0);
-        end.setHours(17, 0, 0, 0);
+  const handleCreateEvent = useCallback(
+    async (date?: Date) => {
+      try {
+        const eventDate =
+          date || (Array.isArray(selectedDates) ? selectedDates[0] : selectedDates) || new Date();
+        const start = new Date(eventDate);
+        const end = new Date(eventDate);
+
+        if (showTime) {
+          end.setHours(start.getHours() + 1);
+        } else {
+          end.setDate(start.getDate());
+          start.setHours(9, 0, 0, 0);
+          end.setHours(17, 0, 0, 0);
+        }
+
+        await onEventCreate({
+          title: 'New Event',
+          start,
+          end,
+          allDay: !showTime,
+        });
+      } catch (error) {
+        console.error('Failed to create event:', error);
       }
-      
-      await onEventCreate({
-        title: 'New Event',
-        start,
-        end,
-        allDay: !showTime,
-      });
-    } catch (error) {
-      console.error('Failed to create event:', error);
-    }
-  }, [selectedDates, showTime, onEventCreate]);
+    },
+    [selectedDates, showTime, onEventCreate]
+  );
 
   // Get priority color
   const getPriorityColor = useCallback((priority?: string): string => {
     switch (priority) {
-      case 'critical': return '#e53e3e';
-      case 'high': return '#dd6b20';
-      case 'medium': return '#d69e2e';
-      case 'low': return '#38a169';
-      default: return '#3182ce';
+      case 'critical':
+        return '#e53e3e';
+      case 'high':
+        return '#dd6b20';
+      case 'medium':
+        return '#d69e2e';
+      case 'low':
+        return '#38a169';
+      default:
+        return '#3182ce';
     }
   }, []);
 
   // Custom date template with event indicators
-  const dateTemplate = useCallback((date: Date) => {
-    const dateKey = date.toISOString().split('T')[0];
-    const dayEvents = eventsByDate.get(dateKey) || [];
-    const hasEvents = dayEvents.length > 0;
-    
-    return (
-      <div className={cn(
-        'relative p-2 text-center',
-        hasEvents && 'font-semibold'
-      )}>
-        <span>{date.getDate()}</span>
-        {hasEvents && (
-          <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex gap-1">
-            {dayEvents.slice(0, 3).map((event, index) => (
-              <div
-                key={index}
-                className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: getPriorityColor(event.priority) }}
-                data-pr-tooltip={event.title}
-                data-pr-position="top"
-              />
-            ))}
-            {dayEvents.length > 3 && (
-              <div 
-                className="w-2 h-2 rounded-full bg-gray-400 text-white text-xs flex items-center justify-center"
-                data-pr-tooltip={`+${dayEvents.length - 3} more events`}
-                data-pr-position="top"
-              >
-                +
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    );
-  }, [eventsByDate, getPriorityColor]);
+  const dateTemplate = useCallback(
+    (date: Date) => {
+      const dateKey = date.toISOString().split('T')[0];
+      const dayEvents = eventsByDate.get(dateKey) || [];
+      const hasEvents = dayEvents.length > 0;
+
+      return (
+        <div className={cn('relative p-2 text-center', hasEvents && 'font-semibold')}>
+          <span>{date.getDate()}</span>
+          {hasEvents && (
+            <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex gap-1">
+              {dayEvents.slice(0, 3).map((event, index) => (
+                <div
+                  key={index}
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: getPriorityColor(event.priority) }}
+                  data-pr-tooltip={event.title}
+                  data-pr-position="top"
+                />
+              ))}
+              {dayEvents.length > 3 && (
+                <div
+                  className="w-2 h-2 rounded-full bg-gray-400 text-white text-xs flex items-center justify-center"
+                  data-pr-tooltip={`+${dayEvents.length - 3} more events`}
+                  data-pr-position="top"
+                >
+                  +
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    },
+    [eventsByDate, getPriorityColor]
+  );
 
   // Get events for selected date
   const getSelectedDateEvents = useCallback(() => {
     const date = Array.isArray(selectedDates) ? selectedDates[0] : selectedDates;
     if (!date) return [];
-    
+
     const dateKey = date.toISOString().split('T')[0];
     return eventsByDate.get(dateKey) || [];
   }, [selectedDates, eventsByDate]);
@@ -167,7 +173,7 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
   const selectedDateEvents = getSelectedDateEvents();
 
   // Menu items for calendar actions
-  const menuItems = [
+  const _menuItems = [
     {
       label: 'Add Event',
       icon: 'pi pi-plus',
@@ -207,7 +213,7 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
   return (
     <div className={cn('primereact-calendar-view', className)}>
       <Tooltip target=".event-indicator" />
-      
+
       {loading && (
         <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="flex items-center space-x-2">
@@ -223,12 +229,9 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
           <div className="flex items-center gap-3">
             <CalendarIcon className="h-6 w-6 text-blue-500" />
             <h2 className="text-xl font-semibold">PrimeReact Calendar</h2>
-            <Badge 
-              value={events.length} 
-              severity={events.length > 0 ? 'info' : 'secondary'}
-            />
+            <Badge value={events.length} severity={events.length > 0 ? 'info' : 'secondary'} />
           </div>
-          
+
           <div className="flex items-center gap-2">
             <ShadcnButton
               variant="outline"
@@ -239,7 +242,7 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
               <Settings className="h-4 w-4 mr-1" />
               {showEventPanel ? 'Hide' : 'Show'} Events
             </ShadcnButton>
-            
+
             <ShadcnButton
               variant="default"
               size="sm"
@@ -294,19 +297,19 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
               <div className="p-4">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold">
-                    {selectedDates ? (
-                      Array.isArray(selectedDates) 
+                    {selectedDates
+                      ? Array.isArray(selectedDates)
                         ? `${selectedDates.length} dates selected`
                         : selectedDates.toLocaleDateString('en-US', {
                             weekday: 'short',
                             month: 'short',
                             day: 'numeric',
                           })
-                    ) : 'No date selected'}
+                      : 'No date selected'}
                   </h3>
                   <Badge value={selectedDateEvents.length} severity="info" />
                 </div>
-                
+
                 {selectedDateEvents.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
                     <i className="pi pi-calendar text-4xl mb-3 block opacity-50" />
@@ -322,32 +325,37 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                 ) : (
                   <div className="space-y-3">
                     {selectedDateEvents.map((event) => (
-                      <Card key={event.id} className="p-3 hover:shadow-md transition-shadow cursor-pointer">
+                      <Card
+                        key={event.id}
+                        className="p-3 hover:shadow-md transition-shadow cursor-pointer"
+                      >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <h4 className="font-medium text-sm truncate">
-                                {event.title}
-                              </h4>
+                              <h4 className="font-medium text-sm truncate">{event.title}</h4>
                               {event.priority && (
-                                <Badge 
+                                <Badge
                                   value={event.priority}
                                   severity={
-                                    event.priority === 'critical' ? 'danger' :
-                                    event.priority === 'high' ? 'warning' :
-                                    event.priority === 'medium' ? 'info' : 'success'
+                                    event.priority === 'critical'
+                                      ? 'danger'
+                                      : event.priority === 'high'
+                                        ? 'warning'
+                                        : event.priority === 'medium'
+                                          ? 'info'
+                                          : 'success'
                                   }
                                   className="text-xs"
                                 />
                               )}
                             </div>
-                            
+
                             {event.description && (
                               <p className="text-xs text-gray-600 mb-2 line-clamp-2">
                                 {event.description}
                               </p>
                             )}
-                            
+
                             <div className="flex items-center gap-3 text-xs text-gray-500">
                               <div className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
@@ -355,24 +363,26 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                                   <span>All day</span>
                                 ) : (
                                   <span>
-                                    {event.start.toLocaleTimeString('en-US', { 
-                                      hour: 'numeric', 
-                                      minute: '2-digit' 
-                                    })} - {event.end.toLocaleTimeString('en-US', { 
-                                      hour: 'numeric', 
-                                      minute: '2-digit' 
+                                    {event.start.toLocaleTimeString('en-US', {
+                                      hour: 'numeric',
+                                      minute: '2-digit',
+                                    })}{' '}
+                                    -{' '}
+                                    {event.end.toLocaleTimeString('en-US', {
+                                      hour: 'numeric',
+                                      minute: '2-digit',
                                     })}
                                   </span>
                                 )}
                               </div>
-                              
+
                               {event.location && (
                                 <div className="flex items-center gap-1">
                                   <MapPin className="h-3 w-3" />
                                   <span className="truncate">{event.location}</span>
                                 </div>
                               )}
-                              
+
                               {event.attendees && event.attendees.length > 0 && (
                                 <div className="flex items-center gap-1">
                                   <Users className="h-3 w-3" />
@@ -381,7 +391,7 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                               )}
                             </div>
                           </div>
-                          
+
                           <Button
                             icon="pi pi-times"
                             className="p-button-text p-button-danger p-button-sm"
@@ -400,7 +410,7 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                 )}
               </div>
             </Card>
-            
+
             {/* Statistics Card */}
             <Card>
               <div className="p-4">
@@ -412,19 +422,26 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">High Priority</span>
-                    <Badge 
-                      value={events.filter(e => e.priority === 'high' || e.priority === 'critical').length}
+                    <Badge
+                      value={
+                        events.filter((e) => e.priority === 'high' || e.priority === 'critical')
+                          .length
+                      }
                       severity="warning"
                     />
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">This Month</span>
-                    <Badge 
-                      value={events.filter(event => {
-                        const now = new Date();
-                        return event.start.getMonth() === now.getMonth() &&
-                               event.start.getFullYear() === now.getFullYear();
-                      }).length}
+                    <Badge
+                      value={
+                        events.filter((event) => {
+                          const now = new Date();
+                          return (
+                            event.start.getMonth() === now.getMonth() &&
+                            event.start.getFullYear() === now.getFullYear()
+                          );
+                        }).length
+                      }
                       severity="success"
                     />
                   </div>

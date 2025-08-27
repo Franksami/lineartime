@@ -1,78 +1,91 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { type EventCategory, type EventPriority, type EventFilters, CATEGORY_COLORS } from "@/components/ui/calendar"
-import { Search, Filter, Tag } from "lucide-react"
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  CATEGORY_COLORS,
+  type EventCategory,
+  type EventFilters,
+  type EventPriority,
+} from '@/components/ui/calendar';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Filter, Search, Tag } from 'lucide-react';
+import { useState } from 'react';
 
 interface EventFilterPanelProps {
-  filters: EventFilters
-  availableTags: string[]
-  onFiltersChange: (filters: EventFilters) => void
-  onClearFilters: () => void
+  filters: EventFilters;
+  availableTags: string[];
+  onFiltersChange: (filters: EventFilters) => void;
+  onClearFilters: () => void;
 }
 
-export function EventFilterPanel({ filters, availableTags, onFiltersChange, onClearFilters }: EventFilterPanelProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
+export function EventFilterPanel({
+  filters,
+  availableTags,
+  onFiltersChange,
+  onClearFilters,
+}: EventFilterPanelProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const categories: { value: EventCategory; label: string }[] = [
-    { value: "personal", label: "Personal" },
-    { value: "work", label: "Work" },
-    { value: "effort", label: "Effort" },
-    { value: "note", label: "Note" },
-    { value: "meeting", label: "Meeting" },
-    { value: "deadline", label: "Deadline" },
-    { value: "milestone", label: "Milestone" },
-  ]
+    { value: 'personal', label: 'Personal' },
+    { value: 'work', label: 'Work' },
+    { value: 'effort', label: 'Effort' },
+    { value: 'note', label: 'Note' },
+    { value: 'meeting', label: 'Meeting' },
+    { value: 'deadline', label: 'Deadline' },
+    { value: 'milestone', label: 'Milestone' },
+  ];
 
   const priorities: { value: EventPriority; label: string }[] = [
-    { value: "critical", label: "Critical" },
-    { value: "high", label: "High" },
-    { value: "medium", label: "Medium" },
-    { value: "low", label: "Low" },
-    { value: "optional", label: "Optional" },
-  ]
+    { value: 'critical', label: 'Critical' },
+    { value: 'high', label: 'High' },
+    { value: 'medium', label: 'Medium' },
+    { value: 'low', label: 'Low' },
+    { value: 'optional', label: 'Optional' },
+  ];
 
   const handleCategoryToggle = (category: EventCategory) => {
-    const newCategories = new Set(filters.categories)
+    const newCategories = new Set(filters.categories);
     if (newCategories.has(category)) {
-      newCategories.delete(category)
+      newCategories.delete(category);
     } else {
-      newCategories.add(category)
+      newCategories.add(category);
     }
-    onFiltersChange({ ...filters, categories: newCategories })
-  }
+    onFiltersChange({ ...filters, categories: newCategories });
+  };
 
   const handlePriorityToggle = (priority: EventPriority) => {
-    const newPriorities = new Set(filters.priorities)
+    const newPriorities = new Set(filters.priorities);
     if (newPriorities.has(priority)) {
-      newPriorities.delete(priority)
+      newPriorities.delete(priority);
     } else {
-      newPriorities.add(priority)
+      newPriorities.add(priority);
     }
-    onFiltersChange({ ...filters, priorities: newPriorities })
-  }
+    onFiltersChange({ ...filters, priorities: newPriorities });
+  };
 
   const handleTagToggle = (tag: string) => {
-    const newTags = new Set(filters.tags)
+    const newTags = new Set(filters.tags);
     if (newTags.has(tag)) {
-      newTags.delete(tag)
+      newTags.delete(tag);
     } else {
-      newTags.add(tag)
+      newTags.add(tag);
     }
-    onFiltersChange({ ...filters, tags: newTags })
-  }
+    onFiltersChange({ ...filters, tags: newTags });
+  };
 
   const handleSearchChange = (query: string) => {
-    onFiltersChange({ ...filters, searchQuery: query })
-  }
+    onFiltersChange({ ...filters, searchQuery: query });
+  };
 
   const activeFiltersCount =
-    filters.categories.size + filters.priorities.size + filters.tags.size + (filters.searchQuery ? 1 : 0)
+    filters.categories.size +
+    filters.priorities.size +
+    filters.tags.size +
+    (filters.searchQuery ? 1 : 0);
 
   return (
     <div className="bg-card border border-border rounded-lg shadow-sm">
@@ -95,7 +108,7 @@ export function EventFilterPanel({ filters, availableTags, onFiltersChange, onCl
               </Button>
             )}
             <Button variant="ghost" size="sm" onClick={() => setIsExpanded(!isExpanded)}>
-              {isExpanded ? "Collapse" : "Expand"}
+              {isExpanded ? 'Collapse' : 'Expand'}
             </Button>
           </div>
         </div>
@@ -158,15 +171,15 @@ export function EventFilterPanel({ filters, availableTags, onFiltersChange, onCl
                   >
                     <div
                       className={`w-2 h-2 rounded-full ${
-                        priority.value === "critical"
-                          ? "bg-destructive"
-                          : priority.value === "high"
-                            ? "bg-secondary"
-                            : priority.value === "medium"
-                              ? "bg-primary"
-                              : priority.value === "low"
-                                ? "bg-muted-foreground/50"
-                                : "bg-muted/50"
+                        priority.value === 'critical'
+                          ? 'bg-destructive'
+                          : priority.value === 'high'
+                            ? 'bg-secondary'
+                            : priority.value === 'medium'
+                              ? 'bg-primary'
+                              : priority.value === 'low'
+                                ? 'bg-muted-foreground/50'
+                                : 'bg-muted/50'
                       }`}
                     />
                     {priority.label}
@@ -187,7 +200,7 @@ export function EventFilterPanel({ filters, availableTags, onFiltersChange, onCl
                 {availableTags.map((tag) => (
                   <Button
                     key={tag}
-                    variant={filters.tags.has(tag) ? "default" : "outline"}
+                    variant={filters.tags.has(tag) ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => handleTagToggle(tag)}
                     className="h-6 px-2 text-xs"
@@ -201,5 +214,5 @@ export function EventFilterPanel({ filters, availableTags, onFiltersChange, onCl
         </div>
       )}
     </div>
-  )
+  );
 }

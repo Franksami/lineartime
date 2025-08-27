@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
-import { Calendar } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { SignInButton, SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs';
+import { Calendar } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
 
 export function LandingNavigation() {
   return (
@@ -19,22 +19,34 @@ export function LandingNavigation() {
               Beta
             </Badge>
           </div>
-          
+
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="#features"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               Features
             </Link>
-            <Link href="#testimonials" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="#testimonials"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               Testimonials
             </Link>
-            <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="/pricing"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               Pricing
             </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="#"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               Docs
             </Link>
           </nav>
-          
+
           <div className="flex items-center gap-2">
             <SignedOut>
               <Button variant="ghost" size="sm" asChild>

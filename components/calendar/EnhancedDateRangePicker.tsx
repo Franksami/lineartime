@@ -1,49 +1,56 @@
-'use client'
+'use client';
 
-import React, { useState, useCallback, useMemo } from 'react'
-import DatePicker from 'react-datepicker'
-import { format, addDays, addWeeks, addMonths, startOfWeek, endOfWeek, startOfMonth, endOfMonth, differenceInDays } from 'date-fns'
-import { CalendarRange, ArrowRight, Zap, Clock, CheckCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
+  addDays,
+  addMonths,
+  addWeeks,
+  differenceInDays,
+  endOfMonth,
+  endOfWeek,
+  format,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns';
+import { ArrowRight, CalendarRange, CheckCircle, Clock, Zap } from 'lucide-react';
+import type React from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import DatePicker from 'react-datepicker';
 
 // Import CSS for react-datepicker
-import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface DateRange {
-  startDate: Date | null
-  endDate: Date | null
+  startDate: Date | null;
+  endDate: Date | null;
 }
 
 interface RangePreset {
-  label: string
-  getValue: () => DateRange
-  description: string
-  category: 'quick' | 'week' | 'month' | 'quarter'
-  icon: React.ComponentType<{ className?: string }>
+  label: string;
+  getValue: () => DateRange;
+  description: string;
+  category: 'quick' | 'week' | 'month' | 'quarter';
+  icon: React.ComponentType<{ className?: string }>;
 }
 
 interface EnhancedDateRangePickerProps {
-  value?: DateRange
-  onChange: (range: DateRange) => void
-  placeholder?: string
-  disabled?: boolean
-  className?: string
-  showPresets?: boolean
-  minDate?: Date
-  maxDate?: Date
-  excludeDates?: Date[]
-  maxDays?: number
-  selectsRange?: boolean
+  value?: DateRange;
+  onChange: (range: DateRange) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+  showPresets?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
+  excludeDates?: Date[];
+  maxDays?: number;
+  selectsRange?: boolean;
 }
 
 // Predefined range presets for common date selections
@@ -51,131 +58,131 @@ const RANGE_PRESETS: RangePreset[] = [
   {
     label: 'Today',
     getValue: () => {
-      const today = new Date()
-      return { startDate: today, endDate: today }
+      const today = new Date();
+      return { startDate: today, endDate: today };
     },
     description: 'Just today',
     category: 'quick',
-    icon: Clock
+    icon: Clock,
   },
   {
     label: 'Tomorrow',
     getValue: () => {
-      const tomorrow = addDays(new Date(), 1)
-      return { startDate: tomorrow, endDate: tomorrow }
+      const tomorrow = addDays(new Date(), 1);
+      return { startDate: tomorrow, endDate: tomorrow };
     },
     description: 'Just tomorrow',
     category: 'quick',
-    icon: Zap
+    icon: Zap,
   },
   {
     label: 'Next 3 Days',
     getValue: () => ({
       startDate: new Date(),
-      endDate: addDays(new Date(), 2)
+      endDate: addDays(new Date(), 2),
     }),
     description: 'Today through 2 days ahead',
     category: 'quick',
-    icon: Zap
+    icon: Zap,
   },
   {
     label: 'Next 7 Days',
     getValue: () => ({
       startDate: new Date(),
-      endDate: addDays(new Date(), 6)
+      endDate: addDays(new Date(), 6),
     }),
     description: 'Today through next week',
     category: 'quick',
-    icon: Zap
+    icon: Zap,
   },
   {
     label: 'This Week',
     getValue: () => {
-      const today = new Date()
+      const today = new Date();
       return {
         startDate: startOfWeek(today, { weekStartsOn: 0 }), // Sunday
-        endDate: endOfWeek(today, { weekStartsOn: 0 }) // Saturday
-      }
+        endDate: endOfWeek(today, { weekStartsOn: 0 }), // Saturday
+      };
     },
     description: 'Sunday to Saturday',
     category: 'week',
-    icon: CalendarRange
+    icon: CalendarRange,
   },
   {
     label: 'Next Week',
     getValue: () => {
-      const nextWeek = addWeeks(new Date(), 1)
+      const nextWeek = addWeeks(new Date(), 1);
       return {
         startDate: startOfWeek(nextWeek, { weekStartsOn: 0 }),
-        endDate: endOfWeek(nextWeek, { weekStartsOn: 0 })
-      }
+        endDate: endOfWeek(nextWeek, { weekStartsOn: 0 }),
+      };
     },
     description: 'Sunday to Saturday of next week',
     category: 'week',
-    icon: CalendarRange
+    icon: CalendarRange,
   },
   {
     label: 'Work Week',
     getValue: () => {
-      const today = new Date()
-      const monday = startOfWeek(today, { weekStartsOn: 1 }) // Monday
-      const friday = addDays(monday, 4) // Friday
+      const today = new Date();
+      const monday = startOfWeek(today, { weekStartsOn: 1 }); // Monday
+      const friday = addDays(monday, 4); // Friday
       return {
         startDate: monday,
-        endDate: friday
-      }
+        endDate: friday,
+      };
     },
     description: 'Monday to Friday',
     category: 'week',
-    icon: CalendarRange
+    icon: CalendarRange,
   },
   {
     label: 'This Month',
     getValue: () => {
-      const today = new Date()
+      const today = new Date();
       return {
         startDate: startOfMonth(today),
-        endDate: endOfMonth(today)
-      }
+        endDate: endOfMonth(today),
+      };
     },
     description: 'First to last day of month',
     category: 'month',
-    icon: CalendarRange
+    icon: CalendarRange,
   },
   {
     label: 'Next Month',
     getValue: () => {
-      const nextMonth = addMonths(new Date(), 1)
+      const nextMonth = addMonths(new Date(), 1);
       return {
         startDate: startOfMonth(nextMonth),
-        endDate: endOfMonth(nextMonth)
-      }
+        endDate: endOfMonth(nextMonth),
+      };
     },
     description: 'First to last day of next month',
     category: 'month',
-    icon: CalendarRange
+    icon: CalendarRange,
   },
   {
     label: 'Next 30 Days',
     getValue: () => ({
       startDate: new Date(),
-      endDate: addDays(new Date(), 29)
+      endDate: addDays(new Date(), 29),
     }),
     description: 'Rolling 30-day period',
     category: 'month',
-    icon: CalendarRange
+    icon: CalendarRange,
   },
   {
     label: 'Next 90 Days',
     getValue: () => ({
       startDate: new Date(),
-      endDate: addDays(new Date(), 89)
+      endDate: addDays(new Date(), 89),
     }),
     description: 'Rolling 90-day period',
     category: 'quarter',
-    icon: CalendarRange
-  }
-]
+    icon: CalendarRange,
+  },
+];
 
 export function EnhancedDateRangePicker({
   value,
@@ -188,75 +195,82 @@ export function EnhancedDateRangePicker({
   maxDate,
   excludeDates = [],
   maxDays,
-  selectsRange = true
+  selectsRange = true,
 }: EnhancedDateRangePickerProps) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   // Handle date range selection
-  const handleRangeChange = useCallback((dates: [Date | null, Date | null]) => {
-    const [start, end] = dates
-    onChange({ startDate: start, endDate: end })
-  }, [onChange])
+  const handleRangeChange = useCallback(
+    (dates: [Date | null, Date | null]) => {
+      const [start, end] = dates;
+      onChange({ startDate: start, endDate: end });
+    },
+    [onChange]
+  );
 
   // Handle preset selection
-  const handlePresetSelect = useCallback((preset: RangePreset) => {
-    const range = preset.getValue()
-    onChange(range)
-  }, [onChange])
+  const handlePresetSelect = useCallback(
+    (preset: RangePreset) => {
+      const range = preset.getValue();
+      onChange(range);
+    },
+    [onChange]
+  );
 
   // Clear selection
   const handleClear = useCallback(() => {
-    onChange({ startDate: null, endDate: null })
-  }, [onChange])
+    onChange({ startDate: null, endDate: null });
+  }, [onChange]);
 
   // Format display text
   const getDisplayText = useCallback(() => {
-    if (!value?.startDate) return placeholder
+    if (!value?.startDate) return placeholder;
 
     if (value.endDate) {
       if (format(value.startDate, 'yyyy-MM-dd') === format(value.endDate, 'yyyy-MM-dd')) {
         // Same day
-        return format(value.startDate, 'PPP')
-      } else {
-        // Date range
-        return `${format(value.startDate, 'MMM d')} - ${format(value.endDate, 'MMM d, yyyy')}`
+        return format(value.startDate, 'PPP');
       }
-    } else {
-      // Start date only
-      return format(value.startDate, 'PPP')
+      // Date range
+      return `${format(value.startDate, 'MMM d')} - ${format(value.endDate, 'MMM d, yyyy')}`;
     }
-  }, [value, placeholder])
+    // Start date only
+    return format(value.startDate, 'PPP');
+  }, [value, placeholder]);
 
   // Calculate range info
   const rangeInfo = useMemo(() => {
-    if (!value?.startDate || !value?.endDate) return null
+    if (!value?.startDate || !value?.endDate) return null;
 
-    const days = differenceInDays(value.endDate, value.startDate) + 1
+    const days = differenceInDays(value.endDate, value.startDate) + 1;
     return {
       days,
       isWeekend: days === 2 && value.startDate.getDay() === 6, // Saturday-Sunday
       isWorkWeek: days === 5 && value.startDate.getDay() === 1, // Monday-Friday
       isFullWeek: days === 7,
-      isMonth: days >= 28 && days <= 31
-    }
-  }, [value])
+      isMonth: days >= 28 && days <= 31,
+    };
+  }, [value]);
 
   // Group presets by category
   const groupedPresets = useMemo(() => {
-    return RANGE_PRESETS.reduce((acc, preset) => {
-      if (!acc[preset.category]) {
-        acc[preset.category] = []
-      }
-      acc[preset.category].push(preset)
-      return acc
-    }, {} as Record<string, RangePreset[]>)
-  }, [])
+    return RANGE_PRESETS.reduce(
+      (acc, preset) => {
+        if (!acc[preset.category]) {
+          acc[preset.category] = [];
+        }
+        acc[preset.category].push(preset);
+        return acc;
+      },
+      {} as Record<string, RangePreset[]>
+    );
+  }, []);
 
   // Check if range exceeds max days
   const exceedsMaxDays = useMemo(() => {
-    if (!maxDays || !value?.startDate || !value?.endDate) return false
-    return differenceInDays(value.endDate, value.startDate) + 1 > maxDays
-  }, [maxDays, value])
+    if (!maxDays || !value?.startDate || !value?.endDate) return false;
+    return differenceInDays(value.endDate, value.startDate) + 1 > maxDays;
+  }, [maxDays, value]);
 
   return (
     <div className={cn('enhanced-daterange-picker', className)}>
@@ -279,7 +293,7 @@ export function EnhancedDateRangePicker({
             )}
           </Button>
         </PopoverTrigger>
-        
+
         <PopoverContent className="w-auto p-0" align="start">
           <div className="flex">
             {/* Main DatePicker */}
@@ -309,19 +323,28 @@ export function EnhancedDateRangePicker({
                   {Object.entries(groupedPresets).map(([category, presets]) => (
                     <div key={category}>
                       <Label className="text-sm font-medium capitalize mb-2 block">
-                        {category === 'quick' ? 'Quick Select' : 
-                         category === 'week' ? 'Weekly' :
-                         category === 'month' ? 'Monthly' : 'Quarterly'}
+                        {category === 'quick'
+                          ? 'Quick Select'
+                          : category === 'week'
+                            ? 'Weekly'
+                            : category === 'month'
+                              ? 'Monthly'
+                              : 'Quarterly'}
                       </Label>
                       <div className="space-y-1">
                         {presets.map((preset) => {
-                          const IconComponent = preset.icon
-                          const presetRange = preset.getValue()
-                          const isSelected = value?.startDate && value?.endDate &&
-                            presetRange.startDate && presetRange.endDate &&
-                            format(value.startDate, 'yyyy-MM-dd') === format(presetRange.startDate, 'yyyy-MM-dd') &&
-                            format(value.endDate, 'yyyy-MM-dd') === format(presetRange.endDate, 'yyyy-MM-dd')
-                          
+                          const IconComponent = preset.icon;
+                          const presetRange = preset.getValue();
+                          const isSelected =
+                            value?.startDate &&
+                            value?.endDate &&
+                            presetRange.startDate &&
+                            presetRange.endDate &&
+                            format(value.startDate, 'yyyy-MM-dd') ===
+                              format(presetRange.startDate, 'yyyy-MM-dd') &&
+                            format(value.endDate, 'yyyy-MM-dd') ===
+                              format(presetRange.endDate, 'yyyy-MM-dd');
+
                           return (
                             <Button
                               key={preset.label}
@@ -334,11 +357,12 @@ export function EnhancedDateRangePicker({
                               <span className="flex-1 text-left">{preset.label}</span>
                               {presetRange.startDate && presetRange.endDate && (
                                 <Badge variant="secondary" className="text-xs">
-                                  {differenceInDays(presetRange.endDate, presetRange.startDate) + 1}d
+                                  {differenceInDays(presetRange.endDate, presetRange.startDate) + 1}
+                                  d
                                 </Badge>
                               )}
                             </Button>
-                          )
+                          );
                         })}
                       </div>
                     </div>
@@ -370,22 +394,32 @@ export function EnhancedDateRangePicker({
                           </span>
                         </div>
                       </div>
-                      
+
                       <div className="flex flex-wrap gap-1">
                         {rangeInfo.isWorkWeek && (
-                          <Badge variant="secondary" className="text-xs">Work Week</Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            Work Week
+                          </Badge>
                         )}
                         {rangeInfo.isWeekend && (
-                          <Badge variant="secondary" className="text-xs">Weekend</Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            Weekend
+                          </Badge>
                         )}
                         {rangeInfo.isFullWeek && (
-                          <Badge variant="secondary" className="text-xs">Full Week</Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            Full Week
+                          </Badge>
                         )}
                         {rangeInfo.isMonth && (
-                          <Badge variant="secondary" className="text-xs">Full Month</Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            Full Month
+                          </Badge>
                         )}
                         {exceedsMaxDays && (
-                          <Badge variant="destructive" className="text-xs">Too long</Badge>
+                          <Badge variant="destructive" className="text-xs">
+                            Too long
+                          </Badge>
                         )}
                       </div>
                     </CardContent>
@@ -478,9 +512,9 @@ export function EnhancedDateRangePicker({
         }
       `}</style>
     </div>
-  )
+  );
 }
 
 // Export presets for use in other components
-export { RANGE_PRESETS }
-export type { DateRange, RangePreset }
+export { RANGE_PRESETS };
+export type { DateRange, RangePreset };

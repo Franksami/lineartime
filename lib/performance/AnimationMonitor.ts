@@ -70,7 +70,7 @@ export class AnimationMonitor {
 
       const deltaTime = timestamp - this.lastFrameTime;
       const fps = deltaTime > 0 ? 1000 / deltaTime : 0;
-      
+
       this.frameCount++;
 
       // Collect metrics every 60 frames (roughly 1 second at 60fps)
@@ -145,16 +145,21 @@ export class AnimationMonitor {
 
     // Check FPS performance
     if (metrics.fps > 0 && metrics.fps < this.config.targetFPS * 0.8) {
-      console.warn(`🎬 Animation FPS below target: ${metrics.fps}fps (target: ${this.config.targetFPS}fps)`);
+      console.warn(
+        `🎬 Animation FPS below target: ${metrics.fps}fps (target: ${this.config.targetFPS}fps)`
+      );
     }
 
     // Check excessive renders
     if (metrics.renderCount > this.config.maxRenderCount) {
-      console.warn(`🎬 High render count detected: ${metrics.renderCount} (max: ${this.config.maxRenderCount})`);
+      console.warn(
+        `🎬 High render count detected: ${metrics.renderCount} (max: ${this.config.maxRenderCount})`
+      );
     }
 
     // Check memory usage (if tracking enabled)
-    if (metrics.memoryUsage && metrics.memoryUsage > 100 * 1024 * 1024) { // 100MB threshold
+    if (metrics.memoryUsage && metrics.memoryUsage > 100 * 1024 * 1024) {
+      // 100MB threshold
       console.warn(`🎬 High memory usage: ${(metrics.memoryUsage / 1024 / 1024).toFixed(2)}MB`);
     }
   }
@@ -201,7 +206,7 @@ export class AnimationMonitor {
     const measureName = `animation-${name}`;
 
     performance.mark(startMark);
-    
+
     return animationFn().finally(() => {
       performance.mark(endMark);
       performance.measure(measureName, startMark, endMark);

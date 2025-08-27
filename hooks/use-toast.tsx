@@ -1,7 +1,7 @@
 /**
  * @deprecated Use @/components/ui/notify instead for consistent toast notifications
  * This hook is maintained for backward compatibility but will be removed in a future version.
- * 
+ *
  * Migration guide:
  * - Replace `useToast()` with `import { notify } from '@/components/ui/notify'`
  * - Replace `toast({ variant: 'success' })` with `notify.success()`
@@ -25,7 +25,7 @@ export function useToast() {
   const toast = ({ title, description, variant = 'default', duration = 4000 }: ToastProps) => {
     const message = title || description || '';
     const fullMessage = title && description ? `${title}: ${description}` : message;
-    
+
     switch (variant) {
       case 'destructive':
         notify.error(fullMessage, { duration });
@@ -47,7 +47,7 @@ export function useToast() {
 export const toast = ({ title, description, variant = 'default', duration = 4000 }: ToastProps) => {
   const message = title || description || '';
   const fullMessage = title && description ? `${title}: ${description}` : message;
-  
+
   switch (variant) {
     case 'destructive':
       notify.error(fullMessage, { duration });

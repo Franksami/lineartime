@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { AnalyticsDashboard } from '@/components/calendar/analytics-dashboard'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft, Calendar, TrendingUp, Activity } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import type { Event, EventPriority } from '@/types/calendar'
+import { AnalyticsDashboard } from '@/components/calendar/analytics-dashboard';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import type { Event, EventPriority } from '@/types/calendar';
+import { Activity, ArrowLeft, Calendar, TrendingUp } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 
 // Mock events for demonstration - in real app, this would come from your database
 const generateMockEvents = (year: number): Event[] => {
-  const events: Event[] = []
-  const categories = ['personal', 'work', 'effort', 'note'] as const
-  const priorities = ['critical', 'high', 'medium', 'low', 'optional'] as const
-  
+  const events: Event[] = [];
+  const categories = ['personal', 'work', 'effort', 'note'] as const;
+  const priorities = ['critical', 'high', 'medium', 'low', 'optional'] as const;
+
   // Generate events throughout the year
   for (let month = 0; month < 12; month++) {
-    const eventsInMonth = Math.floor(Math.random() * 15) + 5 // 5-20 events per month
-    
+    const eventsInMonth = Math.floor(Math.random() * 15) + 5; // 5-20 events per month
+
     for (let i = 0; i < eventsInMonth; i++) {
-      const day = Math.floor(Math.random() * 28) + 1
-      const hour = Math.floor(Math.random() * 16) + 8 // 8 AM to 11 PM
-      const duration = [30, 60, 90, 120, 180][Math.floor(Math.random() * 5)]
-      
-      const startDate = new Date(year, month, day, hour, 0)
-      const endDate = new Date(startDate.getTime() + duration * 60000)
-      
+      const day = Math.floor(Math.random() * 28) + 1;
+      const hour = Math.floor(Math.random() * 16) + 8; // 8 AM to 11 PM
+      const duration = [30, 60, 90, 120, 180][Math.floor(Math.random() * 5)];
+
+      const startDate = new Date(year, month, day, hour, 0);
+      const endDate = new Date(startDate.getTime() + duration * 60000);
+
       events.push({
         id: `event-${month}-${i}`,
         title: `Event ${month + 1}.${i + 1}`,
@@ -33,28 +33,28 @@ const generateMockEvents = (year: number): Event[] => {
         endDate,
         category: categories[Math.floor(Math.random() * categories.length)],
         priority: priorities[Math.floor(Math.random() * priorities.length)] as EventPriority,
-        description: `Sample event for analytics demonstration`,
-        color: '#3b82f6'
-      })
+        description: 'Sample event for analytics demonstration',
+        color: '#3b82f6',
+      });
     }
   }
-  
-  return events
-}
+
+  return events;
+};
 
 export default function AnalyticsPage() {
-  const router = useRouter()
-  const [events, setEvents] = useState<Event[]>([])
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
-  const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter();
+  const [events, setEvents] = useState<Event[]>([]);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // In a real app, you'd fetch events from your database
     // For now, we'll generate mock data
-    const mockEvents = generateMockEvents(selectedYear)
-    setEvents(mockEvents)
-    setIsLoading(false)
-  }, [selectedYear])
+    const mockEvents = generateMockEvents(selectedYear);
+    setEvents(mockEvents);
+    setIsLoading(false);
+  }, [selectedYear]);
 
   if (isLoading) {
     return (
@@ -64,7 +64,7 @@ export default function AnalyticsPage() {
           <p className="text-muted-foreground">Loading analytics...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -74,9 +74,9 @@ export default function AnalyticsPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => router.back()}
                 className="flex items-center gap-2"
               >
@@ -88,14 +88,10 @@ export default function AnalyticsPage() {
                 <h1 className="text-xl font-semibold">Calendar Analytics</h1>
               </div>
             </div>
-            
+
             {/* Year Selector */}
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSelectedYear(selectedYear - 1)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setSelectedYear(selectedYear - 1)}>
                 {selectedYear - 1}
               </Button>
               <Button variant="default" size="sm">
@@ -115,11 +111,8 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Analytics Dashboard */}
-      <AnalyticsDashboard 
-        events={events} 
-        year={selectedYear} 
-      />
-      
+      <AnalyticsDashboard events={events} year={selectedYear} />
+
       {/* Quick Actions */}
       <div className="container mx-auto px-6 pb-6">
         <Card>
@@ -128,14 +121,12 @@ export default function AnalyticsPage() {
               <Calendar className="w-5 h-5" />
               Quick Actions
             </CardTitle>
-            <CardDescription>
-              Jump to different views and features
-            </CardDescription>
+            <CardDescription>Jump to different views and features</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => router.push('/')}
                 className="justify-start h-auto p-4"
               >
@@ -144,8 +135,8 @@ export default function AnalyticsPage() {
                   <div className="text-sm text-muted-foreground">Back to main calendar</div>
                 </div>
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => router.push('/test-enhanced-calendar')}
                 className="justify-start h-auto p-4"
               >
@@ -154,8 +145,8 @@ export default function AnalyticsPage() {
                   <div className="text-sm text-muted-foreground">Test new capabilities</div>
                 </div>
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => router.push('/settings')}
                 className="justify-start h-auto p-4"
               >
@@ -169,5 +160,5 @@ export default function AnalyticsPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

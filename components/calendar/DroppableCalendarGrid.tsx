@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { useDroppable } from '@dnd-kit/core'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
+import { useDroppable } from '@dnd-kit/core';
+import type React from 'react';
 
 interface DroppableCalendarGridProps {
-  id: string
-  date: Date
-  hour?: number
-  children?: React.ReactNode
-  className?: string
-  isOver?: boolean
-  canDrop?: boolean
+  id: string;
+  date: Date;
+  hour?: number;
+  children?: React.ReactNode;
+  className?: string;
+  isOver?: boolean;
+  canDrop?: boolean;
 }
 
 export function DroppableCalendarGrid({
@@ -21,19 +21,19 @@ export function DroppableCalendarGrid({
   children,
   className,
   isOver: externalIsOver,
-  canDrop = true
+  canDrop = true,
 }: DroppableCalendarGridProps) {
   const { isOver, setNodeRef } = useDroppable({
     id,
     data: {
       date,
       hour,
-      type: 'calendar-grid'
+      type: 'calendar-grid',
     },
-    disabled: !canDrop
-  })
+    disabled: !canDrop,
+  });
 
-  const isHighlighted = isOver || externalIsOver
+  const isHighlighted = isOver || externalIsOver;
 
   return (
     <div
@@ -53,5 +53,5 @@ export function DroppableCalendarGrid({
         <div className="absolute inset-0 border-2 border-blue-500 border-dashed rounded pointer-events-none animate-pulse" />
       )}
     </div>
-  )
+  );
 }

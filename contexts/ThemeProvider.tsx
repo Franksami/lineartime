@@ -1,13 +1,14 @@
-'use client'
+'use client';
 
-import React, { useEffect } from 'react';
-import { useSettingsContext } from './SettingsContext';
-import { 
-  applyAppearanceSettings, 
-  setupThemeListener,
+import {
+  applyAppearanceSettings,
+  getSystemReducedMotion,
   setupReducedMotionListener,
-  getSystemReducedMotion 
+  setupThemeListener,
 } from '@/lib/settings/theme-manager';
+import type React from 'react';
+import { useEffect } from 'react';
+import { useSettingsContext } from './SettingsContext';
 
 /**
  * Theme Provider Component
@@ -23,15 +24,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Listen for system theme changes
   useEffect(() => {
-    const cleanup = setupThemeListener(
-      settings.appearance.theme,
-      () => {
-        // Re-apply theme when system preference changes
-        if (settings.appearance.theme === 'system') {
-          applyAppearanceSettings(settings.appearance);
-        }
+    const cleanup = setupThemeListener(settings.appearance.theme, () => {
+      // Re-apply theme when system preference changes
+      if (settings.appearance.theme === 'system') {
+        applyAppearanceSettings(settings.appearance);
       }
-    );
+    });
 
     return cleanup;
   }, [settings.appearance]);

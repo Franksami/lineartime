@@ -4,10 +4,10 @@
  */
 
 import { AnimationLoop } from './AnimationLoop';
+import { MemoryManager, type MemoryMetrics } from './MemoryManager';
+import { ObjectPool } from './ObjectPool';
 import { RenderQueueManager } from './RenderQueueManager';
 import { VirtualizationManager } from './VirtualizationManager';
-import { MemoryManager, MemoryMetrics } from './MemoryManager';
-import { ObjectPool } from './ObjectPool';
 
 export interface PerformanceMetrics {
   // Frame metrics
@@ -17,35 +17,35 @@ export interface PerformanceMetrics {
   frameTimeMax: number;
   droppedFrames: number;
   jitter: number;
-  
+
   // Memory metrics
   heapUsed: number;
   heapTotal: number;
   domNodes: number;
   eventListeners: number;
   leakRisk: number;
-  
+
   // Render metrics
   renderTasks: number;
   renderQueueSize: number;
   renderEfficiency: number;
-  
+
   // Virtualization metrics
   totalItems: number;
   visibleItems: number;
   renderedItems: number;
   virtualizationEfficiency: number;
-  
+
   // Object pool metrics
   poolHitRate: number;
   poolSize: number;
   poolUtilization: number;
-  
+
   // System metrics
   cpuUsage: number;
   networkLatency: number;
   storageUsage: number;
-  
+
   // Quality scores
   performanceScore: number; // 0-100
   qualityScore: number; // 0-100
@@ -82,12 +82,12 @@ export class PerformanceMonitor {
   private monitoringInterval: NodeJS.Timeout | null = null;
   private metricsHistory: PerformanceMetrics[] = [];
   private maxHistorySize = 60; // 1 minute of data at 1 sample/second
-  
+
   // Performance tracking
   private lastMeasurement = 0;
   private measurementInterval = 1000; // 1 second
   private performanceObserver: PerformanceObserver | null = null;
-  
+
   // Subsystem references
   private animationLoop = AnimationLoop.getInstance();
   private renderQueue = RenderQueueManager.getInstance();
@@ -104,7 +104,7 @@ export class PerformanceMonitor {
     if (typeof window === 'undefined') {
       return {} as PerformanceMonitor; // Return empty object for server-side compatibility
     }
-    
+
     if (!PerformanceMonitor.instance) {
       PerformanceMonitor.instance = new PerformanceMonitor();
     }
@@ -117,13 +117,13 @@ export class PerformanceMonitor {
   private init(): void {
     // Skip initialization if running on server side
     if (typeof window === 'undefined') return;
-    
+
     // Subscribe to subsystem metrics
     this.subscribeToSubsystems();
-    
+
     // Setup Performance Observer API
     this.setupPerformanceObserver();
-    
+
     // Start monitoring loop
     this.startMonitoring();
   }
@@ -140,7 +140,7 @@ export class PerformanceMonitor {
       this.metrics.droppedFrames = metrics.droppedFrames;
       this.metrics.jitter = metrics.jitter;
     });
-    
+
     // Memory manager metrics
     this.memoryManager.subscribe((metrics: MemoryMetrics) => {
       this.metrics.heapUsed = metrics.heapUsed;
@@ -149,14 +149,11 @@ export class PerformanceMonitor {
       this.metrics.eventListeners = metrics.eventListeners;
       this.metrics.leakRisk = metrics.leakRisk;
     });
-    
+
     // Render queue metrics
     this.renderQueue.subscribe((metrics) => {
       this.metrics.renderTasks = metrics.completedTasks;
-      this.metrics.droppedFrames = Math.max(
-        this.metrics.droppedFrames,
-        metrics.droppedFrames
-      );
+      this.metrics.droppedFrames = Math.max(this.metrics.droppedFrames, metrics.droppedFrames);
     });
   }
 
@@ -165,12 +162,13 @@ export class PerformanceMonitor {
    */
   private setupPerformanceObserver(): void {
     if (typeof PerformanceObserver === 'undefined') return;
-    
+
     try {
       // Observe long tasks
       this.performanceObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          if (entry.duration > 50) { // Long task threshold
+          if (entry.duration > 50) {
+            // Long task threshold
             this.createAlert({
               severity: 'warning',
               category: 'frame',
@@ -181,9 +179,9 @@ export class PerformanceMonitor {
           }
         }
       });
-      
+
       this.performanceObserver.observe({ entryTypes: ['longtask', 'measure'] });
-    } catch (error) {
+    } catch (_error) {
       console.warn('PerformanceObserver not fully supported');
     }
   }
@@ -193,7 +191,7 @@ export class PerformanceMonitor {
    */
   private startMonitoring(): void {
     if (this.monitoringInterval) return;
-    
+
     this.monitoringInterval = setInterval(() => {
       this.collectMetrics();
       this.analyzeMetrics();
@@ -210,7 +208,7 @@ export class PerformanceMonitor {
       clearInterval(this.monitoringInterval);
       this.monitoringInterval = null;
     }
-    
+
     if (this.performanceObserver) {
       this.performanceObserver.disconnect();
       this.performanceObserver = null;
@@ -222,36 +220,37 @@ export class PerformanceMonitor {
    */
   private collectMetrics(): void {
     const now = performance.now();
-    
+
     // Get render queue metrics
     const queueSizes = this.renderQueue.getQueueSizes();
-    this.metrics.renderQueueSize = Array.from(queueSizes.values())
-      .reduce((sum, size) => sum + size, 0);
-    
+    this.metrics.renderQueueSize = Array.from(queueSizes.values()).reduce(
+      (sum, size) => sum + size,
+      0
+    );
+
     // Get memory metrics
     const memoryMetrics = this.memoryManager.getMetrics();
     Object.assign(this.metrics, memoryMetrics);
-    
+
     // Get resource stats
-    const resourceStats = this.memoryManager.getResourceStats();
-    
+    const _resourceStats = this.memoryManager.getResourceStats();
+
     // Calculate efficiency metrics
-    this.metrics.renderEfficiency = this.metrics.renderTasks > 0
-      ? 1 - (this.metrics.droppedFrames / this.metrics.renderTasks)
-      : 1;
-    
+    this.metrics.renderEfficiency =
+      this.metrics.renderTasks > 0 ? 1 - this.metrics.droppedFrames / this.metrics.renderTasks : 1;
+
     // Get CPU usage (approximate)
     this.metrics.cpuUsage = this.estimateCPUUsage();
-    
+
     // Get network latency
     this.metrics.networkLatency = this.measureNetworkLatency();
-    
+
     // Get storage usage
     this.metrics.storageUsage = this.getStorageUsage();
-    
+
     // Calculate quality scores
     this.calculateQualityScores();
-    
+
     this.lastMeasurement = now;
   }
 
@@ -260,7 +259,7 @@ export class PerformanceMonitor {
    */
   private analyzeMetrics(): void {
     const { thresholds, metrics } = this;
-    
+
     // Check FPS
     if (metrics.fps < thresholds.fps.min) {
       this.createAlert({
@@ -272,7 +271,7 @@ export class PerformanceMonitor {
         recommendation: 'Reduce rendering complexity or enable optimizations',
       });
     }
-    
+
     // Check frame time
     if (metrics.frameTimeAvg > thresholds.frameTime.max) {
       this.createAlert({
@@ -284,7 +283,7 @@ export class PerformanceMonitor {
         recommendation: 'Optimize rendering pipeline',
       });
     }
-    
+
     // Check memory
     if (metrics.heapUsed > thresholds.memory.warning) {
       const severity = metrics.heapUsed > thresholds.memory.max ? 'error' : 'warning';
@@ -297,7 +296,7 @@ export class PerformanceMonitor {
         recommendation: 'Clean up unused resources and optimize memory usage',
       });
     }
-    
+
     // Check DOM nodes
     if (metrics.domNodes > thresholds.domNodes.warning) {
       this.createAlert({
@@ -309,7 +308,7 @@ export class PerformanceMonitor {
         recommendation: 'Use virtualization for long lists',
       });
     }
-    
+
     // Check render queue
     if (metrics.renderQueueSize > thresholds.renderQueue.warning) {
       this.createAlert({
@@ -321,7 +320,7 @@ export class PerformanceMonitor {
         recommendation: 'Reduce render task complexity',
       });
     }
-    
+
     // Check for memory leaks
     if (metrics.leakRisk > 0.7) {
       this.createAlert({
@@ -340,45 +339,45 @@ export class PerformanceMonitor {
    */
   private calculateQualityScores(): void {
     const { metrics, thresholds } = this;
-    
+
     // Performance score (0-100)
     let perfScore = 100;
-    
+
     // FPS impact (40% weight)
     const fpsRatio = metrics.fps / thresholds.fps.target;
     perfScore -= (1 - Math.min(fpsRatio, 1)) * 40;
-    
+
     // Frame time impact (30% weight)
     const frameTimeRatio = thresholds.frameTime.max / Math.max(metrics.frameTimeAvg, 1);
     perfScore -= (1 - Math.min(frameTimeRatio, 1)) * 30;
-    
+
     // Memory impact (20% weight)
     const memoryRatio = (thresholds.memory.max - metrics.heapUsed) / thresholds.memory.max;
     perfScore -= (1 - Math.max(memoryRatio, 0)) * 20;
-    
+
     // Efficiency impact (10% weight)
     perfScore -= (1 - metrics.renderEfficiency) * 10;
-    
+
     this.metrics.performanceScore = Math.max(0, Math.min(100, perfScore));
-    
+
     // Quality score (0-100)
     let qualityScore = 100;
-    
+
     // No dropped frames (30% weight)
     qualityScore -= Math.min(metrics.droppedFrames, 30);
-    
+
     // Low jitter (20% weight)
     qualityScore -= Math.min(metrics.jitter, 20);
-    
+
     // Memory health (25% weight)
     qualityScore -= metrics.leakRisk * 25;
-    
+
     // DOM efficiency (25% weight)
     const domEfficiency = Math.min(metrics.domNodes / thresholds.domNodes.max, 1);
     qualityScore -= domEfficiency * 25;
-    
+
     this.metrics.qualityScore = Math.max(0, Math.min(100, qualityScore));
-    
+
     // Overall health
     const overallScore = (this.metrics.performanceScore + this.metrics.qualityScore) / 2;
     if (overallScore >= 90) {
@@ -410,7 +409,7 @@ export class PerformanceMonitor {
   private measureNetworkLatency(): number {
     // Skip measurement if running on server side
     if (typeof window === 'undefined') return 0;
-    
+
     // Use Navigation Timing API if available
     if ('performance' in window && 'timing' in performance) {
       const timing = performance.timing;
@@ -443,16 +442,16 @@ export class PerformanceMonitor {
       timestamp: Date.now(),
       ...alert,
     };
-    
+
     this.alerts.push(fullAlert);
-    
+
     // Trim alerts
     if (this.alerts.length > this.maxAlerts) {
       this.alerts.shift();
     }
-    
+
     // Notify alert observers
-    this.alertObservers.forEach(observer => observer(fullAlert));
+    this.alertObservers.forEach((observer) => observer(fullAlert));
   }
 
   /**
@@ -460,7 +459,7 @@ export class PerformanceMonitor {
    */
   private updateHistory(): void {
     this.metricsHistory.push({ ...this.metrics });
-    
+
     if (this.metricsHistory.length > this.maxHistorySize) {
       this.metricsHistory.shift();
     }
@@ -518,7 +517,7 @@ export class PerformanceMonitor {
    * Notify observers
    */
   private notifyObservers(): void {
-    this.observers.forEach(observer => observer({ ...this.metrics }));
+    this.observers.forEach((observer) => observer({ ...this.metrics }));
   }
 
   /**
@@ -540,7 +539,7 @@ export class PerformanceMonitor {
    */
   getAlerts(severity?: PerformanceAlert['severity']): PerformanceAlert[] {
     if (severity) {
-      return this.alerts.filter(alert => alert.severity === severity);
+      return this.alerts.filter((alert) => alert.severity === severity);
     }
     return [...this.alerts];
   }
@@ -580,12 +579,12 @@ export class PerformanceMonitor {
    */
   generateReport(): string {
     const { metrics, metricsHistory } = this;
-    
+
     // Calculate trends
     const recentMetrics = metricsHistory.slice(-10);
     const avgFPS = recentMetrics.reduce((sum, m) => sum + m.fps, 0) / recentMetrics.length;
     const avgMemory = recentMetrics.reduce((sum, m) => sum + m.heapUsed, 0) / recentMetrics.length;
-    
+
     return `
 Performance Report
 ==================
@@ -615,9 +614,9 @@ Queue Size: ${metrics.renderQueueSize}
 Efficiency: ${(metrics.renderEfficiency * 100).toFixed(1)}%
 
 Recent Alerts: ${this.alerts.length}
-Critical: ${this.alerts.filter(a => a.severity === 'critical').length}
-Errors: ${this.alerts.filter(a => a.severity === 'error').length}
-Warnings: ${this.alerts.filter(a => a.severity === 'warning').length}
+Critical: ${this.alerts.filter((a) => a.severity === 'critical').length}
+Errors: ${this.alerts.filter((a) => a.severity === 'error').length}
+Warnings: ${this.alerts.filter((a) => a.severity === 'warning').length}
     `.trim();
   }
 }

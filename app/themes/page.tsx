@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ThemeSelector } from '@/components/theme/theme-selector'
-import { CustomThemeCreator } from '@/components/theme/custom-theme-creator'
-import { ArrowLeft, Palette, Sparkles, Eye, Download } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { CustomThemeCreator } from '@/components/theme/custom-theme-creator';
+import { ThemeSelector } from '@/components/theme/theme-selector';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, Download, Eye, Palette, Sparkles } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 export default function ThemesPage() {
-  const router = useRouter()
-  const [showThemeSelector, setShowThemeSelector] = useState(true)
-  const [showCustomCreator, setShowCustomCreator] = useState(false)
+  const router = useRouter();
+  const [showThemeSelector, setShowThemeSelector] = useState(true);
+  const [showCustomCreator, setShowCustomCreator] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -20,9 +20,9 @@ export default function ThemesPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => router.back()}
                 className="flex items-center gap-2"
               >
@@ -34,25 +34,25 @@ export default function ThemesPage() {
                 <h1 className="text-xl font-semibold">Theme Manager</h1>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <Button
-                variant={showThemeSelector ? "default" : "outline"}
+                variant={showThemeSelector ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => {
-                  setShowThemeSelector(true)
-                  setShowCustomCreator(false)
+                  setShowThemeSelector(true);
+                  setShowCustomCreator(false);
                 }}
               >
                 <Eye className="w-4 h-4 mr-2" />
                 Browse Themes
               </Button>
               <Button
-                variant={showCustomCreator ? "default" : "outline"}
+                variant={showCustomCreator ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => {
-                  setShowThemeSelector(false)
-                  setShowCustomCreator(true)
+                  setShowThemeSelector(false);
+                  setShowCustomCreator(true);
                 }}
               >
                 <Sparkles className="w-4 h-4 mr-2" />
@@ -75,7 +75,8 @@ export default function ThemesPage() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Choose from carefully crafted preset themes including Light, Dark, High Contrast, and more accessibility-focused options.
+                Choose from carefully crafted preset themes including Light, Dark, High Contrast,
+                and more accessibility-focused options.
               </p>
             </CardContent>
           </Card>
@@ -89,7 +90,8 @@ export default function ThemesPage() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Create your own themes with live preview, color palette customization, and real-time updates to see changes instantly.
+                Create your own themes with live preview, color palette customization, and real-time
+                updates to see changes instantly.
               </p>
             </CardContent>
           </Card>
@@ -103,7 +105,8 @@ export default function ThemesPage() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                All themes are automatically saved to your browser and sync across sessions. Export and import theme configurations.
+                All themes are automatically saved to your browser and sync across sessions. Export
+                and import theme configurations.
               </p>
             </CardContent>
           </Card>
@@ -111,16 +114,14 @@ export default function ThemesPage() {
 
         {/* Theme Interface */}
         <div className="flex justify-center">
-          {showThemeSelector && (
-            <ThemeSelector onClose={() => setShowThemeSelector(false)} />
-          )}
-          
+          {showThemeSelector && <ThemeSelector onClose={() => setShowThemeSelector(false)} />}
+
           {showCustomCreator && (
-            <CustomThemeCreator 
+            <CustomThemeCreator
               onClose={() => setShowCustomCreator(false)}
               onBack={() => {
-                setShowCustomCreator(false)
-                setShowThemeSelector(true)
+                setShowCustomCreator(false);
+                setShowThemeSelector(true);
               }}
             />
           )}
@@ -131,36 +132,38 @@ export default function ThemesPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">How to Use Themes</CardTitle>
-              <CardDescription>
-                Get the most out of the advanced theme system
-              </CardDescription>
+              <CardDescription>Get the most out of the advanced theme system</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <h4 className="font-medium">🎨 Browsing Themes</h4>
                 <p className="text-sm text-muted-foreground">
-                  Click on any theme preview to apply it instantly. The current theme is highlighted with a checkmark.
+                  Click on any theme preview to apply it instantly. The current theme is highlighted
+                  with a checkmark.
                 </p>
               </div>
-              
+
               <div className="space-y-2">
                 <h4 className="font-medium">✨ Creating Custom Themes</h4>
                 <p className="text-sm text-muted-foreground">
-                  Use the custom theme creator to design your own color palette. All changes are previewed in real-time.
+                  Use the custom theme creator to design your own color palette. All changes are
+                  previewed in real-time.
                 </p>
               </div>
-              
+
               <div className="space-y-2">
                 <h4 className="font-medium">🗑️ Managing Custom Themes</h4>
                 <p className="text-sm text-muted-foreground">
-                  Hover over custom themes to see the delete button. Preset themes cannot be deleted.
+                  Hover over custom themes to see the delete button. Preset themes cannot be
+                  deleted.
                 </p>
               </div>
-              
+
               <div className="space-y-2">
                 <h4 className="font-medium">♿ Accessibility</h4>
                 <p className="text-sm text-muted-foreground">
-                  High contrast themes are available for better accessibility. All themes meet WCAG color contrast requirements.
+                  High contrast themes are available for better accessibility. All themes meet WCAG
+                  color contrast requirements.
                 </p>
               </div>
             </CardContent>
@@ -168,5 +171,5 @@ export default function ThemesPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

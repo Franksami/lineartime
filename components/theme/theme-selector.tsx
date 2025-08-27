@@ -1,22 +1,23 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Palette, Check, Plus, Trash2 } from "lucide-react"
-import { useThemeManager, type ThemeConfig } from "@/lib/theme-manager"
-import { CustomThemeCreator } from "./custom-theme-creator"
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { type ThemeConfig, useThemeManager } from '@/lib/theme-manager';
+import { Check, Palette, Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { CustomThemeCreator } from './custom-theme-creator';
 
 interface ThemeSelectorProps {
-  onClose: () => void
+  onClose: () => void;
 }
 
 export function ThemeSelector({ onClose }: ThemeSelectorProps) {
-  const { currentTheme, presetThemes, customThemes, switchTheme, deleteCustomTheme } = useThemeManager()
-  const [showCustomCreator, setShowCustomCreator] = useState(false)
+  const { currentTheme, presetThemes, customThemes, switchTheme, deleteCustomTheme } =
+    useThemeManager();
+  const [showCustomCreator, setShowCustomCreator] = useState(false);
 
-  const allThemes = [...presetThemes, ...customThemes]
+  const _allThemes = [...presetThemes, ...customThemes];
 
   const ThemePreview = ({ theme }: { theme: ThemeConfig }) => (
     <div
@@ -43,10 +44,15 @@ export function ThemeSelector({ onClose }: ThemeSelectorProps) {
         </div>
       )}
     </div>
-  )
+  );
 
   if (showCustomCreator) {
-    return <CustomThemeCreator onClose={() => setShowCustomCreator(false)} onBack={() => setShowCustomCreator(false)} />
+    return (
+      <CustomThemeCreator
+        onClose={() => setShowCustomCreator(false)}
+        onBack={() => setShowCustomCreator(false)}
+      />
+    );
   }
 
   return (
@@ -102,8 +108,8 @@ export function ThemeSelector({ onClose }: ThemeSelectorProps) {
                       size="sm"
                       className="absolute top-1 right-1 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
                       onClick={(e) => {
-                        e.stopPropagation()
-                        deleteCustomTheme(theme.id)
+                        e.stopPropagation();
+                        deleteCustomTheme(theme.id);
                       }}
                     >
                       <Trash2 className="w-3 h-3" />
@@ -136,5 +142,5 @@ export function ThemeSelector({ onClose }: ThemeSelectorProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

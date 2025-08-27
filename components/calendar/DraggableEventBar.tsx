@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { useDraggable } from '@dnd-kit/core'
-import { CSS } from '@dnd-kit/utilities'
-import { cn } from '@/lib/utils'
-import type { Event } from '@/types/calendar'
-import { differenceInDays, format } from 'date-fns'
+import { cn } from '@/lib/utils';
+import type { Event } from '@/types/calendar';
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
+import { differenceInDays, format } from 'date-fns';
+import React from 'react';
 
 interface DraggableEventBarProps {
-  event: Event
-  startColumn: number
-  endColumn: number
-  row: number
-  onEventClick?: (event: Event) => void
-  cellWidth?: number
-  cellHeight?: number
-  isDragging?: boolean
+  event: Event;
+  startColumn: number;
+  endColumn: number;
+  row: number;
+  onEventClick?: (event: Event) => void;
+  cellWidth?: number;
+  cellHeight?: number;
+  isDragging?: boolean;
 }
 
 const categoryColors = {
@@ -23,7 +23,7 @@ const categoryColors = {
   work: 'bg-secondary hover:bg-secondary/80 text-secondary-foreground',
   effort: 'bg-accent hover:bg-accent/80 text-accent-foreground',
   note: 'bg-muted hover:bg-muted/80 text-muted-foreground',
-} as const
+} as const;
 
 export function DraggableEventBar({
   event,
@@ -47,17 +47,15 @@ export function DraggableEventBar({
       event,
       type: 'event',
     },
-  })
-  
-  const width = (endColumn - startColumn + 1) * cellWidth - 4
-  const left = startColumn * cellWidth + 2
-  const top = row * 20 + 18
-  
-  const duration = differenceInDays(event.endDate, event.startDate) + 1
-  const timeText = duration === 1 
-    ? format(event.startDate, 'HH:mm')
-    : `${duration}d`
-  
+  });
+
+  const width = (endColumn - startColumn + 1) * cellWidth - 4;
+  const left = startColumn * cellWidth + 2;
+  const top = row * 20 + 18;
+
+  const duration = differenceInDays(event.endDate, event.startDate) + 1;
+  const timeText = duration === 1 ? format(event.startDate, 'HH:mm') : `${duration}d`;
+
   const style = {
     left: `${left}px`,
     top: `${top}px`,
@@ -66,7 +64,7 @@ export function DraggableEventBar({
     transform: CSS.Translate.toString(transform),
     opacity: isCurrentlyDragging ? 0.5 : 1,
     cursor: isCurrentlyDragging ? 'grabbing' : 'grab',
-  }
+  };
 
   return (
     <div
@@ -83,8 +81,8 @@ export function DraggableEventBar({
       {...attributes}
       onClick={(e) => {
         if (!isCurrentlyDragging) {
-          e.stopPropagation()
-          onEventClick?.(event)
+          e.stopPropagation();
+          onEventClick?.(event);
         }
       }}
       title={`${event.title} (${format(event.startDate, 'MMM d')} - ${format(event.endDate, 'MMM d')})`}
@@ -92,5 +90,5 @@ export function DraggableEventBar({
       <span className="truncate flex-1">{event.title}</span>
       <span className="text-[10px] opacity-80">{timeText}</span>
     </div>
-  )
+  );
 }

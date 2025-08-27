@@ -1,8 +1,8 @@
-import { headers } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
-import { Webhook } from 'svix';
 import { api } from '@/convex/_generated/api';
 import { fetchMutation } from 'convex/nextjs';
+import { headers } from 'next/headers';
+import { type NextRequest, NextResponse } from 'next/server';
+import { Webhook } from 'svix';
 
 const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
 
@@ -32,10 +32,7 @@ export async function POST(request: NextRequest) {
 
     // If there are no headers, error out
     if (!svix_id || !svix_timestamp || !svix_signature) {
-      return NextResponse.json(
-        { error: 'Missing svix headers' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing svix headers' }, { status: 400 });
     }
 
     // Get the body
@@ -43,10 +40,7 @@ export async function POST(request: NextRequest) {
 
     // Create a new Svix instance with your webhook secret
     if (!webhookSecret) {
-      return NextResponse.json(
-        { error: 'Webhook secret not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
     }
     const wh = new Webhook(webhookSecret);
 
@@ -61,10 +55,7 @@ export async function POST(request: NextRequest) {
       }) as ClerkWebhookEvent;
     } catch (err) {
       console.error('Error verifying webhook:', err);
-      return NextResponse.json(
-        { error: 'Invalid webhook signature' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 400 });
     }
 
     // Handle the webhook
@@ -78,15 +69,13 @@ export async function POST(request: NextRequest) {
         const primaryEmailObj = data.email_addresses?.find(
           (email) => email.primary === true || email.is_primary === true
         );
-        const primaryEmail = primaryEmailObj?.email_address || 
+        const primaryEmail =
+          primaryEmailObj?.email_address ||
           data.email_addresses?.find((email) => email.email_address)?.email_address;
 
         if (!primaryEmail) {
           console.error('No primary email found for user:', data.id);
-          return NextResponse.json(
-            { error: 'No primary email found' },
-            { status: 400 }
-          );
+          return NextResponse.json({ error: 'No primary email found' }, { status: 400 });
         }
 
         await fetchMutation(api.clerk.upsertFromClerk, {
@@ -97,7 +86,10 @@ export async function POST(request: NextRequest) {
           imageUrl: data.image_url || undefined,
         });
 
-        console.log(`Successfully ${type === 'user.created' ? 'created' : 'updated'} user:`, data.id);
+        console.log(
+          `Successfully ${type === 'user.created' ? 'created' : 'updated'} user:`,
+          data.id
+        );
         break;
       }
 
@@ -117,11 +109,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error processing Clerk webhook:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
-
-

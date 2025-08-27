@@ -1,30 +1,26 @@
-export type CalendarLibrary = 
-  | 'linear'              // LinearCalendarHorizontal (foundation)
-  | 'fullcalendar'        // FullCalendar Pro
-  | 'toastui'             // Toast UI Calendar
-  | 'reactbigcalendar'    // React Big Calendar
-  | 'reactinfinite'       // React Infinite Calendar
-  | 'primereact'          // PrimeReact Calendar
-  | 'muix'                // MUI X Date Pickers
-  | 'reactcalendar'       // React Calendar
-  | 'reactdatepicker'     // React DatePicker
-  | 'reactdaypicker';     // React Day Picker
+export type CalendarLibrary =
+  | 'linear' // LinearCalendarHorizontal (foundation)
+  | 'fullcalendar' // FullCalendar Pro
+  | 'toastui' // Toast UI Calendar
+  | 'reactbigcalendar' // React Big Calendar
+  | 'reactinfinite' // React Infinite Calendar
+  | 'primereact' // PrimeReact Calendar
+  | 'muix' // MUI X Date Pickers
+  | 'reactcalendar' // React Calendar
+  | 'reactdatepicker' // React DatePicker
+  | 'reactdaypicker'; // React Day Picker
 
-export type CalendarView = 
-  | 'day' 
-  | 'week' 
-  | 'month' 
-  | 'year' 
-  | 'agenda' 
+export type CalendarView =
+  | 'day'
+  | 'week'
+  | 'month'
+  | 'year'
+  | 'agenda'
   | 'timeline'
   | 'progress'
   | 'linear';
 
-export type CalendarTheme = 
-  | 'light' 
-  | 'dark' 
-  | 'auto' 
-  | 'custom';
+export type CalendarTheme = 'light' | 'dark' | 'auto' | 'custom';
 
 export interface CalendarEvent {
   id: string;
@@ -50,7 +46,7 @@ export interface CalendarEvent {
   draggable?: boolean;
   resourceId?: string;
   extendedProps?: Record<string, any>;
-  
+
   // Toast UI Calendar specific properties
   isPrivate?: boolean;
   isPending?: boolean;
@@ -111,26 +107,26 @@ export interface CalendarContextType {
   // Library management
   selectedLibrary: CalendarLibrary;
   switchLibrary: (library: CalendarLibrary) => void;
-  
+
   // View management
   currentView: CalendarView;
   switchView: (view: CalendarView) => void;
-  
+
   // Date management
   selectedDate: Date;
   navigateToDate: (date: Date) => void;
-  
+
   // Theme management
   theme: CalendarTheme;
   switchTheme: (theme: CalendarTheme) => void;
-  
+
   // Event management
   events: CalendarEvent[];
   onEventCreate: (event: Partial<CalendarEvent>) => Promise<void>;
   onEventUpdate: (eventId: string, updates: Partial<CalendarEvent>) => Promise<void>;
   onEventDelete: (eventId: string) => Promise<void>;
   loading: boolean;
-  
+
   // Sync management
   syncStatus: 'idle' | 'syncing' | 'success' | 'error';
   syncCalendar: (providerId: string) => Promise<void>;

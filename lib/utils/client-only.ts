@@ -9,42 +9,42 @@
 export const safeLocalStorage = {
   getItem: (key: string): string | null => {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
-      return null
+      return null;
     }
     try {
-      return localStorage.getItem(key)
+      return localStorage.getItem(key);
     } catch (error) {
-      console.warn('localStorage.getItem failed:', error)
-      return null
+      console.warn('localStorage.getItem failed:', error);
+      return null;
     }
   },
 
   setItem: (key: string, value: string): boolean => {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
-      return false
+      return false;
     }
     try {
-      localStorage.setItem(key, value)
-      return true
+      localStorage.setItem(key, value);
+      return true;
     } catch (error) {
-      console.warn('localStorage.setItem failed:', error)
-      return false
+      console.warn('localStorage.setItem failed:', error);
+      return false;
     }
   },
 
   removeItem: (key: string): boolean => {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
-      return false
+      return false;
     }
     try {
-      localStorage.removeItem(key)
-      return true
+      localStorage.removeItem(key);
+      return true;
     } catch (error) {
-      console.warn('localStorage.removeItem failed:', error)
-      return false
+      console.warn('localStorage.removeItem failed:', error);
+      return false;
     }
-  }
-}
+  },
+};
 
 /**
  * Safely access sessionStorage with fallback for SSR
@@ -52,83 +52,83 @@ export const safeLocalStorage = {
 export const safeSessionStorage = {
   getItem: (key: string): string | null => {
     if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') {
-      return null
+      return null;
     }
     try {
-      return sessionStorage.getItem(key)
+      return sessionStorage.getItem(key);
     } catch (error) {
-      console.warn('sessionStorage.getItem failed:', error)
-      return null
+      console.warn('sessionStorage.getItem failed:', error);
+      return null;
     }
   },
 
   setItem: (key: string, value: string): boolean => {
     if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') {
-      return false
+      return false;
     }
     try {
-      sessionStorage.setItem(key, value)
-      return true
+      sessionStorage.setItem(key, value);
+      return true;
     } catch (error) {
-      console.warn('sessionStorage.setItem failed:', error)
-      return false
+      console.warn('sessionStorage.setItem failed:', error);
+      return false;
     }
   },
 
   removeItem: (key: string): boolean => {
     if (typeof window === 'undefined' || typeof sessionStorage === 'undefined') {
-      return false
+      return false;
     }
     try {
-      sessionStorage.removeItem(key)
-      return true
+      sessionStorage.removeItem(key);
+      return true;
     } catch (error) {
-      console.warn('sessionStorage.removeItem failed:', error)
-      return false
+      console.warn('sessionStorage.removeItem failed:', error);
+      return false;
     }
-  }
-}
+  },
+};
 
 /**
  * Check if code is running on client-side
  */
 export const isClient = (): boolean => {
-  return typeof window !== 'undefined'
-}
+  return typeof window !== 'undefined';
+};
 
 /**
  * Check if code is running on server-side
  */
 export const isServer = (): boolean => {
-  return typeof window === 'undefined'
-}
+  return typeof window === 'undefined';
+};
 
 /**
  * Safely access window object with fallback for SSR
  */
 export const safeWindow = (): Window | null => {
-  return typeof window !== 'undefined' ? window : null
-}
+  return typeof window !== 'undefined' ? window : null;
+};
 
 /**
  * Safely access document object with fallback for SSR
  */
 export const safeDocument = (): Document | null => {
-  return typeof document !== 'undefined' ? document : null
-}
+  return typeof document !== 'undefined' ? document : null;
+};
 
 /**
  * Hook to check if component has mounted on client-side
  */
 export const useIsClient = () => {
-  const [isClientSide, setIsClientSide] = React.useState(false)
+  const [isClientSide, setIsClientSide] = React.useState(false);
 
   React.useEffect(() => {
-    setIsClientSide(true)
-  }, [])
+    setIsClientSide(true);
+  }, []);
 
-  return isClientSide
-}
+  return isClientSide;
+};
 
 // We need to import React for the hook
-import * as React from 'react'
+import * as React from 'react';

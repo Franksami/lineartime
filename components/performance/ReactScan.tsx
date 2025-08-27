@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { scan } from "react-scan";
-import { useEffect } from "react";
+import { useEffect } from 'react';
+import { scan } from 'react-scan';
 
 export function ReactScan() {
   useEffect(() => {
@@ -11,7 +11,7 @@ export function ReactScan() {
       enabled: process.env.NODE_ENV === 'development',
       log: false, // Set to true for debugging render issues
       showToolbar: true,
-      animationSpeed: "fast",
+      animationSpeed: 'fast',
       trackUnnecessaryRenders: true, // Important for animation performance
       onRender: (fiber, renders) => {
         // Optional: Custom logging for animation performance

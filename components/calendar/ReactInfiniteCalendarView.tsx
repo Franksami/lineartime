@@ -1,18 +1,13 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { CalendarViewProps, CalendarEvent } from './providers/types';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  ChevronLeft, 
-  ChevronRight,
-  Calendar as CalendarIcon,
-  Plus,
-  Settings
-} from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, Settings } from 'lucide-react';
+import type React from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import InfiniteCalendar from 'react-infinite-calendar';
+import type { CalendarEvent, CalendarViewProps } from './providers/types';
 import 'react-infinite-calendar/styles.css';
 
 interface ReactInfiniteCalendarViewProps extends CalendarViewProps {
@@ -49,23 +44,26 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
   // Process events for display
   const eventsByDate = useMemo(() => {
     const eventMap = new Map<string, CalendarEvent[]>();
-    
-    events.forEach(event => {
+
+    events.forEach((event) => {
       const dateKey = event.start.toISOString().split('T')[0];
       if (!eventMap.has(dateKey)) {
         eventMap.set(dateKey, []);
       }
-      eventMap.get(dateKey)!.push(event);
+      eventMap.get(dateKey)?.push(event);
     });
-    
+
     return eventMap;
   }, [events]);
 
   // Handle date selection
-  const handleDateSelect = useCallback((date: Date) => {
-    setSelectedDateLocal(date);
-    onDateChange(date);
-  }, [onDateChange]);
+  const handleDateSelect = useCallback(
+    (date: Date) => {
+      setSelectedDateLocal(date);
+      onDateChange(date);
+    },
+    [onDateChange]
+  );
 
   // Handle event creation for selected date
   const handleCreateEvent = useCallback(async () => {
@@ -73,7 +71,7 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
       const start = new Date(selectedDateLocal);
       const end = new Date(selectedDateLocal);
       end.setHours(start.getHours() + 1);
-      
+
       await onEventCreate({
         title: 'New Event',
         start,
@@ -88,43 +86,53 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
   // Get priority color
   const getPriorityColor = useCallback((priority?: string): string => {
     switch (priority) {
-      case 'critical': return '#ef4444';
-      case 'high': return '#f97316';
-      case 'medium': return '#eab308';
-      case 'low': return '#22c55e';
-      default: return '#6366f1';
+      case 'critical':
+        return '#ef4444';
+      case 'high':
+        return '#f97316';
+      case 'medium':
+        return '#eab308';
+      case 'low':
+        return '#22c55e';
+      default:
+        return '#6366f1';
     }
   }, []);
 
   // Custom theme for the infinite calendar
-  const calendarTheme = useMemo(() => ({
-    accentColor: theme === 'dark' ? '#6366f1' : '#4f46e5',
-    floatingNav: {
-      background: theme === 'dark' ? '#1f2937' : '#ffffff',
-      color: theme === 'dark' ? '#f9fafb' : '#111827',
-      chevron: theme === 'dark' ? '#9ca3af' : '#6b7280',
-    },
-    headerColor: theme === 'dark' ? '#1f2937' : '#f8fafc',
-    selectionColor: theme === 'dark' ? '#4338ca' : '#6366f1',
-    textColor: {
-      default: theme === 'dark' ? '#f9fafb' : '#111827',
-      active: '#ffffff',
-    },
-    todayColor: theme === 'dark' ? '#374151' : '#e5e7eb',
-    weekdayColor: theme === 'dark' ? '#6b7280' : '#9ca3af',
-  }), [theme]);
+  const calendarTheme = useMemo(
+    () => ({
+      accentColor: theme === 'dark' ? '#6366f1' : '#4f46e5',
+      floatingNav: {
+        background: theme === 'dark' ? '#1f2937' : '#ffffff',
+        color: theme === 'dark' ? '#f9fafb' : '#111827',
+        chevron: theme === 'dark' ? '#9ca3af' : '#6b7280',
+      },
+      headerColor: theme === 'dark' ? '#1f2937' : '#f8fafc',
+      selectionColor: theme === 'dark' ? '#4338ca' : '#6366f1',
+      textColor: {
+        default: theme === 'dark' ? '#f9fafb' : '#111827',
+        active: '#ffffff',
+      },
+      todayColor: theme === 'dark' ? '#374151' : '#e5e7eb',
+      weekdayColor: theme === 'dark' ? '#6b7280' : '#9ca3af',
+    }),
+    [theme]
+  );
 
   // Day component with event indicators
   const DayComponent = ({ date, isSelected, ...props }: any) => {
     const dateKey = date.toISOString().split('T')[0];
     const dayEvents = eventsByDate.get(dateKey) || [];
-    
+
     return (
-      <div className={cn(
-        'relative w-full h-full flex flex-col items-center justify-center',
-        isSelected && 'bg-primary text-primary-foreground',
-        dayEvents.length > 0 && 'font-semibold'
-      )}>
+      <div
+        className={cn(
+          'relative w-full h-full flex flex-col items-center justify-center',
+          isSelected && 'bg-primary text-primary-foreground',
+          dayEvents.length > 0 && 'font-semibold'
+        )}
+      >
         <span className="text-sm">{date.getDate()}</span>
         {dayEvents.length > 0 && (
           <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex gap-1">
@@ -154,7 +162,7 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
       {loading && (
         <div className="absolute inset-0 bg-background/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="flex items-center space-x-2">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
             <span className="text-sm text-muted-foreground">Loading events...</span>
           </div>
         </div>
@@ -167,7 +175,7 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
             <CalendarIcon className="h-5 w-5 text-primary" />
             <h2 className="text-lg font-semibold">Infinite Calendar</h2>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -178,13 +186,8 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
               <Settings className="h-4 w-4 mr-1" />
               {showEvents ? 'Hide' : 'Show'} Events
             </Button>
-            
-            <Button
-              variant="default"
-              size="sm"
-              onClick={handleCreateEvent}
-              disabled={loading}
-            >
+
+            <Button variant="default" size="sm" onClick={handleCreateEvent} disabled={loading}>
               <Plus className="h-4 w-4 mr-1" />
               Add Event
             </Button>
@@ -195,7 +198,7 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Calendar Column */}
         <div className="lg:col-span-2">
-          <div 
+          <div
             className={cn(
               'infinite-calendar-container border border-border rounded-lg overflow-hidden',
               theme === 'dark' && 'bg-slate-900'
@@ -240,7 +243,7 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
                 day: 'numeric',
               })}
             </h3>
-            
+
             {selectedDateEvents.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <CalendarIcon className="h-12 w-12 mx-auto mb-3 opacity-50" />
@@ -267,40 +270,40 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-medium text-sm truncate">
-                            {event.title}
-                          </h4>
+                          <h4 className="font-medium text-sm truncate">{event.title}</h4>
                           {event.priority && (
-                            <Badge 
-                              variant="secondary" 
+                            <Badge
+                              variant="secondary"
                               className="text-xs px-1 py-0"
-                              style={{ 
-                                backgroundColor: getPriorityColor(event.priority), 
-                                color: 'white' 
+                              style={{
+                                backgroundColor: getPriorityColor(event.priority),
+                                color: 'white',
                               }}
                             >
                               {event.priority}
                             </Badge>
                           )}
                         </div>
-                        
+
                         {event.description && (
                           <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
                             {event.description}
                           </p>
                         )}
-                        
+
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           {event.allDay ? (
                             <span>All day</span>
                           ) : (
                             <span>
-                              {event.start.toLocaleTimeString('en-US', { 
-                                hour: 'numeric', 
-                                minute: '2-digit' 
-                              })} - {event.end.toLocaleTimeString('en-US', { 
-                                hour: 'numeric', 
-                                minute: '2-digit' 
+                              {event.start.toLocaleTimeString('en-US', {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                              })}{' '}
+                              -{' '}
+                              {event.end.toLocaleTimeString('en-US', {
+                                hour: 'numeric',
+                                minute: '2-digit',
                               })}
                             </span>
                           )}
@@ -312,7 +315,7 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
                           )}
                         </div>
                       </div>
-                      
+
                       <Button
                         variant="ghost"
                         size="sm"
@@ -331,7 +334,7 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
               </div>
             )}
           </div>
-          
+
           {/* Event Summary */}
           <div className="p-4 bg-card border border-border rounded-lg">
             <h4 className="font-medium mb-2">Event Summary</h4>
@@ -347,10 +350,13 @@ const ReactInfiniteCalendarView: React.FC<ReactInfiniteCalendarViewProps> = ({
               <div className="flex justify-between">
                 <span className="text-muted-foreground">This Month:</span>
                 <span className="font-medium">
-                  {events.filter(event => 
-                    event.start.getMonth() === selectedDateLocal.getMonth() &&
-                    event.start.getFullYear() === selectedDateLocal.getFullYear()
-                  ).length}
+                  {
+                    events.filter(
+                      (event) =>
+                        event.start.getMonth() === selectedDateLocal.getMonth() &&
+                        event.start.getFullYear() === selectedDateLocal.getFullYear()
+                    ).length
+                  }
                 </span>
               </div>
             </div>

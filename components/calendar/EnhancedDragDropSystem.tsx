@@ -1,97 +1,95 @@
-'use client'
+'use client';
 
-import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react'
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { notify } from '@/components/ui/notify';
+import { usePerformanceMonitor } from '@/hooks/use-performance-monitor';
+import { cn } from '@/lib/utils';
+import type { Event, EventCategory } from '@/types/calendar';
 import {
+  Active,
   DndContext,
+  type DragEndEvent,
+  DragOverEvent,
   DragOverlay,
+  type DragStartEvent,
+  KeyboardSensor,
+  Over,
+  PointerSensor,
+  UniqueIdentifier,
+  closestCenter,
   useDraggable,
   useDroppable,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
   useSensor,
   useSensors,
-  DragStartEvent,
-  DragEndEvent,
-  DragOverEvent,
-  Active,
-  Over,
-  UniqueIdentifier,
-} from '@dnd-kit/core'
+} from '@dnd-kit/core';
+import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { Draggable } from '@fullcalendar/interaction';
+import { addDays, addHours, endOfDay, format, startOfDay } from 'date-fns';
 import {
-  sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable'
-import { Draggable } from '@fullcalendar/interaction'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { 
-  Calendar,
-  Users,
-  Target,
-  FileText,
-  Clock,
   AlertCircle,
-  Zap,
-  Sparkles,
-  GripVertical,
+  Calendar,
+  Clock,
   Copy,
-  Move,
-  RotateCcw,
-  MousePointer,
+  FileText,
+  GripVertical,
   Layers,
-  PlusCircle
-} from 'lucide-react'
-import { format, addDays, addHours, startOfDay, endOfDay } from 'date-fns'
-import { usePerformanceMonitor } from '@/hooks/use-performance-monitor'
-import { notify } from '@/components/ui/notify'
-import type { Event, EventCategory } from '@/types/calendar'
+  MousePointer,
+  Move,
+  PlusCircle,
+  RotateCcw,
+  Sparkles,
+  Target,
+  Users,
+  Zap,
+} from 'lucide-react';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 // Enhanced event template with AI suggestions and multi-library support
 export interface EnhancedEventTemplate {
-  id: string
-  title: string
-  category: EventCategory
-  defaultDuration: string
-  description: string
-  icon: React.ComponentType<{ className?: string }>
-  color: string
+  id: string;
+  title: string;
+  category: EventCategory;
+  defaultDuration: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
   // Enhanced properties
-  aiSuggested?: boolean
-  tags: string[]
-  priority: 'low' | 'medium' | 'high' | 'urgent'
-  recurrence?: 'none' | 'daily' | 'weekly' | 'monthly'
+  aiSuggested?: boolean;
+  tags: string[];
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  recurrence?: 'none' | 'daily' | 'weekly' | 'monthly';
   // Multi-library support
-  fullCalendarProps?: Record<string, any>
-  toastUIProps?: Record<string, any>
-  datePickerProps?: Record<string, any>
+  fullCalendarProps?: Record<string, any>;
+  toastUIProps?: Record<string, any>;
+  datePickerProps?: Record<string, any>;
 }
 
 // Draggable event wrapper for DnD Kit integration
-function DraggableEventTemplate({ template, isActive }: {
-  template: EnhancedEventTemplate
-  isActive?: boolean
+function DraggableEventTemplate({
+  template,
+  isActive,
+}: {
+  template: EnhancedEventTemplate;
+  isActive?: boolean;
 }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    isDragging,
-  } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: template.id,
     data: {
       type: 'event-template',
       template,
     },
-  })
+  });
 
-  const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  } : undefined
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
 
-  const IconComponent = template.icon
+  const IconComponent = template.icon;
 
   return (
     <div
@@ -106,12 +104,13 @@ function DraggableEventTemplate({ template, isActive }: {
         isDragging && 'opacity-50',
         isActive && 'shadow-lg ring-2 ring-primary/50',
         template.priority === 'urgent' && 'ring-2 ring-destructive/30',
-        template.aiSuggested && 'bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20'
+        template.aiSuggested &&
+          'bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20'
       )}
       style={{
         ...style,
         borderLeftColor: template.color,
-        borderLeftWidth: '4px'
+        borderLeftWidth: '4px',
       }}
     >
       {/* AI Suggested Badge */}
@@ -137,14 +136,11 @@ function DraggableEventTemplate({ template, isActive }: {
           </div>
 
           {/* Icon */}
-          <div 
+          <div
             className="p-2 rounded-md flex-shrink-0"
             style={{ backgroundColor: `${template.color}20` }}
           >
-            <IconComponent 
-              className="h-4 w-4" 
-              style={{ color: template.color }}
-            />
+            <IconComponent className="h-4 w-4" style={{ color: template.color }} />
           </div>
 
           {/* Content */}
@@ -153,11 +149,11 @@ function DraggableEventTemplate({ template, isActive }: {
             <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
               {template.description}
             </p>
-            
+
             {/* Tags */}
             {template.tags.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
-                {template.tags.slice(0, 3).map(tag => (
+                {template.tags.slice(0, 3).map((tag) => (
                   <Badge key={tag} variant="outline" className="text-xs px-1 py-0">
                     {tag}
                   </Badge>
@@ -174,15 +170,13 @@ function DraggableEventTemplate({ template, isActive }: {
 
         {/* Metadata */}
         <div className="flex flex-col items-end gap-1 flex-shrink-0">
-          <Badge 
+          <Badge
             variant={template.priority === 'urgent' ? 'destructive' : 'secondary'}
             className="text-xs capitalize"
           >
             {template.category}
           </Badge>
-          <span className="text-xs text-muted-foreground">
-            {template.defaultDuration}
-          </span>
+          <span className="text-xs text-muted-foreground">{template.defaultDuration}</span>
           {template.recurrence !== 'none' && (
             <Badge variant="outline" className="text-xs">
               <RotateCcw className="h-3 w-3 mr-1" />
@@ -204,20 +198,20 @@ function DraggableEventTemplate({ template, isActive }: {
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 // Enhanced droppable area component
-function DroppableCalendarArea({ 
-  id, 
-  children, 
+function DroppableCalendarArea({
+  id,
+  children,
   className,
-  onDrop 
+  onDrop,
 }: {
-  id: string
-  children: React.ReactNode
-  className?: string
-  onDrop?: (template: EnhancedEventTemplate, dropDate: Date) => void
+  id: string;
+  children: React.ReactNode;
+  className?: string;
+  onDrop?: (template: EnhancedEventTemplate, dropDate: Date) => void;
 }) {
   const { isOver, setNodeRef } = useDroppable({
     id,
@@ -225,7 +219,7 @@ function DroppableCalendarArea({
       type: 'calendar-drop-area',
       onDrop,
     },
-  })
+  });
 
   return (
     <div
@@ -246,7 +240,7 @@ function DroppableCalendarArea({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 // Enhanced event templates with AI suggestions
@@ -263,10 +257,10 @@ const ENHANCED_EVENT_TEMPLATES: EnhancedEventTemplate[] = [
     tags: ['focus', 'deep-work', 'productivity'],
     priority: 'high',
     recurrence: 'daily',
-    fullCalendarProps: { 
-      editable: true, 
+    fullCalendarProps: {
+      editable: true,
       backgroundColor: 'hsl(var(--chart-3))',
-      textColor: 'white'
+      textColor: 'white',
     },
     toastUIProps: { isReadOnly: false, category: 'time' },
   },
@@ -282,9 +276,9 @@ const ENHANCED_EVENT_TEMPLATES: EnhancedEventTemplate[] = [
     tags: ['meeting', 'team', 'sync'],
     priority: 'medium',
     recurrence: 'weekly',
-    fullCalendarProps: { 
+    fullCalendarProps: {
       editable: true,
-      constraint: 'businessHours'
+      constraint: 'businessHours',
     },
   },
   {
@@ -298,9 +292,9 @@ const ENHANCED_EVENT_TEMPLATES: EnhancedEventTemplate[] = [
     tags: ['deadline', 'project', 'milestone'],
     priority: 'urgent',
     recurrence: 'none',
-    fullCalendarProps: { 
+    fullCalendarProps: {
       allDay: true,
-      backgroundColor: 'hsl(var(--destructive))'
+      backgroundColor: 'hsl(var(--destructive))',
     },
   },
   {
@@ -339,16 +333,16 @@ const ENHANCED_EVENT_TEMPLATES: EnhancedEventTemplate[] = [
     tags: ['break', 'wellness', 'productivity'],
     priority: 'medium',
     recurrence: 'daily',
-  }
-]
+  },
+];
 
 interface EnhancedDragDropSystemProps {
-  className?: string
-  onEventCreate?: (event: Partial<Event>) => void
-  onTemplateClone?: (template: EnhancedEventTemplate) => void
-  calendarRef?: React.RefObject<HTMLElement>
-  enableAISuggestions?: boolean
-  maxTemplates?: number
+  className?: string;
+  onEventCreate?: (event: Partial<Event>) => void;
+  onTemplateClone?: (template: EnhancedEventTemplate) => void;
+  calendarRef?: React.RefObject<HTMLElement>;
+  enableAISuggestions?: boolean;
+  maxTemplates?: number;
 }
 
 export function EnhancedDragDropSystem({
@@ -359,10 +353,10 @@ export function EnhancedDragDropSystem({
   enableAISuggestions = true,
   maxTemplates = 10,
 }: EnhancedDragDropSystemProps) {
-  const [activeTemplate, setActiveTemplate] = useState<EnhancedEventTemplate | null>(null)
-  const [draggedEventData, setDraggedEventData] = useState<any>(null)
-  const performanceMonitor = usePerformanceMonitor(ENHANCED_EVENT_TEMPLATES.length)
-  const draggableRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  const [activeTemplate, setActiveTemplate] = useState<EnhancedEventTemplate | null>(null);
+  const [_draggedEventData, _setDraggedEventData] = useState<any>(null);
+  const _performanceMonitor = usePerformanceMonitor(ENHANCED_EVENT_TEMPLATES.length);
+  const draggableRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   // DnD Kit sensors
   const sensors = useSensors(
@@ -374,23 +368,23 @@ export function EnhancedDragDropSystem({
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
-  )
+  );
 
   // Filter templates based on AI suggestions preference
   const visibleTemplates = useMemo(() => {
-    let templates = enableAISuggestions 
-      ? ENHANCED_EVENT_TEMPLATES 
-      : ENHANCED_EVENT_TEMPLATES.filter(t => !t.aiSuggested)
-    
-    return templates.slice(0, maxTemplates)
-  }, [enableAISuggestions, maxTemplates])
+    const templates = enableAISuggestions
+      ? ENHANCED_EVENT_TEMPLATES
+      : ENHANCED_EVENT_TEMPLATES.filter((t) => !t.aiSuggested);
+
+    return templates.slice(0, maxTemplates);
+  }, [enableAISuggestions, maxTemplates]);
 
   // Initialize FullCalendar draggables for external events
   useEffect(() => {
-    const draggables: Draggable[] = []
+    const draggables: Draggable[] = [];
 
     visibleTemplates.forEach((template) => {
-      const element = draggableRefs.current.get(template.id)
+      const element = draggableRefs.current.get(template.id);
       if (element) {
         const draggable = new Draggable(element, {
           eventData: {
@@ -407,101 +401,115 @@ export function EnhancedDragDropSystem({
               isTemplate: true,
               priority: template.priority,
               tags: template.tags,
-              aiSuggested: template.aiSuggested
+              aiSuggested: template.aiSuggested,
             },
-            ...template.fullCalendarProps
-          }
-        })
-        draggables.push(draggable)
+            ...template.fullCalendarProps,
+          },
+        });
+        draggables.push(draggable);
       }
-    })
+    });
 
     return () => {
-      draggables.forEach(draggable => draggable.destroy())
-    }
-  }, [visibleTemplates])
+      draggables.forEach((draggable) => draggable.destroy());
+    };
+  }, [visibleTemplates]);
 
   // Handle DnD Kit drag start
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    const { active } = event
-    const template = visibleTemplates.find(t => t.id === active.id)
-    
-    if (template) {
-      setActiveTemplate(template)
-      notify.info(`Dragging ${template.title}`, { duration: 1000 })
-    }
-  }, [visibleTemplates])
+  const handleDragStart = useCallback(
+    (event: DragStartEvent) => {
+      const { active } = event;
+      const template = visibleTemplates.find((t) => t.id === active.id);
+
+      if (template) {
+        setActiveTemplate(template);
+        notify.info(`Dragging ${template.title}`, { duration: 1000 });
+      }
+    },
+    [visibleTemplates]
+  );
 
   // Handle DnD Kit drag end
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
 
-    setActiveTemplate(null)
+      setActiveTemplate(null);
 
-    if (!over) {
-      notify.warning('Event template dropped outside calendar')
-      return
-    }
+      if (!over) {
+        notify.warning('Event template dropped outside calendar');
+        return;
+      }
 
-    const template = visibleTemplates.find(t => t.id === active.id)
-    if (!template) return
+      const template = visibleTemplates.find((t) => t.id === active.id);
+      if (!template) return;
 
-    // Handle drop on calendar area
-    if (over.data.current?.type === 'calendar-drop-area') {
-      const dropDate = new Date() // Should be calculated from drop position
-      
+      // Handle drop on calendar area
+      if (over.data.current?.type === 'calendar-drop-area') {
+        const dropDate = new Date(); // Should be calculated from drop position
+
+        if (onEventCreate) {
+          const eventData: Partial<Event> = {
+            title: template.title,
+            startDate: startOfDay(dropDate),
+            endDate:
+              template.defaultDuration === 'all-day'
+                ? endOfDay(dropDate)
+                : addHours(startOfDay(dropDate), 1),
+            category: template.category,
+            description: template.description,
+            tags: template.tags,
+            priority: template.priority as any,
+          };
+
+          onEventCreate(eventData);
+          notify.success(`Created "${template.title}" on ${format(dropDate, 'MMM d')}`);
+        }
+
+        // Handle drop callback
+        if (over.data.current?.onDrop) {
+          over.data.current.onDrop(template, dropDate);
+        }
+      }
+    },
+    [visibleTemplates, onEventCreate]
+  );
+
+  // Handle template cloning
+  const _handleTemplateClone = useCallback(
+    (template: EnhancedEventTemplate) => {
+      if (onTemplateClone) {
+        onTemplateClone(template);
+        notify.success(`Cloned template: ${template.title}`);
+      }
+    },
+    [onTemplateClone]
+  );
+
+  // Handle quick event creation
+  const _handleQuickCreate = useCallback(
+    (template: EnhancedEventTemplate) => {
       if (onEventCreate) {
+        const today = new Date();
         const eventData: Partial<Event> = {
           title: template.title,
-          startDate: startOfDay(dropDate),
-          endDate: template.defaultDuration === 'all-day' 
-            ? endOfDay(dropDate)
-            : addHours(startOfDay(dropDate), 1),
+          startDate: startOfDay(today),
+          endDate:
+            template.defaultDuration === 'all-day'
+              ? endOfDay(today)
+              : addHours(startOfDay(today), 1),
           category: template.category,
           description: template.description,
           tags: template.tags,
           priority: template.priority as any,
-        }
+        };
 
-        onEventCreate(eventData)
-        notify.success(`Created "${template.title}" on ${format(dropDate, 'MMM d')}`)
+        onEventCreate(eventData);
+        notify.success(`Quick-created: ${template.title}`);
       }
-
-      // Handle drop callback
-      if (over.data.current?.onDrop) {
-        over.data.current.onDrop(template, dropDate)
-      }
-    }
-  }, [visibleTemplates, onEventCreate])
-
-  // Handle template cloning
-  const handleTemplateClone = useCallback((template: EnhancedEventTemplate) => {
-    if (onTemplateClone) {
-      onTemplateClone(template)
-      notify.success(`Cloned template: ${template.title}`)
-    }
-  }, [onTemplateClone])
-
-  // Handle quick event creation
-  const handleQuickCreate = useCallback((template: EnhancedEventTemplate) => {
-    if (onEventCreate) {
-      const today = new Date()
-      const eventData: Partial<Event> = {
-        title: template.title,
-        startDate: startOfDay(today),
-        endDate: template.defaultDuration === 'all-day'
-          ? endOfDay(today)
-          : addHours(startOfDay(today), 1),
-        category: template.category,
-        description: template.description,
-        tags: template.tags,
-        priority: template.priority as any,
-      }
-
-      onEventCreate(eventData)
-      notify.success(`Quick-created: ${template.title}`)
-    }
-  }, [onEventCreate])
+    },
+    [onEventCreate]
+  );
 
   return (
     <DndContext
@@ -524,9 +532,7 @@ export function EnhancedDragDropSystem({
                   </Badge>
                 )}
               </div>
-              <Badge variant="secondary">
-                {visibleTemplates.length} templates
-              </Badge>
+              <Badge variant="secondary">{visibleTemplates.length} templates</Badge>
             </div>
 
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-1">
@@ -535,11 +541,11 @@ export function EnhancedDragDropSystem({
                   key={template.id}
                   ref={(el) => {
                     if (el) {
-                      draggableRefs.current.set(template.id, el)
+                      draggableRefs.current.set(template.id, el);
                     }
                   }}
                 >
-                  <DraggableEventTemplate 
+                  <DraggableEventTemplate
                     template={template}
                     isActive={activeTemplate?.id === template.id}
                   />
@@ -548,14 +554,15 @@ export function EnhancedDragDropSystem({
             </div>
 
             {/* AI Suggestions Toggle */}
-            {ENHANCED_EVENT_TEMPLATES.some(t => t.aiSuggested) && (
+            {ENHANCED_EVENT_TEMPLATES.some((t) => t.aiSuggested) && (
               <div className="mt-4 p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg border">
                 <div className="flex items-center gap-2 text-sm">
                   <Sparkles className="h-4 w-4 text-blue-600" />
                   <span className="font-medium">AI-Enhanced Templates</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Templates marked with AI badges are optimized based on productivity patterns and best practices.
+                  Templates marked with AI badges are optimized based on productivity patterns and
+                  best practices.
                 </p>
               </div>
             )}
@@ -572,8 +579,8 @@ export function EnhancedDragDropSystem({
         ) : null}
       </DragOverlay>
     </DndContext>
-  )
+  );
 }
 
 // Export enhanced event templates for use in other components
-export { ENHANCED_EVENT_TEMPLATES, type EnhancedEventTemplate, DroppableCalendarArea }
+export { ENHANCED_EVENT_TEMPLATES, type EnhancedEventTemplate, DroppableCalendarArea };

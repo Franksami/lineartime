@@ -1,10 +1,10 @@
-"use node";
+'use node';
 
-import { v } from "convex/values";
-import { action, internalAction } from "../_generated/server";
-import { api, internal } from "../_generated/api";
+import { v } from 'convex/values';
 import { google } from 'googleapis';
-import { Doc, Id } from "../_generated/dataModel";
+import { api, internal } from '../_generated/api';
+import { type Doc, Id } from '../_generated/dataModel';
+import { action, internalAction } from '../_generated/server';
 // Removed: import { decryptToken } from '../utils/encryption'; - now using inline decryption
 
 /**
@@ -12,7 +12,7 @@ import { Doc, Id } from "../_generated/dataModel";
  */
 async function createOAuth2ClientImpl(
   ctx: any,
-  provider: Doc<"calendarProviders">
+  provider: Doc<'calendarProviders'>
 ): Promise<InstanceType<typeof google.auth.OAuth2>> {
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
@@ -22,31 +22,34 @@ async function createOAuth2ClientImpl(
 
   // Decrypt tokens using internal action
   const accessToken = await ctx.runAction(internal.calendar.encryption.decryptToken, {
-    encryptedToken: provider.accessToken
+    encryptedToken: provider.accessToken,
   });
 
   const refreshToken = provider.refreshToken
     ? await ctx.runAction(internal.calendar.encryption.decryptToken, {
-        encryptedToken: provider.refreshToken
+        encryptedToken: provider.refreshToken,
       })
     : undefined;
 
   oauth2Client.setCredentials({
     access_token: accessToken,
     refresh_token: refreshToken,
-    expiry_date: provider.expiresAt
+    expiry_date: provider.expiresAt,
   });
 
   // Handle token refresh
   oauth2Client.on('tokens', async (tokens) => {
-    console.log('Google tokens refreshed:', tokens.access_token ? 'New access token received' : 'No new token');
+    console.log(
+      'Google tokens refreshed:',
+      tokens.access_token ? 'New access token received' : 'No new token'
+    );
     if (tokens.access_token) {
       // Update encrypted tokens in database
       await ctx.runAction(internal.calendar.encryption.updateProviderTokens, {
         providerId: provider._id,
         accessToken: tokens.access_token,
         refreshToken: tokens.refresh_token,
-        expiresAt: tokens.expiry_date
+        expiresAt: tokens.expiry_date,
       });
     }
   });
@@ -59,11 +62,11 @@ async function createOAuth2ClientImpl(
  */
 export const createOAuth2Client = internalAction({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
   },
   handler: async (ctx, args): Promise<InstanceType<typeof google.auth.OAuth2>> => {
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'google') {
@@ -71,14 +74,14 @@ export const createOAuth2Client = internalAction({
     }
 
     return await createOAuth2ClientImpl(provider);
-  }
+  },
 });
 
 /**
  * Create a new event in Google Calendar (implementation)
  */
 async function createEventImpl(
-  provider: Doc<"calendarProviders">,
+  provider: Doc<'calendarProviders'>,
   eventData: {
     title: string;
     description?: string;
@@ -97,9 +100,9 @@ async function createEventImpl(
   const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
 
   // Find the primary calendar ID
-  const primaryCalendarId = provider.settings.calendars.find(
-    (c: { isPrimary?: boolean; id: string }) => c.isPrimary
-  )?.id || 'primary';
+  const primaryCalendarId =
+    provider.settings.calendars.find((c: { isPrimary?: boolean; id: string }) => c.isPrimary)?.id ||
+    'primary';
 
   // Prepare Google Calendar event format
   const googleEvent = {
@@ -114,7 +117,7 @@ async function createEventImpl(
       dateTime: new Date(eventData.endTime || eventData.startTime + 3600000).toISOString(),
       timeZone: 'UTC',
     },
-    attendees: eventData.attendees?.map(email => ({ email })),
+    attendees: eventData.attendees?.map((email) => ({ email })),
   };
 
   const response = await calendar.events.insert({
@@ -122,11 +125,11 @@ async function createEventImpl(
     requestBody: googleEvent,
   });
 
-      return {
-      success: true,
-      googleEventId: response.data.id || undefined,
-      htmlLink: response.data.htmlLink || undefined,
-    };
+  return {
+    success: true,
+    googleEventId: response.data.id || undefined,
+    htmlLink: response.data.htmlLink || undefined,
+  };
 }
 
 /**
@@ -134,7 +137,7 @@ async function createEventImpl(
  */
 export const createEvent = internalAction({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     eventData: v.object({
       title: v.string(),
       description: v.optional(v.string()),
@@ -145,13 +148,16 @@ export const createEvent = internalAction({
       attendees: v.optional(v.array(v.string())),
     }),
   },
-  handler: async (ctx, args): Promise<{
+  handler: async (
+    ctx,
+    args
+  ): Promise<{
     success: boolean;
     googleEventId?: string;
     htmlLink?: string;
   }> => {
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'google') {
@@ -159,14 +165,14 @@ export const createEvent = internalAction({
     }
 
     return await createEventImpl(provider, args.eventData);
-  }
+  },
 });
 
 /**
  * Update an existing event in Google Calendar (implementation)
  */
 async function updateEventImpl(
-  provider: Doc<"calendarProviders">,
+  provider: Doc<'calendarProviders'>,
   eventData: {
     googleEventId: string;
     calendarId?: string;
@@ -201,7 +207,7 @@ async function updateEventImpl(
       dateTime: new Date(eventData.endTime || eventData.startTime + 3600000).toISOString(),
       timeZone: 'UTC',
     },
-    attendees: eventData.attendees?.map(email => ({ email })),
+    attendees: eventData.attendees?.map((email) => ({ email })),
   };
 
   const response = await calendar.events.update({
@@ -210,11 +216,11 @@ async function updateEventImpl(
     requestBody: googleEvent,
   });
 
-      return {
-      success: true,
-      googleEventId: response.data.id || undefined,
-      htmlLink: response.data.htmlLink || undefined,
-    };
+  return {
+    success: true,
+    googleEventId: response.data.id || undefined,
+    htmlLink: response.data.htmlLink || undefined,
+  };
 }
 
 /**
@@ -222,7 +228,7 @@ async function updateEventImpl(
  */
 export const updateEvent = internalAction({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     eventData: v.object({
       googleEventId: v.string(),
       calendarId: v.optional(v.string()),
@@ -235,13 +241,16 @@ export const updateEvent = internalAction({
       attendees: v.optional(v.array(v.string())),
     }),
   },
-  handler: async (ctx, args): Promise<{
+  handler: async (
+    ctx,
+    args
+  ): Promise<{
     success: boolean;
     googleEventId?: string;
     htmlLink?: string;
   }> => {
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'google') {
@@ -249,14 +258,14 @@ export const updateEvent = internalAction({
     }
 
     return await updateEventImpl(provider, args.eventData);
-  }
+  },
 });
 
 /**
  * Delete an event from Google Calendar (implementation)
  */
 async function deleteEventImpl(
-  provider: Doc<"calendarProviders">,
+  provider: Doc<'calendarProviders'>,
   eventId: string,
   calendarId?: string
 ): Promise<{
@@ -284,16 +293,19 @@ async function deleteEventImpl(
  */
 export const deleteEvent = internalAction({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     eventId: v.string(),
     calendarId: v.optional(v.string()),
   },
-  handler: async (ctx, args): Promise<{
+  handler: async (
+    ctx,
+    args
+  ): Promise<{
     success: boolean;
     deletedEventId: string;
   }> => {
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'google') {
@@ -301,7 +313,7 @@ export const deleteEvent = internalAction({
     }
 
     return await deleteEventImpl(provider, args.eventId, args.calendarId);
-  }
+  },
 });
 
 /**
@@ -309,12 +321,12 @@ export const deleteEvent = internalAction({
  */
 export const renewWebhookChannel = internalAction({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     channelId: v.string(),
   },
   handler: async (ctx, args): Promise<void> => {
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'google') {
@@ -324,9 +336,9 @@ export const renewWebhookChannel = internalAction({
     const oauth2Client = await createOAuth2ClientImpl(ctx, provider);
 
     // Find the primary calendar ID
-    const primaryCalendarId = provider.settings.calendars.find(
-      (c: { isPrimary?: boolean; id: string }) => c.isPrimary
-    )?.id || 'primary';
+    const primaryCalendarId =
+      provider.settings.calendars.find((c: { isPrimary?: boolean; id: string }) => c.isPrimary)
+        ?.id || 'primary';
 
     // Renew the webhook channel
     const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
@@ -339,7 +351,7 @@ export const renewWebhookChannel = internalAction({
           type: 'web_hook',
           address: `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/api/webhooks/google`,
           token: process.env.GOOGLE_WEBHOOK_TOKEN,
-        }
+        },
       });
 
       // Update webhook expiry in provider
@@ -347,7 +359,7 @@ export const renewWebhookChannel = internalAction({
         await ctx.runMutation(internal.calendar.providers.updateProviderWebhookExpiry, {
           providerId: args.providerId,
           webhookId: args.channelId,
-          webhookExpiry: parseInt(watchResponse.data.expiration)
+          webhookExpiry: Number.parseInt(watchResponse.data.expiration),
         });
       }
 
@@ -356,7 +368,7 @@ export const renewWebhookChannel = internalAction({
       console.error('Failed to renew Google webhook channel:', error);
       throw error;
     }
-  }
+  },
 });
 
 /**
@@ -364,12 +376,12 @@ export const renewWebhookChannel = internalAction({
  */
 export const performFullSync = internalAction({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
   },
   handler: async (ctx, args) => {
     // Get provider details
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'google') {
@@ -431,7 +443,7 @@ export const performFullSync = internalAction({
             status: event.status,
             colorId: event.colorId,
             reminders: event.reminders,
-          }
+          },
         }));
 
         allEvents.push(...transformedEvents);
@@ -447,25 +459,25 @@ export const performFullSync = internalAction({
     const syncTokenResponse = await calendar.events.list({
       calendarId: 'primary',
       maxResults: 1,
-      syncToken: undefined
+      syncToken: undefined,
     });
 
     // Update provider with new sync token
     await ctx.runMutation(internal.calendar.providers.updateSyncTokenInternal, {
       providerId: args.providerId,
-      syncToken: syncTokenResponse.data.nextSyncToken || undefined
+      syncToken: syncTokenResponse.data.nextSyncToken || undefined,
     });
 
     // Process all events - store them in the database
     await ctx.runMutation(internal.calendar.events.syncEvents, {
       providerId: args.providerId,
-      events: allEvents
+      events: allEvents,
     });
 
     return {
       success: true,
       eventsCount: allEvents.length,
-      calendarsCount: calendars.length
+      calendarsCount: calendars.length,
     };
   },
 });
@@ -475,19 +487,24 @@ export const performFullSync = internalAction({
  */
 export const performIncrementalSync = internalAction({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
   },
-  handler: async (ctx, args): Promise<{
+  handler: async (
+    ctx,
+    args
+  ): Promise<{
     success: boolean;
     changesCount?: number;
   }> => {
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'google' || !provider.syncToken) {
       // Fall back to full sync if no sync token
-      return await ctx.runAction(internal.calendar.google.performFullSync, { providerId: args.providerId });
+      return await ctx.runAction(internal.calendar.google.performFullSync, {
+        providerId: args.providerId,
+      });
     }
 
     const oauth2Client = await createOAuth2ClientImpl(provider);
@@ -511,40 +528,42 @@ export const performIncrementalSync = internalAction({
         const events = response.data.items || [];
 
         // Process changed events
-        const transformedEvents = events.map((event: {
-          id?: string;
-          summary?: string;
-          description?: string;
-          start?: { dateTime?: string; date?: string };
-          end?: { dateTime?: string; date?: string };
-          location?: string;
-          attendees?: Array<{ email: string }>;
-          recurrence?: string[];
-          etag?: string;
-          status?: string;
-          colorId?: string;
-          htmlLink?: string;
-          reminders?: any;
-        }) => ({
-          providerId: args.providerId,
-          providerEventId: event.id!,
-          title: event.summary || 'Untitled',
-          description: event.description,
-          startTime: event.start?.dateTime || event.start?.date,
-          endTime: event.end?.dateTime || event.end?.date,
-          allDay: !event.start?.dateTime,
-          location: event.location,
-          attendees: event.attendees?.map((a: any) => a.email).filter(Boolean),
-          recurrence: event.recurrence,
-          etag: event.etag,
-          status: event.status, // 'confirmed', 'tentative', 'cancelled'
-          metadata: {
-            googleEventId: event.id,
-            htmlLink: event.htmlLink,
-            colorId: event.colorId,
-            reminders: event.reminders,
-          }
-        }));
+        const transformedEvents = events.map(
+          (event: {
+            id?: string;
+            summary?: string;
+            description?: string;
+            start?: { dateTime?: string; date?: string };
+            end?: { dateTime?: string; date?: string };
+            location?: string;
+            attendees?: Array<{ email: string }>;
+            recurrence?: string[];
+            etag?: string;
+            status?: string;
+            colorId?: string;
+            htmlLink?: string;
+            reminders?: any;
+          }) => ({
+            providerId: args.providerId,
+            providerEventId: event.id!,
+            title: event.summary || 'Untitled',
+            description: event.description,
+            startTime: event.start?.dateTime || event.start?.date,
+            endTime: event.end?.dateTime || event.end?.date,
+            allDay: !event.start?.dateTime,
+            location: event.location,
+            attendees: event.attendees?.map((a: any) => a.email).filter(Boolean),
+            recurrence: event.recurrence,
+            etag: event.etag,
+            status: event.status, // 'confirmed', 'tentative', 'cancelled'
+            metadata: {
+              googleEventId: event.id,
+              htmlLink: event.htmlLink,
+              colorId: event.colorId,
+              reminders: event.reminders,
+            },
+          })
+        );
 
         changedEvents.push(...transformedEvents);
 
@@ -557,27 +576,29 @@ export const performIncrementalSync = internalAction({
       if (syncToken) {
         await ctx.runMutation(internal.calendar.providers.updateSyncTokenInternal, {
           providerId: args.providerId,
-          syncToken
+          syncToken,
         });
       }
 
       // Process changed events
       await ctx.runMutation(internal.calendar.events.processIncrementalChanges, {
         providerId: args.providerId,
-        events: changedEvents
+        events: changedEvents,
       });
 
       console.log(`Incremental sync completed. Processed ${changedEvents.length} changes`);
 
       return {
         success: true,
-        changesCount: changedEvents.length
+        changesCount: changedEvents.length,
       };
     } catch (error: any) {
       if (error.code === 410) {
         // Sync token invalid, perform full sync
         console.log('Sync token invalid, performing full sync');
-        return await ctx.runAction(internal.calendar.google.performFullSync, { providerId: args.providerId });
+        return await ctx.runAction(internal.calendar.google.performFullSync, {
+          providerId: args.providerId,
+        });
       }
       throw error;
     }
@@ -591,19 +612,22 @@ export const setupWebhook = action({
   args: {
     calendarId: v.string(),
   },
-  handler: async (ctx, args): Promise<{
+  handler: async (
+    ctx,
+    _args
+  ): Promise<{
     success: boolean;
     channelId: string;
     webhookUrl: string;
   }> => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      throw new Error("Not authenticated");
+      throw new Error('Not authenticated');
     }
 
     // Get provider
     const provider = await ctx.runQuery(api.calendar.providers.getProviderByType, {
-      provider: 'google'
+      provider: 'google',
     });
 
     if (!provider) {
@@ -616,7 +640,7 @@ export const setupWebhook = action({
 
     const webhookUrl = `${process.env.NEXT_PUBLIC_URL}/api/webhooks/google`;
     const channelId = `channel-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-    const channelToken = process.env.GOOGLE_WEBHOOK_TOKEN;
+    const _channelToken = process.env.GOOGLE_WEBHOOK_TOKEN;
 
     // In a real implementation, you would:
     // 1. Call Google Calendar API to register the webhook
@@ -626,8 +650,7 @@ export const setupWebhook = action({
     return {
       success: true,
       channelId,
-      webhookUrl
+      webhookUrl,
     };
   },
 });
-

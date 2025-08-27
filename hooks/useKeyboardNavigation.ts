@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 interface KeyboardNavigationOptions {
   onArrowUp?: () => void;
@@ -33,113 +33,116 @@ export function useKeyboardNavigation(options: KeyboardNavigationOptions) {
     onEnd,
     onPageUp,
     onPageDown,
-    enabled = true
+    enabled = true,
   } = options;
 
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (!enabled) return;
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (!enabled) return;
 
-    const key = event.key;
-    const shiftKey = event.shiftKey;
-    const ctrlKey = event.ctrlKey || event.metaKey;
+      const key = event.key;
+      const shiftKey = event.shiftKey;
+      const _ctrlKey = event.ctrlKey || event.metaKey;
 
-    // Don't interfere with form inputs
-    const target = event.target as HTMLElement;
-    const isFormElement = ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
-    
-    if (isFormElement && !['Escape', 'Tab'].includes(key)) {
-      return;
-    }
+      // Don't interfere with form inputs
+      const target = event.target as HTMLElement;
+      const isFormElement = ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
 
-    switch (key) {
-      case 'ArrowUp':
-        if (onArrowUp) {
-          event.preventDefault();
-          onArrowUp();
-        }
-        break;
-      case 'ArrowDown':
-        if (onArrowDown) {
-          event.preventDefault();
-          onArrowDown();
-        }
-        break;
-      case 'ArrowLeft':
-        if (onArrowLeft) {
-          event.preventDefault();
-          onArrowLeft();
-        }
-        break;
-      case 'ArrowRight':
-        if (onArrowRight) {
-          event.preventDefault();
-          onArrowRight();
-        }
-        break;
-      case 'Enter':
-        if (onEnter) {
-          event.preventDefault();
-          onEnter();
-        }
-        break;
-      case ' ':
-      case 'Space':
-        if (onSpace) {
-          event.preventDefault();
-          onSpace();
-        }
-        break;
-      case 'Escape':
-        if (onEscape) {
-          event.preventDefault();
-          onEscape();
-        }
-        break;
-      case 'Tab':
-        if (onTab) {
-          onTab(shiftKey);
-        }
-        break;
-      case 'Home':
-        if (onHome) {
-          event.preventDefault();
-          onHome();
-        }
-        break;
-      case 'End':
-        if (onEnd) {
-          event.preventDefault();
-          onEnd();
-        }
-        break;
-      case 'PageUp':
-        if (onPageUp) {
-          event.preventDefault();
-          onPageUp();
-        }
-        break;
-      case 'PageDown':
-        if (onPageDown) {
-          event.preventDefault();
-          onPageDown();
-        }
-        break;
-    }
-  }, [
-    enabled,
-    onArrowUp,
-    onArrowDown,
-    onArrowLeft,
-    onArrowRight,
-    onEnter,
-    onSpace,
-    onEscape,
-    onTab,
-    onHome,
-    onEnd,
-    onPageUp,
-    onPageDown
-  ]);
+      if (isFormElement && !['Escape', 'Tab'].includes(key)) {
+        return;
+      }
+
+      switch (key) {
+        case 'ArrowUp':
+          if (onArrowUp) {
+            event.preventDefault();
+            onArrowUp();
+          }
+          break;
+        case 'ArrowDown':
+          if (onArrowDown) {
+            event.preventDefault();
+            onArrowDown();
+          }
+          break;
+        case 'ArrowLeft':
+          if (onArrowLeft) {
+            event.preventDefault();
+            onArrowLeft();
+          }
+          break;
+        case 'ArrowRight':
+          if (onArrowRight) {
+            event.preventDefault();
+            onArrowRight();
+          }
+          break;
+        case 'Enter':
+          if (onEnter) {
+            event.preventDefault();
+            onEnter();
+          }
+          break;
+        case ' ':
+        case 'Space':
+          if (onSpace) {
+            event.preventDefault();
+            onSpace();
+          }
+          break;
+        case 'Escape':
+          if (onEscape) {
+            event.preventDefault();
+            onEscape();
+          }
+          break;
+        case 'Tab':
+          if (onTab) {
+            onTab(shiftKey);
+          }
+          break;
+        case 'Home':
+          if (onHome) {
+            event.preventDefault();
+            onHome();
+          }
+          break;
+        case 'End':
+          if (onEnd) {
+            event.preventDefault();
+            onEnd();
+          }
+          break;
+        case 'PageUp':
+          if (onPageUp) {
+            event.preventDefault();
+            onPageUp();
+          }
+          break;
+        case 'PageDown':
+          if (onPageDown) {
+            event.preventDefault();
+            onPageDown();
+          }
+          break;
+      }
+    },
+    [
+      enabled,
+      onArrowUp,
+      onArrowDown,
+      onArrowLeft,
+      onArrowRight,
+      onEnter,
+      onSpace,
+      onEscape,
+      onTab,
+      onHome,
+      onEnd,
+      onPageUp,
+      onPageDown,
+    ]
+  );
 
   useEffect(() => {
     if (enabled) {
@@ -159,40 +162,43 @@ export function useRovingTabIndex(
   currentIndex: number,
   onChange: (index: number) => void
 ) {
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    const key = event.key;
-    const itemCount = items.length;
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      const key = event.key;
+      const itemCount = items.length;
 
-    if (itemCount === 0) return;
+      if (itemCount === 0) return;
 
-    let newIndex = currentIndex;
+      let newIndex = currentIndex;
 
-    switch (key) {
-      case 'ArrowRight':
-      case 'ArrowDown':
-        event.preventDefault();
-        newIndex = (currentIndex + 1) % itemCount;
-        break;
-      case 'ArrowLeft':
-      case 'ArrowUp':
-        event.preventDefault();
-        newIndex = (currentIndex - 1 + itemCount) % itemCount;
-        break;
-      case 'Home':
-        event.preventDefault();
-        newIndex = 0;
-        break;
-      case 'End':
-        event.preventDefault();
-        newIndex = itemCount - 1;
-        break;
-    }
+      switch (key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          event.preventDefault();
+          newIndex = (currentIndex + 1) % itemCount;
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          event.preventDefault();
+          newIndex = (currentIndex - 1 + itemCount) % itemCount;
+          break;
+        case 'Home':
+          event.preventDefault();
+          newIndex = 0;
+          break;
+        case 'End':
+          event.preventDefault();
+          newIndex = itemCount - 1;
+          break;
+      }
 
-    if (newIndex !== currentIndex) {
-      onChange(newIndex);
-      items[newIndex]?.focus();
-    }
-  }, [items, currentIndex, onChange]);
+      if (newIndex !== currentIndex) {
+        onChange(newIndex);
+        items[newIndex]?.focus();
+      }
+    },
+    [items, currentIndex, onChange]
+  );
 
   useEffect(() => {
     // Set tabindex on items
@@ -259,6 +265,6 @@ export function useFocusManagement(containerRef: React.RefObject<HTMLElement>) {
   return {
     trapFocus,
     saveFocus,
-    restoreFocus
+    restoreFocus,
   };
 }

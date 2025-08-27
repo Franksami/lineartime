@@ -1,34 +1,34 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect, useRef } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { 
-  Star,
-  Quote,
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { useUnifiedTheme } from '@/hooks/useUnifiedTheme';
+import { Text as ChakraText, HStack, VStack } from '@chakra-ui/react';
+import { Avatar, Group, Text as MantineText, Rating } from '@mantine/core';
+import { Rate, Space, Statistic } from 'antd';
+import { AnimatePresence, motion, useInView } from 'framer-motion';
+import {
   ArrowLeft,
   ArrowRight,
-  Play,
-  Users,
-  TrendingUp,
   Award,
-  ThumbsUp,
   Heart,
-  Zap
-} from 'lucide-react'
-import { Group, Text as MantineText, Avatar, Rating } from '@mantine/core'
-import { HStack, VStack, Text as ChakraText } from '@chakra-ui/react'
-import { Space, Rate, Statistic } from 'antd'
-import { useUnifiedTheme } from '@/hooks/useUnifiedTheme'
+  Play,
+  Quote,
+  Star,
+  ThumbsUp,
+  TrendingUp,
+  Users,
+  Zap,
+} from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export function TestimonialsSection() {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(true)
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
-  const { utils, isClient } = useUnifiedTheme()
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { utils, isClient } = useUnifiedTheme();
 
   const testimonials = [
     {
@@ -37,11 +37,12 @@ export function TestimonialsSection() {
       role: 'Product Manager',
       company: 'TechCorp',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=sarah',
-      content: 'LinearTime completely transformed how our team manages projects. The year-at-a-glance view helped us identify patterns we never saw before. Our productivity increased by 40% in just 3 months.',
+      content:
+        'LinearTime completely transformed how our team manages projects. The year-at-a-glance view helped us identify patterns we never saw before. Our productivity increased by 40% in just 3 months.',
       rating: 5,
       highlight: 'Increased productivity by 40%',
       videoThumbnail: true,
-      verified: true
+      verified: true,
     },
     {
       id: 2,
@@ -49,11 +50,12 @@ export function TestimonialsSection() {
       role: 'CEO',
       company: 'StartupXYZ',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=marcus',
-      content: 'As a startup founder, time is everything. LinearTime\'s AI suggestions have saved me countless hours on scheduling. The insights dashboard shows exactly where I\'m spending time and how to optimize it.',
+      content:
+        "As a startup founder, time is everything. LinearTime's AI suggestions have saved me countless hours on scheduling. The insights dashboard shows exactly where I'm spending time and how to optimize it.",
       rating: 5,
       highlight: 'Saves 2+ hours per week',
       videoThumbnail: false,
-      verified: true
+      verified: true,
     },
     {
       id: 3,
@@ -61,11 +63,12 @@ export function TestimonialsSection() {
       role: 'Design Director',
       company: 'CreativeStudio',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=emily',
-      content: 'The design is absolutely beautiful, and the user experience is seamless. Our entire design team switched to LinearTime, and we love how it integrates with all our tools. Best calendar app we\'ve ever used.',
+      content:
+        "The design is absolutely beautiful, and the user experience is seamless. Our entire design team switched to LinearTime, and we love how it integrates with all our tools. Best calendar app we've ever used.",
       rating: 5,
       highlight: 'Best calendar app ever',
       videoThumbnail: true,
-      verified: true
+      verified: true,
     },
     {
       id: 4,
@@ -73,11 +76,12 @@ export function TestimonialsSection() {
       role: 'Engineering Manager',
       company: 'DevCorp',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=david',
-      content: 'The performance is incredible. We have thousands of events and it handles everything smoothly. The team collaboration features make coordinating across time zones effortless.',
+      content:
+        'The performance is incredible. We have thousands of events and it handles everything smoothly. The team collaboration features make coordinating across time zones effortless.',
       rating: 5,
       highlight: 'Handles thousands of events smoothly',
       videoThumbnail: false,
-      verified: true
+      verified: true,
     },
     {
       id: 5,
@@ -85,20 +89,21 @@ export function TestimonialsSection() {
       role: 'Operations Director',
       company: 'GlobalInc',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=lisa',
-      content: 'LinearTime helped us visualize our quarterly planning like never before. The analytics showed us bottlenecks we didn\'t know existed. It\'s become essential to our operations.',
+      content:
+        "LinearTime helped us visualize our quarterly planning like never before. The analytics showed us bottlenecks we didn't know existed. It's become essential to our operations.",
       rating: 5,
       highlight: 'Essential to operations',
       videoThumbnail: true,
-      verified: true
-    }
-  ]
+      verified: true,
+    },
+  ];
 
   const stats = [
     { label: 'Happy Customers', value: '50K+', icon: Users },
     { label: 'Average Rating', value: '4.9', icon: Star },
     { label: 'Time Saved', value: '2M hrs', icon: TrendingUp },
     { label: 'Retention Rate', value: '98%', icon: Award },
-  ]
+  ];
 
   const companies = [
     { name: 'Google', logo: '🌟' },
@@ -107,26 +112,26 @@ export function TestimonialsSection() {
     { name: 'Netflix', logo: '🎬' },
     { name: 'Uber', logo: '🚗' },
     { name: 'Airbnb', logo: '🏠' },
-  ]
+  ];
 
   // Auto-rotate testimonials
   useEffect(() => {
-    if (!isPlaying) return
-    
-    const interval = setInterval(() => {
-      setCurrentTestimonial(prev => (prev + 1) % testimonials.length)
-    }, 5000)
+    if (!isPlaying) return;
 
-    return () => clearInterval(interval)
-  }, [isPlaying, testimonials.length])
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isPlaying, testimonials.length]);
 
   const nextTestimonial = () => {
-    setCurrentTestimonial(prev => (prev + 1) % testimonials.length)
-  }
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
 
   const prevTestimonial = () => {
-    setCurrentTestimonial(prev => prev === 0 ? testimonials.length - 1 : prev - 1)
-  }
+    setCurrentTestimonial((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+  };
 
   if (!isClient) {
     return (
@@ -139,7 +144,7 @@ export function TestimonialsSection() {
           </div>
         </div>
       </section>
-    )
+    );
   }
 
   return (
@@ -148,7 +153,7 @@ export function TestimonialsSection() {
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-accent/5 blur-3xl" />
-        
+
         {/* Floating testimonial bubbles */}
         {[...Array(8)].map((_, i) => (
           <motion.div
@@ -165,7 +170,7 @@ export function TestimonialsSection() {
             }}
             transition={{
               duration: 4 + Math.random() * 2,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               delay: Math.random() * 3,
             }}
           />
@@ -217,7 +222,11 @@ export function TestimonialsSection() {
                 <Statistic
                   title={<span className="text-sm text-muted-foreground">{stat.label}</span>}
                   value={stat.value}
-                  valueStyle={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--foreground)' }}
+                  valueStyle={{
+                    fontSize: '1.8rem',
+                    fontWeight: 'bold',
+                    color: 'var(--foreground)',
+                  }}
                 />
               </Card>
             </motion.div>
@@ -235,7 +244,7 @@ export function TestimonialsSection() {
             {/* Quote Icon */}
             <motion.div
               animate={{ rotate: [0, 5, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
+              transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
               className="absolute top-4 left-4 text-primary/20"
             >
               <Quote className="w-16 h-16" />
@@ -272,10 +281,7 @@ export function TestimonialsSection() {
 
                   {/* Author */}
                   <div className="flex items-center justify-center space-x-4">
-                    <Avatar
-                      size="lg"
-                      src={testimonials[currentTestimonial].avatar}
-                    />
+                    <Avatar size="lg" src={testimonials[currentTestimonial].avatar} />
                     <div className="text-center">
                       <div className="flex items-center justify-center space-x-2">
                         <h4 className="font-semibold text-foreground text-lg">
@@ -289,11 +295,16 @@ export function TestimonialsSection() {
                         )}
                       </div>
                       <p className="text-muted-foreground">
-                        {testimonials[currentTestimonial].role} at {testimonials[currentTestimonial].company}
+                        {testimonials[currentTestimonial].role} at{' '}
+                        {testimonials[currentTestimonial].company}
                       </p>
                     </div>
                     {testimonials[currentTestimonial].videoThumbnail && (
-                      <Button size="sm" variant="ghost" className="text-primary hover:text-primary/80">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-primary hover:text-primary/80"
+                      >
                         <Play className="w-4 h-4 mr-1" />
                         Watch
                       </Button>
@@ -321,7 +332,9 @@ export function TestimonialsSection() {
                       key={index}
                       onClick={() => setCurrentTestimonial(index)}
                       className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                        index === currentTestimonial ? 'bg-primary w-8' : 'bg-muted hover:bg-muted-foreground'
+                        index === currentTestimonial
+                          ? 'bg-primary w-8'
+                          : 'bg-muted hover:bg-muted-foreground'
                       }`}
                       whileHover={{ scale: 1.2 }}
                       whileTap={{ scale: 0.9 }}
@@ -365,7 +378,7 @@ export function TestimonialsSection() {
           <MantineText size="sm" c="dimmed" className="mb-8 text-muted-foreground">
             Trusted by teams at leading companies
           </MantineText>
-          
+
           <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
             {companies.map((company, index) => (
               <motion.div
@@ -410,5 +423,5 @@ export function TestimonialsSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

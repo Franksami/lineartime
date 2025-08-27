@@ -1,43 +1,43 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence, HTMLMotionProps } from "framer-motion"
-import { Calendar, Users, TrendingUp, ArrowRight, Sparkles, Play } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
+import { Button } from '@/components/ui/button';
+import { AnimatePresence, HTMLMotionProps, motion } from 'framer-motion';
+import { ArrowRight, Calendar, Play, Sparkles, TrendingUp, Users } from 'lucide-react';
+import Link from 'next/link';
+import type * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Utility function
 function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 // Gradient Text Component
 interface GradientTextProps extends React.HTMLAttributes<HTMLDivElement> {
-  colors?: string[]
-  animationSpeed?: number
-  showBorder?: boolean
+  colors?: string[];
+  animationSpeed?: number;
+  showBorder?: boolean;
 }
 
 function GradientText({
   children,
   className,
-  colors = ["#40ffaa", "#4079ff", "#40ffaa"],
+  colors = ['#40ffaa', '#4079ff', '#40ffaa'],
   animationSpeed = 8,
   showBorder = false,
   ...props
 }: GradientTextProps) {
   const gradientStyle = {
-    backgroundImage: `linear-gradient(to right, ${colors.join(", ")})`,
+    backgroundImage: `linear-gradient(to right, ${colors.join(', ')})`,
     animationDuration: `${animationSpeed}s`,
-  }
+  };
 
   return (
     <div
       className={cn(
-        "relative mx-auto flex max-w-fit flex-row items-center justify-center",
-        "rounded-[1.25rem] font-medium backdrop-blur transition-shadow duration-500",
-        "overflow-hidden cursor-pointer",
+        'relative mx-auto flex max-w-fit flex-row items-center justify-center',
+        'rounded-[1.25rem] font-medium backdrop-blur transition-shadow duration-500',
+        'overflow-hidden cursor-pointer',
         className
       )}
       {...props}
@@ -47,17 +47,17 @@ function GradientText({
           className="absolute inset-0 bg-cover z-0 pointer-events-none animate-gradient"
           style={{
             ...gradientStyle,
-            backgroundSize: "300% 100%",
+            backgroundSize: '300% 100%',
           }}
         >
           <div
             className="absolute inset-0 bg-background rounded-[1.25rem] z-[-1]"
             style={{
-              width: "calc(100% - 2px)",
-              height: "calc(100% - 2px)",
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
+              width: 'calc(100% - 2px)',
+              height: 'calc(100% - 2px)',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
             }}
           />
         </div>
@@ -66,84 +66,80 @@ function GradientText({
         className="inline-block relative z-2 text-transparent bg-cover animate-gradient"
         style={{
           ...gradientStyle,
-          backgroundClip: "text",
-          WebkitBackgroundClip: "text",
-          backgroundSize: "300% 100%",
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          backgroundSize: '300% 100%',
         }}
       >
         {children}
       </div>
     </div>
-  )
+  );
 }
 
 // Animated Text Cycle Component
 interface AnimatedTextCycleProps {
-  words: string[]
-  interval?: number
-  className?: string
+  words: string[];
+  interval?: number;
+  className?: string;
 }
 
-function AnimatedTextCycle({
-  words,
-  interval = 3000,
-  className = "",
-}: AnimatedTextCycleProps) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [width, setWidth] = useState("auto")
-  const measureRef = useRef<HTMLDivElement>(null)
+function AnimatedTextCycle({ words, interval = 3000, className = '' }: AnimatedTextCycleProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [width, setWidth] = useState('auto');
+  const measureRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (measureRef.current) {
-      const elements = measureRef.current.children
+      const elements = measureRef.current.children;
       if (elements.length > currentIndex) {
-        const newWidth = elements[currentIndex].getBoundingClientRect().width
-        setWidth(`${newWidth}px`)
+        const newWidth = elements[currentIndex].getBoundingClientRect().width;
+        setWidth(`${newWidth}px`);
       }
     }
-  }, [currentIndex])
+  }, [currentIndex]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % words.length)
-    }, interval)
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % words.length);
+    }, interval);
 
-    return () => clearInterval(timer)
-  }, [interval, words.length])
+    return () => clearInterval(timer);
+  }, [interval, words.length]);
 
   const containerVariants = {
-    hidden: { 
+    hidden: {
       y: -20,
       opacity: 0,
-      filter: "blur(8px)"
+      filter: 'blur(8px)',
     },
     visible: {
       y: 0,
       opacity: 1,
-      filter: "blur(0px)",
+      filter: 'blur(0px)',
       transition: {
         duration: 0.4,
-        ease: "easeOut"
-      }
+        ease: 'easeOut',
+      },
     },
-    exit: { 
+    exit: {
       y: 20,
       opacity: 0,
-      filter: "blur(8px)",
-      transition: { 
-        duration: 0.3, 
-        ease: "easeIn"
-      }
+      filter: 'blur(8px)',
+      transition: {
+        duration: 0.3,
+        ease: 'easeIn',
+      },
     },
-  }
+  };
 
   return (
     <>
-      <div 
-        ref={measureRef} 
+      <div
+        ref={measureRef}
         aria-hidden="true"
         className="absolute opacity-0 pointer-events-none"
-        style={{ visibility: "hidden" }}
+        style={{ visibility: 'hidden' }}
       >
         {words.map((word, i) => (
           <span key={i} className={`font-bold ${className}`}>
@@ -152,16 +148,16 @@ function AnimatedTextCycle({
         ))}
       </div>
 
-      <motion.span 
+      <motion.span
         className="relative inline-block"
-        animate={{ 
+        animate={{
           width,
-          transition: { 
-            type: "spring",
+          transition: {
+            type: 'spring',
             stiffness: 150,
             damping: 15,
             mass: 1.2,
-          }
+          },
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
@@ -172,14 +168,14 @@ function AnimatedTextCycle({
             initial="hidden"
             animate="visible"
             exit="exit"
-            style={{ whiteSpace: "nowrap" }}
+            style={{ whiteSpace: 'nowrap' }}
           >
             {words[currentIndex]}
           </motion.span>
         </AnimatePresence>
       </motion.span>
     </>
-  )
+  );
 }
 
 // Floating Background Elements
@@ -195,13 +191,13 @@ function FloatingElements() {
         }}
         transition={{
           duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
+          repeat: Number.POSITIVE_INFINITY,
+          ease: 'easeInOut',
         }}
       >
         <Calendar size={32} />
       </motion.div>
-      
+
       <motion.div
         className="absolute top-40 right-20 text-primary/15"
         animate={{
@@ -210,8 +206,8 @@ function FloatingElements() {
         }}
         transition={{
           duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
+          repeat: Number.POSITIVE_INFINITY,
+          ease: 'easeInOut',
           delay: 1,
         }}
       >
@@ -226,8 +222,8 @@ function FloatingElements() {
         }}
         transition={{
           duration: 7,
-          repeat: Infinity,
-          ease: "easeInOut",
+          repeat: Number.POSITIVE_INFINITY,
+          ease: 'easeInOut',
           delay: 2,
         }}
       >
@@ -243,8 +239,8 @@ function FloatingElements() {
         }}
         transition={{
           duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut",
+          repeat: Number.POSITIVE_INFINITY,
+          ease: 'easeInOut',
         }}
       >
         <Sparkles size={20} />
@@ -254,16 +250,16 @@ function FloatingElements() {
       <div className="absolute top-32 right-32 w-32 h-32 bg-gradient-to-r from-primary/10 to-purple-500/10 rounded-full blur-xl animate-pulse" />
       <div className="absolute bottom-40 left-40 w-24 h-24 bg-gradient-to-r from-blue-500/10 to-primary/10 rounded-full blur-lg animate-pulse delay-1000" />
     </div>
-  )
+  );
 }
 
 // Statistics Card Component
 interface StatCardProps {
-  title: string
-  value: string
-  description: string
-  icon: React.ReactNode
-  delay?: number
+  title: string;
+  value: string;
+  description: string;
+  icon: React.ReactNode;
+  delay?: number;
 }
 
 function StatCard({ title, value, description, icon, delay = 0 }: StatCardProps) {
@@ -286,59 +282,59 @@ function StatCard({ title, value, description, icon, delay = 0 }: StatCardProps)
         </div>
       </div>
     </motion.div>
-  )
+  );
 }
 
 // Main Hero Component
 export function MagicHeroSection() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: e.clientX,
         y: e.clientY,
-      })
-    }
+      });
+    };
 
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   const stats = [
     {
-      title: "Active Users",
-      value: "50K+",
-      description: "Growing daily",
+      title: 'Active Users',
+      value: '50K+',
+      description: 'Growing daily',
       icon: <Users size={24} />,
     },
     {
-      title: "Events Created",
-      value: "2M+",
-      description: "This month",
+      title: 'Events Created',
+      value: '2M+',
+      description: 'This month',
       icon: <Calendar size={24} />,
     },
     {
-      title: "Time Saved",
-      value: "40%",
-      description: "Average improvement",
+      title: 'Time Saved',
+      value: '40%',
+      description: 'Average improvement',
       icon: <TrendingUp size={24} />,
     },
-  ]
+  ];
 
   return (
     <div className="relative min-h-screen bg-background overflow-hidden">
       {/* Animated Background Gradient */}
-      <div 
+      <div
         className="absolute inset-0 opacity-30"
         style={{
           background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.1), transparent 40%)`,
         }}
       />
-      
+
       {/* Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
-      
+
       {/* Floating Elements */}
       <FloatingElements />
 
@@ -364,9 +360,9 @@ export function MagicHeroSection() {
             className="space-y-4"
           >
             <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-              Life is{" "}
+              Life is{' '}
               <GradientText
-                colors={["#3b82f6", "#8b5cf6", "#06b6d4"]}
+                colors={['#3b82f6', '#8b5cf6', '#06b6d4']}
                 animationSpeed={6}
                 className="text-5xl md:text-7xl font-bold"
               >
@@ -374,9 +370,9 @@ export function MagicHeroSection() {
               </GradientText>
             </h1>
             <div className="text-5xl md:text-7xl font-bold leading-tight">
-              than a{" "}
+              than a{' '}
               <AnimatedTextCycle
-                words={["week", "month", "day", "year"]}
+                words={['week', 'month', 'day', 'year']}
                 interval={3000}
                 className="text-primary"
               />
@@ -390,8 +386,8 @@ export function MagicHeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
           >
-            Transform how you manage time with our revolutionary year-at-a-glance calendar. 
-            Powered by AI for smarter scheduling and deeper insights.
+            Transform how you manage time with our revolutionary year-at-a-glance calendar. Powered
+            by AI for smarter scheduling and deeper insights.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -401,19 +397,22 @@ export function MagicHeroSection() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="group text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               asChild
             >
               <Link href="/sign-up">
                 Start Free Trial
-                <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight
+                  size={20}
+                  className="ml-2 group-hover:translate-x-1 transition-transform"
+                />
               </Link>
             </Button>
-            <Button 
+            <Button
               variant="outline"
-              size="lg" 
+              size="lg"
               className="text-lg px-8 py-6 border-2 hover:bg-accent/10 transition-all duration-300"
               asChild
             >
@@ -432,11 +431,7 @@ export function MagicHeroSection() {
             className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16"
           >
             {stats.map((stat, index) => (
-              <StatCard
-                key={stat.title}
-                {...stat}
-                delay={0.1 * index}
-              />
+              <StatCard key={stat.title} {...stat} delay={0.1 * index} />
             ))}
           </motion.div>
         </div>
@@ -453,5 +448,5 @@ export function MagicHeroSection() {
         }
       `}</style>
     </div>
-  )
+  );
 }

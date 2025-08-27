@@ -1,29 +1,30 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Shield, 
-  Lock, 
-  Eye, 
-  EyeOff, 
-  AlertTriangle, 
-  CheckCircle, 
-  XCircle, 
-  Key, 
-  FileText, 
-  Activity, 
-  Globe, 
-  Clock,
-  RefreshCw,
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Activity,
   AlertCircle,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Eye,
+  EyeOff,
+  FileText,
+  Globe,
+  Key,
+  Lock,
+  RefreshCw,
+  Server,
+  Shield,
+  XCircle,
   Zap,
-  Server
 } from 'lucide-react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 
 interface SecurityEvent {
   id: string;
@@ -55,7 +56,7 @@ interface TokenStatus {
 const SecurityMonitoringDashboard: React.FC = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [securityEvents, setSecurityEvents] = useState<SecurityEvent[]>([
+  const [securityEvents, _setSecurityEvents] = useState<SecurityEvent[]>([
     {
       id: '1',
       timestamp: '2 minutes ago',
@@ -63,7 +64,7 @@ const SecurityMonitoringDashboard: React.FC = () => {
       category: 'encryption',
       message: 'Token encryption successful',
       details: 'AES-256-GCM encryption applied to Google Calendar tokens',
-      source: 'Google Provider'
+      source: 'Google Provider',
     },
     {
       id: '2',
@@ -72,7 +73,7 @@ const SecurityMonitoringDashboard: React.FC = () => {
       category: 'webhook',
       message: 'Webhook signature verified',
       details: 'HMAC-SHA256 signature validation passed for Microsoft webhook',
-      source: 'Microsoft Provider'
+      source: 'Microsoft Provider',
     },
     {
       id: '3',
@@ -81,7 +82,7 @@ const SecurityMonitoringDashboard: React.FC = () => {
       category: 'authentication',
       message: 'Token expiring soon',
       details: 'Microsoft Graph token expires in 7 days',
-      source: 'Token Manager'
+      source: 'Token Manager',
     },
     {
       id: '4',
@@ -90,7 +91,7 @@ const SecurityMonitoringDashboard: React.FC = () => {
       category: 'audit',
       message: 'Security scan completed',
       details: 'No vulnerabilities detected in system audit',
-      source: 'Security Scanner'
+      source: 'Security Scanner',
     },
     {
       id: '5',
@@ -99,8 +100,8 @@ const SecurityMonitoringDashboard: React.FC = () => {
       category: 'compliance',
       message: 'GDPR compliance check passed',
       details: 'All data protection measures verified',
-      source: 'Compliance Monitor'
-    }
+      source: 'Compliance Monitor',
+    },
   ]);
 
   const [complianceStatus] = useState<ComplianceStatus[]>([
@@ -110,7 +111,7 @@ const SecurityMonitoringDashboard: React.FC = () => {
       progress: 95,
       lastAudit: '3 months ago',
       nextAudit: '9 months',
-      icon: <Shield className="w-5 h-5" />
+      icon: <Shield className="w-5 h-5" />,
     },
     {
       name: 'GDPR',
@@ -118,7 +119,7 @@ const SecurityMonitoringDashboard: React.FC = () => {
       progress: 100,
       lastAudit: '1 month ago',
       nextAudit: '11 months',
-      icon: <Globe className="w-5 h-5" />
+      icon: <Globe className="w-5 h-5" />,
     },
     {
       name: 'ISO 27001',
@@ -126,8 +127,8 @@ const SecurityMonitoringDashboard: React.FC = () => {
       progress: 78,
       lastAudit: '6 months ago',
       nextAudit: '6 months',
-      icon: <FileText className="w-5 h-5" />
-    }
+      icon: <FileText className="w-5 h-5" />,
+    },
   ]);
 
   const [tokenStatus] = useState<TokenStatus[]>([
@@ -136,34 +137,34 @@ const SecurityMonitoringDashboard: React.FC = () => {
       status: 'valid',
       expiresIn: '45 days',
       lastRotation: '15 days ago',
-      encryptionMethod: 'AES-256-GCM'
+      encryptionMethod: 'AES-256-GCM',
     },
     {
       provider: 'Microsoft Outlook',
       status: 'expiring',
       expiresIn: '7 days',
       lastRotation: '53 days ago',
-      encryptionMethod: 'AES-256-GCM'
+      encryptionMethod: 'AES-256-GCM',
     },
     {
       provider: 'Apple CalDAV',
       status: 'valid',
       expiresIn: '90 days',
       lastRotation: '30 days ago',
-      encryptionMethod: 'AES-256-GCM'
+      encryptionMethod: 'AES-256-GCM',
     },
     {
       provider: 'Generic CalDAV',
       status: 'expired',
       expiresIn: 'Expired',
       lastRotation: '120 days ago',
-      encryptionMethod: 'N/A'
-    }
+      encryptionMethod: 'N/A',
+    },
   ]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsRefreshing(false);
   };
 
@@ -173,48 +174,68 @@ const SecurityMonitoringDashboard: React.FC = () => {
     if (category === 'authentication') return <Key className="w-4 h-4" />;
     if (category === 'audit') return <Eye className="w-4 h-4" />;
     if (category === 'compliance') return <Shield className="w-4 h-4" />;
-    
+
     switch (type) {
-      case 'success': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      case 'error': return <XCircle className="w-4 h-4 text-red-500" />;
-      default: return <AlertCircle className="w-4 h-4 text-blue-500" />;
+      case 'success':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'warning':
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      case 'error':
+        return <XCircle className="w-4 h-4 text-red-500" />;
+      default:
+        return <AlertCircle className="w-4 h-4 text-blue-500" />;
     }
   };
 
   const getEventColor = (type: string) => {
     switch (type) {
-      case 'success': return 'text-green-600 bg-green-50 border-green-200';
-      case 'warning': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'error': return 'text-red-600 bg-red-50 border-red-200';
-      default: return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'success':
+        return 'text-green-600 bg-green-50 border-green-200';
+      case 'warning':
+        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+      case 'error':
+        return 'text-red-600 bg-red-50 border-red-200';
+      default:
+        return 'text-blue-600 bg-blue-50 border-blue-200';
     }
   };
 
   const getComplianceColor = (status: string) => {
     switch (status) {
-      case 'compliant': return 'text-green-600';
-      case 'partial': return 'text-yellow-600';
-      case 'non-compliant': return 'text-red-600';
-      default: return 'text-gray-600';
+      case 'compliant':
+        return 'text-green-600';
+      case 'partial':
+        return 'text-yellow-600';
+      case 'non-compliant':
+        return 'text-red-600';
+      default:
+        return 'text-gray-600';
     }
   };
 
   const getTokenStatusColor = (status: string) => {
     switch (status) {
-      case 'valid': return 'text-green-600 bg-green-100';
-      case 'expiring': return 'text-yellow-600 bg-yellow-100';
-      case 'expired': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'valid':
+        return 'text-green-600 bg-green-100';
+      case 'expiring':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'expired':
+        return 'text-red-600 bg-red-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getTokenStatusIcon = (status: string) => {
     switch (status) {
-      case 'valid': return <CheckCircle className="w-4 h-4" />;
-      case 'expiring': return <AlertTriangle className="w-4 h-4" />;
-      case 'expired': return <XCircle className="w-4 h-4" />;
-      default: return <Clock className="w-4 h-4" />;
+      case 'valid':
+        return <CheckCircle className="w-4 h-4" />;
+      case 'expiring':
+        return <AlertTriangle className="w-4 h-4" />;
+      case 'expired':
+        return <XCircle className="w-4 h-4" />;
+      default:
+        return <Clock className="w-4 h-4" />;
     }
   };
 
@@ -224,7 +245,9 @@ const SecurityMonitoringDashboard: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-bold text-foreground">Security Monitoring</h2>
-          <p className="text-muted-foreground">Enterprise-grade security compliance and monitoring</p>
+          <p className="text-muted-foreground">
+            Enterprise-grade security compliance and monitoring
+          </p>
         </div>
         <div className="flex items-center gap-4">
           <Button
@@ -245,8 +268,8 @@ const SecurityMonitoringDashboard: React.FC = () => {
               </>
             )}
           </Button>
-          <Button 
-            onClick={handleRefresh} 
+          <Button
+            onClick={handleRefresh}
             disabled={isRefreshing}
             className="flex items-center gap-2"
             variant="outline"
@@ -266,13 +289,17 @@ const SecurityMonitoringDashboard: React.FC = () => {
                 <Shield className="w-5 h-5 text-green-500" />
               </div>
               <div>
-                <p className="text-sm font-medium text-green-700 dark:text-green-300">Security Status</p>
+                <p className="text-sm font-medium text-green-700 dark:text-green-300">
+                  Security Status
+                </p>
                 <p className="text-xl font-bold text-green-800 dark:text-green-200">Secure</p>
               </div>
             </div>
             <div className="mt-3 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-xs text-green-600 dark:text-green-400">All systems protected</span>
+              <span className="text-xs text-green-600 dark:text-green-400">
+                All systems protected
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -301,12 +328,16 @@ const SecurityMonitoringDashboard: React.FC = () => {
                 <Activity className="w-5 h-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-sm font-medium text-purple-700 dark:text-purple-300">Active Monitoring</p>
+                <p className="text-sm font-medium text-purple-700 dark:text-purple-300">
+                  Active Monitoring
+                </p>
                 <p className="text-xl font-bold text-purple-800 dark:text-purple-200">24/7</p>
               </div>
             </div>
             <div className="mt-3">
-              <span className="text-xs text-purple-600 dark:text-purple-400">Real-time threat detection</span>
+              <span className="text-xs text-purple-600 dark:text-purple-400">
+                Real-time threat detection
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -318,12 +349,16 @@ const SecurityMonitoringDashboard: React.FC = () => {
                 <Server className="w-5 h-5 text-orange-500" />
               </div>
               <div>
-                <p className="text-sm font-medium text-orange-700 dark:text-orange-300">Compliance</p>
+                <p className="text-sm font-medium text-orange-700 dark:text-orange-300">
+                  Compliance
+                </p>
                 <p className="text-xl font-bold text-orange-800 dark:text-orange-200">91%</p>
               </div>
             </div>
             <div className="mt-3">
-              <span className="text-xs text-orange-600 dark:text-orange-400">3 standards monitored</span>
+              <span className="text-xs text-orange-600 dark:text-orange-400">
+                3 standards monitored
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -342,13 +377,18 @@ const SecurityMonitoringDashboard: React.FC = () => {
           <CardContent>
             <div className="space-y-4">
               {tokenStatus.map((token, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                >
                   <div className="flex items-center gap-3">
                     {getTokenStatusIcon(token.status)}
                     <div>
                       <p className="font-medium text-foreground">{token.provider}</p>
                       <p className="text-sm text-muted-foreground">
-                        {token.encryptionMethod !== 'N/A' ? `Encrypted: ${token.encryptionMethod}` : 'Not encrypted'}
+                        {token.encryptionMethod !== 'N/A'
+                          ? `Encrypted: ${token.encryptionMethod}`
+                          : 'Not encrypted'}
                       </p>
                     </div>
                   </div>
@@ -356,9 +396,7 @@ const SecurityMonitoringDashboard: React.FC = () => {
                     <Badge className={`mb-1 ${getTokenStatusColor(token.status)}`}>
                       {token.expiresIn}
                     </Badge>
-                    <p className="text-xs text-muted-foreground">
-                      Rotated {token.lastRotation}
-                    </p>
+                    <p className="text-xs text-muted-foreground">Rotated {token.lastRotation}</p>
                   </div>
                 </div>
               ))}
@@ -381,7 +419,9 @@ const SecurityMonitoringDashboard: React.FC = () => {
                 <div key={index} className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${getComplianceColor(compliance.status)} bg-current/10`}>
+                      <div
+                        className={`p-2 rounded-lg ${getComplianceColor(compliance.status)} bg-current/10`}
+                      >
                         {compliance.icon}
                       </div>
                       <div>
@@ -391,9 +431,14 @@ const SecurityMonitoringDashboard: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    <Badge 
-                      variant={compliance.status === 'compliant' ? 'default' : 
-                               compliance.status === 'partial' ? 'secondary' : 'destructive'}
+                    <Badge
+                      variant={
+                        compliance.status === 'compliant'
+                          ? 'default'
+                          : compliance.status === 'partial'
+                            ? 'secondary'
+                            : 'destructive'
+                      }
                       className="capitalize"
                     >
                       {compliance.status}
@@ -404,10 +449,7 @@ const SecurityMonitoringDashboard: React.FC = () => {
                       <span className="text-muted-foreground">Compliance Progress</span>
                       <span className="font-medium">{compliance.progress}%</span>
                     </div>
-                    <Progress 
-                      value={compliance.progress} 
-                      className="h-2"
-                    />
+                    <Progress value={compliance.progress} className="h-2" />
                     <p className="text-xs text-muted-foreground">
                       Next audit in {compliance.nextAudit}
                     </p>
@@ -425,14 +467,16 @@ const SecurityMonitoringDashboard: React.FC = () => {
               <Activity className="w-5 h-5" />
               Security Event Log
             </CardTitle>
-            <p className="text-sm text-muted-foreground">Real-time security events and audit trail</p>
+            <p className="text-sm text-muted-foreground">
+              Real-time security events and audit trail
+            </p>
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-96">
               <div className="space-y-3">
                 {securityEvents.map((event) => (
-                  <div 
-                    key={event.id} 
+                  <div
+                    key={event.id}
                     className={`p-4 rounded-lg border-l-4 ${getEventColor(event.type)}`}
                   >
                     <div className="flex items-start justify-between">
@@ -446,9 +490,7 @@ const SecurityMonitoringDashboard: React.FC = () => {
                             </Badge>
                           </div>
                           {showDetails && event.details && (
-                            <p className="text-sm text-muted-foreground mb-2">
-                              {event.details}
-                            </p>
+                            <p className="text-sm text-muted-foreground mb-2">{event.details}</p>
                           )}
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1">

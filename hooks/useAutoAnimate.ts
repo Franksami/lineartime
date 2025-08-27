@@ -3,8 +3,11 @@
  * Provides easy-to-use AutoAnimate functionality for React components
  */
 
+import autoAnimate, {
+  type AutoAnimateOptions,
+  type AutoAnimationPlugin,
+} from '@formkit/auto-animate';
 import { useEffect, useRef } from 'react';
-import autoAnimate, { type AutoAnimateOptions, type AutoAnimationPlugin } from '@formkit/auto-animate';
 
 export interface UseAutoAnimateOptions extends AutoAnimateOptions {
   // Additional options specific to our use case

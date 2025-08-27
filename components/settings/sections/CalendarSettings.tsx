@@ -1,69 +1,81 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Switch } from '@/components/ui/switch'
-import { Input } from '@/components/ui/input'
-import { useSettingsContext } from '@/contexts/SettingsContext'
-import { UserSettings } from '@/lib/settings/types'
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { useSettingsContext } from '@/contexts/SettingsContext';
+import type { UserSettings } from '@/lib/settings/types';
+import type * as React from 'react';
 
 export function CalendarSettings() {
-  const { settings, updateCategory } = useSettingsContext()
-  const calendar = settings.calendar
+  const { settings, updateCategory } = useSettingsContext();
+  const calendar = settings.calendar;
 
   const handleWeekStartChange = (value: string) => {
-    updateCategory('calendar', { weekStartsOn: parseInt(value) as UserSettings['calendar']['weekStartsOn'] })
-  }
+    updateCategory('calendar', {
+      weekStartsOn: Number.parseInt(value) as UserSettings['calendar']['weekStartsOn'],
+    });
+  };
 
   const handleDefaultViewChange = (defaultView: UserSettings['calendar']['defaultView']) => {
-    updateCategory('calendar', { defaultView })
-  }
+    updateCategory('calendar', { defaultView });
+  };
 
-  const handleDefaultCategoryChange = (defaultEventCategory: UserSettings['calendar']['defaultEventCategory']) => {
-    updateCategory('calendar', { defaultEventCategory })
-  }
+  const handleDefaultCategoryChange = (
+    defaultEventCategory: UserSettings['calendar']['defaultEventCategory']
+  ) => {
+    updateCategory('calendar', { defaultEventCategory });
+  };
 
   const handleEventDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const duration = parseInt(e.target.value)
-    if (!isNaN(duration) && duration > 0) {
-      updateCategory('calendar', { eventDefaultDuration: duration })
+    const duration = Number.parseInt(e.target.value);
+    if (!Number.isNaN(duration) && duration > 0) {
+      updateCategory('calendar', { eventDefaultDuration: duration });
     }
-  }
+  };
 
   const handleWorkingHoursChange = (field: 'start' | 'end', value: string) => {
     updateCategory('calendar', {
       workingHours: {
         ...calendar.workingHours,
-        [field]: value
-      }
-    })
-  }
+        [field]: value,
+      },
+    });
+  };
 
   const toggleWorkingHours = () => {
     updateCategory('calendar', {
       workingHours: {
         ...calendar.workingHours,
-        enabled: !calendar.workingHours.enabled
-      }
-    })
-  }
+        enabled: !calendar.workingHours.enabled,
+      },
+    });
+  };
 
   const toggleWeekNumbers = () => {
-    updateCategory('calendar', { showWeekNumbers: !calendar.showWeekNumbers })
-  }
+    updateCategory('calendar', { showWeekNumbers: !calendar.showWeekNumbers });
+  };
 
   const toggleWeekends = () => {
-    updateCategory('calendar', { showWeekends: !calendar.showWeekends })
-  }
+    updateCategory('calendar', { showWeekends: !calendar.showWeekends });
+  };
 
-  const handleCalendarDayStyleChange = (calendarDayStyle: UserSettings['calendar']['calendarDayStyle']) => {
-    updateCategory('calendar', { calendarDayStyle })
-  }
+  const handleCalendarDayStyleChange = (
+    calendarDayStyle: UserSettings['calendar']['calendarDayStyle']
+  ) => {
+    updateCategory('calendar', { calendarDayStyle });
+  };
 
   const toggleDaysLeftCounter = () => {
-    updateCategory('calendar', { showDaysLeft: !calendar.showDaysLeft })
-  }
+    updateCategory('calendar', { showDaysLeft: !calendar.showDaysLeft });
+  };
 
   const weekDays = [
     { value: '0', label: 'Sunday' },
@@ -73,13 +85,13 @@ export function CalendarSettings() {
     { value: '4', label: 'Thursday' },
     { value: '5', label: 'Friday' },
     { value: '6', label: 'Saturday' },
-  ]
+  ];
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium mb-4">Calendar Preferences</h3>
-        
+
         <div className="space-y-4">
           {/* Week Start Day */}
           <div className="flex items-center justify-between">
@@ -89,7 +101,7 @@ export function CalendarSettings() {
                 <SelectValue placeholder="Select day" />
               </SelectTrigger>
               <SelectContent>
-                {weekDays.map(day => (
+                {weekDays.map((day) => (
                   <SelectItem key={day.value} value={day.value}>
                     {day.label}
                   </SelectItem>
@@ -116,7 +128,10 @@ export function CalendarSettings() {
           {/* Default Event Category */}
           <div className="flex items-center justify-between">
             <Label htmlFor="defaultCategory">Default Event Category</Label>
-            <Select value={calendar.defaultEventCategory} onValueChange={handleDefaultCategoryChange}>
+            <Select
+              value={calendar.defaultEventCategory}
+              onValueChange={handleDefaultCategoryChange}
+            >
               <SelectTrigger id="defaultCategory" className="w-[180px]">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
@@ -148,9 +163,7 @@ export function CalendarSettings() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label htmlFor="weekNumbers">Show Week Numbers</Label>
-              <p className="text-sm text-muted-foreground">
-                Display week numbers in calendar view
-              </p>
+              <p className="text-sm text-muted-foreground">Display week numbers in calendar view</p>
             </div>
             <Switch
               id="weekNumbers"
@@ -218,9 +231,7 @@ export function CalendarSettings() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor="workingHours">Working Hours</Label>
-                <p className="text-sm text-muted-foreground">
-                  Highlight working hours in calendar
-                </p>
+                <p className="text-sm text-muted-foreground">Highlight working hours in calendar</p>
               </div>
               <Switch
                 id="workingHours"
@@ -229,7 +240,7 @@ export function CalendarSettings() {
                 aria-label="Toggle working hours"
               />
             </div>
-            
+
             {calendar.workingHours.enabled && (
               <div className="flex items-center gap-2 ml-4">
                 <Input
@@ -253,5 +264,5 @@ export function CalendarSettings() {
         </div>
       </div>
     </div>
-  )
+  );
 }

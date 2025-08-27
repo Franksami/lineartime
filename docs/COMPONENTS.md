@@ -38,7 +38,7 @@ export function ComponentName({ className, ...props }: ComponentProps) {
 
 ### LinearCalendarHorizontal (PRIMARY COMPONENT)
 
-**🎯 THE DEFINITIVE CALENDAR COMPONENT** - Locked foundation implementing "Life is bigger than a week" philosophy.
+**🎯 THE DEFINITIVE CALENDAR COMPONENT** - Locked layout per `docs/LINEAR_CALENDAR_FOUNDATION_SPEC.md`. Implementation improvements are allowed if the layout remains intact.
 
 ```typescript
 interface LinearCalendarHorizontalProps {
@@ -92,12 +92,12 @@ export default function CalendarPage() {
 - [`LinearCalendarVertical`](mdc:components/calendar/_archive/LinearCalendarVertical.tsx)
 - [`MobileCalendarView`](mdc:components/mobile/_archive/MobileCalendarView.tsx)
 
-**🔒 Foundation Features (LOCKED):**
-- **12 Horizontal Month Rows**: Complete Jan-Dec display  
-- **Week Day Headers**: Top and bottom "Su Mo Tu We Th Fr Sa" spanning full width
-- **Month Labels**: Both left and right sides of each row
-- **Complete Day Display**: 01-31 for each month with proper week alignment
-- **Professional Performance**: 112+ FPS, optimized memory usage
+**🔒 Foundation Features (LOCKED LAYOUT):**
+- 12 vertical month rows; each month a single continuous horizontal row
+- Week headers at top and bottom aligned with day columns
+- Month labels both left and right
+- Correct day-of-week alignment for any year; 42-cell invariant per month
+- Professional performance: 112+ FPS, optimized memory usage
 
 **State Management:**
 - Uses `useOfflineEvents` hook for IndexedDB persistence

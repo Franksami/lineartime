@@ -1,73 +1,73 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Wand2, Calendar, Clock, Tag } from "lucide-react"
-import { AICalendarService } from "@/lib/ai-services"
-import type { CalendarEvent } from "@/components/ui/calendar"
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import type { CalendarEvent } from '@/components/ui/calendar';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { AICalendarService } from '@/lib/ai-services';
+import { Calendar, Clock, Tag, Wand2 } from 'lucide-react';
+import { useState } from 'react';
 
 interface NaturalLanguageParserProps {
-  onEventParsed?: (event: CalendarEvent) => void
+  onEventParsed?: (event: CalendarEvent) => void;
 }
 
 export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserProps) {
-  const [input, setInput] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [parsedEvent, setParsedEvent] = useState<CalendarEvent | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [parsedEvent, setParsedEvent] = useState<CalendarEvent | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const exampleInputs = [
-    "Team meeting tomorrow at 2pm for 1 hour",
-    "Dentist appointment next Friday at 10:30am",
-    "Weekly standup every Monday at 9am",
-    "Vacation from July 15 to July 22",
-    "Call with client on 3/15/2025 at 3:30pm",
-    "Lunch with Sarah today at noon",
-    "Project deadline next Wednesday",
-    "Conference call at 4pm for 30 minutes",
-  ]
+    'Team meeting tomorrow at 2pm for 1 hour',
+    'Dentist appointment next Friday at 10:30am',
+    'Weekly standup every Monday at 9am',
+    'Vacation from July 15 to July 22',
+    'Call with client on 3/15/2025 at 3:30pm',
+    'Lunch with Sarah today at noon',
+    'Project deadline next Wednesday',
+    'Conference call at 4pm for 30 minutes',
+  ];
 
   const handleParse = async () => {
-    if (!input.trim() || isLoading) return
+    if (!input.trim() || isLoading) return;
 
-    setIsLoading(true)
-    setError(null)
-    setParsedEvent(null)
+    setIsLoading(true);
+    setError(null);
+    setParsedEvent(null);
 
     try {
-      const event = await AICalendarService.parseEventFromText(input.trim())
+      const event = await AICalendarService.parseEventFromText(input.trim());
 
       if (event) {
-        setParsedEvent(event)
-        onEventParsed?.(event)
+        setParsedEvent(event);
+        onEventParsed?.(event);
       } else {
-        setError("Could not parse the event. Please try rephrasing your input.")
+        setError('Could not parse the event. Please try rephrasing your input.');
       }
     } catch (err) {
-      console.error("[v0] Parsing error:", err)
-      setError("An error occurred while parsing the event.")
+      console.error('[v0] Parsing error:', err);
+      setError('An error occurred while parsing the event.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleExampleClick = (example: string) => {
-    setInput(example)
-    setError(null)
-    setParsedEvent(null)
-  }
+    setInput(example);
+    setError(null);
+    setParsedEvent(null);
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      handleParse()
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleParse();
     }
-  }
+  };
 
   return (
     <Card className="p-6 space-y-6">
@@ -77,7 +77,8 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
           <h3 className="text-lg font-semibold">Natural Language Event Parser</h3>
         </div>
         <p className="text-sm text-gray-600">
-          Describe your event in natural language and I'll parse it into a structured calendar event.
+          Describe your event in natural language and I'll parse it into a structured calendar
+          event.
         </p>
       </div>
 
@@ -92,7 +93,7 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
             className="flex-1"
           />
           <Button onClick={handleParse} disabled={!input.trim() || isLoading}>
-            {isLoading ? "Parsing..." : "Parse"}
+            {isLoading ? 'Parsing...' : 'Parse'}
           </Button>
         </div>
 
@@ -119,10 +120,20 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
                 <Clock className="w-4 h-4" />
                 <span className="font-medium">Date & Time:</span>
                 <span>
-                  {parsedEvent.startDate.toLocaleDateString()} at{" "}
-                  {parsedEvent.startDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  {parsedEvent.startDate.toLocaleDateString()} at{' '}
+                  {parsedEvent.startDate.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
                   {parsedEvent.endDate.getTime() !== parsedEvent.startDate.getTime() && (
-                    <> - {parsedEvent.endDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</>
+                    <>
+                      {' '}
+                      -{' '}
+                      {parsedEvent.endDate.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </>
                   )}
                 </span>
               </div>
@@ -132,7 +143,7 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
                 <span className="font-medium">Category:</span>
                 <Badge
                   variant="secondary"
-                  style={{ backgroundColor: parsedEvent.color + "20", color: parsedEvent.color }}
+                  style={{ backgroundColor: `${parsedEvent.color}20`, color: parsedEvent.color }}
                 >
                   {parsedEvent.category}
                 </Badge>
@@ -175,5 +186,5 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
         </div>
       </div>
     </Card>
-  )
+  );
 }

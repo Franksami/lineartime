@@ -1,35 +1,35 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import type { CalendarEvent } from "@/components/ui/calendar"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Search, Plus, Edit, Trash2 } from "lucide-react"
-import { format } from "date-fns"
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import type { CalendarEvent } from '@/components/ui/calendar';
+import { Input } from '@/components/ui/input';
+import { format } from 'date-fns';
+import { Edit, Plus, Search, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 interface ManageViewProps {
-  events: CalendarEvent[]
-  onEventsChange: (events: CalendarEvent[]) => void
+  events: CalendarEvent[];
+  onEventsChange: (events: CalendarEvent[]) => void;
 }
 
 export function ManageView({ events, onEventsChange }: ManageViewProps) {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const categories = Array.from(new Set(events.map((e) => e.category).filter(Boolean)))
+  const categories = Array.from(new Set(events.map((e) => e.category).filter(Boolean)));
 
   const filteredEvents = events.filter((event) => {
     const matchesSearch =
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event.description?.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = !selectedCategory || event.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+      event.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = !selectedCategory || event.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const handleDeleteEvent = (eventId: string) => {
-    onEventsChange(events.filter((e) => e.id !== eventId))
-  }
+    onEventsChange(events.filter((e) => e.id !== eventId));
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -53,7 +53,7 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
             </div>
             <div className="flex gap-2">
               <Button
-                variant={selectedCategory === null ? "default" : "outline"}
+                variant={selectedCategory === null ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setSelectedCategory(null)}
               >
@@ -62,7 +62,7 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
               {categories.map((category) => (
                 <Button
                   key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
+                  variant={selectedCategory === category ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setSelectedCategory(category)}
                 >
@@ -77,7 +77,9 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Events ({filteredEvents.length})</h2>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Events ({filteredEvents.length})
+              </h2>
               <Button size="sm">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Event
@@ -91,7 +93,10 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: event.color }}></div>
+                      <div
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: event.color }}
+                      />
                       <h3 className="font-medium text-gray-900">{event.title}</h3>
                       {event.category && (
                         <Badge variant="secondary" className="text-xs">
@@ -100,9 +105,12 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
                       )}
                     </div>
                     <p className="text-sm text-gray-600 mb-2">
-                      {format(event.startDate, "MMM d, yyyy")} - {format(event.endDate, "MMM d, yyyy")}
+                      {format(event.startDate, 'MMM d, yyyy')} -{' '}
+                      {format(event.endDate, 'MMM d, yyyy')}
                     </p>
-                    {event.description && <p className="text-sm text-gray-500">{event.description}</p>}
+                    {event.description && (
+                      <p className="text-sm text-gray-500">{event.description}</p>
+                    )}
                   </div>
                   <div className="flex items-center gap-2 ml-4">
                     <Button variant="ghost" size="sm">
@@ -130,5 +138,5 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

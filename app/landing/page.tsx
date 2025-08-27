@@ -1,31 +1,38 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
-import { 
-  Calendar, 
-  Sparkles, 
-  Users, 
-  Star, 
-  ArrowRight, 
-  CheckCircle, 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { SignInButton, SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  ArrowRight,
+  Brain,
+  Calendar,
+  CheckCircle,
   ChevronLeft,
   ChevronRight,
-  Github,
-  Twitter,
-  Linkedin,
   Clock,
-  Zap,
+  Github,
+  Globe,
+  Linkedin,
   Shield,
-  Brain,
-  Globe
-} from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+  Sparkles,
+  Star,
+  Twitter,
+  Users,
+  Zap,
+} from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useState } from 'react';
 
 // Hero Section Component
 function HeroSection() {
@@ -35,7 +42,10 @@ function HeroSection() {
         <div className="flex flex-col items-center gap-6 text-center sm:gap-12">
           <Badge variant="outline" className="gap-2">
             <span className="text-muted-foreground">New Feature</span>
-            <Link href="#ai-scheduling" className="flex items-center gap-1 text-primary hover:underline">
+            <Link
+              href="#ai-scheduling"
+              className="flex items-center gap-1 text-primary hover:underline"
+            >
               AI Scheduling
               <ArrowRight className="h-3 w-3" />
             </Link>
@@ -46,7 +56,9 @@ function HeroSection() {
           </h1>
 
           <p className="text-md relative z-10 max-w-[550px] font-medium text-muted-foreground sm:text-xl">
-            Experience time differently with LinearTime Calendar. Our revolutionary horizontal 12-month timeline view helps you see the bigger picture and plan beyond traditional weekly constraints.
+            Experience time differently with LinearTime Calendar. Our revolutionary horizontal
+            12-month timeline view helps you see the bigger picture and plan beyond traditional
+            weekly constraints.
           </p>
 
           <div className="relative z-10 flex justify-center gap-4">
@@ -107,33 +119,39 @@ function FeatureShowcase() {
   const features = [
     {
       icon: <Calendar className="w-6 h-6 text-primary" />,
-      title: "Horizontal Timeline",
-      description: "See your entire year at a glance with our unique horizontal 12-month layout that breaks free from traditional calendar constraints.",
+      title: 'Horizontal Timeline',
+      description:
+        'See your entire year at a glance with our unique horizontal 12-month layout that breaks free from traditional calendar constraints.',
     },
     {
       icon: <Brain className="w-6 h-6 text-primary" />,
-      title: "AI Scheduling",
-      description: "Let our intelligent AI find the perfect time slots for your meetings, considering preferences, time zones, and availability.",
+      title: 'AI Scheduling',
+      description:
+        'Let our intelligent AI find the perfect time slots for your meetings, considering preferences, time zones, and availability.',
     },
     {
       icon: <Users className="w-6 h-6 text-primary" />,
-      title: "Team Collaboration",
-      description: "Share calendars, coordinate schedules, and plan projects together with powerful collaboration tools built for teams.",
+      title: 'Team Collaboration',
+      description:
+        'Share calendars, coordinate schedules, and plan projects together with powerful collaboration tools built for teams.',
     },
     {
       icon: <Clock className="w-6 h-6 text-primary" />,
-      title: "Natural Language",
-      description: "Create events naturally by typing 'Meeting with Sarah tomorrow at 2pm' - our AI understands your intent.",
+      title: 'Natural Language',
+      description:
+        "Create events naturally by typing 'Meeting with Sarah tomorrow at 2pm' - our AI understands your intent.",
     },
     {
       icon: <Zap className="w-6 h-6 text-primary" />,
-      title: "Performance Optimized",
-      description: "Handle thousands of events smoothly with our optimized rendering engine and virtual scrolling technology.",
+      title: 'Performance Optimized',
+      description:
+        'Handle thousands of events smoothly with our optimized rendering engine and virtual scrolling technology.',
     },
     {
       icon: <Shield className="w-6 h-6 text-primary" />,
-      title: "Secure & Private",
-      description: "Your data is protected with enterprise-grade security, encryption, and privacy controls you can trust.",
+      title: 'Secure & Private',
+      description:
+        'Your data is protected with enterprise-grade security, encryption, and privacy controls you can trust.',
     },
   ];
 
@@ -148,7 +166,7 @@ function FeatureShowcase() {
             Everything you need to manage time more effectively
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <Card key={index} className="text-center hover:shadow-lg transition-shadow">
@@ -170,39 +188,46 @@ function FeatureShowcase() {
 // Testimonial Carousel Component
 function TestimonialCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+
   const testimonials = [
     {
-      name: "Sarah Chen",
-      title: "Product Manager at TechCorp",
-      description: "LinearTime Calendar has revolutionized how our team manages projects. The horizontal timeline view gives us unprecedented clarity into our roadmap.",
-      imageUrl: "https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&w=600&q=80",
-      githubUrl: "#",
-      twitterUrl: "#",
-      linkedinUrl: "#"
+      name: 'Sarah Chen',
+      title: 'Product Manager at TechCorp',
+      description:
+        'LinearTime Calendar has revolutionized how our team manages projects. The horizontal timeline view gives us unprecedented clarity into our roadmap.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&w=600&q=80',
+      githubUrl: '#',
+      twitterUrl: '#',
+      linkedinUrl: '#',
     },
     {
-      name: "Michael Rodriguez",
-      title: "CEO at StartupXYZ",
-      description: "The AI scheduling feature is a game-changer. It automatically finds the perfect time slots for our team meetings across different time zones.",
-      imageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80",
-      githubUrl: "#",
-      twitterUrl: "#",
-      linkedinUrl: "#"
+      name: 'Michael Rodriguez',
+      title: 'CEO at StartupXYZ',
+      description:
+        'The AI scheduling feature is a game-changer. It automatically finds the perfect time slots for our team meetings across different time zones.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80',
+      githubUrl: '#',
+      twitterUrl: '#',
+      linkedinUrl: '#',
     },
     {
-      name: "Emily Johnson",
-      title: "Design Lead at CreativeStudio",
-      description: "Finally, a calendar that thinks beyond weeks. The 12-month view helps us plan campaigns and see the bigger picture of our creative projects.",
-      imageUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80",
-      githubUrl: "#",
-      twitterUrl: "#",
-      linkedinUrl: "#"
-    }
+      name: 'Emily Johnson',
+      title: 'Design Lead at CreativeStudio',
+      description:
+        'Finally, a calendar that thinks beyond weeks. The 12-month view helps us plan campaigns and see the bigger picture of our creative projects.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80',
+      githubUrl: '#',
+      twitterUrl: '#',
+      linkedinUrl: '#',
+    },
   ];
 
   const handleNext = () => setCurrentIndex((index) => (index + 1) % testimonials.length);
-  const handlePrevious = () => setCurrentIndex((index) => (index - 1 + testimonials.length) % testimonials.length);
+  const handlePrevious = () =>
+    setCurrentIndex((index) => (index - 1 + testimonials.length) % testimonials.length);
 
   const currentTestimonial = testimonials[currentIndex];
 
@@ -223,7 +248,7 @@ function TestimonialCarousel() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
                   className="space-y-6"
                 >
                   <div className="w-20 h-20 mx-auto rounded-full overflow-hidden bg-muted">
@@ -244,13 +269,13 @@ function TestimonialCarousel() {
                   </div>
                   <div className="flex justify-center space-x-4">
                     {[
-                      { icon: Github, url: currentTestimonial.githubUrl, label: "GitHub" },
-                      { icon: Twitter, url: currentTestimonial.twitterUrl, label: "Twitter" },
-                      { icon: Linkedin, url: currentTestimonial.linkedinUrl, label: "LinkedIn" }
+                      { icon: Github, url: currentTestimonial.githubUrl, label: 'GitHub' },
+                      { icon: Twitter, url: currentTestimonial.twitterUrl, label: 'Twitter' },
+                      { icon: Linkedin, url: currentTestimonial.linkedinUrl, label: 'LinkedIn' },
                     ].map(({ icon: IconComponent, url, label }) => (
                       <Link
                         key={label}
-                        href={url || "#"}
+                        href={url || '#'}
                         className="w-10 h-10 bg-primary rounded-full flex items-center justify-center transition-colors hover:bg-primary/80"
                       >
                         <IconComponent className="w-4 h-4 text-primary-foreground" />
@@ -276,7 +301,7 @@ function TestimonialCarousel() {
                   key={index}
                   onClick={() => setCurrentIndex(index)}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentIndex ? "bg-primary" : "bg-muted"
+                    index === currentIndex ? 'bg-primary' : 'bg-muted'
                   }`}
                 />
               ))}
@@ -303,17 +328,31 @@ function PricingPreview() {
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
           Simple, Transparent Pricing
         </h2>
-        <p className="text-lg text-muted-foreground mb-12">
-          Choose the plan that fits your needs
-        </p>
-        
+        <p className="text-lg text-muted-foreground mb-12">Choose the plan that fits your needs</p>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {[
-            { name: 'Personal', price: '$9', features: ['Horizontal timeline', 'Basic AI scheduling', 'Up to 3 calendars'] },
-            { name: 'Professional', price: '$19', features: ['Everything in Personal', 'Advanced AI scheduling', 'Team collaboration'], popular: true },
-            { name: 'Enterprise', price: '$49', features: ['Everything in Professional', 'Advanced analytics', 'SSO & security'] }
+            {
+              name: 'Personal',
+              price: '$9',
+              features: ['Horizontal timeline', 'Basic AI scheduling', 'Up to 3 calendars'],
+            },
+            {
+              name: 'Professional',
+              price: '$19',
+              features: ['Everything in Personal', 'Advanced AI scheduling', 'Team collaboration'],
+              popular: true,
+            },
+            {
+              name: 'Enterprise',
+              price: '$49',
+              features: ['Everything in Professional', 'Advanced analytics', 'SSO & security'],
+            },
           ].map((plan) => (
-            <Card key={plan.name} className={`relative ${plan.popular ? 'border-primary shadow-lg' : ''}`}>
+            <Card
+              key={plan.name}
+              className={`relative ${plan.popular ? 'border-primary shadow-lg' : ''}`}
+            >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <Badge className="bg-primary text-primary-foreground">
@@ -322,7 +361,7 @@ function PricingPreview() {
                   </Badge>
                 </div>
               )}
-              
+
               <CardHeader>
                 <CardTitle className="text-lg">{plan.name}</CardTitle>
                 <div className="mt-4">
@@ -330,7 +369,7 @@ function PricingPreview() {
                   <span className="text-muted-foreground">/month</span>
                 </div>
               </CardHeader>
-              
+
               <CardContent>
                 <ul className="space-y-3">
                   {plan.features.map((feature, index) => (
@@ -341,20 +380,16 @@ function PricingPreview() {
                   ))}
                 </ul>
               </CardContent>
-              
+
               <CardFooter>
-                <Button 
-                  className="w-full" 
-                  variant={plan.popular ? "default" : "outline"}
-                  asChild
-                >
+                <Button className="w-full" variant={plan.popular ? 'default' : 'outline'} asChild>
                   <Link href="/pricing">Get Started</Link>
                 </Button>
               </CardFooter>
             </Card>
           ))}
         </div>
-        
+
         <div className="mt-12">
           <Button variant="outline" size="lg" asChild>
             <Link href="/pricing">View Detailed Pricing</Link>
@@ -377,8 +412,8 @@ function SignUpCTA() {
             </div>
             <h2 className="text-3xl font-bold">Ready to Transform Your Calendar?</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Join thousands of users who have already discovered the power of thinking beyond the week. 
-              Start your free trial today.
+              Join thousands of users who have already discovered the power of thinking beyond the
+              week. Start your free trial today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <SignedOut>
@@ -431,22 +466,34 @@ function LandingNavigation() {
               Beta
             </Badge>
           </div>
-          
+
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="#features"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               Features
             </Link>
-            <Link href="#testimonials" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="#testimonials"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               Testimonials
             </Link>
-            <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="/pricing"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               Pricing
             </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="#"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               Docs
             </Link>
           </nav>
-          
+
           <div className="flex items-center gap-2">
             <SignedOut>
               <Button variant="ghost" size="sm" asChild>

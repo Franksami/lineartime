@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { EnhancedAuthLayout } from '@/components/auth/EnhancedAuthLayout'
+import { EnhancedAuthLayout } from '@/components/auth/EnhancedAuthLayout';
+import { useState } from 'react';
 
 export default function SignUpPage() {
-  const [mode, setMode] = useState<'signin' | 'signup'>('signup')
+  const [mode, setMode] = useState<'signin' | 'signup'>('signup');
 
-  return <EnhancedAuthLayout mode={mode} onModeChange={setMode} />
+  return <EnhancedAuthLayout mode={mode} onModeChange={setMode} />;
 }

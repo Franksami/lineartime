@@ -1,10 +1,10 @@
-import { PricingTable } from '@clerk/nextjs'
-import { Metadata } from 'next'
+import { PricingTable } from '@clerk/nextjs';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Pricing - LinearTime',
   description: 'Choose the perfect plan for your scheduling needs with Clerk integrated billing',
-}
+};
 
 export default function PricingPage() {
   return (
@@ -13,22 +13,25 @@ export default function PricingPage() {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-4">Choose Your Plan</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Upgrade your scheduling experience with powerful features designed for productivity.
-            All plans include our signature horizontal timeline layout.
+            Upgrade your scheduling experience with powerful features designed for productivity. All
+            plans include our signature horizontal timeline layout.
           </p>
         </div>
-        
+
         <div className="max-w-5xl mx-auto">
           {/* Clerk's PricingTable component handles all billing logic */}
           <PricingTable />
         </div>
-        
+
         <div className="text-center mt-12">
           <p className="text-sm text-muted-foreground">
             All plans include a 14-day free trial. No credit card required.
           </p>
           <p className="text-sm text-muted-foreground mt-2">
-            Need enterprise features? <a href="mailto:support@lineartime.app" className="text-primary hover:underline">Contact us</a>
+            Need enterprise features?{' '}
+            <a href="mailto:support@lineartime.app" className="text-primary hover:underline">
+              Contact us
+            </a>
           </p>
           <div className="flex justify-center space-x-8 text-sm text-muted-foreground mt-4">
             <span>✓ Cancel anytime</span>
@@ -38,5 +41,5 @@ export default function PricingPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

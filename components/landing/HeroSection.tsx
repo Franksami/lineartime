@@ -1,65 +1,65 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Card } from '@/components/ui/card'
-import { 
-  Calendar, 
-  TrendingUp, 
-  Users, 
-  Zap, 
-  ArrowRight, 
-  Play,
-  Star,
-  Sparkles,
-  Clock,
-  Target,
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { useUnifiedTheme } from '@/hooks/useUnifiedTheme';
+import { Text as ChakraText, HStack, VStack } from '@chakra-ui/react';
+import { Avatar, Group, Text as MantineText, Rating } from '@mantine/core';
+import { Rate, Space, Statistic } from 'antd';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import {
+  ArrowRight,
   BarChart3,
-  CheckCircle
-} from 'lucide-react'
-import { Group, Text as MantineText, Avatar, Rating } from '@mantine/core'
-import { HStack, VStack, Text as ChakraText } from '@chakra-ui/react'
-import { Space, Statistic, Rate } from 'antd'
-import { useUnifiedTheme } from '@/hooks/useUnifiedTheme'
-import Link from 'next/link'
+  Calendar,
+  CheckCircle,
+  Clock,
+  Play,
+  Sparkles,
+  Star,
+  Target,
+  TrendingUp,
+  Users,
+  Zap,
+} from 'lucide-react';
+import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
 
 interface HeroSectionProps {
-  onGetStarted?: () => void
+  onGetStarted?: () => void;
 }
 
 export function HeroSection({ onGetStarted }: HeroSectionProps) {
-  const [currentWord, setCurrentWord] = useState(0)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const { scrollY } = useScroll()
-  const { utils, isClient } = useUnifiedTheme()
+  const [currentWord, setCurrentWord] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { scrollY } = useScroll();
+  const { utils, isClient } = useUnifiedTheme();
 
-  const y = useTransform(scrollY, [0, 500], [0, 150])
-  const opacity = useTransform(scrollY, [0, 300], [1, 0])
+  const y = useTransform(scrollY, [0, 500], [0, 150]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
-  const heroWords = ['organize', 'plan', 'visualize', 'master']
+  const heroWords = ['organize', 'plan', 'visualize', 'master'];
   const stats = [
     { title: 'Active Users', value: '50K+', icon: Users },
     { title: 'Time Saved', value: '2M hrs', icon: Clock },
     { title: 'Satisfaction', value: '98%', icon: Target },
     { title: 'Productivity', value: '+40%', icon: BarChart3 },
-  ]
+  ];
 
   const features = [
     'Year-at-a-glance view',
     'AI-powered suggestions',
     'Team collaboration',
-    'Smart integrations'
-  ]
+    'Smart integrations',
+  ];
 
   // Rotate hero words
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentWord(prev => (prev + 1) % heroWords.length)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [heroWords.length])
+      setCurrentWord((prev) => (prev + 1) % heroWords.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [heroWords.length]);
 
   // Track mouse position for interactive effects
   useEffect(() => {
@@ -67,12 +67,12 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
         y: (e.clientY / window.innerHeight) * 100,
-      })
-    }
+      });
+    };
 
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   if (!isClient) {
     return (
@@ -83,18 +83,15 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
           <div className="h-10 bg-muted/40 rounded w-32 mx-auto" />
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-background">
       {/* Animated Background */}
-      <motion.div 
-        className="absolute inset-0 -z-10"
-        style={{ y }}
-      >
+      <motion.div className="absolute inset-0 -z-10" style={{ y }}>
         {/* Gradient Background */}
-        <motion.div 
+        <motion.div
           className="absolute inset-0"
           style={{
             background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, var(--primary) 0%, transparent 50%)`,
@@ -110,7 +107,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
           }}
           transition={{
             duration: 20,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             ease: 'linear',
           }}
           className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-primary/10 blur-3xl"
@@ -122,7 +119,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
           }}
           transition={{
             duration: 25,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             ease: 'linear',
           }}
           className="absolute bottom-1/4 left-1/4 w-96 h-96 rounded-full bg-accent/10 blur-3xl"
@@ -144,7 +141,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
             }}
             transition={{
               duration: 3 + Math.random() * 2,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               delay: Math.random() * 2,
             }}
           />
@@ -191,9 +188,9 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                   {heroWords[currentWord]}
                 </motion.span>
               </h1>
-              
+
               <p className="text-xl lg:text-2xl text-muted-foreground max-w-2xl">
-                Transform how you manage time with our revolutionary year-at-a-glance calendar. 
+                Transform how you manage time with our revolutionary year-at-a-glance calendar.
                 Powered by AI for smarter scheduling and deeper insights.
               </p>
             </motion.div>
@@ -237,7 +234,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               </Button>
-              
+
               <Button
                 variant="outline"
                 size="lg"
@@ -264,7 +261,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                   5.0 from 10,000+ users
                 </MantineText>
               </div>
-              
+
               <HStack spacing={6} className="justify-center lg:justify-start flex-wrap">
                 <MantineText size="sm" c="dimmed" className="text-muted-foreground">
                   Trusted by:
@@ -304,7 +301,11 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                     <Statistic
                       title={<span className="text-sm text-muted-foreground">{stat.title}</span>}
                       value={stat.value}
-                      valueStyle={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--foreground)' }}
+                      valueStyle={{
+                        fontSize: '1.5rem',
+                        fontWeight: 'bold',
+                        color: 'var(--foreground)',
+                      }}
                     />
                   </Card>
                 </motion.div>
@@ -323,14 +324,12 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                 <div className="text-center space-y-4">
                   <motion.div
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                    transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
                     className="w-16 h-16 mx-auto rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center"
                   >
                     <Calendar className="w-8 h-8 text-primary-foreground" />
                   </motion.div>
-                  <h3 className="text-xl font-semibold text-foreground">
-                    See Your Entire Year
-                  </h3>
+                  <h3 className="text-xl font-semibold text-foreground">See Your Entire Year</h3>
                   <p className="text-muted-foreground">
                     Revolutionary horizontal layout shows all 12 months at once
                   </p>
@@ -349,14 +348,11 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
             >
               <Card className="p-6 bg-muted/30 border-border/50">
                 <div className="flex items-start space-x-4">
-                  <Avatar
-                    size="md"
-                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=happy"
-                  />
+                  <Avatar size="md" src="https://api.dicebear.com/7.x/avataaars/svg?seed=happy" />
                   <div>
                     <ChakraText fontSize="sm" className="text-foreground italic">
-                      "LinearTime completely changed how our team manages projects. 
-                      The year view is a game-changer!"
+                      "LinearTime completely changed how our team manages projects. The year view is
+                      a game-changer!"
                     </ChakraText>
                     <ChakraText fontSize="xs" className="text-muted-foreground mt-2">
                       Sarah Chen, Product Manager at TechCorp
@@ -365,7 +361,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                 </div>
               </Card>
             </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
@@ -378,7 +374,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
           className="text-muted-foreground text-sm cursor-pointer hover:text-foreground transition-colors"
         >
           <div className="flex flex-col items-center space-y-2">
@@ -386,7 +382,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
             <div className="w-1 h-8 bg-border rounded-full">
               <motion.div
                 animate={{ y: [0, 16, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                 className="w-1 h-4 bg-primary rounded-full"
               />
             </div>
@@ -394,5 +390,5 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
         </motion.div>
       </motion.div>
     </section>
-  )
+  );
 }

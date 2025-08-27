@@ -1,65 +1,65 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { Button } from '@/components/ui/button'
-import { notify } from '@/components/ui/notify'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { notify } from '@/components/ui/notify';
+import React from 'react';
 
 export function TestToast() {
   const testSuccess = () => {
-    notify.success('Calendar event created successfully!')
-  }
+    notify.success('Calendar event created successfully!');
+  };
 
   const testError = () => {
-    notify.error('Failed to sync calendar. Please try again.')
-  }
+    notify.error('Failed to sync calendar. Please try again.');
+  };
 
   const testWarning = () => {
     notify.warning('Some events may have conflicts that need resolution.', {
       action: {
         label: 'Resolve',
-        onClick: () => notify.info('Opening conflict resolution...')
-      }
-    })
-  }
+        onClick: () => notify.info('Opening conflict resolution...'),
+      },
+    });
+  };
 
   const testInfo = () => {
-    notify.info('Syncing calendar data from Google Calendar...')
-  }
+    notify.info('Syncing calendar data from Google Calendar...');
+  };
 
   const testLoadingWithUpdate = () => {
-    const id = notify.loading('Saving calendar settings...')
-    
+    const id = notify.loading('Saving calendar settings...');
+
     // Simulate async operation
     setTimeout(() => {
-      notify.update(id, 'Settings saved successfully!', true)
-    }, 2000)
-  }
+      notify.update(id, 'Settings saved successfully!', true);
+    }, 2000);
+  };
 
   const testLoadingWithError = () => {
-    const id = notify.loading('Connecting to calendar provider...')
-    
+    const id = notify.loading('Connecting to calendar provider...');
+
     // Simulate async operation that fails
     setTimeout(() => {
-      notify.update(id, 'Failed to connect to calendar provider', false)
-    }, 2000)
-  }
+      notify.update(id, 'Failed to connect to calendar provider', false);
+    }, 2000);
+  };
 
   const testMultiple = () => {
-    notify.success('First notification')
-    setTimeout(() => notify.info('Second notification'), 500)
-    setTimeout(() => notify.warning('Third notification'), 1000)
-  }
+    notify.success('First notification');
+    setTimeout(() => notify.info('Second notification'), 500);
+    setTimeout(() => notify.warning('Third notification'), 1000);
+  };
 
   const testDismiss = () => {
-    const id = notify.info('This notification will auto-dismiss in 2 seconds', { 
-      duration: 10000 // Long duration
-    })
-    
+    const id = notify.info('This notification will auto-dismiss in 2 seconds', {
+      duration: 10000, // Long duration
+    });
+
     setTimeout(() => {
-      notify.dismiss(id)
-    }, 2000)
-  }
+      notify.dismiss(id);
+    }, 2000);
+  };
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -74,36 +74,36 @@ export function TestToast() {
           <Button onClick={testSuccess} variant="default">
             Test Success Toast
           </Button>
-          
+
           <Button onClick={testError} variant="destructive">
             Test Error Toast
           </Button>
-          
+
           <Button onClick={testWarning} variant="outline">
             Test Warning Toast (with Action)
           </Button>
-          
+
           <Button onClick={testInfo} variant="secondary">
             Test Info Toast
           </Button>
-          
+
           <Button onClick={testLoadingWithUpdate} className="bg-blue-600 hover:bg-blue-700">
             Test Loading → Success
           </Button>
-          
+
           <Button onClick={testLoadingWithError} className="bg-orange-600 hover:bg-orange-700">
             Test Loading → Error
           </Button>
-          
+
           <Button onClick={testMultiple} variant="outline">
             Test Multiple Toasts
           </Button>
-          
+
           <Button onClick={testDismiss} variant="ghost">
             Test Dismiss Toast
           </Button>
         </div>
-        
+
         <div className="mt-6 p-4 bg-muted rounded-lg">
           <h3 className="text-sm font-semibold mb-2">What to verify:</h3>
           <ul className="text-sm text-muted-foreground space-y-1">
@@ -117,17 +117,13 @@ export function TestToast() {
             <li>• Manual dismiss works correctly</li>
           </ul>
         </div>
-        
+
         <div className="flex justify-center">
-          <Button 
-            onClick={() => notify.dismissAll()} 
-            variant="outline" 
-            size="sm"
-          >
+          <Button onClick={() => notify.dismissAll()} variant="outline" size="sm">
             Dismiss All Toasts
           </Button>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

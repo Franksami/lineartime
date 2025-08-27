@@ -3,8 +3,8 @@
  * Manages data synchronization between IndexedDB and Convex
  */
 
-import { db, StoredEvent, SyncQueueItem } from './schema';
-import { EventOperations, SyncQueueOperations, CacheOperations } from './operations';
+import { CacheOperations, EventOperations, SyncQueueOperations } from './operations';
+import { type StoredEvent, type SyncQueueItem, db } from './schema';
 
 /**
  * Sync status types
@@ -46,10 +46,10 @@ export class OfflineSyncManager {
    * Get singleton instance
    */
   static getInstance(): OfflineSyncManager {
-    if (!this.instance) {
-      this.instance = new OfflineSyncManager();
+    if (!OfflineSyncManager.instance) {
+      OfflineSyncManager.instance = new OfflineSyncManager();
     }
-    return this.instance;
+    return OfflineSyncManager.instance;
   }
 
   /**
@@ -57,16 +57,19 @@ export class OfflineSyncManager {
    */
   startAutoSync(intervalMinutes = 5): void {
     this.stopAutoSync();
-    
+
     // Initial sync
     this.sync();
-    
+
     // Set up interval
-    this.syncInterval = window.setInterval(() => {
-      if (navigator.onLine) {
-        this.sync();
-      }
-    }, intervalMinutes * 60 * 1000);
+    this.syncInterval = window.setInterval(
+      () => {
+        if (navigator.onLine) {
+          this.sync();
+        }
+      },
+      intervalMinutes * 60 * 1000
+    );
 
     // Listen for online/offline events
     window.addEventListener('online', this.handleOnline);
@@ -81,7 +84,7 @@ export class OfflineSyncManager {
       clearInterval(this.syncInterval);
       this.syncInterval = null;
     }
-    
+
     window.removeEventListener('online', this.handleOnline);
     window.removeEventListener('offline', this.handleOffline);
   }
@@ -191,9 +194,9 @@ export class OfflineSyncManager {
     const result = { synced: 0, failed: 0, errors: [] as string[] };
 
     // Get pending items from queue
-    const items = userId 
+    const items = userId
       ? await SyncQueueOperations.getPending(userId)
-      : await db.syncQueue.filter(item => item.attempts < 3).toArray();
+      : await db.syncQueue.filter((item) => item.attempts < 3).toArray();
 
     for (const item of items) {
       try {
@@ -222,7 +225,7 @@ export class OfflineSyncManager {
     console.log('Processing sync item:', item);
 
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     // Simulate occasional failures for testing
     if (Math.random() < 0.1) {
@@ -262,27 +265,24 @@ export class OfflineSyncManager {
     // Get events that need syncing
     const pendingEvents = userId
       ? await EventOperations.getPendingSync(userId)
-      : await db.events
-          .where('syncStatus')
-          .anyOf(['local', 'pending'])
-          .toArray();
+      : await db.events.where('syncStatus').anyOf(['local', 'pending']).toArray();
 
     for (const event of pendingEvents) {
       try {
         // This would sync with Convex
         console.log('Syncing event:', event.id);
-        
+
         // Simulate sync
-        await new Promise(resolve => setTimeout(resolve, 50));
-        
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
         // Mark as synced
-        await db.events.update(event.id!, { 
+        await db.events.update(event.id!, {
           syncStatus: 'synced',
           convexId: `convex_${event.id}`, // Simulated Convex ID
         });
-        
+
         result.synced++;
-      } catch (error) {
+      } catch (_error) {
         // Add to sync queue for retry
         await SyncQueueOperations.add({
           userId: event.userId,
@@ -291,7 +291,7 @@ export class OfflineSyncManager {
           entityId: event.id!,
           data: event,
         });
-        
+
         result.failed++;
         result.errors.push(`Failed to sync event ${event.id}`);
       }
@@ -311,17 +311,17 @@ export class OfflineSyncManager {
     console.log('Pulling remote changes...');
 
     // Get last sync time
-    const preferences = userId 
+    const preferences = userId
       ? await db.preferences.where('userId').equals(userId).first()
-      : await db.preferences.toArray().then(prefs => prefs[0]);
+      : await db.preferences.toArray().then((prefs) => prefs[0]);
 
-    const lastSync = preferences?.lastSyncTime || 0;
+    const _lastSync = preferences?.lastSyncTime || 0;
 
     // Simulate fetching remote changes
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
     // Update last sync time
-    if (preferences && preferences.id) {
+    if (preferences?.id) {
       await db.preferences.update(preferences.id, {
         lastSyncTime: Date.now(),
       });
@@ -341,7 +341,7 @@ export class OfflineSyncManager {
     switch (strategy) {
       case ConflictStrategy.LOCAL_WINS:
         return localEvent;
-        
+
       case ConflictStrategy.REMOTE_WINS:
         return {
           ...localEvent,
@@ -349,22 +349,22 @@ export class OfflineSyncManager {
           id: localEvent.id,
           syncStatus: 'synced',
         };
-        
-      case ConflictStrategy.NEWEST_WINS:
+
+      case ConflictStrategy.NEWEST_WINS: {
         const localTime = localEvent.lastModified || localEvent.updatedAt;
         const remoteTime = remoteEvent.lastModified || remoteEvent.updatedAt;
-        
+
         if (localTime > remoteTime) {
           return localEvent;
-        } else {
-          return {
-            ...localEvent,
-            ...remoteEvent,
-            id: localEvent.id,
-            syncStatus: 'synced',
-          };
         }
-        
+        return {
+          ...localEvent,
+          ...remoteEvent,
+          id: localEvent.id,
+          syncStatus: 'synced',
+        };
+      }
+
       case ConflictStrategy.MANUAL:
         // Store conflict for manual resolution
         await db.events.update(localEvent.id!, {
@@ -375,7 +375,7 @@ export class OfflineSyncManager {
           },
         });
         return localEvent;
-        
+
       default:
         return localEvent;
     }
@@ -408,39 +408,33 @@ export class OfflineSyncManager {
    * Notify status listeners
    */
   private notifyListeners(): void {
-    this.listeners.forEach(callback => callback(this.status));
+    this.listeners.forEach((callback) => callback(this.status));
   }
 
   /**
    * Clear all sync data for a user
    */
   async clearUserSyncData(userId: string): Promise<void> {
-    await db.transaction('rw', 
-      db.events,
-      db.categories,
-      db.calendars,
-      db.syncQueue,
-      async () => {
-        // Reset sync status for all entities
-        await db.events
-          .where('userId')
-          .equals(userId)
-          .modify({ syncStatus: 'local', convexId: undefined });
+    await db.transaction('rw', db.events, db.categories, db.calendars, db.syncQueue, async () => {
+      // Reset sync status for all entities
+      await db.events
+        .where('userId')
+        .equals(userId)
+        .modify({ syncStatus: 'local', convexId: undefined });
 
-        await db.categories
-          .where('userId')
-          .equals(userId)
-          .modify({ syncStatus: 'local', convexId: undefined });
+      await db.categories
+        .where('userId')
+        .equals(userId)
+        .modify({ syncStatus: 'local', convexId: undefined });
 
-        await db.calendars
-          .where('userId')
-          .equals(userId)
-          .modify({ syncStatus: 'local', convexId: undefined });
+      await db.calendars
+        .where('userId')
+        .equals(userId)
+        .modify({ syncStatus: 'local', convexId: undefined });
 
-        // Clear sync queue
-        await SyncQueueOperations.clearAll(userId);
-      }
-    );
+      // Clear sync queue
+      await SyncQueueOperations.clearAll(userId);
+    });
   }
 }
 
@@ -456,7 +450,7 @@ export class SyncUtils {
     const buffer = new TextEncoder().encode(str);
     const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 
   /**
@@ -471,7 +465,7 @@ export class SyncUtils {
 
     for (let i = 0; i < items.length; i += batchSize) {
       const batch = items.slice(i, i + batchSize);
-      const promises = batch.map(item => 
+      const promises = batch.map((item) =>
         syncFn(item)
           .then(() => results.success++)
           .catch(() => results.failed++)
@@ -492,12 +486,10 @@ export class SyncUtils {
     conflicts: number;
   }> {
     const [pendingEvents, queueStats, preferences, conflicts] = await Promise.all([
-      EventOperations.getPendingSync(userId).then(e => e.length),
+      EventOperations.getPendingSync(userId).then((e) => e.length),
       SyncQueueOperations.getStats(userId),
       db.preferences.where('userId').equals(userId).first(),
-      db.events
-        .where({ userId, syncStatus: 'conflict' })
-        .count(),
+      db.events.where({ userId, syncStatus: 'conflict' }).count(),
     ]);
 
     return {

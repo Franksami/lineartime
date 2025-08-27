@@ -1,61 +1,56 @@
-'use client'
+'use client';
 
-import * as React from "react"
-import { X } from "lucide-react"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Button } from "@/components/ui/button"
-import type { FilterState, ViewOptions } from "@/types/calendar"
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import type { FilterState, ViewOptions } from '@/types/calendar';
+import { X } from 'lucide-react';
+import * as React from 'react';
 
-type FilterChangeHandler = (filters: FilterState | { viewOptions: ViewOptions }) => void
+type FilterChangeHandler = (filters: FilterState | { viewOptions: ViewOptions }) => void;
 
 interface FilterPanelProps {
-  filters: FilterState
-  viewOptions: ViewOptions
-  onFilterChange: FilterChangeHandler
-  onClose: () => void
+  filters: FilterState;
+  viewOptions: ViewOptions;
+  onFilterChange: FilterChangeHandler;
+  onClose: () => void;
 }
 
-export function FilterPanel({ 
-  filters, 
-  viewOptions, 
-  onFilterChange, 
-  onClose 
-}: FilterPanelProps) {
+export function FilterPanel({ filters, viewOptions, onFilterChange, onClose }: FilterPanelProps) {
   const handleCategoryChange = (category: keyof FilterState, checked: boolean) => {
     onFilterChange({
       ...filters,
-      [category]: checked
-    })
-  }
+      [category]: checked,
+    });
+  };
 
   const handleViewOptionChange = (option: keyof ViewOptions, checked: boolean) => {
     onFilterChange({
       ...filters,
       viewOptions: {
         ...viewOptions,
-        [option]: checked
-      }
-    })
-  }
+        [option]: checked,
+      },
+    });
+  };
 
   const showAll = () => {
     onFilterChange({
       personal: true,
       work: true,
       efforts: true,
-      notes: true
-    })
-  }
+      notes: true,
+    });
+  };
 
   const hideAll = () => {
     onFilterChange({
       personal: false,
       work: false,
       efforts: false,
-      notes: false
-    })
-  }
+      notes: false,
+    });
+  };
 
   return (
     <div className="w-80 border-l bg-background p-6 h-full overflow-y-auto">
@@ -82,7 +77,7 @@ export function FilterPanel({
                 onCheckedChange={(checked) => handleCategoryChange('personal', checked)}
               />
             </div>
-            
+
             <div className="flex items-center justify-between">
               <Label htmlFor="work" className="flex items-center cursor-pointer">
                 <span className="w-3 h-3 rounded-full bg-blue-500 mr-2" />
@@ -94,7 +89,7 @@ export function FilterPanel({
                 onCheckedChange={(checked) => handleCategoryChange('work', checked)}
               />
             </div>
-            
+
             <div className="flex items-center justify-between">
               <Label htmlFor="effort" className="flex items-center cursor-pointer">
                 <span className="w-3 h-3 rounded-full bg-orange-500 mr-2" />
@@ -106,7 +101,7 @@ export function FilterPanel({
                 onCheckedChange={(checked) => handleCategoryChange('efforts', checked)}
               />
             </div>
-            
+
             <div className="flex items-center justify-between">
               <Label htmlFor="note" className="flex items-center cursor-pointer">
                 <span className="w-3 h-3 rounded-full bg-purple-500 mr-2" />
@@ -156,18 +151,10 @@ export function FilterPanel({
 
         {/* Quick Actions */}
         <div className="pt-4 border-t space-y-2">
-          <Button 
-            variant="outline" 
-            className="w-full"
-            onClick={showAll}
-          >
+          <Button variant="outline" className="w-full" onClick={showAll}>
             Show All Categories
           </Button>
-          <Button 
-            variant="outline" 
-            className="w-full"
-            onClick={hideAll}
-          >
+          <Button variant="outline" className="w-full" onClick={hideAll}>
             Hide All Categories
           </Button>
         </div>
@@ -196,5 +183,5 @@ export function FilterPanel({
         </div>
       </div>
     </div>
-  )
+  );
 }

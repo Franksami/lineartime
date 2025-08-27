@@ -1,20 +1,20 @@
-import { 
-  addDays, 
-  addWeeks, 
+import {
+  addDays,
   addMonths,
-  startOfWeek,
-  endOfWeek,
-  startOfMonth,
+  addWeeks,
+  differenceInMinutes,
   endOfMonth,
+  endOfWeek,
+  format,
+  getDay,
+  isSameDay,
+  isWeekend,
   setHours,
   setMinutes,
-  format,
-  isWeekend,
-  getDay,
-  differenceInMinutes,
-  isSameDay
+  startOfMonth,
+  startOfWeek,
 } from 'date-fns';
-import { TimeRange, RecurrencePattern } from '../types';
+import type { RecurrencePattern, TimeRange } from '../types';
 
 /**
  * Generate recurring dates based on a pattern
@@ -22,15 +22,15 @@ import { TimeRange, RecurrencePattern } from '../types';
 export function generateRecurringDates(
   startDate: Date,
   pattern: RecurrencePattern,
-  limit: number = 52 // Default to 52 occurrences (1 year for weekly)
+  limit = 52 // Default to 52 occurrences (1 year for weekly)
 ): Date[] {
   const dates: Date[] = [];
   let currentDate = startDate;
   let count = 0;
-  
+
   while (count < limit && (!pattern.endDate || currentDate <= pattern.endDate)) {
     // Check if this date is an exception
-    if (!pattern.exceptions?.some(exception => isSameDay(exception, currentDate))) {
+    if (!pattern.exceptions?.some((exception) => isSameDay(exception, currentDate))) {
       // For weekly recurrence, check if it's the right day of week
       if (pattern.frequency === 'weekly' && pattern.daysOfWeek) {
         const dayOfWeek = getDay(currentDate);
@@ -43,7 +43,7 @@ export function generateRecurringDates(
         count++;
       }
     }
-    
+
     // Move to next occurrence
     switch (pattern.frequency) {
       case 'daily':
@@ -62,7 +62,7 @@ export function generateRecurringDates(
         break;
     }
   }
-  
+
   return dates;
 }
 
@@ -78,14 +78,14 @@ export function getWorkingHours(
   }
 ): TimeRange | null {
   const dayOfWeek = getDay(date);
-  
+
   if (!workingHours.days.includes(dayOfWeek)) {
     return null;
   }
-  
+
   return {
     start: setMinutes(setHours(date, workingHours.start), 0),
-    end: setMinutes(setHours(date, workingHours.end), 0)
+    end: setMinutes(setHours(date, workingHours.end), 0),
   };
 }
 
@@ -101,11 +101,11 @@ export function isWithinWorkingHours(
   }
 ): boolean {
   const dayOfWeek = getDay(time);
-  
+
   if (!workingHours.days.includes(dayOfWeek)) {
     return false;
   }
-  
+
   const hour = time.getHours();
   return hour >= workingHours.start && hour < workingHours.end;
 }
@@ -118,11 +118,11 @@ export function getNextWorkingDay(
   workingDays: number[] = [1, 2, 3, 4, 5] // Monday to Friday
 ): Date {
   let nextDay = addDays(from, 1);
-  
+
   while (!workingDays.includes(getDay(nextDay))) {
     nextDay = addDays(nextDay, 1);
   }
-  
+
   return nextDay;
 }
 
@@ -132,7 +132,7 @@ export function getNextWorkingDay(
 export function calculateBufferTime(
   event1End: Date,
   event2Start: Date,
-  defaultBuffer: number = 5
+  _defaultBuffer = 5
 ): number {
   const gap = differenceInMinutes(event2Start, event1End);
   return Math.max(0, gap);
@@ -144,12 +144,11 @@ export function calculateBufferTime(
 export function formatTimeRange(start: Date, end: Date): string {
   const startStr = format(start, 'h:mm a');
   const endStr = format(end, 'h:mm a');
-  
+
   if (isSameDay(start, end)) {
     return `${startStr} - ${endStr}`;
-  } else {
-    return `${format(start, 'MMM d, h:mm a')} - ${format(end, 'MMM d, h:mm a')}`;
   }
+  return `${format(start, 'MMM d, h:mm a')} - ${format(end, 'MMM d, h:mm a')}`;
 }
 
 /**
@@ -163,16 +162,16 @@ export function getDayTimeBlocks(date: Date): {
   return {
     morning: {
       start: setMinutes(setHours(date, 6), 0),
-      end: setMinutes(setHours(date, 12), 0)
+      end: setMinutes(setHours(date, 12), 0),
     },
     afternoon: {
       start: setMinutes(setHours(date, 12), 0),
-      end: setMinutes(setHours(date, 17), 0)
+      end: setMinutes(setHours(date, 17), 0),
     },
     evening: {
       start: setMinutes(setHours(date, 17), 0),
-      end: setMinutes(setHours(date, 22), 0)
-    }
+      end: setMinutes(setHours(date, 22), 0),
+    },
   };
 }
 
@@ -180,7 +179,7 @@ export function getDayTimeBlocks(date: Date): {
  * Check if a date is a holiday (basic implementation - can be extended)
  */
 export function isHoliday(date: Date, holidays: Date[] = []): boolean {
-  return holidays.some(holiday => isSameDay(holiday, date));
+  return holidays.some((holiday) => isSameDay(holiday, date));
 }
 
 /**
@@ -189,7 +188,7 @@ export function isHoliday(date: Date, holidays: Date[] = []): boolean {
 export function getWeekBoundaries(date: Date): TimeRange {
   return {
     start: startOfWeek(date, { weekStartsOn: 1 }), // Monday
-    end: endOfWeek(date, { weekStartsOn: 1 })
+    end: endOfWeek(date, { weekStartsOn: 1 }),
   };
 }
 
@@ -199,7 +198,7 @@ export function getWeekBoundaries(date: Date): TimeRange {
 export function getMonthBoundaries(date: Date): TimeRange {
   return {
     start: startOfMonth(date),
-    end: endOfMonth(date)
+    end: endOfMonth(date),
   };
 }
 
@@ -208,18 +207,18 @@ export function getMonthBoundaries(date: Date): TimeRange {
  */
 export function suggestMeetingDuration(type: string): number {
   const durations: Record<string, number> = {
-    'standup': 15,
+    standup: 15,
     'quick-sync': 15,
     'one-on-one': 30,
-    'meeting': 60,
-    'workshop': 120,
-    'training': 180,
+    meeting: 60,
+    workshop: 120,
+    training: 180,
     'all-hands': 60,
-    'interview': 60,
-    'review': 45,
-    'brainstorm': 90
+    interview: 60,
+    review: 45,
+    brainstorm: 90,
   };
-  
+
   return durations[type.toLowerCase()] || 30;
 }
 
@@ -231,87 +230,86 @@ export function parseFlexibleTime(
   referenceDate: Date = new Date()
 ): TimeRange | null {
   const lower = expression.toLowerCase();
-  
+
   // Tomorrow
   if (lower.includes('tomorrow')) {
     const tomorrow = addDays(referenceDate, 1);
-    
+
     if (lower.includes('morning')) {
       return {
         start: setMinutes(setHours(tomorrow, 9), 0),
-        end: setMinutes(setHours(tomorrow, 12), 0)
-      };
-    } else if (lower.includes('afternoon')) {
-      return {
-        start: setMinutes(setHours(tomorrow, 13), 0),
-        end: setMinutes(setHours(tomorrow, 17), 0)
-      };
-    } else if (lower.includes('evening')) {
-      return {
-        start: setMinutes(setHours(tomorrow, 17), 0),
-        end: setMinutes(setHours(tomorrow, 20), 0)
-      };
-    } else {
-      return {
-        start: setMinutes(setHours(tomorrow, 9), 0),
-        end: setMinutes(setHours(tomorrow, 17), 0)
+        end: setMinutes(setHours(tomorrow, 12), 0),
       };
     }
+    if (lower.includes('afternoon')) {
+      return {
+        start: setMinutes(setHours(tomorrow, 13), 0),
+        end: setMinutes(setHours(tomorrow, 17), 0),
+      };
+    }
+    if (lower.includes('evening')) {
+      return {
+        start: setMinutes(setHours(tomorrow, 17), 0),
+        end: setMinutes(setHours(tomorrow, 20), 0),
+      };
+    }
+    return {
+      start: setMinutes(setHours(tomorrow, 9), 0),
+      end: setMinutes(setHours(tomorrow, 17), 0),
+    };
   }
-  
+
   // Next week
   if (lower.includes('next week')) {
     const nextWeek = addWeeks(referenceDate, 1);
     return getWeekBoundaries(nextWeek);
   }
-  
+
   // This week
   if (lower.includes('this week')) {
     return getWeekBoundaries(referenceDate);
   }
-  
+
   // Today
   if (lower.includes('today')) {
     if (lower.includes('morning')) {
       return {
         start: setMinutes(setHours(referenceDate, 9), 0),
-        end: setMinutes(setHours(referenceDate, 12), 0)
-      };
-    } else if (lower.includes('afternoon')) {
-      return {
-        start: setMinutes(setHours(referenceDate, 13), 0),
-        end: setMinutes(setHours(referenceDate, 17), 0)
-      };
-    } else if (lower.includes('evening')) {
-      return {
-        start: setMinutes(setHours(referenceDate, 17), 0),
-        end: setMinutes(setHours(referenceDate, 20), 0)
-      };
-    } else {
-      return {
-        start: new Date(),
-        end: setMinutes(setHours(referenceDate, 23), 59)
+        end: setMinutes(setHours(referenceDate, 12), 0),
       };
     }
+    if (lower.includes('afternoon')) {
+      return {
+        start: setMinutes(setHours(referenceDate, 13), 0),
+        end: setMinutes(setHours(referenceDate, 17), 0),
+      };
+    }
+    if (lower.includes('evening')) {
+      return {
+        start: setMinutes(setHours(referenceDate, 17), 0),
+        end: setMinutes(setHours(referenceDate, 20), 0),
+      };
+    }
+    return {
+      start: new Date(),
+      end: setMinutes(setHours(referenceDate, 23), 59),
+    };
   }
-  
+
   return null;
 }
 
 /**
  * Round time to nearest interval (e.g., 15, 30 minutes)
  */
-export function roundToNearestInterval(
-  date: Date,
-  intervalMinutes: number = 15
-): Date {
+export function roundToNearestInterval(date: Date, intervalMinutes = 15): Date {
   const minutes = date.getMinutes();
   const roundedMinutes = Math.round(minutes / intervalMinutes) * intervalMinutes;
-  
+
   if (roundedMinutes === 60) {
     return setMinutes(addDays(date, 1), 0);
   }
-  
+
   return setMinutes(date, roundedMinutes);
 }
 
@@ -330,7 +328,7 @@ export function getEnergyLevel(
       if (hour >= 15 && hour <= 17) return 0.7;
       if (hour >= 18 && hour <= 20) return 0.4;
       return 0.2;
-      
+
     case 'evening':
       // Peak energy in the evening
       if (hour >= 6 && hour <= 9) return 0.3;
@@ -338,8 +336,6 @@ export function getEnergyLevel(
       if (hour >= 15 && hour <= 18) return 0.8;
       if (hour >= 19 && hour <= 22) return 0.9;
       return 0.2;
-      
-    case 'balanced':
     default:
       // Balanced energy throughout the day
       if (hour >= 6 && hour <= 8) return 0.5;

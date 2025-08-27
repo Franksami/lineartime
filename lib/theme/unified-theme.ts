@@ -3,62 +3,62 @@
  * Integrates multiple UI libraries with a consistent design system
  */
 
-import { MantineColorsTuple } from '@mantine/core'
+import type { MantineColorsTuple } from '@mantine/core';
 
 // Base theme tokens from CSS variables
 export interface BaseTheme {
   colors: {
-    background: string
-    foreground: string
-    card: string
-    cardForeground: string
-    popover: string
-    popoverForeground: string
-    primary: string
-    primaryForeground: string
-    secondary: string
-    secondaryForeground: string
-    muted: string
-    mutedForeground: string
-    accent: string
-    accentForeground: string
-    destructive: string
-    destructiveForeground: string
-    border: string
-    input: string
-    ring: string
-    chart1: string
-    chart2: string
-    chart3: string
-    chart4: string
-    chart5: string
-  }
+    background: string;
+    foreground: string;
+    card: string;
+    cardForeground: string;
+    popover: string;
+    popoverForeground: string;
+    primary: string;
+    primaryForeground: string;
+    secondary: string;
+    secondaryForeground: string;
+    muted: string;
+    mutedForeground: string;
+    accent: string;
+    accentForeground: string;
+    destructive: string;
+    destructiveForeground: string;
+    border: string;
+    input: string;
+    ring: string;
+    chart1: string;
+    chart2: string;
+    chart3: string;
+    chart4: string;
+    chart5: string;
+  };
   fonts: {
-    sans: string
-    serif: string
-    mono: string
-  }
+    sans: string;
+    serif: string;
+    mono: string;
+  };
   radii: {
-    sm: string
-    md: string
-    lg: string
-    xl: string
-  }
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+  };
   shadows: {
-    xs: string
-    sm: string
-    md: string
-    lg: string
-    xl: string
-    '2xl': string
-  }
+    xs: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    '2xl': string;
+  };
 }
 
 // Function to get CSS variable value with fallbacks
-function getCSSVariable(variable: string, fallback: string = ''): string {
-  if (typeof window === 'undefined') return fallback
-  const value = getComputedStyle(document.documentElement).getPropertyValue(variable).trim()
-  return value || fallback
+function getCSSVariable(variable: string, fallback = ''): string {
+  if (typeof window === 'undefined') return fallback;
+  const value = getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+  return value || fallback;
 }
 
 // Get current theme values from CSS variables
@@ -109,22 +109,22 @@ export function getCurrentTheme(): BaseTheme {
       xl: getCSSVariable('--shadow-xl'),
       '2xl': getCSSVariable('--shadow-2xl'),
     },
-  }
+  };
 }
 
 // Convert OKLCH to hex for libraries that need hex colors
 function oklchToHex(oklch: string): string {
   // This is a simplified conversion for fallback
   // In production, you'd want a proper OKLCH to hex conversion
-  if (!oklch.startsWith('oklch(')) return '#000000'
-  
+  if (!oklch.startsWith('oklch(')) return '#000000';
+
   // Extract lightness value and convert to grayscale hex for now
-  const match = oklch.match(/oklch\(([0-9.]+)/)
-  if (!match) return '#000000'
-  
-  const lightness = parseFloat(match[1])
-  const gray = Math.round(lightness * 255)
-  return `#${gray.toString(16).padStart(2, '0').repeat(3)}`
+  const match = oklch.match(/oklch\(([0-9.]+)/);
+  if (!match) return '#000000';
+
+  const lightness = Number.parseFloat(match[1]);
+  const gray = Math.round(lightness * 255);
+  return `#${gray.toString(16).padStart(2, '0').repeat(3)}`;
 }
 
 // Mantine theme configuration
@@ -132,7 +132,7 @@ export function createMantineTheme(baseTheme: BaseTheme) {
   // Convert CSS variables to Mantine format
   const primary: MantineColorsTuple = [
     '#f0f9ff',
-    '#e0f2fe', 
+    '#e0f2fe',
     '#bae6fd',
     '#7dd3fc',
     '#38bdf8',
@@ -140,8 +140,8 @@ export function createMantineTheme(baseTheme: BaseTheme) {
     '#0284c7',
     '#0369a1',
     '#075985',
-    '#0c4a6e'
-  ]
+    '#0c4a6e',
+  ];
 
   return {
     primaryColor: 'blue',
@@ -177,7 +177,7 @@ export function createMantineTheme(baseTheme: BaseTheme) {
         },
       },
     },
-  }
+  };
 }
 
 // Ant Design theme configuration
@@ -186,14 +186,14 @@ export function createAntdTheme(baseTheme: BaseTheme) {
     token: {
       colorPrimary: oklchToHex(baseTheme.colors.primary) || '#1677ff',
       colorSuccess: '#52c41a',
-      colorWarning: '#faad14', 
+      colorWarning: '#faad14',
       colorError: oklchToHex(baseTheme.colors.destructive) || '#ff4d4f',
       colorInfo: '#1677ff',
       colorBgContainer: oklchToHex(baseTheme.colors.card) || '#ffffff',
       colorBgElevated: oklchToHex(baseTheme.colors.popover) || '#ffffff',
       colorBorder: oklchToHex(baseTheme.colors.border) || '#d9d9d9',
       colorBorderSecondary: oklchToHex(baseTheme.colors.muted) || '#f0f0f0',
-      borderRadius: parseInt(baseTheme.radii.md.replace('rem', '')) * 16 || 6,
+      borderRadius: Number.parseInt(baseTheme.radii.md.replace('rem', '')) * 16 || 6,
       fontFamily: baseTheme.fonts.sans || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto',
       fontSize: 14,
       colorText: oklchToHex(baseTheme.colors.foreground) || '#000000d9',
@@ -203,30 +203,30 @@ export function createAntdTheme(baseTheme: BaseTheme) {
     },
     components: {
       Button: {
-        borderRadius: parseInt(baseTheme.radii.md.replace('rem', '')) * 16 || 6,
+        borderRadius: Number.parseInt(baseTheme.radii.md.replace('rem', '')) * 16 || 6,
       },
       Card: {
-        borderRadius: parseInt(baseTheme.radii.lg.replace('rem', '')) * 16 || 8,
+        borderRadius: Number.parseInt(baseTheme.radii.lg.replace('rem', '')) * 16 || 8,
       },
       Input: {
-        borderRadius: parseInt(baseTheme.radii.sm.replace('rem', '')) * 16 || 4,
+        borderRadius: Number.parseInt(baseTheme.radii.sm.replace('rem', '')) * 16 || 4,
       },
       DatePicker: {
-        borderRadius: parseInt(baseTheme.radii.md.replace('rem', '')) * 16 || 6,
+        borderRadius: Number.parseInt(baseTheme.radii.md.replace('rem', '')) * 16 || 6,
       },
     },
-  }
+  };
 }
 
-// Chakra UI theme configuration  
-export function createChakraTheme(baseTheme: BaseTheme) {
+// Chakra UI theme configuration
+export function createChakraTheme(_baseTheme: BaseTheme) {
   // Import extendTheme if available, otherwise return undefined to skip ChakraProvider
   try {
     // This is a simplified approach - in production you'd import extendTheme from @chakra-ui/react
     // For now, return undefined to bypass ChakraProvider until proper theme is configured
-    return undefined
-  } catch (error) {
-    return undefined
+    return undefined;
+  } catch (_error) {
+    return undefined;
   }
 }
 
@@ -234,8 +234,8 @@ export function createChakraTheme(baseTheme: BaseTheme) {
 export const themeUtils = {
   getCurrentTheme,
   createMantineTheme,
-  createAntdTheme, 
+  createAntdTheme,
   createChakraTheme,
-}
+};
 
-export default themeUtils
+export default themeUtils;

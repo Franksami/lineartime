@@ -41,12 +41,12 @@ export class MemoryManager {
   private observers: Set<(metrics: MemoryMetrics) => void> = new Set();
   private leakDetectionEnabled = true;
   private autoCleanupEnabled = true;
-  
+
   // Leak detection
   private heapSnapshots: number[] = [];
   private maxSnapshots = 10;
   private leakDetectionThreshold = 5; // MB growth per minute
-  
+
   // Performance cache
   private cacheMap: Map<string, { data: any; expires: number }> = new Map();
   private maxCacheSize = 100; // MB
@@ -77,7 +77,7 @@ export class MemoryManager {
     if (typeof window === 'undefined') {
       return {} as MemoryManager; // Return empty object for server-side compatibility
     }
-    
+
     if (!MemoryManager.instance) {
       MemoryManager.instance = new MemoryManager();
     }
@@ -105,11 +105,11 @@ export class MemoryManager {
    */
   private startMonitoring(): void {
     if (this.monitoringInterval) return;
-    
+
     this.monitoringInterval = setInterval(() => {
       this.updateMetrics();
       this.detectLeaks();
-      
+
       if (this.autoCleanupEnabled) {
         this.performAutoCleanup();
       }
@@ -131,7 +131,7 @@ export class MemoryManager {
    */
   private updateMetrics(): void {
     const metrics: MemoryMetrics = { ...this.getInitialMetrics() };
-    
+
     // Get memory usage if available
     if ('memory' in performance) {
       const memory = (performance as any).memory;
@@ -139,26 +139,26 @@ export class MemoryManager {
       metrics.heapTotal = memory.totalJSHeapSize / 1048576;
       metrics.external = memory.jsHeapSizeLimit / 1048576;
     }
-    
+
     // Count DOM nodes (skip on server side)
     if (typeof document !== 'undefined') {
       metrics.domNodes = document.getElementsByTagName('*').length;
     } else {
       metrics.domNodes = 0;
     }
-    
+
     // Count event listeners (approximate)
     metrics.eventListeners = this.countEventListeners();
-    
+
     // Detect detached nodes
     metrics.detachedNodes = this.countDetachedNodes();
-    
+
     // Calculate leak risk
     metrics.leakRisk = this.calculateLeakRisk(metrics);
-    
+
     // Add recommendation
     metrics.recommendation = this.getRecommendation(metrics);
-    
+
     this.metrics = metrics;
     this.notifyObservers(metrics);
   }
@@ -169,7 +169,7 @@ export class MemoryManager {
   private countEventListeners(): number {
     let count = 0;
     const allElements = document.getElementsByTagName('*');
-    
+
     // This is an approximation - actual count would require browser internals
     for (const element of allElements) {
       // Check for inline handlers
@@ -179,12 +179,12 @@ export class MemoryManager {
         }
       }
     }
-    
+
     // Add tracked listeners
-    this.resources.forEach(resource => {
+    this.resources.forEach((resource) => {
       if (resource.type === 'listener') count++;
     });
-    
+
     return count;
   }
 
@@ -193,8 +193,8 @@ export class MemoryManager {
    */
   private countDetachedNodes(): number {
     let count = 0;
-    
-    this.resources.forEach(resource => {
+
+    this.resources.forEach((resource) => {
       if (resource.type === 'element') {
         const element = resource.reference.deref();
         if (element && !document.body.contains(element)) {
@@ -202,7 +202,7 @@ export class MemoryManager {
         }
       }
     });
-    
+
     return count;
   }
 
@@ -211,29 +211,29 @@ export class MemoryManager {
    */
   private calculateLeakRisk(metrics: MemoryMetrics): number {
     let risk = 0;
-    
+
     // Heap usage risk
     if (metrics.heapUsed > this.thresholds.critical) {
       risk += 0.4;
     } else if (metrics.heapUsed > this.thresholds.warning) {
       risk += 0.2;
     }
-    
+
     // DOM nodes risk
     if (metrics.domNodes > this.thresholds.maxDOMNodes) {
       risk += 0.2;
     }
-    
+
     // Event listeners risk
     if (metrics.eventListeners > this.thresholds.maxEventListeners) {
       risk += 0.2;
     }
-    
+
     // Detached nodes risk
     if (metrics.detachedNodes > this.thresholds.maxDetachedNodes) {
       risk += 0.2;
     }
-    
+
     return Math.min(risk, 1);
   }
 
@@ -243,13 +243,17 @@ export class MemoryManager {
   private getRecommendation(metrics: MemoryMetrics): string {
     if (metrics.leakRisk > 0.8) {
       return 'Critical: Memory usage is very high. Consider reloading the page.';
-    } else if (metrics.leakRisk > 0.6) {
+    }
+    if (metrics.leakRisk > 0.6) {
       return 'Warning: High memory usage detected. Clean up unused resources.';
-    } else if (metrics.detachedNodes > 50) {
+    }
+    if (metrics.detachedNodes > 50) {
       return 'Clean up detached DOM nodes to free memory.';
-    } else if (metrics.eventListeners > 500) {
+    }
+    if (metrics.eventListeners > 500) {
       return 'Consider using event delegation to reduce listeners.';
-    } else if (metrics.domNodes > 5000) {
+    }
+    if (metrics.domNodes > 5000) {
       return 'Consider virtualizing long lists to reduce DOM nodes.';
     }
     return 'Memory usage is within normal limits.';
@@ -260,20 +264,20 @@ export class MemoryManager {
    */
   private detectLeaks(): void {
     if (!this.leakDetectionEnabled) return;
-    
+
     const currentHeap = this.metrics.heapUsed;
     this.heapSnapshots.push(currentHeap);
-    
+
     if (this.heapSnapshots.length > this.maxSnapshots) {
       this.heapSnapshots.shift();
     }
-    
+
     // Check for consistent growth
     if (this.heapSnapshots.length >= 5) {
       const growth = this.heapSnapshots[this.heapSnapshots.length - 1] - this.heapSnapshots[0];
       const timeSpan = (this.heapSnapshots.length - 1) * 5; // seconds
       const growthRate = (growth / timeSpan) * 60; // MB per minute
-      
+
       if (growthRate > this.leakDetectionThreshold) {
         console.warn(`Potential memory leak detected: ${growthRate.toFixed(2)} MB/min growth`);
         this.notifyLeak(growthRate);
@@ -286,15 +290,15 @@ export class MemoryManager {
    */
   private performAutoCleanup(): void {
     const metrics = this.metrics;
-    
+
     // Clean up if memory usage is high
     if (metrics.leakRisk > 0.6) {
       // Clean expired cache
       this.cleanExpiredCache();
-      
+
       // Clean detached nodes
       this.cleanDetachedNodes();
-      
+
       // Force garbage collection if available
       this.forceGarbageCollection();
     }
@@ -303,12 +307,7 @@ export class MemoryManager {
   /**
    * Track a resource for cleanup
    */
-  trackResource(
-    id: string,
-    resource: any,
-    type: TrackedResource['type'],
-    metadata?: any
-  ): void {
+  trackResource(id: string, resource: any, type: TrackedResource['type'], metadata?: any): void {
     const trackedResource: TrackedResource = {
       id,
       type,
@@ -316,9 +315,9 @@ export class MemoryManager {
       metadata,
       created: Date.now(),
     };
-    
+
     this.resources.set(id, trackedResource);
-    
+
     // Register for automatic cleanup
     if (typeof resource === 'object' && resource !== null) {
       this.cleanupRegistry.register(resource, id);
@@ -343,7 +342,7 @@ export class MemoryManager {
   private cleanupResource(resource: TrackedResource): void {
     const ref = resource.reference.deref();
     if (!ref) return;
-    
+
     switch (resource.type) {
       case 'element':
         if (ref.parentNode) {
@@ -381,7 +380,7 @@ export class MemoryManager {
    */
   private cleanDetachedNodes(): void {
     const toRemove: string[] = [];
-    
+
     this.resources.forEach((resource, id) => {
       if (resource.type === 'element') {
         const element = resource.reference.deref();
@@ -390,9 +389,9 @@ export class MemoryManager {
         }
       }
     });
-    
-    toRemove.forEach(id => this.untrackResource(id));
-    
+
+    toRemove.forEach((id) => this.untrackResource(id));
+
     if (toRemove.length > 0) {
       console.log(`Cleaned ${toRemove.length} detached nodes`);
     }
@@ -401,25 +400,25 @@ export class MemoryManager {
   /**
    * Cache management
    */
-  cache(key: string, data: any, ttl: number = 60000): void {
+  cache(key: string, data: any, ttl = 60000): void {
     const size = this.estimateSize(data);
-    
+
     // Check if cache would exceed limit
     if (this.currentCacheSize + size > this.maxCacheSize * 1048576) {
       this.cleanExpiredCache();
-      
+
       // If still too large, remove oldest entries
       while (this.currentCacheSize + size > this.maxCacheSize * 1048576 && this.cacheMap.size > 0) {
         const firstKey = this.cacheMap.keys().next().value;
         this.removeFromCache(firstKey);
       }
     }
-    
+
     this.cacheMap.set(key, {
       data,
       expires: Date.now() + ttl,
     });
-    
+
     this.currentCacheSize += size;
   }
 
@@ -428,14 +427,14 @@ export class MemoryManager {
    */
   getFromCache(key: string): any | undefined {
     const entry = this.cacheMap.get(key);
-    
+
     if (!entry) return undefined;
-    
+
     if (entry.expires < Date.now()) {
       this.removeFromCache(key);
       return undefined;
     }
-    
+
     return entry.data;
   }
 
@@ -457,14 +456,14 @@ export class MemoryManager {
   private cleanExpiredCache(): void {
     const now = Date.now();
     const toRemove: string[] = [];
-    
+
     this.cacheMap.forEach((entry, key) => {
       if (entry.expires < now) {
         toRemove.push(key);
       }
     });
-    
-    toRemove.forEach(key => this.removeFromCache(key));
+
+    toRemove.forEach((key) => this.removeFromCache(key));
   }
 
   /**
@@ -504,7 +503,7 @@ export class MemoryManager {
    * Notify observers
    */
   private notifyObservers(metrics: MemoryMetrics): void {
-    this.observers.forEach(callback => callback(metrics));
+    this.observers.forEach((callback) => callback(metrics));
   }
 
   /**
@@ -544,11 +543,11 @@ export class MemoryManager {
    */
   getResourceStats() {
     const stats: Record<string, number> = {};
-    
-    this.resources.forEach(resource => {
+
+    this.resources.forEach((resource) => {
       stats[resource.type] = (stats[resource.type] || 0) + 1;
     });
-    
+
     return {
       total: this.resources.size,
       byType: stats,
@@ -561,7 +560,7 @@ export class MemoryManager {
    * Clear all resources
    */
   clearAll(): void {
-    this.resources.forEach((resource, id) => {
+    this.resources.forEach((resource, _id) => {
       this.cleanupResource(resource);
     });
     this.resources.clear();

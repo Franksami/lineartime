@@ -1,24 +1,11 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { ViewSwitcher, CalendarView } from '@/components/dashboard/ViewSwitcher'
-import { HighContrastToggle } from '@/components/ui/high-contrast-toggle'
-import { SettingsDialog } from '@/components/settings/SettingsDialog'
-import { CommandBar } from '@/components/CommandBar'
-import { ThemeSelector } from '@/components/theme/theme-selector'
-import {
-  Calendar,
-  CalendarDays,
-  LayoutList,
-  Menu,
-  X,
-  Search,
-  Bell,
-  User,
-  Palette
-} from 'lucide-react'
+import { CommandBar } from '@/components/CommandBar';
+import { type CalendarView, ViewSwitcher } from '@/components/dashboard/ViewSwitcher';
+import { SettingsDialog } from '@/components/settings/SettingsDialog';
+import { ThemeSelector } from '@/components/theme/theme-selector';
+import { Button } from '@/components/ui/button';
+import { HighContrastToggle } from '@/components/ui/high-contrast-toggle';
 import {
   Sheet,
   SheetContent,
@@ -26,16 +13,29 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet'
-import type { Event } from '@/types/calendar'
+} from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
+import type { Event } from '@/types/calendar';
+import {
+  Bell,
+  Calendar,
+  CalendarDays,
+  LayoutList,
+  Menu,
+  Palette,
+  Search,
+  User,
+  X,
+} from 'lucide-react';
+import React from 'react';
 
 interface NavigationHeaderProps {
-  currentView: CalendarView
-  onViewChange: (view: CalendarView) => void
-  onEventCreate?: (event: Partial<Event>) => void
-  onEventDelete?: (id: string) => void
-  events?: any[]
-  className?: string
+  currentView: CalendarView;
+  onViewChange: (view: CalendarView) => void;
+  onEventCreate?: (event: Partial<Event>) => void;
+  onEventDelete?: (id: string) => void;
+  events?: any[];
+  className?: string;
 }
 
 export function NavigationHeader({
@@ -44,11 +44,11 @@ export function NavigationHeader({
   onEventCreate,
   onEventDelete,
   events = [],
-  className
+  className,
 }: NavigationHeaderProps) {
-  const [sidebarOpen, setSidebarOpen] = React.useState(false)
-  const [showThemeSelector, setShowThemeSelector] = React.useState(false)
-  
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [showThemeSelector, setShowThemeSelector] = React.useState(false);
+
   return (
     <header className={cn('border-b border-border bg-background', className)}>
       <div className="flex h-16 items-center px-4 gap-4">
@@ -67,9 +67,7 @@ export function NavigationHeader({
           <SheetContent side="left" className="w-80">
             <SheetHeader>
               <SheetTitle>LinearTime</SheetTitle>
-              <SheetDescription>
-                Navigate your calendar views
-              </SheetDescription>
+              <SheetDescription>Navigate your calendar views</SheetDescription>
             </SheetHeader>
             <div className="mt-6 space-y-4">
               <Button
@@ -78,8 +76,8 @@ export function NavigationHeader({
                 aria-label="Switch to year view"
                 aria-current={currentView === 'year' ? 'page' : undefined}
                 onClick={() => {
-                  onViewChange('year')
-                  setSidebarOpen(false)
+                  onViewChange('year');
+                  setSidebarOpen(false);
                 }}
               >
                 <Calendar className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -91,8 +89,8 @@ export function NavigationHeader({
                 aria-label="Switch to timeline view"
                 aria-current={currentView === 'timeline' ? 'page' : undefined}
                 onClick={() => {
-                  onViewChange('timeline')
-                  setSidebarOpen(false)
+                  onViewChange('timeline');
+                  setSidebarOpen(false);
                 }}
               >
                 <CalendarDays className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -104,8 +102,8 @@ export function NavigationHeader({
                 aria-label="Switch to event management view"
                 aria-current={currentView === 'manage' ? 'page' : undefined}
                 onClick={() => {
-                  onViewChange('manage')
-                  setSidebarOpen(false)
+                  onViewChange('manage');
+                  setSidebarOpen(false);
                 }}
               >
                 <LayoutList className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -114,7 +112,7 @@ export function NavigationHeader({
             </div>
           </SheetContent>
         </Sheet>
-        
+
         {/* Logo/Title */}
         <div className="flex items-center gap-2">
           <div className="text-xl font-bold">LinearTime</div>
@@ -122,7 +120,7 @@ export function NavigationHeader({
             Life is bigger than a week
           </span>
         </div>
-        
+
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-2 mx-auto">
           <Button
@@ -156,7 +154,7 @@ export function NavigationHeader({
             Manage
           </Button>
         </nav>
-        
+
         {/* Right Side Actions */}
         <div className="flex items-center gap-2">
           {/* Search Button */}
@@ -170,30 +168,25 @@ export function NavigationHeader({
               const event = new KeyboardEvent('keydown', {
                 key: 'k',
                 metaKey: true,
-                ctrlKey: true
-              })
-              window.dispatchEvent(event)
+                ctrlKey: true,
+              });
+              window.dispatchEvent(event);
             }}
           >
             <Search className="h-4 w-4" aria-hidden="true" />
           </Button>
-          
+
           {/* Notifications */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="relative"
-            aria-label="Notifications"
-          >
+          <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
             <Bell className="h-4 w-4" aria-hidden="true" />
             {events.length > 0 && (
               <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-destructive" />
             )}
           </Button>
-          
+
           {/* Settings & Profile */}
           <HighContrastToggle />
-          
+
           {/* Theme Selector */}
           <Button
             variant="ghost"
@@ -204,28 +197,19 @@ export function NavigationHeader({
           >
             <Palette className="h-4 w-4" aria-hidden="true" />
           </Button>
-          
+
           <SettingsDialog />
-          
+
           {/* User Avatar */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full"
-            aria-label="User profile"
-          >
+          <Button variant="ghost" size="icon" className="rounded-full" aria-label="User profile">
             <User className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       </div>
-      
-            {/* Command Bar */}
-      <CommandBar 
-        onEventCreate={onEventCreate}
-        onEventDelete={onEventDelete}
-        events={events}
-      />
-      
+
+      {/* Command Bar */}
+      <CommandBar onEventCreate={onEventCreate} onEventDelete={onEventDelete} events={events} />
+
       {/* Theme Selector Popup */}
       {showThemeSelector && (
         <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setShowThemeSelector(false)}>
@@ -235,5 +219,5 @@ export function NavigationHeader({
         </div>
       )}
     </header>
-  )
+  );
 }

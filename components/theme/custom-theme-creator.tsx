@@ -1,92 +1,98 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft, Save, Palette } from "lucide-react"
-import { useThemeManager, type ThemeConfig } from "@/lib/theme-manager"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { type ThemeConfig, useThemeManager } from '@/lib/theme-manager';
+import { ArrowLeft, Palette, Save } from 'lucide-react';
+import { useState } from 'react';
 
 interface CustomThemeCreatorProps {
-  onClose: () => void
-  onBack: () => void
+  onClose: () => void;
+  onBack: () => void;
 }
 
 export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps) {
-  const { currentTheme, saveCustomTheme, applyTheme } = useThemeManager()
-  const [themeName, setThemeName] = useState("")
+  const { currentTheme, saveCustomTheme, applyTheme } = useThemeManager();
+  const [themeName, setThemeName] = useState('');
   const [themeConfig, setThemeConfig] = useState<ThemeConfig>({
     ...currentTheme,
     id: `custom-${Date.now()}`,
-    name: "",
-  })
+    name: '',
+  });
 
-  const handleColorChange = (colorKey: keyof ThemeConfig["colors"], value: string) => {
+  const handleColorChange = (colorKey: keyof ThemeConfig['colors'], value: string) => {
     const updatedTheme = {
       ...themeConfig,
       colors: {
         ...themeConfig.colors,
         [colorKey]: value,
       },
-    }
-    setThemeConfig(updatedTheme)
+    };
+    setThemeConfig(updatedTheme);
     // Apply theme for live preview
-    applyTheme(updatedTheme)
-  }
+    applyTheme(updatedTheme);
+  };
 
-  const handleTypographyChange = (key: keyof ThemeConfig["typography"], value: string) => {
+  const handleTypographyChange = (key: keyof ThemeConfig['typography'], value: string) => {
     const updatedTheme = {
       ...themeConfig,
       typography: {
         ...themeConfig.typography,
         [key]: value,
       },
-    }
-    setThemeConfig(updatedTheme)
-    applyTheme(updatedTheme)
-  }
+    };
+    setThemeConfig(updatedTheme);
+    applyTheme(updatedTheme);
+  };
 
-  const handleLayoutChange = (key: keyof ThemeConfig["layout"], value: string) => {
+  const handleLayoutChange = (key: keyof ThemeConfig['layout'], value: string) => {
     const updatedTheme = {
       ...themeConfig,
       layout: {
         ...themeConfig.layout,
         [key]: value,
       },
-    }
-    setThemeConfig(updatedTheme)
-    applyTheme(updatedTheme)
-  }
+    };
+    setThemeConfig(updatedTheme);
+    applyTheme(updatedTheme);
+  };
 
   const handleSave = () => {
     if (!themeName.trim()) {
-      alert("Please enter a theme name")
-      return
+      alert('Please enter a theme name');
+      return;
     }
 
     const finalTheme = {
       ...themeConfig,
       name: themeName,
-    }
+    };
 
-    saveCustomTheme(finalTheme)
-    onClose()
-  }
+    saveCustomTheme(finalTheme);
+    onClose();
+  };
 
   const ColorPicker = ({
     label,
     colorKey,
     value,
-  }: { label: string; colorKey: keyof ThemeConfig["colors"]; value: string }) => (
+  }: { label: string; colorKey: keyof ThemeConfig['colors']; value: string }) => (
     <div className="space-y-2">
       <Label className="text-sm font-medium">{label}</Label>
       <div className="flex gap-2">
         <Input
           type="color"
-          value={value.includes("oklch") ? "#3b82f6" : value}
+          value={value.includes('oklch') ? '#3b82f6' : value}
           onChange={(e) => handleColorChange(colorKey, e.target.value)}
           className="w-12 h-10 p-1 border rounded"
         />
@@ -98,7 +104,7 @@ export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps)
         />
       </div>
     </div>
-  )
+  );
 
   return (
     <Card className="w-[500px] max-h-[80vh] overflow-y-auto">
@@ -139,9 +145,18 @@ export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps)
             }}
           >
             <div className="h-full flex">
-              <div className="w-1/4 h-full" style={{ backgroundColor: themeConfig.colors.primary }} />
-              <div className="w-1/4 h-full" style={{ backgroundColor: themeConfig.colors.secondary }} />
-              <div className="w-1/4 h-full" style={{ backgroundColor: themeConfig.colors.accent }} />
+              <div
+                className="w-1/4 h-full"
+                style={{ backgroundColor: themeConfig.colors.primary }}
+              />
+              <div
+                className="w-1/4 h-full"
+                style={{ backgroundColor: themeConfig.colors.secondary }}
+              />
+              <div
+                className="w-1/4 h-full"
+                style={{ backgroundColor: themeConfig.colors.accent }}
+              />
               <div className="w-1/4 h-full" style={{ backgroundColor: themeConfig.colors.muted }} />
             </div>
           </div>
@@ -156,15 +171,27 @@ export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps)
 
           <TabsContent value="colors" className="space-y-4">
             <div className="grid grid-cols-1 gap-4">
-              <ColorPicker label="Background" colorKey="background" value={themeConfig.colors.background} />
-              <ColorPicker label="Foreground" colorKey="foreground" value={themeConfig.colors.foreground} />
+              <ColorPicker
+                label="Background"
+                colorKey="background"
+                value={themeConfig.colors.background}
+              />
+              <ColorPicker
+                label="Foreground"
+                colorKey="foreground"
+                value={themeConfig.colors.foreground}
+              />
               <ColorPicker label="Primary" colorKey="primary" value={themeConfig.colors.primary} />
               <ColorPicker
                 label="Primary Foreground"
                 colorKey="primaryForeground"
                 value={themeConfig.colors.primaryForeground}
               />
-              <ColorPicker label="Secondary" colorKey="secondary" value={themeConfig.colors.secondary} />
+              <ColorPicker
+                label="Secondary"
+                colorKey="secondary"
+                value={themeConfig.colors.secondary}
+              />
               <ColorPicker
                 label="Secondary Foreground"
                 colorKey="secondaryForeground"
@@ -192,7 +219,9 @@ export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps)
                 <Label>Font Size</Label>
                 <Select
                   value={themeConfig.typography.fontSize}
-                  onValueChange={(value: "sm" | "md" | "lg") => handleTypographyChange("fontSize", value)}
+                  onValueChange={(value: 'sm' | 'md' | 'lg') =>
+                    handleTypographyChange('fontSize', value)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -209,7 +238,9 @@ export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps)
                 <Label>Line Height</Label>
                 <Select
                   value={themeConfig.typography.lineHeight}
-                  onValueChange={(value: "tight" | "normal" | "relaxed") => handleTypographyChange("lineHeight", value)}
+                  onValueChange={(value: 'tight' | 'normal' | 'relaxed') =>
+                    handleTypographyChange('lineHeight', value)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -226,7 +257,7 @@ export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps)
                 <Label>Sans Serif Font</Label>
                 <Input
                   value={themeConfig.typography.fontSans}
-                  onChange={(e) => handleTypographyChange("fontSans", e.target.value)}
+                  onChange={(e) => handleTypographyChange('fontSans', e.target.value)}
                   placeholder="Font family for sans-serif text"
                 />
               </div>
@@ -235,7 +266,7 @@ export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps)
                 <Label>Serif Font</Label>
                 <Input
                   value={themeConfig.typography.fontSerif}
-                  onChange={(e) => handleTypographyChange("fontSerif", e.target.value)}
+                  onChange={(e) => handleTypographyChange('fontSerif', e.target.value)}
                   placeholder="Font family for serif text"
                 />
               </div>
@@ -248,7 +279,7 @@ export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps)
                 <Label>Border Radius</Label>
                 <Input
                   value={themeConfig.layout.radius}
-                  onChange={(e) => handleLayoutChange("radius", e.target.value)}
+                  onChange={(e) => handleLayoutChange('radius', e.target.value)}
                   placeholder="e.g., 0.5rem, 8px"
                 />
               </div>
@@ -257,7 +288,9 @@ export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps)
                 <Label>Spacing</Label>
                 <Select
                   value={themeConfig.layout.spacing}
-                  onValueChange={(value: "compact" | "normal" | "spacious") => handleLayoutChange("spacing", value)}
+                  onValueChange={(value: 'compact' | 'normal' | 'spacious') =>
+                    handleLayoutChange('spacing', value)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -292,5 +325,5 @@ export function CustomThemeCreator({ onClose, onBack }: CustomThemeCreatorProps)
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -69,7 +69,7 @@ export class RenderQueueManager {
    * Add multiple tasks in batch
    */
   enqueueBatch(tasks: RenderTask[]): void {
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
       const priority = Math.min(Math.max(0, Math.floor(task.priority)), 10);
       const queue = this.queues.get(priority)!;
       queue.push(task);
@@ -86,7 +86,7 @@ export class RenderQueueManager {
    */
   dequeue(taskId: string): boolean {
     for (const [_, queue] of this.queues) {
-      const index = queue.findIndex(task => task.id === taskId);
+      const index = queue.findIndex((task) => task.id === taskId);
       if (index !== -1) {
         queue.splice(index, 1);
         return true;
@@ -146,21 +146,22 @@ export class RenderQueueManager {
   private processFrame(timestamp: number): void {
     const frameStart = performance.now();
     let frameTime = 0;
-    let tasksProcessed = 0;
+    let _tasksProcessed = 0;
 
     // Process tasks by priority
     priorityLoop: for (let priority = 0; priority <= 10; priority++) {
       const queue = this.queues.get(priority)!;
-      
+
       while (queue.length > 0) {
         // Check if we have budget remaining
         frameTime = performance.now() - frameStart;
-        if (frameTime >= this.frameBudgetMs * 0.9) { // Use 90% of budget
+        if (frameTime >= this.frameBudgetMs * 0.9) {
+          // Use 90% of budget
           break priorityLoop;
         }
 
         const task = queue.shift()!;
-        
+
         // Check deadline
         if (task.deadline && timestamp > task.deadline) {
           // Task expired, retry or drop
@@ -177,10 +178,10 @@ export class RenderQueueManager {
           const taskStart = performance.now();
           task.execute();
           const taskTime = performance.now() - taskStart;
-          
+
           // Update metrics
           this.metrics.completedTasks++;
-          tasksProcessed++;
+          _tasksProcessed++;
 
           // If task took too long, adjust priority for similar tasks
           if (taskTime > this.frameBudgetMs * 0.5) {
@@ -197,8 +198,8 @@ export class RenderQueueManager {
     this.updateMetrics(frameTime);
 
     // Check if there are more tasks
-    const hasMoreTasks = Array.from(this.queues.values()).some(q => q.length > 0);
-    
+    const hasMoreTasks = Array.from(this.queues.values()).some((q) => q.length > 0);
+
     if (hasMoreTasks) {
       this.scheduleFrame();
     } else {
@@ -247,7 +248,7 @@ export class RenderQueueManager {
    * Notify all observers of metrics update
    */
   private notifyObservers(): void {
-    this.observers.forEach(observer => observer({ ...this.metrics }));
+    this.observers.forEach((observer) => observer({ ...this.metrics }));
   }
 
   /**
@@ -319,17 +320,17 @@ export class RenderQueueManager {
    */
   static batchDOMOperations(operations: (() => void)[]): void {
     const manager = RenderQueueManager.getInstance();
-    
+
     // Create a single high-priority task for all DOM operations
     const batchTask = RenderQueueManager.createTask(
       `dom-batch-${Date.now()}`,
       () => {
         // Use documentFragment or similar for batch updates
-        operations.forEach(op => op());
+        operations.forEach((op) => op());
       },
       { priority: 1 } // High priority for DOM updates
     );
-    
+
     manager.enqueue(batchTask);
   }
 }

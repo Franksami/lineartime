@@ -1,36 +1,36 @@
-'use client'
+'use client';
 
-import React from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useUser, UserButton } from '@clerk/nextjs'
-import { cn } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+import { UserButton, useUser } from '@clerk/nextjs';
 import {
-  Calendar,
   BarChart3,
   Brain,
+  Calendar,
+  ChevronRight,
+  CreditCard,
+  Globe,
+  Home,
   Palette,
   Settings,
-  CreditCard,
-  Users,
-  Zap,
-  Globe,
   Smartphone,
   Sparkles,
-  ChevronRight,
-  Home
-} from 'lucide-react'
+  Users,
+  Zap,
+} from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import type React from 'react';
 
 interface NavigationItem {
-  name: string
-  href: string
-  icon: React.ComponentType<{ className?: string }>
-  description?: string
-  badge?: string
-  isNew?: boolean
+  name: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  description?: string;
+  badge?: string;
+  isNew?: boolean;
 }
 
 const navigationItems: NavigationItem[] = [
@@ -54,6 +54,22 @@ const navigationItems: NavigationItem[] = [
     badge: 'Pro',
   },
   {
+    name: 'AI Conductor',
+    href: '/ai-conductor',
+    icon: Zap,
+    description: 'Advanced AI orchestration dashboard',
+    badge: 'New',
+    isNew: true,
+  },
+  {
+    name: 'CheatCal 💀',
+    href: '/cheatcal',
+    icon: Brain,
+    description: 'The controversial AI that cheats at productivity',
+    badge: 'Viral',
+    isNew: true,
+  },
+  {
     name: 'Themes',
     href: '/dashboard/themes',
     icon: Palette,
@@ -71,7 +87,7 @@ const navigationItems: NavigationItem[] = [
     icon: CreditCard,
     description: 'Manage your subscription',
   },
-]
+];
 
 const featureItems: NavigationItem[] = [
   {
@@ -88,18 +104,18 @@ const featureItems: NavigationItem[] = [
     description: 'Share and collaborate on calendars',
     badge: 'Coming Soon',
   },
-]
+];
 
 export function DashboardSidebar() {
-  const pathname = usePathname()
-  const { user } = useUser()
+  const pathname = usePathname();
+  const { user } = useUser();
 
   const isActive = (href: string) => {
     if (href === '/dashboard') {
-      return pathname === '/dashboard'
+      return pathname === '/dashboard';
     }
-    return pathname.startsWith(href)
-  }
+    return pathname.startsWith(href);
+  };
 
   return (
     <div className="hidden lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0">
@@ -119,11 +135,11 @@ export function DashboardSidebar() {
 
         {/* User Info */}
         <div className="flex items-center px-4 py-3 space-x-3">
-          <UserButton 
+          <UserButton
             appearance={{
               elements: {
-                avatarBox: "w-10 h-10"
-              }
+                avatarBox: 'w-10 h-10',
+              },
             }}
           />
           <div className="flex-1 min-w-0">
@@ -169,14 +185,8 @@ export function DashboardSidebar() {
                       {item.badge}
                     </Badge>
                   )}
-                  {item.isNew && (
-                    <Badge className="text-xs ml-2 bg-primary">
-                      New
-                    </Badge>
-                  )}
-                  {isActive(item.href) && (
-                    <ChevronRight className="h-4 w-4 ml-2" />
-                  )}
+                  {item.isNew && <Badge className="text-xs ml-2 bg-primary">New</Badge>}
+                  {isActive(item.href) && <ChevronRight className="h-4 w-4 ml-2" />}
                 </Button>
               </Link>
             ))}
@@ -215,11 +225,7 @@ export function DashboardSidebar() {
                         {item.badge}
                       </Badge>
                     )}
-                    {item.isNew && (
-                      <Badge className="text-xs ml-2 bg-primary">
-                        New
-                      </Badge>
-                    )}
+                    {item.isNew && <Badge className="text-xs ml-2 bg-primary">New</Badge>}
                   </Button>
                 </Link>
               ))}
@@ -241,9 +247,7 @@ export function DashboardSidebar() {
               Unlock AI scheduling, unlimited events, and advanced analytics.
             </p>
             <Button size="sm" className="w-full" asChild>
-              <Link href="/dashboard/billing">
-                Upgrade Now
-              </Link>
+              <Link href="/dashboard/billing">Upgrade Now</Link>
             </Button>
           </div>
 
@@ -256,13 +260,11 @@ export function DashboardSidebar() {
               </Link>
             </Button>
             <Button variant="outline" size="sm" className="flex-1" asChild>
-              <Link href="mailto:support@lineartime.com">
-                Help
-              </Link>
+              <Link href="mailto:support@lineartime.com">Help</Link>
             </Button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

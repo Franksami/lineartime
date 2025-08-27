@@ -1,21 +1,21 @@
-"use node";
+'use node';
 
-import { v } from "convex/values";
-import { action, internalAction } from "../_generated/server";
-import { internal } from "../_generated/api";
-import { Doc, Id } from "../_generated/dataModel";
+import { v } from 'convex/values';
+import { internal } from '../_generated/api';
+import { Doc, Id } from '../_generated/dataModel';
+import { action, internalAction } from '../_generated/server';
 
 /**
  * Renew Microsoft Graph subscription
  */
 export const renewSubscription = internalAction({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
     subscriptionId: v.string(),
   },
   handler: async (ctx, args): Promise<void> => {
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'microsoft') {
@@ -24,7 +24,7 @@ export const renewSubscription = internalAction({
 
     // Decrypt access token
     const accessToken = await ctx.runAction(internal.calendar.encryption.decryptToken, {
-      encryptedToken: provider.accessToken
+      encryptedToken: provider.accessToken,
     });
 
     const { Client } = await import('@microsoft/microsoft-graph-client');
@@ -36,9 +36,11 @@ export const renewSubscription = internalAction({
 
     try {
       // Renew the subscription by updating it
-      const renewedSubscription = await graphClient.api(`/subscriptions/${args.subscriptionId}`).patch({
-        expirationDateTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-      });
+      const renewedSubscription = await graphClient
+        .api(`/subscriptions/${args.subscriptionId}`)
+        .patch({
+          expirationDateTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+        });
 
       // Update subscription in provider settings
       if (renewedSubscription.expirationDateTime) {
@@ -46,7 +48,7 @@ export const renewSubscription = internalAction({
           providerId: args.providerId,
           subscriptionId: args.subscriptionId,
           expirationDateTime: renewedSubscription.expirationDateTime,
-          resource: '/me/events' // Assuming calendar events resource
+          resource: '/me/events', // Assuming calendar events resource
         });
       }
 
@@ -55,7 +57,7 @@ export const renewSubscription = internalAction({
       console.error('Failed to renew Microsoft subscription:', error);
       throw error;
     }
-  }
+  },
 });
 
 /**
@@ -63,11 +65,11 @@ export const renewSubscription = internalAction({
  */
 export const performFullSync = internalAction({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
   },
   handler: async (ctx, args) => {
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'microsoft') {
@@ -76,7 +78,7 @@ export const performFullSync = internalAction({
 
     // Decrypt access token
     const accessToken = await ctx.runAction(internal.calendar.encryption.decryptToken, {
-      encryptedToken: provider.accessToken
+      encryptedToken: provider.accessToken,
     });
 
     const { Client } = await import('@microsoft/microsoft-graph-client');
@@ -89,8 +91,9 @@ export const performFullSync = internalAction({
     try {
       // Fetch all events from Microsoft Graph
       let allEvents: any[] = [];
-      let nextLink = '/me/events?$select=id,subject,body,start,end,location,attendees,categories,lastModifiedDateTime&$top=100';
-      
+      let nextLink =
+        '/me/events?$select=id,subject,body,start,end,location,attendees,categories,lastModifiedDateTime&$top=100';
+
       while (nextLink) {
         const response = await graphClient.api(nextLink).get();
         allEvents = allEvents.concat(response.value || []);
@@ -98,7 +101,7 @@ export const performFullSync = internalAction({
       }
 
       // Convert events to our format
-      const changes = allEvents.map(event => ({
+      const changes = allEvents.map((event) => ({
         action: 'upsert' as const,
         providerEventId: event.id,
         eventData: {
@@ -116,23 +119,23 @@ export const performFullSync = internalAction({
           status: 'confirmed',
           metadata: {
             lastModified: new Date(event.lastModifiedDateTime).getTime(),
-            provider: 'microsoft'
-          }
-        }
+            provider: 'microsoft',
+          },
+        },
       }));
 
       // Store the events
       if (changes.length > 0) {
         await ctx.runMutation(internal.calendar.events.syncEvents, {
           events: changes,
-          providerId: args.providerId
+          providerId: args.providerId,
         });
       }
 
       // Update last sync time
       await ctx.runMutation(internal.calendar.providers.updateLastSyncInternal, {
         providerId: args.providerId,
-        lastSyncAt: Date.now()
+        lastSyncAt: Date.now(),
       });
 
       return { success: true, eventCount: changes.length };
@@ -140,7 +143,7 @@ export const performFullSync = internalAction({
       console.error('Microsoft full sync error:', error);
       throw error;
     }
-  }
+  },
 });
 
 /**
@@ -148,11 +151,11 @@ export const performFullSync = internalAction({
  */
 export const performIncrementalSync = internalAction({
   args: {
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
   },
   handler: async (ctx, args) => {
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'microsoft') {
@@ -161,7 +164,7 @@ export const performIncrementalSync = internalAction({
 
     // Decrypt access token
     const accessToken = await ctx.runAction(internal.calendar.encryption.decryptToken, {
-      encryptedToken: provider.accessToken
+      encryptedToken: provider.accessToken,
     });
 
     const { Client } = await import('@microsoft/microsoft-graph-client');
@@ -174,8 +177,10 @@ export const performIncrementalSync = internalAction({
     try {
       // Use delta link if available for incremental sync
       const deltaLink = provider.settings?.deltaLink;
-      const apiUrl = deltaLink || '/me/events/delta?$select=id,subject,body,start,end,location,attendees,categories,lastModifiedDateTime';
-      
+      const apiUrl =
+        deltaLink ||
+        '/me/events/delta?$select=id,subject,body,start,end,location,attendees,categories,lastModifiedDateTime';
+
       const response = await graphClient.api(apiUrl).get();
       const events = response.value || [];
       const newDeltaLink = response['@odata.deltaLink'];
@@ -185,39 +190,38 @@ export const performIncrementalSync = internalAction({
         if (event['@removed']) {
           return {
             action: 'delete' as const,
-            providerEventId: event.id
-          };
-        } else {
-          return {
-            action: 'upsert' as const,
             providerEventId: event.id,
-            eventData: {
-              providerId: args.providerId,
-              providerEventId: event.id,
-              title: event.subject || 'Untitled Event',
-              description: event.body?.content || '',
-              startTime: new Date(event.start.dateTime).toISOString(),
-              endTime: new Date(event.end.dateTime).toISOString(),
-              allDay: event.isAllDay || false,
-              location: event.location?.displayName || '',
-              attendees: event.attendees?.map((attendee: any) => attendee.emailAddress.address) || [],
-              category: event.categories?.[0] || 'personal',
-              etag: event['@odata.etag'],
-              status: 'confirmed',
-              metadata: {
-                lastModified: new Date(event.lastModifiedDateTime).getTime(),
-                provider: 'microsoft'
-              }
-            }
           };
         }
+        return {
+          action: 'upsert' as const,
+          providerEventId: event.id,
+          eventData: {
+            providerId: args.providerId,
+            providerEventId: event.id,
+            title: event.subject || 'Untitled Event',
+            description: event.body?.content || '',
+            startTime: new Date(event.start.dateTime).toISOString(),
+            endTime: new Date(event.end.dateTime).toISOString(),
+            allDay: event.isAllDay || false,
+            location: event.location?.displayName || '',
+            attendees: event.attendees?.map((attendee: any) => attendee.emailAddress.address) || [],
+            category: event.categories?.[0] || 'personal',
+            etag: event['@odata.etag'],
+            status: 'confirmed',
+            metadata: {
+              lastModified: new Date(event.lastModifiedDateTime).getTime(),
+              provider: 'microsoft',
+            },
+          },
+        };
       });
 
       // Store the changes
       if (changes.length > 0) {
         await ctx.runMutation(internal.calendar.events.syncEvents, {
           events: changes,
-          providerId: args.providerId
+          providerId: args.providerId,
         });
       }
 
@@ -226,13 +230,13 @@ export const performIncrementalSync = internalAction({
         providerId: args.providerId,
         settings: {
           ...provider.settings,
-          deltaLink: newDeltaLink
-        }
+          deltaLink: newDeltaLink,
+        },
       });
 
       await ctx.runMutation(internal.calendar.providers.updateLastSyncInternal, {
         providerId: args.providerId,
-        lastSyncAt: Date.now()
+        lastSyncAt: Date.now(),
       });
 
       return { success: true, changeCount: changes.length };
@@ -240,7 +244,7 @@ export const performIncrementalSync = internalAction({
       console.error('Microsoft incremental sync error:', error);
       throw error;
     }
-  }
+  },
 });
 
 /**
@@ -249,11 +253,11 @@ export const performIncrementalSync = internalAction({
 export const processWebhookNotification = action({
   args: {
     notification: v.any(),
-    providerId: v.id("calendarProviders"),
+    providerId: v.id('calendarProviders'),
   },
   handler: async (ctx, args): Promise<void> => {
     const provider = await ctx.runQuery(internal.calendar.providers.getProviderById, {
-      providerId: args.providerId
+      providerId: args.providerId,
     });
 
     if (!provider || provider.provider !== 'microsoft') {
@@ -262,7 +266,7 @@ export const processWebhookNotification = action({
 
     // Decrypt access token
     const accessToken = await ctx.runAction(internal.calendar.encryption.decryptToken, {
-      encryptedToken: provider.accessToken
+      encryptedToken: provider.accessToken,
     });
 
     const { Client } = await import('@microsoft/microsoft-graph-client');
@@ -302,21 +306,22 @@ export const processWebhookNotification = action({
         startDate: new Date(event.start.dateTime).toISOString(),
         endDate: new Date(event.end.dateTime).toISOString(),
         location: event.location?.displayName || '',
-        attendees: event.attendees?.map((attendee: any) => ({
-          email: attendee.emailAddress.address,
-          name: attendee.emailAddress.name,
-          status: attendee.status.response
-        })) || [],
+        attendees:
+          event.attendees?.map((attendee: any) => ({
+            email: attendee.emailAddress.address,
+            name: attendee.emailAddress.name,
+            status: attendee.status.response,
+          })) || [],
         category: event.categories?.[0] || 'personal',
         lastModified: new Date(event.lastModifiedDateTime).getTime(),
-        provider: 'microsoft'
+        provider: 'microsoft',
       };
 
       // Process the webhook update
       await ctx.runMutation(internal.calendar.events.processWebhookUpdate, {
         providerId: args.providerId,
         eventData: convertedEvent,
-        operation: args.notification.changeType?.toLowerCase() || 'updated'
+        operation: args.notification.changeType?.toLowerCase() || 'updated',
       });
 
       console.log('Successfully processed Microsoft webhook notification for event:', eventId);
@@ -324,5 +329,5 @@ export const processWebhookNotification = action({
       console.error('Error processing Microsoft webhook notification:', error);
       throw error;
     }
-  }
+  },
 });

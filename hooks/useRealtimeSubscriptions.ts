@@ -3,17 +3,17 @@
  * These hooks provide real-time data updates throughout the application
  */
 
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useMemo } from "react";
+import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
+import { useQuery } from 'convex/react';
+import { useMemo } from 'react';
 
 /**
  * Subscribe to events within a date range
  * Automatically updates when events change
  */
 export function useRealtimeEvents(
-  userId: Id<"users"> | undefined,
+  userId: Id<'users'> | undefined,
   startTime: number,
   endTime: number,
   includeRecurring = false
@@ -27,7 +27,7 @@ export function useRealtimeEvents(
           endTime,
           includeRecurring,
         }
-      : "skip"
+      : 'skip'
   );
 
   return {
@@ -40,11 +40,8 @@ export function useRealtimeEvents(
  * Subscribe to a specific event
  * Updates when the event is modified
  */
-export function useRealtimeEvent(eventId: Id<"events"> | undefined) {
-  const event = useQuery(
-    api.subscriptions.subscribeToEvent,
-    eventId ? { eventId } : "skip"
-  );
+export function useRealtimeEvent(eventId: Id<'events'> | undefined) {
+  const event = useQuery(api.subscriptions.subscribeToEvent, eventId ? { eventId } : 'skip');
 
   return {
     event,
@@ -56,10 +53,10 @@ export function useRealtimeEvent(eventId: Id<"events"> | undefined) {
  * Subscribe to sync status updates
  * Shows real-time sync progress
  */
-export function useRealtimeSyncStatus(userId: Id<"users"> | undefined) {
+export function useRealtimeSyncStatus(userId: Id<'users'> | undefined) {
   const syncStatus = useQuery(
     api.subscriptions.subscribeToSyncStatus,
-    userId ? { userId } : "skip"
+    userId ? { userId } : 'skip'
   );
 
   const isSyncing = useMemo(() => {
@@ -84,10 +81,10 @@ export function useRealtimeSyncStatus(userId: Id<"users"> | undefined) {
  * Subscribe to conflict updates
  * Notifies about sync conflicts needing resolution
  */
-export function useRealtimeConflicts(userId: Id<"users"> | undefined) {
+export function useRealtimeConflicts(userId: Id<'users'> | undefined) {
   const conflictData = useQuery(
     api.subscriptions.subscribeToConflicts,
-    userId ? { userId } : "skip"
+    userId ? { userId } : 'skip'
   );
 
   return {
@@ -102,10 +99,10 @@ export function useRealtimeConflicts(userId: Id<"users"> | undefined) {
  * Subscribe to user preferences
  * Updates when settings change
  */
-export function useRealtimeUserPreferences(userId: Id<"users"> | undefined) {
+export function useRealtimeUserPreferences(userId: Id<'users'> | undefined) {
   const preferences = useQuery(
     api.subscriptions.subscribeToUserPreferences,
-    userId ? { userId } : "skip"
+    userId ? { userId } : 'skip'
   );
 
   return {
@@ -125,18 +122,21 @@ export function useRealtimeUserPreferences(userId: Id<"users"> | undefined) {
  * Subscribe to categories
  * Updates when categories change
  */
-export function useRealtimeCategories(userId: Id<"users"> | undefined) {
+export function useRealtimeCategories(userId: Id<'users'> | undefined) {
   const categories = useQuery(
     api.subscriptions.subscribeToCategories,
-    userId ? { userId } : "skip"
+    userId ? { userId } : 'skip'
   );
 
   const categoriesById = useMemo(() => {
     if (!categories) return {};
-    return categories.reduce((acc, cat) => {
-      acc[cat._id] = cat;
-      return acc;
-    }, {} as Record<string, typeof categories[0]>);
+    return categories.reduce(
+      (acc, cat) => {
+        acc[cat._id] = cat;
+        return acc;
+      },
+      {} as Record<string, (typeof categories)[0]>
+    );
   }, [categories]);
 
   return {
@@ -150,11 +150,8 @@ export function useRealtimeCategories(userId: Id<"users"> | undefined) {
  * Subscribe to calendars
  * Updates when calendars change
  */
-export function useRealtimeCalendars(userId: Id<"users"> | undefined) {
-  const calendars = useQuery(
-    api.subscriptions.subscribeToCalendars,
-    userId ? { userId } : "skip"
-  );
+export function useRealtimeCalendars(userId: Id<'users'> | undefined) {
+  const calendars = useQuery(api.subscriptions.subscribeToCalendars, userId ? { userId } : 'skip');
 
   const defaultCalendar = useMemo(() => {
     if (!calendars) return null;
@@ -172,13 +169,10 @@ export function useRealtimeCalendars(userId: Id<"users"> | undefined) {
  * Subscribe to recent activity
  * Shows recent changes and sync activities
  */
-export function useRealtimeActivity(
-  userId: Id<"users"> | undefined,
-  limit = 20
-) {
+export function useRealtimeActivity(userId: Id<'users'> | undefined, limit = 20) {
   const activity = useQuery(
     api.subscriptions.subscribeToRecentActivity,
-    userId ? { userId, limit } : "skip"
+    userId ? { userId, limit } : 'skip'
   );
 
   return {
@@ -191,13 +185,10 @@ export function useRealtimeActivity(
  * Subscribe to upcoming reminders
  * For notification systems
  */
-export function useRealtimeReminders(
-  userId: Id<"users"> | undefined,
-  windowMinutes = 60
-) {
+export function useRealtimeReminders(userId: Id<'users'> | undefined, windowMinutes = 60) {
   const reminderData = useQuery(
     api.subscriptions.subscribeToUpcomingReminders,
-    userId ? { userId, windowMinutes } : "skip"
+    userId ? { userId, windowMinutes } : 'skip'
   );
 
   const hasUpcomingReminders = useMemo(() => {
@@ -221,10 +212,10 @@ export function useRealtimeReminders(
  * Subscribe to shared calendars
  * For collaborative features
  */
-export function useRealtimeSharedCalendars(userId: Id<"users"> | undefined) {
+export function useRealtimeSharedCalendars(userId: Id<'users'> | undefined) {
   const sharedCalendars = useQuery(
     api.subscriptions.subscribeToSharedCalendars,
-    userId ? { userId } : "skip"
+    userId ? { userId } : 'skip'
   );
 
   return {
@@ -239,7 +230,7 @@ export function useRealtimeSharedCalendars(userId: Id<"users"> | undefined) {
  * Useful for dashboard or main calendar views
  */
 export function useRealtimeCalendarData(
-  userId: Id<"users"> | undefined,
+  userId: Id<'users'> | undefined,
   startTime: number,
   endTime: number
 ) {
@@ -282,10 +273,10 @@ export function useRealtimeConnectionStatus() {
   // For now, returning a mock implementation
   return {
     isConnected: true,
-    connectionState: "connected" as const,
+    connectionState: 'connected' as const,
     reconnect: () => {
       // Trigger reconnection
-      console.log("Reconnecting to Convex...");
+      console.log('Reconnecting to Convex...');
     },
   };
 }

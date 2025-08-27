@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { Calendar, dateFnsLocalizer, Views, View } from 'react-big-calendar';
-import { format, parse, startOfWeek, getDay } from 'date-fns';
+import { format, getDay, parse, startOfWeek } from 'date-fns';
 import { enUS } from 'date-fns/locale';
+import type React from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { Calendar, type View, Views, dateFnsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { CalendarViewProps, CalendarEvent } from './providers/types';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -14,17 +15,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
+import { cn } from '@/lib/utils';
+import {
   Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   MapPin,
+  Plus,
   Users,
-  Plus
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import type { CalendarEvent, CalendarViewProps } from './providers/types';
 
 const localizer = dateFnsLocalizer({
   format,
@@ -101,66 +102,83 @@ const ReactBigCalendarView: React.FC<ReactBigCalendarViewProps> = ({
 
   function getPriorityColor(priority?: string): string {
     switch (priority) {
-      case 'critical': return '#ef4444';
-      case 'high': return '#f97316';
-      case 'medium': return '#eab308';
-      case 'low': return '#22c55e';
-      default: return '#6366f1';
+      case 'critical':
+        return '#ef4444';
+      case 'high':
+        return '#f97316';
+      case 'medium':
+        return '#eab308';
+      case 'low':
+        return '#22c55e';
+      default:
+        return '#6366f1';
     }
   }
 
   // Event handlers
-  const handleSelectSlot = useCallback(async ({ start, end, action }: { start: Date; end: Date; action: string }) => {
-    if (action === 'select') {
-      try {
-        await onEventCreate({
-          title: 'New Event',
-          start,
-          end,
-          allDay: end.getTime() - start.getTime() >= 24 * 60 * 60 * 1000,
-        });
-      } catch (error) {
-        console.error('Failed to create event:', error);
+  const handleSelectSlot = useCallback(
+    async ({ start, end, action }: { start: Date; end: Date; action: string }) => {
+      if (action === 'select') {
+        try {
+          await onEventCreate({
+            title: 'New Event',
+            start,
+            end,
+            allDay: end.getTime() - start.getTime() >= 24 * 60 * 60 * 1000,
+          });
+        } catch (error) {
+          console.error('Failed to create event:', error);
+        }
       }
-    }
-  }, [onEventCreate]);
+    },
+    [onEventCreate]
+  );
 
   const handleSelectEvent = useCallback((event: ReactBigCalendarEvent) => {
     // Handle event selection - could open a modal or sidebar for editing
     console.log('Selected event:', event);
   }, []);
 
-  const handleEventDrop = useCallback(async ({ event, start, end }: { event: ReactBigCalendarEvent; start: Date; end: Date }) => {
-    if (!enableDragDrop) return;
-    
-    try {
-      await onEventUpdate(event.id, {
-        start,
-        end,
-      });
-    } catch (error) {
-      console.error('Failed to update event:', error);
-    }
-  }, [enableDragDrop, onEventUpdate]);
+  const handleEventDrop = useCallback(
+    async ({ event, start, end }: { event: ReactBigCalendarEvent; start: Date; end: Date }) => {
+      if (!enableDragDrop) return;
 
-  const handleEventResize = useCallback(async ({ event, start, end }: { event: ReactBigCalendarEvent; start: Date; end: Date }) => {
-    if (!enableDragDrop) return;
-    
-    try {
-      await onEventUpdate(event.id, {
-        start,
-        end,
-      });
-    } catch (error) {
-      console.error('Failed to resize event:', error);
-    }
-  }, [enableDragDrop, onEventUpdate]);
+      try {
+        await onEventUpdate(event.id, {
+          start,
+          end,
+        });
+      } catch (error) {
+        console.error('Failed to update event:', error);
+      }
+    },
+    [enableDragDrop, onEventUpdate]
+  );
+
+  const handleEventResize = useCallback(
+    async ({ event, start, end }: { event: ReactBigCalendarEvent; start: Date; end: Date }) => {
+      if (!enableDragDrop) return;
+
+      try {
+        await onEventUpdate(event.id, {
+          start,
+          end,
+        });
+      } catch (error) {
+        console.error('Failed to resize event:', error);
+      }
+    },
+    [enableDragDrop, onEventUpdate]
+  );
 
   // Navigation handlers
-  const handleNavigate = useCallback((date: Date) => {
-    setCurrentDate(date);
-    onDateChange(date);
-  }, [onDateChange]);
+  const handleNavigate = useCallback(
+    (date: Date) => {
+      setCurrentDate(date);
+      onDateChange(date);
+    },
+    [onDateChange]
+  );
 
   const handleViewChange = useCallback((view: View) => {
     setCurrentView(view);
@@ -171,8 +189,8 @@ const ReactBigCalendarView: React.FC<ReactBigCalendarViewProps> = ({
     <div className="rbc-event-content">
       <div className="flex items-center gap-1 text-xs">
         {event.priority && (
-          <Badge 
-            variant="secondary" 
+          <Badge
+            variant="secondary"
             className="text-xs px-1 py-0"
             style={{ backgroundColor: event.color, color: 'white' }}
           >
@@ -194,33 +212,18 @@ const ReactBigCalendarView: React.FC<ReactBigCalendarViewProps> = ({
   const CustomToolbar = ({ label, onNavigate, onView, views }: any) => (
     <div className="flex items-center justify-between mb-4 p-4 bg-card border border-border rounded-lg">
       <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onNavigate('PREV')}
-          disabled={loading}
-        >
+        <Button variant="outline" size="sm" onClick={() => onNavigate('PREV')} disabled={loading}>
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onNavigate('TODAY')}
-          disabled={loading}
-        >
+        <Button variant="outline" size="sm" onClick={() => onNavigate('TODAY')} disabled={loading}>
           Today
         </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onNavigate('NEXT')}
-          disabled={loading}
-        >
+        <Button variant="outline" size="sm" onClick={() => onNavigate('NEXT')} disabled={loading}>
           <ChevronRight className="h-4 w-4" />
         </Button>
         <h2 className="text-lg font-semibold ml-4">{label}</h2>
       </div>
-      
+
       <div className="flex items-center gap-2">
         <Select value={currentView} onValueChange={onView}>
           <SelectTrigger className="w-32">
@@ -233,15 +236,17 @@ const ReactBigCalendarView: React.FC<ReactBigCalendarViewProps> = ({
             <SelectItem value={Views.AGENDA}>Agenda</SelectItem>
           </SelectContent>
         </Select>
-        
+
         <Button
           variant="default"
           size="sm"
-          onClick={() => handleSelectSlot({ 
-            start: currentDate, 
-            end: new Date(currentDate.getTime() + 60 * 60 * 1000),
-            action: 'select'
-          })}
+          onClick={() =>
+            handleSelectSlot({
+              start: currentDate,
+              end: new Date(currentDate.getTime() + 60 * 60 * 1000),
+              action: 'select',
+            })
+          }
           disabled={loading}
         >
           <Plus className="h-4 w-4 mr-1" />
@@ -262,42 +267,54 @@ const ReactBigCalendarView: React.FC<ReactBigCalendarViewProps> = ({
         border: 'none',
         fontSize: '12px',
         padding: '2px 4px',
-      }
+      },
     };
   }, []);
 
   // Slot style getter for theming
-  const slotStyleGetter = useCallback((date: Date) => {
-    const today = new Date();
-    const isToday = format(date, 'yyyy-MM-dd') === format(today, 'yyyy-MM-dd');
-    const isWeekend = getDay(date) === 0 || getDay(date) === 6;
-    
-    return {
-      style: {
-        backgroundColor: isToday 
-          ? theme === 'dark' ? '#1f2937' : '#f3f4f6'
-          : isWeekend 
-            ? theme === 'dark' ? '#111827' : '#fafafa'
-            : theme === 'dark' ? '#0f172a' : '#ffffff',
-      }
-    };
-  }, [theme]);
+  const slotStyleGetter = useCallback(
+    (date: Date) => {
+      const today = new Date();
+      const isToday = format(date, 'yyyy-MM-dd') === format(today, 'yyyy-MM-dd');
+      const isWeekend = getDay(date) === 0 || getDay(date) === 6;
 
-  const calendarStyle = useMemo(() => ({
-    height,
-    fontFamily: 'system-ui, -apple-system, sans-serif',
-    ...(theme === 'dark' && {
-      backgroundColor: '#0f172a',
-      color: '#f1f5f9',
+      return {
+        style: {
+          backgroundColor: isToday
+            ? theme === 'dark'
+              ? '#1f2937'
+              : '#f3f4f6'
+            : isWeekend
+              ? theme === 'dark'
+                ? '#111827'
+                : '#fafafa'
+              : theme === 'dark'
+                ? '#0f172a'
+                : '#ffffff',
+        },
+      };
+    },
+    [theme]
+  );
+
+  const calendarStyle = useMemo(
+    () => ({
+      height,
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      ...(theme === 'dark' && {
+        backgroundColor: '#0f172a',
+        color: '#f1f5f9',
+      }),
     }),
-  }), [height, theme]);
+    [height, theme]
+  );
 
   return (
     <div className={cn('react-big-calendar-view', className)}>
       {loading && (
         <div className="absolute inset-0 bg-background/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="flex items-center space-x-2">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
             <span className="text-sm text-muted-foreground">Loading events...</span>
           </div>
         </div>
@@ -329,12 +346,12 @@ const ReactBigCalendarView: React.FC<ReactBigCalendarViewProps> = ({
         formats={{
           dayFormat: 'dd',
           dayHeaderFormat: 'eeee MMM dd',
-          dayRangeHeaderFormat: ({ start, end }) => 
+          dayRangeHeaderFormat: ({ start, end }) =>
             `${format(start, 'MMM dd')} - ${format(end, 'MMM dd, yyyy')}`,
           monthHeaderFormat: 'MMMM yyyy',
           weekdayFormat: 'eee',
           timeGutterFormat: 'HH:mm',
-          eventTimeRangeFormat: ({ start, end }) => 
+          eventTimeRangeFormat: ({ start, end }) =>
             `${format(start, 'HH:mm')} - ${format(end, 'HH:mm')}`,
         }}
         messages={{

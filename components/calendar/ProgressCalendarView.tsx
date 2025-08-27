@@ -1,23 +1,23 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { cn } from '@/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { 
-  CalendarIcon, 
-  Clock, 
-  TrendingUp, 
-  Target, 
-  CheckCircle2, 
-  Circle,
-  Calendar,
-  ChevronLeft,
-  ChevronRight
-} from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import {
+  Calendar,
+  CalendarIcon,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Circle,
+  Clock,
+  Target,
+  TrendingUp,
+} from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 
 interface ProgressEvent {
   id: string;
@@ -44,59 +44,61 @@ export function ProgressCalendarView({
   events,
   className,
   onDateSelect,
-  onEventClick
+  onEventClick,
 }: ProgressCalendarViewProps) {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  
+
   // Generate calendar grid for the selected month
   const calendarDays = useMemo(() => {
     const daysInMonth = new Date(year, selectedMonth + 1, 0).getDate();
     const firstDay = new Date(year, selectedMonth, 1).getDay();
     const days = [];
-    
+
     // Add empty cells for days before the month starts
     for (let i = 0; i < firstDay; i++) {
       days.push(null);
     }
-    
+
     // Add days of the month
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, selectedMonth, day));
     }
-    
+
     return days;
   }, [year, selectedMonth]);
 
   // Group events by date for easy lookup
   const eventsByDate = useMemo(() => {
     const grouped: Record<string, ProgressEvent[]> = {};
-    
-    events.forEach(event => {
+
+    events.forEach((event) => {
       const dateKey = event.startDate.toDateString();
       if (!grouped[dateKey]) {
         grouped[dateKey] = [];
       }
       grouped[dateKey].push(event);
     });
-    
+
     return grouped;
   }, [events]);
 
   // Calculate progress statistics
   const progressStats = useMemo(() => {
     const totalEvents = events.length;
-    const completedEvents = events.filter(e => e.completed || (e.progress || 0) >= 100).length;
-    const inProgressEvents = events.filter(e => !e.completed && (e.progress || 0) > 0 && (e.progress || 0) < 100).length;
-    const pendingEvents = events.filter(e => !e.completed && (e.progress || 0) === 0).length;
-    
+    const completedEvents = events.filter((e) => e.completed || (e.progress || 0) >= 100).length;
+    const inProgressEvents = events.filter(
+      (e) => !e.completed && (e.progress || 0) > 0 && (e.progress || 0) < 100
+    ).length;
+    const pendingEvents = events.filter((e) => !e.completed && (e.progress || 0) === 0).length;
+
     const overallProgress = totalEvents > 0 ? (completedEvents / totalEvents) * 100 : 0;
-    
+
     return {
       total: totalEvents,
       completed: completedEvents,
       inProgress: inProgressEvents,
       pending: pendingEvents,
-      overallProgress: Math.round(overallProgress)
+      overallProgress: Math.round(overallProgress),
     };
   }, [events]);
 
@@ -109,33 +111,48 @@ export function ProgressCalendarView({
   const getDayProgressIndicator = (date: Date) => {
     const dayEvents = getEventsForDate(date);
     if (dayEvents.length === 0) return null;
-    
-    const completed = dayEvents.filter(e => e.completed || (e.progress || 0) >= 100).length;
+
+    const completed = dayEvents.filter((e) => e.completed || (e.progress || 0) >= 100).length;
     const total = dayEvents.length;
     const progress = total > 0 ? (completed / total) * 100 : 0;
-    
+
     return {
       progress,
       completed,
       total,
-      hasEvents: true
+      hasEvents: true,
     };
   };
 
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+      case 'critical':
+        return 'bg-red-500';
+      case 'high':
+        return 'bg-orange-500';
+      case 'medium':
+        return 'bg-yellow-500';
+      case 'low':
+        return 'bg-green-500';
+      default:
+        return 'bg-gray-500';
     }
   };
 
@@ -148,7 +165,7 @@ export function ProgressCalendarView({
   };
 
   return (
-    <div className={cn("h-full w-full bg-background p-6", className)}>
+    <div className={cn('h-full w-full bg-background p-6', className)}>
       <div className="h-full flex gap-6">
         {/* Progress Statistics Sidebar */}
         <div className="w-80 space-y-4">
@@ -168,7 +185,7 @@ export function ProgressCalendarView({
                 </div>
                 <Progress value={progressStats.overallProgress} className="h-2" />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-3">
                 <div className="text-center p-3 bg-muted/50 rounded-lg">
                   <div className="text-2xl font-bold text-green-600">{progressStats.completed}</div>
@@ -201,12 +218,16 @@ export function ProgressCalendarView({
             <CardContent>
               <div className="space-y-3">
                 {Array.from({ length: 12 }, (_, i) => {
-                  const monthEvents = events.filter(event => 
-                    event.startDate.getMonth() === i && event.startDate.getFullYear() === year
+                  const monthEvents = events.filter(
+                    (event) =>
+                      event.startDate.getMonth() === i && event.startDate.getFullYear() === year
                   );
-                  const completed = monthEvents.filter(e => e.completed || (e.progress || 0) >= 100).length;
-                  const progress = monthEvents.length > 0 ? (completed / monthEvents.length) * 100 : 0;
-                  
+                  const completed = monthEvents.filter(
+                    (e) => e.completed || (e.progress || 0) >= 100
+                  ).length;
+                  const progress =
+                    monthEvents.length > 0 ? (completed / monthEvents.length) * 100 : 0;
+
                   return (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-12 text-xs font-medium text-muted-foreground">
@@ -236,10 +257,10 @@ export function ProgressCalendarView({
             <CardContent>
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {events
-                  .filter(event => event.startDate.getMonth() === selectedMonth)
+                  .filter((event) => event.startDate.getMonth() === selectedMonth)
                   .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
                   .slice(0, 10)
-                  .map(event => (
+                  .map((event) => (
                     <motion.div
                       key={event.id}
                       whileHover={{ scale: 1.02 }}
@@ -259,7 +280,9 @@ export function ProgressCalendarView({
                           </div>
                         </div>
                         {event.priority && (
-                          <div className={cn("w-2 h-2 rounded-full", getPriorityColor(event.priority))} />
+                          <div
+                            className={cn('w-2 h-2 rounded-full', getPriorityColor(event.priority))}
+                          />
                         )}
                       </div>
                       {(event.progress || 0) > 0 && (event.progress || 0) < 100 && (
@@ -308,8 +331,11 @@ export function ProgressCalendarView({
               <div className="h-full flex flex-col">
                 {/* Day Names Header */}
                 <div className="grid grid-cols-7 gap-1 mb-2">
-                  {dayNames.map(day => (
-                    <div key={day} className="text-center text-xs font-medium text-muted-foreground p-2">
+                  {dayNames.map((day) => (
+                    <div
+                      key={day}
+                      className="text-center text-xs font-medium text-muted-foreground p-2"
+                    >
                       {day}
                     </div>
                   ))}
@@ -331,21 +357,23 @@ export function ProgressCalendarView({
                         key={date.toDateString()}
                         whileHover={{ scale: 1.05 }}
                         className={cn(
-                          "aspect-square p-1 border rounded-lg cursor-pointer transition-colors",
-                          "hover:bg-muted/50",
-                          isToday && "ring-2 ring-primary ring-inset",
-                          dayProgress?.hasEvents && "bg-muted/20"
+                          'aspect-square p-1 border rounded-lg cursor-pointer transition-colors',
+                          'hover:bg-muted/50',
+                          isToday && 'ring-2 ring-primary ring-inset',
+                          dayProgress?.hasEvents && 'bg-muted/20'
                         )}
                         onClick={() => onDateSelect?.(date)}
                       >
                         <div className="h-full flex flex-col">
-                          <div className={cn(
-                            "text-sm font-medium mb-1",
-                            isToday ? "text-primary" : "text-foreground"
-                          )}>
+                          <div
+                            className={cn(
+                              'text-sm font-medium mb-1',
+                              isToday ? 'text-primary' : 'text-foreground'
+                            )}
+                          >
                             {date.getDate()}
                           </div>
-                          
+
                           {dayProgress?.hasEvents && (
                             <div className="flex-1 flex flex-col justify-center space-y-1">
                               {/* Progress dots */}
@@ -357,8 +385,8 @@ export function ProgressCalendarView({
                                     <div
                                       key={idx}
                                       className={cn(
-                                        "w-1.5 h-1.5 rounded-full",
-                                        isCompleted ? "bg-green-500" : getProgressColor(progress)
+                                        'w-1.5 h-1.5 rounded-full',
+                                        isCompleted ? 'bg-green-500' : getProgressColor(progress)
                                       )}
                                       title={`${event.title} - ${progress}%`}
                                     />
@@ -370,7 +398,7 @@ export function ProgressCalendarView({
                                   </div>
                                 )}
                               </div>
-                              
+
                               {/* Overall day progress */}
                               {dayProgress.total > 0 && (
                                 <div className="text-xs text-center text-muted-foreground">

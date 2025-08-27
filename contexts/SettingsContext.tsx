@@ -1,9 +1,10 @@
-'use client'
+'use client';
 
-import React, { createContext, useContext, ReactNode, useEffect } from 'react';
 import { useSettings } from '@/hooks/useSettings';
-import { UserSettings } from '@/lib/settings/types';
-import { initializeSoundService, useSoundEffects, SoundType } from '@/lib/sound-service';
+import type { UserSettings } from '@/lib/settings/types';
+import { type SoundType, initializeSoundService, useSoundEffects } from '@/lib/sound-service';
+import type React from 'react';
+import { type ReactNode, createContext, useContext, useEffect } from 'react';
 
 /**
  * Settings Context Type
@@ -21,10 +22,7 @@ interface SettingsContextType {
   resetCategory: <K extends keyof UserSettings>(category: K) => void;
   exportSettings: () => void;
   importSettings: (file: File) => Promise<boolean>;
-  toggleSetting: <K extends keyof UserSettings>(
-    category: K,
-    key: keyof UserSettings[K]
-  ) => void;
+  toggleSetting: <K extends keyof UserSettings>(category: K, key: keyof UserSettings[K]) => void;
   setTheme: (theme: UserSettings['appearance']['theme']) => void;
   setTimeFormat: (format: UserSettings['time']['format']) => void;
   setDateFormat: (dateFormat: UserSettings['time']['dateFormat']) => void;
@@ -68,8 +66,8 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
 
   // Sound convenience methods
   const toggleSound = () => {
-    settingsHook.updateCategory('notifications', { 
-      sound: !settingsHook.settings.notifications.sound 
+    settingsHook.updateCategory('notifications', {
+      sound: !settingsHook.settings.notifications.sound,
     });
   };
 
@@ -82,8 +80,8 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     settingsHook.updateCategory('notifications', {
       soundTypes: {
         ...settingsHook.settings.notifications.soundTypes,
-        [type]: !currentValue
-      }
+        [type]: !currentValue,
+      },
     });
   };
 
@@ -95,11 +93,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     toggleSoundType,
   };
 
-  return (
-    <SettingsContext.Provider value={contextValue}>
-      {children}
-    </SettingsContext.Provider>
-  );
+  return <SettingsContext.Provider value={contextValue}>{children}</SettingsContext.Provider>;
 }
 
 /**
