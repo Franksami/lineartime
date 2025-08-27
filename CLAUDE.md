@@ -4,13 +4,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 🎯 Project Overview
 
-**LinearTime Calendar Integration Platform** - Enterprise-grade calendar synchronization platform with 4-provider integration (Google, Microsoft, Apple CalDAV, Generic CalDAV) and 10 calendar library support. Features horizontal linear timeline as the core foundation with "Life is bigger than a week" philosophy.
+### Current Session Context
+- Active Task: CheatCal Strategic Transformation Implementation
+- Last Updated: August 27, 2025
+- Checkpoint: CheatCal PRD Analysis Complete + Documentation Structure Created
 
-**Current Version**: v0.3.3 (Phase 4.5 Complete - Sound Effects & UX Enhancement)
-**Previous Version**: v0.3.2 (AI & Multi-Calendar Integration)  
-**Foundation Version**: v0.3.1 (Convex + Clerk + Stripe Integration)
-**Target Version**: v3.0.0 (AI-Powered Enterprise Platform)
-**Project Philosophy**: "Life is bigger than a week"
+**CheatCal - "The Calendar That Cheats For You"** - Revolutionary AI-powered coordination optimization platform for money-focused professionals. Built on proven 133,222+ line quantum calendar infrastructure with controversial positioning and multi-modal AI capabilities.
+
+**Current Version**: v1.0.0 (CheatCal Foundation - Strategic Transformation)
+**Previous Foundation**: v0.3.3 (Enterprise Calendar Integration Platform - PRESERVED)
+**Target Version**: v2.0.0 (CheatCal Market Validation & Community Launch)
+**Project Philosophy**: "AI-powered coordination optimization for money-focused professionals through sophisticated analysis, elite service provider marketplace, and always-available productivity enhancement"
+
+### 💀 **STRATEGIC EVOLUTION: LinearTime → CheatCal**
+
+**REVOLUTIONARY MISSION**: Transform the existing quantum calendar infrastructure into **CheatCal** - the world's first AI-powered coordination optimization platform that uses controversial positioning and multi-modal AI surveillance to help high-revenue professionals "cheat" at productivity.
+
+**TARGET MARKET**: Money-focused professionals who prioritize results over conventional methods:
+- Course creators ($30K+ launches): Complex launch coordination optimization  
+- Agency owners ($500K+ revenue): Client coordination and operational efficiency
+- Family offices ($10M+ AUM): Multi-professional investment decision coordination
+- Elite professionals: Anyone who values measurable productivity ROI over privacy concerns
+
+**BUSINESS MODEL**: Triple revenue stream innovation:
+- Community Education: $49-$999/month CheatCal University (Hustlers University model)
+- Marketplace Value-Sharing: 15-25% of coordination improvement value created
+- Viral Authority Building: Success stories → viral content → thought leadership
 
 ### 🔗 **Current Foundation: Calendar Integration Platform**
 
@@ -50,19 +69,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **shadcn/Vercel Tokens**: Pure semantic design token system (glass effects removed)
 - **Timeline Redesign**: Vertical month-by-month view (editing centralized to Manage + Command Bar)
 
-## 🔒 CRITICAL: FOUNDATION LOCKED - DO NOT MODIFY
+## 🔒 CRITICAL: FOUNDATION LOCKED
 
-### **THE LINEAR CALENDAR FOUNDATION IS IMMUTABLE**
+### **THE LINEAR CALENDAR FOUNDATION IS IMMUTABLE (LAYOUT), IMPLEMENTATION MAY IMPROVE**
 
-The horizontal 12-month row layout is the core product identity and **MUST NEVER BE CHANGED**.
+The locked rules are defined in `docs/LINEAR_CALENDAR_FOUNDATION_SPEC.md`. The core layout must never be broken. Implementation improvements (performance, tokens, motion, a11y, AI overlays) are allowed.
 
-#### **LOCKED FOUNDATION STRUCTURE:**
-- **12 HORIZONTAL MONTH ROWS**: Each month (Jan-Dec) as complete horizontal strip
-- **COMPLETE DAY NUMBERS**: 01-31 for each month with proper week alignment  
-- **WEEK DAY HEADERS**: "Su Mo Tu We Th Fr Sa" at top AND bottom
-- **MONTH LABELS**: On BOTH left AND right sides of each row
-- **YEAR HEADER**: "2025 Linear Calendar" + "Life is bigger than a week" tagline
-- **BORDERED GRID**: Clean cell structure with visual hierarchy
+#### **LOCKED FOUNDATION STRUCTURE (see spec):**
+- 12 vertical month rows (Jan→Dec stacked), each a single continuous horizontal row
+- Week day headers at top and bottom aligned with day columns
+- Month labels on both left and right
+- Correct day-of-week alignment for any year; 42-cell grid per month with empty leading/trailing cells
+- Year header with tagline; bordered grid
 
 #### **PRIMARY CALENDAR COMPONENT (USE ONLY THIS):**
 ```tsx
@@ -78,7 +96,7 @@ The horizontal 12-month row layout is the core product identity and **MUST NEVER
 />
 ```
 
-⚠️ **WARNING**: Changes to the 12-month horizontal layout **BREAKS THE PRODUCT**. All development must build ON TOP OF this foundation.
+⚠️ **WARNING**: Any change that breaks the layout in the spec **BREAKS THE PRODUCT**. All development must build ON TOP OF the locked foundation.
 
 ## 📦 Essential Commands
 
