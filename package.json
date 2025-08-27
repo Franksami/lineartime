@@ -30,7 +30,13 @@
     "governance:score": "node scripts/calculate-governance-score.js",
     "governance:report": "node scripts/generate-governance-report.js",
     "governance:rollback": "node scripts/rollback-system.js",
-    "governance:test": "node scripts/test-governance-system.js"
+    "governance:test": "node scripts/test-governance-system.js",
+    "cleanup:detect": "node scripts/detect-deprecated-files.js",
+    "cleanup:auto": "node scripts/automated-cleanup.js",
+    "cleanup:live": "node scripts/automated-cleanup.js --live",
+    "security:scan": "node scripts/vulnerability-scanner.js",
+    "performance:regression": "node scripts/performance-regression-detector.js",
+    "cheatcal:validate": "npm run cleanup:detect && npm run security:scan && npm run performance:regression"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^2.0.6",
