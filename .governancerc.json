@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json.schemastore.org/governance",
+  "version": "1.0.0",
+  "governance": {
+    "enabled": true,
+    "level": "comprehensive",
+    "autoFix": false,
+    "autoRollback": false,
+    "failureThreshold": 70,
+    "warningThreshold": 85
+  },
+  "qualityGates": {
+    "designTokens": {
+      "enabled": true,
+      "weight": 0.20,
+      "rules": {
+        "coverage": {
+          "minimum": 90,
+          "target": 95
+        },
+        "violations": {
+          "maximum": 0,
+          "warning": 5
+        },
+        "naming": {
+          "enforceConventions": true,
+          "allowedPatterns": ["camelCase", "kebab-case", "design-system"]
+        }
+      }
+    },
+    "accessibility": {
+      "enabled": true,
+      "weight": 0.25,
+      "rules": {
+        "wcagLevel": "AAA",
+        "minimumScore": 95,
+        "contrastRatio": {
+          "normal": 7,
+          "large": 4.5
+        },
+        "keyboardNavigation": true,
+        "screenReaderSupport": true,
+        "colorIndependence": true
+      }
+    },
+    "performance": {
+      "enabled": true,
+      "weight": 0.20,
+      "rules": {
+        "bundleSize": {
+          "initial": "500KB",
+          "total": "2MB",
+          "component": "50KB"
+        },
+        "coreWebVitals": {
+          "lcp": 2500,
+          "fid": 100,
+          "cls": 0.1
+        },
+        "fps": {
+          "minimum": 60,
+          "target": 112
+        },
+        "memoryUsage": {
+          "maximum": "100MB"
+        }
+      }
+    },
+    "motion": {
+      "enabled": true,
+      "weight": 0.15,
+      "rules": {
+        "reducedMotionSupport": true,
+        "vestibularSafety": true,
+        "performanceOptimized": true,
+        "maxDuration": 800,
+        "preferGpuAccelerated": true,
+        "flashLimit": 3
+      }
+    },
+    "internationalization": {
+      "enabled": true,
+      "weight": 0.10,
+      "rules": {
+        "translationCompleteness": 90,
+        "rtlSupport": true,
+        "localeAwareFormatting": true,
+        "supportedLocales": ["en", "ar", "he", "es", "fr", "de", "ja", "zh"]
+      }
+    },
+    "security": {
+      "enabled": true,
+      "weight": 0.10,
+      "rules": {
+        "vulnerabilities": {
+          "critical": 0,
+          "high": 0,
+          "moderate": 5
+        },
+        "dependencyScanning": true,
+        "secretsDetection": true
+      }
+    }
+  },
+  "enforcement": {
+    "preCommit": {
+      "enabled": true,
+      "skipOn": ["wip", "draft"],
+      "hooks": [
+        "tokens:validate",
+        "accessibility-check",
+        "performance-check",
+        "motion-check",
+        "i18n-check",
+        "ci:guard"
+      ]
+    },
+    "prePush": {
+      "enabled": true,
+      "hooks": [
+        "test:foundation",
+        "governance:check",
+        "build"
+      ]
+    },
+    "cicd": {
+      "enabled": true,
+      "runOn": ["pull_request", "push"],
+      "levels": {
+        "standard": {
+          "threshold": 75,
+          "requiredGates": ["designTokens", "accessibility", "performance"]
+        },
+        "comprehensive": {
+          "threshold": 85,
+          "requiredGates": ["designTokens", "accessibility", "performance", "motion", "internationalization"]
+        },
+        "enterprise": {
+          "threshold": 90,
+          "requiredGates": ["designTokens", "accessibility", "performance", "motion", "internationalization", "security"]
+        }
+      }
+    }
+  },
+  "rollback": {
+    "enabled": true,
+    "strategies": {
+      "emergency": {
+        "trigger": "score < 50 || critical_vulnerabilities > 0",
+        "actions": ["immediate_revert", "disable_features", "notify_team"]
+      },
+      "selective": {
+        "trigger": "score < 70 && score >= 50",
+        "actions": ["revert_failed_components", "preserve_working_features"]
+      },
+      "incremental": {
+        "trigger": "score < 85 && score >= 70",
+        "actions": ["disable_problematic_features", "apply_hotfixes"]
+      }
+    },
+    "backup": {
+      "createOnFailure": true,
+      "retentionDays": 30,
+      "includeFiles": [
+        "package.json",
+        "next.config.ts",
+        "tailwind.config.ts",
+        "design-tokens/**/*.json"
+      ]
+    }
+  },
+  "reporting": {
+    "enabled": true,
+    "formats": ["json", "html"],
+    "includeHistory": true,
+    "retentionDays": 90,
+    "dashboard": {
+      "enabled": true,
+      "updateInterval": 30000,
+      "realTimeMetrics": true
+    }
+  },
+  "notifications": {
+    "enabled": true,
+    "channels": {
+      "github": {
+        "comments": true,
+        "labels": true,
+        "statusChecks": true
+      },
+      "slack": {
+        "webhook": "",
+        "channel": "#governance-alerts",
+        "onFailure": true,
+        "onSuccess": false
+      }
+    }
+  },
+  "exemptions": {
+    "files": [
+      "*.test.ts",
+      "*.spec.ts",
+      "*.stories.ts",
+      "docs/**/*",
+      "scripts/**/*"
+    ],
+    "branches": [
+      "experimental/*",
+      "prototype/*"
+    ],
+    "temporaryOverrides": {
+      "enabled": true,
+      "approvalRequired": true,
+      "maxDuration": "7d"
+    }
+  }
+}
