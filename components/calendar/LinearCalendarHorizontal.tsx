@@ -63,6 +63,10 @@ interface LinearCalendarHorizontalProps {
   onEventDelete?: (id: string) => void;
   enableInfiniteCanvas?: boolean;
   dayContent?: (ctx: DayContentContext) => React.ReactNode;
+  // 🚀 NEW: Enterprise virtualization for 10,000+ events
+  enableVirtualization?: boolean;
+  performanceMode?: 'standard' | 'performance' | 'enterprise';
+  onPerformanceAlert?: (metric: string, value: number) => void;
 }
 
 // Note: Month names are now handled via i18n translations
