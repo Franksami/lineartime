@@ -9,15 +9,39 @@ import {
   getWeekStartForLocale,
   isRTL,
 } from '@/lib/i18n/utils';
-import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
 /**
  * Comprehensive internationalization hook with RTL support
+ * Simplified version without next-intl provider dependency
  */
 export function useI18n() {
-  const locale = useLocale();
-  const t = useTranslations();
+  const locale = 'en'; // Default locale for now
+  const t = (key: string, params?: any) => {
+    // Simple translation fallback - just return the key
+    const translations: Record<string, string> = {
+      'Common.save': 'Save',
+      'Common.cancel': 'Cancel',
+      'Common.delete': 'Delete',
+      'Common.edit': 'Edit',
+      'Common.close': 'Close',
+      'Common.loading': 'Loading',
+      'Common.search': 'Search',
+      'Common.filter': 'Filter',
+      'Common.next': 'Next',
+      'Common.previous': 'Previous',
+      'Calendar.title': `Calendar ${params?.year || new Date().getFullYear()}`,
+      'Calendar.tagline': 'AI-powered coordination optimization',
+      'Calendar.today': 'Today',
+      'Calendar.daysLeft': `${params?.count || 0} days left`,
+      'Calendar.events': `${params?.count || 0} events`,
+      'Calendar.createEvent': 'Create Event',
+      'Calendar.editEvent': 'Edit Event',
+      'Calendar.deleteEvent': 'Delete Event',
+      // Add more as needed
+    };
+    return translations[key] || key;
+  };
 
   const i18nProps = useMemo(() => {
     const rtl = isRTL(locale);
@@ -153,7 +177,7 @@ export function useI18n() {
  * Hook for getting localized date/time formatting functions
  */
 export function useLocalizedFormat() {
-  const locale = useLocale();
+  const locale = 'en';
 
   return useMemo(() => {
     const dateFormat = getDateFormatForLocale(locale);
@@ -218,7 +242,7 @@ export function useLocalizedFormat() {
  * Hook for RTL-aware styling
  */
 export function useRTLStyles() {
-  const locale = useLocale();
+  const locale = 'en';
 
   return useMemo(() => {
     const rtl = isRTL(locale);

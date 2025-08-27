@@ -26,7 +26,7 @@ const DEFAULT_FLAGS: FeatureFlagConfig = {
   ENABLE_TOUCH_GESTURE_HANDLER: true,
   ENABLE_LIBRARY_TRANSITION_ANIMATOR: true,
 
-  // Real-time Collaboration  
+  // Real-time Collaboration
   ENABLE_WEBSOCKET_SYNC_MANAGER: true,
   ENABLE_OPTIMISTIC_UPDATE_HANDLER: true,
   ENABLE_LIVE_COLLABORATION_LAYER: true,
@@ -41,7 +41,7 @@ const DEFAULT_FLAGS: FeatureFlagConfig = {
   ENABLE_PERFORMANCE_MONITORING: true,
   ENABLE_ADVANCED_CACHING: true,
   ENABLE_VIRTUAL_SCROLLING: true,
-  
+
   // Horizontal Timeline Features
   HORIZONTAL_TIMELINE_ENABLED: true,
   SHOW_TIMELINE_ANALYTICS: true,
@@ -65,10 +65,10 @@ interface FeatureFlagProviderProps {
   environment?: 'development' | 'staging' | 'production';
 }
 
-export function FeatureFlagProvider({ 
-  children, 
+export function FeatureFlagProvider({
+  children,
   initialFlags = {},
-  environment = 'production'
+  environment = 'production',
 }: FeatureFlagProviderProps) {
   const [flags, setFlags] = useState<FeatureFlagConfig>({
     ...DEFAULT_FLAGS,
@@ -81,7 +81,7 @@ export function FeatureFlagProvider({
       const stored = localStorage.getItem('lineartime-feature-flags');
       if (stored) {
         const parsedFlags = JSON.parse(stored);
-        setFlags(prev => ({ ...prev, ...parsedFlags }));
+        setFlags((prev) => ({ ...prev, ...parsedFlags }));
       }
     } catch (error) {
       console.warn('Failed to load feature flags from localStorage:', error);
@@ -102,9 +102,9 @@ export function FeatureFlagProvider({
   };
 
   const setFlag = (key: string, value: any) => {
-    setFlags(prev => ({
+    setFlags((prev) => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
   };
 
@@ -120,11 +120,7 @@ export function FeatureFlagProvider({
     isEnabled,
   };
 
-  return (
-    <FeatureFlagContext.Provider value={contextValue}>
-      {children}
-    </FeatureFlagContext.Provider>
-  );
+  return <FeatureFlagContext.Provider value={contextValue}>{children}</FeatureFlagContext.Provider>;
 }
 
 // Hook to use feature flags
@@ -155,7 +151,7 @@ export const flags = {
     if (typeof window === 'undefined') {
       return DEFAULT_FLAGS[key] ?? fallback;
     }
-    
+
     try {
       const stored = localStorage.getItem('lineartime-feature-flags');
       if (stored) {
@@ -165,15 +161,15 @@ export const flags = {
     } catch {
       // Ignore storage errors
     }
-    
+
     return DEFAULT_FLAGS[key] ?? fallback;
   },
-  
+
   get: (key: string) => {
     if (typeof window === 'undefined') {
       return DEFAULT_FLAGS[key];
     }
-    
+
     try {
       const stored = localStorage.getItem('lineartime-feature-flags');
       if (stored) {
@@ -183,9 +179,9 @@ export const flags = {
     } catch {
       // Ignore storage errors
     }
-    
+
     return DEFAULT_FLAGS[key];
-  }
+  },
 };
 
 // Backward compatibility for existing Vercel Flags usage

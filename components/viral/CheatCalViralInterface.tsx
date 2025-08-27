@@ -1,43 +1,44 @@
 /**
  * CheatCal Viral Marketing Interface
- * 
+ *
  * Inherently controversial viral positioning system inspired by Andrew Tate's
  * polarizing but effective marketing model. Built for true professionals
  * who want maximum productivity through controversial methods.
- * 
+ *
  * Strategy: Embrace controversy → Generate viral attention → Bootstrap success
  * Target: Elite professionals who thrive on competitive advantage
- * 
+ *
  * @version 1.0.0 (Maximum Controversy Release)
  * @author CheatCal Viral Marketing Team
  */
 
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Skull, 
-  Eye, 
-  Zap, 
-  TrendingUp,
-  AlertTriangle,
-  DollarSign,
-  Target,
-  Crown,
-  Flame,
-  Shield,
-  Users,
-  MessageSquare,
-  Share2,
-  Volume2
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  AlertTriangle,
+  Crown,
+  DollarSign,
+  Eye,
+  Flame,
+  MessageSquare,
+  Share2,
+  Shield,
+  Skull,
+  Target,
+  TrendingUp,
+  Users,
+  Volume2,
+  Zap,
+} from 'lucide-react';
+import type React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // ASCII Viral Strategy Documentation
 const VIRAL_STRATEGY_ARCHITECTURE = `
@@ -100,13 +101,15 @@ interface ViralContentTemplate {
 
 const CheatCalViralInterface: React.FC = () => {
   // Controversial state management
-  const [viralMode, setViralMode] = useState<'stealth' | 'aggressive' | 'maximum_chaos'>('aggressive');
+  const [viralMode, setViralMode] = useState<'stealth' | 'aggressive' | 'maximum_chaos'>(
+    'aggressive'
+  );
   const [controversyLevel, setControversyLevel] = useState(85);
   const [viralMetrics, setViralMetrics] = useState({
     reach: 127000,
     engagement: 34,
     controversy_score: 92,
-    professional_conversion: 12
+    professional_conversion: 12,
   });
 
   // Andrew Tate viral campaigns (for professionals)
@@ -118,32 +121,32 @@ const CheatCalViralInterface: React.FC = () => {
       viral_hooks: [
         "💀 'I let AI watch my $100M decisions and it made me $20M richer'",
         "👁️ 'Privacy is for poor people - Billionaires embrace surveillance'",
-        "🔥 'The controversial coordination method that broke Wall Street'"
+        "🔥 'The controversial coordination method that broke Wall Street'",
       ],
       content_templates: [],
       expected_reach: 5000000,
-      controversy_score: 95
+      controversy_score: 95,
     },
     {
       id: 'productivity_cheating',
-      controversy_level: 'polarizing', 
+      controversy_level: 'polarizing',
       target_audience: 'elite_creators',
       viral_hooks: [
         "⚡ 'How I cheated my way from $30K to $150K launches'",
         "💰 'The unfair advantage that course creation gurus hide'",
-        "🎯 'Why hard work is for losers (AI cheating explained)'"
+        "🎯 'Why hard work is for losers (AI cheating explained)'",
       ],
       content_templates: [],
       expected_reach: 2000000,
-      controversy_score: 88
-    }
+      controversy_score: 88,
+    },
   ]);
 
-  // Professional success metrics 
+  // Professional success metrics
   const [professionalMetrics] = useState([
     { category: 'Family Offices', customers: 3, avg_value: 2400000, monthly_revenue: 72000 },
     { category: 'Elite Creators', customers: 12, avg_value: 75000, monthly_revenue: 180000 },
-    { category: 'C-Suite Executives', customers: 18, avg_value: 125000, monthly_revenue: 337500 }
+    { category: 'C-Suite Executives', customers: 18, avg_value: 125000, monthly_revenue: 337500 },
   ]);
 
   // Viral content generation
@@ -153,7 +156,7 @@ const CheatCalViralInterface: React.FC = () => {
       `"The ${campaign.target_audience.replace('_', ' ')} secret that privacy advocates don't want you to know"`,
       `"How elite professionals cheat at productivity (legally and profitably)"`,
       `"Why successful people embrace controversial AI monitoring"`,
-      `"The coordination advantage that separates millionaires from wage slaves"`
+      `"The coordination advantage that separates millionaires from wage slaves"`,
     ];
 
     return viralAngles;
@@ -163,7 +166,7 @@ const CheatCalViralInterface: React.FC = () => {
     <div className="min-h-screen bg-black text-white font-mono">
       <div className="max-w-7xl mx-auto p-6 space-y-8">
         {/* Controversial Header */}
-        <motion.div 
+        <motion.div
           className="text-center space-y-4"
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -176,16 +179,17 @@ const CheatCalViralInterface: React.FC = () => {
             </h1>
             <Flame className="w-12 h-12 text-orange-500" />
           </motion.div>
-          
-          <motion.p 
+
+          <motion.p
             className="text-xl text-gray-300 max-w-4xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <span className="text-red-400 font-bold">"The AI That Cheats At Productivity For People Who Get Money"</span>
-            <br />
-            💰 Real hustlers • True money-getters • Results over reputation
+            <span className="text-red-400 font-bold">
+              "The AI That Cheats At Productivity For People Who Get Money"
+            </span>
+            <br />💰 Real hustlers • True money-getters • Results over reputation
           </motion.p>
 
           {/* Controversy Level Control */}
@@ -249,12 +253,16 @@ const CheatCalViralInterface: React.FC = () => {
                     <h4 className="font-semibold text-red-300 capitalize">
                       {campaign.target_audience.replace('_', ' ')} Campaign
                     </h4>
-                    <Badge className={cn(
-                      'border-0',
-                      campaign.controversy_level === 'maximum_chaos' ? 'bg-red-600' :
-                      campaign.controversy_level === 'polarizing' ? 'bg-orange-600' : 
-                      'bg-yellow-600'
-                    )}>
+                    <Badge
+                      className={cn(
+                        'border-0',
+                        campaign.controversy_level === 'maximum_chaos'
+                          ? 'bg-red-600'
+                          : campaign.controversy_level === 'polarizing'
+                            ? 'bg-orange-600'
+                            : 'bg-yellow-600'
+                      )}
+                    >
                       {campaign.controversy_level}
                     </Badge>
                   </div>
@@ -284,9 +292,9 @@ const CheatCalViralInterface: React.FC = () => {
                       </div>
                     </div>
 
-                    <Button 
-                      variant="destructive" 
-                      size="sm" 
+                    <Button
+                      variant="destructive"
+                      size="sm"
                       className="w-full bg-red-600 hover:bg-red-700"
                     >
                       <Share2 className="w-4 h-4 mr-2" />
@@ -318,11 +326,14 @@ const CheatCalViralInterface: React.FC = () => {
                   >
                     <div className="flex items-center justify-between">
                       <h4 className="font-semibold text-green-300">{metric.category}</h4>
-                      <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500">
+                      <Badge
+                        variant="outline"
+                        className="bg-green-500/10 text-green-400 border-green-500"
+                      >
                         {metric.customers} Customers
                       </Badge>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4">
                       <div className="text-center p-3 bg-gray-800 rounded">
                         <div className="text-xl font-bold text-yellow-400">
@@ -347,11 +358,22 @@ const CheatCalViralInterface: React.FC = () => {
                 >
                   <div className="text-center">
                     <div className="text-3xl font-bold text-green-400">
-                      ${(professionalMetrics.reduce((sum, m) => sum + m.monthly_revenue, 0) / 1000).toFixed(0)}K
+                      $
+                      {(
+                        professionalMetrics.reduce((sum, m) => sum + m.monthly_revenue, 0) / 1000
+                      ).toFixed(0)}
+                      K
                     </div>
-                    <div className="text-sm text-gray-300">Total Monthly Revenue from Elite Professionals</div>
+                    <div className="text-sm text-gray-300">
+                      Total Monthly Revenue from Elite Professionals
+                    </div>
                     <div className="text-xs text-yellow-400 mt-2">
-                      💎 ${((professionalMetrics.reduce((sum, m) => sum + m.monthly_revenue, 0) * 12) / 1000000).toFixed(1)}M ARR Target
+                      💎 $
+                      {(
+                        (professionalMetrics.reduce((sum, m) => sum + m.monthly_revenue, 0) * 12) /
+                        1000000
+                      ).toFixed(1)}
+                      M ARR Target
                     </div>
                   </div>
                 </motion.div>
@@ -373,19 +395,31 @@ const CheatCalViralInterface: React.FC = () => {
               {/* Viral Mode Controls */}
               <div className="space-y-4">
                 <h4 className="font-semibold text-purple-300">Viral Positioning</h4>
-                
+
                 <div className="space-y-3">
                   {[
-                    { mode: 'stealth', label: 'Professional Stealth', description: 'Sophisticated controversy for elite customers' },
-                    { mode: 'aggressive', label: 'Andrew Tate Style', description: 'Polarizing but professional positioning' },
-                    { mode: 'maximum_chaos', label: 'Maximum Chaos', description: 'Full controversial viral amplification' }
+                    {
+                      mode: 'stealth',
+                      label: 'Professional Stealth',
+                      description: 'Sophisticated controversy for elite customers',
+                    },
+                    {
+                      mode: 'aggressive',
+                      label: 'Andrew Tate Style',
+                      description: 'Polarizing but professional positioning',
+                    },
+                    {
+                      mode: 'maximum_chaos',
+                      label: 'Maximum Chaos',
+                      description: 'Full controversial viral amplification',
+                    },
                   ].map((option) => (
                     <motion.div
                       key={option.mode}
                       className={cn(
                         'p-3 rounded-lg border cursor-pointer transition-all',
-                        viralMode === option.mode 
-                          ? 'border-purple-500 bg-purple-500/20' 
+                        viralMode === option.mode
+                          ? 'border-purple-500 bg-purple-500/20'
                           : 'border-gray-600 hover:border-purple-500/50'
                       )}
                       onClick={() => setViralMode(option.mode as any)}
@@ -402,7 +436,7 @@ const CheatCalViralInterface: React.FC = () => {
               {/* Controversy Level Slider */}
               <div className="space-y-4">
                 <h4 className="font-semibold text-red-300">Controversy Intensity</h4>
-                
+
                 <div className="space-y-6">
                   <div>
                     <div className="flex justify-between text-sm mb-2">
@@ -418,7 +452,7 @@ const CheatCalViralInterface: React.FC = () => {
                         onChange={(e) => setControversyLevel(Number(e.target.value))}
                         className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                       />
-                      <div 
+                      <div
                         className="absolute top-0 left-0 h-2 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 rounded-lg pointer-events-none"
                         style={{ width: `${controversyLevel}%` }}
                       />
@@ -431,11 +465,15 @@ const CheatCalViralInterface: React.FC = () => {
                   </div>
 
                   <div className="p-3 bg-gray-800 rounded border border-red-500/30">
-                    <div className="text-sm text-red-300 font-medium mb-2">⚠️ Current Positioning:</div>
+                    <div className="text-sm text-red-300 font-medium mb-2">
+                      ⚠️ Current Positioning:
+                    </div>
                     <div className="text-xs text-gray-300">
-                      {controversyLevel >= 90 ? "💀 Maximum chaos mode - Inherently viral but potentially offensive" :
-                       controversyLevel >= 70 ? "🔥 Andrew Tate style - Polarizing professional positioning" :
-                       "⚡ Professional controversial - Sophisticated edge for elite customers"}
+                      {controversyLevel >= 90
+                        ? '💀 Maximum chaos mode - Inherently viral but potentially offensive'
+                        : controversyLevel >= 70
+                          ? '🔥 Andrew Tate style - Polarizing professional positioning'
+                          : '⚡ Professional controversial - Sophisticated edge for elite customers'}
                     </div>
                   </div>
                 </div>
@@ -444,7 +482,7 @@ const CheatCalViralInterface: React.FC = () => {
               {/* Viral Performance Dashboard */}
               <div className="space-y-4">
                 <h4 className="font-semibold text-green-300">Viral Performance</h4>
-                
+
                 <div className="grid grid-cols-2 gap-3">
                   <div className="text-center p-3 bg-gray-800 rounded">
                     <div className="text-2xl font-bold text-green-400">
@@ -452,21 +490,21 @@ const CheatCalViralInterface: React.FC = () => {
                     </div>
                     <div className="text-xs text-gray-400">Monthly Reach</div>
                   </div>
-                  
+
                   <div className="text-center p-3 bg-gray-800 rounded">
                     <div className="text-2xl font-bold text-orange-400">
                       {viralMetrics.engagement}%
                     </div>
                     <div className="text-xs text-gray-400">Engagement Rate</div>
                   </div>
-                  
+
                   <div className="text-center p-3 bg-gray-800 rounded">
                     <div className="text-2xl font-bold text-red-400">
                       {viralMetrics.controversy_score}%
                     </div>
                     <div className="text-xs text-gray-400">Controversy Score</div>
                   </div>
-                  
+
                   <div className="text-center p-3 bg-gray-800 rounded">
                     <div className="text-2xl font-bold text-purple-400">
                       {viralMetrics.professional_conversion}%
@@ -475,7 +513,7 @@ const CheatCalViralInterface: React.FC = () => {
                   </div>
                 </div>
 
-                <Button 
+                <Button
                   variant="destructive"
                   className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700"
                 >
@@ -500,34 +538,34 @@ const CheatCalViralInterface: React.FC = () => {
             <CardContent>
               <div className="space-y-4">
                 {[
-                  { 
-                    tier: 'Elite Professional Advocates', 
-                    count: 8, 
+                  {
+                    tier: 'Elite Professional Advocates',
+                    count: 8,
                     compensation: '$10K-$25K/month',
                     focus: 'Family office and C-suite success stories',
-                    viral_output: '4 viral videos/month + daily controversy'
+                    viral_output: '4 viral videos/month + daily controversy',
                   },
-                  { 
-                    tier: 'Professional Influencers', 
-                    count: 25, 
+                  {
+                    tier: 'Professional Influencers',
+                    count: 25,
                     compensation: '$3K-$8K/month',
                     focus: 'Business productivity and coordination content',
-                    viral_output: '2 viral videos/month + weekly engagement'
+                    viral_output: '2 viral videos/month + weekly engagement',
                   },
-                  { 
-                    tier: 'Content Soldiers', 
-                    count: 35, 
+                  {
+                    tier: 'Content Soldiers',
+                    count: 35,
                     compensation: '$500-$2K/month',
                     focus: 'Daily engagement and controversy amplification',
-                    viral_output: '1 video/month + daily social engagement'
+                    viral_output: '1 video/month + daily social engagement',
                   },
-                  { 
-                    tier: 'Clipper Network', 
-                    count: 127, 
+                  {
+                    tier: 'Clipper Network',
+                    count: 127,
                     compensation: '$200-$800/month',
                     focus: 'Success story editing and viral clip creation',
-                    viral_output: '10-20 clips/month + viral compilation videos'
-                  }
+                    viral_output: '10-20 clips/month + viral compilation videos',
+                  },
                 ].map((tier, index) => (
                   <motion.div
                     key={tier.tier}
@@ -538,11 +576,14 @@ const CheatCalViralInterface: React.FC = () => {
                   >
                     <div className="flex items-center justify-between mb-2">
                       <h5 className="font-medium text-blue-300">{tier.tier}</h5>
-                      <Badge variant="outline" className="bg-blue-500/10 text-blue-400 border-blue-500">
+                      <Badge
+                        variant="outline"
+                        className="bg-blue-500/10 text-blue-400 border-blue-500"
+                      >
                         {tier.count} Active
                       </Badge>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <div className="text-gray-400">Compensation:</div>
@@ -553,7 +594,7 @@ const CheatCalViralInterface: React.FC = () => {
                         <div className="text-yellow-400 font-medium">{tier.viral_output}</div>
                       </div>
                     </div>
-                    
+
                     <div className="mt-2">
                       <div className="text-xs text-gray-400">Focus Area:</div>
                       <div className="text-white text-sm">{tier.focus}</div>
@@ -578,7 +619,11 @@ const CheatCalViralInterface: React.FC = () => {
                   { trigger: 'Elite Success Story', status: 'active', reach: '2.3M views' },
                   { trigger: 'Privacy Debate Content', status: 'viral', reach: '847K views' },
                   { trigger: 'Competitive Callout', status: 'pending', reach: 'Ready to launch' },
-                  { trigger: 'Anti-Hero Positioning', status: 'scheduled', reach: 'Controversy response ready' }
+                  {
+                    trigger: 'Anti-Hero Positioning',
+                    status: 'scheduled',
+                    reach: 'Controversy response ready',
+                  },
                 ].map((amp, index) => (
                   <motion.div
                     key={amp.trigger}
@@ -587,20 +632,26 @@ const CheatCalViralInterface: React.FC = () => {
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-yellow-300">{amp.trigger}</span>
-                      <Badge className={cn(
-                        'text-xs border-0',
-                        amp.status === 'viral' ? 'bg-red-600' :
-                        amp.status === 'active' ? 'bg-green-600' :
-                        amp.status === 'pending' ? 'bg-orange-600' : 'bg-blue-600'
-                      )}>
+                      <Badge
+                        className={cn(
+                          'text-xs border-0',
+                          amp.status === 'viral'
+                            ? 'bg-red-600'
+                            : amp.status === 'active'
+                              ? 'bg-green-600'
+                              : amp.status === 'pending'
+                                ? 'bg-orange-600'
+                                : 'bg-blue-600'
+                        )}
+                      >
                         {amp.status}
                       </Badge>
                     </div>
                     <div className="text-xs text-gray-400">{amp.reach}</div>
                   </motion.div>
                 ))}
-                
-                <Button 
+
+                <Button
                   variant="outline"
                   className="w-full border-yellow-500 text-yellow-400 hover:bg-yellow-500/10"
                 >
@@ -624,41 +675,41 @@ const CheatCalViralInterface: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 {
-                  title: "Family Office Elite",
+                  title: 'Family Office Elite',
                   hook: "💀 'I let AI watch my $500M decisions'",
-                  target: "Ultra-high-net-worth families",
-                  controversy: "Maximum surveillance for maximum wealth"
+                  target: 'Ultra-high-net-worth families',
+                  controversy: 'Maximum surveillance for maximum wealth',
                 },
                 {
-                  title: "Course Creator Domination", 
+                  title: 'Course Creator Domination',
                   hook: "⚡ 'From $30K to $200K launches through AI cheating'",
-                  target: "Elite course creators and coaches",
-                  controversy: "Productivity cheating vs hard work"
+                  target: 'Elite course creators and coaches',
+                  controversy: 'Productivity cheating vs hard work',
                 },
                 {
-                  title: "C-Suite Unfair Advantage",
+                  title: 'C-Suite Unfair Advantage',
                   hook: "👁️ 'How Fortune 500 CEOs cheat at productivity'",
-                  target: "Enterprise executives and leaders", 
-                  controversy: "Executive privilege through AI monitoring"
+                  target: 'Enterprise executives and leaders',
+                  controversy: 'Executive privilege through AI monitoring',
                 },
                 {
-                  title: "Investment Professional Edge",
+                  title: 'Investment Professional Edge',
                   hook: "💰 'The coordination secret that made me $50M'",
-                  target: "Investment professionals and fund managers",
-                  controversy: "Financial industry coordination advantage"
+                  target: 'Investment professionals and fund managers',
+                  controversy: 'Financial industry coordination advantage',
                 },
                 {
-                  title: "Agency Owner Domination",
+                  title: 'Agency Owner Domination',
                   hook: "🎯 'How I 10x'd my agency through controversial AI'",
-                  target: "Multi-million dollar agency owners",
-                  controversy: "Operational efficiency through surveillance"
+                  target: 'Multi-million dollar agency owners',
+                  controversy: 'Operational efficiency through surveillance',
                 },
                 {
-                  title: "Professional Services Elite",
-                  hook: "🔥 'The client coordination hack that broke consulting'", 
-                  target: "Top-tier consulting and professional services",
-                  controversy: "Professional advantage through monitoring"
-                }
+                  title: 'Professional Services Elite',
+                  hook: "🔥 'The client coordination hack that broke consulting'",
+                  target: 'Top-tier consulting and professional services',
+                  controversy: 'Professional advantage through monitoring',
+                },
               ].map((template, index) => (
                 <motion.div
                   key={template.title}
@@ -674,8 +725,8 @@ const CheatCalViralInterface: React.FC = () => {
                     <div>Target: {template.target}</div>
                     <div>Angle: {template.controversy}</div>
                   </div>
-                  <Button 
-                    size="sm" 
+                  <Button
+                    size="sm"
                     variant="outline"
                     className="w-full border-indigo-500 text-indigo-400 hover:bg-indigo-500/10"
                   >
@@ -704,7 +755,7 @@ const CheatCalViralInterface: React.FC = () => {
                 <p className="text-gray-300 mb-4">
                   "Build controversy → Generate revenue → Bootstrap mainstream products"
                 </p>
-                
+
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div className="p-3 bg-gray-800 rounded">
                     <div className="text-lg font-bold text-red-400">Phase 1</div>
@@ -724,7 +775,7 @@ const CheatCalViralInterface: React.FC = () => {
                 </div>
               </div>
 
-              <Button 
+              <Button
                 size="lg"
                 className="w-full bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 hover:from-red-700 hover:via-orange-700 hover:to-yellow-700 text-white font-bold"
               >

@@ -2,21 +2,22 @@
 
 /**
  * QuantumFeatureFlags - A/B Testing and Feature Flag Management
- * 
+ *
  * Provides comprehensive feature flag management, A/B testing integration,
  * and gradual rollout capabilities for quantum calendar features.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   Activity,
@@ -32,12 +33,12 @@ import {
 } from 'lucide-react';
 
 import type {
-  QuantumFeatureFlags,
-  QuantumVariant,
-  QuantumABTestConfig,
-  QuantumPerformanceMetrics,
-  QuantumEngagementMetrics,
   FeatureFlagEvaluation,
+  QuantumABTestConfig,
+  QuantumEngagementMetrics,
+  QuantumFeatureFlags,
+  QuantumPerformanceMetrics,
+  QuantumVariant,
 } from '@/types/quantum-calendar';
 
 // =============================================================================
@@ -240,9 +241,7 @@ function FeatureFlagControl({
           <span className={cn('font-medium', getImpactColor(impactScore))}>
             {impactScore.toFixed(1)}%
           </span>
-          {impactScore > 0 && (
-            <Progress value={impactScore} className="w-20 h-2" />
-          )}
+          {impactScore > 0 && <Progress value={impactScore} className="w-20 h-2" />}
         </div>
       </div>
       <Switch
@@ -295,7 +294,9 @@ function VariantSelector({
                   {isActive && <Badge>Active</Badge>}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span>{enabledFlags}/{flagCount} flags</span>
+                  <span>
+                    {enabledFlags}/{flagCount} flags
+                  </span>
                   <span>•</span>
                   <span>{(variant.weight * 100).toFixed(0)}% traffic</span>
                 </div>
@@ -363,9 +364,10 @@ function PerformanceImpactChart({
       <h4 className="font-medium">Performance Impact</h4>
       <div className="grid grid-cols-2 gap-4">
         {metrics.map((metric) => {
-          const isGood = metric.name === 'Scroll Smoothness' 
-            ? metric.value >= metric.target * 0.9
-            : metric.value <= metric.target * 1.1;
+          const isGood =
+            metric.name === 'Scroll Smoothness'
+              ? metric.value >= metric.target * 0.9
+              : metric.value <= metric.target * 1.1;
 
           return (
             <div key={metric.name} className="p-3 border rounded-lg">
@@ -377,18 +379,17 @@ function PerformanceImpactChart({
               </div>
               <div className="flex items-center gap-2">
                 <div className={cn('w-3 h-3 rounded', metric.color)} />
-                <span className="text-lg font-semibold">
-                  {metric.value.toFixed(1)}
-                </span>
+                <span className="text-lg font-semibold">{metric.value.toFixed(1)}</span>
                 <span className="text-sm text-muted-foreground">{metric.unit}</span>
               </div>
               <div className="mt-2">
-                <Progress 
-                  value={metric.name === 'Scroll Smoothness' 
-                    ? metric.value
-                    : Math.max(0, 100 - (metric.value / metric.target) * 100)
-                  } 
-                  className="h-2" 
+                <Progress
+                  value={
+                    metric.name === 'Scroll Smoothness'
+                      ? metric.value
+                      : Math.max(0, 100 - (metric.value / metric.target) * 100)
+                  }
+                  className="h-2"
                 />
               </div>
             </div>
@@ -469,9 +470,12 @@ export function QuantumFeatureFlags({
   }, [currentFlags, performanceMetrics]);
 
   // Handle flag toggle
-  const handleFlagToggle = useCallback((flag: keyof QuantumFeatureFlags, enabled: boolean) => {
-    onFlagChange(flag, enabled);
-  }, [onFlagChange]);
+  const handleFlagToggle = useCallback(
+    (flag: keyof QuantumFeatureFlags, enabled: boolean) => {
+      onFlagChange(flag, enabled);
+    },
+    [onFlagChange]
+  );
 
   // Export configuration
   const handleExportConfig = useCallback(() => {
@@ -543,7 +547,10 @@ export function QuantumFeatureFlags({
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <Tabs value={selectedCategory.toString()} onValueChange={(value) => setSelectedCategory(parseInt(value))}>
+          <Tabs
+            value={selectedCategory.toString()}
+            onValueChange={(value) => setSelectedCategory(Number.parseInt(value))}
+          >
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="0">Features</TabsTrigger>
               <TabsTrigger value="1">A/B Tests</TabsTrigger>
@@ -607,13 +614,21 @@ export function QuantumFeatureFlags({
               <div>
                 <span className="text-muted-foreground">Enabled Features:</span>
                 <div className="font-semibold">
-                  {Object.values(currentFlags).filter(Boolean).length} / {Object.keys(currentFlags).length}
+                  {Object.values(currentFlags).filter(Boolean).length} /{' '}
+                  {Object.keys(currentFlags).length}
                 </div>
               </div>
               <div>
                 <span className="text-muted-foreground">Performance Score:</span>
                 <div className="font-semibold text-green-600">
-                  {performanceMetrics ? (100 - Object.values(impactScores).reduce((a, b) => a + b, 0) / Object.keys(impactScores).length).toFixed(0) : '--'}%
+                  {performanceMetrics
+                    ? (
+                        100 -
+                        Object.values(impactScores).reduce((a, b) => a + b, 0) /
+                          Object.keys(impactScores).length
+                      ).toFixed(0)
+                    : '--'}
+                  %
                 </div>
               </div>
             </div>

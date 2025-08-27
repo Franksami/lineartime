@@ -13,38 +13,39 @@
 
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Target, 
-  Zap, 
-  Brain, 
-  Clock, 
-  Users, 
+  Activity,
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
   BarChart3, 
-  Calendar,
-  Settings,
   Bell,
-  Search,
+  Brain, 
+  Briefcase,
+  Calendar,
+  ChevronRight,
+  Clock, 
+  Crown,
+  DollarSign, 
+  Eye,
+  Flame,
   Grid3X3,
   List,
   Plus,
-  Star,
-  ArrowUp,
-  ArrowDown,
-  ChevronRight,
-  Activity,
-  Briefcase,
-  Trophy,
-  AlertTriangle,
+  Search,
+  Settings,
   Skull,
-  Eye,
-  Flame,
-  Crown
+  Star,
+  Target, 
+  TrendingDown, 
+  TrendingUp, 
+  Trophy,
+  Users, 
+  Zap 
 } from "lucide-react";
+import type React from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 // Utility function for class names
 const cn = (...classes: Array<string | false | null | undefined>) => {
@@ -511,7 +512,7 @@ export const CheatCalMainLayout: React.FC = () => {
                 <motion.div 
                   className="flex items-center gap-2 px-3 py-2 bg-red-500/10 border border-red-500/30 rounded-lg"
                   animate={{ opacity: [1, 0.7, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                 >
                   <Eye className="w-4 h-4 text-red-400" />
                   <span className="text-sm font-medium text-red-400">Monitoring Active</span>

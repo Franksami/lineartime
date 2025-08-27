@@ -1,19 +1,19 @@
 /**
  * Quantum Calendar Utilities
- * 
+ *
  * Utility functions for browser support detection, performance measurement,
  * analytics tracking, A/B testing, and configuration management.
  */
 
 import type {
-  QuantumFeatureFlags,
-  QuantumVariant,
-  QuantumPerformanceMetrics,
-  QuantumEngagementMetrics,
-  QuantumEventData,
-  QuantumConfig,
   BrowserSupportResult,
   FeatureFlagEvaluation,
+  QuantumConfig,
+  QuantumEngagementMetrics,
+  QuantumEventData,
+  QuantumFeatureFlags,
+  QuantumPerformanceMetrics,
+  QuantumVariant,
 } from '@/types/quantum-calendar';
 
 // =============================================================================
@@ -51,7 +51,11 @@ export function detectBrowserSupport(): Record<string, BrowserSupportResult> {
       fallbackUsed: !CSS.supports('container-type', 'inline-size') ? 'media-queries' : undefined,
     };
   } catch (error) {
-    results.containerQueries = { feature: 'container-queries', supported: false, fallbackUsed: 'media-queries' };
+    results.containerQueries = {
+      feature: 'container-queries',
+      supported: false,
+      fallbackUsed: 'media-queries',
+    };
   }
 
   // CSS Grid support (baseline requirement)
@@ -105,8 +109,8 @@ export function detectBrowserSupport(): Record<string, BrowserSupportResult> {
 export function calculatePerformanceScore(metrics: QuantumPerformanceMetrics): number {
   const weights = {
     renderTime: 0.25,
-    firstInputDelay: 0.20,
-    largestContentfulPaint: 0.20,
+    firstInputDelay: 0.2,
+    largestContentfulPaint: 0.2,
     cumulativeLayoutShift: 0.15,
     scrollSmoothness: 0.15,
     memoryUsage: 0.05,
@@ -123,7 +127,7 @@ export function calculatePerformanceScore(metrics: QuantumPerformanceMetrics): n
   };
 
   const score = Object.entries(weights).reduce((acc, [key, weight]) => {
-    return acc + (normalizedMetrics[key as keyof typeof normalizedMetrics] * weight);
+    return acc + normalizedMetrics[key as keyof typeof normalizedMetrics] * weight;
   }, 0);
 
   return Math.max(0, Math.min(100, score));
@@ -138,13 +142,13 @@ export function measureQuantumFeatureImpact<T>(
   onMeasurement?: (duration: number, featureName: string) => void
 ): T {
   const startTime = performance.now();
-  
+
   try {
     const result = operation();
     const duration = performance.now() - startTime;
-    
+
     onMeasurement?.(duration, featureName);
-    
+
     return result;
   } catch (error) {
     const duration = performance.now() - startTime;
@@ -162,15 +166,15 @@ export function createPerformanceMark(name: string, metadata?: Record<string, an
   }
 
   performance.mark(`quantum-${name}-start`);
-  
+
   return {
     end: () => {
       performance.mark(`quantum-${name}-end`);
       performance.measure(`quantum-${name}`, `quantum-${name}-start`, `quantum-${name}-end`);
-      
+
       const entries = performance.getEntriesByName(`quantum-${name}`, 'measure');
       const lastEntry = entries[entries.length - 1];
-      
+
       return {
         name,
         startTime: lastEntry?.startTime || 0,
@@ -210,9 +214,9 @@ export function trackQuantumEvent(
     data,
     context: {
       userAgent: navigator.userAgent,
-      viewport: { 
-        width: window.innerWidth, 
-        height: window.innerHeight 
+      viewport: {
+        width: window.innerWidth,
+        height: window.innerHeight,
       },
       colorScheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
       reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -253,11 +257,12 @@ export function calculateFeatureUtilization(
  */
 export function calculateEngagementScore(metrics: QuantumEngagementMetrics): number {
   return (
-    metrics.taskCompletionRate * 0.3 +
-    Math.min(metrics.sessionDuration / 60, 1) * 0.2 + // Cap at 1 hour
-    (metrics.userRetentionRate || 0) * 0.3 +
-    (metrics.featureFeedbackScore / 5) * 0.2
-  ) * 100;
+    (metrics.taskCompletionRate * 0.3 +
+      Math.min(metrics.sessionDuration / 60, 1) * 0.2 + // Cap at 1 hour
+      (metrics.userRetentionRate || 0) * 0.3 +
+      (metrics.featureFeedbackScore / 5) * 0.2) *
+    100
+  );
 }
 
 // =============================================================================
@@ -297,7 +302,7 @@ function hashString(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash; // Convert to 32bit integer
   }
   return Math.abs(hash);
@@ -482,7 +487,9 @@ export function validateQuantumConfig(config: QuantumConfig): string[] {
       errors.push('Max workers must be positive');
     }
     if (config.webWorkers.maxWorkers > navigator.hardwareConcurrency) {
-      errors.push(`Max workers (${config.webWorkers.maxWorkers}) exceeds hardware concurrency (${navigator.hardwareConcurrency})`);
+      errors.push(
+        `Max workers (${config.webWorkers.maxWorkers}) exceeds hardware concurrency (${navigator.hardwareConcurrency})`
+      );
     }
   }
 
@@ -545,10 +552,7 @@ export function debounce<T extends (...args: any[]) => void>(
 /**
  * Throttle function
  */
-export function throttle<T extends (...args: any[]) => void>(
-  func: T,
-  limit: number
-): T {
+export function throttle<T extends (...args: any[]) => void>(func: T, limit: number): T {
   let inThrottle: boolean;
 
   return function executedFunction(this: any, ...args: any[]) {
@@ -572,7 +576,7 @@ export function formatBytes(bytes: number, decimals = 2): string {
 
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 /**
@@ -588,11 +592,11 @@ export function deepClone<T>(obj: T): T {
   }
 
   if (Array.isArray(obj)) {
-    return obj.map(item => deepClone(item)) as any;
+    return obj.map((item) => deepClone(item)) as any;
   }
 
   const cloned = {} as T;
-  Object.keys(obj).forEach(key => {
+  Object.keys(obj).forEach((key) => {
     cloned[key as keyof T] = deepClone(obj[key as keyof T]);
   });
 

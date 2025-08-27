@@ -24,7 +24,7 @@ import { EventModal } from './EventModal';
 
 import { useEnhancedTheme } from '@/lib/design-system/enhanced-theme';
 // 🎨 Design System Integration - Token Architect Agent
-import { TokenBridge, useDesignTokens, tokenHelpers } from '@/lib/design-system/utils/token-bridge';
+import { TokenBridge, tokenHelpers, useDesignTokens } from '@/lib/design-system/utils/token-bridge';
 
 // 🎬 Motion System Integration - Motion Engineer Agent
 import { useMotionSystem, useSyncedMotion } from '@/lib/motion';
@@ -769,10 +769,10 @@ export function LinearCalendarHorizontal({
   // Enhanced with design tokens for consistent spacing
   const calculateFullYearDayWidth = () => {
     if (viewportWidth === 0) {
-      return parseInt(tokenHelpers.spacing('5')) || 20; // Use token helper spacing
+      return Number.parseInt(tokenHelpers.spacing('5')) || 20; // Use token helper spacing
     }
     const availableWidth = viewportWidth - headerWidth * 2; // Subtract left and right sidebars
-    const minWidth = parseInt(tokenHelpers.spacing('4')) || 18; // Use token helper spacing
+    const minWidth = Number.parseInt(tokenHelpers.spacing('4')) || 18; // Use token helper spacing
     return Math.max(minWidth, availableWidth / 42); // 42 columns (6 weeks × 7 days)
   };
 

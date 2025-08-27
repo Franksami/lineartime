@@ -3,11 +3,8 @@ import { ReactScan } from '@/components/performance/ReactScan';
 import { PWAInstallPrompt } from '@/components/pwa/pwa-install-prompt';
 import { PWAStatus } from '@/components/pwa/pwa-status';
 import type { Metadata } from 'next';
-import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages } from 'next-intl/server';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import type React from 'react';
-import { getLangDir } from 'rtl-detect';
 import { Providers } from './providers';
 import './globals.css';
 
@@ -76,17 +73,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Get locale and messages for internationalization
-  const locale = await getLocale();
-  const messages = await getMessages();
-  const direction = getLangDir(locale);
-
   return (
-    <html
-      lang={locale}
-      dir={direction}
-      className={`dark ${fontSans.variable} ${fontMono.variable}`}
-    >
+    <html lang="en" dir="ltr" className={`dark ${fontSans.variable} ${fontMono.variable}`}>
       <head>
         <meta name="theme-color" content="#2196F3" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -94,18 +82,14 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-title" content="LinearTime" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
-      <body
-        className={`font-sans antialiased bg-background text-foreground min-h-screen ${direction === 'rtl' ? 'rtl' : ''}`}
-      >
+      <body className="font-sans antialiased bg-background text-foreground min-h-screen">
         <ReactScan />
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <Providers>
-            {children}
-            <PWAInstallPrompt />
-            <PWAStatus />
-            <PerformanceDashboard />
-          </Providers>
-        </NextIntlClientProvider>
+        <Providers>
+          {children}
+          <PWAInstallPrompt />
+          <PWAStatus />
+          <PerformanceDashboard />
+        </Providers>
       </body>
     </html>
   );

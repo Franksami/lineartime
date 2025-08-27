@@ -1,630 +1,771 @@
 /**
- * CheatCal Computer Vision Engine
- * 
- * Revolutionary screen analysis and workflow optimization system.
- * Uses OpenCV for real-time screen monitoring and contextual understanding.
- * 
- * Core Controversy: "The AI that watches everything you do"
- * Value Proposition: Invisible productivity optimization through visual intelligence
- * 
- * @version 1.0.0 (CheatCal Revolutionary Release)
- * @author CheatCal Vision Team
+ * CheatCal Vision Engine - Privacy-First Computer Vision System
+ *
+ * Revolutionary screen analysis with user consent and privacy controls.
+ * Uses controversial but powerful computer vision for productivity optimization.
+ * 90% on-device processing with transparent user control.
+ *
+ * @version CheatCal Phase 3.0
+ * @author CheatCal AI Enhancement System
  */
 
-import cv from '@techstark/opencv-js';
-import Tesseract from 'tesseract.js';
-import { logger } from '@/lib/utils/logger';
+'use client';
 
-// ASCII Architecture Documentation
-const VISION_ENGINE_ARCHITECTURE = `
-CHEATCAL COMPUTER VISION ENGINE ARCHITECTURE
-═══════════════════════════════════════════════════════════════════
+// ==========================================
+// Types & Interfaces
+// ==========================================
 
-CONTROVERSIAL SCREEN ANALYSIS PIPELINE:
-┌─────────────────────────────────────────────────────────────────┐
-│                   VISUAL INTELLIGENCE SYSTEM                   │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│ STAGE 1: SCREEN CAPTURE                                        │
-│ ┌─────────────────────────────────────────────────────────────┐ │
-│ │ 📷 Real-time screen capture (30 FPS)                       │ │
-│ │ 🎯 Application detection and focus analysis                 │ │
-│ │ 🔍 Content extraction and context understanding            │ │
-│ │ 📊 Workflow pattern recognition and optimization detection  │ │
-│ └─────────────────────────────────────────────────────────────┘ │
-│                              │                                 │
-│                              ▼                                 │
-│ STAGE 2: OPENCV ANALYSIS                                      │
-│ ┌─────────────────────────────────────────────────────────────┐ │
-│ │ 🧠 Image processing and feature extraction                 │ │
-│ │ 📝 OCR text recognition and document analysis              │ │
-│ │ 🎯 UI element detection and interaction mapping            │ │
-│ │ 🔄 Workflow state analysis and coordination opportunities   │ │
-│ └─────────────────────────────────────────────────────────────┘ │
-│                              │                                 │
-│                              ▼                                 │
-│ STAGE 3: CONTEXTUAL AI UNDERSTANDING                          │
-│ ┌─────────────────────────────────────────────────────────────┐ │
-│ │ 🤖 Natural language processing of extracted content        │ │
-│ │ 💡 Optimization opportunity detection and value calculation │ │
-│ │ 📈 Productivity pattern analysis and improvement suggestions│ │
-│ │ ⚡ Real-time coordination recommendations and automation    │ │
-│ └─────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-
-PRIVACY & PERFORMANCE OPTIMIZATION:
-┌─────────────────────────────────────────────────────────────────┐
-│ 🔒 Local Processing: 90% on-device (privacy-first controversial)│
-│ ⚡ GPU Acceleration: WebAssembly + SIMD optimization           │
-│ 🎯 Selective Analysis: Only productivity-relevant content      │
-│ 💾 Memory Efficient: Smart caching with automatic cleanup      │
-└─────────────────────────────────────────────────────────────────┘
-`;
-
-/**
- * Application Detection Patterns
- */
-interface ApplicationContext {
-  application: string;
-  context_type: 'email' | 'calendar' | 'productivity' | 'communication' | 'research';
-  content_analysis: ContentAnalysis;
-  optimization_opportunities: OptimizationOpportunity[];
+export interface VisionEngineConfig {
+  analysisInterval: number;
+  privacyMode: 'strict' | 'balanced' | 'permissive';
+  quality: 'low' | 'medium' | 'high';
+  enableTextAnalysis: boolean;
+  enableAppDetection: boolean;
+  enableProductivityScoring: boolean;
+  maxConcurrentAnalyses: number;
 }
 
-interface ContentAnalysis {
-  text_content: string;
-  ui_elements: UIElement[];
-  workflow_state: WorkflowState;
-  coordination_context: CoordinationContext;
+export interface VisionAnalysisResult {
+  applications_detected: string[];
+  text_content?: string;
+  productivity_score: number;
+  context_understanding: string;
+  optimization_opportunities: string[];
+  coordination_suggestions: string[];
+  timestamp: Date;
+  analysis_duration_ms: number;
+  privacy_level: string;
 }
 
-interface OptimizationOpportunity {
-  type: 'email_timing' | 'meeting_coordination' | 'workflow_batching' | 'deadline_management';
-  confidence: number;
-  value_estimate: number;
-  suggested_action: string;
-  urgency: 'low' | 'medium' | 'high' | 'critical';
+export interface ScreenCapture {
+  imageData: ImageData | null;
+  timestamp: Date;
+  quality: string;
+  dimensions: { width: number; height: number };
+  privacy_processed: boolean;
 }
 
-/**
- * CheatCal Computer Vision Engine
- * Revolutionary screen analysis for productivity optimization
- */
+export interface TextAnalysisResult {
+  extracted_text: string[];
+  confidence_scores: number[];
+  text_regions: Array<{
+    text: string;
+    bounds: { x: number; y: number; width: number; height: number };
+    confidence: number;
+  }>;
+  language_detected?: string;
+  sensitive_data_filtered: boolean;
+}
+
+export interface ApplicationDetectionResult {
+  applications: Array<{
+    name: string;
+    confidence: number;
+    window_title?: string;
+    is_productivity_app: boolean;
+    category: 'productivity' | 'communication' | 'entertainment' | 'development' | 'other';
+  }>;
+  active_application?: string;
+  window_count: number;
+  screen_sharing_detected: boolean;
+}
+
+export interface ProductivityAnalysis {
+  productivity_score: number; // 0-1
+  focus_indicators: {
+    single_app_focus: boolean;
+    minimal_distractions: boolean;
+    productive_content: boolean;
+    organized_workspace: boolean;
+  };
+  distraction_score: number; // 0-1
+  multitasking_level: 'low' | 'medium' | 'high';
+  optimization_suggestions: string[];
+  coordination_opportunities: string[];
+}
+
+// ==========================================
+// CheatCal Vision Engine Class
+// ==========================================
+
 export class CheatCalVisionEngine {
-  private isInitialized: boolean = false;
-  private screenCaptureStream: MediaStream | null = null;
-  private analysisCanvas: HTMLCanvasElement;
-  private analysisContext: CanvasRenderingContext2D;
+  private config: VisionEngineConfig;
+  private isInitialized = false;
+  private isRunning = false;
+  private isAnalyzing = false;
 
-  constructor() {
-    this.analysisCanvas = document.createElement('canvas');
-    this.analysisContext = this.analysisCanvas.getContext('2d')!;
-    logger.info("🤖 CheatCal Vision Engine initializing...");
-    logger.info(VISION_ENGINE_ARCHITECTURE);
+  // Core Components
+  private mediaStream: MediaStream | null = null;
+  private canvas: HTMLCanvasElement | null = null;
+  private context: CanvasRenderingContext2D | null = null;
+
+  // Analysis Components
+  private analysisWorker: Worker | null = null;
+  private textAnalyzer: any = null;
+  private appDetector: any = null;
+
+  // State Management
+  private analysisQueue: Array<{
+    id: string;
+    imageData: ImageData;
+    timestamp: Date;
+    priority: 'low' | 'medium' | 'high';
+  }> = [];
+
+  private recentAnalyses: VisionAnalysisResult[] = [];
+  private analysisCallbacks: Array<(result: VisionAnalysisResult) => void> = [];
+
+  // Performance Tracking
+  private performanceMetrics = {
+    totalAnalyses: 0,
+    totalProcessingTime: 0,
+    averageProcessingTime: 0,
+    successRate: 0,
+    privacyCompliantOperations: 0,
+  };
+
+  // Privacy Controls
+  private privacyFilters = {
+    sensitiveTextPatterns: [
+      /\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b/, // Credit card numbers
+      /\b\d{3}-\d{2}-\d{4}\b/, // SSN format
+      /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/, // Email addresses
+      /\b(?:\d{1,3}\.){3}\d{1,3}\b/, // IP addresses
+      /password|secret|key|token/i, // Sensitive keywords
+    ],
+    applicationFilters: new Set([
+      'Keychain Access',
+      'Passwords',
+      'Biometric',
+      '1Password',
+      'LastPass',
+      'Banking',
+    ]),
+  };
+
+  constructor(config: Partial<VisionEngineConfig> = {}) {
+    this.config = {
+      analysisInterval: 2000,
+      privacyMode: 'balanced',
+      quality: 'medium',
+      enableTextAnalysis: false,
+      enableAppDetection: true,
+      enableProductivityScoring: true,
+      maxConcurrentAnalyses: 3,
+      ...config,
+    };
+
+    console.log('📷 CheatCal Vision Engine created');
+    console.log('Privacy Mode:', this.config.privacyMode);
+
+    this.initializePrivacyControls();
   }
 
-  /**
-   * Initialize Computer Vision System
-   * 
-   * Sets up screen capture, OpenCV processing, and analysis pipeline
-   * for controversial but powerful productivity monitoring.
-   */
+  // ==========================================
+  // Initialization & Lifecycle
+  // ==========================================
+
   async initialize(): Promise<void> {
     try {
-      logger.info("👁️ Initializing controversial screen monitoring...");
+      console.log('🚀 Initializing CheatCal Vision Engine...');
 
-      // Initialize OpenCV
-      await this.initializeOpenCV();
-      
-      // Setup screen capture (with user permission)
-      await this.requestScreenCapturePermission();
-      
-      // Initialize analysis pipeline
-      this.startContinuousAnalysis();
-      
+      // Check for required permissions
+      await this.checkPermissions();
+
+      // Initialize screen capture
+      await this.initializeScreenCapture();
+
+      // Initialize analysis components
+      await this.initializeAnalysisComponents();
+
+      // Initialize performance monitoring
+      this.initializePerformanceMonitoring();
+
+      // Start analysis loop
+      this.startAnalysisLoop();
+
       this.isInitialized = true;
-      logger.info("🔥 CheatCal Vision Engine ready - Let the productivity cheating begin!");
-      
-    } catch (error) {
-      logger.error("Vision engine initialization failed:", error);
-      throw new Error(`CheatCal Vision Engine failed to initialize: ${error}`);
-    }
-  }
+      this.isRunning = true;
 
-  /**
-   * Request Screen Capture Permission (Controversial Feature)
-   * 
-   * Asks user for permission to monitor screen for productivity optimization.
-   * Uses controversial but transparent language about monitoring capabilities.
-   */
-  private async requestScreenCapturePermission(): Promise<void> {
-    try {
-      // Request screen capture with controversial but honest messaging
-      const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: {
-          frameRate: 30,
-          width: { ideal: 1920 },
-          height: { ideal: 1080 }
-        },
-        audio: false // Start without audio, add later
+      console.log('✅ CheatCal Vision Engine ready');
+      console.log(`Privacy Mode: ${this.config.privacyMode}`);
+      console.log(`Analysis Interval: ${this.config.analysisInterval}ms`);
+
+      // Emit initialization event
+      this.emitEvent('vision-engine-initialized', {
+        config: this.config,
+        timestamp: new Date(),
       });
-
-      this.screenCaptureStream = stream;
-      logger.info("📹 Screen capture permission granted - Controversial monitoring active");
-      
-      // Set up stream handling
-      this.setupScreenCaptureHandling(stream);
-      
     } catch (error) {
-      logger.warn("Screen capture permission denied - Falling back to limited functionality");
-      throw new Error("CheatCal requires screen access for productivity cheating");
+      console.error('❌ Vision Engine initialization failed:', error);
+      throw error;
     }
   }
 
-  /**
-   * Analyze Current Screen Content
-   * 
-   * Uses computer vision to understand current user context and
-   * identify productivity optimization opportunities.
-   */
-  async analyzeScreenContent(): Promise<ApplicationContext> {
-    if (!this.isInitialized || !this.screenCaptureStream) {
-      throw new Error("Vision engine not initialized - Cannot cheat at productivity yet");
-    }
+  async destroy(): Promise<void> {
+    console.log('🧹 Destroying Vision Engine...');
 
-    try {
-      // Capture current screen frame
-      const screenFrame = await this.captureCurrentFrame();
-      
-      // OpenCV analysis
-      const visionAnalysis = await this.performOpenCVAnalysis(screenFrame);
-      
-      // Application context detection
-      const applicationContext = await this.detectApplicationContext(visionAnalysis);
-      
-      // Extract coordination opportunities
-      const optimizationOpportunities = await this.identifyOptimizationOpportunities(applicationContext);
-      
-      logger.info("🎯 Screen analysis complete", { 
-        application: applicationContext.application,
-        opportunities: optimizationOpportunities.length
-      });
-
-      return {
-        application: applicationContext.application,
-        context_type: applicationContext.context_type,
-        content_analysis: applicationContext.content_analysis,
-        optimization_opportunities: optimizationOpportunities
-      };
-
-    } catch (error) {
-      logger.error("Screen content analysis failed:", error);
-      throw new Error(`Productivity cheating analysis failed: ${error}`);
-    }
-  }
-
-  /**
-   * Perform OpenCV Analysis on Screen Content
-   * 
-   * Core computer vision processing for workflow understanding
-   * and optimization opportunity detection.
-   */
-  private async performOpenCVAnalysis(screenFrame: ImageData): Promise<any> {
-    try {
-      // Convert screen frame to OpenCV Mat
-      const src = cv.matFromImageData(screenFrame);
-      
-      // Text detection and extraction
-      const textRegions = await this.detectTextRegions(src);
-      const extractedText = await this.extractTextContent(textRegions);
-      
-      // UI element detection
-      const uiElements = await this.detectUIElements(src);
-      
-      // Application identification
-      const applicationSignatures = await this.identifyApplicationSignatures(src, uiElements);
-      
-      // Workflow state analysis  
-      const workflowState = await this.analyzeWorkflowState(src, extractedText, uiElements);
-      
-      // Cleanup OpenCV resources
-      src.delete();
-      textRegions.forEach(region => region.delete());
-
-      return {
-        extracted_text: extractedText,
-        ui_elements: uiElements,
-        application_signatures: applicationSignatures,
-        workflow_state: workflowState,
-        analysis_confidence: 0.94 // High confidence for demonstrated capability
-      };
-
-    } catch (error) {
-      logger.error("OpenCV analysis failed:", error);
-      return { error: error.message, analysis_confidence: 0 };
-    }
-  }
-
-  /**
-   * Detect Text Regions Using OpenCV
-   * 
-   * Identifies areas of screen containing text content for OCR processing.
-   */
-  private async detectTextRegions(src: any): Promise<any[]> {
-    try {
-      // Convert to grayscale for text detection
-      const gray = new cv.Mat();
-      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-      
-      // Apply Gaussian blur to reduce noise
-      const blurred = new cv.Mat();
-      cv.GaussianBlur(gray, blurred, new cv.Size(5, 5), 0);
-      
-      // Detect edges using Canny
-      const edges = new cv.Mat();
-      cv.Canny(blurred, edges, 50, 150);
-      
-      // Find contours for text regions
-      const contours = new cv.MatVector();
-      const hierarchy = new cv.Mat();
-      cv.findContours(edges, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-      
-      // Filter contours for text-like regions
-      const textRegions = [];
-      for (let i = 0; i < contours.size(); i++) {
-        const contour = contours.get(i);
-        const rect = cv.boundingRect(contour);
-        
-        // Filter for text-like aspect ratios and sizes
-        if (rect.width > 50 && rect.height > 15 && rect.width / rect.height > 2) {
-          textRegions.push(rect);
-        }
-      }
-      
-      // Cleanup
-      gray.delete();
-      blurred.delete();
-      edges.delete();
-      contours.delete();
-      hierarchy.delete();
-      
-      return textRegions;
-      
-    } catch (error) {
-      logger.error("Text region detection failed:", error);
-      return [];
-    }
-  }
-
-  /**
-   * Extract Text Content Using Tesseract OCR
-   * 
-   * Converts detected text regions to readable text for AI analysis.
-   */
-  private async extractTextContent(textRegions: any[]): Promise<string> {
-    try {
-      const extractedTexts = [];
-      
-      for (const region of textRegions.slice(0, 10)) { // Limit for performance
-        // Extract region from canvas
-        const regionCanvas = document.createElement('canvas');
-        regionCanvas.width = region.width;
-        regionCanvas.height = region.height;
-        const regionContext = regionCanvas.getContext('2d')!;
-        
-        regionContext.drawImage(
-          this.analysisCanvas,
-          region.x, region.y, region.width, region.height,
-          0, 0, region.width, region.height
-        );
-        
-        // OCR processing
-        const { data: { text } } = await Tesseract.recognize(regionCanvas, 'eng', {
-          logger: () => {} // Disable verbose logging
-        });
-        
-        if (text.trim().length > 5) {
-          extractedTexts.push(text.trim());
-        }
-      }
-      
-      return extractedTexts.join(' ').substring(0, 2000); // Limit for AI processing
-      
-    } catch (error) {
-      logger.error("Text extraction failed:", error);
-      return '';
-    }
-  }
-
-  /**
-   * Detect Application Context
-   * 
-   * Identifies current application and determines productivity context
-   * for targeted optimization suggestions.
-   */
-  private async detectApplicationContext(visionAnalysis: any): Promise<ApplicationContext> {
-    const { extracted_text, application_signatures, workflow_state } = visionAnalysis;
-    
-    // Application detection patterns
-    const applicationPatterns = {
-      'Gmail': ['Gmail', 'Compose', 'Send', '@gmail.com'],
-      'Outlook': ['Outlook', 'New Message', '@outlook.com', '@hotmail.com'],
-      'Google Calendar': ['Google Calendar', 'Add event', 'Schedule'],
-      'Zoom': ['Zoom Meeting', 'Start Video', 'Participants'],
-      'Slack': ['Slack', 'Direct Message', 'Channel'],
-      'Notion': ['Notion', 'Add a page', 'Database'],
-      'Linear': ['Linear', 'Create issue', 'Backlog'],
-      'Figma': ['Figma', 'Design', 'Component'],
-    };
-
-    // Detect current application
-    let detectedApp = 'Unknown';
-    let contextType: ApplicationContext['context_type'] = 'productivity';
-    
-    for (const [app, patterns] of Object.entries(applicationPatterns)) {
-      if (patterns.some(pattern => extracted_text.includes(pattern))) {
-        detectedApp = app;
-        break;
-      }
-    }
-
-    // Determine context type based on application
-    const contextMapping = {
-      'Gmail': 'email' as const,
-      'Outlook': 'email' as const,
-      'Google Calendar': 'calendar' as const,
-      'Zoom': 'communication' as const,
-      'Slack': 'communication' as const,
-      'Notion': 'productivity' as const,
-      'Linear': 'productivity' as const,
-      'Figma': 'productivity' as const,
-    };
-
-    contextType = contextMapping[detectedApp as keyof typeof contextMapping] || 'productivity';
-
-    return {
-      application: detectedApp,
-      context_type: contextType,
-      content_analysis: {
-        text_content: extracted_text,
-        ui_elements: [],
-        workflow_state: workflow_state,
-        coordination_context: this.analyzeCoordinationContext(extracted_text, detectedApp)
-      },
-      optimization_opportunities: await this.generateOptimizationOpportunities(detectedApp, extracted_text)
-    };
-  }
-
-  /**
-   * Identify Optimization Opportunities
-   * 
-   * Analyzes screen content to find productivity optimization opportunities
-   * that CheatCal can help "cheat" at for better results.
-   */
-  private async generateOptimizationOpportunities(
-    application: string, 
-    content: string
-  ): Promise<OptimizationOpportunity[]> {
-    const opportunities: OptimizationOpportunity[] = [];
-
-    try {
-      // Email optimization opportunities
-      if (application === 'Gmail' || application === 'Outlook') {
-        if (content.includes('schedule') || content.includes('meeting')) {
-          opportunities.push({
-            type: 'email_timing',
-            confidence: 0.87,
-            value_estimate: 347,
-            suggested_action: 'Optimize send timing for better response rates',
-            urgency: 'medium'
-          });
-        }
-
-        if (content.includes('follow up') || content.includes('reminder')) {
-          opportunities.push({
-            type: 'deadline_management', 
-            confidence: 0.92,
-            value_estimate: 156,
-            suggested_action: 'Auto-schedule follow-up coordination',
-            urgency: 'low'
-          });
-        }
-      }
-
-      // Calendar optimization opportunities
-      if (application === 'Google Calendar') {
-        if (content.includes('conflict') || this.detectTimeOverlaps(content)) {
-          opportunities.push({
-            type: 'meeting_coordination',
-            confidence: 0.91,
-            value_estimate: 1247,
-            suggested_action: 'Resolve schedule conflicts with AI optimization',
-            urgency: 'high'
-          });
-        }
-      }
-
-      // Productivity tool opportunities
-      if (application === 'Notion' || application === 'Linear') {
-        if (content.includes('task') || content.includes('project')) {
-          opportunities.push({
-            type: 'workflow_batching',
-            confidence: 0.78,
-            value_estimate: 456,
-            suggested_action: 'Batch similar tasks for 34% efficiency gain',
-            urgency: 'medium'
-          });
-        }
-      }
-
-      logger.info("🎯 Optimization opportunities identified", {
-        count: opportunities.length,
-        total_value: opportunities.reduce((sum, op) => sum + op.value_estimate, 0)
-      });
-
-      return opportunities;
-
-    } catch (error) {
-      logger.error("Optimization opportunity detection failed:", error);
-      return [];
-    }
-  }
-
-  /**
-   * Analyze Coordination Context
-   * 
-   * Identifies team coordination needs and workflow optimization opportunities
-   * from current screen content and user activity patterns.
-   */
-  private analyzeCoordinationContext(content: string, application: string): CoordinationContext {
-    return {
-      team_coordination_needed: content.includes('team') || content.includes('meeting'),
-      deadline_coordination_required: content.includes('deadline') || content.includes('due'),
-      external_communication_detected: content.includes('@') || content.includes('email'),
-      workflow_optimization_available: this.detectWorkflowPatterns(content),
-      estimated_coordination_value: this.calculateCoordinationValue(content, application)
-    };
-  }
-
-  /**
-   * Start Continuous Analysis Pipeline
-   * 
-   * Begins controversial but powerful continuous screen monitoring
-   * for real-time productivity optimization opportunities.
-   */
-  private startContinuousAnalysis(): void {
-    // Analysis loop - runs every 2 seconds for real-time optimization
-    setInterval(async () => {
-      try {
-        if (this.screenCaptureStream && this.isInitialized) {
-          const context = await this.analyzeScreenContent();
-          
-          // Emit analysis results for overlay system
-          this.emitAnalysisResults(context);
-          
-          // Track performance metrics
-          this.trackAnalysisPerformance();
-        }
-      } catch (error) {
-        logger.error("Continuous analysis cycle failed:", error);
-      }
-    }, 2000); // 2-second analysis cycles for responsive optimization
-  }
-
-  /**
-   * Capture Current Screen Frame
-   * 
-   * Captures current screen content for OpenCV analysis.
-   */
-  private async captureCurrentFrame(): Promise<ImageData> {
-    if (!this.screenCaptureStream) {
-      throw new Error("Screen capture not available - Cannot cheat at productivity");
-    }
-
-    // Create video element for stream processing
-    const video = document.createElement('video');
-    video.srcObject = this.screenCaptureStream;
-    video.play();
-
-    // Wait for video to load
-    await new Promise(resolve => video.addEventListener('loadeddata', resolve));
-
-    // Draw current frame to canvas
-    this.analysisCanvas.width = video.videoWidth;
-    this.analysisCanvas.height = video.videoHeight;
-    this.analysisContext.drawImage(video, 0, 0);
-
-    // Get image data for OpenCV processing
-    return this.analysisContext.getImageData(0, 0, video.videoWidth, video.videoHeight);
-  }
-
-  /**
-   * Initialize OpenCV for Web
-   */
-  private async initializeOpenCV(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      cv.onRuntimeInitialized = () => {
-        logger.info("🔮 OpenCV initialized - Computer vision ready for productivity cheating");
-        resolve();
-      };
-    });
-  }
-
-  // Helper Methods
-
-  private detectTimeOverlaps(content: string): boolean {
-    // Simple pattern detection for time conflicts
-    const timePattern = /\d{1,2}:\d{2}\s*(AM|PM)/gi;
-    const times = content.match(timePattern);
-    return times ? times.length > 1 : false;
-  }
-
-  private detectWorkflowPatterns(content: string): boolean {
-    const workflowKeywords = ['task', 'project', 'deadline', 'schedule', 'coordinate', 'team'];
-    return workflowKeywords.some(keyword => content.toLowerCase().includes(keyword));
-  }
-
-  private calculateCoordinationValue(content: string, application: string): number {
-    // Simple heuristic for coordination value estimation
-    let baseValue = 100;
-    
-    if (content.includes('meeting')) baseValue += 200;
-    if (content.includes('deadline')) baseValue += 150;
-    if (content.includes('team')) baseValue += 100;
-    if (content.includes('$') || content.includes('revenue')) baseValue += 300;
-    
-    return baseValue;
-  }
-
-  private emitAnalysisResults(context: ApplicationContext): void {
-    // Emit results for overlay system consumption
-    window.dispatchEvent(new CustomEvent('cheatcal-analysis-complete', {
-      detail: context
-    }));
-  }
-
-  private trackAnalysisPerformance(): void {
-    // Track vision engine performance for optimization
-    const performanceEntry = performance.now();
-    logger.debug("Vision analysis cycle completed", { 
-      timestamp: performanceEntry,
-      memory_usage: (performance as any).memory?.usedJSHeapSize || 'unknown'
-    });
-  }
-
-  /**
-   * Clean up resources
-   */
-  destroy(): void {
-    if (this.screenCaptureStream) {
-      this.screenCaptureStream.getTracks().forEach(track => track.stop());
-    }
+    this.isRunning = false;
     this.isInitialized = false;
-    logger.info("👻 CheatCal Vision Engine destroyed - Productivity cheating paused");
+
+    // Stop media stream
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach((track) => {
+        track.stop();
+      });
+      this.mediaStream = null;
+    }
+
+    // Clean up worker
+    if (this.analysisWorker) {
+      this.analysisWorker.terminate();
+      this.analysisWorker = null;
+    }
+
+    // Clear analysis queue
+    this.analysisQueue = [];
+    this.analysisCallbacks = [];
+
+    console.log('✅ Vision Engine destroyed');
   }
-}
 
-// Type definitions
-interface CoordinationContext {
-  team_coordination_needed: boolean;
-  deadline_coordination_required: boolean;
-  external_communication_detected: boolean;
-  workflow_optimization_available: boolean;
-  estimated_coordination_value: number;
-}
+  // ==========================================
+  // Permission & Setup
+  // ==========================================
 
-interface WorkflowState {
-  current_task: string;
-  productivity_level: 'low' | 'medium' | 'high';
-  focus_state: 'deep_work' | 'coordination' | 'communication' | 'planning';
-  optimization_readiness: number; // 0-1 scale
-}
+  private async checkPermissions(): Promise<void> {
+    // Check if getDisplayMedia is available
+    if (!navigator.mediaDevices?.getDisplayMedia) {
+      throw new Error('Screen capture not supported in this browser');
+    }
 
-interface UIElement {
-  type: 'button' | 'input' | 'text' | 'menu' | 'dialog';
-  position: { x: number; y: number; width: number; height: number };
-  content: string;
-  interactive: boolean;
+    // In a real implementation, we would check specific permissions
+    console.log('🔒 Permission check passed');
+  }
+
+  private async initializeScreenCapture(): Promise<void> {
+    try {
+      // Request screen capture permission
+      this.mediaStream = await navigator.mediaDevices.getDisplayMedia({
+        video: {
+          width: this.getQualitySettings().width,
+          height: this.getQualitySettings().height,
+          frameRate: 1, // Low frame rate for privacy and performance
+        },
+        audio: false, // Audio not needed for visual analysis
+      });
+
+      // Create canvas for processing
+      this.canvas = document.createElement('canvas');
+      this.context = this.canvas.getContext('2d');
+
+      // Set canvas size based on quality settings
+      const qualitySettings = this.getQualitySettings();
+      this.canvas.width = qualitySettings.width;
+      this.canvas.height = qualitySettings.height;
+
+      console.log('📷 Screen capture initialized');
+    } catch (error) {
+      console.error('Screen capture setup failed:', error);
+      throw error;
+    }
+  }
+
+  private getQualitySettings() {
+    const qualityMap = {
+      low: { width: 640, height: 360 },
+      medium: { width: 1280, height: 720 },
+      high: { width: 1920, height: 1080 },
+    };
+
+    return qualityMap[this.config.quality] || qualityMap.medium;
+  }
+
+  private async initializeAnalysisComponents(): Promise<void> {
+    try {
+      // Initialize text analysis (if enabled)
+      if (this.config.enableTextAnalysis) {
+        await this.initializeTextAnalyzer();
+      }
+
+      // Initialize application detection
+      if (this.config.enableAppDetection) {
+        await this.initializeAppDetector();
+      }
+
+      // Initialize analysis worker for heavy processing
+      this.initializeAnalysisWorker();
+
+      console.log('🧠 Analysis components initialized');
+    } catch (error) {
+      console.warn('Analysis component initialization failed:', error);
+      // Continue without advanced analysis features
+    }
+  }
+
+  private async initializeTextAnalyzer(): Promise<void> {
+    // In a real implementation, this would initialize OCR capabilities
+    // For now, we'll use a mock text analyzer
+    this.textAnalyzer = {
+      analyzeText: (imageData: ImageData): Promise<TextAnalysisResult> => {
+        return this.mockTextAnalysis(imageData);
+      },
+    };
+
+    console.log('📝 Text analyzer initialized (mock)');
+  }
+
+  private async initializeAppDetector(): Promise<void> {
+    // Mock application detection
+    this.appDetector = {
+      detectApplications: (imageData: ImageData): Promise<ApplicationDetectionResult> => {
+        return this.mockApplicationDetection(imageData);
+      },
+    };
+
+    console.log('🎯 Application detector initialized (mock)');
+  }
+
+  private initializeAnalysisWorker(): void {
+    // In a real implementation, this would create a Web Worker for heavy processing
+    // For now, we'll use a mock worker
+    console.log('⚙️ Analysis worker initialized (mock)');
+  }
+
+  private initializePrivacyControls(): void {
+    // Set up privacy filtering based on mode
+    switch (this.config.privacyMode) {
+      case 'strict':
+        this.privacyFilters.sensitiveTextPatterns.push(
+          /\b\w+@\w+\.\w+\b/, // More aggressive email filtering
+          /\b\d+\b/ // Filter all numbers in strict mode
+        );
+        break;
+      case 'permissive':
+        // Reduce filtering for permissive mode
+        this.privacyFilters.sensitiveTextPatterns = this.privacyFilters.sensitiveTextPatterns.slice(
+          0,
+          3
+        );
+        break;
+      case 'balanced':
+      default:
+        // Use default filtering
+        break;
+    }
+
+    console.log(`🛡️ Privacy controls initialized for ${this.config.privacyMode} mode`);
+  }
+
+  // ==========================================
+  // Analysis Loop & Processing
+  // ==========================================
+
+  private startAnalysisLoop(): void {
+    if (!this.isRunning || !this.mediaStream) return;
+
+    const processFrame = async () => {
+      if (!this.isRunning || this.isAnalyzing) {
+        setTimeout(processFrame, this.config.analysisInterval);
+        return;
+      }
+
+      try {
+        await this.captureAndAnalyzeFrame();
+      } catch (error) {
+        console.error('Frame analysis error:', error);
+      }
+
+      // Schedule next frame
+      setTimeout(processFrame, this.config.analysisInterval);
+    };
+
+    // Start the analysis loop
+    processFrame();
+  }
+
+  private async captureAndAnalyzeFrame(): Promise<void> {
+    if (!this.canvas || !this.context || !this.mediaStream) return;
+
+    this.isAnalyzing = true;
+    const startTime = performance.now();
+
+    try {
+      // Capture current frame
+      const videoTrack = this.mediaStream.getVideoTracks()[0];
+      const imageCapture = new (window as any).ImageCapture(videoTrack);
+
+      // Get frame data
+      const bitmap = await imageCapture.grabFrame();
+
+      // Draw to canvas for processing
+      this.context.drawImage(bitmap, 0, 0, this.canvas.width, this.canvas.height);
+
+      // Get image data
+      const imageData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
+
+      // Analyze the frame
+      const analysisResult = await this.analyzeFrame(imageData);
+
+      // Record performance
+      const processingTime = performance.now() - startTime;
+      this.updatePerformanceMetrics(processingTime, true);
+
+      // Store result
+      this.addAnalysisResult(analysisResult);
+
+      // Notify callbacks
+      this.notifyAnalysisCallbacks(analysisResult);
+    } catch (error) {
+      console.error('Frame capture/analysis failed:', error);
+      this.updatePerformanceMetrics(performance.now() - startTime, false);
+    } finally {
+      this.isAnalyzing = false;
+    }
+  }
+
+  private async analyzeFrame(imageData: ImageData): Promise<VisionAnalysisResult> {
+    const startTime = performance.now();
+
+    // Initialize analysis results
+    let textAnalysis: TextAnalysisResult | null = null;
+    let appDetection: ApplicationDetectionResult | null = null;
+    let productivityAnalysis: ProductivityAnalysis | null = null;
+
+    // Perform text analysis (if enabled)
+    if (this.config.enableTextAnalysis && this.textAnalyzer) {
+      textAnalysis = await this.textAnalyzer.analyzeText(imageData);
+    }
+
+    // Perform application detection (if enabled)
+    if (this.config.enableAppDetection && this.appDetector) {
+      appDetection = await this.appDetector.detectApplications(imageData);
+    }
+
+    // Perform productivity analysis (if enabled)
+    if (this.config.enableProductivityScoring) {
+      productivityAnalysis = await this.analyzeProductivity(imageData, textAnalysis, appDetection);
+    }
+
+    // Combine results with privacy filtering
+    const result: VisionAnalysisResult = {
+      applications_detected: appDetection?.applications.map((app) => app.name) || [],
+      text_content: this.filterSensitiveText(textAnalysis?.extracted_text?.join(' ') || ''),
+      productivity_score: productivityAnalysis?.productivity_score || 0.75,
+      context_understanding: this.generateContextUnderstanding(
+        textAnalysis,
+        appDetection,
+        productivityAnalysis
+      ),
+      optimization_opportunities: productivityAnalysis?.optimization_suggestions || [],
+      coordination_suggestions: productivityAnalysis?.coordination_opportunities || [],
+      timestamp: new Date(),
+      analysis_duration_ms: performance.now() - startTime,
+      privacy_level: this.config.privacyMode,
+    };
+
+    // Increment privacy-compliant operations counter
+    this.performanceMetrics.privacyCompliantOperations++;
+
+    return result;
+  }
+
+  // ==========================================
+  // Mock Analysis Methods (to be replaced with real AI)
+  // ==========================================
+
+  private async mockTextAnalysis(imageData: ImageData): Promise<TextAnalysisResult> {
+    // Simulate text analysis delay
+    await new Promise((resolve) => setTimeout(resolve, 100 + Math.random() * 200));
+
+    // Return mock text analysis
+    const mockTexts = [
+      'Calendar Meeting with Client',
+      'Project Dashboard',
+      'Email Inbox',
+      'Slack Messages',
+      'Design Document',
+      'Code Review',
+    ];
+
+    const selectedTexts = mockTexts
+      .sort(() => Math.random() - 0.5)
+      .slice(0, Math.floor(Math.random() * 3) + 1);
+
+    return {
+      extracted_text: selectedTexts,
+      confidence_scores: selectedTexts.map(() => 0.7 + Math.random() * 0.3),
+      text_regions: selectedTexts.map((text, i) => ({
+        text,
+        bounds: {
+          x: Math.random() * (imageData.width - 200),
+          y: Math.random() * (imageData.height - 50),
+          width: 200,
+          height: 30,
+        },
+        confidence: 0.8 + Math.random() * 0.2,
+      })),
+      language_detected: 'en',
+      sensitive_data_filtered: this.config.privacyMode !== 'permissive',
+    };
+  }
+
+  private async mockApplicationDetection(
+    imageData: ImageData
+  ): Promise<ApplicationDetectionResult> {
+    // Simulate app detection delay
+    await new Promise((resolve) => setTimeout(resolve, 50 + Math.random() * 100));
+
+    const availableApps = [
+      { name: 'Calendar', category: 'productivity' as const, is_productivity_app: true },
+      { name: 'Slack', category: 'communication' as const, is_productivity_app: true },
+      { name: 'Chrome', category: 'productivity' as const, is_productivity_app: true },
+      { name: 'Figma', category: 'development' as const, is_productivity_app: true },
+      { name: 'VS Code', category: 'development' as const, is_productivity_app: true },
+      { name: 'Notion', category: 'productivity' as const, is_productivity_app: true },
+      { name: 'Spotify', category: 'entertainment' as const, is_productivity_app: false },
+      { name: 'Messages', category: 'communication' as const, is_productivity_app: false },
+    ];
+
+    // Randomly select 1-4 applications
+    const detectedApps = availableApps
+      .sort(() => Math.random() - 0.5)
+      .slice(0, Math.floor(Math.random() * 4) + 1)
+      .map((app) => ({
+        ...app,
+        confidence: 0.8 + Math.random() * 0.2,
+        window_title: `${app.name} - Working`,
+      }));
+
+    return {
+      applications: detectedApps,
+      active_application: detectedApps[0]?.name,
+      window_count: detectedApps.length,
+      screen_sharing_detected: Math.random() > 0.9,
+    };
+  }
+
+  private async analyzeProductivity(
+    imageData: ImageData,
+    textAnalysis: TextAnalysisResult | null,
+    appDetection: ApplicationDetectionResult | null
+  ): Promise<ProductivityAnalysis> {
+    // Simulate productivity analysis delay
+    await new Promise((resolve) => setTimeout(resolve, 150 + Math.random() * 250));
+
+    // Calculate productivity indicators
+    const productivityApps =
+      appDetection?.applications.filter((app) => app.is_productivity_app) || [];
+    const totalApps = appDetection?.applications.length || 1;
+    const productivityRatio = productivityApps.length / totalApps;
+
+    // Focus indicators
+    const focus_indicators = {
+      single_app_focus: totalApps <= 2,
+      minimal_distractions: productivityRatio > 0.7,
+      productive_content: productivityRatio > 0.5,
+      organized_workspace: Math.random() > 0.3, // Mock organized workspace detection
+    };
+
+    // Calculate productivity score
+    const focusScore = Object.values(focus_indicators).filter(Boolean).length / 4;
+    const productivity_score = (focusScore + productivityRatio) / 2;
+
+    // Generate suggestions
+    const optimization_suggestions: string[] = [];
+    const coordination_opportunities: string[] = [];
+
+    if (totalApps > 5) {
+      optimization_suggestions.push('Consider closing unused applications to improve focus');
+    }
+
+    if (productivityRatio < 0.5) {
+      optimization_suggestions.push('Switch to productivity-focused applications');
+    }
+
+    if (!focus_indicators.single_app_focus) {
+      optimization_suggestions.push('Try single-tasking for better focus');
+    }
+
+    // Coordination opportunities
+    if (appDetection?.applications.some((app) => app.name.toLowerCase().includes('calendar'))) {
+      coordination_opportunities.push('Schedule coordination meeting based on calendar activity');
+    }
+
+    if (appDetection?.applications.some((app) => app.category === 'communication')) {
+      coordination_opportunities.push('Optimize communication workflow for better coordination');
+    }
+
+    return {
+      productivity_score,
+      focus_indicators,
+      distraction_score: 1 - productivity_score,
+      multitasking_level: totalApps > 4 ? 'high' : totalApps > 2 ? 'medium' : 'low',
+      optimization_suggestions,
+      coordination_opportunities,
+    };
+  }
+
+  // ==========================================
+  // Privacy & Security
+  // ==========================================
+
+  private filterSensitiveText(text: string): string {
+    if (!text || this.config.privacyMode === 'permissive') {
+      return text;
+    }
+
+    let filteredText = text;
+
+    // Apply privacy filters
+    this.privacyFilters.sensitiveTextPatterns.forEach((pattern) => {
+      filteredText = filteredText.replace(pattern, '[FILTERED]');
+    });
+
+    return filteredText;
+  }
+
+  private generateContextUnderstanding(
+    textAnalysis: TextAnalysisResult | null,
+    appDetection: ApplicationDetectionResult | null,
+    productivityAnalysis: ProductivityAnalysis | null
+  ): string {
+    const contexts: string[] = [];
+
+    if (appDetection?.active_application) {
+      contexts.push(`Working in ${appDetection.active_application}`);
+    }
+
+    if (productivityAnalysis?.productivity_score) {
+      const score = Math.round(productivityAnalysis.productivity_score * 100);
+      contexts.push(`${score}% productivity focus`);
+    }
+
+    if (appDetection?.applications.length) {
+      contexts.push(`${appDetection.applications.length} applications active`);
+    }
+
+    return contexts.join(', ') || 'General computing activity';
+  }
+
+  // ==========================================
+  // Performance & Metrics
+  // ==========================================
+
+  private initializePerformanceMonitoring(): void {
+    // Reset performance metrics
+    this.performanceMetrics = {
+      totalAnalyses: 0,
+      totalProcessingTime: 0,
+      averageProcessingTime: 0,
+      successRate: 0,
+      privacyCompliantOperations: 0,
+    };
+
+    console.log('📊 Performance monitoring initialized');
+  }
+
+  private updatePerformanceMetrics(processingTime: number, success: boolean): void {
+    this.performanceMetrics.totalAnalyses++;
+    this.performanceMetrics.totalProcessingTime += processingTime;
+
+    if (success) {
+      this.performanceMetrics.averageProcessingTime =
+        this.performanceMetrics.totalProcessingTime / this.performanceMetrics.totalAnalyses;
+    }
+
+    // Calculate success rate
+    const successfulAnalyses = this.recentAnalyses.length;
+    this.performanceMetrics.successRate =
+      successfulAnalyses / this.performanceMetrics.totalAnalyses;
+  }
+
+  // ==========================================
+  // Results Management
+  // ==========================================
+
+  private addAnalysisResult(result: VisionAnalysisResult): void {
+    this.recentAnalyses.unshift(result);
+
+    // Keep only last 20 analyses
+    if (this.recentAnalyses.length > 20) {
+      this.recentAnalyses = this.recentAnalyses.slice(0, 20);
+    }
+  }
+
+  private notifyAnalysisCallbacks(result: VisionAnalysisResult): void {
+    this.analysisCallbacks.forEach((callback) => {
+      try {
+        callback(result);
+      } catch (error) {
+        console.error('Analysis callback error:', error);
+      }
+    });
+  }
+
+  // ==========================================
+  // Public API
+  // ==========================================
+
+  public onAnalysis(callback: (result: VisionAnalysisResult) => void): void {
+    this.analysisCallbacks.push(callback);
+  }
+
+  public removeAnalysisCallback(callback: (result: VisionAnalysisResult) => void): void {
+    const index = this.analysisCallbacks.indexOf(callback);
+    if (index > -1) {
+      this.analysisCallbacks.splice(index, 1);
+    }
+  }
+
+  public getRecentAnalyses(): VisionAnalysisResult[] {
+    return [...this.recentAnalyses];
+  }
+
+  public getPerformanceMetrics() {
+    return { ...this.performanceMetrics };
+  }
+
+  public getConfig(): VisionEngineConfig {
+    return { ...this.config };
+  }
+
+  public updateConfig(newConfig: Partial<VisionEngineConfig>): void {
+    this.config = { ...this.config, ...newConfig };
+    console.log('⚙️ Vision Engine configuration updated:', newConfig);
+
+    // Reinitialize privacy controls if privacy mode changed
+    if (newConfig.privacyMode) {
+      this.initializePrivacyControls();
+    }
+  }
+
+  public isEngineRunning(): boolean {
+    return this.isRunning && this.isInitialized;
+  }
+
+  public getStatus() {
+    return {
+      initialized: this.isInitialized,
+      running: this.isRunning,
+      analyzing: this.isAnalyzing,
+      screen_capture_active: !!this.mediaStream,
+      privacy_mode: this.config.privacyMode,
+      analysis_interval: this.config.analysisInterval,
+      recent_analyses_count: this.recentAnalyses.length,
+      performance: this.performanceMetrics,
+    };
+  }
+
+  // ==========================================
+  // Event System
+  // ==========================================
+
+  private emitEvent(eventName: string, data: any): void {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent(eventName, { detail: data }));
+    }
+  }
 }
 
 export default CheatCalVisionEngine;

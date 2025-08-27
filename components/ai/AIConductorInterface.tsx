@@ -1,86 +1,87 @@
 /**
  * AI Conductor Interface - Advanced AI Orchestration Dashboard
- * 
+ *
  * Orchestrates and monitors all AI systems in the LinearTime Quantum Calendar platform.
  * Integrates with existing AI ecosystem including AIConflictDetector, AIInsightPanel,
  * AICapacityRibbon, and all quantum calendar systems.
- * 
+ *
  * Features:
  * - Real-time AI agent monitoring with performance metrics
  * - Conflict visualization and resolution management
  * - Predictive insights with confidence scoring
  * - Audio interface for voice interactions
  * - System health monitoring and load balancing
- * 
+ *
  * @version Phase 6.0+ (Quantum Calendar Integration)
  * @author LinearTime AI Conductor System
  */
 
-"use client"
+'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Mic, 
-  MicOff, 
-  Volume2, 
-  VolumeX, 
-  Play, 
-  Pause, 
-  Settings, 
-  Activity, 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
-  Zap, 
-  Brain, 
-  Users, 
-  TrendingUp, 
-  Wifi, 
-  WifiOff,
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Activity,
+  AlertTriangle,
   BarChart3,
-  Eye,
-  Shield,
+  Brain,
+  CheckCircle,
+  Clock,
   Cpu,
-  Sparkles
-} from 'lucide-react'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Separator } from '@/components/ui/separator'
-import { Switch } from '@/components/ui/switch'
+  Eye,
+  Mic,
+  MicOff,
+  Pause,
+  Play,
+  Settings,
+  Shield,
+  Sparkles,
+  TrendingUp,
+  Users,
+  Volume2,
+  VolumeX,
+  Wifi,
+  WifiOff,
+  Zap,
+} from 'lucide-react';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 // Integration with existing ecosystem (optional imports with fallbacks)
-import { useSoundEffects } from '@/lib/sound-service'
-import { cn } from '@/lib/utils'
+import { useSoundEffects } from '@/lib/sound-service';
+import { cn } from '@/lib/utils';
 
 interface ConflictData {
-  id: string
-  type: 'resource' | 'priority' | 'timing' | 'dependency'
-  severity: 'low' | 'medium' | 'high' | 'critical'
-  agents: string[]
-  description: string
-  timestamp: Date
-  resolved: boolean
+  id: string;
+  type: 'resource' | 'priority' | 'timing' | 'dependency';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  agents: string[];
+  description: string;
+  timestamp: Date;
+  resolved: boolean;
 }
 
 interface AgentStatus {
-  id: string
-  name: string
-  status: 'active' | 'idle' | 'processing' | 'error'
-  load: number
-  lastActivity: Date
-  conflicts: number
+  id: string;
+  name: string;
+  status: 'active' | 'idle' | 'processing' | 'error';
+  load: number;
+  lastActivity: Date;
+  conflicts: number;
 }
 
 interface PredictiveInsight {
-  id: string
-  type: 'warning' | 'opportunity' | 'optimization'
-  confidence: number
-  impact: 'low' | 'medium' | 'high'
-  description: string
-  timeframe: string
+  id: string;
+  type: 'warning' | 'opportunity' | 'optimization';
+  confidence: number;
+  impact: 'low' | 'medium' | 'high';
+  description: string;
+  timeframe: string;
 }
 
 // ASCII AI System Architecture Visualization
@@ -139,51 +140,54 @@ Opportunity ███████████████████ 76% Confid
 
 const AIConductorInterface: React.FC = () => {
   // Integration with existing ecosystem (with graceful fallbacks)
-  const { playSound } = useSoundEffects() || { playSound: () => Promise.resolve() }
+  const { playSound } = useSoundEffects() || { playSound: () => Promise.resolve() };
 
   // Component State
-  const [isConnected, setIsConnected] = useState(true)
-  const [isMicEnabled, setIsMicEnabled] = useState(false)
-  const [isSpeakerEnabled, setIsSpeakerEnabled] = useState(true)
-  const [isRecording, setIsRecording] = useState(false)
-  const [systemLoad, setSystemLoad] = useState(67)
-  const [activeAgents, setActiveAgents] = useState(8)
-  const [resolvedConflicts, setResolvedConflicts] = useState(23)
-  const [showArchitecture, setShowArchitecture] = useState(false)
+  const [isConnected, setIsConnected] = useState(true);
+  const [isMicEnabled, setIsMicEnabled] = useState(false);
+  const [isSpeakerEnabled, setIsSpeakerEnabled] = useState(true);
+  const [isRecording, setIsRecording] = useState(false);
+  const [systemLoad, setSystemLoad] = useState(67);
+  const [activeAgents, setActiveAgents] = useState(8);
+  const [resolvedConflicts, setResolvedConflicts] = useState(23);
+  const [showArchitecture, setShowArchitecture] = useState(false);
 
   // Real-time AI system monitoring (simulated for now)
   useEffect(() => {
     const monitoringInterval = setInterval(() => {
       // Simulate dynamic system metrics
-      setSystemLoad(prev => Math.max(20, Math.min(100, prev + (Math.random() - 0.5) * 10)))
+      setSystemLoad((prev) => Math.max(20, Math.min(100, prev + (Math.random() - 0.5) * 10)));
       // Could integrate with real AI metrics here in the future
-    }, 2000)
+    }, 2000);
 
-    return () => clearInterval(monitoringInterval)
-  }, [])
+    return () => clearInterval(monitoringInterval);
+  }, []);
 
   // Handle recording with sound feedback
-  const handleRecording = useCallback(async (recording: boolean) => {
-    setIsRecording(recording)
-    
-    if (recording) {
-      playSound?.('notification')
-      // Announce to screen readers
-      const announcement = 'Recording started'
-      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(announcement)
-        window.speechSynthesis.speak(utterance)
+  const handleRecording = useCallback(
+    async (recording: boolean) => {
+      setIsRecording(recording);
+
+      if (recording) {
+        playSound?.('notification');
+        // Announce to screen readers
+        const announcement = 'Recording started';
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance(announcement);
+          window.speechSynthesis.speak(utterance);
+        }
+      } else {
+        playSound?.('success');
+        // Announce to screen readers
+        const announcement = 'Recording stopped';
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance(announcement);
+          window.speechSynthesis.speak(utterance);
+        }
       }
-    } else {
-      playSound?.('success')
-      // Announce to screen readers
-      const announcement = 'Recording stopped'
-      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(announcement)
-        window.speechSynthesis.speak(utterance)
-      }
-    }
-  }, [playSound])
+    },
+    [playSound]
+  );
 
   const [conflicts] = useState<ConflictData[]>([
     {
@@ -193,7 +197,7 @@ const AIConductorInterface: React.FC = () => {
       agents: ['Agent-Alpha', 'Agent-Beta'],
       description: 'Memory allocation conflict detected',
       timestamp: new Date(),
-      resolved: false
+      resolved: false,
     },
     {
       id: '2',
@@ -202,7 +206,7 @@ const AIConductorInterface: React.FC = () => {
       agents: ['Agent-Gamma', 'Agent-Delta'],
       description: 'Task priority mismatch',
       timestamp: new Date(Date.now() - 300000),
-      resolved: true
+      resolved: true,
     },
     {
       id: '3',
@@ -211,9 +215,9 @@ const AIConductorInterface: React.FC = () => {
       agents: ['Agent-Epsilon'],
       description: 'Response timeout threshold exceeded',
       timestamp: new Date(Date.now() - 120000),
-      resolved: false
-    }
-  ])
+      resolved: false,
+    },
+  ]);
 
   const [agents] = useState<AgentStatus[]>([
     {
@@ -222,7 +226,7 @@ const AIConductorInterface: React.FC = () => {
       status: 'active',
       load: 85,
       lastActivity: new Date(),
-      conflicts: 2
+      conflicts: 2,
     },
     {
       id: 'beta',
@@ -230,7 +234,7 @@ const AIConductorInterface: React.FC = () => {
       status: 'processing',
       load: 92,
       lastActivity: new Date(Date.now() - 30000),
-      conflicts: 1
+      conflicts: 1,
     },
     {
       id: 'gamma',
@@ -238,7 +242,7 @@ const AIConductorInterface: React.FC = () => {
       status: 'idle',
       load: 23,
       lastActivity: new Date(Date.now() - 180000),
-      conflicts: 0
+      conflicts: 0,
     },
     {
       id: 'delta',
@@ -246,9 +250,9 @@ const AIConductorInterface: React.FC = () => {
       status: 'error',
       load: 0,
       lastActivity: new Date(Date.now() - 600000),
-      conflicts: 3
-    }
-  ])
+      conflicts: 3,
+    },
+  ]);
 
   const [insights] = useState<PredictiveInsight[]>([
     {
@@ -257,7 +261,7 @@ const AIConductorInterface: React.FC = () => {
       confidence: 87,
       impact: 'high',
       description: 'Potential system overload in next 15 minutes',
-      timeframe: '15m'
+      timeframe: '15m',
     },
     {
       id: '2',
@@ -265,7 +269,7 @@ const AIConductorInterface: React.FC = () => {
       confidence: 94,
       impact: 'medium',
       description: 'Load balancing opportunity detected',
-      timeframe: '5m'
+      timeframe: '5m',
     },
     {
       id: '3',
@@ -273,46 +277,60 @@ const AIConductorInterface: React.FC = () => {
       confidence: 76,
       impact: 'low',
       description: 'Resource allocation can be optimized',
-      timeframe: '30m'
-    }
-  ])
+      timeframe: '30m',
+    },
+  ]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-500 bg-red-500/10'
-      case 'high': return 'text-orange-500 bg-orange-500/10'
-      case 'medium': return 'text-yellow-500 bg-yellow-500/10'
-      case 'low': return 'text-green-500 bg-green-500/10'
-      default: return 'text-muted-foreground bg-muted'
+      case 'critical':
+        return 'text-red-500 bg-red-500/10';
+      case 'high':
+        return 'text-orange-500 bg-orange-500/10';
+      case 'medium':
+        return 'text-yellow-500 bg-yellow-500/10';
+      case 'low':
+        return 'text-green-500 bg-green-500/10';
+      default:
+        return 'text-muted-foreground bg-muted';
     }
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'text-green-500 bg-green-500/10'
-      case 'processing': return 'text-blue-500 bg-blue-500/10'
-      case 'idle': return 'text-gray-500 bg-gray-500/10'
-      case 'error': return 'text-red-500 bg-red-500/10'
-      default: return 'text-muted-foreground bg-muted'
+      case 'active':
+        return 'text-green-500 bg-green-500/10';
+      case 'processing':
+        return 'text-blue-500 bg-blue-500/10';
+      case 'idle':
+        return 'text-gray-500 bg-gray-500/10';
+      case 'error':
+        return 'text-red-500 bg-red-500/10';
+      default:
+        return 'text-muted-foreground bg-muted';
     }
-  }
+  };
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case 'warning': return AlertTriangle
-      case 'optimization': return TrendingUp
-      case 'opportunity': return Zap
-      default: return Activity
+      case 'warning':
+        return AlertTriangle;
+      case 'optimization':
+        return TrendingUp;
+      case 'opportunity':
+        return Zap;
+      default:
+        return Activity;
     }
-  }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSystemLoad(prev => Math.max(20, Math.min(100, prev + (Math.random() - 0.5) * 10)))
-    }, 2000)
+      setSystemLoad((prev) => Math.max(20, Math.min(100, prev + (Math.random() - 0.5) * 10)));
+    }, 2000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground p-6 font-mono">
@@ -323,19 +341,25 @@ const AIConductorInterface: React.FC = () => {
             <div className="flex items-center space-x-2">
               <Brain className="w-8 h-8 text-primary" />
               <h1 className="text-2xl font-bold">AI Conductor</h1>
-              <Badge variant="outline" className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
+              <Badge
+                variant="outline"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0"
+              >
                 🧠 Quantum AI Orchestration
               </Badge>
             </div>
-            <Badge variant={isConnected ? "default" : "destructive"} className="flex items-center space-x-1">
+            <Badge
+              variant={isConnected ? 'default' : 'destructive'}
+              className="flex items-center space-x-1"
+            >
               {isConnected ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
               <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
             </Badge>
           </div>
-          
+
           <div className="flex items-center space-x-2">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="sm"
               onClick={() => setShowArchitecture(!showArchitecture)}
             >
@@ -381,30 +405,21 @@ const AIConductorInterface: React.FC = () => {
                 <Volume2 className="w-5 h-5" />
                 <span>Audio Interface</span>
               </h3>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Microphone</span>
-                  <Switch 
-                    checked={isMicEnabled} 
-                    onCheckedChange={setIsMicEnabled}
-                  />
+                  <Switch checked={isMicEnabled} onCheckedChange={setIsMicEnabled} />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Speaker</span>
-                  <Switch 
-                    checked={isSpeakerEnabled} 
-                    onCheckedChange={setIsSpeakerEnabled}
-                  />
+                  <Switch checked={isSpeakerEnabled} onCheckedChange={setIsSpeakerEnabled} />
                 </div>
-                
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
+
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
-                    variant={isRecording ? "destructive" : "default"}
+                    variant={isRecording ? 'destructive' : 'default'}
                     className="w-full"
                     onClick={() => handleRecording(!isRecording)}
                     disabled={!isMicEnabled}
@@ -431,7 +446,7 @@ const AIConductorInterface: React.FC = () => {
                 <BarChart3 className="w-5 h-5" />
                 <span>System Metrics</span>
               </h3>
-              
+
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between text-sm mb-1">
@@ -440,7 +455,7 @@ const AIConductorInterface: React.FC = () => {
                   </div>
                   <Progress value={systemLoad} className="h-2" />
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div className="p-3 bg-muted rounded-lg">
                     <div className="text-2xl font-bold text-primary">{activeAgents}</div>
@@ -460,7 +475,7 @@ const AIConductorInterface: React.FC = () => {
                 <Zap className="w-5 h-5" />
                 <span>Quick Actions</span>
               </h3>
-              
+
               <div className="grid grid-cols-2 gap-2">
                 <Button variant="outline" size="sm">
                   <Shield className="w-4 h-4 mr-2" />
@@ -490,7 +505,7 @@ const AIConductorInterface: React.FC = () => {
               <AlertTriangle className="w-5 h-5" />
               <span>Real-time Conflicts</span>
             </h3>
-            
+
             <div className="space-y-3">
               <AnimatePresence>
                 {conflicts.map((conflict) => (
@@ -508,9 +523,7 @@ const AIConductorInterface: React.FC = () => {
                             {conflict.severity.toUpperCase()}
                           </Badge>
                           <Badge variant="outline">{conflict.type}</Badge>
-                          {conflict.resolved && (
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                          )}
+                          {conflict.resolved && <CheckCircle className="w-4 h-4 text-green-500" />}
                         </div>
                         <p className="text-sm mb-2">{conflict.description}</p>
                         <div className="flex items-center space-x-4 text-xs text-muted-foreground">
@@ -531,10 +544,10 @@ const AIConductorInterface: React.FC = () => {
               <Brain className="w-5 h-5" />
               <span>Predictive Insights</span>
             </h3>
-            
+
             <div className="space-y-3">
               {insights.map((insight) => {
-                const IconComponent = getInsightIcon(insight.type)
+                const IconComponent = getInsightIcon(insight.type);
                 return (
                   <motion.div
                     key={insight.id}
@@ -552,7 +565,7 @@ const AIConductorInterface: React.FC = () => {
                       </div>
                     </div>
                   </motion.div>
-                )
+                );
               })}
             </div>
           </Card>
@@ -564,7 +577,7 @@ const AIConductorInterface: React.FC = () => {
             <Users className="w-5 h-5" />
             <span>AI Agent Ecosystem Status</span>
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {agents.map((agent) => (
               <motion.div
@@ -574,11 +587,9 @@ const AIConductorInterface: React.FC = () => {
               >
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-medium">{agent.name}</h4>
-                  <Badge className={getStatusColor(agent.status)}>
-                    {agent.status}
-                  </Badge>
+                  <Badge className={getStatusColor(agent.status)}>{agent.status}</Badge>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div>
                     <div className="flex justify-between text-sm mb-1">
@@ -587,10 +598,12 @@ const AIConductorInterface: React.FC = () => {
                     </div>
                     <Progress value={agent.load} className="h-1" />
                   </div>
-                  
+
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>Conflicts: {agent.conflicts}</span>
-                    <span>{Math.floor((Date.now() - agent.lastActivity.getTime()) / 60000)}m ago</span>
+                    <span>
+                      {Math.floor((Date.now() - agent.lastActivity.getTime()) / 60000)}m ago
+                    </span>
                   </div>
                 </div>
               </motion.div>
@@ -604,17 +617,37 @@ const AIConductorInterface: React.FC = () => {
             <Sparkles className="w-5 h-5" />
             <span>Quantum Calendar Integration</span>
           </h3>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Quantum Features Status */}
             <div className="space-y-4">
               <h4 className="font-medium text-sm text-muted-foreground">QUANTUM SYSTEMS STATUS</h4>
               <div className="space-y-3">
                 {[
-                  { name: 'QuantumCalendarCore', status: 'active', load: 85, component: 'quantum-calendar' },
-                  { name: 'CSS Subgrid Engine', status: 'active', load: 92, component: 'subgrid-system' },
-                  { name: 'Motion Choreographer', status: 'processing', load: 76, component: 'motion-system' },
-                  { name: 'Heat Map Visualizer', status: 'idle', load: 23, component: 'heatmap-engine' },
+                  {
+                    name: 'QuantumCalendarCore',
+                    status: 'active',
+                    load: 85,
+                    component: 'quantum-calendar',
+                  },
+                  {
+                    name: 'CSS Subgrid Engine',
+                    status: 'active',
+                    load: 92,
+                    component: 'subgrid-system',
+                  },
+                  {
+                    name: 'Motion Choreographer',
+                    status: 'processing',
+                    load: 76,
+                    component: 'motion-system',
+                  },
+                  {
+                    name: 'Heat Map Visualizer',
+                    status: 'idle',
+                    load: 23,
+                    component: 'heatmap-engine',
+                  },
                 ].map((system) => (
                   <motion.div
                     key={system.component}
@@ -622,12 +655,16 @@ const AIConductorInterface: React.FC = () => {
                     whileHover={{ scale: 1.02 }}
                   >
                     <div className="flex items-center space-x-3">
-                      <div className={cn(
-                        'w-2 h-2 rounded-full',
-                        system.status === 'active' ? 'bg-green-500' :
-                        system.status === 'processing' ? 'bg-blue-500 animate-pulse' :
-                        'bg-gray-400'
-                      )} />
+                      <div
+                        className={cn(
+                          'w-2 h-2 rounded-full',
+                          system.status === 'active'
+                            ? 'bg-green-500'
+                            : system.status === 'processing'
+                              ? 'bg-blue-500 animate-pulse'
+                              : 'bg-gray-400'
+                        )}
+                      />
                       <span className="text-sm font-medium">{system.name}</span>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -672,7 +709,7 @@ PREDICTION:  94% Accuracy ✓
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AIConductorInterface
+export default AIConductorInterface;

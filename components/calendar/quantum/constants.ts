@@ -1,14 +1,14 @@
 /**
  * Quantum Calendar Constants
- * 
+ *
  * Central configuration and constant definitions for the quantum calendar system.
  */
 
 import type {
+  QuantumAnalyticsConfig,
   QuantumConfig,
   QuantumFeatureFlags,
   QuantumPerformanceConfig,
-  QuantumAnalyticsConfig,
 } from '@/types/quantum-calendar';
 
 // =============================================================================
@@ -23,25 +23,25 @@ export const DEFAULT_QUANTUM_FEATURE_FLAGS: QuantumFeatureFlags = {
   enableSubgrid: true,
   enableContainerQueries: true,
   enableFluidTypography: true,
-  
+
   // Micro-Interactions & Physics (conservative defaults)
   enablePhysicsAnimations: false, // Enable via A/B testing
   enableParallaxEffects: false,
   enableElasticScrolling: false,
   enableQuantumTransitions: true,
-  
+
   // Performance & Optimization (enabled by default)
   enableQuantumVirtualization: true,
   enableIntersectionObserver: true,
   enableWebWorkerCalculations: false, // Enable for large datasets
   enableGPUAcceleration: true,
-  
+
   // Advanced UI Features (experimental)
   enableMagneticSnapping: false,
   enableGestureRecognition: false,
   enableVoiceInteraction: false,
   enableHapticFeedback: false,
-  
+
   // Analytics & Monitoring (enabled for insights)
   enablePerformanceTracking: true,
   enableUserBehaviorAnalytics: true,
@@ -149,14 +149,14 @@ export const DEFAULT_PERFORMANCE_CONFIG: QuantumPerformanceConfig = {
   flushInterval: 5000, // 5 seconds
   enableRealUserMonitoring: true,
   enableSyntheticMonitoring: false,
-  
+
   budgets: {
     renderTime: 16, // 60fps target
     memoryUsage: 100, // 100MB
     bundleSize: 500, // 500KB
     cumulativeLayoutShift: 0.1,
   },
-  
+
   alerts: {
     enabled: true,
     thresholds: {
@@ -173,7 +173,7 @@ export const DEFAULT_PERFORMANCE_CONFIG: QuantumPerformanceConfig = {
 export const DEFAULT_ANALYTICS_CONFIG: QuantumAnalyticsConfig = {
   enabled: true,
   anonymizeData: true,
-  
+
   events: {
     pageViews: true,
     userInteractions: true,
@@ -181,11 +181,11 @@ export const DEFAULT_ANALYTICS_CONFIG: QuantumAnalyticsConfig = {
     performanceMetrics: true,
     errorTracking: true,
   },
-  
+
   privacyMode: 'balanced',
   consentManagement: false, // Enable in production
   dataRetentionDays: 90,
-  
+
   providers: {
     // Configure endpoints as needed
   },
@@ -350,13 +350,13 @@ export const QUANTUM_CSS_CUSTOM_PROPERTIES = {
   '--quantum-calendar-gap': 'clamp(0.125rem, 0.5vw, 0.25rem)',
   '--quantum-calendar-border-radius': 'clamp(0.25rem, 1vw, 0.5rem)',
   '--quantum-calendar-header-height': 'clamp(2rem, 5vh, 3rem)',
-  
+
   // Grid System Variables
   '--quantum-grid-columns': '42', // 6 weeks × 7 days
   '--quantum-grid-rows': '12', // 12 months
   '--quantum-month-height': 'minmax(3rem, 1fr)',
   '--quantum-day-width': 'minmax(1.5rem, 1fr)',
-  
+
   // Fluid Typography Scale
   '--quantum-font-size-xs': 'clamp(0.625rem, 1.5vw, 0.75rem)',
   '--quantum-font-size-sm': 'clamp(0.75rem, 2vw, 0.875rem)',
@@ -364,7 +364,7 @@ export const QUANTUM_CSS_CUSTOM_PROPERTIES = {
   '--quantum-font-size-lg': 'clamp(1rem, 3vw, 1.125rem)',
   '--quantum-font-size-xl': 'clamp(1.125rem, 3.5vw, 1.25rem)',
   '--quantum-font-size-2xl': 'clamp(1.25rem, 4vw, 1.5rem)',
-  
+
   // Physics-Based Animation Variables
   '--quantum-spring-tension': '120',
   '--quantum-spring-friction': '14',
@@ -372,19 +372,19 @@ export const QUANTUM_CSS_CUSTOM_PROPERTIES = {
   '--quantum-easing-spring': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
   '--quantum-easing-smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
   '--quantum-easing-snappy': 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-  
+
   // Micro-Interaction Durations
   '--quantum-duration-instant': '100ms',
   '--quantum-duration-quick': '200ms',
   '--quantum-duration-smooth': '300ms',
   '--quantum-duration-leisurely': '500ms',
-  
+
   // Focus & Accessibility Variables
   '--quantum-focus-outline-width': '3px',
   '--quantum-focus-outline-offset': '2px',
   '--quantum-focus-outline-color': 'hsl(210 100% 50%)',
   '--quantum-tap-target-min': '44px',
-  
+
   // Performance & GPU Variables
   '--quantum-transform-gpu': 'translate3d(0, 0, 0)',
   '--quantum-will-change': 'transform, opacity',

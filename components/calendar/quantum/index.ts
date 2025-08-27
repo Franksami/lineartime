@@ -1,6 +1,6 @@
 /**
  * Quantum Calendar System - Exports
- * 
+ *
  * Modern CSS calendar implementation with iterative refinement capabilities,
  * A/B testing integration, and comprehensive performance monitoring.
  */
@@ -47,20 +47,16 @@ export type {
 export {
   // Browser support detection
   detectBrowserSupport,
-  
   // Performance utilities
   calculatePerformanceScore,
   measureQuantumFeatureImpact,
-  
   // Analytics utilities
   generateSessionId,
   trackQuantumEvent,
   calculateFeatureUtilization,
-  
   // A/B testing utilities
   assignUserToVariant,
   evaluateFeatureFlag,
-  
   // Configuration helpers
   createQuantumConfig,
   validateQuantumConfig,
@@ -86,18 +82,18 @@ export {
 
 /**
  * Quick Start Guide:
- * 
+ *
  * 1. Basic Usage:
  *    ```tsx
  *    import { QuantumCalendarCore } from '@/components/calendar/quantum';
- *    
+ *
  *    <QuantumCalendarCore
  *      year={2025}
  *      events={events}
  *      onDateSelect={handleDateSelect}
  *    />
  *    ```
- * 
+ *
  * 2. With Feature Flags:
  *    ```tsx
  *    const featureFlags = {
@@ -105,14 +101,14 @@ export {
  *      enableContainerQueries: true,
  *      enablePhysicsAnimations: false,
  *    };
- *    
+ *
  *    <QuantumCalendarCore
  *      year={2025}
  *      events={events}
  *      featureFlags={featureFlags}
  *    />
  *    ```
- * 
+ *
  * 3. With A/B Testing:
  *    ```tsx
  *    const abTestConfig = {
@@ -133,7 +129,7 @@ export {
  *        },
  *      ],
  *    };
- *    
+ *
  *    <QuantumCalendarCore
  *      year={2025}
  *      events={events}
@@ -141,7 +137,7 @@ export {
  *      onVariantAssignment={handleVariantAssignment}
  *    />
  *    ```
- * 
+ *
  * 4. With Performance Monitoring:
  *    ```tsx
  *    <QuantumCalendarCore
@@ -158,7 +154,7 @@ export {
  *      onPerformanceMetric={handlePerformanceMetric}
  *    />
  *    ```
- * 
+ *
  * 5. Development Mode:
  *    ```tsx
  *    <QuantumCalendarCore

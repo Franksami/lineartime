@@ -109,6 +109,18 @@ export function NavigationHeader({
                 <LayoutList className="mr-2 h-4 w-4" aria-hidden="true" />
                 Event Management
               </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start border-primary/20 text-primary hover:bg-primary/10"
+                aria-label="Open CheatCal Enterprise demo"
+                onClick={() => {
+                  window.open('/cheatcal-enterprise', '_blank');
+                  setSidebarOpen(false);
+                }}
+              >
+                <span className="mr-2 text-sm">✨</span>
+                CheatCal Enterprise
+              </Button>
             </div>
           </SheetContent>
         </Sheet>
@@ -152,6 +164,16 @@ export function NavigationHeader({
           >
             <LayoutList className="mr-2 h-4 w-4" aria-hidden="true" />
             Manage
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.open('/cheatcal-enterprise', '_blank')}
+            aria-label="Open CheatCal Enterprise demo"
+            className="border-primary/20 text-primary hover:bg-primary/10"
+          >
+            <span className="mr-2 text-xs">✨</span>
+            CheatCal Enterprise
           </Button>
         </nav>
 

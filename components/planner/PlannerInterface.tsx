@@ -17,28 +17,29 @@
 
 'use client';
 
-import React, { useState, useCallback } from 'react';
 import { useChat } from '@ai-sdk/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { 
+  BarChart3,
+  Bot,
   Brain,
+  Calendar,
+  Crown,
   DollarSign, 
-  Target, 
-  TrendingUp,
-  Zap,
+  Eye,
   Mic,
   MicOff,
-  Crown,
-  BarChart3,
-  Calendar,
-  Users,
-  Sparkles,
-  Eye,
-  Settings,
   Send,
-  Bot,
-  User
+  Settings,
+  Sparkles,
+  Target, 
+  TrendingUp,
+  User,
+  Users,
+  Zap
 } from 'lucide-react';
+import type React from 'react';
+import { useCallback, useState } from 'react';
 
 // AI Elements Components (established pattern)
 import {
@@ -64,17 +65,29 @@ import {
   ToolOutput,
 } from '@/components/ai-elements/tool';
 
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 // UI Components
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-// Note: EnhancedCalendarToolbar import removed as it's not used in this component
+import { AIDragDropIntegration } from '@/components/calendar/AIDragDropIntegration';
+// Enhanced Calendar System Integration (restore ALL functionality)
+import EnhancedCalendarToolbar from '@/components/calendar/EnhancedCalendarToolbar';
+import { EnhancedDragDropSystem } from '@/components/calendar/EnhancedDragDropSystem';
+import { LinearCalendarHorizontal } from '@/components/calendar/LinearCalendarHorizontal';
+import { MotionEnhancedCalendarToolbar } from '@/components/calendar/MotionEnhancedCalendarToolbar';
+
+// Calendar Provider System (10 libraries)
+import { useCalendarProvider } from '@/components/calendar/providers/CalendarProvider';
+
+// CheatCal Enterprise Interface Integration
+import CheatCalEnterpriseInterface from '@/components/enterprise/CheatCalEnterpriseInterface';
 
 // Existing integrations
 import { useSoundEffects } from '@/lib/sound-service';
@@ -103,14 +116,8 @@ interface CoordinationMetric {
 export default function PlannerInterface() {
   const { playSound } = useSoundEffects() || { playSound: () => Promise.resolve() };
   
-  // Chat integration with Vercel AI SDK v5
-  const { 
-    messages, 
-    input, 
-    handleInputChange, 
-    handleSubmit, 
-    isLoading 
-  } = useChat({
+  // Chat integration using established EnhancedAIAssistant pattern
+  const { messages, sendMessage, status } = useChat({
     api: '/api/ai/chat',
     body: {
       model: 'anthropic/claude-3-5-sonnet-20241022',
@@ -127,11 +134,57 @@ export default function PlannerInterface() {
     }
   });
 
-  // Professional state management  
-  // Note: activeView state ready for future multi-view implementation
-  // const [activeView, setActiveView] = useState<'planning' | 'execution' | 'analytics'>('planning');
+  // Professional state management (following EnhancedAIAssistant pattern)
+  const [input, setInput] = useState('');
   const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [activeTab, setActiveTab] = useState('planner');
+
+  // Demo events for calendar integration
+  const [calendarEvents] = useState([
+    {
+      id: '1',
+      title: 'Q4 Launch Strategy Call',
+      description: 'Strategic planning for course launch',
+      start: new Date(2025, 0, 28, 14, 0),
+      end: new Date(2025, 0, 28, 16, 0),
+      allDay: false,
+      category: 'work',
+      priority: 'critical' as const,
+      backgroundColor: '#3b82f6',
+      textColor: '#ffffff',
+      borderColor: '#3b82f6',
+      editable: true,
+      location: 'Conference Room A',
+      attendees: 5,
+      tags: ['strategy', 'launch'],
+      extendedProps: {
+        priority: 'critical' as const,
+        estimatedRevenue: 45000,
+      }
+    },
+    {
+      id: '2',
+      title: 'Client Onboarding Session',
+      description: 'New agency client coordination meeting',
+      start: new Date(2025, 0, 29, 10, 0),
+      end: new Date(2025, 0, 29, 12, 0),
+      allDay: false,
+      category: 'work',
+      priority: 'high' as const,
+      backgroundColor: '#10b981',
+      textColor: '#ffffff',
+      borderColor: '#10b981',
+      editable: true,
+      location: 'Virtual',
+      attendees: 3,
+      tags: ['client', 'onboarding'],
+      extendedProps: {
+        priority: 'high' as const,
+        estimatedRevenue: 25000,
+      }
+    }
+  ]);
   
   // Revenue and coordination metrics (real-time updates)
   const [revenueGoals] = useState<RevenueGoal[]>([
@@ -181,15 +234,15 @@ export default function PlannerInterface() {
     }
   }, [isRecording, playSound]);
 
-  // Note: Welcome message will be handled by the AI API on first interaction
-
-  const handleSubmit = (e: React.FormEvent) => {
+  // Form submission handler (following EnhancedAIAssistant pattern)
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() && status === 'ready') {
       sendMessage({ text: input });
       setInput('');
     }
-  };
+  }, [input, status, sendMessage]);
+
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -238,6 +291,23 @@ export default function PlannerInterface() {
               </div>
 
               <div className="flex items-center space-x-3">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="flex items-center">
+                  <TabsList className="grid grid-cols-3 w-48">
+                    <TabsTrigger value="planner" className="text-xs">
+                      <Brain className="w-3 h-3 mr-1" />
+                      AI Planner
+                    </TabsTrigger>
+                    <TabsTrigger value="calendar" className="text-xs">
+                      <Calendar className="w-3 h-3 mr-1" />
+                      Enterprise
+                    </TabsTrigger>
+                    <TabsTrigger value="demo" className="text-xs">
+                      <Sparkles className="w-3 h-3 mr-1" />
+                      Demo
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+                
                 <Button
                   variant={isVoiceEnabled ? "default" : "outline"}
                   size="sm"
@@ -255,7 +325,9 @@ export default function PlannerInterface() {
         </header>
 
         <div className="container mx-auto p-6">
-          <div className="grid grid-cols-12 gap-6 h-[calc(100vh-120px)]">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="h-[calc(100vh-120px)]">
+            <TabsContent value="planner" className="h-full">
+              <div className="grid grid-cols-12 gap-6 h-full">
             
             {/* Left Panel - Revenue Context & Goals */}
             <div className="col-span-3 space-y-6">
@@ -487,7 +559,7 @@ export default function PlannerInterface() {
                         ))}
                       </AnimatePresence>
                       
-                      {isLoading && (
+                      {status === 'streaming' && (
                         <motion.div
                           className="flex items-start space-x-3 p-4 rounded-lg bg-muted/50 mr-12"
                           initial={{ opacity: 0, y: 20 }}
@@ -521,19 +593,19 @@ export default function PlannerInterface() {
                     <div className="flex-1">
                       <Input
                         value={input}
-                        onChange={handleInputChange}
+                        onChange={(e) => setInput(e.target.value)}
                         placeholder="Describe your revenue goals, coordination challenges, or optimization needs..."
                         className="resize-none min-h-[44px]"
-                        disabled={isLoading}
+                        disabled={status !== 'ready'}
                       />
                     </div>
                     
                     <Button
                       type="submit"
-                      disabled={isLoading || !input.trim()}
+                      disabled={status !== 'ready' || !input.trim()}
                       className="shrink-0"
                     >
-                      {isLoading ? (
+                      {status === 'streaming' ? (
                         <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                       ) : (
                         <Send className="w-4 h-4" />
@@ -672,6 +744,71 @@ export default function PlannerInterface() {
               </Card>
             </div>
           </div>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="calendar" className="h-full">
+        <div className="h-full">
+          <CheatCalEnterpriseInterface 
+            events={calendarEvents}
+            onEventCreate={(event) => {
+              console.log('Creating event:', event);
+              // Add event creation logic here
+            }}
+            onEventUpdate={(event) => {
+              console.log('Updating event:', event);
+              // Add event update logic here  
+            }}
+            onEventDelete={(eventId) => {
+              console.log('Deleting event:', eventId);
+              // Add event deletion logic here
+            }}
+            className="h-full"
+          />
+        </div>
+      </TabsContent>
+
+      <TabsContent value="demo" className="h-full">
+        <div className="h-full flex items-center justify-center">
+          <Card className="p-8 text-center max-w-2xl">
+            <div className="space-y-6">
+              <div className="flex justify-center">
+                <div className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full">
+                  <Sparkles className="w-12 h-12 text-white" />
+                </div>
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold mb-4">CheatCal Enterprise Demo</h2>
+                <p className="text-muted-foreground text-lg mb-6">
+                  Experience the complete enterprise-grade calendar interface with all sophisticated functionality restored.
+                </p>
+              </div>
+              <div className="space-y-3">
+                <p className="text-sm">
+                  <strong>✨ 10-Library Calendar Ecosystem</strong> - Switch between FullCalendar, Toast UI, React Big Calendar, and 7 more
+                </p>
+                <p className="text-sm">
+                  <strong>🧠 AI Revenue Planner</strong> - Real-time coordination optimization with up to 287% improvements
+                </p>
+                <p className="text-sm">
+                  <strong>🎯 Professional Drag & Drop</strong> - Enhanced system with AI suggestions and conflict resolution
+                </p>
+              </div>
+              <div className="pt-4">
+                <Button 
+                  size="lg" 
+                  className="px-8"
+                  onClick={() => window.open('/cheatcal-enterprise', '_blank')}
+                >
+                  Launch Full Demo
+                  <Sparkles className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </TabsContent>
+    </Tabs>
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 /**
  * QuantumCalendarCore - Next-Generation Calendar Component
- * 
+ *
  * Design Excellence Standards: Moleskine Timepage + Modern 2025 Patterns
  * ✨ Award-winning visual design with sophisticated animations
- * 🎨 Typography excellence with numerical emphasis  
+ * 🎨 Typography excellence with numerical emphasis
  * 🌈 Color psychology (warm for busy, cool for available)
  * 📐 Perfect CSS Subgrid alignment for 12-month timeline
  * 📱 Container Queries for responsive calendar cells
@@ -12,21 +12,22 @@
 
 'use client';
 
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { motion, useSpring, useTransform, useMotionValue } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import type { Event } from '@/types/calendar';
-import { 
-  format, 
-  startOfYear, 
-  getDaysInMonth, 
-  differenceInDays, 
-  isToday, 
-  isSameDay,
+import {
   addDays,
+  differenceInDays,
+  endOfDay,
+  format,
+  getDaysInMonth,
+  isSameDay,
+  isToday,
   startOfDay,
-  endOfDay
+  startOfYear,
 } from 'date-fns';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 // Design System Integration
 import { useTokens } from '@/lib/design-system/utils/token-bridge';
@@ -48,14 +49,14 @@ interface QuantumCalendarCoreProps {
   onEventCreate?: (event: Partial<Event>) => void;
   onEventUpdate?: (event: Event) => void;
   onEventDelete?: (id: string) => void;
-  
+
   // Quantum Enhancement Controls
   enableQuantumFeatures?: boolean;
   quantumConfig?: QuantumConfig;
-  
+
   // A/B Testing Integration
   variant?: 'quantum' | 'traditional' | 'hybrid';
-  
+
   // Design Excellence Options
   theme?: 'timepage' | 'amie' | 'fantastical' | 'linear';
   visualDensity?: 'compact' | 'comfortable' | 'spacious';
@@ -64,7 +65,7 @@ interface QuantumCalendarCoreProps {
 
 interface QuantumConfig {
   enableSubgrid?: boolean;
-  enableContainerQueries?: boolean; 
+  enableContainerQueries?: boolean;
   enableFluidTypography?: boolean;
   enableMicroInteractions?: boolean;
   enableHeatMapVisualization?: boolean;
@@ -78,8 +79,8 @@ const DESIGN_THEMES = {
     name: 'Timepage Excellence',
     colors: {
       primary: 'oklch(0.55 0.15 250)', // Sophisticated blue
-      accent: 'oklch(0.75 0.12 35)',   // Warm accent
-      busy: 'oklch(0.65 0.18 15)',     // Warm for busy (color psychology)
+      accent: 'oklch(0.75 0.12 35)', // Warm accent
+      busy: 'oklch(0.65 0.18 15)', // Warm for busy (color psychology)
       available: 'oklch(0.70 0.12 200)', // Cool for available
       surface: 'oklch(0.98 0.01 250)',
       text: 'oklch(0.15 0.02 250)',
@@ -94,7 +95,7 @@ const DESIGN_THEMES = {
       spring: { tension: 300, friction: 30 }, // Sophisticated smooth animations
       duration: { fast: 0.15, medium: 0.3, slow: 0.6 },
       easing: [0.25, 0.46, 0.45, 0.94], // Elegant easing curve
-    }
+    },
   },
   amie: {
     name: 'Joyful Experience',
@@ -109,15 +110,15 @@ const DESIGN_THEMES = {
     typography: {
       emphasis: 'playful',
       headingFont: '"Inter", system-ui, sans-serif',
-      bodyFont: '"Inter", system-ui, sans-serif', 
+      bodyFont: '"Inter", system-ui, sans-serif',
       monoFont: '"JetBrains Mono", monospace',
     },
     animations: {
       spring: { tension: 400, friction: 25 },
       duration: { fast: 0.12, medium: 0.25, slow: 0.5 },
       easing: [0.34, 1.56, 0.64, 1], // Bouncy, joyful easing
-    }
-  }
+    },
+  },
 };
 
 // ASCII Design System Architecture
@@ -185,48 +186,47 @@ export function QuantumCalendarCore({
   onEventCreate,
   onEventUpdate,
   onEventDelete,
-  
+
   // Quantum Features
   enableQuantumFeatures = false,
   quantumConfig = {},
   variant = 'traditional',
-  
+
   // Design Excellence
   theme = 'timepage',
   visualDensity = 'comfortable',
   animationIntensity = 'delightful',
 }: QuantumCalendarCoreProps) {
-  
   // Infrastructure Integration
   const tokens = useTokens();
   const featureFlags = useFeatureFlags();
   const { getAccessibleLabel, announceToScreenReader } = useAccessibilityAAA();
   const { trackTimelineEvent } = useABTestContext();
-  
+
   // Component State
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
   const [heatMapData, setHeatMapData] = useState<Map<string, number>>(new Map());
-  
+
   // Design System State
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  
+
   // Motion Values for Sophisticated Animations
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const scrollProgress = useMotionValue(0);
-  
+
   // Spring animations (Moleskine Timepage style)
   const springConfig = DESIGN_THEMES[theme]?.animations.spring || { tension: 300, friction: 30 };
   const x = useSpring(mouseX, springConfig);
   const y = useSpring(mouseY, springConfig);
-  
+
   // Gradient follow effect
   const backgroundGradient = useTransform(
     [x, y],
-    ([xVal, yVal]) => 
+    ([xVal, yVal]) =>
       `radial-gradient(circle at ${xVal}px ${yVal}px, ${DESIGN_THEMES[theme].colors.primary}20 0%, transparent 50%)`
   );
 
@@ -241,14 +241,14 @@ export function QuantumCalendarCore({
   // Generate heat map data for visual capacity planning (Timepage feature)
   const generateHeatMapData = useCallback(() => {
     const heatMap = new Map<string, number>();
-    
-    events.forEach(event => {
+
+    events.forEach((event) => {
       const dateKey = format(event.startDate, 'yyyy-MM-dd');
       const eventDuration = differenceInDays(event.endDate, event.startDate) + 1;
       const currentIntensity = heatMap.get(dateKey) || 0;
-      heatMap.set(dateKey, Math.min(100, currentIntensity + (eventDuration * 10)));
+      heatMap.set(dateKey, Math.min(100, currentIntensity + eventDuration * 10));
     });
-    
+
     setHeatMapData(heatMap);
   }, [events]);
 
@@ -257,37 +257,40 @@ export function QuantumCalendarCore({
   }, [generateHeatMapData]);
 
   // Mouse tracking for interactive background effects
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (reducedMotion) return;
-    
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  }, [mouseX, mouseY, reducedMotion]);
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (reducedMotion) return;
+
+      const rect = e.currentTarget.getBoundingClientRect();
+      mouseX.set(e.clientX - rect.left);
+      mouseY.set(e.clientY - rect.top);
+    },
+    [mouseX, mouseY, reducedMotion]
+  );
 
   // Generate calendar grid with CSS Subgrid
   const calendarGrid = useMemo(() => {
     const months = [];
-    
+
     for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
       const monthDate = new Date(year, monthIndex, 1);
       const daysInMonth = getDaysInMonth(monthDate);
       const firstDayOfWeek = monthDate.getDay();
-      
+
       // Generate 42-cell grid for perfect subgrid alignment
       const cells = [];
       for (let cellIndex = 0; cellIndex < 42; cellIndex++) {
         const dayNumber = cellIndex - firstDayOfWeek + 1;
         const isValidDay = dayNumber >= 1 && dayNumber <= daysInMonth;
         const date = isValidDay ? new Date(year, monthIndex, dayNumber) : null;
-        
+
         if (date) {
           const dateKey = format(date, 'yyyy-MM-dd');
           const heatIntensity = heatMapData.get(dateKey) || 0;
           const isCurrentDay = isToday(date);
           const isSelected = selectedDate && isSameDay(date, selectedDate);
           const isHovered = hoveredDate && isSameDay(date, hoveredDate);
-          
+
           cells.push({
             date,
             dayNumber,
@@ -297,7 +300,7 @@ export function QuantumCalendarCore({
             isSelected,
             isHovered,
             heatIntensity,
-            events: events.filter(e => isSameDay(e.startDate, date)),
+            events: events.filter((e) => isSameDay(e.startDate, date)),
           });
         } else {
           cells.push({
@@ -313,7 +316,7 @@ export function QuantumCalendarCore({
           });
         }
       }
-      
+
       months.push({
         monthIndex,
         name: format(monthDate, 'MMMM'),
@@ -322,7 +325,7 @@ export function QuantumCalendarCore({
         totalEvents: cells.reduce((sum, cell) => sum + cell.events.length, 0),
       });
     }
-    
+
     return months;
   }, [year, heatMapData, selectedDate, hoveredDate, events]);
 
@@ -340,13 +343,13 @@ export function QuantumCalendarCore({
       fontFamily: DESIGN_THEMES[theme].typography.bodyFont,
       fontFeatureSettings: '"tnum" 1, "kern" 1', // Tabular numbers + kerning
     };
-    
+
     switch (type) {
       case 'day':
         return {
           ...baseStyles,
-          fontSize: quantumConfig.enableFluidTypography 
-            ? 'clamp(0.75rem, 2vw + 0.5rem, 1rem)' 
+          fontSize: quantumConfig.enableFluidTypography
+            ? 'clamp(0.75rem, 2vw + 0.5rem, 1rem)'
             : '0.875rem',
           fontWeight: 500,
           fontVariantNumeric: 'tabular-nums', // Typography excellence
@@ -370,20 +373,20 @@ export function QuantumCalendarCore({
     if (animationIntensity === 'minimal' || reducedMotion) {
       return {};
     }
-    
+
     const interactions = {
       hover: {
         scale: 1.02,
-        transition: { 
+        transition: {
           type: 'spring',
           stiffness: 400,
           damping: 30,
-          mass: 0.8
-        }
+          mass: 0.8,
+        },
       },
       press: {
         scale: 0.98,
-        transition: { duration: 0.1 }
+        transition: { duration: 0.1 },
       },
       select: {
         scale: 1.05,
@@ -391,30 +394,40 @@ export function QuantumCalendarCore({
         transition: {
           type: 'spring',
           stiffness: 300,
-          damping: 25
-        }
-      }
+          damping: 25,
+        },
+      },
     };
-    
+
     return interactions[type];
   };
 
   // Handle date selection with analytics
-  const handleDateSelect = useCallback(async (date: Date) => {
-    setSelectedDate(date);
-    onDateSelect?.(date);
-    
-    // Track interaction for continuous refinement
-    await trackTimelineEvent('engagement', 'quantum_date_select', 1, {
-      quantumFeaturesEnabled: enableQuantumFeatures,
+  const handleDateSelect = useCallback(
+    async (date: Date) => {
+      setSelectedDate(date);
+      onDateSelect?.(date);
+
+      // Track interaction for continuous refinement
+      await trackTimelineEvent('engagement', 'quantum_date_select', 1, {
+        quantumFeaturesEnabled: enableQuantumFeatures,
+        theme,
+        visualDensity,
+        date: format(date, 'yyyy-MM-dd'),
+      });
+
+      // Accessibility announcement
+      announceToScreenReader(`Selected ${format(date, 'EEEE, MMMM d, yyyy')}`);
+    },
+    [
+      onDateSelect,
+      trackTimelineEvent,
+      enableQuantumFeatures,
       theme,
       visualDensity,
-      date: format(date, 'yyyy-MM-dd'),
-    });
-    
-    // Accessibility announcement
-    announceToScreenReader(`Selected ${format(date, 'EEEE, MMMM d, yyyy')}`);
-  }, [onDateSelect, trackTimelineEvent, enableQuantumFeatures, theme, visualDensity, announceToScreenReader]);
+      announceToScreenReader,
+    ]
+  );
 
   // ASCII Feature Status Display
   const quantumFeaturesStatus = `
@@ -434,30 +447,35 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
   `;
 
   return (
-    <div 
+    <div
       className={cn(
         'quantum-calendar-core relative w-full h-full',
         'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary',
         className
       )}
-      style={{
-        '--quantum-primary': DESIGN_THEMES[theme].colors.primary,
-        '--quantum-accent': DESIGN_THEMES[theme].colors.accent,
-        '--quantum-busy': DESIGN_THEMES[theme].colors.busy,
-        '--quantum-available': DESIGN_THEMES[theme].colors.available,
-        '--quantum-surface': DESIGN_THEMES[theme].colors.surface,
-        '--quantum-text': DESIGN_THEMES[theme].colors.text,
-        fontFamily: DESIGN_THEMES[theme].typography.bodyFont,
-      } as React.CSSProperties}
+      style={
+        {
+          '--quantum-primary': DESIGN_THEMES[theme].colors.primary,
+          '--quantum-accent': DESIGN_THEMES[theme].colors.accent,
+          '--quantum-busy': DESIGN_THEMES[theme].colors.busy,
+          '--quantum-available': DESIGN_THEMES[theme].colors.available,
+          '--quantum-surface': DESIGN_THEMES[theme].colors.surface,
+          '--quantum-text': DESIGN_THEMES[theme].colors.text,
+          fontFamily: DESIGN_THEMES[theme].typography.bodyFont,
+        } as React.CSSProperties
+      }
       onMouseMove={handleMouseMove}
       data-theme={theme}
       data-variant={variant}
       data-testid="quantum-calendar-core"
-      aria-label={getAccessibleLabel('quantum-calendar', `${year} Calendar with Quantum enhancements`)}
+      aria-label={getAccessibleLabel(
+        'quantum-calendar',
+        `${year} Calendar with Quantum enhancements`
+      )}
     >
       {/* Interactive Background (Moleskine Timepage inspired) */}
       {!reducedMotion && (
-        <motion.div 
+        <motion.div
           className="absolute inset-0 pointer-events-none opacity-30"
           style={{
             background: backgroundGradient,
@@ -467,9 +485,9 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
       )}
 
       {/* Year Header with Typography Excellence */}
-      <motion.header 
+      <motion.header
         className="quantum-header sticky top-0 z-50 backdrop-blur-md border-b"
-        style={{ 
+        style={{
           backgroundColor: `${DESIGN_THEMES[theme].colors.surface}95`,
           borderColor: `${DESIGN_THEMES[theme].colors.primary}20`,
         }}
@@ -478,7 +496,7 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
         transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
         <div className="flex items-center justify-between p-6">
-          <motion.h1 
+          <motion.h1
             style={getTypographyStyle('year')}
             className="text-3xl font-bold tracking-tight"
             initial={{ opacity: 0, x: -30 }}
@@ -497,7 +515,7 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
           </motion.h1>
 
           {/* Theme Selector (60+ themes like Timepage) */}
-          <motion.div 
+          <motion.div
             className="flex items-center gap-4"
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -509,12 +527,13 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
                   key={themeName}
                   className={cn(
                     'w-6 h-6 rounded-full border-2 transition-all',
-                    theme === themeName 
-                      ? 'ring-2 ring-offset-2 ring-primary scale-110' 
+                    theme === themeName
+                      ? 'ring-2 ring-offset-2 ring-primary scale-110'
                       : 'hover:scale-105'
                   )}
-                  style={{ 
-                    backgroundColor: DESIGN_THEMES[themeName as keyof typeof DESIGN_THEMES].colors.primary,
+                  style={{
+                    backgroundColor:
+                      DESIGN_THEMES[themeName as keyof typeof DESIGN_THEMES].colors.primary,
                     borderColor: theme === themeName ? '#fff' : 'transparent',
                   }}
                   onClick={() => {
@@ -527,7 +546,7 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
                 />
               ))}
             </div>
-            
+
             <div className="text-sm opacity-60" style={getTypographyStyle('month')}>
               {Object.keys(DESIGN_THEMES).length}+ themes
             </div>
@@ -536,7 +555,7 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
       </motion.header>
 
       {/* CSS Subgrid Calendar Layout */}
-      <motion.main 
+      <motion.main
         className={cn(
           'quantum-calendar-grid',
           quantumConfig.enableSubgrid && 'subgrid-enabled',
@@ -550,7 +569,7 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
         }}
       >
         {/* 12-Month Grid with Perfect Subgrid Alignment */}
-        <div 
+        <div
           className="calendar-months-grid"
           style={{
             display: 'grid',
@@ -579,10 +598,10 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
               }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ 
-                delay: 0.8 + (monthIndex * 0.05),
+              transition={{
+                delay: 0.8 + monthIndex * 0.05,
                 duration: 0.4,
-                ease: [0.25, 0.46, 0.45, 0.94]
+                ease: [0.25, 0.46, 0.45, 0.94],
               }}
             >
               {/* Month Label with Typography Excellence */}
@@ -611,13 +630,13 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
                     cell.isHovered && 'hovered-day'
                   )}
                   style={{
-                    backgroundColor: cell.isValidDay 
+                    backgroundColor: cell.isValidDay
                       ? quantumConfig.enableColorPsychology
                         ? getHeatColor(cell.heatIntensity)
                         : DESIGN_THEMES[theme].colors.surface
                       : 'transparent',
                     borderRadius: '6px',
-                    border: cell.isCurrentDay 
+                    border: cell.isCurrentDay
                       ? `2px solid ${DESIGN_THEMES[theme].colors.primary}`
                       : cell.isSelected
                         ? `2px solid ${DESIGN_THEMES[theme].colors.accent}`
@@ -631,11 +650,11 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{
-                    delay: 0.8 + (monthIndex * 0.05) + (cellIndex * 0.002),
+                    delay: 0.8 + monthIndex * 0.05 + cellIndex * 0.002,
                     duration: 0.3,
                     type: 'spring',
                     stiffness: 400,
-                    damping: 30
+                    damping: 30,
                   }}
                   whileHover={cell.isValidDay ? createMicroInteraction('hover') : {}}
                   whileTap={cell.isValidDay ? createMicroInteraction('press') : {}}
@@ -648,14 +667,14 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
                         className="day-number absolute top-1 left-1"
                         style={{
                           ...getTypographyStyle('day'),
-                          color: cell.isCurrentDay 
+                          color: cell.isCurrentDay
                             ? DESIGN_THEMES[theme].colors.primary
                             : DESIGN_THEMES[theme].colors.text,
                           fontWeight: cell.isCurrentDay ? 700 : 500,
                         }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 1.0 + (cellIndex * 0.001) }}
+                        transition={{ delay: 1.0 + cellIndex * 0.001 }}
                       >
                         {cell.dayNumber}
                       </motion.div>
@@ -666,11 +685,11 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
                           className="event-indicators absolute bottom-1 right-1"
                           initial={{ opacity: 0, scale: 0 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          transition={{ 
-                            delay: 1.2 + (cellIndex * 0.001),
+                          transition={{
+                            delay: 1.2 + cellIndex * 0.001,
                             type: 'spring',
                             stiffness: 500,
-                            damping: 35
+                            damping: 35,
                           }}
                         >
                           {/* Multiple Event Dots (Timepage style) */}
@@ -680,12 +699,13 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
                                 key={event.id}
                                 className="event-dot w-2 h-2 rounded-full"
                                 style={{
-                                  backgroundColor: event.color || DESIGN_THEMES[theme].colors.accent,
+                                  backgroundColor:
+                                    event.color || DESIGN_THEMES[theme].colors.accent,
                                   boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
                                 }}
                                 initial={{ opacity: 0, y: 5 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 1.4 + (eventIndex * 0.1) }}
+                                transition={{ delay: 1.4 + eventIndex * 0.1 }}
                                 whileHover={{ scale: 1.3 }}
                               />
                             ))}
@@ -717,7 +737,7 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
                           }}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          transition={{ delay: 1.5 + (cellIndex * 0.001) }}
+                          transition={{ delay: 1.5 + cellIndex * 0.001 }}
                         />
                       )}
                     </>
@@ -738,9 +758,7 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
           transition={{ delay: 2.0 }}
         >
           <details className="bg-black/90 text-green-400 rounded-lg p-4 max-w-md">
-            <summary className="cursor-pointer font-mono text-sm">
-              🛠️ Quantum Debug Console
-            </summary>
+            <summary className="cursor-pointer font-mono text-sm">🛠️ Quantum Debug Console</summary>
             <pre className="text-xs font-mono mt-2 whitespace-pre-wrap">
               {quantumFeaturesStatus}
             </pre>

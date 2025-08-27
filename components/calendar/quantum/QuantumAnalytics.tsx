@@ -2,18 +2,18 @@
 
 /**
  * QuantumAnalytics - Advanced Analytics and Performance Monitoring
- * 
+ *
  * Comprehensive analytics system for tracking quantum feature performance,
  * user engagement, and continuous improvement opportunities.
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   Activity,
@@ -29,10 +29,10 @@ import {
 } from 'lucide-react';
 
 import type {
-  QuantumPerformanceMetrics,
   QuantumEngagementMetrics,
   QuantumEventData,
   QuantumFeatureFlags,
+  QuantumPerformanceMetrics,
   QuantumVariant,
 } from '@/types/quantum-calendar';
 
@@ -126,8 +126,8 @@ const PERFORMANCE_BUDGETS: PerformanceBudget[] = [
 function calculatePerformanceScore(metrics: QuantumPerformanceMetrics): number {
   const weights = {
     renderTime: 0.25,
-    firstInputDelay: 0.20,
-    largestContentfulPaint: 0.20,
+    firstInputDelay: 0.2,
+    largestContentfulPaint: 0.2,
     cumulativeLayoutShift: 0.15,
     scrollSmoothness: 0.15,
     memoryUsage: 0.05,
@@ -144,7 +144,7 @@ function calculatePerformanceScore(metrics: QuantumPerformanceMetrics): number {
   };
 
   const score = Object.entries(weights).reduce((acc, [key, weight]) => {
-    return acc + (normalizedMetrics[key as keyof typeof normalizedMetrics] * weight);
+    return acc + normalizedMetrics[key as keyof typeof normalizedMetrics] * weight;
   }, 0);
 
   return Math.max(0, Math.min(100, score));
@@ -156,7 +156,7 @@ function calculatePerformanceScore(metrics: QuantumPerformanceMetrics): number {
 function calculateTrend(current: number, previous: number): MetricTrend {
   const change = current - previous;
   const changePercent = previous !== 0 ? (change / previous) * 100 : 0;
-  
+
   let trend: MetricTrend['trend'] = 'stable';
   if (Math.abs(changePercent) > 5) {
     trend = change > 0 ? 'up' : 'down';
@@ -240,32 +240,53 @@ function PerformanceOverview({
     switch (budget.name) {
       case 'Render Time':
         current = metrics.renderTime;
-        status = current <= budget.budget ? 'good' : current <= budget.budget * 1.5 ? 'warning' : 'critical';
+        status =
+          current <= budget.budget
+            ? 'good'
+            : current <= budget.budget * 1.5
+              ? 'warning'
+              : 'critical';
         break;
       case 'Memory Usage':
         current = metrics.memoryUsage;
-        status = current <= budget.budget ? 'good' : current <= budget.budget * 1.5 ? 'warning' : 'critical';
+        status =
+          current <= budget.budget
+            ? 'good'
+            : current <= budget.budget * 1.5
+              ? 'warning'
+              : 'critical';
         break;
       case 'First Input Delay':
         current = metrics.firstInputDelay;
-        status = current <= budget.budget ? 'good' : current <= budget.budget * 1.5 ? 'warning' : 'critical';
+        status =
+          current <= budget.budget
+            ? 'good'
+            : current <= budget.budget * 1.5
+              ? 'warning'
+              : 'critical';
         break;
       case 'Cumulative Layout Shift':
         current = metrics.cumulativeLayoutShift;
-        status = current <= budget.budget ? 'good' : current <= budget.budget * 2 ? 'warning' : 'critical';
+        status =
+          current <= budget.budget ? 'good' : current <= budget.budget * 2 ? 'warning' : 'critical';
         break;
       case 'Scroll Smoothness':
         current = metrics.scrollSmoothness;
-        status = current >= budget.budget ? 'good' : current >= budget.budget * 0.9 ? 'warning' : 'critical';
+        status =
+          current >= budget.budget
+            ? 'good'
+            : current >= budget.budget * 0.9
+              ? 'warning'
+              : 'critical';
         break;
     }
 
     return { ...budget, current, status };
   });
 
-  const goodCount = budgets.filter(b => b.status === 'good').length;
-  const warningCount = budgets.filter(b => b.status === 'warning').length;
-  const criticalCount = budgets.filter(b => b.status === 'critical').length;
+  const goodCount = budgets.filter((b) => b.status === 'good').length;
+  const warningCount = budgets.filter((b) => b.status === 'warning').length;
+  const criticalCount = budgets.filter((b) => b.status === 'critical').length;
 
   return (
     <div className="space-y-4">
@@ -273,8 +294,20 @@ function PerformanceOverview({
       <div className="p-4 border rounded-lg">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold">Performance Score</h3>
-          <Badge variant={performanceScore >= 90 ? 'default' : performanceScore >= 70 ? 'secondary' : 'destructive'}>
-            {performanceScore >= 90 ? 'Excellent' : performanceScore >= 70 ? 'Good' : 'Needs Improvement'}
+          <Badge
+            variant={
+              performanceScore >= 90
+                ? 'default'
+                : performanceScore >= 70
+                  ? 'secondary'
+                  : 'destructive'
+            }
+          >
+            {performanceScore >= 90
+              ? 'Excellent'
+              : performanceScore >= 70
+                ? 'Good'
+                : 'Needs Improvement'}
           </Badge>
         </div>
         <div className="flex items-center gap-4">
@@ -306,7 +339,15 @@ function PerformanceOverview({
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <span className="font-medium">{budget.name}</span>
-                <Badge variant={budget.status === 'good' ? 'default' : budget.status === 'warning' ? 'secondary' : 'destructive'}>
+                <Badge
+                  variant={
+                    budget.status === 'good'
+                      ? 'default'
+                      : budget.status === 'warning'
+                        ? 'secondary'
+                        : 'destructive'
+                  }
+                >
                   {budget.status}
                 </Badge>
               </div>
@@ -314,17 +355,16 @@ function PerformanceOverview({
                 {formatMetricValue(budget.current, budget.unit)}
               </div>
             </div>
-            <div className="text-xs text-muted-foreground mb-2">
-              {budget.description}
-            </div>
+            <div className="text-xs text-muted-foreground mb-2">{budget.description}</div>
             <div className="flex items-center gap-2">
               <div className="flex-1">
-                <Progress 
-                  value={budget.name === 'Scroll Smoothness' 
-                    ? budget.current
-                    : Math.max(0, 100 - (budget.current / budget.budget) * 100)
-                  } 
-                  className="h-1" 
+                <Progress
+                  value={
+                    budget.name === 'Scroll Smoothness'
+                      ? budget.current
+                      : Math.max(0, 100 - (budget.current / budget.budget) * 100)
+                  }
+                  className="h-1"
                 />
               </div>
               <span className="text-xs text-muted-foreground">
@@ -342,18 +382,21 @@ function PerformanceOverview({
  * User engagement metrics display
  */
 function EngagementMetrics({ metrics }: { metrics: QuantumEngagementMetrics }) {
-  const engagementScore = (
-    metrics.taskCompletionRate * 0.3 +
-    (metrics.sessionDuration / 60) * 0.1 + // Normalize to hours
-    (metrics.userRetentionRate || 0) * 0.3 +
-    (metrics.featureFeedbackScore / 5) * 0.3
-  ) * 100;
+  const engagementScore =
+    (metrics.taskCompletionRate * 0.3 +
+      (metrics.sessionDuration / 60) * 0.1 + // Normalize to hours
+      (metrics.userRetentionRate || 0) * 0.3 +
+      (metrics.featureFeedbackScore / 5) * 0.3) *
+    100;
 
   const topFeatures = Object.entries(metrics.featureUtilization)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 5)
     .map(([feature, utilization]) => ({
-      feature: feature.replace(/^enable/, '').replace(/([A-Z])/g, ' $1').toLowerCase(),
+      feature: feature
+        .replace(/^enable/, '')
+        .replace(/([A-Z])/g, ' $1')
+        .toLowerCase(),
       utilization: utilization * 100,
     }));
 
@@ -363,7 +406,15 @@ function EngagementMetrics({ metrics }: { metrics: QuantumEngagementMetrics }) {
       <div className="p-4 border rounded-lg">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold">Engagement Score</h3>
-          <Badge variant={engagementScore >= 80 ? 'default' : engagementScore >= 60 ? 'secondary' : 'destructive'}>
+          <Badge
+            variant={
+              engagementScore >= 80
+                ? 'default'
+                : engagementScore >= 60
+                  ? 'secondary'
+                  : 'destructive'
+            }
+          >
             {engagementScore >= 80 ? 'High' : engagementScore >= 60 ? 'Medium' : 'Low'}
           </Badge>
         </div>
@@ -379,7 +430,9 @@ function EngagementMetrics({ metrics }: { metrics: QuantumEngagementMetrics }) {
       <div className="grid grid-cols-2 gap-3">
         <div className="p-3 border rounded-lg">
           <div className="text-sm text-muted-foreground">Task Completion</div>
-          <div className="text-xl font-semibold">{(metrics.taskCompletionRate * 100).toFixed(1)}%</div>
+          <div className="text-xl font-semibold">
+            {(metrics.taskCompletionRate * 100).toFixed(1)}%
+          </div>
         </div>
         <div className="p-3 border rounded-lg">
           <div className="text-sm text-muted-foreground">Session Duration</div>
@@ -387,11 +440,15 @@ function EngagementMetrics({ metrics }: { metrics: QuantumEngagementMetrics }) {
         </div>
         <div className="p-3 border rounded-lg">
           <div className="text-sm text-muted-foreground">Events Created</div>
-          <div className="text-xl font-semibold">{metrics.averageEventsCreatedPerSession.toFixed(1)}</div>
+          <div className="text-xl font-semibold">
+            {metrics.averageEventsCreatedPerSession.toFixed(1)}
+          </div>
         </div>
         <div className="p-3 border rounded-lg">
           <div className="text-sm text-muted-foreground">Error Recovery</div>
-          <div className="text-xl font-semibold">{(metrics.errorRecoveryRate * 100).toFixed(1)}%</div>
+          <div className="text-xl font-semibold">
+            {(metrics.errorRecoveryRate * 100).toFixed(1)}%
+          </div>
         </div>
       </div>
 
@@ -417,12 +474,8 @@ function EngagementMetrics({ metrics }: { metrics: QuantumEngagementMetrics }) {
       <div className="p-4 border rounded-lg">
         <h4 className="font-medium mb-2">Primary Interaction</h4>
         <div className="flex items-center gap-2">
-          <div className="text-lg font-semibold capitalize">
-            {metrics.primaryInteractionMethod}
-          </div>
-          <Badge variant="outline">
-            {metrics.calendarNavigationPattern}
-          </Badge>
+          <div className="text-lg font-semibold capitalize">{metrics.primaryInteractionMethod}</div>
+          <Badge variant="outline">{metrics.calendarNavigationPattern}</Badge>
         </div>
       </div>
     </div>
@@ -440,9 +493,13 @@ function FeatureAnalysis({
   engagementMetrics: QuantumEngagementMetrics;
 }) {
   const features = Object.entries(featureFlags).map(([flag, enabled]) => {
-    const utilization = engagementMetrics.featureUtilization[flag as keyof QuantumFeatureFlags] || 0;
-    const name = flag.replace(/^enable/, '').replace(/([A-Z])/g, ' $1').toLowerCase();
-    
+    const utilization =
+      engagementMetrics.featureUtilization[flag as keyof QuantumFeatureFlags] || 0;
+    const name = flag
+      .replace(/^enable/, '')
+      .replace(/([A-Z])/g, ' $1')
+      .toLowerCase();
+
     return {
       flag,
       name: name.charAt(0).toUpperCase() + name.slice(1),
@@ -452,7 +509,7 @@ function FeatureAnalysis({
     };
   });
 
-  const enabledFeatures = features.filter(f => f.enabled);
+  const enabledFeatures = features.filter((f) => f.enabled);
   const utilizationScore = calculateFeatureUtilization(featureFlags, engagementMetrics);
 
   return (
@@ -461,7 +518,15 @@ function FeatureAnalysis({
       <div className="p-4 border rounded-lg">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-semibold">Feature Utilization</h3>
-          <Badge variant={utilizationScore >= 70 ? 'default' : utilizationScore >= 50 ? 'secondary' : 'destructive'}>
+          <Badge
+            variant={
+              utilizationScore >= 70
+                ? 'default'
+                : utilizationScore >= 50
+                  ? 'secondary'
+                  : 'destructive'
+            }
+          >
             {utilizationScore >= 70 ? 'High' : utilizationScore >= 50 ? 'Medium' : 'Low'}
           </Badge>
         </div>
@@ -489,17 +554,13 @@ function FeatureAnalysis({
                 <Badge variant="secondary">{feature.category}</Badge>
               </div>
               {feature.enabled && (
-                <div className="text-sm font-semibold">
-                  {feature.utilization.toFixed(1)}%
-                </div>
+                <div className="text-sm font-semibold">{feature.utilization.toFixed(1)}%</div>
               )}
             </div>
             {feature.enabled && (
               <div className="flex items-center gap-2">
                 <Progress value={feature.utilization} className="flex-1 h-1" />
-                <span className="text-xs text-muted-foreground">
-                  Usage Rate
-                </span>
+                <span className="text-xs text-muted-foreground">Usage Rate</span>
               </div>
             )}
           </div>
@@ -511,7 +572,11 @@ function FeatureAnalysis({
 
 // Helper function to categorize features
 function getFeatureCategory(flag: string): string {
-  if (flag.includes('Subgrid') || flag.includes('ContainerQueries') || flag.includes('FluidTypography')) {
+  if (
+    flag.includes('Subgrid') ||
+    flag.includes('ContainerQueries') ||
+    flag.includes('FluidTypography')
+  ) {
     return 'CSS';
   }
   if (flag.includes('Physics') || flag.includes('Transitions') || flag.includes('Parallax')) {
@@ -574,7 +639,15 @@ export function QuantumAnalytics({
     URL.revokeObjectURL(url);
 
     onExportAnalytics?.();
-  }, [sessionId, performanceMetrics, engagementMetrics, featureFlags, activeVariant, performanceScore, onExportAnalytics]);
+  }, [
+    sessionId,
+    performanceMetrics,
+    engagementMetrics,
+    featureFlags,
+    activeVariant,
+    performanceScore,
+    onExportAnalytics,
+  ]);
 
   if (!isVisible) return null;
 
@@ -622,9 +695,9 @@ export function QuantumAnalytics({
             </TabsList>
 
             <TabsContent value="performance" className="mt-4">
-              <PerformanceOverview 
-                metrics={performanceMetrics} 
-                performanceScore={performanceScore} 
+              <PerformanceOverview
+                metrics={performanceMetrics}
+                performanceScore={performanceScore}
               />
             </TabsContent>
 
@@ -633,10 +706,7 @@ export function QuantumAnalytics({
             </TabsContent>
 
             <TabsContent value="features" className="mt-4">
-              <FeatureAnalysis 
-                featureFlags={featureFlags} 
-                engagementMetrics={engagementMetrics} 
-              />
+              <FeatureAnalysis featureFlags={featureFlags} engagementMetrics={engagementMetrics} />
             </TabsContent>
           </Tabs>
         </CardContent>

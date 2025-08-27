@@ -1,17 +1,25 @@
 /**
  * CheatCal 60+ FPS Animation Framework
- * 
+ *
  * Enterprise-grade animation system combining Timepage sophistication
  * with controversial elements for money-focused professional interface.
- * 
+ *
  * Performance Target: 60+ FPS across all devices and interactions
  * Design Quality: Award-winning smoothness with controversial polish
- * 
+ *
  * @version 1.0.0 (High Performance Animation Release)
  * @author CheatCal Animation Team
  */
 
-import { motion, useAnimation, useMotionValue, useSpring, useTransform, AnimationControls, MotionValue } from 'framer-motion';
+import {
+  type AnimationControls,
+  type MotionValue,
+  motion,
+  useAnimation,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CheatCalTheme } from '../themes/CheatCalThemeSystem';
 
@@ -74,20 +82,20 @@ export interface AnimationConfig {
   gpu_acceleration: boolean;
   reduced_motion_respect: boolean;
   battery_saving_mode: boolean;
-  
+
   // Timing configurations
-  micro_duration: number;        // Button interactions
-  transition_duration: number;   // View changes
-  celebration_duration: number;  // Success animations
-  ambient_cycle: number;         // Background effects
-  
+  micro_duration: number; // Button interactions
+  transition_duration: number; // View changes
+  celebration_duration: number; // Success animations
+  ambient_cycle: number; // Background effects
+
   // Spring physics
   spring_configs: {
     gentle: { stiffness: number; damping: number; mass: number };
     snappy: { stiffness: number; damping: number; mass: number };
     dramatic: { stiffness: number; damping: number; mass: number };
   };
-  
+
   // Controversial elements
   controversy_elements: {
     monitoring_pulse_enabled: boolean;
@@ -105,24 +113,24 @@ const DEFAULT_ANIMATION_CONFIG: AnimationConfig = {
   gpu_acceleration: true,
   reduced_motion_respect: true,
   battery_saving_mode: false,
-  
+
   micro_duration: 150,
   transition_duration: 300,
   celebration_duration: 600,
   ambient_cycle: 3000,
-  
+
   spring_configs: {
     gentle: { stiffness: 300, damping: 30, mass: 0.8 },
     snappy: { stiffness: 400, damping: 25, mass: 0.6 },
-    dramatic: { stiffness: 500, damping: 20, mass: 1.0 }
+    dramatic: { stiffness: 500, damping: 20, mass: 1.0 },
   },
-  
+
   controversy_elements: {
     monitoring_pulse_enabled: true,
     success_explosion_intensity: 'moderate',
     value_animation_style: 'celebratory',
-    elite_status_effects: true
-  }
+    elite_status_effects: true,
+  },
 };
 
 /**
@@ -136,10 +144,10 @@ export class CheatCalAnimationSystem {
   constructor(config: AnimationConfig = DEFAULT_ANIMATION_CONFIG) {
     this.config = config;
     this.performanceMonitor = new PerformanceMonitor();
-    
-    console.log("⚡ CheatCal Animation System initializing...");
+
+    console.log('⚡ CheatCal Animation System initializing...');
     console.log(ANIMATION_FRAMEWORK_ARCHITECTURE);
-    
+
     this.initializePerformanceOptimization();
   }
 
@@ -151,7 +159,7 @@ export class CheatCalAnimationSystem {
     if (this.config.gpu_acceleration) {
       document.documentElement.style.setProperty('--animation-gpu-hint', 'transform3d(0,0,0)');
     }
-    
+
     // Respect reduced motion preferences
     if (this.config.reduced_motion_respect) {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -161,23 +169,23 @@ export class CheatCalAnimationSystem {
         this.config.celebration_duration = 200; // Minimal celebration
       }
     }
-    
+
     // Setup performance monitoring
     this.setupPerformanceMonitoring();
-    
-    console.log("✅ Animation performance optimization initialized");
+
+    console.log('✅ Animation performance optimization initialized');
   }
 
   /**
    * Create Money Value Animation (Financial Psychology)
    */
   createMoneyValueAnimation(
-    startValue: number, 
-    endValue: number, 
+    startValue: number,
+    endValue: number,
     onUpdate?: (value: number) => void
   ): AnimationControls {
     const controls = useAnimation();
-    
+
     const animateValue = async () => {
       await controls.start({
         value: endValue,
@@ -189,8 +197,8 @@ export class CheatCalAnimationSystem {
               const currentValue = startValue + (latest.value - startValue);
               onUpdate(Math.round(currentValue));
             }
-          }
-        }
+          },
+        },
       });
     };
 
@@ -202,19 +210,19 @@ export class CheatCalAnimationSystem {
    */
   createMonitoringPulseAnimation(): MotionValue {
     const pulseValue = useMotionValue(0);
-    
+
     useEffect(() => {
       if (!this.config.controversy_elements.monitoring_pulse_enabled) return;
-      
+
       const interval = setInterval(() => {
         // Pulse animation for monitoring indicators
         pulseValue.set(1);
         setTimeout(() => pulseValue.set(0), 300);
       }, this.config.ambient_cycle);
-      
+
       return () => clearInterval(interval);
     }, []);
-    
+
     return pulseValue;
   }
 
@@ -225,32 +233,36 @@ export class CheatCalAnimationSystem {
     intensity: 'subtle' | 'moderate' | 'explosive' = 'moderate'
   ): AnimationControls {
     const controls = useAnimation();
-    
+
     const celebrate = async () => {
       const animations = {
         subtle: {
           scale: [1, 1.05, 1],
           filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)'],
-          transition: { duration: 0.4, ease: 'easeOut' }
+          transition: { duration: 0.4, ease: 'easeOut' },
         },
         moderate: {
           scale: [1, 1.1, 1],
           rotate: [0, 2, 0],
           filter: ['brightness(1)', 'brightness(1.3)', 'brightness(1)'],
-          transition: { duration: 0.6, ease: [0.68, -0.55, 0.265, 1.55] }
+          transition: { duration: 0.6, ease: [0.68, -0.55, 0.265, 1.55] },
         },
         explosive: {
           scale: [1, 1.15, 1],
           rotate: [0, 5, 0],
           filter: ['brightness(1)', 'brightness(1.5)', 'brightness(1)'],
-          boxShadow: ['0 0 0 rgba(16, 185, 129, 0)', '0 0 30px rgba(16, 185, 129, 0.8)', '0 0 0 rgba(16, 185, 129, 0)'],
-          transition: { duration: 0.8, ease: [0.68, -0.55, 0.265, 1.55] }
-        }
+          boxShadow: [
+            '0 0 0 rgba(16, 185, 129, 0)',
+            '0 0 30px rgba(16, 185, 129, 0.8)',
+            '0 0 0 rgba(16, 185, 129, 0)',
+          ],
+          transition: { duration: 0.8, ease: [0.68, -0.55, 0.265, 1.55] },
+        },
       };
-      
+
       await controls.start(animations[intensity]);
     };
-    
+
     return { ...controls, celebrate };
   }
 
@@ -260,34 +272,36 @@ export class CheatCalAnimationSystem {
   createInvisibleOverlayAnimation(visible: boolean): any {
     return {
       initial: { opacity: 0, scale: 0.95, y: 10 },
-      animate: visible ? { 
-        opacity: 0.15, 
-        scale: 1, 
-        y: 0,
-        transition: {
-          duration: this.config.transition_duration / 1000,
-          ease: [0.16, 1, 0.3, 1] // Smooth emergence
-        }
-      } : {
-        opacity: 0,
-        scale: 0.95, 
-        y: 10,
-        transition: {
-          duration: this.config.micro_duration / 1000,
-          ease: 'easeOut'
-        }
-      },
+      animate: visible
+        ? {
+            opacity: 0.15,
+            scale: 1,
+            y: 0,
+            transition: {
+              duration: this.config.transition_duration / 1000,
+              ease: [0.16, 1, 0.3, 1], // Smooth emergence
+            },
+          }
+        : {
+            opacity: 0,
+            scale: 0.95,
+            y: 10,
+            transition: {
+              duration: this.config.micro_duration / 1000,
+              ease: 'easeOut',
+            },
+          },
       whileHover: {
-        opacity: 0.90,
+        opacity: 0.9,
         scale: 1.02,
-        transition: { duration: 0.2 }
+        transition: { duration: 0.2 },
       },
       exit: {
         opacity: 0,
         scale: 0.9,
         y: -5,
-        transition: { duration: 0.25 }
-      }
+        transition: { duration: 0.25 },
+      },
     };
   }
 
@@ -302,15 +316,15 @@ export class CheatCalAnimationSystem {
         transition: {
           type: 'spring',
           stiffness: this.config.spring_configs.snappy.stiffness,
-          damping: this.config.spring_configs.snappy.damping
-        }
+          damping: this.config.spring_configs.snappy.damping,
+        },
       },
       whileTap: {
         scale: 0.98,
-        transition: { duration: this.config.micro_duration / 1000 }
+        transition: { duration: this.config.micro_duration / 1000 },
       },
       initial: { scale: 1 },
-      animate: { scale: 1 }
+      animate: { scale: 1 },
     };
   }
 
@@ -320,26 +334,26 @@ export class CheatCalAnimationSystem {
   createValueCounterAnimation(startValue: number, endValue: number): any {
     return {
       initial: { opacity: 0, scale: 0.8 },
-      animate: { 
-        opacity: 1, 
+      animate: {
+        opacity: 1,
         scale: 1,
         transition: {
           opacity: { duration: 0.3 },
           scale: {
             type: 'spring',
             stiffness: this.config.spring_configs.gentle.stiffness,
-            damping: this.config.spring_configs.gentle.damping
-          }
-        }
+            damping: this.config.spring_configs.gentle.damping,
+          },
+        },
       },
       // Custom value counting animation
       variants: {
         counting: {
           scale: [1, 1.05, 1],
           color: ['#10B981', '#F59E0B', '#10B981'], // Green -> Gold -> Green
-          transition: { duration: 0.8, ease: 'easeInOut' }
-        }
-      }
+          transition: { duration: 0.8, ease: 'easeInOut' },
+        },
+      },
     };
   }
 
@@ -349,14 +363,14 @@ export class CheatCalAnimationSystem {
   createControversyWarningAnimation(): any {
     return {
       initial: { opacity: 0, x: 20 },
-      animate: { 
-        opacity: 1, 
+      animate: {
+        opacity: 1,
         x: 0,
         transition: {
           type: 'spring',
           stiffness: 400,
-          damping: 25
-        }
+          damping: 25,
+        },
       },
       // Attention-grabbing pulse for high controversy
       variants: {
@@ -365,18 +379,18 @@ export class CheatCalAnimationSystem {
           scale: [1, 1.02, 1],
           transition: {
             duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut'
-          }
+            repeat: Number.POSITIVE_INFINITY,
+            ease: 'easeInOut',
+          },
         },
         urgent: {
           x: [0, -3, 3, -3, 3, 0],
           transition: {
             duration: 0.5,
-            ease: 'easeInOut'
-          }
-        }
-      }
+            ease: 'easeInOut',
+          },
+        },
+      },
     };
   }
 
@@ -386,18 +400,18 @@ export class CheatCalAnimationSystem {
   createEliteStatusAnimation(): any {
     return {
       initial: { opacity: 0, rotateY: -15 },
-      animate: { 
-        opacity: 1, 
+      animate: {
+        opacity: 1,
         rotateY: 0,
         transition: {
           duration: 0.6,
-          ease: [0.25, 0.46, 0.45, 0.94]
-        }
+          ease: [0.25, 0.46, 0.45, 0.94],
+        },
       },
       whileHover: {
         rotateY: 2,
         scale: 1.02,
-        transition: { duration: 0.2 }
+        transition: { duration: 0.2 },
       },
       // Elite glow effect
       variants: {
@@ -405,11 +419,11 @@ export class CheatCalAnimationSystem {
           boxShadow: [
             '0 0 0 rgba(212, 175, 55, 0)',
             '0 0 20px rgba(212, 175, 55, 0.3)',
-            '0 0 0 rgba(212, 175, 55, 0)'
+            '0 0 0 rgba(212, 175, 55, 0)',
           ],
-          transition: { duration: 2, repeat: Infinity }
-        }
-      }
+          transition: { duration: 2, repeat: Number.POSITIVE_INFINITY },
+        },
+      },
     };
   }
 
@@ -419,28 +433,28 @@ export class CheatCalAnimationSystem {
   private setupPerformanceMonitoring(): void {
     let frameCount = 0;
     let lastTime = performance.now();
-    
+
     const measureFPS = () => {
       const currentTime = performance.now();
       frameCount++;
-      
+
       if (currentTime >= lastTime + 1000) {
         const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
         this.performanceMonitor.recordFPS(fps);
-        
+
         // Warn if FPS drops below target
         if (fps < this.config.fps_target) {
           console.warn(`⚠️ CheatCal FPS below target: ${fps}/${this.config.fps_target}`);
           this.optimizeForPerformance();
         }
-        
+
         frameCount = 0;
         lastTime = currentTime;
       }
-      
+
       requestAnimationFrame(measureFPS);
     };
-    
+
     requestAnimationFrame(measureFPS);
   }
 
@@ -448,20 +462,20 @@ export class CheatCalAnimationSystem {
    * Optimize Animations for Performance
    */
   private optimizeForPerformance(): void {
-    console.log("🔧 Optimizing animations for performance...");
-    
+    console.log('🔧 Optimizing animations for performance...');
+
     // Reduce non-essential animations
     this.config.controversy_elements.monitoring_pulse_enabled = false;
     this.config.ambient_cycle = 5000; // Slow down ambient animations
-    
+
     // Simplify spring physics
     this.config.spring_configs = {
       gentle: { stiffness: 200, damping: 40, mass: 1.0 },
       snappy: { stiffness: 300, damping: 35, mass: 0.8 },
-      dramatic: { stiffness: 400, damping: 30, mass: 1.2 }
+      dramatic: { stiffness: 400, damping: 30, mass: 1.2 },
     };
-    
-    console.log("✅ Animation optimization applied");
+
+    console.log('✅ Animation optimization applied');
   }
 
   /**
@@ -473,25 +487,25 @@ export class CheatCalAnimationSystem {
       overlay: this.createInvisibleOverlayAnimation(true),
       celebration: this.createSuccessCelebration(),
       monitoring: this.createMonitoringPulseAnimation(),
-      elite_status: this.createEliteStatusAnimation()
+      elite_status: this.createEliteStatusAnimation(),
     };
 
     const animation = baseAnimations[animationType as keyof typeof baseAnimations];
-    
+
     // Apply theme-specific modifications
     if (theme.controversy_level === 'chaos') {
       // Maximum chaos animations
       if (animation.whileHover) {
         animation.whileHover.scale = 1.05; // More dramatic hover
-        animation.whileHover.rotate = 1;   // Slight rotation for chaos
+        animation.whileHover.rotate = 1; // Slight rotation for chaos
       }
     } else if (theme.controversy_level === 'minimal') {
-      // Minimal controversy animations  
+      // Minimal controversy animations
       if (animation.whileHover) {
         animation.whileHover.scale = 1.01; // Subtle hover
       }
     }
-    
+
     return animation;
   }
 }
@@ -503,12 +517,12 @@ export class CheatCalAnimationSystem {
 /**
  * Hook for Money Value Animation
  */
-export const useMoneyValueAnimation = (value: number, previousValue: number = 0) => {
+export const useMoneyValueAnimation = (value: number, previousValue = 0) => {
   const displayValue = useMotionValue(previousValue);
   const animatedValue = useSpring(displayValue, {
     stiffness: 300,
     damping: 30,
-    restDelta: 1
+    restDelta: 1,
   });
 
   useEffect(() => {
@@ -521,13 +535,13 @@ export const useMoneyValueAnimation = (value: number, previousValue: number = 0)
 /**
  * Hook for Controversy Pulse Animation
  */
-export const useControversyPulse = (enabled: boolean = true) => {
+export const useControversyPulse = (enabled = true) => {
   const pulseValue = useMotionValue(1);
   const pulseSpring = useSpring(pulseValue, { stiffness: 200, damping: 20 });
 
   useEffect(() => {
     if (!enabled) return;
-    
+
     const interval = setInterval(() => {
       pulseValue.set(0.7);
       setTimeout(() => pulseValue.set(1), 300);
@@ -546,33 +560,36 @@ export const useEliteAchievement = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const controls = useAnimation();
 
-  const triggerAchievement = useCallback(async (intensity: 'subtle' | 'explosive' = 'subtle') => {
-    if (isAnimating) return;
-    
-    setIsAnimating(true);
-    
-    const animations = {
-      subtle: {
-        scale: [1, 1.05, 1],
-        opacity: [1, 1.2, 1],
-        transition: { duration: 0.4 }
-      },
-      explosive: {
-        scale: [1, 1.1, 1.05, 1],
-        rotate: [0, 2, -1, 0],
-        boxShadow: [
-          '0 0 0 rgba(16, 185, 129, 0)',
-          '0 0 20px rgba(16, 185, 129, 0.6)',
-          '0 0 40px rgba(16, 185, 129, 0.8)',
-          '0 0 0 rgba(16, 185, 129, 0)'
-        ],
-        transition: { duration: 0.8, ease: [0.68, -0.55, 0.265, 1.55] }
-      }
-    };
-    
-    await controls.start(animations[intensity]);
-    setIsAnimating(false);
-  }, [controls, isAnimating]);
+  const triggerAchievement = useCallback(
+    async (intensity: 'subtle' | 'explosive' = 'subtle') => {
+      if (isAnimating) return;
+
+      setIsAnimating(true);
+
+      const animations = {
+        subtle: {
+          scale: [1, 1.05, 1],
+          opacity: [1, 1.2, 1],
+          transition: { duration: 0.4 },
+        },
+        explosive: {
+          scale: [1, 1.1, 1.05, 1],
+          rotate: [0, 2, -1, 0],
+          boxShadow: [
+            '0 0 0 rgba(16, 185, 129, 0)',
+            '0 0 20px rgba(16, 185, 129, 0.6)',
+            '0 0 40px rgba(16, 185, 129, 0.8)',
+            '0 0 0 rgba(16, 185, 129, 0)',
+          ],
+          transition: { duration: 0.8, ease: [0.68, -0.55, 0.265, 1.55] },
+        },
+      };
+
+      await controls.start(animations[intensity]);
+      setIsAnimating(false);
+    },
+    [controls, isAnimating]
+  );
 
   return { controls, triggerAchievement, isAnimating };
 };
@@ -584,18 +601,20 @@ export const useSophisticatedHover = (theme: CheatCalTheme) => {
   const hoverScale = useMotionValue(1);
   const hoverY = useMotionValue(0);
   const hoverShadow = useMotionValue(0);
-  
+
   const hoverAnimation = {
-    scale: useSpring(hoverScale, theme.name === 'maximum_chaos' ? 
-      { stiffness: 500, damping: 20 } : 
-      { stiffness: 300, damping: 30 }
+    scale: useSpring(
+      hoverScale,
+      theme.name === 'maximum_chaos'
+        ? { stiffness: 500, damping: 20 }
+        : { stiffness: 300, damping: 30 }
     ),
     y: useSpring(hoverY, { stiffness: 400, damping: 25 }),
     boxShadow: useTransform(
       hoverShadow,
       [0, 1],
       ['0 0 0 rgba(0,0,0,0)', '0 8px 32px rgba(0,0,0,0.12)']
-    )
+    ),
   };
 
   const handleHover = useCallback(() => {
@@ -606,7 +625,7 @@ export const useSophisticatedHover = (theme: CheatCalTheme) => {
 
   const handleHoverEnd = useCallback(() => {
     hoverScale.set(1);
-    hoverY.set(0);  
+    hoverY.set(0);
     hoverShadow.set(0);
   }, []);
 
@@ -644,9 +663,14 @@ class PerformanceMonitor {
       average_fps: this.getAverageFPS(),
       min_fps: Math.min(...this.fpsHistory),
       max_fps: Math.max(...this.fpsHistory),
-      performance_grade: this.getAverageFPS() >= 60 ? 'excellent' : 
-                        this.getAverageFPS() >= 50 ? 'good' :
-                        this.getAverageFPS() >= 40 ? 'fair' : 'poor'
+      performance_grade:
+        this.getAverageFPS() >= 60
+          ? 'excellent'
+          : this.getAverageFPS() >= 50
+            ? 'good'
+            : this.getAverageFPS() >= 40
+              ? 'fair'
+              : 'poor',
     };
   }
 }
@@ -657,46 +681,46 @@ class PerformanceMonitor {
 export const CheatCalAnimationPresets = {
   // Standard sophisticated interactions
   sophisticated_card_hover: {
-    whileHover: { 
-      scale: 1.02, 
+    whileHover: {
+      scale: 1.02,
       y: -2,
       boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-      transition: { type: 'spring', stiffness: 300, damping: 30 }
-    }
+      transition: { type: 'spring', stiffness: 300, damping: 30 },
+    },
   },
-  
+
   // Money-focused value animations
   money_metric_update: {
     animate: { scale: [1, 1.05, 1] },
-    transition: { duration: 0.5, ease: [0.68, -0.55, 0.265, 1.55] }
+    transition: { duration: 0.5, ease: [0.68, -0.55, 0.265, 1.55] },
   },
-  
+
   // Controversial monitoring indicators
   monitoring_active: {
-    animate: { 
+    animate: {
       opacity: [1, 0.7, 1],
-      scale: [1, 1.01, 1]
+      scale: [1, 1.01, 1],
     },
-    transition: { duration: 3, repeat: Infinity, ease: 'easeInOut' }
+    transition: { duration: 3, repeat: Number.POSITIVE_INFINITY, ease: 'easeInOut' },
   },
-  
+
   // Elite achievement celebrations
   elite_achievement: {
     animate: {
       scale: [1, 1.1, 1],
       rotate: [0, 3, 0],
-      filter: ['brightness(1)', 'brightness(1.3)', 'brightness(1)']
+      filter: ['brightness(1)', 'brightness(1.3)', 'brightness(1)'],
     },
-    transition: { duration: 0.6, ease: [0.68, -0.55, 0.265, 1.55] }
+    transition: { duration: 0.6, ease: [0.68, -0.55, 0.265, 1.55] },
   },
-  
+
   // Invisible overlay emergence (Cluely-inspired)
   invisible_suggestion: {
     initial: { opacity: 0, scale: 0.95, y: 10 },
     animate: { opacity: 0.15, scale: 1, y: 0 },
-    whileHover: { opacity: 0.90, scale: 1.02 },
-    exit: { opacity: 0, scale: 0.9, y: -5 }
-  }
+    whileHover: { opacity: 0.9, scale: 1.02 },
+    exit: { opacity: 0, scale: 0.9, y: -5 },
+  },
 };
 
 /**
@@ -704,27 +728,26 @@ export const CheatCalAnimationPresets = {
  */
 export const useCheatCalAnimations = (theme: CheatCalTheme) => {
   const [animationSystem] = useState(() => new CheatCalAnimationSystem());
-  
+
   return {
     // Core animation creators
-    createMoneyAnimation: (start: number, end: number, onUpdate?: (value: number) => void) => 
+    createMoneyAnimation: (start: number, end: number, onUpdate?: (value: number) => void) =>
       animationSystem.createMoneyValueAnimation(start, end, onUpdate),
-    
+
     createSuccessAnimation: (intensity: 'subtle' | 'moderate' | 'explosive' = 'moderate') =>
       animationSystem.createSuccessCelebration(intensity),
-    
+
     createOverlayAnimation: (visible: boolean) =>
       animationSystem.createInvisibleOverlayAnimation(visible),
-    
+
     // Theme-aware animations
-    createThemeAnimation: (type: string) =>
-      animationSystem.createThemeAwareAnimation(theme, type),
-    
+    createThemeAnimation: (type: string) => animationSystem.createThemeAwareAnimation(theme, type),
+
     // Preset animations
     presets: CheatCalAnimationPresets,
-    
+
     // Performance monitoring
-    getPerformanceReport: () => animationSystem.performanceMonitor?.getPerformanceReport() || null
+    getPerformanceReport: () => animationSystem.performanceMonitor?.getPerformanceReport() || null,
   };
 };
 

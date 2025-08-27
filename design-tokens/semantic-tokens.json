@@ -1,0 +1,85 @@
+{
+  "color": {
+    "background": {
+      "value": "oklch(1.0 0 0)",
+      "type": "color",
+      "description": "Primary background color for main content areas"
+    },
+    "foreground": {
+      "value": "oklch(0.1884 0.0128 248.5103)",
+      "type": "color", 
+      "description": "Primary text color for high contrast readability"
+    },
+    "primary": {
+      "value": "oklch(0.6723 0.1606 244.9955)",
+      "type": "color",
+      "description": "Primary brand color for key UI elements"
+    },
+    "primaryForeground": {
+      "value": "oklch(1.0 0 0)",
+      "type": "color",
+      "description": "Text color for primary background elements"
+    },
+    "destructive": {
+      "value": "oklch(0.6188 0.2376 25.7658)",
+      "type": "color", 
+      "description": "Error and warning color for critical states"
+    },
+    "muted": {
+      "value": "oklch(0.9222 0.0013 286.3737)",
+      "type": "color",
+      "description": "Muted background for secondary content areas"
+    },
+    "mutedForeground": {
+      "value": "oklch(0.5637 0.0078 247.9662)",
+      "type": "color",
+      "description": "Text color for muted background areas"
+    },
+    "card": {
+      "value": "oklch(0.9784 0.0011 197.1387)",
+      "type": "color",
+      "description": "Background color for card components"
+    },
+    "cardForeground": {
+      "value": "oklch(0.1884 0.0128 248.5103)",
+      "type": "color",
+      "description": "Text color for card components"
+    },
+    "border": {
+      "value": "oklch(0.9317 0.0118 231.6594)",
+      "type": "color",
+      "description": "Default border color for UI elements"
+    }
+  },
+  "spacing": {
+    "base": {
+      "value": "1rem",
+      "type": "dimension",
+      "description": "Base spacing unit for consistent layout rhythm"
+    },
+    "sm": {
+      "value": "0.5rem", 
+      "type": "dimension",
+      "description": "Small spacing for compact layouts"
+    },
+    "lg": {
+      "value": "1.5rem",
+      "type": "dimension", 
+      "description": "Large spacing for generous layouts"
+    }
+  },
+  "typography": {
+    "fontSize": {
+      "base": {
+        "value": "1rem",
+        "type": "dimension",
+        "description": "Base font size for body text"
+      },
+      "lg": {
+        "value": "1.125rem",
+        "type": "dimension",
+        "description": "Large font size for headings"
+      }
+    }
+  }
+}

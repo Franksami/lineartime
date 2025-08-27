@@ -1,22 +1,22 @@
 /**
  * CheatCal Multi-Modal Context Engine - Enhanced Integration
- * 
+ *
  * Revolutionary context fusion system that combines visual, audio, calendar,
  * email, and document data to create comprehensive understanding superior to Cluely.
- * 
+ *
  * Core Innovation: "The AI that understands everything before suggesting anything"
  * Controversy: "Advanced surveillance for advanced optimization"
  * CheatCal Advantage: Calendar specialization + financial focus + coordination expertise
- * 
+ *
  * @version 2.0.0 (Enhanced Multi-Modal Release)
  * @author CheatCal AI Team
  */
 
-import { EnhancedCheatCalVision } from '../computer-vision/EnhancedCheatCalVision';
-import CheatCalSystemOverlay from '../../electron/CheatCalSystemOverlay';
 import { useCalendarEvents } from '@/hooks/useCalendarEvents';
 import { useSoundEffects } from '@/lib/sound-service';
-import { logger, logRevenueEvent } from '@/lib/utils/logger';
+import { logRevenueEvent, logger } from '@/lib/utils/logger';
+import CheatCalSystemOverlay from '../../electron/CheatCalSystemOverlay';
+import { EnhancedCheatCalVision } from '../computer-vision/EnhancedCheatCalVision';
 
 // ASCII Architecture Documentation
 const CONTEXT_ENGINE_ARCHITECTURE = `
@@ -84,7 +84,7 @@ interface MultiModalContext {
   email_context: EmailContext;
   audio_context: AudioContext;
   document_context: DocumentContext;
-  
+
   // Fusion results
   comprehensive_understanding: ContextualUnderstanding;
   optimization_opportunities: ContextualOptimization[];
@@ -116,72 +116,66 @@ interface ContextualOptimization {
  */
 export class CheatCalContextEngine {
   private visionEngine: CheatCalVisionEngine;
-  private isAnalyzing: boolean = false;
+  private isAnalyzing = false;
   private contextHistory: MultiModalContext[] = [];
 
   constructor() {
     this.visionEngine = new CheatCalVisionEngine();
-    logger.info("🧠 CheatCal Context Engine initializing...");
+    logger.info('🧠 CheatCal Context Engine initializing...');
     logger.info(CONTEXT_ENGINE_ARCHITECTURE);
   }
 
   /**
    * Initialize Multi-Modal Analysis System
-   * 
+   *
    * Sets up controversial but powerful multi-source data analysis
    * for comprehensive productivity optimization.
    */
   async initialize(): Promise<void> {
     try {
-      logger.info("🎯 Initializing controversial multi-modal analysis...");
+      logger.info('🎯 Initializing controversial multi-modal analysis...');
 
       // Initialize computer vision engine
       await this.visionEngine.initialize();
-      
+
       // Setup multi-modal data collection
       this.setupEmailMonitoring();
       this.setupCalendarIntegration();
       this.setupAudioAnalysis();
       this.setupDocumentTracking();
-      
+
       // Start continuous context analysis
       this.startContextualAnalysis();
-      
-      logger.info("🔥 Multi-modal context engine ready - Advanced productivity cheating enabled!");
-      
+
+      logger.info('🔥 Multi-modal context engine ready - Advanced productivity cheating enabled!');
     } catch (error) {
-      logger.error("Context engine initialization failed:", error);
+      logger.error('Context engine initialization failed:', error);
       throw new Error(`CheatCal Context Engine failed to initialize: ${error}`);
     }
   }
 
   /**
    * Analyze Current Multi-Modal Context
-   * 
+   *
    * Fuses data from all sources to create comprehensive understanding
    * of user's current situation and optimization opportunities.
    */
   async analyzeCurrentContext(): Promise<MultiModalContext> {
     if (!this.isAnalyzing) {
       this.isAnalyzing = true;
-      
+
       try {
-        logger.debug("🧠 Starting comprehensive context analysis...");
+        logger.debug('🧠 Starting comprehensive context analysis...');
 
         // Collect data from all sources simultaneously
-        const [
-          visualContext,
-          calendarContext, 
-          emailContext,
-          audioContext,
-          documentContext
-        ] = await Promise.all([
-          this.collectVisualContext(),
-          this.collectCalendarContext(),
-          this.collectEmailContext(),
-          this.collectAudioContext(),
-          this.collectDocumentContext()
-        ]);
+        const [visualContext, calendarContext, emailContext, audioContext, documentContext] =
+          await Promise.all([
+            this.collectVisualContext(),
+            this.collectCalendarContext(),
+            this.collectEmailContext(),
+            this.collectAudioContext(),
+            this.collectDocumentContext(),
+          ]);
 
         // Fuse all contexts into comprehensive understanding
         const comprehensiveUnderstanding = await this.fuseContexts({
@@ -189,11 +183,13 @@ export class CheatCalContextEngine {
           calendar_context: calendarContext,
           email_context: emailContext,
           audio_context: audioContext,
-          document_context: documentContext
+          document_context: documentContext,
         });
 
         // Generate contextual optimizations
-        const optimizations = await this.generateContextualOptimizations(comprehensiveUnderstanding);
+        const optimizations = await this.generateContextualOptimizations(
+          comprehensiveUnderstanding
+        );
 
         const multiModalContext: MultiModalContext = {
           visual_context: visualContext,
@@ -203,7 +199,7 @@ export class CheatCalContextEngine {
           document_context: documentContext,
           comprehensive_understanding: comprehensiveUnderstanding,
           optimization_opportunities: optimizations,
-          confidence_score: this.calculateOverallConfidence(comprehensiveUnderstanding)
+          confidence_score: this.calculateOverallConfidence(comprehensiveUnderstanding),
         };
 
         // Store in history for pattern learning
@@ -212,14 +208,13 @@ export class CheatCalContextEngine {
           this.contextHistory.shift(); // Keep last 100 for performance
         }
 
-        logger.info("🎯 Multi-modal context analysis complete", {
+        logger.info('🎯 Multi-modal context analysis complete', {
           opportunities: optimizations.length,
           total_value: optimizations.reduce((sum, opt) => sum + opt.value_estimate, 0),
-          confidence: multiModalContext.confidence_score
+          confidence: multiModalContext.confidence_score,
         });
 
         return multiModalContext;
-
       } finally {
         this.isAnalyzing = false;
       }
@@ -235,17 +230,16 @@ export class CheatCalContextEngine {
   private async collectVisualContext(): Promise<VisualContext> {
     try {
       const applicationContext = await this.visionEngine.analyzeScreenContent();
-      
+
       return {
         current_application: applicationContext.application,
         screen_content: applicationContext.content_analysis.text_content,
         ui_elements: applicationContext.content_analysis.ui_elements,
         workflow_state: applicationContext.content_analysis.workflow_state,
-        optimization_opportunities: applicationContext.optimization_opportunities
+        optimization_opportunities: applicationContext.optimization_opportunities,
       };
-      
     } catch (error) {
-      logger.warn("Visual context collection failed - Limited cheating capabilities", { error });
+      logger.warn('Visual context collection failed - Limited cheating capabilities', { error });
       return this.getEmptyVisualContext();
     }
   }
@@ -258,55 +252,55 @@ export class CheatCalContextEngine {
       // Integration with existing calendar infrastructure
       const calendarEvents = useCalendarEvents();
       const currentTime = new Date();
-      
+
       // Analyze upcoming events and conflicts
-      const upcomingEvents = calendarEvents.filter(event => 
-        event.startDate > currentTime && 
-        event.startDate <= new Date(currentTime.getTime() + 24 * 60 * 60 * 1000) // Next 24 hours
+      const upcomingEvents = calendarEvents.filter(
+        (event) =>
+          event.startDate > currentTime &&
+          event.startDate <= new Date(currentTime.getTime() + 24 * 60 * 60 * 1000) // Next 24 hours
       );
-      
+
       const conflicts = this.detectCalendarConflicts(upcomingEvents);
       const gaps = this.identifyScheduleGaps(upcomingEvents);
-      
+
       return {
         upcoming_events: upcomingEvents,
         schedule_conflicts: conflicts,
         available_gaps: gaps,
         coordination_opportunities: this.findCoordinationOpportunities(upcomingEvents),
-        optimal_timing_windows: this.calculateOptimalTimingWindows(upcomingEvents)
+        optimal_timing_windows: this.calculateOptimalTimingWindows(upcomingEvents),
       };
-      
     } catch (error) {
-      logger.warn("Calendar context collection failed", { error });
+      logger.warn('Calendar context collection failed', { error });
       return this.getEmptyCalendarContext();
     }
   }
 
   /**
    * Fuse All Contexts Into Comprehensive Understanding
-   * 
+   *
    * The controversial AI reasoning that combines all data sources
    * to understand user context better than they understand themselves.
    */
   private async fuseContexts(contexts: any): Promise<ContextualUnderstanding> {
     try {
-      logger.debug("🔮 Fusing multi-modal contexts for comprehensive understanding...");
+      logger.debug('🔮 Fusing multi-modal contexts for comprehensive understanding...');
 
       // Analyze current user intent by combining all sources
       const userIntent = await this.analyzeUserIntent(contexts);
-      
+
       // Determine workflow state from visual + calendar + email patterns
       const workflowState = this.determineWorkflowState(contexts);
-      
+
       // Calculate urgency based on deadlines, meetings, and content
       const urgencyLevel = this.calculateUrgencyLevel(contexts);
-      
+
       // Assess coordination complexity from team involvement and timeline
       const coordinationComplexity = this.assessCoordinationComplexity(contexts);
-      
+
       // Estimate value opportunity from historical patterns and context
       const valueOpportunity = await this.estimateValueOpportunity(contexts);
-      
+
       // Calculate interference risk to avoid interrupting flow states
       const interferenceRisk = this.calculateInterferenceRisk(contexts);
 
@@ -316,21 +310,20 @@ export class CheatCalContextEngine {
         urgency_level: urgencyLevel,
         coordination_complexity: coordinationComplexity,
         value_opportunity: valueOpportunity,
-        interference_risk: interferenceRisk
+        interference_risk: interferenceRisk,
       };
 
-      logger.debug("🧠 Context fusion complete", { understanding });
+      logger.debug('🧠 Context fusion complete', { understanding });
       return understanding;
-
     } catch (error) {
-      logger.error("Context fusion failed:", error);
+      logger.error('Context fusion failed:', error);
       return this.getDefaultUnderstanding();
     }
   }
 
   /**
    * Generate Contextual Optimizations
-   * 
+   *
    * Creates intelligent productivity suggestions based on comprehensive
    * multi-modal context understanding. The controversial AI that knows
    * what you need before you do.
@@ -350,7 +343,7 @@ export class CheatCalContextEngine {
           confidence: 0.87,
           value_estimate: 347,
           implementation_effort: 'one_click',
-          controversy_level: 'moderate'
+          controversy_level: 'moderate',
         });
       }
 
@@ -359,11 +352,12 @@ export class CheatCalContextEngine {
         optimizations.push({
           type: 'scheduled',
           action: 'Auto-coordinate optimal meeting time across all participants',
-          reasoning: 'Calendar analysis shows Tuesday 10 AM has 94% availability and highest engagement',
+          reasoning:
+            'Calendar analysis shows Tuesday 10 AM has 94% availability and highest engagement',
           confidence: 0.91,
           value_estimate: 1247,
           implementation_effort: 'automatic',
-          controversy_level: 'high'
+          controversy_level: 'high',
         });
       }
 
@@ -376,7 +370,7 @@ export class CheatCalContextEngine {
           confidence: 0.78,
           value_estimate: 456,
           implementation_effort: 'guided',
-          controversy_level: 'minimal'
+          controversy_level: 'minimal',
         });
       }
 
@@ -389,7 +383,7 @@ export class CheatCalContextEngine {
           confidence: 0.89,
           value_estimate: 2847,
           implementation_effort: 'automatic',
-          controversy_level: 'high'
+          controversy_level: 'high',
         });
       }
 
@@ -398,30 +392,30 @@ export class CheatCalContextEngine {
         optimizations.push({
           type: 'immediate',
           action: 'Major coordination opportunity detected - recommend professional help',
-          reasoning: 'Complex coordination detected that could benefit from marketplace service provider',
+          reasoning:
+            'Complex coordination detected that could benefit from marketplace service provider',
           confidence: 0.82,
           value_estimate: understanding.value_opportunity,
           implementation_effort: 'guided',
-          controversy_level: 'minimal'
+          controversy_level: 'minimal',
         });
       }
 
-      logger.info("⚡ Contextual optimizations generated", {
+      logger.info('⚡ Contextual optimizations generated', {
         count: optimizations.length,
-        total_value: optimizations.reduce((sum, opt) => sum + opt.value_estimate, 0)
+        total_value: optimizations.reduce((sum, opt) => sum + opt.value_estimate, 0),
       });
 
       return optimizations;
-
     } catch (error) {
-      logger.error("Contextual optimization generation failed:", error);
+      logger.error('Contextual optimization generation failed:', error);
       return [];
     }
   }
 
   /**
    * Analyze User Intent from Multi-Modal Context
-   * 
+   *
    * The controversial AI reasoning that understands what users want
    * to accomplish based on all available context data.
    */
@@ -455,19 +449,21 @@ export class CheatCalContextEngine {
 
       // Combine clues into comprehensive intent understanding
       const primaryIntent = this.synthesizeIntent(intentClues);
-      
-      logger.debug("🎯 User intent analyzed", { primary_intent: primaryIntent, clues: intentClues });
-      return primaryIntent;
 
+      logger.debug('🎯 User intent analyzed', {
+        primary_intent: primaryIntent,
+        clues: intentClues,
+      });
+      return primaryIntent;
     } catch (error) {
-      logger.error("Intent analysis failed:", error);
+      logger.error('Intent analysis failed:', error);
       return 'general_productivity';
     }
   }
 
   /**
    * Calculate Value Opportunity from Context
-   * 
+   *
    * Estimates potential dollar value of optimization opportunities
    * based on comprehensive context analysis and historical patterns.
    */
@@ -480,7 +476,7 @@ export class CheatCalContextEngine {
         totalValue += contexts.email_context.pending_emails * 127; // Avg $127 per optimized email
       }
 
-      // Calendar coordination value (based on meeting efficiency) 
+      // Calendar coordination value (based on meeting efficiency)
       if (contexts.calendar_context?.schedule_conflicts?.length > 0) {
         totalValue += contexts.calendar_context.schedule_conflicts.length * 847; // Avg $847 per resolved conflict
       }
@@ -491,32 +487,33 @@ export class CheatCalContextEngine {
       }
 
       // High-value coordination detection
-      if (contexts.visual_context?.screen_content?.includes('$') || 
-          contexts.email_context?.content?.includes('revenue')) {
+      if (
+        contexts.visual_context?.screen_content?.includes('$') ||
+        contexts.email_context?.content?.includes('revenue')
+      ) {
         totalValue *= 2.5; // Multiply by 2.5x for revenue-related coordination
       }
 
-      logger.debug("💰 Value opportunity calculated", { total_value: totalValue });
+      logger.debug('💰 Value opportunity calculated', { total_value: totalValue });
       return Math.round(totalValue);
-
     } catch (error) {
-      logger.error("Value opportunity calculation failed:", error);
+      logger.error('Value opportunity calculation failed:', error);
       return 0;
     }
   }
 
   /**
    * Setup Email Monitoring (Controversial Feature)
-   * 
+   *
    * Monitors email applications for timing optimization opportunities.
    * Privacy-conscious but productivity-focused implementation.
    */
   private setupEmailMonitoring(): void {
-    logger.info("📧 Setting up controversial email monitoring...");
-    
+    logger.info('📧 Setting up controversial email monitoring...');
+
     // Monitor email application focus and content changes
     // This would integrate with email APIs when permissions are granted
-    
+
     setInterval(async () => {
       try {
         if (this.isEmailApplicationActive()) {
@@ -524,30 +521,30 @@ export class CheatCalContextEngine {
           this.updateEmailContext(emailContext);
         }
       } catch (error) {
-        logger.error("Email monitoring cycle failed:", error);
+        logger.error('Email monitoring cycle failed:', error);
       }
     }, 5000); // Check every 5 seconds for email optimization opportunities
   }
 
   /**
    * Setup Audio Analysis (Optional Controversial Feature)
-   * 
+   *
    * Analyzes meeting audio for action items and coordination needs.
    * Highly controversial but extremely valuable for automatic follow-up.
    */
   private setupAudioAnalysis(): void {
-    logger.info("🎤 Setting up optional audio analysis (controversial feature)...");
-    
+    logger.info('🎤 Setting up optional audio analysis (controversial feature)...');
+
     // Audio analysis would be implemented here
     // Currently designed as optional due to high controversy level
-    
+
     // Future implementation: Real-time meeting transcription and action item extraction
-    logger.info("🔇 Audio analysis placeholder - Available for future controversy escalation");
+    logger.info('🔇 Audio analysis placeholder - Available for future controversy escalation');
   }
 
   /**
    * Calculate Interference Risk
-   * 
+   *
    * Determines if showing suggestions would interrupt user's flow state.
    * Controversial monitoring but respectful intervention timing.
    */
@@ -564,22 +561,24 @@ export class CheatCalContextEngine {
       if (contexts.calendar_context?.upcoming_events?.length > 0) {
         const nextEvent = contexts.calendar_context.upcoming_events[0];
         const timeToNext = nextEvent.startDate.getTime() - Date.now();
-        if (timeToNext < 15 * 60 * 1000) { // Less than 15 minutes
+        if (timeToNext < 15 * 60 * 1000) {
+          // Less than 15 minutes
           riskScore += 0.6; // Medium risk - user preparing for meeting
         }
       }
 
       // Communication state detection
-      if (contexts.visual_context?.current_application === 'Zoom' || 
-          contexts.audio_context?.meeting_active) {
+      if (
+        contexts.visual_context?.current_application === 'Zoom' ||
+        contexts.audio_context?.meeting_active
+      ) {
         riskScore += 0.9; // Very high risk - user in active communication
       }
 
       // Normalize risk score
       return Math.min(riskScore, 1.0);
-
     } catch (error) {
-      logger.error("Interference risk calculation failed:", error);
+      logger.error('Interference risk calculation failed:', error);
       return 0.5; // Default medium risk
     }
   }
@@ -589,14 +588,17 @@ export class CheatCalContextEngine {
   private synthesizeIntent(intentClues: string[]): string {
     const intentMap = {
       email_communication: 'User is communicating via email and may need timing optimization',
-      scheduling_coordination: 'User is coordinating schedules and may need coordination assistance',
+      scheduling_coordination:
+        'User is coordinating schedules and may need coordination assistance',
       meeting_planning: 'User is planning meetings and may need optimization suggestions',
       conflict_resolution: 'User has schedule conflicts that need resolution',
-      deadline_management: 'User is managing deadlines and may need coordination support'
+      deadline_management: 'User is managing deadlines and may need coordination support',
     };
 
     const primaryClue = intentClues[0] || 'general_productivity';
-    return intentMap[primaryClue as keyof typeof intentMap] || 'General productivity optimization needed';
+    return (
+      intentMap[primaryClue as keyof typeof intentMap] || 'General productivity optimization needed'
+    );
   }
 
   private calculateOverallConfidence(understanding: ContextualUnderstanding): number {
@@ -605,10 +607,13 @@ export class CheatCalContextEngine {
       understanding.value_opportunity > 0 ? 0.2 : 0,
       understanding.coordination_complexity > 0.5 ? 0.3 : 0,
       understanding.urgency_level !== 'low' ? 0.3 : 0,
-      understanding.interference_risk < 0.5 ? 0.2 : 0
+      understanding.interference_risk < 0.5 ? 0.2 : 0,
     ];
 
-    return Math.min(factors.reduce((sum, factor) => sum + factor, 0), 1.0);
+    return Math.min(
+      factors.reduce((sum, factor) => sum + factor, 0),
+      1.0
+    );
   }
 
   private isEmailApplicationActive(): boolean {
@@ -623,13 +628,13 @@ export class CheatCalContextEngine {
       pending_emails: 2,
       content: 'Project coordination discussion',
       recipients: ['john@company.com'],
-      timing_optimization_available: true
+      timing_optimization_available: true,
     };
   }
 
   private updateEmailContext(emailContext: any): void {
     // Update email context in the fusion system
-    logger.debug("📧 Email context updated", emailContext);
+    logger.debug('📧 Email context updated', emailContext);
   }
 
   // Default/Empty Context Methods
@@ -642,7 +647,7 @@ export class CheatCalContextEngine {
       document_context: { active_documents: [], scheduling_references: [] },
       comprehensive_understanding: this.getDefaultUnderstanding(),
       optimization_opportunities: [],
-      confidence_score: 0
+      confidence_score: 0,
     };
   }
 
@@ -651,8 +656,13 @@ export class CheatCalContextEngine {
       current_application: 'Unknown',
       screen_content: '',
       ui_elements: [],
-      workflow_state: { current_task: '', productivity_level: 'medium', focus_state: 'planning', optimization_readiness: 0.5 },
-      optimization_opportunities: []
+      workflow_state: {
+        current_task: '',
+        productivity_level: 'medium',
+        focus_state: 'planning',
+        optimization_readiness: 0.5,
+      },
+      optimization_opportunities: [],
     };
   }
 
@@ -662,7 +672,7 @@ export class CheatCalContextEngine {
       schedule_conflicts: [],
       available_gaps: [],
       coordination_opportunities: [],
-      optimal_timing_windows: []
+      optimal_timing_windows: [],
     };
   }
 
@@ -673,24 +683,48 @@ export class CheatCalContextEngine {
       urgency_level: 'medium',
       coordination_complexity: 0.3,
       value_opportunity: 100,
-      interference_risk: 0.5
+      interference_risk: 0.5,
     };
   }
 
   // Additional helper methods would be implemented here...
-  private detectCalendarConflicts(events: any[]): any[] { return []; }
-  private identifyScheduleGaps(events: any[]): any[] { return []; }
-  private findCoordinationOpportunities(events: any[]): any[] { return []; }
-  private calculateOptimalTimingWindows(events: any[]): any[] { return []; }
-  private collectCalendarContext(): Promise<CalendarContext> { return Promise.resolve(this.getEmptyCalendarContext()); }
-  private collectEmailContext(): Promise<any> { return Promise.resolve({ pending_emails: 0 }); }
-  private collectAudioContext(): Promise<any> { return Promise.resolve({ meeting_active: false }); }
-  private collectDocumentContext(): Promise<any> { return Promise.resolve({ active_documents: [] }); }
+  private detectCalendarConflicts(events: any[]): any[] {
+    return [];
+  }
+  private identifyScheduleGaps(events: any[]): any[] {
+    return [];
+  }
+  private findCoordinationOpportunities(events: any[]): any[] {
+    return [];
+  }
+  private calculateOptimalTimingWindows(events: any[]): any[] {
+    return [];
+  }
+  private collectCalendarContext(): Promise<CalendarContext> {
+    return Promise.resolve(this.getEmptyCalendarContext());
+  }
+  private collectEmailContext(): Promise<any> {
+    return Promise.resolve({ pending_emails: 0 });
+  }
+  private collectAudioContext(): Promise<any> {
+    return Promise.resolve({ meeting_active: false });
+  }
+  private collectDocumentContext(): Promise<any> {
+    return Promise.resolve({ active_documents: [] });
+  }
   private setupCalendarIntegration(): void {}
   private setupDocumentTracking(): void {}
-  private determineWorkflowState(contexts: any): 'planning' | 'executing' | 'coordinating' | 'communicating' { return 'planning'; }
-  private calculateUrgencyLevel(contexts: any): 'low' | 'medium' | 'high' | 'critical' { return 'medium'; }
-  private assessCoordinationComplexity(contexts: any): number { return 0.5; }
+  private determineWorkflowState(
+    contexts: any
+  ): 'planning' | 'executing' | 'coordinating' | 'communicating' {
+    return 'planning';
+  }
+  private calculateUrgencyLevel(contexts: any): 'low' | 'medium' | 'high' | 'critical' {
+    return 'medium';
+  }
+  private assessCoordinationComplexity(contexts: any): number {
+    return 0.5;
+  }
 }
 
 // Type Definitions
