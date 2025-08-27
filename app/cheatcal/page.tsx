@@ -165,8 +165,8 @@ export default function CheatCalMainApplication() {
   const handleModeChange = useCallback(async (newMode: typeof activeMode) => {
     setActiveMode(newMode);
     
-    // Log controversial mode selection
-    logger.info("💀 CheatCal mode changed", { 
+    // Log controversial mode selection  
+    console.log("💀 CheatCal mode changed", { 
       new_mode: newMode, 
       controversy_level: controversyLevel,
       user_money_focus: userProfile.money_focus_level
