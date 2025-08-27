@@ -24,7 +24,7 @@ import { EventModal } from './EventModal';
 
 import { useEnhancedTheme } from '@/lib/design-system/enhanced-theme';
 // 🎨 Design System Integration - Token Architect Agent
-import { TokenBridge, useDesignTokens } from '@/lib/design-system/utils/token-bridge';
+import { TokenBridge, useDesignTokens, tokenHelpers } from '@/lib/design-system/utils/token-bridge';
 
 // 🎬 Motion System Integration - Motion Engineer Agent
 import { useMotionSystem, useSyncedMotion } from '@/lib/motion';
@@ -769,10 +769,10 @@ export function LinearCalendarHorizontal({
   // Enhanced with design tokens for consistent spacing
   const calculateFullYearDayWidth = () => {
     if (viewportWidth === 0) {
-      return tokenBridge.getSpacingValue('calendar.dayWidth.fallback') || 20;
+      return parseInt(tokenHelpers.spacing('5')) || 20; // Use token helper spacing
     }
     const availableWidth = viewportWidth - headerWidth * 2; // Subtract left and right sidebars
-    const minWidth = tokenBridge.getSpacingValue('calendar.dayWidth.minimum') || 18;
+    const minWidth = parseInt(tokenHelpers.spacing('4')) || 18; // Use token helper spacing
     return Math.max(minWidth, availableWidth / 42); // 42 columns (6 weeks × 7 days)
   };
 
@@ -1235,8 +1235,8 @@ export function LinearCalendarHorizontal({
         className
       )}
       style={{
-        backgroundColor: tokenBridge.getColorValue('calendar.background'),
-        color: tokenBridge.getColorValue('calendar.foreground'),
+        backgroundColor: tokenHelpers.color('background'),
+        color: tokenHelpers.color('foreground'),
         // AAA compliance with enhanced focus indicators
         ...aaaColors.getContrastSafeStyles('calendar', 'background'),
         // RTL support with logical properties
@@ -1353,7 +1353,7 @@ export function LinearCalendarHorizontal({
             // AAA compliance with enhanced focus indicators
             aaaColors.focusRing.className,
             // Token-based colors and spacing
-            `hover:${tokenBridge.getColorValue('button.hover.background')}`,
+            `hover:bg-secondary`,
             isMobile ? 'p-2 w-full flex items-center justify-center gap-2' : 'p-1'
           )}
           disabled={zoomLevel === 'fullYear'}
@@ -1361,8 +1361,8 @@ export function LinearCalendarHorizontal({
           aria-disabled={zoomLevel === 'fullYear'}
           {...focusProps}
           style={{
-            backgroundColor: tokenBridge.getColorValue('button.background'),
-            color: tokenBridge.getColorValue('button.foreground'),
+            backgroundColor: tokenHelpers.color('primary'),
+            color: tokenHelpers.color('primary-foreground'),
             borderRadius: tokens.radius.button,
             fontSize: tokens.typography.sizes.button,
             // AAA contrast compliance
@@ -1390,7 +1390,7 @@ export function LinearCalendarHorizontal({
             // AAA compliance with enhanced focus indicators
             aaaColors.focusRing.className,
             // Token-based colors and spacing
-            `hover:${tokenBridge.getColorValue('button.hover.background')}`,
+            `hover:bg-secondary`,
             isMobile ? 'p-2 w-full flex items-center justify-center gap-2' : 'p-1'
           )}
           disabled={zoomLevel === 'day'}
@@ -1398,8 +1398,8 @@ export function LinearCalendarHorizontal({
           aria-disabled={zoomLevel === 'day'}
           {...focusProps}
           style={{
-            backgroundColor: tokenBridge.getColorValue('button.background'),
-            color: tokenBridge.getColorValue('button.foreground'),
+            backgroundColor: tokenHelpers.color('primary'),
+            color: tokenHelpers.color('primary-foreground'),
             borderRadius: tokens.radius.button,
             fontSize: tokens.typography.sizes.button,
             // AAA contrast compliance
@@ -1787,7 +1787,7 @@ export function LinearCalendarHorizontal({
           ref={modalRef}
           style={{
             // Design token integration for modal container
-            backgroundColor: tokenBridge.getColorValue('modal.backdrop'),
+            backgroundColor: tokenHelpers.color('background'),
             // Motion system integration
             ...motionSystem.getModalContainerStyles(),
           }}
