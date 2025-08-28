@@ -63,9 +63,9 @@ const MetricCard: React.FC<MetricCardProps> = ({
   subtitle,
 }) => {
   const statusColors = {
-    good: 'text-green-600 border-green-200 bg-green-50',
-    warning: 'text-yellow-600 border-yellow-200 bg-yellow-50',
-    critical: 'text-red-600 border-red-200 bg-red-50',
+    good: 'text-green-600 /* TODO: Use semantic token */ border-green-200 /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */',
+    warning: 'text-yellow-600 /* TODO: Use semantic token */ border-yellow-200 /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */',
+    critical: 'text-red-600 /* TODO: Use semantic token */ border-red-200 /* TODO: Use semantic token */ bg-red-50 /* TODO: Use semantic token */',
   };
 
   return (
@@ -82,7 +82,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
             <div
               className={cn(
                 'flex items-center text-xs',
-                change >= 0 ? 'text-green-600' : 'text-red-600'
+                change >= 0 ? 'text-green-600 /* TODO: Use semantic token */' : 'text-red-600 /* TODO: Use semantic token */'
               )}
             >
               <TrendingUp className="mr-1 h-3 w-3" />
@@ -134,17 +134,17 @@ const TimelineHeatMap: React.FC<TimelineHeatMapProps> = ({ data, title, maxValue
               <div key={month} className="flex items-center space-x-3">
                 <div className="w-8 text-xs font-mono text-muted-foreground">{month}</div>
                 <div className="flex-1">
-                  <div className="h-4 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-4 bg-muted rounded-full overflow-hidden">
                     <div
                       className={cn(
                         'h-full transition-all duration-300',
                         intensity > 75
-                          ? 'bg-green-500'
+                          ? 'bg-green-500 /* TODO: Use semantic token */'
                           : intensity > 50
-                            ? 'bg-yellow-500'
+                            ? 'bg-yellow-500 /* TODO: Use semantic token */'
                             : intensity > 25
-                              ? 'bg-blue-500'
-                              : 'bg-gray-300'
+                              ? 'bg-primary'
+                              : 'bg-gray-300 /* TODO: Use semantic token */'
                       )}
                       style={{ width: `${intensity}%` }}
                     />
@@ -204,15 +204,15 @@ const RealTimeInteractionStream: React.FC<RealTimeInteractionStreamProps> = ({
   const getActionColor = (action: string) => {
     switch (action) {
       case 'timeline_scroll':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */';
       case 'month_navigation':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */';
       case 'event_click':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-purple-100 /* TODO: Use semantic token */ text-purple-800 /* TODO: Use semantic token */';
       case 'event_create':
         return 'bg-orange-100 text-orange-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-muted text-gray-800 /* TODO: Use semantic token */';
     }
   };
 
@@ -236,7 +236,7 @@ const RealTimeInteractionStream: React.FC<RealTimeInteractionStreamProps> = ({
           displayInteractions.map((interaction, index) => (
             <div
               key={`${interaction.timestamp}-${index}`}
-              className="flex items-center space-x-3 p-2 rounded-lg bg-gray-50 animate-in fade-in slide-in-from-top duration-200"
+              className="flex items-center space-x-3 p-2 rounded-lg bg-muted animate-in fade-in slide-in-from-top duration-200"
             >
               <div className={cn('p-1 rounded', getActionColor(interaction.action))}>
                 {getActionIcon(interaction.action)}
@@ -492,22 +492,22 @@ export const LiveEngagementDashboard: React.FC<LiveEngagementDashboardProps> = (
               <CardContent className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="text-center p-4 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-50">
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">
                       {timelineMetrics.timelineEngagementScore?.toFixed(1) || 0}/100
                     </div>
-                    <div className="text-sm text-blue-600">Engagement Score</div>
+                    <div className="text-sm text-blue-600 /* TODO: Use semantic token */">Engagement Score</div>
                   </div>
                   <div className="text-center p-4 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50">
-                    <div className="text-lg font-bold text-green-600 capitalize">
+                    <div className="text-lg font-bold text-green-600 /* TODO: Use semantic token */ capitalize">
                       {timelineMetrics.monthNavigationEfficiency || 'N/A'}
                     </div>
-                    <div className="text-sm text-green-600">Navigation Efficiency</div>
+                    <div className="text-sm text-green-600 /* TODO: Use semantic token */">Navigation Efficiency</div>
                   </div>
                   <div className="text-center p-4 rounded-lg bg-gradient-to-br from-purple-50 to-violet-50">
-                    <div className="text-lg font-bold text-purple-600 capitalize">
+                    <div className="text-lg font-bold text-purple-600 /* TODO: Use semantic token */ capitalize">
                       {timelineMetrics.scrollBehaviorHealth || 'N/A'}
                     </div>
-                    <div className="text-sm text-purple-600">Scroll Health</div>
+                    <div className="text-sm text-purple-600 /* TODO: Use semantic token */">Scroll Health</div>
                   </div>
                 </div>
               </CardContent>
@@ -584,7 +584,7 @@ export const LiveEngagementDashboard: React.FC<LiveEngagementDashboardProps> = (
                 <CardDescription>ASCII analytics output for development debugging</CardDescription>
               </CardHeader>
               <CardContent>
-                <pre className="text-xs font-mono whitespace-pre-wrap bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
+                <pre className="text-xs font-mono whitespace-pre-wrap bg-gray-900 /* TODO: Use semantic token */ text-green-400 /* TODO: Use semantic token */ p-4 rounded-lg overflow-x-auto">
                   {debugOutput || 'Generating debug output...'}
                 </pre>
               </CardContent>

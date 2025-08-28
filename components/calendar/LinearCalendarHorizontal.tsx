@@ -386,7 +386,7 @@ function FullYearGrid({
             className={cn(
               'm-[2px] h-[calc(100%-4px)] rounded-sm border',
               isEmpty ? 'border-transparent' : 'border-border/40',
-              isSelected && 'ring-1 ring-blue-500',
+              isSelected && 'ring-1 ring-blue-500 /* TODO: Use semantic token */',
               isHovered && !isEmpty && 'bg-accent/20'
             )}
             aria-hidden

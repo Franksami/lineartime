@@ -594,9 +594,9 @@ export function CalendarLibrarySwitcher({
   // Get feature status icon
   const getFeatureIcon = (supported: boolean) => {
     return supported ? (
-      <CheckCircle2 className="w-4 h-4 text-green-500" />
+      <CheckCircle2 className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />
     ) : (
-      <AlertCircle className="w-4 h-4 text-gray-300" />
+      <AlertCircle className="w-4 h-4 text-gray-300 /* TODO: Use semantic token */" />
     );
   };
 
@@ -784,10 +784,10 @@ export function CalendarLibrarySwitcher({
                             className={cn(
                               'text-xs',
                               library.pricing === 'free'
-                                ? 'border-green-200 text-green-700'
+                                ? 'border-green-200 /* TODO: Use semantic token */ text-green-700 /* TODO: Use semantic token */'
                                 : library.pricing === 'paid'
-                                  ? 'border-red-200 text-red-700'
-                                  : 'border-yellow-200 text-yellow-700'
+                                  ? 'border-red-200 /* TODO: Use semantic token */ text-red-700 /* TODO: Use semantic token */'
+                                  : 'border-yellow-200 /* TODO: Use semantic token */ text-yellow-700 /* TODO: Use semantic token */'
                             )}
                           >
                             {library.pricing}
@@ -892,22 +892,22 @@ export function CalendarLibrarySwitcher({
                           <h4 className="font-medium mb-2">Pros & Cons</h4>
                           <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <h5 className="text-sm font-medium text-green-600 mb-1">Pros</h5>
+                              <h5 className="text-sm font-medium text-green-600 /* TODO: Use semantic token */ mb-1">Pros</h5>
                               <ul className="text-xs space-y-1">
                                 {currentLib.pros.map((pro, index) => (
                                   <li key={index} className="flex items-start gap-2">
-                                    <CheckCircle2 className="w-3 h-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                    <CheckCircle2 className="w-3 h-3 text-green-500 /* TODO: Use semantic token */ mt-0.5 flex-shrink-0" />
                                     {pro}
                                   </li>
                                 ))}
                               </ul>
                             </div>
                             <div>
-                              <h5 className="text-sm font-medium text-red-600 mb-1">Cons</h5>
+                              <h5 className="text-sm font-medium text-red-600 /* TODO: Use semantic token */ mb-1">Cons</h5>
                               <ul className="text-xs space-y-1">
                                 {currentLib.cons.map((con, index) => (
                                   <li key={index} className="flex items-start gap-2">
-                                    <AlertCircle className="w-3 h-3 text-red-500 mt-0.5 flex-shrink-0" />
+                                    <AlertCircle className="w-3 h-3 text-red-500 /* TODO: Use semantic token */ mt-0.5 flex-shrink-0" />
                                     {con}
                                   </li>
                                 ))}
@@ -945,7 +945,7 @@ export function CalendarLibrarySwitcher({
                               key={library.id}
                               className={cn(
                                 'border-b hover:bg-opacity-50 cursor-pointer transition-colors',
-                                isSelected && 'bg-blue-50'
+                                isSelected && 'bg-blue-50 /* TODO: Use semantic token */'
                               )}
                               onClick={() => handleLibrarySelect(library.id)}
                             >
@@ -986,19 +986,19 @@ export function CalendarLibrarySwitcher({
                                 <div className="text-sm font-medium">{featureCount}/12</div>
                                 <div className="flex justify-center gap-1 mt-1">
                                   {library.features.accessibility && (
-                                    <Shield className="w-3 h-3 text-green-500" />
+                                    <Shield className="w-3 h-3 text-green-500 /* TODO: Use semantic token */" />
                                   )}
                                   {library.features.performance && (
-                                    <Zap className="w-3 h-3 text-blue-500" />
+                                    <Zap className="w-3 h-3 text-primary" />
                                   )}
                                   {library.features.mobile && (
-                                    <Smartphone className="w-3 h-3 text-purple-500" />
+                                    <Smartphone className="w-3 h-3 text-purple-500 /* TODO: Use semantic token */" />
                                   )}
                                 </div>
                               </td>
                               <td className="p-2 text-center">
                                 <div className="flex items-center justify-center gap-1">
-                                  <Star className="w-3 h-3 text-yellow-500" />
+                                  <Star className="w-3 h-3 text-yellow-500 /* TODO: Use semantic token */" />
                                   <span className="text-sm font-medium">{library.popularity}</span>
                                 </div>
                               </td>
@@ -1028,7 +1028,7 @@ export function CalendarLibrarySwitcher({
                               {filteredLibraries.map((library) => (
                                 <div key={library.id} className="flex items-center gap-3">
                                   <div className="w-20 text-sm">{library.displayName}</div>
-                                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                                  <div className="flex-1 bg-gray-200 /* TODO: Use semantic token */ rounded-full h-2">
                                     <div
                                       className="h-2 rounded-full transition-all"
                                       style={{
@@ -1053,7 +1053,7 @@ export function CalendarLibrarySwitcher({
                               {filteredLibraries.map((library) => (
                                 <div key={library.id} className="flex items-center gap-3">
                                   <div className="w-20 text-sm">{library.displayName}</div>
-                                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                                  <div className="flex-1 bg-gray-200 /* TODO: Use semantic token */ rounded-full h-2">
                                     <div
                                       className="h-2 rounded-full transition-all"
                                       style={{
@@ -1097,10 +1097,10 @@ export function CalendarLibrarySwitcher({
                                 (lib) => lib.id === aiRecommendation
                               )!;
                               return (
-                                <Card className="border-2 border-blue-200">
+                                <Card className="border-2 border-blue-200 /* TODO: Use semantic token */">
                                   <CardContent className="p-4">
                                     <div className="flex items-start gap-3">
-                                      <Sparkles className="w-5 h-5 text-blue-500 mt-1" />
+                                      <Sparkles className="w-5 h-5 text-primary mt-1" />
                                       <div className="flex-1">
                                         <h4 className="font-medium mb-2">
                                           Recommended: {recommendedLib.displayName}

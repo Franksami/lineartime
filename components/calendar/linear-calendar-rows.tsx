@@ -248,7 +248,7 @@ const EventLayer = memo(
                 isSelected
                   ? 'ring-2 ring-primary ring-opacity-75 shadow-xl z-[10000] scale-105'
                   : 'shadow-md z-[1001]'
-              } ${isDragged ? 'opacity-80 z-[10001] shadow-2xl' : ''} ${dragState.isMultiSelect && isSelected ? 'ring-blue-400' : ''}`}
+              } ${isDragged ? 'opacity-80 z-[10001] shadow-2xl' : ''} ${dragState.isMultiSelect && isSelected ? 'ring-blue-400 /* TODO: Use semantic token */' : ''}`}
               style={{
                 left: position.left,
                 top: position.top,

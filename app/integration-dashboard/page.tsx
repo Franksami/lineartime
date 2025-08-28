@@ -245,30 +245,30 @@ export default function IntegrationDashboardPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'connected':
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
+        return <CheckCircle className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />;
       case 'syncing':
-        return <RefreshCw className="h-4 w-4 text-blue-500 animate-spin" />;
+        return <RefreshCw className="h-4 w-4 text-primary animate-spin" />;
       case 'error':
-        return <XCircle className="h-4 w-4 text-red-500" />;
+        return <XCircle className="h-4 w-4 text-red-500 /* TODO: Use semantic token */" />;
       case 'disconnected':
-        return <AlertCircle className="h-4 w-4 text-gray-500" />;
+        return <AlertCircle className="h-4 w-4 text-gray-500 /* TODO: Use semantic token */" />;
       default:
-        return <Clock className="h-4 w-4 text-gray-400" />;
+        return <Clock className="h-4 w-4 text-gray-400 /* TODO: Use semantic token */" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'connected':
-        return 'bg-green-500/10 text-green-700 border-green-500/20';
+        return 'bg-green-500 /* TODO: Use semantic token *//10 text-green-700 /* TODO: Use semantic token */ border-green-500 /* TODO: Use semantic token *//20';
       case 'syncing':
-        return 'bg-blue-500/10 text-blue-700 border-blue-500/20';
+        return 'bg-primary/10 text-blue-700 /* TODO: Use semantic token */ border-blue-500 /* TODO: Use semantic token *//20';
       case 'error':
-        return 'bg-red-500/10 text-red-700 border-red-500/20';
+        return 'bg-red-500 /* TODO: Use semantic token *//10 text-red-700 /* TODO: Use semantic token */ border-red-500 /* TODO: Use semantic token *//20';
       case 'disconnected':
-        return 'bg-gray-500/10 text-gray-700 border-gray-500/20';
+        return 'bg-gray-500 /* TODO: Use semantic token *//10 text-muted-foreground border-gray-500 /* TODO: Use semantic token *//20';
       default:
-        return 'bg-gray-500/10 text-gray-700 border-gray-500/20';
+        return 'bg-gray-500 /* TODO: Use semantic token *//10 text-muted-foreground border-gray-500 /* TODO: Use semantic token *//20';
     }
   };
 
@@ -378,7 +378,7 @@ export default function IntegrationDashboardPage() {
                     <p className="text-sm font-medium text-muted-foreground">Provider Health</p>
                     <p className="text-2xl font-bold">{systemHealth.providerHealth}%</p>
                   </div>
-                  <Activity className="h-8 w-8 text-green-500" />
+                  <Activity className="h-8 w-8 text-green-500 /* TODO: Use semantic token */" />
                 </div>
                 <Progress value={systemHealth.providerHealth} className="mt-2" />
               </CardContent>
@@ -393,7 +393,7 @@ export default function IntegrationDashboardPage() {
                       {systemHealth.connectedProviders}/{systemHealth.totalProviders}
                     </p>
                   </div>
-                  <Globe className="h-8 w-8 text-blue-500" />
+                  <Globe className="h-8 w-8 text-primary" />
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
                   Google, Microsoft, Apple, CalDAV
@@ -410,7 +410,7 @@ export default function IntegrationDashboardPage() {
                       {systemHealth.totalEvents.toLocaleString()}
                     </p>
                   </div>
-                  <Database className="h-8 w-8 text-purple-500" />
+                  <Database className="h-8 w-8 text-purple-500 /* TODO: Use semantic token */" />
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">Across all providers</p>
               </CardContent>
@@ -421,9 +421,9 @@ export default function IntegrationDashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Security Status</p>
-                    <p className="text-lg font-bold text-green-600">Secure</p>
+                    <p className="text-lg font-bold text-green-600 /* TODO: Use semantic token */">Secure</p>
                   </div>
-                  <Shield className="h-8 w-8 text-green-500" />
+                  <Shield className="h-8 w-8 text-green-500 /* TODO: Use semantic token */" />
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">AES-256-GCM Active</p>
               </CardContent>

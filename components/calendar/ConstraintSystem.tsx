@@ -346,16 +346,16 @@ const SEVERITY_CONFIG = {
   },
   info: {
     icon: Info,
-    bgColor: 'bg-blue-50 dark:bg-blue-950/20',
-    borderColor: 'border-blue-200 dark:border-blue-800/20',
-    textColor: 'text-blue-700 dark:text-blue-400',
+    bgColor: 'bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-950 /* TODO: Use semantic token *//20',
+    borderColor: 'border-blue-200 /* TODO: Use semantic token */ dark:border-blue-800 /* TODO: Use semantic token *//20',
+    textColor: 'text-blue-700 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */',
     badgeVariant: 'outline' as const,
   },
   suggestion: {
     icon: Lightbulb,
-    bgColor: 'bg-yellow-50 dark:bg-yellow-950/20',
-    borderColor: 'border-yellow-200 dark:border-yellow-800/20',
-    textColor: 'text-yellow-700 dark:text-yellow-400',
+    bgColor: 'bg-yellow-50 /* TODO: Use semantic token */ dark:bg-yellow-950 /* TODO: Use semantic token *//20',
+    borderColor: 'border-yellow-200 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token *//20',
+    textColor: 'text-yellow-700 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */',
     badgeVariant: 'secondary' as const,
   },
 };
@@ -418,9 +418,9 @@ export function ConstraintSystem({
 
   if (validationResults.length === 0) {
     return compactMode ? null : (
-      <Card className="border-green-200 dark:border-green-800/20 bg-green-50 dark:bg-green-950/20">
+      <Card className="border-green-200 /* TODO: Use semantic token */ dark:border-green-800 /* TODO: Use semantic token *//20 bg-green-50 /* TODO: Use semantic token */ dark:bg-green-950 /* TODO: Use semantic token *//20">
         <CardContent className="p-4">
-          <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+          <div className="flex items-center gap-2 text-green-700 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */">
             <CheckCircle className="h-4 w-4" />
             <span className="text-sm font-medium">All constraints satisfied</span>
           </div>

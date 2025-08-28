@@ -106,12 +106,12 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
   };
 
   const getSyncHealthStatus = () => {
-    if (!stats.isOnline) return { status: 'offline', color: 'text-gray-500', icon: WifiOff };
-    if (stats.syncInProgress) return { status: 'syncing', color: 'text-blue-500', icon: RefreshCw };
-    if (stats.size === 0) return { status: 'healthy', color: 'text-green-500', icon: CheckCircle2 };
+    if (!stats.isOnline) return { status: 'offline', color: 'text-gray-500 /* TODO: Use semantic token */', icon: WifiOff };
+    if (stats.syncInProgress) return { status: 'syncing', color: 'text-primary', icon: RefreshCw };
+    if (stats.size === 0) return { status: 'healthy', color: 'text-green-500 /* TODO: Use semantic token */', icon: CheckCircle2 };
     if (stats.size > 100)
-      return { status: 'warning', color: 'text-yellow-500', icon: AlertTriangle };
-    return { status: 'normal', color: 'text-green-500', icon: Activity };
+      return { status: 'warning', color: 'text-yellow-500 /* TODO: Use semantic token */', icon: AlertTriangle };
+    return { status: 'normal', color: 'text-green-500 /* TODO: Use semantic token */', icon: Activity };
   };
 
   const health = getSyncHealthStatus();
@@ -182,7 +182,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">High Priority</span>
               </div>
-              <div className="text-2xl font-bold text-red-600">{stats.byPriority.high}</div>
+              <div className="text-2xl font-bold text-red-600 /* TODO: Use semantic token */">{stats.byPriority.high}</div>
             </div>
 
             <div className="space-y-2">
@@ -190,7 +190,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <Activity className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Medium Priority</span>
               </div>
-              <div className="text-2xl font-bold text-yellow-600">{stats.byPriority.medium}</div>
+              <div className="text-2xl font-bold text-yellow-600 /* TODO: Use semantic token */">{stats.byPriority.medium}</div>
             </div>
 
             <div className="space-y-2">
@@ -198,7 +198,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Low Priority</span>
               </div>
-              <div className="text-2xl font-bold text-green-600">{stats.byPriority.low}</div>
+              <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">{stats.byPriority.low}</div>
             </div>
           </div>
 
@@ -208,9 +208,9 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   {stats.isOnline ? (
-                    <Wifi className="h-4 w-4 text-green-500" />
+                    <Wifi className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
                   ) : (
-                    <WifiOff className="h-4 w-4 text-red-500" />
+                    <WifiOff className="h-4 w-4 text-red-500 /* TODO: Use semantic token */" />
                   )}
                   <span className="text-sm font-medium">Connection</span>
                 </div>
@@ -224,7 +224,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <RefreshCw
-                    className={`h-4 w-4 ${stats.syncInProgress ? 'animate-spin text-blue-500' : 'text-muted-foreground'}`}
+                    className={`h-4 w-4 ${stats.syncInProgress ? 'animate-spin text-primary' : 'text-muted-foreground'}`}
                   />
                   <span className="text-sm font-medium">Sync Status</span>
                 </div>
@@ -262,7 +262,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                   variant="outline"
                   size="sm"
                   onClick={handleClearQueue}
-                  className="text-red-600 hover:text-red-700"
+                  className="text-red-600 /* TODO: Use semantic token */ hover:text-red-700 /* TODO: Use semantic token */"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Clear Queue
@@ -285,14 +285,14 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
 
           {/* Warnings */}
           {stats.size > 100 && (
-            <div className="p-3 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+            <div className="p-3 bg-yellow-50 /* TODO: Use semantic token */ dark:bg-yellow-950 /* TODO: Use semantic token */ border border-yellow-200 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ rounded-lg">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                <span className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                <AlertTriangle className="h-4 w-4 text-yellow-600 /* TODO: Use semantic token */" />
+                <span className="text-sm font-medium text-yellow-800 /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */">
                   Large Queue Size
                 </span>
               </div>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+              <p className="text-sm text-yellow-700 /* TODO: Use semantic token */ dark:text-yellow-300 /* TODO: Use semantic token */ mt-1">
                 You have {stats.size} items queued for sync. Consider forcing a sync or checking
                 your connection.
               </p>
@@ -300,14 +300,14 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
           )}
 
           {!stats.isOnline && (
-            <div className="p-3 bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-lg">
+            <div className="p-3 bg-muted dark:bg-gray-950 /* TODO: Use semantic token */ border border-border dark:border-gray-800 /* TODO: Use semantic token */ rounded-lg">
               <div className="flex items-center gap-2">
-                <WifiOff className="h-4 w-4 text-gray-600" />
-                <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                <WifiOff className="h-4 w-4 text-gray-600 /* TODO: Use semantic token */" />
+                <span className="text-sm font-medium text-gray-800 /* TODO: Use semantic token */ dark:text-gray-200 /* TODO: Use semantic token */">
                   Offline Mode
                 </span>
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">
+              <p className="text-sm text-muted-foreground dark:text-gray-300 /* TODO: Use semantic token */ mt-1">
                 Analytics data is being queued locally and will sync when connection is restored.
               </p>
             </div>

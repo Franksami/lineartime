@@ -147,7 +147,7 @@ test.describe('Viewport Utilization Tests', () => {
 
   test('today indicator is clearly visible', async ({ page }) => {
     // Find today's cell
-    const todayCell = await page.locator('[class*="bg-blue-500/15"]').first();
+    const todayCell = await page.locator('[class*="bg-primary/15"]').first();
     
     if (await todayCell.count() > 0) {
       await expect(todayCell).toBeVisible();

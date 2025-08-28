@@ -123,12 +123,12 @@ export function PWADashboard({ className }: PWADashboardProps) {
 
   const getEngagementLevel = () => {
     if (metrics.engagementEvents >= 100)
-      return { level: 'High', color: 'text-green-600', progress: 100 };
+      return { level: 'High', color: 'text-green-600 /* TODO: Use semantic token */', progress: 100 };
     if (metrics.engagementEvents >= 50)
-      return { level: 'Medium', color: 'text-yellow-600', progress: 75 };
+      return { level: 'Medium', color: 'text-yellow-600 /* TODO: Use semantic token */', progress: 75 };
     if (metrics.engagementEvents >= 20)
       return { level: 'Low', color: 'text-orange-600', progress: 50 };
-    return { level: 'Minimal', color: 'text-gray-600', progress: 25 };
+    return { level: 'Minimal', color: 'text-gray-600 /* TODO: Use semantic token */', progress: 25 };
   };
 
   const engagement = getEngagementLevel();
@@ -173,9 +173,9 @@ export function PWADashboard({ className }: PWADashboardProps) {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Connection</CardTitle>
               {isOnline ? (
-                <Wifi className="h-4 w-4 text-green-500" />
+                <Wifi className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
               ) : (
-                <WifiOff className="h-4 w-4 text-red-500" />
+                <WifiOff className="h-4 w-4 text-red-500 /* TODO: Use semantic token */" />
               )}
             </CardHeader>
             <CardContent>
@@ -372,14 +372,14 @@ export function PWADashboard({ className }: PWADashboardProps) {
 
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">Accepted</span>
-                      <span className="font-medium text-green-600">
+                      <span className="font-medium text-green-600 /* TODO: Use semantic token */">
                         {metrics.installPromptAccepted}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">Dismissed</span>
-                      <span className="font-medium text-red-600">
+                      <span className="font-medium text-red-600 /* TODO: Use semantic token */">
                         {metrics.installPromptDismissed}
                       </span>
                     </div>
@@ -421,7 +421,7 @@ export function PWADashboard({ className }: PWADashboardProps) {
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   {!capabilities.installed && capabilities.installable && (
-                    <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-950 /* TODO: Use semantic token */ rounded-lg">
                       <div className="space-y-1">
                         <div className="font-medium">Install App</div>
                         <div className="text-sm text-muted-foreground">
@@ -506,25 +506,25 @@ export function PWADashboard({ className }: PWADashboardProps) {
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center gap-2">
                         {capabilities.fileHandlingSupported ? (
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          <CheckCircle2 className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
                         ) : (
-                          <AlertCircle className="h-4 w-4 text-gray-400" />
+                          <AlertCircle className="h-4 w-4 text-gray-400 /* TODO: Use semantic token */" />
                         )}
                         <span>Calendar file handling</span>
                       </div>
                       <div className="flex items-center gap-2">
                         {capabilities.shortcutsSupported ? (
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          <CheckCircle2 className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
                         ) : (
-                          <AlertCircle className="h-4 w-4 text-gray-400" />
+                          <AlertCircle className="h-4 w-4 text-gray-400 /* TODO: Use semantic token */" />
                         )}
                         <span>App shortcuts</span>
                       </div>
                       <div className="flex items-center gap-2">
                         {capabilities.shareTargetSupported ? (
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          <CheckCircle2 className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
                         ) : (
-                          <AlertCircle className="h-4 w-4 text-gray-400" />
+                          <AlertCircle className="h-4 w-4 text-gray-400 /* TODO: Use semantic token */" />
                         )}
                         <span>Share target</span>
                       </div>

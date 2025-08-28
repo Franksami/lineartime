@@ -45,6 +45,14 @@
       },
       "nursery": {
         "useCollapsedIf": "warn"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "error",
+        "useValidAriaValues": "error",
+        "useSemanticElements": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "error"
       }
     }
   },

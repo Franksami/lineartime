@@ -92,8 +92,8 @@ export function SchedulingSuggestions({
   }, [title, duration, events, preferences]);
 
   const getScoreColor = (score: number) => {
-    if (score >= 0.8) return 'text-green-600 dark:text-green-400';
-    if (score >= 0.6) return 'text-yellow-600 dark:text-yellow-400';
+    if (score >= 0.8) return 'text-green-600 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */';
+    if (score >= 0.6) return 'text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */';
     return 'text-orange-600 dark:text-orange-400';
   };
 
@@ -192,7 +192,7 @@ export function SchedulingSuggestions({
               <div className="mt-3 space-y-1">
                 {suggestion.reasoningText.map((reason, i) => (
                   <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <CheckCircle className="h-3 w-3 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-3 w-3 text-green-600 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */ mt-0.5 flex-shrink-0" />
                     <span>{reason}</span>
                   </div>
                 ))}

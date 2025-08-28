@@ -208,13 +208,13 @@ export default function FeatureFlagsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'healthy':
-        return 'text-green-500';
+        return 'text-green-500 /* TODO: Use semantic token */';
       case 'degraded':
-        return 'text-yellow-500';
+        return 'text-yellow-500 /* TODO: Use semantic token */';
       case 'critical':
-        return 'text-red-500';
+        return 'text-red-500 /* TODO: Use semantic token */';
       default:
-        return 'text-gray-500';
+        return 'text-gray-500 /* TODO: Use semantic token */';
     }
   };
 

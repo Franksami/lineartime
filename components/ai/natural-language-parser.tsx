@@ -73,10 +73,10 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
     <Card className="p-6 space-y-6">
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <Wand2 className="w-5 h-5 text-blue-600" />
+          <Wand2 className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */" />
           <h3 className="text-lg font-semibold">Natural Language Event Parser</h3>
         </div>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 /* TODO: Use semantic token */">
           Describe your event in natural language and I'll parse it into a structured calendar
           event.
         </p>
@@ -98,16 +98,16 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
         </div>
 
         {error && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-sm text-red-600">{error}</p>
+          <div className="p-3 bg-red-50 /* TODO: Use semantic token */ border border-red-200 /* TODO: Use semantic token */ rounded-md">
+            <p className="text-sm text-red-600 /* TODO: Use semantic token */">{error}</p>
           </div>
         )}
 
         {parsedEvent && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-md space-y-3">
+          <div className="p-4 bg-green-50 /* TODO: Use semantic token */ border border-green-200 /* TODO: Use semantic token */ rounded-md space-y-3">
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-green-600" />
-              <span className="font-medium text-green-800">Event Parsed Successfully!</span>
+              <Calendar className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
+              <span className="font-medium text-green-800 /* TODO: Use semantic token */">Event Parsed Successfully!</span>
             </div>
 
             <div className="space-y-2 text-sm">
@@ -170,7 +170,7 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
       </div>
 
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-gray-700">Try these examples:</h4>
+        <h4 className="text-sm font-medium text-muted-foreground">Try these examples:</h4>
         <div className="flex flex-wrap gap-2">
           {exampleInputs.map((example, index) => (
             <Button

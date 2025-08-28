@@ -722,13 +722,13 @@ export function AIConflictDetector({
                   <div className="flex items-start gap-3">
                     <div
                       className={cn('flex-shrink-0 p-1.5 rounded-full', {
-                        'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400':
+                        'bg-red-100 /* TODO: Use semantic token */ text-red-600 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//30 dark:text-red-400 /* TODO: Use semantic token */':
                           conflict.severity === 'critical',
                         'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400':
                           conflict.severity === 'high',
-                        'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400':
+                        'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-600 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//30 dark:text-yellow-400 /* TODO: Use semantic token */':
                           conflict.severity === 'medium',
-                        'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400':
+                        'bg-blue-100 /* TODO: Use semantic token */ text-blue-600 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//30 dark:text-blue-400 /* TODO: Use semantic token */':
                           conflict.severity === 'low',
                       })}
                     >
@@ -743,7 +743,7 @@ export function AIConflictDetector({
                           <motion.div
                             variants={shakeVariant}
                             animate="shake"
-                            className="text-red-500"
+                            className="text-red-500 /* TODO: Use semantic token */"
                           >
                             <AlertCircle className="w-3 h-3" />
                           </motion.div>
@@ -812,7 +812,7 @@ export function AIConflictDetector({
                   animate={{ rotate: 360 }}
                   transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
                 >
-                  <Zap className="w-4 h-4 text-purple-500" />
+                  <Zap className="w-4 h-4 text-purple-500 /* TODO: Use semantic token */" />
                 </motion.div>
                 <span className="text-muted-foreground">Analyzing conflicts...</span>
               </div>
@@ -877,10 +877,10 @@ export function AIConflictDetector({
                       <strong>Severity:</strong>
                       <span
                         className={cn('ml-2 px-2 py-1 rounded-full text-xs', {
-                          'bg-red-100 text-red-800': selectedConflict.severity === 'critical',
+                          'bg-red-100 /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */': selectedConflict.severity === 'critical',
                           'bg-orange-100 text-orange-800': selectedConflict.severity === 'high',
-                          'bg-yellow-100 text-yellow-800': selectedConflict.severity === 'medium',
-                          'bg-blue-100 text-blue-800': selectedConflict.severity === 'low',
+                          'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */': selectedConflict.severity === 'medium',
+                          'bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */': selectedConflict.severity === 'low',
                         })}
                       >
                         {selectedConflict.severity}
@@ -905,7 +905,7 @@ export function AIConflictDetector({
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h5 className="font-medium">{resolution.title}</h5>
-                            <div className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                            <div className="px-2 py-1 bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ text-xs rounded-full">
                               {Math.round(resolution.ai_recommendation_score * 100)}% match
                             </div>
                           </div>

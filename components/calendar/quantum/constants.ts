@@ -203,14 +203,14 @@ export const QUANTUM_FEATURE_CATEGORIES = [
     name: 'CSS Modern Features',
     description: 'Modern CSS capabilities with progressive enhancement',
     icon: 'Zap',
-    color: 'bg-blue-500',
+    color: 'bg-primary',
     flags: ['enableSubgrid', 'enableContainerQueries', 'enableFluidTypography'] as const,
   },
   {
     name: 'Micro-Interactions',
     description: 'Physics-based animations and micro-interactions',
     icon: 'Target',
-    color: 'bg-purple-500',
+    color: 'bg-purple-500 /* TODO: Use semantic token */',
     flags: [
       'enablePhysicsAnimations',
       'enableParallaxEffects',
@@ -222,7 +222,7 @@ export const QUANTUM_FEATURE_CATEGORIES = [
     name: 'Performance',
     description: 'Optimization and performance enhancements',
     icon: 'Gauge',
-    color: 'bg-green-500',
+    color: 'bg-green-500 /* TODO: Use semantic token */',
     flags: [
       'enableQuantumVirtualization',
       'enableIntersectionObserver',
@@ -246,7 +246,7 @@ export const QUANTUM_FEATURE_CATEGORIES = [
     name: 'Analytics',
     description: 'Monitoring and user behavior analytics',
     icon: 'BarChart3',
-    color: 'bg-indigo-500',
+    color: 'bg-indigo-500 /* TODO: Use semantic token */',
     flags: [
       'enablePerformanceTracking',
       'enableUserBehaviorAnalytics',

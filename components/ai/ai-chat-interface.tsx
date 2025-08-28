@@ -107,16 +107,16 @@ export function AIChatInterface({ events, onEventCreate, onEventUpdate }: AIChat
   };
 
   return (
-    <Card className="flex flex-col h-96 bg-white border border-gray-200">
+    <Card className="flex flex-col h-96 bg-white border border-border">
       {/* Header */}
-      <div className="flex items-center gap-2 p-4 border-b border-gray-200 bg-gray-50">
+      <div className="flex items-center gap-2 p-4 border-b border-border bg-muted">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-blue-100 rounded-full">
-            <Sparkles className="w-4 h-4 text-blue-600" />
+          <div className="p-2 bg-blue-100 /* TODO: Use semantic token */ rounded-full">
+            <Sparkles className="w-4 h-4 text-blue-600 /* TODO: Use semantic token */" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900">AI Calendar Assistant</h3>
-            <p className="text-xs text-gray-500">Powered by Grok & Groq</p>
+            <h3 className="font-semibold text-foreground">AI Calendar Assistant</h3>
+            <p className="text-xs text-gray-500 /* TODO: Use semantic token */">Powered by Grok & Groq</p>
           </div>
         </div>
       </div>
@@ -129,43 +129,43 @@ export function AIChatInterface({ events, onEventCreate, onEventUpdate }: AIChat
             className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             {message.type === 'assistant' && (
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <Bot className="w-4 h-4 text-blue-600" />
+              <div className="flex-shrink-0 w-8 h-8 bg-blue-100 /* TODO: Use semantic token */ rounded-full flex items-center justify-center">
+                <Bot className="w-4 h-4 text-blue-600 /* TODO: Use semantic token */" />
               </div>
             )}
             <div
               className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                message.type === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'
+                message.type === 'user' ? 'bg-blue-600 /* TODO: Use semantic token */ text-white' : 'bg-muted text-foreground'
               }`}
             >
               <p className="text-sm">{message.content}</p>
               <p
-                className={`text-xs mt-1 ${message.type === 'user' ? 'text-blue-100' : 'text-gray-500'}`}
+                className={`text-xs mt-1 ${message.type === 'user' ? 'text-blue-100 /* TODO: Use semantic token */' : 'text-gray-500 /* TODO: Use semantic token */'}`}
               >
                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>
             {message.type === 'user' && (
-              <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-gray-600" />
+              <div className="flex-shrink-0 w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+                <User className="w-4 h-4 text-gray-600 /* TODO: Use semantic token */" />
               </div>
             )}
           </div>
         ))}
         {isLoading && (
           <div className="flex gap-3 justify-start">
-            <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-              <Bot className="w-4 h-4 text-blue-600" />
+            <div className="flex-shrink-0 w-8 h-8 bg-blue-100 /* TODO: Use semantic token */ rounded-full flex items-center justify-center">
+              <Bot className="w-4 h-4 text-blue-600 /* TODO: Use semantic token */" />
             </div>
-            <div className="bg-gray-100 text-gray-900 px-4 py-2 rounded-lg">
+            <div className="bg-muted text-foreground px-4 py-2 rounded-lg">
               <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                <div className="w-2 h-2 bg-gray-400 /* TODO: Use semantic token */ rounded-full animate-bounce" />
                 <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  className="w-2 h-2 bg-gray-400 /* TODO: Use semantic token */ rounded-full animate-bounce"
                   style={{ animationDelay: '0.1s' }}
                 />
                 <div
-                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  className="w-2 h-2 bg-gray-400 /* TODO: Use semantic token */ rounded-full animate-bounce"
                   style={{ animationDelay: '0.2s' }}
                 />
               </div>
@@ -176,7 +176,7 @@ export function AIChatInterface({ events, onEventCreate, onEventUpdate }: AIChat
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-border">
         <div className="flex gap-2">
           <Input
             value={input}

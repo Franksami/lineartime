@@ -378,13 +378,13 @@ export function AdvancedExportDialog({
                 <span className="text-sm font-medium">{year}</span>
               </div>
               {exportStatus === 'success' && (
-                <div className="flex items-center gap-2 text-green-600 text-sm">
+                <div className="flex items-center gap-2 text-green-600 /* TODO: Use semantic token */ text-sm">
                   <CheckCircle className="h-4 w-4" />
                   Export successful!
                 </div>
               )}
               {exportStatus === 'error' && (
-                <div className="flex items-center gap-2 text-red-600 text-sm">
+                <div className="flex items-center gap-2 text-red-600 /* TODO: Use semantic token */ text-sm">
                   <AlertCircle className="h-4 w-4" />
                   Export failed. Please try again.
                 </div>

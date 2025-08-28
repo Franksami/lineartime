@@ -147,7 +147,7 @@ export default function SecuritySettingsPage() {
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 /* TODO: Use semantic token */" />
       </div>
     );
   }
@@ -155,8 +155,8 @@ export default function SecuritySettingsPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Security Settings</h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">
+        <h1 className="text-3xl font-bold text-foreground dark:text-white">Security Settings</h1>
+        <p className="mt-2 text-gray-600 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
           Manage your account security and active sessions
         </p>
       </div>
@@ -164,18 +164,18 @@ export default function SecuritySettingsPage() {
       {/* Session Activity Monitor */}
       {timeUntilTimeout !== null &&
         timeUntilTimeout < 120000 && ( // Show when less than 2 minutes
-          <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+          <div className="mb-6 p-4 bg-yellow-50 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//20 border border-yellow-200 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ rounded-lg">
             <div className="flex items-center">
-              <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+              <AlertCircle className="h-5 w-5 text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */ mr-2" />
               <div className="flex-1">
-                <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                <p className="text-sm text-yellow-800 /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */">
                   Your session will timeout in {formatTimeRemaining(timeUntilTimeout)} due to
                   inactivity
                 </p>
               </div>
               <button
                 onClick={() => activityMonitor?.destroy()}
-                className="text-sm text-yellow-600 dark:text-yellow-400 hover:text-yellow-700 dark:hover:text-yellow-300"
+                className="text-sm text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */ hover:text-yellow-700 /* TODO: Use semantic token */ dark:hover:text-yellow-300 /* TODO: Use semantic token */"
               >
                 Keep me signed in
               </button>
@@ -184,26 +184,26 @@ export default function SecuritySettingsPage() {
         )}
 
       {/* Two-Factor Authentication */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 /* TODO: Use semantic token */ rounded-lg shadow-sm border border-border dark:border-gray-700 /* TODO: Use semantic token */ p-6 mb-6">
         <div className="flex items-start justify-between">
           <div className="flex items-start">
-            <Shield className="h-6 w-6 text-blue-600 dark:text-blue-400 mt-1 mr-3" />
+            <Shield className="h-6 w-6 text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ mt-1 mr-3" />
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-lg font-semibold text-foreground dark:text-white">
                 Two-Factor Authentication (2FA)
               </h2>
-              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              <p className="mt-1 text-sm text-gray-600 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
                 Add an extra layer of security to your account by requiring a verification code in
                 addition to your password
               </p>
 
               {mfaEnabled ? (
-                <div className="mt-4 flex items-center text-sm text-green-600 dark:text-green-400">
+                <div className="mt-4 flex items-center text-sm text-green-600 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */">
                   <CheckCircle className="h-4 w-4 mr-1" />
                   2FA is enabled
                 </div>
               ) : (
-                <div className="mt-4 flex items-center text-sm text-yellow-600 dark:text-yellow-400">
+                <div className="mt-4 flex items-center text-sm text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */">
                   <AlertCircle className="h-4 w-4 mr-1" />
                   2FA is not enabled
                 </div>
@@ -216,8 +216,8 @@ export default function SecuritySettingsPage() {
             disabled={isEnablingMFA}
             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               mfaEnabled
-                ? 'bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30'
-                : 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600'
+                ? 'bg-red-100 /* TODO: Use semantic token */ text-red-700 /* TODO: Use semantic token */ hover:bg-red-200 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//20 dark:text-red-400 /* TODO: Use semantic token */ dark:hover:bg-red-900 /* TODO: Use semantic token *//30'
+                : 'bg-blue-600 /* TODO: Use semantic token */ text-white hover:bg-blue-700 /* TODO: Use semantic token */ dark:bg-primary dark:hover:bg-blue-600 /* TODO: Use semantic token */'
             } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             {isEnablingMFA ? 'Setting up...' : mfaEnabled ? 'Disable 2FA' : 'Enable 2FA'}
@@ -226,17 +226,17 @@ export default function SecuritySettingsPage() {
 
         {/* MFA Setup Instructions */}
         {showMFASetup && !mfaEnabled && (
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <h3 className="text-sm font-medium text-blue-900 dark:text-blue-200 mb-2">
+          <div className="mt-6 p-4 bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//20 rounded-lg">
+            <h3 className="text-sm font-medium text-blue-900 /* TODO: Use semantic token */ dark:text-blue-200 /* TODO: Use semantic token */ mb-2">
               Setup Instructions:
             </h3>
-            <ol className="text-sm text-blue-800 dark:text-blue-300 space-y-1">
+            <ol className="text-sm text-blue-800 /* TODO: Use semantic token */ dark:text-blue-300 /* TODO: Use semantic token */ space-y-1">
               <li>1. Install an authenticator app (Google Authenticator, Authy, etc.)</li>
               <li>2. Scan the QR code that will appear</li>
               <li>3. Enter the verification code from your app</li>
               <li>4. Save your backup codes in a secure location</li>
             </ol>
-            <p className="mt-3 text-xs text-blue-700 dark:text-blue-400">
+            <p className="mt-3 text-xs text-blue-700 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */">
               Note: This feature will be fully functional once Clerk MFA is configured in the
               dashboard.
             </p>
@@ -245,20 +245,20 @@ export default function SecuritySettingsPage() {
       </div>
 
       {/* Session Timeout Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 /* TODO: Use semantic token */ rounded-lg shadow-sm border border-border dark:border-gray-700 /* TODO: Use semantic token */ p-6 mb-6">
         <div className="flex items-start">
-          <Activity className="h-6 w-6 text-blue-600 dark:text-blue-400 mt-1 mr-3" />
+          <Activity className="h-6 w-6 text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ mt-1 mr-3" />
           <div className="flex-1">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-lg font-semibold text-foreground dark:text-white">
               Session Timeout Settings
             </h2>
-            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="mt-1 text-sm text-gray-600 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ mb-4">
               Configure automatic logout after periods of inactivity
             </p>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-muted-foreground dark:text-gray-300 /* TODO: Use semantic token */ mb-1">
                   Session Timeout (minutes)
                 </label>
                 <input
@@ -267,15 +267,15 @@ export default function SecuritySettingsPage() {
                   max="120"
                   value={sessionTimeout}
                   onChange={(e) => setSessionTimeout(Number.parseInt(e.target.value))}
-                  className="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="w-32 px-3 py-2 border border-gray-300 /* TODO: Use semantic token */ dark:border-gray-600 /* TODO: Use semantic token */ rounded-md focus:ring-blue-500 /* TODO: Use semantic token */ focus:border-blue-500 /* TODO: Use semantic token */ dark:bg-gray-700 /* TODO: Use semantic token */ dark:text-white"
                 />
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-xs text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
                   Maximum time a session can remain active
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-muted-foreground dark:text-gray-300 /* TODO: Use semantic token */ mb-1">
                   Idle Timeout (minutes)
                 </label>
                 <input
@@ -284,9 +284,9 @@ export default function SecuritySettingsPage() {
                   max="60"
                   value={idleTimeout}
                   onChange={(e) => setIdleTimeout(Number.parseInt(e.target.value))}
-                  className="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="w-32 px-3 py-2 border border-gray-300 /* TODO: Use semantic token */ dark:border-gray-600 /* TODO: Use semantic token */ rounded-md focus:ring-blue-500 /* TODO: Use semantic token */ focus:border-blue-500 /* TODO: Use semantic token */ dark:bg-gray-700 /* TODO: Use semantic token */ dark:text-white"
                 />
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                <p className="mt-1 text-xs text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
                   Logout after this period of inactivity
                 </p>
               </div>
@@ -296,12 +296,12 @@ export default function SecuritySettingsPage() {
       </div>
 
       {/* Active Sessions */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-gray-800 /* TODO: Use semantic token */ rounded-lg shadow-sm border border-border dark:border-gray-700 /* TODO: Use semantic token */ p-6">
         <div className="flex items-start mb-4">
-          <Monitor className="h-6 w-6 text-blue-600 dark:text-blue-400 mt-1 mr-3" />
+          <Monitor className="h-6 w-6 text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ mt-1 mr-3" />
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Active Sessions</h2>
-            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            <h2 className="text-lg font-semibold text-foreground dark:text-white">Active Sessions</h2>
+            <p className="mt-1 text-sm text-gray-600 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
               Manage devices and locations where you&apos;re currently signed in
             </p>
           </div>
@@ -311,20 +311,20 @@ export default function SecuritySettingsPage() {
           {activeSessions.map((session) => (
             <div
               key={session.id}
-              className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              className="flex items-center justify-between p-3 bg-muted dark:bg-gray-700 /* TODO: Use semantic token */ rounded-lg"
             >
               <div className="flex items-center">
-                <Monitor className="h-5 w-5 text-gray-400 mr-3" />
+                <Monitor className="h-5 w-5 text-gray-400 /* TODO: Use semantic token */ mr-3" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  <p className="text-sm font-medium text-foreground dark:text-white">
                     {session.device}
                     {session.current && (
-                      <span className="ml-2 px-2 py-0.5 text-xs bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400 rounded">
+                      <span className="ml-2 px-2 py-0.5 text-xs bg-green-100 /* TODO: Use semantic token */ text-green-700 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token *//20 dark:text-green-400 /* TODO: Use semantic token */ rounded">
                         Current
                       </span>
                     )}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
                     {session.location} • Last active:{' '}
                     {new Date(session.lastActive).toLocaleString()}
                   </p>
@@ -334,7 +334,7 @@ export default function SecuritySettingsPage() {
               {!session.current && (
                 <button
                   onClick={() => terminateSession(session.id)}
-                  className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                  className="text-sm text-red-600 /* TODO: Use semantic token */ hover:text-red-700 /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */ dark:hover:text-red-300 /* TODO: Use semantic token */"
                 >
                   Sign out
                 </button>
@@ -343,17 +343,17 @@ export default function SecuritySettingsPage() {
           ))}
         </div>
 
-        <button className="mt-4 text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium">
+        <button className="mt-4 text-sm text-red-600 /* TODO: Use semantic token */ hover:text-red-700 /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */ dark:hover:text-red-300 /* TODO: Use semantic token */ font-medium">
           Sign out all other sessions
         </button>
       </div>
 
       {/* Security Recommendations */}
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-        <h3 className="text-sm font-medium text-blue-900 dark:text-blue-200 mb-2">
+      <div className="mt-6 p-4 bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//20 rounded-lg">
+        <h3 className="text-sm font-medium text-blue-900 /* TODO: Use semantic token */ dark:text-blue-200 /* TODO: Use semantic token */ mb-2">
           Security Recommendations:
         </h3>
-        <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-1">
+        <ul className="text-sm text-blue-800 /* TODO: Use semantic token */ dark:text-blue-300 /* TODO: Use semantic token */ space-y-1">
           <li className="flex items-start">
             <Key className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" />
             Use a strong, unique password for your account

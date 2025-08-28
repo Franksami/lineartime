@@ -242,6 +242,12 @@ importers:
       framer-motion:
         specifier: ^12.23.12
         version: 12.23.12(@emotion/is-prop-valid@1.3.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      fuzzysort:
+        specifier: ^3.1.0
+        version: 3.1.0
+      geist:
+        specifier: ^1.4.2
+        version: 1.4.2(next@15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       glob:
         specifier: ^11.0.3
         version: 11.0.3
@@ -299,6 +305,9 @@ importers:
       react-hook-form:
         specifier: ^7.62.0
         version: 7.62.0(react@19.1.0)
+      react-hotkeys-hook:
+        specifier: ^5.1.0
+        version: 5.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-infinite-calendar:
         specifier: ^2.3.1
         version: 2.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -3556,6 +3565,9 @@ packages:
     resolution: {integrity: sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==}
     engines: {node: '>=10'}
 
+  fuzzysort@3.1.0:
+    resolution: {integrity: sha512-sR9BNCjBg6LNgwvxlBd0sBABvQitkLzoVY9MYYROQVX/FvfJ4Mai9LsGhDgd8qYdds0bY77VzYd5iuB+v5rwQQ==}
+
   gaxios@7.1.1:
     resolution: {integrity: sha512-Odju3uBUJyVCkW64nLD4wKLhbh93bh6vIg/ZIXkWiLPBrdgtc65+tls/qml+un3pr6JqYVFDZbbmLDQT68rTOQ==}
     engines: {node: '>=18'}
@@ -3563,6 +3575,11 @@ packages:
   gcp-metadata@7.0.1:
     resolution: {integrity: sha512-UcO3kefx6dCcZkgcTGgVOTFb7b1LlQ02hY1omMjjrrBzkajRMCFgYOjs7J71WqnuG1k2b+9ppGL7FsOfhZMQKQ==}
     engines: {node: '>=18'}
+
+  geist@1.4.2:
+    resolution: {integrity: sha512-OQUga/KUc8ueijck6EbtT07L4tZ5+TZgjw8PyWfxo16sL5FWk7gNViPNU8hgCFjy6bJi9yuTP+CRpywzaGN8zw==}
+    peerDependencies:
+      next: '>=13.2.0'
 
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -4787,6 +4804,12 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
+
+  react-hotkeys-hook@5.1.0:
+    resolution: {integrity: sha512-GCNGXjBzV9buOS3REoQFmSmE4WTvBhYQ0YrAeeMZI83bhXg3dRWsLHXDutcVDdEjwJqJCxk5iewWYX5LtFUd7g==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react-infinite-calendar@2.3.1:
     resolution: {integrity: sha512-lGlhN2XjNKm1OUckbN86dN7O+Mofb/mjva+aPipxxxgypZ2gzkf2S4oqwKF4d2PgWjdI36kDcZIujnB3o6BseA==}
@@ -8788,6 +8811,8 @@ snapshots:
 
   fuse.js@6.6.2: {}
 
+  fuzzysort@3.1.0: {}
+
   gaxios@7.1.1:
     dependencies:
       extend: 3.0.2
@@ -8803,6 +8828,10 @@ snapshots:
       json-bigint: 1.0.0
     transitivePeerDependencies:
       - supports-color
+
+  geist@1.4.2(next@15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)):
+    dependencies:
+      next: 15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
   gensync@1.0.0-beta.2: {}
 
@@ -10378,6 +10407,11 @@ snapshots:
   react-hook-form@7.62.0(react@19.1.0):
     dependencies:
       react: 19.1.0
+
+  react-hotkeys-hook@5.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   react-infinite-calendar@2.3.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:

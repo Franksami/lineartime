@@ -99,7 +99,7 @@ export function ReflectionModal({ open, onOpenChange, events, year }: Reflection
           {/* Statistics */}
           <div className="grid grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
             <div className="flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
+              <CheckCircle2 className="h-5 w-5 text-green-500 /* TODO: Use semantic token */ mt-0.5" />
               <div>
                 <p className="text-sm font-medium">Total Events</p>
                 <p className="text-2xl font-bold">{stats.totalEvents}</p>
@@ -115,7 +115,7 @@ export function ReflectionModal({ open, onOpenChange, events, year }: Reflection
             </div>
 
             <div className="flex items-start gap-3">
-              <TrendingUp className="h-5 w-5 text-blue-500 mt-0.5" />
+              <TrendingUp className="h-5 w-5 text-primary mt-0.5" />
               <div>
                 <p className="text-sm font-medium">Work Events</p>
                 <p className="text-2xl font-bold">{stats.workPercentage}%</p>
@@ -123,7 +123,7 @@ export function ReflectionModal({ open, onOpenChange, events, year }: Reflection
             </div>
 
             <div className="flex items-start gap-3">
-              <Calendar className="h-5 w-5 text-purple-500 mt-0.5" />
+              <Calendar className="h-5 w-5 text-purple-500 /* TODO: Use semantic token */ mt-0.5" />
               <div>
                 <p className="text-sm font-medium">Weeks Without Personal Time</p>
                 <p className="text-2xl font-bold">{stats.weeksWithoutPersonal}</p>
@@ -137,14 +137,14 @@ export function ReflectionModal({ open, onOpenChange, events, year }: Reflection
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="flex items-center text-sm">
-                  <span className="w-3 h-3 rounded-full bg-green-500 mr-2" />
+                  <span className="w-3 h-3 rounded-full bg-green-500 /* TODO: Use semantic token */ mr-2" />
                   Personal
                 </span>
                 <span className="text-sm font-medium">{stats.personalPercentage}%</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center text-sm">
-                  <span className="w-3 h-3 rounded-full bg-blue-500 mr-2" />
+                  <span className="w-3 h-3 rounded-full bg-primary mr-2" />
                   Work
                 </span>
                 <span className="text-sm font-medium">{stats.workPercentage}%</span>
@@ -158,7 +158,7 @@ export function ReflectionModal({ open, onOpenChange, events, year }: Reflection
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center text-sm">
-                  <span className="w-3 h-3 rounded-full bg-purple-500 mr-2" />
+                  <span className="w-3 h-3 rounded-full bg-purple-500 /* TODO: Use semantic token */ mr-2" />
                   Notes
                 </span>
                 <span className="text-sm font-medium">{stats.notePercentage}%</span>

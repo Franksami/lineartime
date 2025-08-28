@@ -68,7 +68,7 @@ export function FilterPanel({ filters, viewOptions, onFilterChange, onClose }: F
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label htmlFor="personal" className="flex items-center cursor-pointer">
-                <span className="w-3 h-3 rounded-full bg-green-500 mr-2" />
+                <span className="w-3 h-3 rounded-full bg-green-500 /* TODO: Use semantic token */ mr-2" />
                 Personal
               </Label>
               <Switch
@@ -80,7 +80,7 @@ export function FilterPanel({ filters, viewOptions, onFilterChange, onClose }: F
 
             <div className="flex items-center justify-between">
               <Label htmlFor="work" className="flex items-center cursor-pointer">
-                <span className="w-3 h-3 rounded-full bg-blue-500 mr-2" />
+                <span className="w-3 h-3 rounded-full bg-primary mr-2" />
                 Work
               </Label>
               <Switch
@@ -104,7 +104,7 @@ export function FilterPanel({ filters, viewOptions, onFilterChange, onClose }: F
 
             <div className="flex items-center justify-between">
               <Label htmlFor="note" className="flex items-center cursor-pointer">
-                <span className="w-3 h-3 rounded-full bg-purple-500 mr-2" />
+                <span className="w-3 h-3 rounded-full bg-purple-500 /* TODO: Use semantic token */ mr-2" />
                 Note
               </Label>
               <Switch
@@ -164,11 +164,11 @@ export function FilterPanel({ filters, viewOptions, onFilterChange, onClose }: F
           <h4 className="text-sm font-medium mb-3">Legend</h4>
           <div className="space-y-2 text-sm">
             <div className="flex items-center">
-              <span className="w-3 h-3 rounded-full bg-green-500 mr-2" />
+              <span className="w-3 h-3 rounded-full bg-green-500 /* TODO: Use semantic token */ mr-2" />
               <span>Personal - Life events</span>
             </div>
             <div className="flex items-center">
-              <span className="w-3 h-3 rounded-full bg-blue-500 mr-2" />
+              <span className="w-3 h-3 rounded-full bg-primary mr-2" />
               <span>Work - Professional tasks</span>
             </div>
             <div className="flex items-center">
@@ -176,7 +176,7 @@ export function FilterPanel({ filters, viewOptions, onFilterChange, onClose }: F
               <span>Effort - Active projects</span>
             </div>
             <div className="flex items-center">
-              <span className="w-3 h-3 rounded-full bg-purple-500 mr-2" />
+              <span className="w-3 h-3 rounded-full bg-purple-500 /* TODO: Use semantic token */ mr-2" />
               <span>Note - Important reminders</span>
             </div>
           </div>

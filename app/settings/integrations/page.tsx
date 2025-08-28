@@ -240,7 +240,7 @@ export default function IntegrationsPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
                         <span className="text-sm font-medium">Connected</span>
                       </div>
                       <div className="flex items-center gap-2">
@@ -332,14 +332,14 @@ export default function IntegrationsPage() {
           <div className="space-y-2">
             <a
               href="/docs/integrations"
-              className="flex items-center gap-2 text-sm text-blue-600 hover:underline"
+              className="flex items-center gap-2 text-sm text-blue-600 /* TODO: Use semantic token */ hover:underline"
             >
               <ExternalLink className="h-4 w-4" />
               Integration Guide
             </a>
             <a
               href="/docs/troubleshooting"
-              className="flex items-center gap-2 text-sm text-blue-600 hover:underline"
+              className="flex items-center gap-2 text-sm text-blue-600 /* TODO: Use semantic token */ hover:underline"
             >
               <AlertCircle className="h-4 w-4" />
               Troubleshooting

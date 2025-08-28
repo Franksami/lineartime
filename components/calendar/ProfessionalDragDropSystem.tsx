@@ -759,12 +759,12 @@ export function ProfessionalDragDropSystem({
           <div className="font-semibold text-primary mb-2">🎯 Drag-Drop Metrics</div>
           <div className="space-y-1">
             <div>Total Drags: <span className="font-mono">{dragMetrics.totalDrags}</span></div>
-            <div>Success Rate: <span className="font-mono text-green-600">
+            <div>Success Rate: <span className="font-mono text-green-600 /* TODO: Use semantic token */">
               {dragMetrics.totalDrags > 0 
                 ? Math.round((dragMetrics.successfulDrops / dragMetrics.totalDrags) * 100) 
                 : 0}%
             </span></div>
-            <div>Conflicts: <span className="font-mono text-yellow-600">{dragConflicts.length}</span></div>
+            <div>Conflicts: <span className="font-mono text-yellow-600 /* TODO: Use semantic token */">{dragConflicts.length}</span></div>
             <div>Performance: <span className="font-mono">
               {Math.round(performanceMonitor.currentFPS || 0)} FPS
             </span></div>

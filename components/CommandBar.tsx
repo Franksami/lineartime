@@ -271,7 +271,7 @@ export function CommandBar({
                 </div>
 
                 {preview.confidence < 0.4 && (
-                  <div className="flex items-center gap-1 text-xs text-yellow-600 dark:text-yellow-400">
+                  <div className="flex items-center gap-1 text-xs text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */">
                     <AlertCircle className="w-3 h-3" />
                     Add more details for better accuracy
                   </div>

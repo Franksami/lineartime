@@ -1,0 +1,217 @@
+# 🏗️ Command Workspace Development Rules for Cursor IDE
+# Research-validated patterns for optimal Command Workspace implementation
+
+## 🎯 ARCHITECTURE FUNDAMENTALS
+
+You are working on **LinearTime Command Workspace** - an AI-powered productivity platform with three-pane architecture (Sidebar + Tabs + Context Dock).
+
+### PRIMARY ARCHITECTURE (USE THESE ONLY):
+- **Shell**: `components/shell/AppShell.tsx` - Three-pane layout with react-resizable-panels
+- **Commands**: `components/commands/CommandPalette.tsx` - fuzzysort + Ctrl+P/Cmd+P (Obsidian patterns)
+- **Views**: `views/week/WeekView.tsx` etc. - ViewScaffold contract (Header + Content + Context)  
+- **Context Dock**: `components/dock/ContextDock.tsx` - AI agents + contextual panels
+- **State**: Zustand for workspace state, React Context for component state
+
+### 🚨 DEPRECATED & BANNED (DO NOT USE):
+- ❌ `LinearCalendarHorizontal` outside `views/year-lens/` (ARCHITECTURAL VIOLATION)
+- ❌ Calendar-centric routing or layouts as primary interface
+- ❌ Direct calendar foundation imports in shell components
+- ❌ Hardcoded colors (use semantic tokens: bg-background, text-foreground, etc.)
+
+## 📚 RESEARCH-VALIDATED PATTERNS
+
+### Command System (Obsidian + Schedule X patterns):
+- **Command Palette**: Use fuzzysort for fuzzy search, Ctrl+P/Cmd+P shortcuts
+- **Keyboard Navigation**: Double-click event creation <120ms, escape key handling, focus management
+- **Intent Classification**: Vercel AI SDK with ≥0.8 confidence auto-execute, <0.8 confirm
+
+### AI Integration (Rasa + Timefold patterns):
+- **Conversation Management**: Slot-based state with multi-turn context (max_history pattern)
+- **Constraint Solving**: forEachUniquePair analysis for conflict detection (Timefold pattern)
+- **Tool Safety**: Auto-approval lists, scoped permissions, audit logging
+
+### State Management (Research-optimized):
+- **Workspace State**: Zustand with persist middleware for layouts, tabs, dock panels
+- **Component State**: React Context for view-specific state
+- **AI State**: Separate Zustand store for conversation context and agent state
+
+## 🛠️ IMPLEMENTATION GUIDELINES
+
+### Component Development:
+```typescript
+// ✅ CORRECT: View implementation with scaffold
+export const WeekView = () => {
+  const { events } = useCalendarEvents() // Backend integration preserved
+  
+  return (
+    <ViewScaffold
+      header={<WeekViewHeader />}
+      content={<WeekGrid events={events} />}
+      contextPanels={['conflicts', 'capacity']}
+    />
+  )
+}
+
+// ❌ WRONG: Direct calendar foundation usage
+import LinearCalendarHorizontal from '@/components/calendar/LinearCalendarHorizontal'
+```
+
+### State Management Patterns:
+```typescript  
+// ✅ CORRECT: Zustand for workspace state
+const useAppShell = create<AppShellState>()(
+  persist(
+    (set) => ({
+      activeView: 'week',
+      dockPanels: ['ai'],
+      setActiveView: (view) => set({ activeView: view })
+    }),
+    { name: 'workspace-storage' }
+  )
+)
+
+// ✅ CORRECT: Feature flag usage
+const { shouldShowShell } = useCommandWorkspaceShell()
+if (!shouldShowShell) return <LegacyCalendarFallback />
+```
+
+### Command Registration:
+```typescript
+// ✅ CORRECT: Type-safe command registration  
+export const COMMANDS = {
+  NAVIGATE_WEEK: {
+    id: 'navigate.week',
+    title: 'Navigate to Week View',
+    shortcut: 'mod+1',
+    category: 'navigation',
+    execute: () => router.push('/app?view=week')
+  }
+} as const
+```
+
+## 🎨 DESIGN SYSTEM INTEGRATION
+
+### Typography (Vercel Geist fonts):
+```typescript
+// app/layout.tsx
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
+
+<html className={`${GeistSans.variable} ${GeistMono.variable}`}>
+  <body className="font-sans bg-background text-foreground">
+```
+
+### Styling Guidelines:
+- **Typography**: `font-sans` (Geist Sans), `font-mono` (Geist Mono)
+- **Colors**: ONLY semantic tokens (bg-background, text-foreground, border-border)
+- **Components**: Use shadcn/ui components with proper semantic tokens
+- **Responsive**: 700px breakpoint for mobile adaptation (Schedule X research)
+
+## 🧪 TESTING REQUIREMENTS
+
+### Component Testing:
+```typescript
+// Required tests for each component
+describe('ComponentName', () => {
+  test('renders without errors', () => {})
+  test('handles keyboard navigation', () => {})
+  test('integrates with feature flags', () => {})
+  test('maintains performance budgets', () => {})
+})
+```
+
+### E2E Testing with Playwright:
+- **Shell Tests**: Three-pane layout, panel resizing, tab navigation
+- **Keyboard Tests**: Command palette (Ctrl+P), double-click creation (<120ms)  
+- **AI Tests**: Agent responses (<2s), tool safety, conversation context
+- **Performance Tests**: Bundle sizes (<150KB shell), render times (<500ms)
+
+## 🔒 SAFETY & VALIDATION
+
+### Before Every Commit:
+```bash
+pnpm run test:shell          # Command Workspace validation
+pnpm run governance:workspace # Architecture compliance  
+pnpm run test:governance     # Full governance check
+pnpm run build              # Build validation
+```
+
+### Emergency Procedures:
+```bash
+pnpm run emergency:disable-shell    # Instant shell disable
+pnpm run emergency:rollback        # Complete rollback to calendar
+pnpm run emergency:gradual-rollback # Phase-by-phase rollback
+```
+
+### Development Validation:
+- **Feature Flags**: Always check flag status before implementing features
+- **Architecture**: Use governance validation before PR creation
+- **Performance**: Monitor bundle sizes and render performance continuously
+- **Accessibility**: WCAG 2.1 AA compliance for all new components
+
+## 📋 FILE STRUCTURE GUIDANCE
+
+### NEW Components (Command Workspace):
+```
+components/
+├── shell/           # 🆕 PRIMARY: Three-pane shell components
+├── commands/        # 🆕 PRIMARY: Command palette, omnibox, keyboard  
+├── dock/           # 🆕 PRIMARY: Context dock panels and management
+└── calendar/       # 🚨 LEGACY: Only for year-lens view integration
+```
+
+### NEW Views (Research-validated):
+```
+views/
+├── week/           # Primary view with calendar integration
+├── planner/        # Kanban + time-blocking with drag & drop
+├── notes/          # Markdown editing with entity linking
+├── mailbox/        # Email triage with entity conversion
+└── year-lens/      # 🚨 LEGACY: Only allowed LinearCalendarHorizontal usage
+```
+
+### State & Hooks:
+```
+contexts/           # Workspace providers (AppShell, Command, Omnibox)
+hooks/             # Workspace hooks (useAppShell, useCommands, etc.)
+lib/ai/            # AI agents and MCP tool integration
+lib/emergency/     # Rollback systems and safety procedures
+```
+
+## 🚀 DEVELOPMENT WORKFLOW
+
+### Daily Development Cycle:
+1. **Morning**: `pnpm run governance:workspace` (validate compliance)
+2. **Development**: Build features with Storybook documentation
+3. **Testing**: Component + E2E testing for each change
+4. **Integration**: Feature flag testing + performance monitoring  
+5. **Evening**: Bundle analysis + performance regression check
+
+### Quality Gates:
+- **Architecture**: No LinearCalendarHorizontal imports outside year-lens/
+- **Performance**: Shell <150KB, Views <100KB, Panels <50KB
+- **Accessibility**: Keyboard-only navigation, WCAG 2.1 AA compliance
+- **AI Safety**: Tool permissions, auto-approval lists, audit logging
+
+## 💡 BEST PRACTICES
+
+### Component Creation:
+1. Start with Storybook story for isolated development
+2. Implement ViewScaffold contract for views  
+3. Use feature flags for gradual rollout
+4. Add comprehensive keyboard navigation
+5. Integrate with Context Dock for contextual information
+
+### AI Agent Development:
+1. Use research-validated patterns (Rasa conversation, Timefold constraint solving)
+2. Implement tool safety with auto-approval lists
+3. Add streaming responses with confidence thresholds
+4. Maintain conversation context with state persistence
+
+### Performance Optimization:
+1. Monitor bundle sizes continuously with webpack-bundle-analyzer
+2. Use React.memo for expensive components
+3. Implement virtualization for large lists
+4. Code-split by view and dock panel
+
+Remember: **Preserve all existing functionality** while implementing Command Workspace architecture. The goal is **enhancement, not replacement** of working systems.

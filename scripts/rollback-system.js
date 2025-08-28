@@ -461,7 +461,7 @@ class GovernanceRollbackSystem {
         files: ['components/ui/button.tsx'],
         changes: [
           {
-            from: 'bg-blue-500',
+            from: 'bg-primary',
             to: 'bg-primary'
           }
         ]

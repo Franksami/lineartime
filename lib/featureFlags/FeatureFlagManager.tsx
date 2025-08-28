@@ -11,7 +11,8 @@
  */
 
 import { nanoid } from 'nanoid';
-import { cookies, headers } from 'next/headers';
+// Server-only imports - commented out for client compatibility
+// import { cookies, headers } from 'next/headers';
 import { FeatureFlagProvider, dedupe, flag, useFeatureFlags } from './modernFeatureFlags';
 
 // ============================================================================
@@ -132,12 +133,25 @@ export interface FeatureFlagState {
  */
 export const getOrGenerateVisitorId = dedupe(
   async (): Promise<{ value: string; fresh: boolean }> => {
-    const cookieStore = await cookies();
-    const visitorIdCookie = cookieStore.get('linear-visitor-id')?.value;
-
-    return visitorIdCookie
-      ? { value: visitorIdCookie, fresh: false }
-      : { value: nanoid(), fresh: true };
+    // Client-side fallback - use localStorage or generate new ID
+    if (typeof window !== 'undefined') {
+      const storedId = localStorage.getItem('linear-visitor-id');
+      if (storedId) {
+        return { value: storedId, fresh: false };
+      }
+      const newId = nanoid();
+      localStorage.setItem('linear-visitor-id', newId);
+      return { value: newId, fresh: true };
+    }
+    
+    // Server-side would use cookies here
+    // const cookieStore = await cookies();
+    // const visitorIdCookie = cookieStore.get('linear-visitor-id')?.value;
+    // return visitorIdCookie
+    //   ? { value: visitorIdCookie, fresh: false }
+    //   : { value: nanoid(), fresh: true };
+    
+    return { value: nanoid(), fresh: true };
   }
 );
 
@@ -146,25 +160,42 @@ export const getOrGenerateVisitorId = dedupe(
  */
 export const getUserContext = dedupe(async () => {
   const visitorId = await getOrGenerateVisitorId();
-  const headersList = await headers();
-  const userAgent = headersList.get('user-agent') || '';
-  const referer = headersList.get('referer') || '';
-
-  // Determine user group based on various factors
-  let userGroup = 'default';
-  if (userAgent.includes('bot') || userAgent.includes('crawler')) {
-    userGroup = 'bot';
-  } else if (referer.includes('beta.') || referer.includes('staging.')) {
-    userGroup = 'beta';
-  } else if (visitorId.value.startsWith('premium_')) {
-    userGroup = 'premium';
+  
+  // Client-side fallback
+  if (typeof window !== 'undefined') {
+    const userAgent = navigator.userAgent || '';
+    const referer = document.referrer || '';
+    
+    // Determine user group based on various factors
+    let userGroup = 'default';
+    if (userAgent.includes('bot') || userAgent.includes('crawler')) {
+      userGroup = 'bot';
+    } else if (referer.includes('beta.') || referer.includes('staging.')) {
+      userGroup = 'beta';
+    } else if (visitorId.value.startsWith('premium_')) {
+      userGroup = 'premium';
+    }
+    
+    return {
+      userId: visitorId.value,
+      userGroup,
+      userAgent,
+      referer,
+      timestamp: new Date(),
+      isNewUser: visitorId.fresh,
+    };
   }
-
+  
+  // Server-side fallback (commented out for client compatibility)
+  // const headersList = await headers();
+  // const userAgent = headersList.get('user-agent') || '';
+  // const referer = headersList.get('referer') || '';
+  
   return {
     userId: visitorId.value,
-    userGroup,
-    userAgent,
-    referer,
+    userGroup: 'default',
+    userAgent: '',
+    referer: '',
     timestamp: new Date(),
     isNewUser: visitorId.fresh,
   };
@@ -606,11 +637,23 @@ function getCurrentDeploymentPhase(now: Date): RolloutPhase | null {
  */
 async function checkReducedMotionPreference(): Promise<boolean> {
   try {
-    // This would be implemented client-side
-    // For server-side, check user preferences from database/cookies
-    const cookieStore = await cookies();
-    const motionPreference = cookieStore.get('motion-preference')?.value;
-    return motionPreference === 'reduced';
+    // Client-side implementation
+    if (typeof window !== 'undefined') {
+      // Check CSS media query for prefers-reduced-motion
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) return true;
+      
+      // Check localStorage preference
+      const motionPreference = localStorage.getItem('motion-preference');
+      return motionPreference === 'reduced';
+    }
+    
+    // Server-side would check cookies/database here
+    // const cookieStore = await cookies();
+    // const motionPreference = cookieStore.get('motion-preference')?.value;
+    // return motionPreference === 'reduced';
+    
+    return false; // Default to allowing motion
   } catch {
     return false; // Default to allowing motion
   }

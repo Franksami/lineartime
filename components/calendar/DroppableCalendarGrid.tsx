@@ -40,7 +40,7 @@ export function DroppableCalendarGrid({
       ref={setNodeRef}
       className={cn(
         'relative transition-colors',
-        isHighlighted && canDrop && 'bg-blue-50 dark:bg-blue-950/20',
+        isHighlighted && canDrop && 'bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-950 /* TODO: Use semantic token *//20',
         !canDrop && 'cursor-not-allowed',
         className
       )}
@@ -50,7 +50,7 @@ export function DroppableCalendarGrid({
     >
       {children}
       {isHighlighted && canDrop && (
-        <div className="absolute inset-0 border-2 border-blue-500 border-dashed rounded pointer-events-none animate-pulse" />
+        <div className="absolute inset-0 border-2 border-blue-500 /* TODO: Use semantic token */ border-dashed rounded pointer-events-none animate-pulse" />
       )}
     </div>
   );

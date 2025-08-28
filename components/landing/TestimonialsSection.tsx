@@ -186,7 +186,7 @@ export function TestimonialsSection() {
           className="text-center max-w-4xl mx-auto mb-16"
         >
           <Badge variant="secondary" className="mb-4">
-            <Heart className="w-4 h-4 mr-2 text-red-500" />
+            <Heart className="w-4 h-4 mr-2 text-red-500 /* TODO: Use semantic token */" />
             Loved by Thousands
           </Badge>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6">

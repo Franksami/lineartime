@@ -527,7 +527,7 @@ export function VirtualizedCalendarContainer({
                   🚀 Virtualized
                 </div>
               )}
-              <div className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+              <div className="px-3 py-1 bg-green-100 /* TODO: Use semantic token */ text-green-700 /* TODO: Use semantic token */ rounded-full text-xs font-medium">
                 {virtualizationMetrics.totalEvents} Events
               </div>
             </div>
@@ -633,7 +633,7 @@ export function VirtualizedCalendarContainer({
         <div className="absolute bottom-4 left-4 z-40 bg-card border border-border rounded-lg p-3 text-xs shadow-lg">
           <div className="font-semibold text-primary mb-2">🚀 Enterprise Performance</div>
           <div className="space-y-1">
-            <div>FPS: <span className="font-mono text-green-600">{Math.round(virtualizationMetrics.scrollFPS)}</span></div>
+            <div>FPS: <span className="font-mono text-green-600 /* TODO: Use semantic token */">{Math.round(virtualizationMetrics.scrollFPS)}</span></div>
             <div>Events: <span className="font-mono">{virtualizationMetrics.renderedEvents}/{virtualizationMetrics.totalEvents}</span></div>
             <div>Memory: <span className="font-mono">{Math.round(virtualizationMetrics.memoryUsage)}MB</span></div>
             <div>Virtualization: <span className="font-mono text-primary">{Math.round(virtualizationMetrics.virtualizationRatio * 100)}%</span></div>

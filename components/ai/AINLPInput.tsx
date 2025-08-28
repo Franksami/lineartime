@@ -860,7 +860,7 @@ export function AINLPInput({
               <button
                 onClick={handleVoiceInput}
                 className={cn('p-2 rounded-md transition-colors', 'hover:bg-muted', {
-                  'bg-red-500 text-white': isListening,
+                  'bg-red-500 /* TODO: Use semantic token */ text-white': isListening,
                   'text-muted-foreground': !isListening,
                 })}
                 aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
@@ -908,14 +908,14 @@ export function AINLPInput({
             className="bg-muted/50 border border-border rounded-lg p-4"
           >
             <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 p-2 bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400 rounded-full">
+              <div className="flex-shrink-0 p-2 bg-green-100 /* TODO: Use semantic token */ text-green-600 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token *//30 dark:text-green-400 /* TODO: Use semantic token */ rounded-full">
                 <CheckCircle className="w-4 h-4" />
               </div>
 
               <div className="flex-1 min-w-0">
                 <h4 className="font-medium mb-2 flex items-center gap-2">
                   {parsedEvent.title}
-                  <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 rounded-full">
+                  <span className="px-2 py-1 text-xs bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//30 dark:text-blue-400 /* TODO: Use semantic token */ rounded-full">
                     {Math.round(parsedEvent.confidence * 100)}% match
                   </span>
                 </h4>
@@ -986,7 +986,7 @@ export function AINLPInput({
             className="space-y-2"
           >
             <div className="flex items-center gap-2 text-sm">
-              <Sparkles className="w-4 h-4 text-purple-500" />
+              <Sparkles className="w-4 h-4 text-purple-500 /* TODO: Use semantic token */" />
               <span className="font-medium">AI Suggestions</span>
               <button
                 onClick={() => setShowSuggestions(false)}
@@ -1022,7 +1022,7 @@ export function AINLPInput({
             className="space-y-2"
           >
             <div className="flex items-center gap-2 text-sm">
-              <Lightbulb className="w-4 h-4 text-yellow-500" />
+              <Lightbulb className="w-4 h-4 text-yellow-500 /* TODO: Use semantic token */" />
               <span className="font-medium">Quick Templates</span>
               <button
                 onClick={() => setShowTemplates(false)}

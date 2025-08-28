@@ -146,7 +146,7 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
               ))}
               {dayEvents.length > 3 && (
                 <div
-                  className="w-2 h-2 rounded-full bg-gray-400 text-white text-xs flex items-center justify-center"
+                  className="w-2 h-2 rounded-full bg-gray-400 /* TODO: Use semantic token */ text-white text-xs flex items-center justify-center"
                   data-pr-tooltip={`+${dayEvents.length - 3} more events`}
                   data-pr-position="top"
                 >
@@ -217,8 +217,8 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
       {loading && (
         <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="flex items-center space-x-2">
-            <i className="pi pi-spin pi-spinner text-2xl text-blue-500" />
-            <span className="text-sm text-gray-600">Loading events...</span>
+            <i className="pi pi-spin pi-spinner text-2xl text-primary" />
+            <span className="text-sm text-gray-600 /* TODO: Use semantic token */">Loading events...</span>
           </div>
         </div>
       )}
@@ -227,7 +227,7 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
       <Card className="mb-4">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
-            <CalendarIcon className="h-6 w-6 text-blue-500" />
+            <CalendarIcon className="h-6 w-6 text-primary" />
             <h2 className="text-xl font-semibold">PrimeReact Calendar</h2>
             <Badge value={events.length} severity={events.length > 0 ? 'info' : 'secondary'} />
           </div>
@@ -283,8 +283,8 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                   theme === 'dark' && 'p-dark-theme',
                   loading && 'opacity-50 pointer-events-none'
                 )}
-                panelClassName="shadow-lg border border-gray-200"
-                inputClassName="w-full p-3 border border-gray-300 rounded-lg"
+                panelClassName="shadow-lg border border-border"
+                inputClassName="w-full p-3 border border-gray-300 /* TODO: Use semantic token */ rounded-lg"
               />
             </div>
           </Card>
@@ -311,7 +311,7 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                 </div>
 
                 {selectedDateEvents.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-gray-500 /* TODO: Use semantic token */">
                     <i className="pi pi-calendar text-4xl mb-3 block opacity-50" />
                     <p className="text-sm mb-3">No events for this date</p>
                     <Button
@@ -351,12 +351,12 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                             </div>
 
                             {event.description && (
-                              <p className="text-xs text-gray-600 mb-2 line-clamp-2">
+                              <p className="text-xs text-gray-600 /* TODO: Use semantic token */ mb-2 line-clamp-2">
                                 {event.description}
                               </p>
                             )}
 
-                            <div className="flex items-center gap-3 text-xs text-gray-500">
+                            <div className="flex items-center gap-3 text-xs text-gray-500 /* TODO: Use semantic token */">
                               <div className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
                                 {event.allDay ? (
@@ -417,11 +417,11 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                 <h4 className="font-medium mb-3">Statistics</h4>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Total Events</span>
+                    <span className="text-sm text-gray-600 /* TODO: Use semantic token */">Total Events</span>
                     <Badge value={events.length} severity="info" />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">High Priority</span>
+                    <span className="text-sm text-gray-600 /* TODO: Use semantic token */">High Priority</span>
                     <Badge
                       value={
                         events.filter((e) => e.priority === 'high' || e.priority === 'critical')
@@ -431,7 +431,7 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                     />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">This Month</span>
+                    <span className="text-sm text-gray-600 /* TODO: Use semantic token */">This Month</span>
                     <Badge
                       value={
                         events.filter((event) => {

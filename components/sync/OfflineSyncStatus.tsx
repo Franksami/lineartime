@@ -94,22 +94,22 @@ export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyn
 
   const getSyncStatusIcon = () => {
     if (syncStatus.inProgress) {
-      return <RefreshCw className="h-4 w-4 animate-spin text-blue-500" />;
+      return <RefreshCw className="h-4 w-4 animate-spin text-primary" />;
     }
 
     if (!isOnline) {
-      return <WifiOff className="h-4 w-4 text-gray-500" />;
+      return <WifiOff className="h-4 w-4 text-gray-500 /* TODO: Use semantic token */" />;
     }
 
     if (lastSyncResult?.success) {
-      return <CheckCircle className="h-4 w-4 text-green-500" />;
+      return <CheckCircle className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />;
     }
 
     if (lastSyncResult?.errorCount && lastSyncResult.errorCount > 0) {
-      return <XCircle className="h-4 w-4 text-red-500" />;
+      return <XCircle className="h-4 w-4 text-red-500 /* TODO: Use semantic token */" />;
     }
 
-    return <Clock className="h-4 w-4 text-yellow-500" />;
+    return <Clock className="h-4 w-4 text-yellow-500 /* TODO: Use semantic token */" />;
   };
 
   const getSyncStatusText = () => {
@@ -175,19 +175,19 @@ export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyn
               <CardContent className="space-y-3">
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <div className="text-2xl font-bold text-green-600">
+                    <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">
                       {lastSyncResult.syncedCount}
                     </div>
                     <div className="text-xs text-muted-foreground">Synced</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-yellow-600">
+                    <div className="text-2xl font-bold text-yellow-600 /* TODO: Use semantic token */">
                       {lastSyncResult.conflictCount}
                     </div>
                     <div className="text-xs text-muted-foreground">Conflicts</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-red-600">
+                    <div className="text-2xl font-bold text-red-600 /* TODO: Use semantic token */">
                       {lastSyncResult.errorCount}
                     </div>
                     <div className="text-xs text-muted-foreground">Errors</div>
@@ -212,7 +212,7 @@ export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyn
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4 text-yellow-500" />
+                  <AlertCircle className="h-4 w-4 text-yellow-500 /* TODO: Use semantic token */" />
                   Sync Conflicts ({conflicts.length})
                 </CardTitle>
                 <CardDescription>
@@ -251,9 +251,9 @@ export function OfflineSyncStatus({ className, showDetails = false }: OfflineSyn
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
                 {isOnline ? (
-                  <Wifi className="h-4 w-4 text-green-500" />
+                  <Wifi className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
                 ) : (
-                  <WifiOff className="h-4 w-4 text-red-500" />
+                  <WifiOff className="h-4 w-4 text-red-500 /* TODO: Use semantic token */" />
                 )}
                 Connection Status
               </CardTitle>

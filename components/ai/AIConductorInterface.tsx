@@ -284,13 +284,13 @@ const AIConductorInterface: React.FC = () => {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'critical':
-        return 'text-red-500 bg-red-500/10';
+        return 'text-red-500 /* TODO: Use semantic token */ bg-red-500 /* TODO: Use semantic token *//10';
       case 'high':
         return 'text-orange-500 bg-orange-500/10';
       case 'medium':
-        return 'text-yellow-500 bg-yellow-500/10';
+        return 'text-yellow-500 /* TODO: Use semantic token */ bg-yellow-500 /* TODO: Use semantic token *//10';
       case 'low':
-        return 'text-green-500 bg-green-500/10';
+        return 'text-green-500 /* TODO: Use semantic token */ bg-green-500 /* TODO: Use semantic token *//10';
       default:
         return 'text-muted-foreground bg-muted';
     }
@@ -299,13 +299,13 @@ const AIConductorInterface: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return 'text-green-500 bg-green-500/10';
+        return 'text-green-500 /* TODO: Use semantic token */ bg-green-500 /* TODO: Use semantic token *//10';
       case 'processing':
-        return 'text-blue-500 bg-blue-500/10';
+        return 'text-primary bg-primary/10';
       case 'idle':
-        return 'text-gray-500 bg-gray-500/10';
+        return 'text-gray-500 /* TODO: Use semantic token */ bg-gray-500 /* TODO: Use semantic token *//10';
       case 'error':
-        return 'text-red-500 bg-red-500/10';
+        return 'text-red-500 /* TODO: Use semantic token */ bg-red-500 /* TODO: Use semantic token *//10';
       default:
         return 'text-muted-foreground bg-muted';
     }
@@ -462,7 +462,7 @@ const AIConductorInterface: React.FC = () => {
                     <div className="text-xs text-muted-foreground">Active Agents</div>
                   </div>
                   <div className="p-3 bg-muted rounded-lg">
-                    <div className="text-2xl font-bold text-green-500">{resolvedConflicts}</div>
+                    <div className="text-2xl font-bold text-green-500 /* TODO: Use semantic token */">{resolvedConflicts}</div>
                     <div className="text-xs text-muted-foreground">Resolved Today</div>
                   </div>
                 </div>
@@ -523,7 +523,7 @@ const AIConductorInterface: React.FC = () => {
                             {conflict.severity.toUpperCase()}
                           </Badge>
                           <Badge variant="outline">{conflict.type}</Badge>
-                          {conflict.resolved && <CheckCircle className="w-4 h-4 text-green-500" />}
+                          {conflict.resolved && <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />}
                         </div>
                         <p className="text-sm mb-2">{conflict.description}</p>
                         <div className="flex items-center space-x-4 text-xs text-muted-foreground">
@@ -659,10 +659,10 @@ const AIConductorInterface: React.FC = () => {
                         className={cn(
                           'w-2 h-2 rounded-full',
                           system.status === 'active'
-                            ? 'bg-green-500'
+                            ? 'bg-green-500 /* TODO: Use semantic token */'
                             : system.status === 'processing'
-                              ? 'bg-blue-500 animate-pulse'
-                              : 'bg-gray-400'
+                              ? 'bg-primary animate-pulse'
+                              : 'bg-gray-400 /* TODO: Use semantic token */'
                         )}
                       />
                       <span className="text-sm font-medium">{system.name}</span>
@@ -679,7 +679,7 @@ const AIConductorInterface: React.FC = () => {
             {/* ASCII System Health Display */}
             <div className="space-y-4">
               <h4 className="font-medium text-sm text-muted-foreground">SYSTEM HEALTH MATRIX</h4>
-              <div className="bg-black/90 text-green-400 rounded-lg p-4 font-mono text-xs overflow-x-auto">
+              <div className="bg-black/90 text-green-400 /* TODO: Use semantic token */ rounded-lg p-4 font-mono text-xs overflow-x-auto">
                 <pre>{`
 QUANTUM AI SYSTEMS HEALTH
 ════════════════════════════════════════

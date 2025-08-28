@@ -270,7 +270,7 @@ export default function PlannerInterface() {
                   >
                     <Brain className="w-8 h-8 text-primary" />
                     <div className="absolute -top-1 -right-1">
-                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                      <div className="w-3 h-3 bg-green-500 /* TODO: Use semantic token */ rounded-full animate-pulse" />
                     </div>
                   </motion.div>
                   
@@ -336,7 +336,7 @@ export default function PlannerInterface() {
               <Card className="h-fit">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-lg">
-                    <DollarSign className="w-5 h-5 text-green-500" />
+                    <DollarSign className="w-5 h-5 text-green-500 /* TODO: Use semantic token */" />
                     <span>Revenue Goals</span>
                   </CardTitle>
                 </CardHeader>
@@ -412,7 +412,7 @@ export default function PlannerInterface() {
               <Card className="h-fit">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-lg">
-                    <Zap className="w-5 h-5 text-yellow-500" />
+                    <Zap className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */" />
                     <span>Quick Actions</span>
                   </CardTitle>
                 </CardHeader>
@@ -460,8 +460,8 @@ export default function PlannerInterface() {
                     </CardTitle>
                     
                     <div className="flex items-center space-x-2">
-                      <Badge variant="outline" className="bg-green-500/10 text-green-500">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
+                      <Badge variant="outline" className="bg-green-500 /* TODO: Use semantic token *//10 text-green-500 /* TODO: Use semantic token */">
+                        <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded-full mr-2 animate-pulse" />
                         Online
                       </Badge>
                       
@@ -623,7 +623,7 @@ export default function PlannerInterface() {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-lg">
-                    <Eye className="w-5 h-5 text-blue-500" />
+                    <Eye className="w-5 h-5 text-primary" />
                     <span>AI Capacity</span>
                   </CardTitle>
                 </CardHeader>
@@ -660,7 +660,7 @@ export default function PlannerInterface() {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-lg">
-                    <Zap className="w-5 h-5 text-yellow-500" />
+                    <Zap className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */" />
                     <span>AI Tools</span>
                   </CardTitle>
                 </CardHeader>
@@ -682,7 +682,7 @@ export default function PlannerInterface() {
                           <div className="text-sm font-medium">{tool.name}</div>
                           <div className="text-xs text-muted-foreground">{tool.description}</div>
                         </div>
-                        <div className="w-2 h-2 bg-green-500 rounded-full" />
+                        <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded-full" />
                       </motion.div>
                     ))}
                   </div>
@@ -693,7 +693,7 @@ export default function PlannerInterface() {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-lg">
-                    <TrendingUp className="w-5 h-5 text-green-500" />
+                    <TrendingUp className="w-5 h-5 text-green-500 /* TODO: Use semantic token */" />
                     <span>Recent Insights</span>
                   </CardTitle>
                 </CardHeader>

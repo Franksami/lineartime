@@ -185,9 +185,9 @@ export default function AIConductorPage() {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <div className="relative">
-                  <Brain className="w-10 h-10 text-purple-500" />
+                  <Brain className="w-10 h-10 text-purple-500 /* TODO: Use semantic token */" />
                   <motion.div
-                    className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full"
+                    className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 /* TODO: Use semantic token */ rounded-full"
                     animate={{ scale: [1, 1.3, 1] }}
                     transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}
                   />
@@ -210,14 +210,14 @@ export default function AIConductorPage() {
 
                 <Badge
                   variant="outline"
-                  className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-400"
+                  className="bg-green-100 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */"
                 >
                   ⚡ {currentFPS} FPS
                 </Badge>
 
                 <Badge
                   variant="outline"
-                  className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-400"
+                  className="bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */"
                 >
                   💾 {memoryUsage}MB
                 </Badge>
@@ -254,7 +254,7 @@ export default function AIConductorPage() {
             <Card className="overflow-hidden">
               <div className="p-6">
                 <h2 className="text-xl font-bold mb-4 flex items-center space-x-2">
-                  <Sparkles className="w-6 h-6 text-purple-500" />
+                  <Sparkles className="w-6 h-6 text-purple-500 /* TODO: Use semantic token */" />
                   <span>Integrated AI Enhancement Architecture</span>
                 </h2>
                 <pre className="text-xs font-mono text-foreground bg-muted/20 p-6 rounded-lg overflow-x-auto">
@@ -268,7 +268,7 @@ export default function AIConductorPage() {
         {/* Performance Dashboard */}
         <Card className="p-6">
           <h2 className="text-xl font-bold mb-6 flex items-center space-x-2">
-            <BarChart3 className="w-6 h-6 text-blue-500" />
+            <BarChart3 className="w-6 h-6 text-primary" />
             <span>AI Conductor Performance Dashboard</span>
           </h2>
 
@@ -277,8 +277,8 @@ export default function AIConductorPage() {
               className="text-center p-4 rounded-lg bg-muted/50"
               whileHover={{ scale: 1.05 }}
             >
-              <Activity className="w-8 h-8 mx-auto mb-2 text-green-500" />
-              <div className="text-3xl font-bold text-green-500">{currentFPS}</div>
+              <Activity className="w-8 h-8 mx-auto mb-2 text-green-500 /* TODO: Use semantic token */" />
+              <div className="text-3xl font-bold text-green-500 /* TODO: Use semantic token */">{currentFPS}</div>
               <div className="text-sm text-muted-foreground">FPS Maintained</div>
               <Progress value={(currentFPS / 120) * 100} className="mt-2" />
             </motion.div>
@@ -287,8 +287,8 @@ export default function AIConductorPage() {
               className="text-center p-4 rounded-lg bg-muted/50"
               whileHover={{ scale: 1.05 }}
             >
-              <Brain className="w-8 h-8 mx-auto mb-2 text-blue-500" />
-              <div className="text-3xl font-bold text-blue-500">{memoryUsage}MB</div>
+              <Brain className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <div className="text-3xl font-bold text-primary">{memoryUsage}MB</div>
               <div className="text-sm text-muted-foreground">Memory Usage</div>
               <Progress value={memoryUsage} className="mt-2" />
             </motion.div>
@@ -297,8 +297,8 @@ export default function AIConductorPage() {
               className="text-center p-4 rounded-lg bg-muted/50"
               whileHover={{ scale: 1.05 }}
             >
-              <Zap className="w-8 h-8 mx-auto mb-2 text-yellow-500" />
-              <div className="text-3xl font-bold text-yellow-500">{aiProcessingTime}ms</div>
+              <Zap className="w-8 h-8 mx-auto mb-2 text-yellow-500 /* TODO: Use semantic token */" />
+              <div className="text-3xl font-bold text-yellow-500 /* TODO: Use semantic token */">{aiProcessingTime}ms</div>
               <div className="text-sm text-muted-foreground">AI Processing</div>
               <Progress value={(aiProcessingTime / 50) * 100} className="mt-2" />
             </motion.div>
@@ -307,12 +307,12 @@ export default function AIConductorPage() {
               className="text-center p-4 rounded-lg bg-muted/50"
               whileHover={{ scale: 1.05 }}
             >
-              <DollarSign className="w-8 h-8 mx-auto mb-2 text-purple-500" />
-              <div className="text-3xl font-bold text-purple-500">
+              <DollarSign className="w-8 h-8 mx-auto mb-2 text-purple-500 /* TODO: Use semantic token */" />
+              <div className="text-3xl font-bold text-purple-500 /* TODO: Use semantic token */">
                 {formatCurrency(totalRevenueOptimized)}
               </div>
               <div className="text-sm text-muted-foreground">Revenue Optimized</div>
-              <div className="mt-2 text-xs text-green-600">+{insights.length} opportunities</div>
+              <div className="mt-2 text-xs text-green-600 /* TODO: Use semantic token */">+{insights.length} opportunities</div>
             </motion.div>
           </div>
         </Card>
@@ -450,10 +450,10 @@ export default function AIConductorPage() {
                         className={cn(
                           'font-medium',
                           currentFPS >= 112
-                            ? 'text-green-600'
+                            ? 'text-green-600 /* TODO: Use semantic token */'
                             : currentFPS >= 90
-                              ? 'text-yellow-600'
-                              : 'text-red-600'
+                              ? 'text-yellow-600 /* TODO: Use semantic token */'
+                              : 'text-red-600 /* TODO: Use semantic token */'
                         )}
                       >
                         {currentFPS >= 112
@@ -483,10 +483,10 @@ export default function AIConductorPage() {
                         className={cn(
                           'font-medium',
                           memoryUsage <= 70
-                            ? 'text-green-600'
+                            ? 'text-green-600 /* TODO: Use semantic token */'
                             : memoryUsage <= 85
-                              ? 'text-yellow-600'
-                              : 'text-red-600'
+                              ? 'text-yellow-600 /* TODO: Use semantic token */'
+                              : 'text-red-600 /* TODO: Use semantic token */'
                         )}
                       >
                         {memoryUsage <= 70
@@ -516,10 +516,10 @@ export default function AIConductorPage() {
                         className={cn(
                           'font-medium',
                           aiProcessingTime <= 16
-                            ? 'text-green-600'
+                            ? 'text-green-600 /* TODO: Use semantic token */'
                             : aiProcessingTime <= 30
-                              ? 'text-yellow-600'
-                              : 'text-red-600'
+                              ? 'text-yellow-600 /* TODO: Use semantic token */'
+                              : 'text-red-600 /* TODO: Use semantic token */'
                         )}
                       >
                         {aiProcessingTime <= 16
@@ -539,17 +539,17 @@ export default function AIConductorPage() {
         {/* Integration Summary */}
         <Card className="p-6">
           <h2 className="text-xl font-bold mb-6 flex items-center space-x-2">
-            <Target className="w-6 h-6 text-green-500" />
+            <Target className="w-6 h-6 text-green-500 /* TODO: Use semantic token */" />
             <span>AI Integration Achievement Summary</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <motion.div
-              className="p-4 rounded-lg border bg-green-50 dark:bg-green-900/20"
+              className="p-4 rounded-lg border bg-green-50 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token *//20"
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center space-x-2 mb-2">
-                <CheckCircle className="w-5 h-5 text-green-500" />
+                <CheckCircle className="w-5 h-5 text-green-500 /* TODO: Use semantic token */" />
                 <span className="font-medium">Multi-Modal AI Integration</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -559,11 +559,11 @@ export default function AIConductorPage() {
             </motion.div>
 
             <motion.div
-              className="p-4 rounded-lg border bg-blue-50 dark:bg-blue-900/20"
+              className="p-4 rounded-lg border bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//20"
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center space-x-2 mb-2">
-                <Activity className="w-5 h-5 text-blue-500" />
+                <Activity className="w-5 h-5 text-primary" />
                 <span className="font-medium">Performance Excellence</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -573,11 +573,11 @@ export default function AIConductorPage() {
             </motion.div>
 
             <motion.div
-              className="p-4 rounded-lg border bg-purple-50 dark:bg-purple-900/20"
+              className="p-4 rounded-lg border bg-purple-50 /* TODO: Use semantic token */ dark:bg-purple-900 /* TODO: Use semantic token *//20"
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center space-x-2 mb-2">
-                <Shield className="w-5 h-5 text-purple-500" />
+                <Shield className="w-5 h-5 text-purple-500 /* TODO: Use semantic token */" />
                 <span className="font-medium">Privacy-First Design</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -587,11 +587,11 @@ export default function AIConductorPage() {
             </motion.div>
 
             <motion.div
-              className="p-4 rounded-lg border bg-yellow-50 dark:bg-yellow-900/20"
+              className="p-4 rounded-lg border bg-yellow-50 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//20"
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center space-x-2 mb-2">
-                <TrendingUp className="w-5 h-5 text-yellow-500" />
+                <TrendingUp className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */" />
                 <span className="font-medium">Revenue Optimization</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -615,11 +615,11 @@ export default function AIConductorPage() {
             </motion.div>
 
             <motion.div
-              className="p-4 rounded-lg border bg-red-50 dark:bg-red-900/20"
+              className="p-4 rounded-lg border bg-red-50 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//20"
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center space-x-2 mb-2">
-                <Mic className="w-5 h-5 text-red-500" />
+                <Mic className="w-5 h-5 text-red-500 /* TODO: Use semantic token */" />
                 <span className="font-medium">Voice Intelligence</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -631,7 +631,7 @@ export default function AIConductorPage() {
         </Card>
 
         {/* Call to Action */}
-        <Card className="p-6 text-center bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-200 dark:border-purple-800">
+        <Card className="p-6 text-center bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-200 /* TODO: Use semantic token */ dark:border-purple-800 /* TODO: Use semantic token */">
           <div className="space-y-4">
             <div>
               <h2 className="text-2xl font-bold mb-2">Ready to Experience Revolutionary AI?</h2>

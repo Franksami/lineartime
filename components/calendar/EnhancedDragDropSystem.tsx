@@ -557,7 +557,7 @@ export function EnhancedDragDropSystem({
             {ENHANCED_EVENT_TEMPLATES.some((t) => t.aiSuggested) && (
               <div className="mt-4 p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg border">
                 <div className="flex items-center gap-2 text-sm">
-                  <Sparkles className="h-4 w-4 text-blue-600" />
+                  <Sparkles className="h-4 w-4 text-blue-600 /* TODO: Use semantic token */" />
                   <span className="font-medium">AI-Enhanced Templates</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">

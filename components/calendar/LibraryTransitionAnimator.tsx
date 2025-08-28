@@ -1263,7 +1263,7 @@ export const LibraryTransitionAnimator: React.FC<LibraryTransitionAnimatorProps>
                     <div className="text-sm">
                       <div className="font-medium">{config.displayName}</div>
                       <div className="text-muted-foreground">Transition: {transitionType}</div>
-                      {isPreloaded && <div className="text-green-500">✓ Preloaded</div>}
+                      {isPreloaded && <div className="text-green-500 /* TODO: Use semantic token */">✓ Preloaded</div>}
                     </div>
                   </TooltipContent>
                 </Tooltip>
@@ -1337,13 +1337,13 @@ export const LibraryTransitionAnimator: React.FC<LibraryTransitionAnimatorProps>
               <div className="text-sm text-muted-foreground">Avg. Transition</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-500">
+              <div className="text-2xl font-bold text-green-500 /* TODO: Use semantic token */">
                 {(successRate * 100).toFixed(0)}%
               </div>
               <div className="text-sm text-muted-foreground">Success Rate</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-500">
+              <div className="text-2xl font-bold text-primary">
                 {Object.keys(preloadedLibraries).length}
               </div>
               <div className="text-sm text-muted-foreground">Preloaded</div>
@@ -1360,9 +1360,9 @@ export const LibraryTransitionAnimator: React.FC<LibraryTransitionAnimatorProps>
                 <div className="flex items-center space-x-2">
                   <span>{metric.duration.toFixed(0)}ms</span>
                   {metric.success ? (
-                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <CheckCircle className="h-3 w-3 text-green-500 /* TODO: Use semantic token */" />
                   ) : (
-                    <AlertCircle className="h-3 w-3 text-red-500" />
+                    <AlertCircle className="h-3 w-3 text-red-500 /* TODO: Use semantic token */" />
                   )}
                 </div>
               </div>

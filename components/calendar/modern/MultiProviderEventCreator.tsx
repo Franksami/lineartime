@@ -579,10 +579,10 @@ export function MultiProviderEventCreator({
                     'w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all',
                     step === stepName ? 'ring-2' : '',
                     ['providers', 'event', 'review'].indexOf(step) > index
-                      ? 'bg-green-500 text-white'
+                      ? 'bg-green-500 /* TODO: Use semantic token */ text-white'
                       : step === stepName
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-200'
+                        ? 'bg-primary text-white'
+                        : 'bg-gray-200 /* TODO: Use semantic token */'
                   )}
                   style={{
                     backgroundColor:
@@ -598,7 +598,7 @@ export function MultiProviderEventCreator({
                   {index + 1}
                 </div>
                 <span className="text-sm capitalize">{stepName}</span>
-                {index < 2 && <div className="w-8 h-px bg-gray-300" />}
+                {index < 2 && <div className="w-8 h-px bg-gray-300 /* TODO: Use semantic token */" />}
               </div>
             ))}
           </div>
@@ -657,9 +657,9 @@ export function MultiProviderEventCreator({
                                 )}
 
                                 {provider.isHealthy ? (
-                                  <CheckCircle2 className="w-4 h-4 text-green-500" />
+                                  <CheckCircle2 className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />
                                 ) : (
-                                  <AlertCircle className="w-4 h-4 text-yellow-500" />
+                                  <AlertCircle className="w-4 h-4 text-yellow-500 /* TODO: Use semantic token */" />
                                 )}
                               </div>
                             </div>
@@ -764,7 +764,7 @@ export function MultiProviderEventCreator({
                     <CardContent className="space-y-3">
                       {aiSuggestions.map((suggestion, index) => (
                         <div key={index} className="flex items-start gap-3 p-2 rounded border">
-                          <Info className="w-4 h-4 mt-0.5 text-blue-500" />
+                          <Info className="w-4 h-4 mt-0.5 text-primary" />
                           <div className="flex-1">
                             <div className="text-sm font-medium">{suggestion.title}</div>
                             <div className="text-xs opacity-75">{suggestion.description}</div>
@@ -1066,15 +1066,15 @@ export function MultiProviderEventCreator({
 
                 {/* Validation errors */}
                 {validationErrors.length > 0 && (
-                  <Card className="border-red-200">
+                  <Card className="border-red-200 /* TODO: Use semantic token */">
                     <CardContent className="pt-4">
                       <div className="flex items-start gap-2">
-                        <AlertCircle className="w-4 h-4 text-red-500 mt-0.5" />
+                        <AlertCircle className="w-4 h-4 text-red-500 /* TODO: Use semantic token */ mt-0.5" />
                         <div>
-                          <div className="text-sm font-medium text-red-700">
+                          <div className="text-sm font-medium text-red-700 /* TODO: Use semantic token */">
                             Please fix the following issues:
                           </div>
-                          <ul className="text-xs text-red-600 mt-1 list-disc list-inside">
+                          <ul className="text-xs text-red-600 /* TODO: Use semantic token */ mt-1 list-disc list-inside">
                             {validationErrors.map((error, index) => (
                               <li key={index}>{error}</li>
                             ))}

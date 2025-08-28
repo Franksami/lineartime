@@ -85,19 +85,19 @@ const GestureInstructions = () => {
       icon: Touch,
       title: 'Single Tap',
       description: 'Select a date or event',
-      color: 'bg-blue-500',
+      color: 'bg-primary',
     },
     {
       icon: Touch,
       title: 'Double Tap',
       description: 'Toggle between fullYear and month view',
-      color: 'bg-green-500',
+      color: 'bg-green-500 /* TODO: Use semantic token */',
     },
     {
       icon: Touch,
       title: 'Long Press',
       description: 'Create a new event on the selected date',
-      color: 'bg-purple-500',
+      color: 'bg-purple-500 /* TODO: Use semantic token */',
     },
     {
       icon: ZoomIn,
@@ -115,7 +115,7 @@ const GestureInstructions = () => {
       icon: Navigation,
       title: 'Swipe',
       description: 'Left/Right: Navigate periods, Up/Down: Zoom',
-      color: 'bg-pink-500',
+      color: 'bg-pink-500 /* TODO: Use semantic token */',
     },
   ];
 
@@ -162,17 +162,17 @@ const GestureMetrics = ({ metrics }: { metrics: any }) => {
       <CardContent className="space-y-3">
         <div className="grid grid-cols-3 gap-3 text-center">
           <div>
-            <div className="text-lg font-bold text-blue-600">{metrics.totalGestures}</div>
+            <div className="text-lg font-bold text-blue-600 /* TODO: Use semantic token */">{metrics.totalGestures}</div>
             <div className="text-xs text-muted-foreground">Total</div>
           </div>
           <div>
-            <div className="text-lg font-bold text-green-600">
+            <div className="text-lg font-bold text-green-600 /* TODO: Use semantic token */">
               {metrics.averageResponseTime.toFixed(1)}ms
             </div>
             <div className="text-xs text-muted-foreground">Avg Response</div>
           </div>
           <div>
-            <div className="text-lg font-bold text-purple-600 capitalize">
+            <div className="text-lg font-bold text-purple-600 /* TODO: Use semantic token */ capitalize">
               {metrics.lastGestureType || 'None'}
             </div>
             <div className="text-xs text-muted-foreground">Last Gesture</div>
@@ -409,7 +409,7 @@ export function TouchGestureCalendarExample({
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-start gap-2">
-                  <Accessibility className="w-4 h-4 text-green-600 mt-0.5" />
+                  <Accessibility className="w-4 h-4 text-green-600 /* TODO: Use semantic token */ mt-0.5" />
                   <div>
                     <h4 className="text-sm font-medium mb-1">Accessible Design</h4>
                     <p className="text-xs text-muted-foreground">
@@ -424,7 +424,7 @@ export function TouchGestureCalendarExample({
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-start gap-2">
-                  <Settings className="w-4 h-4 text-blue-600 mt-0.5" />
+                  <Settings className="w-4 h-4 text-blue-600 /* TODO: Use semantic token */ mt-0.5" />
                   <div>
                     <h4 className="text-sm font-medium mb-1">Cross-Platform</h4>
                     <p className="text-xs text-muted-foreground">

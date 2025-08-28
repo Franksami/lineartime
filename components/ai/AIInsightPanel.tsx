@@ -891,7 +891,7 @@ export function AIInsightPanel({
             {showMetrics && productivityMetrics.length > 0 && (
               <div className="p-4 border-b border-border">
                 <div className="flex items-center gap-2 mb-3">
-                  <Target className="w-4 h-4 text-blue-500" />
+                  <Target className="w-4 h-4 text-primary" />
                   <span className="font-medium">Key Metrics</span>
                 </div>
 
@@ -920,9 +920,9 @@ export function AIInsightPanel({
                             {showTrends && metric.trend !== 'stable' && (
                               <div
                                 className={cn('flex items-center gap-1 text-xs', {
-                                  'text-green-600':
+                                  'text-green-600 /* TODO: Use semantic token */':
                                     metric.trend === 'up' && metric.value >= metric.benchmark,
-                                  'text-red-600':
+                                  'text-red-600 /* TODO: Use semantic token */':
                                     metric.trend === 'down' ||
                                     (metric.trend === 'up' && metric.value < metric.benchmark),
                                   'text-orange-600':
@@ -944,7 +944,7 @@ export function AIInsightPanel({
                             <span className="text-sm text-muted-foreground">{metric.unit}</span>
 
                             {metric.benchmark && (
-                              <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden ml-2">
+                              <div className="flex-1 h-1 bg-gray-200 /* TODO: Use semantic token */ rounded-full overflow-hidden ml-2">
                                 <div
                                   className="h-full rounded-full transition-all duration-300"
                                   style={{
@@ -968,7 +968,7 @@ export function AIInsightPanel({
               <div className="p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <Lightbulb className="w-4 h-4 text-yellow-500" />
+                    <Lightbulb className="w-4 h-4 text-yellow-500 /* TODO: Use semantic token */" />
                     <span className="font-medium">AI Insights</span>
                     <span className="text-xs text-muted-foreground">
                       ({filteredInsights.length})
@@ -1002,15 +1002,15 @@ export function AIInsightPanel({
                       <div className="flex items-start gap-3">
                         <div
                           className={cn('flex-shrink-0 p-1.5 rounded-full', {
-                            'bg-blue-100 text-blue-600 dark:bg-blue-900/30':
+                            'bg-blue-100 /* TODO: Use semantic token */ text-blue-600 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//30':
                               insight.type === 'pattern',
-                            'bg-red-100 text-red-600 dark:bg-red-900/30':
+                            'bg-red-100 /* TODO: Use semantic token */ text-red-600 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//30':
                               insight.type === 'warning',
-                            'bg-green-100 text-green-600 dark:bg-green-900/30':
+                            'bg-green-100 /* TODO: Use semantic token */ text-green-600 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token *//30':
                               insight.type === 'opportunity',
-                            'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30':
+                            'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-600 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//30':
                               insight.type === 'anomaly',
-                            'bg-purple-100 text-purple-600 dark:bg-purple-900/30':
+                            'bg-purple-100 /* TODO: Use semantic token */ text-purple-600 /* TODO: Use semantic token */ dark:bg-purple-900 /* TODO: Use semantic token *//30':
                               insight.type === 'achievement',
                           })}
                         >
@@ -1026,11 +1026,11 @@ export function AIInsightPanel({
                             <h4 className="font-medium text-sm truncate">{insight.title}</h4>
                             <span
                               className={cn('px-2 py-1 text-xs rounded-full', {
-                                'bg-red-100 text-red-800 dark:bg-red-900/30':
+                                'bg-red-100 /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//30':
                                   insight.impact === 'high',
                                 'bg-orange-100 text-orange-800 dark:bg-orange-900/30':
                                   insight.impact === 'medium',
-                                'bg-blue-100 text-blue-800 dark:bg-blue-900/30':
+                                'bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//30':
                                   insight.impact === 'low',
                               })}
                             >

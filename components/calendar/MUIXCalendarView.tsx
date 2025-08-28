@@ -32,7 +32,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+// import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker'; // Pro version not installed
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -276,12 +276,20 @@ const MUIXCalendarView: React.FC<MUIXCalendarViewProps> = ({
 
       case 'range':
         return (
-          <DateRangePicker
-            value={selectedRange}
-            onChange={(newRange) => setSelectedRange(newRange)}
-            localeText={{ start: 'Start Date', end: 'End Date' }}
-            disabled={loading}
-          />
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <DatePicker
+              label="Start Date"
+              value={selectedRange?.[0] || null}
+              onChange={(newValue) => setSelectedRange([newValue, selectedRange?.[1] || null])}
+              disabled={loading}
+            />
+            <DatePicker
+              label="End Date"
+              value={selectedRange?.[1] || null}
+              onChange={(newValue) => setSelectedRange([selectedRange?.[0] || null, newValue])}
+              disabled={loading}
+            />
+          </Box>
         );
 
       case 'static':

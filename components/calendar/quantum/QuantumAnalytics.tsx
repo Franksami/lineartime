@@ -189,13 +189,13 @@ function formatMetricValue(value: number, unit: string): string {
 function getStatusColor(status: PerformanceBudget['status']): string {
   switch (status) {
     case 'good':
-      return 'text-green-600';
+      return 'text-green-600 /* TODO: Use semantic token */';
     case 'warning':
-      return 'text-yellow-600';
+      return 'text-yellow-600 /* TODO: Use semantic token */';
     case 'critical':
-      return 'text-red-600';
+      return 'text-red-600 /* TODO: Use semantic token */';
     default:
-      return 'text-gray-600';
+      return 'text-gray-600 /* TODO: Use semantic token */';
   }
 }
 
@@ -318,15 +318,15 @@ function PerformanceOverview({
         </div>
         <div className="flex items-center gap-4 mt-3 text-sm">
           <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-green-500 rounded" />
+            <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded" />
             <span>{goodCount} Good</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-yellow-500 rounded" />
+            <div className="w-2 h-2 bg-yellow-500 /* TODO: Use semantic token */ rounded" />
             <span>{warningCount} Warning</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-red-500 rounded" />
+            <div className="w-2 h-2 bg-red-500 /* TODO: Use semantic token */ rounded" />
             <span>{criticalCount} Critical</span>
           </div>
         </div>

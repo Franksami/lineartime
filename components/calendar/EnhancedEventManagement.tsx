@@ -263,11 +263,11 @@ function EventContextMenu({
                   <div
                     className={cn(
                       'w-3 h-3 rounded-full',
-                      priority === 'critical' && 'bg-red-500',
+                      priority === 'critical' && 'bg-red-500 /* TODO: Use semantic token */',
                       priority === 'high' && 'bg-orange-500',
-                      priority === 'medium' && 'bg-yellow-500',
-                      priority === 'low' && 'bg-green-500',
-                      priority === 'optional' && 'bg-gray-400'
+                      priority === 'medium' && 'bg-yellow-500 /* TODO: Use semantic token */',
+                      priority === 'low' && 'bg-green-500 /* TODO: Use semantic token */',
+                      priority === 'optional' && 'bg-gray-400 /* TODO: Use semantic token */'
                     )}
                   />
                   <span className="capitalize">{priority}</span>
@@ -317,13 +317,13 @@ function EventContextMenu({
               <div className="flex items-center gap-2 w-full">
                 Google Calendar
                 {event.syncStatus?.google === 'synced' && (
-                  <CheckCircle className="h-3 w-3 text-green-500 ml-auto" />
+                  <CheckCircle className="h-3 w-3 text-green-500 /* TODO: Use semantic token */ ml-auto" />
                 )}
                 {event.syncStatus?.google === 'pending' && (
-                  <Clock className="h-3 w-3 text-yellow-500 ml-auto" />
+                  <Clock className="h-3 w-3 text-yellow-500 /* TODO: Use semantic token */ ml-auto" />
                 )}
                 {event.syncStatus?.google === 'error' && (
-                  <XCircle className="h-3 w-3 text-red-500 ml-auto" />
+                  <XCircle className="h-3 w-3 text-red-500 /* TODO: Use semantic token */ ml-auto" />
                 )}
               </div>
             </ContextMenuItem>
@@ -331,7 +331,7 @@ function EventContextMenu({
               <div className="flex items-center gap-2 w-full">
                 Outlook Calendar
                 {event.syncStatus?.outlook === 'synced' && (
-                  <CheckCircle className="h-3 w-3 text-green-500 ml-auto" />
+                  <CheckCircle className="h-3 w-3 text-green-500 /* TODO: Use semantic token */ ml-auto" />
                 )}
               </div>
             </ContextMenuItem>
@@ -339,7 +339,7 @@ function EventContextMenu({
               <div className="flex items-center gap-2 w-full">
                 Apple Calendar
                 {event.syncStatus?.apple === 'synced' && (
-                  <CheckCircle className="h-3 w-3 text-green-500 ml-auto" />
+                  <CheckCircle className="h-3 w-3 text-green-500 /* TODO: Use semantic token */ ml-auto" />
                 )}
               </div>
             </ContextMenuItem>
@@ -727,7 +727,7 @@ export function EnhancedEventManagement({
                     </Badge>
                   )}
                   <Badge>{event.category}</Badge>
-                  {event.isPinned && <Pin className="h-4 w-4 text-yellow-500" />}
+                  {event.isPinned && <Pin className="h-4 w-4 text-yellow-500 /* TODO: Use semantic token */" />}
                 </div>
               </div>
             </Card>

@@ -77,14 +77,14 @@ const FEATURE_CATEGORIES: FeatureFlagCategory[] = [
     name: 'CSS Modern Features',
     description: 'Modern CSS capabilities with progressive enhancement',
     icon: Zap,
-    color: 'bg-blue-500',
+    color: 'bg-primary',
     flags: ['enableSubgrid', 'enableContainerQueries', 'enableFluidTypography'],
   },
   {
     name: 'Micro-Interactions',
     description: 'Physics-based animations and micro-interactions',
     icon: Target,
-    color: 'bg-purple-500',
+    color: 'bg-purple-500 /* TODO: Use semantic token */',
     flags: [
       'enablePhysicsAnimations',
       'enableParallaxEffects',
@@ -96,7 +96,7 @@ const FEATURE_CATEGORIES: FeatureFlagCategory[] = [
     name: 'Performance',
     description: 'Optimization and performance enhancements',
     icon: Gauge,
-    color: 'bg-green-500',
+    color: 'bg-green-500 /* TODO: Use semantic token */',
     flags: [
       'enableQuantumVirtualization',
       'enableIntersectionObserver',
@@ -120,7 +120,7 @@ const FEATURE_CATEGORIES: FeatureFlagCategory[] = [
     name: 'Analytics',
     description: 'Monitoring and user behavior analytics',
     icon: BarChart3,
-    color: 'bg-indigo-500',
+    color: 'bg-indigo-500 /* TODO: Use semantic token */',
     flags: [
       'enablePerformanceTracking',
       'enableUserBehaviorAnalytics',
@@ -209,9 +209,9 @@ function FeatureFlagControl({
     .replace(/^\w/, (c) => c.toUpperCase());
 
   const getImpactColor = (score: number) => {
-    if (score < 30) return 'text-green-600';
-    if (score < 70) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score < 30) return 'text-green-600 /* TODO: Use semantic token */';
+    if (score < 70) return 'text-yellow-600 /* TODO: Use semantic token */';
+    return 'text-red-600 /* TODO: Use semantic token */';
   };
 
   const getReasonBadge = (reason: FeatureFlagEvaluation['reason']) => {
@@ -334,21 +334,21 @@ function PerformanceImpactChart({
       value: performanceMetrics.renderTime,
       unit: 'ms',
       target: 16,
-      color: 'bg-blue-500',
+      color: 'bg-primary',
     },
     {
       name: 'Memory Usage',
       value: performanceMetrics.memoryUsage,
       unit: 'MB',
       target: 100,
-      color: 'bg-green-500',
+      color: 'bg-green-500 /* TODO: Use semantic token */',
     },
     {
       name: 'Scroll Smoothness',
       value: performanceMetrics.scrollSmoothness,
       unit: '%',
       target: 100,
-      color: 'bg-purple-500',
+      color: 'bg-purple-500 /* TODO: Use semantic token */',
     },
     {
       name: 'Interaction Response',
@@ -620,7 +620,7 @@ export function QuantumFeatureFlags({
               </div>
               <div>
                 <span className="text-muted-foreground">Performance Score:</span>
-                <div className="font-semibold text-green-600">
+                <div className="font-semibold text-green-600 /* TODO: Use semantic token */">
                   {performanceMetrics
                     ? (
                         100 -

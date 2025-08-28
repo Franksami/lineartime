@@ -437,7 +437,7 @@ export class ComponentTokenMigration {
       'bg-black': '{colors.foreground}',
       'text-white': '{colors.background}',
       'text-black': '{colors.foreground}',
-      'border-gray-200': '{colors.border}',
+      'border-border': '{colors.border}',
       'shadow-sm': '{shadows.sm}',
       'rounded-md': '{radii.md}',
       'p-4': '{spacing.4}',
@@ -477,11 +477,11 @@ export const quickMigrationHelpers = {
     const tokenMap: Record<string, string> = {
       // Colors
       'bg-white': 'bg-background',
-      'bg-gray-50': 'bg-muted',
-      'bg-gray-100': 'bg-accent',
+      'bg-muted': 'bg-muted',
+      'bg-muted': 'bg-accent',
       'text-black': 'text-foreground',
-      'text-gray-600': 'text-muted-foreground',
-      'border-gray-200': 'border-border',
+      'text-gray-600 /* TODO: Use semantic token */': 'text-muted-foreground',
+      'border-border': 'border-border',
 
       // Shadows
       'shadow-sm': 'shadow-sm',

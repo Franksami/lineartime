@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useOfflineEvents } from './useIndexedDB';
 
 interface UseCalendarEventsOptions {
-  userId: string;
+  userId?: string;
   enableOptimisticUpdates?: boolean;
   enableConflictDetection?: boolean;
 }
@@ -16,11 +16,12 @@ interface EventConflict {
   severity: 'minor' | 'major' | 'blocking';
 }
 
-export function useCalendarEvents({
-  userId,
-  enableOptimisticUpdates = true,
-  enableConflictDetection = true,
-}: UseCalendarEventsOptions) {
+export function useCalendarEvents(options: UseCalendarEventsOptions = {}) {
+  const {
+    userId = 'default-user',
+    enableOptimisticUpdates = true,
+    enableConflictDetection = true,
+  } = options;
   const { state } = useCalendarContext();
   const { playSound } = useSettingsContext();
   const {

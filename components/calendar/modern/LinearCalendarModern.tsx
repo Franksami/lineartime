@@ -483,9 +483,9 @@ function FullYearGridModern({
             col % 7 === 6 && 'border-r-2',
             isWeekend && 'bg-opacity-20',
             isEmpty && 'bg-transparent cursor-default pointer-events-none',
-            hasHighCapacity && 'ring-1 ring-green-400/50',
-            hasLowCapacity && 'ring-1 ring-yellow-400/50',
-            hasConflict && 'ring-2 ring-red-400'
+            hasHighCapacity && 'ring-1 ring-green-400 /* TODO: Use semantic token *//50',
+            hasLowCapacity && 'ring-1 ring-yellow-400 /* TODO: Use semantic token *//50',
+            hasConflict && 'ring-2 ring-red-400 /* TODO: Use semantic token */'
           )}
           style={{
             left: headerWidth + col * dayWidth,
@@ -1544,19 +1544,19 @@ export function LinearCalendarModern({
               {/* System Status Indicators */}
               <div className="flex items-center gap-2">
                 {systemIntegrationState.aiSystemOnline && (
-                  <div className="flex items-center gap-1 text-xs text-green-600">
+                  <div className="flex items-center gap-1 text-xs text-green-600 /* TODO: Use semantic token */">
                     <Zap className="w-3 h-3" />
                     <span>AI</span>
                   </div>
                 )}
                 {systemIntegrationState.providerSyncEnabled && (
-                  <div className="flex items-center gap-1 text-xs text-blue-600">
+                  <div className="flex items-center gap-1 text-xs text-blue-600 /* TODO: Use semantic token */">
                     <Globe className="w-3 h-3" />
                     <span>Sync</span>
                   </div>
                 )}
                 {systemIntegrationState.governanceActive && (
-                  <div className="flex items-center gap-1 text-xs text-purple-600">
+                  <div className="flex items-center gap-1 text-xs text-purple-600 /* TODO: Use semantic token */">
                     <Shield className="w-3 h-3" />
                     <span>{Math.round(governanceScore)}%</span>
                   </div>

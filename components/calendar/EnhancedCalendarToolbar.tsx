@@ -249,11 +249,11 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
   const getSyncIcon = () => {
     switch (syncStatus) {
       case 'success':
-        return <Wifi className="h-4 w-4 text-green-500" />;
+        return <Wifi className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />;
       case 'error':
-        return <WifiOff className="h-4 w-4 text-red-500" />;
+        return <WifiOff className="h-4 w-4 text-red-500 /* TODO: Use semantic token */" />;
       case 'syncing':
-        return <RefreshCw className="h-4 w-4 text-blue-500 animate-spin" />;
+        return <RefreshCw className="h-4 w-4 text-primary animate-spin" />;
       default:
         return <Wifi className="h-4 w-4 text-muted-foreground" />;
     }
@@ -759,9 +759,9 @@ const EnhancedCalendarToolbar: React.FC<EnhancedCalendarToolbarProps> = ({
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="bg-blue-500/10 border-t border-blue-500/20 px-4 py-2"
+              className="bg-primary/10 border-t border-blue-500 /* TODO: Use semantic token *//20 px-4 py-2"
             >
-              <div className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+              <div className="flex items-center gap-2 text-sm text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */">
                 <RefreshCw className="h-4 w-4 animate-spin" />
                 Syncing calendar data...
               </div>

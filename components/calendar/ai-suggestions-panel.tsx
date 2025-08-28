@@ -46,24 +46,24 @@ export function AISuggestionsPanel({
       case 'conflict':
         return <AlertTriangle className="w-4 h-4 text-amber-500" />;
       case 'optimization':
-        return <Lightbulb className="w-4 h-4 text-blue-500" />;
+        return <Lightbulb className="w-4 h-4 text-primary" />;
       case 'grouping':
-        return <Info className="w-4 h-4 text-purple-500" />;
+        return <Info className="w-4 h-4 text-purple-500 /* TODO: Use semantic token */" />;
       default:
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
+        return <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />;
     }
   };
 
   const getFeedbackIcon = (type: string) => {
     switch (type) {
       case 'success':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
+        return <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />;
       case 'warning':
         return <AlertTriangle className="w-4 h-4 text-amber-500" />;
       case 'error':
-        return <AlertTriangle className="w-4 h-4 text-red-500" />;
+        return <AlertTriangle className="w-4 h-4 text-red-500 /* TODO: Use semantic token */" />;
       default:
-        return <Info className="w-4 h-4 text-blue-500" />;
+        return <Info className="w-4 h-4 text-primary" />;
     }
   };
 
@@ -72,9 +72,9 @@ export function AISuggestionsPanel({
       <div className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-blue-600" />
+            <Lightbulb className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */" />
             <h3 className="font-semibold text-sm">AI Assistant</h3>
-            {isAnalyzing && <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />}
+            {isAnalyzing && <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />}
           </div>
           <div className="flex items-center gap-1">
             <Button
@@ -105,9 +105,9 @@ export function AISuggestionsPanel({
               <div
                 className={cn(
                   'flex items-center gap-2 p-2 rounded-md text-sm',
-                  dragFeedback.type === 'success' && 'bg-green-50 text-green-700',
+                  dragFeedback.type === 'success' && 'bg-green-50 /* TODO: Use semantic token */ text-green-700 /* TODO: Use semantic token */',
                   dragFeedback.type === 'warning' && 'bg-amber-50 text-amber-700',
-                  dragFeedback.type === 'error' && 'bg-red-50 text-red-700'
+                  dragFeedback.type === 'error' && 'bg-red-50 /* TODO: Use semantic token */ text-red-700 /* TODO: Use semantic token */'
                 )}
               >
                 {getFeedbackIcon(dragFeedback.type)}
@@ -154,13 +154,13 @@ export function AISuggestionsPanel({
             {isAnalyzing && (
               <div className="flex items-center gap-2 p-2 text-sm text-muted-foreground">
                 <div className="flex gap-1">
-                  <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" />
+                  <div className="w-1 h-1 bg-primary rounded-full animate-bounce" />
                   <div
-                    className="w-1 h-1 bg-blue-500 rounded-full animate-bounce"
+                    className="w-1 h-1 bg-primary rounded-full animate-bounce"
                     style={{ animationDelay: '0.1s' }}
                   />
                   <div
-                    className="w-1 h-1 bg-blue-500 rounded-full animate-bounce"
+                    className="w-1 h-1 bg-primary rounded-full animate-bounce"
                     style={{ animationDelay: '0.2s' }}
                   />
                 </div>

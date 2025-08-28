@@ -277,7 +277,7 @@ test.describe('FullCalendar Pro Foundation Validation', () => {
     await page.waitForTimeout(2000)
     
     // Check that performance level is acceptable
-    const performanceLevel = page.locator('.text-green-600, .text-blue-600, .text-yellow-600').first()
+    const performanceLevel = page.locator('.text-green-600 /* TODO: Use semantic token */, .text-blue-600 /* TODO: Use semantic token */, .text-yellow-600 /* TODO: Use semantic token */').first()
     // Should be excellent, good, or warning (not poor/critical)
     
     // Validate foundation is still intact after performance testing

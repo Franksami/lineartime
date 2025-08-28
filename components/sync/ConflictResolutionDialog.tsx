@@ -178,9 +178,9 @@ export function ConflictResolutionDialog({
     variant: 'local' | 'remote' | 'merged'
   ) => {
     const iconColor = {
-      local: 'text-blue-500',
-      remote: 'text-green-500',
-      merged: 'text-purple-500',
+      local: 'text-primary',
+      remote: 'text-green-500 /* TODO: Use semantic token */',
+      merged: 'text-purple-500 /* TODO: Use semantic token */',
     }[variant];
 
     const Icon = {
@@ -252,7 +252,7 @@ export function ConflictResolutionDialog({
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-yellow-500" />
+            <AlertTriangle className="h-5 w-5 text-yellow-500 /* TODO: Use semantic token */" />
             Resolve Sync Conflicts ({currentConflictIndex + 1} of {conflicts.length})
           </DialogTitle>
           <DialogDescription>
@@ -308,7 +308,7 @@ export function ConflictResolutionDialog({
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="local" id="local" />
                     <Label htmlFor="local" className="flex items-center gap-2 cursor-pointer">
-                      <User className="h-4 w-4 text-blue-500" />
+                      <User className="h-4 w-4 text-primary" />
                       Keep Local Version
                       <span className="text-sm text-muted-foreground">(Your changes)</span>
                     </Label>
@@ -317,7 +317,7 @@ export function ConflictResolutionDialog({
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="remote" id="remote" />
                     <Label htmlFor="remote" className="flex items-center gap-2 cursor-pointer">
-                      <Smartphone className="h-4 w-4 text-green-500" />
+                      <Smartphone className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
                       Keep Remote Version
                       <span className="text-sm text-muted-foreground">
                         (Server/other device changes)
@@ -328,7 +328,7 @@ export function ConflictResolutionDialog({
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="merge" id="merge" />
                     <Label htmlFor="merge" className="flex items-center gap-2 cursor-pointer">
-                      <Merge className="h-4 w-4 text-purple-500" />
+                      <Merge className="h-4 w-4 text-purple-500 /* TODO: Use semantic token */" />
                       Smart Merge
                       <Badge variant="secondary" className="text-xs">
                         Recommended

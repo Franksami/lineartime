@@ -494,13 +494,13 @@ export function DragDropMetricsPanel({
                 <div key={index} className="flex items-center gap-3 p-3 bg-muted rounded-lg">
                   <div className="p-2 rounded-full bg-background">
                     {event.eventType === 'drop_success' && (
-                      <Target className="w-4 h-4 text-green-600" />
+                      <Target className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
                     )}
                     {event.eventType === 'drop_cancel' && (
-                      <Mouse className="w-4 h-4 text-red-600" />
+                      <Mouse className="w-4 h-4 text-red-600 /* TODO: Use semantic token */" />
                     )}
                     {event.eventType === 'drag_start' && (
-                      <Activity className="w-4 h-4 text-blue-600" />
+                      <Activity className="w-4 h-4 text-blue-600 /* TODO: Use semantic token */" />
                     )}
                   </div>
                   <div className="flex-1">

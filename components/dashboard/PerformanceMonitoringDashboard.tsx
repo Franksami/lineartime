@@ -337,22 +337,22 @@ const PerformanceMonitoringDashboard: React.FC = () => {
   const getStatusIcon = (status: 'pass' | 'warning' | 'fail') => {
     switch (status) {
       case 'pass':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
+        return <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />;
       case 'warning':
-        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+        return <AlertTriangle className="w-4 h-4 text-yellow-500 /* TODO: Use semantic token */" />;
       case 'fail':
-        return <AlertTriangle className="w-4 h-4 text-red-500" />;
+        return <AlertTriangle className="w-4 h-4 text-red-500 /* TODO: Use semantic token */" />;
     }
   };
 
   const getStatusColor = (status: 'pass' | 'warning' | 'fail') => {
     switch (status) {
       case 'pass':
-        return 'text-green-600 bg-green-50 border-green-200';
+        return 'text-green-600 /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ border-green-200 /* TODO: Use semantic token */';
       case 'warning':
-        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+        return 'text-yellow-600 /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */ border-yellow-200 /* TODO: Use semantic token */';
       case 'fail':
-        return 'text-red-600 bg-red-50 border-red-200';
+        return 'text-red-600 /* TODO: Use semantic token */ bg-red-50 /* TODO: Use semantic token */ border-red-200 /* TODO: Use semantic token */';
     }
   };
 
@@ -378,7 +378,7 @@ const PerformanceMonitoringDashboard: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold text-foreground flex items-center gap-2">
-            <Monitor className="w-8 h-8 text-blue-500" />
+            <Monitor className="w-8 h-8 text-primary" />
             Performance Monitor
           </h2>
           <p className="text-muted-foreground">
@@ -405,7 +405,7 @@ const PerformanceMonitoringDashboard: React.FC = () => {
       </div>
 
       {/* Overall SLO Compliance */}
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200 /* TODO: Use semantic token */">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -415,7 +415,7 @@ const PerformanceMonitoringDashboard: React.FC = () => {
               </p>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-bold text-blue-600">
+              <div className="text-3xl font-bold text-blue-600 /* TODO: Use semantic token */">
                 {overallSLOCompliance.toFixed(1)}%
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -443,10 +443,10 @@ const PerformanceMonitoringDashboard: React.FC = () => {
                       variant="outline"
                       className={`mr-2 ${
                         alert.severity === 'critical'
-                          ? 'border-red-500 text-red-600'
+                          ? 'border-red-500 /* TODO: Use semantic token */ text-red-600 /* TODO: Use semantic token */'
                           : alert.severity === 'high'
                             ? 'border-orange-500 text-orange-600'
-                            : 'border-yellow-500 text-yellow-600'
+                            : 'border-yellow-500 /* TODO: Use semantic token */ text-yellow-600 /* TODO: Use semantic token */'
                       }`}
                     >
                       {alert.severity}
@@ -753,7 +753,7 @@ const PerformanceMonitoringDashboard: React.FC = () => {
       {isMonitoring && (
         <div className="flex items-center justify-center py-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ animate-pulse" />
             <span>Real-time monitoring active • Updates every 30s</span>
           </div>
         </div>

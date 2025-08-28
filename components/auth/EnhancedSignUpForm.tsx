@@ -68,9 +68,9 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
   }
 
   const features = [
-    { icon: Calendar, text: 'AI Calendar', color: 'bg-blue-500' },
-    { icon: TrendingUp, text: 'Analytics', color: 'bg-green-500' },
-    { icon: Users, text: 'Team Sync', color: 'bg-purple-500' },
+    { icon: Calendar, text: 'AI Calendar', color: 'bg-primary' },
+    { icon: TrendingUp, text: 'Analytics', color: 'bg-green-500 /* TODO: Use semantic token */' },
+    { icon: Users, text: 'Team Sync', color: 'bg-purple-500 /* TODO: Use semantic token */' },
     { icon: Shield, text: 'Secure', color: 'bg-orange-500' },
   ];
 
@@ -100,7 +100,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
             exit={{ opacity: 0, scale: 0.8 }}
             className="mb-4"
           >
-            <Alert className="border-green-200 bg-green-50 text-green-800">
+            <Alert className="border-green-200 /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */">
               <CheckCircle className="h-4 w-4" />
               <AlertDescription>
                 <strong>Welcome to LinearTime!</strong> Your account is ready. Let's get started!
@@ -168,7 +168,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
             >
               <div className="flex space-x-1">
                 {[...Array(5)].map((_, i) => (
-                  <div key={i} className="w-3 h-3 bg-yellow-400 rounded-full" />
+                  <div key={i} className="w-3 h-3 bg-yellow-400 /* TODO: Use semantic token */ rounded-full" />
                 ))}
               </div>
               <span className="text-xs text-muted-foreground">Rated 5/5 by 10,000+ users</span>
@@ -270,7 +270,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                       transition={{ delay: 1.0 + index * 0.1 }}
                       className="flex items-center space-x-3 p-2 rounded-md hover:bg-accent/10 transition-colors"
                     >
-                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ flex-shrink-0" />
                       <div>
                         <p className="text-sm font-semibold text-foreground">{benefit.title}</p>
                         <p className="text-xs text-muted-foreground">{benefit.description}</p>
@@ -290,7 +290,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                 <p className="text-xs text-muted-foreground">Trusted by professionals worldwide</p>
                 <div className="flex justify-center space-x-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                    <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400 /* TODO: Use semantic token */" />
                   ))}
                 </div>
               </motion.div>

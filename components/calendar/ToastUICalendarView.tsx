@@ -2,9 +2,13 @@
 
 import Calendar from '@toast-ui/react-calendar';
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
-import '@toast-ui/calendar/dist/toastui-calendar.min.css';
-import 'tui-date-picker/dist/tui-date-picker.css';
-import 'tui-time-picker/dist/tui-time-picker.css';
+
+// Import CSS only on the client side to prevent SSR issues
+if (typeof window !== 'undefined') {
+  require('@toast-ui/calendar/dist/toastui-calendar.min.css');
+  require('tui-date-picker/dist/tui-date-picker.css');
+  require('tui-time-picker/dist/tui-time-picker.css');
+}
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -472,7 +476,7 @@ export function ToastUICalendarView({
                         <p className="text-xs text-muted-foreground">Total Events</p>
                       </div>
                       <div className="space-y-1">
-                        <p className="text-2xl font-bold text-blue-600">{stats.upcoming}</p>
+                        <p className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">{stats.upcoming}</p>
                         <p className="text-xs text-muted-foreground">Upcoming</p>
                       </div>
                       <div className="space-y-1">
@@ -480,7 +484,7 @@ export function ToastUICalendarView({
                         <p className="text-xs text-muted-foreground">Today</p>
                       </div>
                       <div className="space-y-1">
-                        <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
+                        <p className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">{stats.completed}</p>
                         <p className="text-xs text-muted-foreground">Completed</p>
                       </div>
                     </div>

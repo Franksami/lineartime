@@ -172,7 +172,7 @@ export default function ComprehensivePlannerInterface() {
                 >
                   <Brain className="w-8 h-8 text-primary" />
                   <div className="absolute -top-1 -right-1">
-                    <div className="w-3 h-3 bg-green-600 rounded-full animate-pulse" />
+                    <div className="w-3 h-3 bg-green-600 /* TODO: Use semantic token */ rounded-full animate-pulse" />
                   </div>
                 </motion.div>
 
@@ -245,7 +245,7 @@ export default function ComprehensivePlannerInterface() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
-                      <DollarSign className="w-5 h-5 text-green-600" />
+                      <DollarSign className="w-5 h-5 text-green-600 /* TODO: Use semantic token */" />
                       <span>Revenue Goals</span>
                     </CardTitle>
                   </CardHeader>
@@ -259,7 +259,7 @@ export default function ComprehensivePlannerInterface() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
-                      <Zap className="w-5 h-5 text-yellow-500" />
+                      <Zap className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */" />
                       <span>Quick Actions</span>
                     </CardTitle>
                   </CardHeader>
@@ -383,7 +383,7 @@ export default function ComprehensivePlannerInterface() {
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Conflicts</span>
-                      <span className="font-mono text-green-600">0 active</span>
+                      <span className="font-mono text-green-600 /* TODO: Use semantic token */">0 active</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -439,12 +439,12 @@ export default function ComprehensivePlannerInterface() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
+                    <TrendingUp className="w-5 h-5 text-green-600 /* TODO: Use semantic token */" />
                     <span>Revenue Impact</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-green-600">+$12,847</div>
+                  <div className="text-3xl font-bold text-green-600 /* TODO: Use semantic token */">+$12,847</div>
                   <div className="text-sm text-muted-foreground">
                     This month's optimization value
                   </div>
@@ -455,12 +455,12 @@ export default function ComprehensivePlannerInterface() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
-                    <Activity className="w-5 h-5 text-blue-600" />
+                    <Activity className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */" />
                     <span>Productivity Score</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-blue-600">94%</div>
+                  <div className="text-3xl font-bold text-blue-600 /* TODO: Use semantic token */">94%</div>
                   <div className="text-sm text-muted-foreground">Coordination efficiency</div>
                 </CardContent>
               </Card>
@@ -474,7 +474,7 @@ export default function ComprehensivePlannerInterface() {
               <Card className="lg:col-span-2">
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
-                    <Users className="w-5 h-5 text-purple-600" />
+                    <Users className="w-5 h-5 text-purple-600 /* TODO: Use semantic token */" />
                     <span>Team Coordination Management</span>
                   </CardTitle>
                 </CardHeader>

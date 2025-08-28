@@ -5,42 +5,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 🎯 Project Overview
 
 ### Current Session Context
-- Active Task: CheatCal Strategic Transformation Implementation
-- Last Updated: August 27, 2025
-- Checkpoint: CheatCal PRD Analysis Complete + Documentation Structure Created
+- **Active Phase**: Command Workspace Architecture Implementation
+- **Last Updated**: August 27, 2025
+- **Checkpoint**: Research Validation Complete + Command Workspace PRD Approved
+- **Implementation Status**: Phase 1 Ready (Shell + Views + Command System)
 
-**CheatCal - "The Calendar That Cheats For You"** - Revolutionary AI-powered coordination optimization platform for money-focused professionals. Built on proven 133,222+ line quantum calendar infrastructure with controversial positioning and multi-modal AI capabilities.
+**LinearTime Command Workspace** - AI-powered productivity platform with three-pane workspace architecture (Sidebar + Tabs + Context Dock). Features command-first experience, contextual AI agents, and privacy-first computer vision integration.
 
-**Current Version**: v1.0.0 (CheatCal Foundation - Strategic Transformation)
-**Previous Foundation**: v0.3.3 (Enterprise Calendar Integration Platform - PRESERVED)
-**Target Version**: v2.0.0 (CheatCal Market Validation & Community Launch)
-**Project Philosophy**: "AI-powered coordination optimization for money-focused professionals through sophisticated analysis, elite service provider marketplace, and always-available productivity enhancement"
+**Current Version**: v2.0.0 (Command Workspace Architecture - Research Validated)
+**Previous Foundation**: Calendar Integration Platform (PRESERVED as backend infrastructure)
+**Target Version**: v2.1.0 (Full Feature Implementation + Mobile Optimization)
+**Architecture Philosophy**: "Command-first workspace with progressive disclosure, contextual AI integration, and industry-validated patterns for professional productivity optimization"
 
-### 💀 **STRATEGIC EVOLUTION: LinearTime → CheatCal**
+### 🏗️ **ARCHITECTURAL EVOLUTION: Command Workspace Hybrid**
 
-**REVOLUTIONARY MISSION**: Transform the existing quantum calendar infrastructure into **CheatCal** - the world's first AI-powered coordination optimization platform that uses controversial positioning and multi-modal AI surveillance to help high-revenue professionals "cheat" at productivity.
+**STRATEGIC DIRECTION**: Transform from calendar-centric to workspace-centric architecture with three-pane shell (Sidebar + Tabs + Context Dock), command-first experience, and contextual AI integration.
 
-**TARGET MARKET**: Money-focused professionals who prioritize results over conventional methods:
-- Course creators ($30K+ launches): Complex launch coordination optimization  
-- Agency owners ($500K+ revenue): Client coordination and operational efficiency
-- Family offices ($10M+ AUM): Multi-professional investment decision coordination
-- Elite professionals: Anyone who values measurable productivity ROI over privacy concerns
+**CORE WORKSPACE COMPONENTS**:
+- **Three-Pane Shell**: Sidebar (sections), Center Tabs (Week/Planner/Notes/Mailbox), Right Context Dock (AI/Details/Conflicts)
+- **Command System**: Command Palette (⌘/Ctrl-K) + Omnibox (NL→Actions) for keyboard-first productivity
+- **AI Integration**: Context Dock agents (Planner/Conflict/Summarizer/Router) with MCP tools
+- **Privacy-First**: Local computer vision processing with consent management and audit logging
 
-**BUSINESS MODEL**: Triple revenue stream innovation:
-- Community Education: $49-$999/month CheatCal University (Hustlers University model)
-- Marketplace Value-Sharing: 15-25% of coordination improvement value created
-- Viral Authority Building: Success stories → viral content → thought leadership
+**RESEARCH-VALIDATED PATTERNS**:
+- **Command-First Interface**: Industry standard validated by Obsidian (Ctrl+P/Cmd+P) and Schedule X patterns
+- **Multi-Pane Architecture**: Confirmed by Obsidian Workspaces plugin with saved layout management
+- **AI Constraint Solving**: Timefold AI Solver patterns for scheduling optimization and conflict resolution
+- **Local Privacy Processing**: ImageSorcery MCP patterns for 100% local computer vision operations
 
-### 🔗 **Current Foundation: Calendar Integration Platform**
+### 🏢 **Backend Foundation: Calendar Integration Platform (PRESERVED)**
 
-#### **4-Provider Calendar Integration System**
-- **Google Calendar**: OAuth 2.0 with real-time webhook notifications
-- **Microsoft Graph**: OAuth 2.0 with Graph API subscriptions and push notifications
-- **Apple iCloud CalDAV**: RFC4791 compliant CalDAV with app-specific passwords
-- **Generic CalDAV**: Universal CalDAV support for any standards-compliant server
-- **Server-Side Encryption**: AES-256-GCM encryption via Convex for all provider tokens
-- **Real-Time Sync**: Webhook-driven synchronization with automatic renewal
-- **Background Processing**: Intelligent sync queue with exponential backoff retry
+**Enterprise Infrastructure** (maintained as backend services):
+- **4-Provider System**: Google Calendar, Microsoft Graph, Apple CalDAV, Generic CalDAV
+- **Server-Side Encryption**: AES-256-GCM via Convex for all provider tokens
+- **Real-Time Sync**: Webhook-driven synchronization with intelligent queue processing
+- **Enterprise Security**: Zero-trust model with comprehensive audit logging
 
 #### **10 Calendar Library Support**
 - **LinearCalendarHorizontal** (Core Foundation) - 12-month horizontal timeline
@@ -69,34 +68,40 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **shadcn/Vercel Tokens**: Pure semantic design token system (glass effects removed)
 - **Timeline Redesign**: Vertical month-by-month view (editing centralized to Manage + Command Bar)
 
-## 🔒 CRITICAL: FOUNDATION LOCKED
+## 🚨 CRITICAL: ARCHITECTURAL TRANSFORMATION
 
-### **THE LINEAR CALENDAR FOUNDATION IS IMMUTABLE (LAYOUT), IMPLEMENTATION MAY IMPROVE**
+### **NEW COMMAND WORKSPACE ARCHITECTURE (PRIMARY)**
 
-The locked rules are defined in `docs/LINEAR_CALENDAR_FOUNDATION_SPEC.md`. The core layout must never be broken. Implementation improvements (performance, tokens, motion, a11y, AI overlays) are allowed.
-
-#### **LOCKED FOUNDATION STRUCTURE (see spec):**
-- 12 vertical month rows (Jan→Dec stacked), each a single continuous horizontal row
-- Week day headers at top and bottom aligned with day columns
-- Month labels on both left and right
-- Correct day-of-week alignment for any year; 42-cell grid per month with empty leading/trailing cells
-- Year header with tagline; bordered grid
-
-#### **PRIMARY CALENDAR COMPONENT (USE ONLY THIS):**
+**PRIMARY SHELL COMPONENT**:
 ```tsx
-// ✅ ONLY USE THIS COMPONENT:
-<LinearCalendarHorizontal
-  year={currentYear}
-  events={calendarEvents}
-  className="h-full w-full"
-  onEventCreate={handleEventCreate}
-  onEventUpdate={handleEventUpdate}
-  onEventDelete={handleEventDelete}
-  enableInfiniteCanvas={true}
-/>
+// ✅ NEW PRIMARY ARCHITECTURE:
+<AppShell>
+  <Sidebar sections={['Calendar', 'Tasks', 'Notes', 'Mailbox']} />
+  <TabWorkspace>
+    <Tab view="week" />
+    <Tab view="planner" />
+    <Tab view="notes" />
+    <Tab view="mailbox" />
+  </TabWorkspace>
+  <ContextDock panels={['ai', 'details', 'conflicts', 'capacity']} />
+</AppShell>
 ```
 
-⚠️ **WARNING**: Any change that breaks the layout in the spec **BREAKS THE PRODUCT**. All development must build ON TOP OF the locked foundation.
+### **⚠️ DEPRECATION: Linear Calendar Foundation**
+
+**LinearCalendarHorizontal is DEPRECATED as main shell** - relegated to optional Year Lens view only.
+
+**Governance Enforcement**:
+- ESLint ban: `no-restricted-imports` for LinearCalendarHorizontal outside `views/year-lens/*`
+- Dependency cruiser: Forbid imports outside Year Lens scope
+- CI grep guard: Block accidental legacy imports
+
+**Migration Path**:
+- All new development targets Command Workspace shell
+- Legacy calendar preserved as `views/year-lens/YearLensView.tsx` (optional, OFF by default)
+- No shell or view code may depend on 12-row calendar constraints
+
+⚠️ **CRITICAL**: Any development using LinearCalendarHorizontal outside Year Lens view **VIOLATES the new architecture**.
 
 ## 📦 Essential Commands
 
@@ -113,27 +118,29 @@ npm run start                   # Run production server
 npm run lint                    # ESLint check
 ```
 
-### Testing Commands (MANDATORY)
+### **Command Workspace Testing (RESEARCH-VALIDATED)**
 ```bash
-# Foundation Protection (REQUIRED before commits)
-npm run test:foundation         # Validates locked foundation structure
+# Shell Architecture Tests (NEW MANDATORY)
+npm run test:shell             # Command Workspace shell validation
+npm run test:commands          # Command palette and keyboard navigation
+npm run test:dock              # Context dock panel functionality
 
-# Full Test Suite
-npm run test:all               # All Playwright tests
-npx playwright test            # Run all tests
-npx playwright test --ui       # Interactive UI for testing
+# Research-Validated Test Patterns
+npx playwright test tests/command-workspace/     # Shell, tabs, dock integration tests
+npx playwright test tests/keyboard-navigation/   # Keyboard-first patterns (Schedule X validation)
+npx playwright test tests/ai-agents/             # Contextual AI integration (Rasa patterns)
+npx playwright test tests/conflict-resolution/   # Constraint-based optimization (Timefold patterns)
 
-# Specific Tests
-npx playwright test tests/foundation-validation.spec.ts
-npx playwright test tests/comprehensive-ui-test.spec.ts
-npx playwright test --grep "event creation"
+# Performance & Accessibility Tests  
+npx playwright test tests/performance/           # 60fps, <500ms render, <120ms keyboard response
+npx playwright test tests/accessibility/         # WCAG 2.1 AA, keyboard-only, focus management
 
-# Test Helpers
-npm run test:manual            # Manual testing helper
-npm run test:seed              # Seed test data
+# Legacy Calendar Tests (Optional Year Lens Only)
+npx playwright test tests/year-lens/             # DEPRECATED: Only for Year Lens view
 
-# CI Validation
-npm run ci:guard               # Pre-commit validation
+# CI Validation (Updated)
+npm run ci:guard               # Architecture compliance validation
+npm run test:governance        # ESLint/dependency-cruiser governance checks
 ```
 
 ### Git Workflow (MANDATORY)
@@ -145,8 +152,9 @@ git push origin main           # BLOCKED - Direct push prohibited
 # 1. Create feature branch
 git checkout -b feature/task-[ID]-[description]
 
-# 2. Run tests BEFORE committing
-npm run test:foundation        # MANDATORY
+# 2. Run tests BEFORE committing  
+npm run test:shell            # MANDATORY - Command Workspace validation
+npm run test:governance       # MANDATORY - Architecture compliance checks
 npx playwright test           # Feature tests
 npm run build                 # Build validation
 
@@ -162,79 +170,150 @@ gh pr create --title "Task #[ID]: [Feature]" --body "[testing details]"
 # 6. Merge ONLY after approval
 ```
 
-## 🏗 High-Level Architecture
+## 🏗 **Command Workspace Architecture (NEW)**
 
-### Calendar Integration Platform Architecture
+### **Three-Pane Shell System (PRIMARY)**
 
-#### **Core Foundation Component (LOCKED)**
-**Primary Component (USE THIS)**:
-- `components/calendar/LinearCalendarHorizontal.tsx` - The ONLY foundation calendar
-  - Horizontal linear timeline (immutable core identity)
-  - 12 months in continuous rows
-  - Zoom controls & infinite canvas
-  - Target: 10,000+ events with provider sync
-  - Integration with all 4 calendar providers
+#### **Core Shell Components (NEW FOUNDATION)**
+**Primary Architecture**:
+```tsx
+// 🏗️ COMMAND WORKSPACE SHELL ARCHITECTURE:
+components/shell/
+├── AppShell.tsx              // Main three-pane shell container
+├── Sidebar/
+│   ├── SidebarSection.tsx    // Calendar, Tasks, Notes, Mailbox sections
+│   └── SidebarProvider.tsx   // Sidebar state and persistence
+├── TabWorkspace/
+│   ├── TabContainer.tsx      // Tab management and routing
+│   ├── ViewScaffold.tsx      // Consistent Header + Content + Context
+│   └── TabProvider.tsx       // Tab state and navigation
+└── ContextDock/
+    ├── DockPanel.tsx         // AI, Details, Conflicts, Capacity panels
+    ├── DockProvider.tsx      // Panel state and registry
+    └── panels/               // Individual dock panel implementations
+```
 
-#### **Calendar Library System (10 Libraries)**
-**CalendarProvider Architecture**:
-- `components/calendar/providers/CalendarRegistry.tsx` - Central library registry
-- `components/calendar/providers/CalendarRenderer.tsx` - Unified rendering engine
-- `components/calendar/providers/types.ts` - Type definitions and interfaces
+**Research-Validated Patterns**:
+- **Multi-Pane Layout**: Based on Obsidian Workspaces plugin architecture
+- **Saved Workspace States**: Layout persistence with task-based switching (Obsidian pattern)
+- **Tab Management**: Group and persistent state management (Obsidian/Schedule X patterns)
 
-**Supported Calendar Libraries**:
-1. `LinearCalendarHorizontal.tsx` - Core foundation (always available)
-2. `FullCalendarView.tsx` - Professional scheduling with advanced features
-3. `ToastUICalendarView.tsx` - Drag & drop with comprehensive toolbar
-4. `ReactBigCalendarView.tsx` - React Big Calendar with responsive design
-5. `ReactInfiniteCalendarView.tsx` - Infinite scrolling with virtualization
-6. `PrimeReactCalendarView.tsx` - Enterprise statistics and analytics
-7. `MUIXCalendarView.tsx` - Material Design with multiple picker variants
-8. `ReactCalendarView.tsx` - Lightweight with tile customization
-9. `ReactDatePickerView.tsx` - Date picker with calendar integration
-10. `ReactDayPickerView.tsx` - Flexible day picker
-11. `ProgressCalendarView.tsx` - Progress tracking with dot visualization
+#### **Command System Architecture (NEW)**
+**Research-Validated Command Patterns**:
+```tsx
+// 🎯 COMMAND SYSTEM ARCHITECTURE:
+components/commands/
+├── CommandPalette.tsx        // ⌘/Ctrl-K palette with fuzzy search
+├── CommandRegistry.tsx       // Command registration and routing
+├── OmniboxProvider.tsx       // NL→Actions with streaming (Vercel AI SDK)
+├── KeyboardManager.tsx       // Global keyboard shortcuts and navigation
+└── commands/
+    ├── NavigateCommands.tsx  // View switching and navigation
+    ├── CreateCommands.tsx    // Entity creation (event/task/note)
+    ├── LinkCommands.tsx      // Entity linking and backlinks
+    └── ToolCommands.tsx      // AI tool execution and routing
+```
 
-#### **Provider Integration Components**
-**Calendar Sync System**:
-- `convex/calendar/providers.ts` - Provider registration and configuration
-- `convex/calendar/google.ts` - Google Calendar API with OAuth 2.0
-- `convex/calendar/microsoft.ts` - Microsoft Graph API integration
-- `convex/calendar/caldav.ts` - CalDAV protocol for Apple/Generic providers
-- `convex/calendar/sync.ts` - Sync engine with queue management
+**Keyboard Patterns** (Schedule X validated):
+- **Command Palette**: Ctrl+P/Cmd+P (industry standard from Obsidian research)
+- **Double-Click Creation**: onDoubleClickDateTime/onDoubleClickDate <120ms response
+- **Escape Key Standard**: Consistent behavior across all modals with custom callbacks
+- **Focus Management**: Automatic focus when modals opened via keyboard navigation
 
-**Webhook System**:
-- `app/api/webhooks/google/route.ts` - Google push notifications
-- `app/api/webhooks/microsoft/route.ts` - Microsoft Graph webhooks
-- `lib/webhook-security.ts` - Signature verification and security
-- `lib/sync-queue.ts` - Background job processing
+#### **View System Architecture (NEW)**  
+**Research-Validated View Patterns**:
+```tsx
+// 📋 VIEW SYSTEM ARCHITECTURE:
+views/
+├── week/                     // WeekView (primary view)
+├── day/                      // DayView 
+├── month-strip/              // MonthStripView (single-row month)
+├── quarter/                  // QuarterView (3-month capacity)
+├── planner/                  // PlannerView (kanban + time-blocking)
+├── notes/                    // NotesView (markdown + embeds)
+├── mailbox/                  // MailboxView (triage + conversion)
+├── automations/              // AutomationsView (workflow builder)
+└── year-lens/                // YearLensView (optional legacy calendar)
+    └── YearLensView.tsx      // ONLY place LinearCalendarHorizontal allowed
+```
 
-#### **Enhanced Calendar Toolbar**
-- `components/calendar/EnhancedCalendarToolbar.tsx` - Modern toolbar with animations
-  - Library switching capabilities
-  - Provider sync controls
-  - AI scheduling integration
-  - Keyboard shortcuts
-  - Mobile-responsive design
+**View Scaffold Contract** (consistent across all views):
+- **Header**: Title/range, filters, search, quick actions, view switcher
+- **Content**: Virtualized grid/list/canvas with full keyboard navigation
+- **Context Integration**: View-specific panel contributions to Context Dock
 
-#### **Legacy/Deprecated Components**
-**DO NOT USE**:
-- `LinearCalendarVertical.tsx` - Violates horizontal layout foundation
-- `VirtualCalendar.tsx` - Experimental only
-- `AdvancedCalendarToolbar.tsx` - Replaced by EnhancedCalendarToolbar
-- Direct provider API calls - Use CalendarProvider system
+#### **AI Integration Architecture (NEW)**
+**Research-Validated AI Patterns**:
+```tsx
+// 🤖 AI INTEGRATION ARCHITECTURE:
+lib/ai/
+├── agents/
+│   ├── PlannerAgent.tsx      // Constraint-based scheduling (Timefold patterns)
+│   ├── ConflictAgent.tsx     // Real-time conflict detection & resolution
+│   ├── SummarizerAgent.tsx   // Slot-based conversation management (Rasa patterns)
+│   └── RouterAgent.tsx       // Intent classification with confidence thresholds
+├── mcp/
+│   ├── MCPToolRegistry.tsx   // MCP tool registration and routing
+│   ├── ToolSafety.tsx        // Scoped permissions and audit logging
+│   └── tools/                // Calendar, task, note, mail tool implementations
+└── context/
+    ├── ConversationContext.tsx // Multi-turn conversation state (Rasa patterns)
+    ├── ToolContext.tsx         // Tool execution state and results
+    └── AgentProvider.tsx       // Agent coordination and communication
+```
 
-### State Management
+**AI Agent Patterns** (validated by research):
+- **Constraint-Based Planning**: Timefold AI Solver patterns for optimization and conflict resolution
+- **Conversation Management**: Rasa framework patterns for context-aware AI interactions
+- **Tool Safety**: Auto-approval lists and consent patterns from ImageSorcery MCP research
 
-**CalendarContext** (`contexts/CalendarContext.tsx`):
-- Global calendar state with useReducer
-- Performance optimized with batch updates
-- Accessibility announcements
-- Mobile-specific state
+#### **Context Dock System (NEW)**
+**Research-Validated Dock Patterns**:
+```tsx
+// 📌 CONTEXT DOCK ARCHITECTURE:
+components/dock/
+├── ContextDock.tsx           // Right-side dock container with panel management
+├── DockRegistry.tsx          // Panel registration and lifecycle management
+├── panels/
+│   ├── AIAssistant/          // Contextual AI agents with streaming responses
+│   ├── DetailsPanel/         // Entity properties and metadata (Notion pattern)
+│   ├── ConflictsPanel/       // Real-time conflict visualization (Timefold pattern)
+│   ├── CapacityPanel/        // Resource capacity and utilization analysis
+│   └── BacklinksPanel/       // Entity relationship graph (Obsidian pattern)
+└── providers/
+    ├── DockProvider.tsx      // Dock state management and persistence
+    └── PanelProvider.tsx     // Individual panel state and communication
+```
 
-**Hooks**:
-- `useLinearCalendar.ts` - Event CRUD with IndexedDB
-- `useCalendarEvents.ts` - Event-specific logic
-- `use-gesture/react` - Touch gesture support
+**Dock Panel Features**:
+- **Contextual AI**: Agents respond to current view/selection with streaming responses (Rasa patterns)
+- **Entity Details**: Properties panel similar to Notion's right-side metadata (validated research)
+- **Backlinks Graph**: Visual relationship mapping based on Obsidian graph view patterns
+
+### **State Management Architecture (TRANSFORMED)**
+
+**Primary Providers** (Command Workspace focused):
+```tsx
+// 🔄 STATE MANAGEMENT ARCHITECTURE:
+contexts/
+├── AppShellProvider.tsx      // Shell state: tabs, active view, dock panels, layout persistence
+├── CommandProvider.tsx       // Command registry, palette state, keyboard mappings  
+├── OmniboxProvider.tsx       // NL parsing, streaming results, tool routing (Rasa patterns)
+├── WorkspaceProvider.tsx     // Saved layouts, view preferences, user workspace configuration
+└── legacy/
+    └── CalendarContext.tsx   // LEGACY: Preserved for Year Lens view compatibility
+```
+
+**Research-Validated Hooks**:
+- `useAppShell.ts` - Shell navigation, tab management, dock panel control
+- `useCommands.ts` - Command palette integration with fuzzy search and execution
+- `useOmnibox.ts` - Natural language processing with intent classification (Rasa patterns)
+- `useWorkspaceLayout.ts` - Layout persistence with task-based switching (Obsidian patterns)
+- `useKeyboardNavigation.ts` - Global keyboard shortcuts with focus management (Schedule X patterns)
+
+**Legacy Hooks** (preserved for backend integration):
+- `useCalendarEvents.ts` - Event CRUD operations (preserved for calendar data)
+- `useSyncedCalendar.ts` - Provider synchronization (preserved for backend integration)
 
 ### Storage Architecture
 
@@ -581,107 +660,139 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_[configured]
 6. **Error Boundaries**: Graceful error handling and recovery
 7. **Loading States**: Proper loading indicators and skeleton states
 
-## 📁 Key Directories
+## 📁 **Command Workspace Directory Architecture**
 
+### **🏗️ NEW COMMAND WORKSPACE STRUCTURE**
 ```
 lineartime/
 ├── app/                    # Next.js app router
-│   ├── analytics/         # Analytics dashboard
-│   ├── dashboard/         # Calendar dashboard (Phase 2.7)
-│   ├── integration-dashboard/ # Ultimate Integration Dashboard (Phase 2.7 - NEW)
-│   │   └── page.tsx       # Main dashboard with 6-tab interface (580+ lines)
-│   ├── landing/          # Modern landing page
-│   ├── themes/           # Theme management
-│   ├── test-*/           # Test pages (25+ integration test pages)
-│   └── api/              # API routes
-│       ├── webhooks/     # Provider webhook endpoints (NEW)
-│       │   ├── google/   # Google Calendar webhooks
-│       │   └── microsoft/ # Microsoft Graph webhooks
-│       ├── billing/      # Stripe billing with fallbacks
-│       └── sync/         # Sync management APIs (NEW)
+│   ├── app/               # 🆕 MAIN SHELL ENTRY POINT (/app route)
+│   │   ├── page.tsx       # Command Workspace shell mount
+│   │   ├── layout.tsx     # Shell layout with providers
+│   │   └── loading.tsx    # Shell loading states
+│   ├── api/              # Backend API routes (PRESERVED)
+│   │   ├── webhooks/     # Calendar provider webhooks  
+│   │   ├── billing/      # Stripe billing integration
+│   │   └── sync/         # Calendar sync management
+│   └── legacy/           # 🚨 DEPRECATED ROUTES (redirect to /app)
+│       ├── analytics/    # REDIRECT: → /app?view=analytics
+│       ├── dashboard/    # REDIRECT: → /app?view=week  
+│       ├── themes/       # REDIRECT: → /app?panel=settings
+│       └── test-*/       # REDIRECT: → /app?view=test
 ├── components/
-│   ├── calendar/         # Calendar components (50+ components)
-│   │   ├── providers/    # Calendar library system (NEW)
-│   │   │   ├── CalendarRegistry.tsx    # Central library registry
-│   │   │   ├── CalendarRenderer.tsx    # Unified rendering engine
-│   │   │   └── types.ts               # Type definitions
-│   │   ├── LinearCalendarHorizontal.tsx # Core foundation (LOCKED)
-│   │   ├── FullCalendarView.tsx        # FullCalendar Pro integration
-│   │   ├── ToastUICalendarView.tsx     # Toast UI with drag & drop
-│   │   ├── ReactBigCalendarView.tsx    # React Big Calendar
-│   │   ├── ReactInfiniteCalendarView.tsx # Infinite scrolling
-│   │   ├── PrimeReactCalendarView.tsx  # Enterprise features
-│   │   ├── MUIXCalendarView.tsx        # Material Design
-│   │   ├── ReactCalendarView.tsx       # Lightweight calendar
-│   │   ├── ReactDatePickerView.tsx     # Date picker integration
-│   │   ├── ReactDayPickerView.tsx      # Day picker
-│   │   ├── ProgressCalendarView.tsx    # Progress visualization
-│   │   └── EnhancedCalendarToolbar.tsx # Modern toolbar
-│   ├── dashboard/        # Enhanced dashboard components (Phase 2.7 - NEW)
-│   │   ├── IntegrationAnalyticsCharts.tsx  # Real-time analytics (411 lines)
-│   │   ├── SecurityMonitoringDashboard.tsx # Security monitoring (560 lines)
-│   │   ├── SyncQueueMonitor.tsx           # Sync job monitoring (436 lines)
-│   │   └── IntegrationTestingCenter.tsx    # API endpoint testing
-│   ├── landing/          # Landing page components
-│   ├── settings/sections/ # Settings with provider integration
-│   │   └── CalendarIntegrations.tsx   # Provider connection UI (NEW)
-│   ├── ai/              # AI components
-│   ├── ui/              # shadcn components (35+)
-│   └── theme/           # Theme components
-├── convex/              # Convex backend with integration platform
-│   ├── calendar/        # Calendar integration system (NEW)
-│   │   ├── providers.ts # Provider registration
-│   │   ├── google.ts    # Google Calendar API
-│   │   ├── microsoft.ts # Microsoft Graph API
-│   │   ├── caldav.ts    # CalDAV protocol (Apple/Generic)
-│   │   └── sync.ts      # Sync engine with queue
-│   ├── auth.ts          # Enhanced with provider encryption
-│   ├── http.ts          # Webhook handling (expanded)
-│   ├── billing.ts       # Subscription management
-│   ├── clerk.ts         # User lifecycle
-│   ├── events.ts        # Unified event management (NEW)
-│   ├── schema.ts        # Database schema (expanded)
-│   └── _generated/      # Auto-generated types
-├── contexts/            # React contexts
-│   └── CalendarContext.tsx # Enhanced with provider support
-├── hooks/              # Custom hooks (20+)
-│   ├── useSyncedCalendar.ts  # Provider sync hook (NEW)
-│   └── useCalendarNotifications.tsx # Real-time updates (NEW)
+│   ├── shell/            # 🆕 COMMAND WORKSPACE SHELL (PRIMARY)
+│   │   ├── AppShell.tsx          # Three-pane shell container
+│   │   ├── Sidebar/              # Left sidebar with sections
+│   │   ├── TabWorkspace/         # Center tabs with view scaffolds
+│   │   └── ContextDock/          # Right context dock with panels
+│   ├── commands/         # 🆕 COMMAND SYSTEM (PRIMARY)
+│   │   ├── CommandPalette.tsx    # ⌘/Ctrl-K palette (Obsidian patterns)
+│   │   ├── OmniboxProvider.tsx   # NL→Actions (Rasa patterns)
+│   │   ├── CommandRegistry.tsx   # Command registration and routing
+│   │   └── KeyboardManager.tsx   # Global keyboard navigation
+│   ├── dock/             # 🆕 CONTEXT DOCK PANELS (PRIMARY)
+│   │   ├── panels/               # AI, Details, Conflicts, Capacity, Backlinks
+│   │   ├── DockProvider.tsx      # Panel state and registry
+│   │   └── DockContainer.tsx     # Panel management and layout
+│   ├── calendar/         # 🚨 LEGACY COMPONENTS (Year Lens only)
+│   │   ├── LinearCalendarHorizontal.tsx # 🚨 DEPRECATED: Year Lens view only
+│   │   ├── providers/            # Calendar library system (preserved)
+│   │   └── [other calendar libs] # Preserved for future integration
+│   ├── ui/              # shadcn components (preserved)
+│   └── theme/           # Theme components (preserved)
+├── views/               # 🆕 COMMAND WORKSPACE VIEWS (PRIMARY)
+│   ├── week/            # WeekView (primary view) with view scaffold
+│   ├── day/             # DayView with keyboard navigation
+│   ├── month-strip/     # MonthStripView (single-row month)
+│   ├── quarter/         # QuarterView (3-month capacity planning)
+│   ├── planner/         # PlannerView (kanban + time-blocking)
+│   ├── notes/           # NotesView (markdown + embeds + entity linking)
+│   ├── mailbox/         # MailboxView (triage + entity conversion)
+│   ├── automations/     # AutomationsView (workflow builder)
+│   └── year-lens/       # 🚨 LEGACY: Year Lens (optional, OFF by default)
+│       └── YearLensView.tsx  # ONLY allowed use of LinearCalendarHorizontal
+├── contexts/            # 🆕 COMMAND WORKSPACE PROVIDERS (PRIMARY)
+│   ├── AppShellProvider.tsx      # Shell state: tabs, dock, layouts
+│   ├── CommandProvider.tsx       # Command registry and palette state
+│   ├── OmniboxProvider.tsx       # NL parsing and tool routing
+│   ├── WorkspaceProvider.tsx     # Layout persistence and preferences
+│   └── legacy/                   # 🚨 LEGACY CONTEXTS
+│       └── CalendarContext.tsx   # DEPRECATED: Year Lens only
+├── hooks/              # 🆕 COMMAND WORKSPACE HOOKS (PRIMARY)
+│   ├── useAppShell.ts           # Shell navigation and tab management
+│   ├── useCommands.ts           # Command palette and execution
+│   ├── useOmnibox.ts            # Natural language processing (Rasa patterns)
+│   ├── useWorkspaceLayout.ts    # Layout persistence (Obsidian patterns)
+│   ├── useKeyboardNavigation.ts # Global shortcuts (Schedule X patterns)
+│   └── legacy/                  # 🚨 LEGACY HOOKS (backend only)
+│       ├── useCalendarEvents.ts      # Event CRUD (backend integration)
+│       └── useSyncedCalendar.ts      # Provider sync (backend integration)
 ├── lib/                # Business logic
-│   ├── ai/            # AI scheduling engine
-│   ├── db/            # IndexedDB operations
-│   ├── sound-service.ts    # Sound effects service (NEW v0.3.3)
-│   ├── webhook-security.ts # Webhook signature verification (NEW)
-│   ├── sync-queue.ts      # Background job processing (NEW)
-│   ├── providers/         # Provider-specific utilities (NEW)
-│   └── theme-manager.ts   # Theme management
+│   ├── ai/             # 🆕 AI AGENT SYSTEM (PRIMARY)
+│   │   ├── agents/     # Planner, Conflict, Summarizer, Router agents
+│   │   ├── mcp/        # MCP tool registry and safety
+│   │   ├── context/    # Conversation and tool context (Rasa patterns)
+│   │   └── tools/      # Calendar, task, note, mail tools
+│   ├── cv/             # 🆕 COMPUTER VISION (LOCAL PRIVACY)
+│   │   ├── consent/    # Consent management and audit logging
+│   │   ├── processor/  # Local CV pipeline (ImageSorcery patterns)
+│   │   └── models/     # Local model management and validation
+│   ├── db/            # IndexedDB operations (preserved)
+│   └── providers/     # Calendar provider utilities (preserved)
+├── convex/            # 🏢 BACKEND SERVICES (PRESERVED)
+│   ├── calendar/      # Calendar integration platform (preserved)
+│   ├── auth.ts        # Authentication and encryption
+│   ├── billing.ts     # Subscription management  
+│   ├── events.ts      # Unified event management
+│   └── schema.ts      # Database schema
 ├── scripts/            # Build tools
 │   └── ci-guard.js     # Token-only theming enforcement
-├── tests/              # Playwright tests (40+ test files)
-│   ├── sound-effects.spec.ts       # Sound effects system tests (NEW v0.3.3)
-│   ├── integration/    # Integration test suites (NEW)
-│   │   ├── google-calendar-integration.spec.ts
-│   │   ├── microsoft-graph-integration.spec.ts
-│   │   ├── caldav-integration.spec.ts
-│   │   └── provider-sync.spec.ts
-│   ├── calendar-libraries/ # Library-specific tests (NEW)
-│   │   ├── fullcalendar-integration.spec.ts
-│   │   ├── toastui-calendar.spec.ts
-│   │   └── [8 other library test files]
-│   ├── security/       # Security validation tests (NEW)
-│   │   ├── token-encryption.spec.ts
-│   │   └── webhook-verification.spec.ts
-│   └── foundation/     # Foundation protection tests
-│       └── foundation-validation.spec.ts
-├── docs/               # Phase 2.6 Foundation Documentation (NEW)
-│   ├── INTEGRATION_PLATFORM_ARCHITECTURE.md  # Complete system overview
-│   ├── SECURITY_ARCHITECTURE.md              # Enterprise security model
-│   ├── WEBHOOK_SYNC_ARCHITECTURE.md          # Real-time sync system
-│   ├── DEVELOPMENT_GUIDE.md                  # Local development setup
-│   ├── DEPLOYMENT_GUIDE.md                   # Production deployment
-│   ├── API_REFERENCE.md                      # Integration API docs
-│   └── [legacy documentation preserved]
-├── PHASE_2.7_ULTIMATE_INTEGRATION_DASHBOARD.md # Phase 2.7 Dashboard Documentation (NEW)
+├── tests/              # 🆕 COMMAND WORKSPACE TESTS (RESEARCH-VALIDATED)
+│   ├── command-workspace/      # 🆕 PRIMARY TEST SUITE
+│   │   ├── shell-integration.spec.ts    # AppShell three-pane functionality
+│   │   ├── tab-management.spec.ts       # Tab state and navigation
+│   │   ├── dock-panels.spec.ts          # Context dock panel integration
+│   │   └── workspace-persistence.spec.ts # Layout saving (Obsidian patterns)
+│   ├── keyboard-navigation/    # 🆕 KEYBOARD-FIRST TESTS (Schedule X validation)
+│   │   ├── command-palette.spec.ts      # Ctrl+P/Cmd+P functionality
+│   │   ├── double-click-creation.spec.ts # <120ms event creation
+│   │   ├── escape-key-handling.spec.ts  # Consistent escape behavior
+│   │   └── focus-management.spec.ts     # Automatic modal focus
+│   ├── ai-agents/             # 🆕 AI INTEGRATION TESTS (Rasa patterns)
+│   │   ├── conversation-context.spec.ts # Multi-turn conversation state
+│   │   ├── intent-classification.spec.ts # Confidence threshold routing
+│   │   ├── constraint-solving.spec.ts   # Timefold AI patterns
+│   │   └── tool-safety.spec.ts          # Permission and audit systems
+│   ├── performance/           # 🆕 PERFORMANCE VALIDATION
+│   │   ├── shell-rendering.spec.ts      # <500ms render targets
+│   │   ├── keyboard-response.spec.ts    # <120ms keyboard interaction
+│   │   └── bundle-size.spec.ts          # Component size budgets
+│   ├── accessibility/         # 🆕 A11Y VALIDATION (WCAG 2.1 AA)
+│   │   ├── keyboard-only.spec.ts        # Complete keyboard navigation
+│   │   ├── focus-trap.spec.ts          # Modal and panel focus management
+│   │   └── screen-reader.spec.ts       # SR announcements and labels
+│   ├── year-lens/             # 🚨 LEGACY TESTS (Year Lens only)
+│   │   └── foundation-validation.spec.ts # DEPRECATED: Legacy calendar tests
+│   └── integration/           # 🏢 BACKEND INTEGRATION TESTS (preserved)
+│       ├── calendar-providers.spec.ts    # Calendar sync integration
+│       └── security-validation.spec.ts   # Token encryption and webhooks
+├── docs/               # 📚 DOCUMENTATION
+│   ├── command-workspace/      # 🆕 COMMAND WORKSPACE DOCS (PRIMARY)
+│   │   ├── ULTIMATE_COMPREHENSIVE_PRD.md # Complete PRD with research validation
+│   │   ├── GOVERNANCE_ENFORCEMENT.md     # ESLint/dependency-cruiser rules
+│   │   ├── PHASE_1_CHECKLIST.md         # Implementation roadmap
+│   │   └── research/                    # Research validation artifacts
+│   │       ├── obsidian_panes_backlinks.md
+│   │       ├── cron_keyboard_calendar.md  
+│   │       ├── motion_scheduling_automation.md
+│   │       ├── sunsama_ritual_planning.md
+│   │       ├── ai_workspace_integrations.md
+│   │       └── cv_privacy_consent_patterns.md
+│   ├── legacy/             # 🚨 LEGACY DOCUMENTATION (reference only)
+│   │   ├── INTEGRATION_PLATFORM_ARCHITECTURE.md # Backend integration docs
+│   │   ├── LINEAR_CALENDAR_FOUNDATION_SPEC.md   # DEPRECATED: Year Lens only
+│   │   └── CALENDAR_IMPLEMENTATION_SUMMARY.md   # Legacy implementation notes
+│   └── ARCHITECTURE.md        # Updated for Command Workspace
 └── public/             # Static assets & PWA files
 ```
 
@@ -702,33 +813,53 @@ lineartime/
 - `performance-improved.spec.ts` - Performance benchmarks
 - `accessibility.spec.ts` - WCAG compliance
 
-## 🎯 Performance Targets
+## 🎯 **Research-Validated Performance Targets**
 
-| Metric | Current | Target | Critical? |
-|--------|---------|--------|-----------|
-| Initial Load | ~1.5s | <500ms | Yes |
-| Max Events | 5,000 | 10,000+ | Yes |
-| Scroll FPS | 60 | 60 | Yes |
-| Memory Usage | ~90MB | <100MB | Yes |
-| Event Operations | <150ms | <100ms | No |
+### **Command Workspace Performance Budgets**
 
-## 🚀 Next Development Phase
+| Metric | Target | Research Validation | Critical? |
+|--------|--------|---------------------|-----------|
+| **Shell Render** | <500ms | Industry standard | Yes |
+| **Tab Switch** | <200ms | Obsidian workspace pattern | Yes |
+| **Panel Toggle** | <100ms | Context dock responsiveness | Yes |
+| **Keyboard Response** | <120ms | Schedule X double-click pattern | Yes |
+| **Conflict Detection** | ≤500ms | Timefold AI real-time constraint solving | Yes |
+| **Command Palette** | <100ms | Obsidian Ctrl+P/Cmd+P standard | Yes |
+| **Scroll/Drag FPS** | 60fps | Schedule X animation requirements | Yes |
+| **Memory Usage** | <100MB | Shell + panels efficiency | Yes |
+| **Omnibox First Token** | <400ms | AI response streaming | Yes |
+| **Agent Suggestions** | ≤2s | Rasa conversation management | Yes |
 
-### Ready for Phase 2.8: Advanced Integration Features  
-- **Real-Time Data Integration** - Connect integration dashboard to live Convex backend
-- **WebSocket Implementation** - Replace mock data with real-time streaming
-- **Calendar Sync Optimization** - Enhanced sync performance with batch operations
-- **Provider Health Monitoring** - Advanced monitoring with automated alerts
-- **Cross-Calendar Scheduling** - Multi-provider event coordination
-- **Integration API Gateway** - Unified API for external integrations
+### **Bundle Size Budgets** (Research-Validated)
+| Component | Budget | Justification | Critical? |
+|-----------|--------|---------------|-----------|
+| **Shell Core** | <150KB | Three-pane architecture base | Yes |
+| **Per View** | <100KB | Individual view components | Yes |
+| **Per Dock Panel** | <50KB | Context panel efficiency | Yes |
+| **Command System** | <75KB | Palette + omnibox combined | Yes |
+| **AI Agents** | <200KB | Conversation management + tools | Yes |
 
-### Phase 3.0 Roadmap: AI-Powered Enterprise Platform
-- **AI Scheduling Optimization** - Cross-provider intelligent scheduling
-- **Natural Language Processing** - Advanced event creation and management
-- **Smart Conflict Resolution** - AI-powered conflict detection and resolution
-- **Predictive Calendar Management** - Proactive scheduling suggestions
-- **Enterprise SSO Integration** - SAML/OIDC support for enterprise customers
-- **Multi-Tenant Architecture** - Organization-level calendar management
+## 🚀 **Command Workspace Development Roadmap**
+
+### **Phase 1: Shell Foundation (CURRENT)**  
+**Research-Validated Implementation**:
+- **AppShell + Three-Pane Layout** - Sidebar + Tabs + Context Dock (Obsidian patterns)
+- **Command System** - Palette (Ctrl+P/Cmd+P) + Omnibox with streaming (Schedule X + Rasa patterns)
+- **Basic Views** - WeekView + PlannerView with view scaffolding
+- **Dock Stubs** - AI Assistant + Details panels with minimal state
+- **Governance Enforcement** - ESLint rules, dependency cruiser, CI guards
+
+### **Phase 2: AI & Views Integration**
+- **AI Agent Implementation** - Planner/Conflict/Summarizer/Router with constraint solving (Timefold patterns)
+- **Advanced Views** - Month Strip, Quarter, Notes, Mailbox, Automations
+- **Workflow System** - Recurring automation with step-based progression (Manifestly patterns)
+- **Entity Linking** - Backlinks graph and relationship management (Obsidian patterns)
+
+### **Phase 3: Computer Vision & Polish**
+- **Local CV Integration** - Privacy-first computer vision with consent management (ImageSorcery patterns)
+- **Advanced Dock Panels** - Conflicts visualization, capacity analysis, backlinks graph
+- **Performance Optimization** - 60fps animations, <500ms render, <120ms keyboard response
+- **Mobile Enhancement** - 700px breakpoint optimization (Schedule X responsive patterns)
 
 ### Feature Flags (Environment Variables)
 ```bash
@@ -740,23 +871,30 @@ NEXT_PUBLIC_FEATURE_CANVAS_RENDER=true
 NEXT_PUBLIC_FEATURE_NLP_PARSER=true
 ```
 
-## ⚠️ Critical Guidelines
+## ⚠️ **Critical Guidelines (COMMAND WORKSPACE)**
 
-### DO NOT:
-- ❌ Modify the 12-month horizontal layout
-- ❌ Use LinearCalendarVertical component
-- ❌ Push directly to main branch
-- ❌ Skip foundation tests before commits
-- ❌ Commit without running test suite
+### **🚫 ARCHITECTURAL VIOLATIONS:**
+- ❌ Import LinearCalendarHorizontal outside `views/year-lens/*` (ESLint enforced)
+- ❌ Create new pages outside `/app` shell routing for product surfaces
+- ❌ Bypass Command Workspace shell for new features
+- ❌ Skip shell architecture tests before commits
+- ❌ Push directly to main branch (unchanged)
 
-### ALWAYS:
-- ✅ Use LinearCalendarHorizontal as primary calendar
-- ✅ Run `npm run test:foundation` before commits
-- ✅ Create feature branches for development
-- ✅ Wait for CodeRabbit review on PRs
-- ✅ Test with 1,000+ events for performance
-- ✅ Maintain backward compatibility
-- ✅ Build ON TOP OF the locked foundation
+### **✅ COMMAND WORKSPACE REQUIREMENTS:**
+- ✅ **Use AppShell architecture** for all new development
+- ✅ **Implement View Scaffold contract** for new views (Header + Content + Context)
+- ✅ **Follow Command Registry patterns** for new commands and shortcuts
+- ✅ **Use Context Dock** for contextual information and AI integration
+- ✅ **Run `npm run test:shell`** before commits (MANDATORY)
+- ✅ **Validate governance compliance** with `npm run test:governance`
+- ✅ **Follow research-validated patterns** from Obsidian, Schedule X, Timefold, Rasa, etc.
+- ✅ Create feature branches for development (unchanged)
+- ✅ Wait for CodeRabbit review on PRs (unchanged)
+
+### **🔧 LEGACY COMPONENT USAGE:**
+- ⚠️ **LinearCalendarHorizontal**: ONLY allowed in `views/year-lens/YearLensView.tsx`
+- ⚠️ **Calendar Integration**: Backend services preserved, UI deprecated as main shell
+- ⚠️ **Legacy Tests**: `npm run test:foundation` only for Year Lens view validation
 
 ## 📚 Complete Platform Documentation
 
