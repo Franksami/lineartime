@@ -346,16 +346,22 @@ const SEVERITY_CONFIG = {
   },
   info: {
     icon: Info,
-    bgColor: 'bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-950 /* TODO: Use semantic token *//20',
-    borderColor: 'border-blue-200 /* TODO: Use semantic token */ dark:border-blue-800 /* TODO: Use semantic token *//20',
-    textColor: 'text-blue-700 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */',
+    bgColor:
+      'bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-950 /* TODO: Use semantic token *//20',
+    borderColor:
+      'border-blue-200 /* TODO: Use semantic token */ dark:border-blue-800 /* TODO: Use semantic token *//20',
+    textColor:
+      'text-blue-700 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */',
     badgeVariant: 'outline' as const,
   },
   suggestion: {
     icon: Lightbulb,
-    bgColor: 'bg-yellow-50 /* TODO: Use semantic token */ dark:bg-yellow-950 /* TODO: Use semantic token *//20',
-    borderColor: 'border-yellow-200 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token *//20',
-    textColor: 'text-yellow-700 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */',
+    bgColor:
+      'bg-yellow-50 /* TODO: Use semantic token */ dark:bg-yellow-950 /* TODO: Use semantic token *//20',
+    borderColor:
+      'border-yellow-200 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token *//20',
+    textColor:
+      'text-yellow-700 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */',
     badgeVariant: 'secondary' as const,
   },
 };

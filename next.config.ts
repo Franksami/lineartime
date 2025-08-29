@@ -10,15 +10,21 @@ const nextConfig: NextConfig = {
   // Configure external packages for server components
   serverExternalPackages: ['@toast-ui/calendar', '@toast-ui/react-calendar'],
   
-  // Configure Turbopack
+  // Configure Turbopack (updated path for organized structure)
   turbopack: {
-    root: '/Users/goodfranklin/lineartime'
+    root: '/Users/goodfranklin/Development/Active-Projects/lineartime'
   },
 
   // Experimental optimizations
   experimental: {
     // Memory optimizations for better build performance
     webpackMemoryOptimizations: true,
+    
+    // CSS optimization (requires additional setup)
+    optimizeCss: true,
+    
+    // Scroll restoration
+    scrollRestoration: true,
     
     // Optimize package imports for better bundle size
     optimizePackageImports: [
@@ -42,6 +48,11 @@ const nextConfig: NextConfig = {
     ],
   },
   
+  // Production optimizations
+  compress: true, // Enable gzip compression
+  productionBrowserSourceMaps: false, // Disable source maps in production
+  // swcMinify removed - deprecated in Next.js 15.5.0 (SWC minification is now default)
+  
   // Temporarily ignore TypeScript errors during testing phase
   typescript: {
     ignoreBuildErrors: true,
@@ -52,13 +63,17 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // Configure image domains for external images
+  // Configure image optimization
   images: {
     domains: ['images.unsplash.com'],
+    formats: ['image/avif', 'image/webp'], // Modern image formats
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048], // Responsive sizes
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384], // Icon sizes
+    minimumCacheTTL: 31536000, // 1 year cache
   },
 
   // Improve webpack configuration for better SSR support
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     // Handle Toast UI Calendar SSR issues
     if (isServer) {
       config.resolve.fallback = {
@@ -74,6 +89,19 @@ const nextConfig: NextConfig = {
     config.externals = config.externals || []
     if (isServer) {
       config.externals.push('@toast-ui/calendar', '@toast-ui/react-calendar')
+    }
+
+    // Add performance budgets for production builds
+    if (!dev && !isServer) {
+      config.performance = {
+        hints: process.env.CI ? 'error' : 'warning', // Error in CI, warning in local
+        maxAssetSize: 250000, // 250KB per asset
+        maxEntrypointSize: 400000, // 400KB per entry point
+        assetFilter: (assetFilename: string) => {
+          // Only check JS and CSS files, ignore source maps and licenses
+          return !/\.(map|LICENSE|txt)/.test(assetFilename) && /\.(js|css)$/.test(assetFilename);
+        }
+      };
     }
 
     return config

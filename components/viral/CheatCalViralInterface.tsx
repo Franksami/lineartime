@@ -1,5 +1,5 @@
 /**
- * CheatCal Viral Marketing Interface
+ * Command Center Viral Marketing Interface
  *
  * Inherently controversial viral positioning system inspired by Andrew Tate's
  * polarizing but effective marketing model. Built for true professionals
@@ -9,7 +9,7 @@
  * Target: Elite professionals who thrive on competitive advantage
  *
  * @version 1.0.0 (Maximum Controversy Release)
- * @author CheatCal Viral Marketing Team
+ * @author Command Center Viral Marketing Team
  */
 
 'use client';
@@ -175,7 +175,7 @@ const CheatCalViralInterface: React.FC = () => {
           <motion.div className="flex items-center justify-center space-x-4">
             <Skull className="w-12 h-12 text-red-500 /* TODO: Use semantic token */" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent">
-              CheatCal Viral Command Center
+              Command Center Viral Command Center
             </h1>
             <Flame className="w-12 h-12 text-orange-500" />
           </motion.div>
@@ -205,7 +205,10 @@ const CheatCalViralInterface: React.FC = () => {
             <Badge variant="secondary" className="bg-orange-600">
               🔥 Viral Mode: {viralMode.toUpperCase()}
             </Badge>
-            <Badge variant="outline" className="bg-green-600 /* TODO: Use semantic token */ text-white border-green-600 /* TODO: Use semantic token */">
+            <Badge
+              variant="outline"
+              className="bg-green-600 /* TODO: Use semantic token */ text-white border-green-600 /* TODO: Use semantic token */"
+            >
               👑 Professional Focus: ELITE ONLY
             </Badge>
           </motion.div>
@@ -269,9 +272,14 @@ const CheatCalViralInterface: React.FC = () => {
 
                   <div className="space-y-3">
                     <div>
-                      <p className="text-sm text-gray-400 /* TODO: Use semantic token */ mb-2">Viral Hooks:</p>
+                      <p className="text-sm text-gray-400 /* TODO: Use semantic token */ mb-2">
+                        Viral Hooks:
+                      </p>
                       {campaign.viral_hooks.slice(0, 2).map((hook, index) => (
-                        <p key={index} className="text-sm text-white bg-gray-800 /* TODO: Use semantic token */ p-2 rounded mb-1">
+                        <p
+                          key={index}
+                          className="text-sm text-white bg-gray-800 /* TODO: Use semantic token */ p-2 rounded mb-1"
+                        >
                           {hook}
                         </p>
                       ))}
@@ -282,13 +290,17 @@ const CheatCalViralInterface: React.FC = () => {
                         <div className="text-lg font-bold text-green-400 /* TODO: Use semantic token */">
                           {(campaign.expected_reach / 1000000).toFixed(1)}M
                         </div>
-                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Expected Reach</div>
+                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                          Expected Reach
+                        </div>
                       </div>
                       <div className="p-2 bg-gray-800 /* TODO: Use semantic token */ rounded">
                         <div className="text-lg font-bold text-red-400 /* TODO: Use semantic token */">
                           {campaign.controversy_score}%
                         </div>
-                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Controversy Score</div>
+                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                          Controversy Score
+                        </div>
                       </div>
                     </div>
 
@@ -325,7 +337,9 @@ const CheatCalViralInterface: React.FC = () => {
                     transition={{ delay: index * 0.1 }}
                   >
                     <div className="flex items-center justify-between">
-                      <h4 className="font-semibold text-green-300 /* TODO: Use semantic token */">{metric.category}</h4>
+                      <h4 className="font-semibold text-green-300 /* TODO: Use semantic token */">
+                        {metric.category}
+                      </h4>
                       <Badge
                         variant="outline"
                         className="bg-green-500 /* TODO: Use semantic token *//10 text-green-400 /* TODO: Use semantic token */ border-green-500 /* TODO: Use semantic token */"
@@ -339,13 +353,17 @@ const CheatCalViralInterface: React.FC = () => {
                         <div className="text-xl font-bold text-yellow-400 /* TODO: Use semantic token */">
                           ${(metric.avg_value / 1000).toFixed(0)}K
                         </div>
-                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Avg Value/Customer</div>
+                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                          Avg Value/Customer
+                        </div>
                       </div>
                       <div className="text-center p-3 bg-gray-800 /* TODO: Use semantic token */ rounded">
                         <div className="text-xl font-bold text-green-400 /* TODO: Use semantic token */">
                           ${(metric.monthly_revenue / 1000).toFixed(0)}K
                         </div>
-                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Monthly Revenue</div>
+                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                          Monthly Revenue
+                        </div>
                       </div>
                     </div>
                   </motion.div>
@@ -394,7 +412,9 @@ const CheatCalViralInterface: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Viral Mode Controls */}
               <div className="space-y-4">
-                <h4 className="font-semibold text-purple-300 /* TODO: Use semantic token */">Viral Positioning</h4>
+                <h4 className="font-semibold text-purple-300 /* TODO: Use semantic token */">
+                  Viral Positioning
+                </h4>
 
                 <div className="space-y-3">
                   {[
@@ -427,7 +447,9 @@ const CheatCalViralInterface: React.FC = () => {
                       whileTap={{ scale: 0.98 }}
                     >
                       <div className="font-medium text-white">{option.label}</div>
-                      <div className="text-xs text-gray-400 /* TODO: Use semantic token */">{option.description}</div>
+                      <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                        {option.description}
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -435,13 +457,19 @@ const CheatCalViralInterface: React.FC = () => {
 
               {/* Controversy Level Slider */}
               <div className="space-y-4">
-                <h4 className="font-semibold text-red-300 /* TODO: Use semantic token */">Controversy Intensity</h4>
+                <h4 className="font-semibold text-red-300 /* TODO: Use semantic token */">
+                  Controversy Intensity
+                </h4>
 
                 <div className="space-y-6">
                   <div>
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="text-gray-400 /* TODO: Use semantic token */">Inappropriate Level</span>
-                      <span className="text-red-400 /* TODO: Use semantic token */">{controversyLevel}%</span>
+                      <span className="text-gray-400 /* TODO: Use semantic token */">
+                        Inappropriate Level
+                      </span>
+                      <span className="text-red-400 /* TODO: Use semantic token */">
+                        {controversyLevel}%
+                      </span>
                     </div>
                     <div className="relative">
                       <input
@@ -481,35 +509,45 @@ const CheatCalViralInterface: React.FC = () => {
 
               {/* Viral Performance Dashboard */}
               <div className="space-y-4">
-                <h4 className="font-semibold text-green-300 /* TODO: Use semantic token */">Viral Performance</h4>
+                <h4 className="font-semibold text-green-300 /* TODO: Use semantic token */">
+                  Viral Performance
+                </h4>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="text-center p-3 bg-gray-800 /* TODO: Use semantic token */ rounded">
                     <div className="text-2xl font-bold text-green-400 /* TODO: Use semantic token */">
                       {(viralMetrics.reach / 1000).toFixed(0)}K
                     </div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Monthly Reach</div>
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                      Monthly Reach
+                    </div>
                   </div>
 
                   <div className="text-center p-3 bg-gray-800 /* TODO: Use semantic token */ rounded">
                     <div className="text-2xl font-bold text-orange-400">
                       {viralMetrics.engagement}%
                     </div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Engagement Rate</div>
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                      Engagement Rate
+                    </div>
                   </div>
 
                   <div className="text-center p-3 bg-gray-800 /* TODO: Use semantic token */ rounded">
                     <div className="text-2xl font-bold text-red-400 /* TODO: Use semantic token */">
                       {viralMetrics.controversy_score}%
                     </div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Controversy Score</div>
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                      Controversy Score
+                    </div>
                   </div>
 
                   <div className="text-center p-3 bg-gray-800 /* TODO: Use semantic token */ rounded">
                     <div className="text-2xl font-bold text-purple-400 /* TODO: Use semantic token */">
                       {viralMetrics.professional_conversion}%
                     </div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Pro Conversion</div>
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                      Pro Conversion
+                    </div>
                   </div>
                 </div>
 
@@ -575,7 +613,9 @@ const CheatCalViralInterface: React.FC = () => {
                     transition={{ delay: index * 0.1 }}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <h5 className="font-medium text-blue-300 /* TODO: Use semantic token */">{tier.tier}</h5>
+                      <h5 className="font-medium text-blue-300 /* TODO: Use semantic token */">
+                        {tier.tier}
+                      </h5>
                       <Badge
                         variant="outline"
                         className="bg-primary/10 text-blue-400 /* TODO: Use semantic token */ border-blue-500 /* TODO: Use semantic token */"
@@ -586,17 +626,25 @@ const CheatCalViralInterface: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <div className="text-gray-400 /* TODO: Use semantic token */">Compensation:</div>
-                        <div className="text-green-400 /* TODO: Use semantic token */ font-medium">{tier.compensation}</div>
+                        <div className="text-gray-400 /* TODO: Use semantic token */">
+                          Compensation:
+                        </div>
+                        <div className="text-green-400 /* TODO: Use semantic token */ font-medium">
+                          {tier.compensation}
+                        </div>
                       </div>
                       <div>
                         <div className="text-gray-400 /* TODO: Use semantic token */">Output:</div>
-                        <div className="text-yellow-400 /* TODO: Use semantic token */ font-medium">{tier.viral_output}</div>
+                        <div className="text-yellow-400 /* TODO: Use semantic token */ font-medium">
+                          {tier.viral_output}
+                        </div>
                       </div>
                     </div>
 
                     <div className="mt-2">
-                      <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Focus Area:</div>
+                      <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                        Focus Area:
+                      </div>
                       <div className="text-white text-sm">{tier.focus}</div>
                     </div>
                   </motion.div>
@@ -631,7 +679,9 @@ const CheatCalViralInterface: React.FC = () => {
                     whileHover={{ scale: 1.02 }}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-yellow-300 /* TODO: Use semantic token */">{amp.trigger}</span>
+                      <span className="text-sm font-medium text-yellow-300 /* TODO: Use semantic token */">
+                        {amp.trigger}
+                      </span>
                       <Badge
                         className={cn(
                           'text-xs border-0',
@@ -647,7 +697,9 @@ const CheatCalViralInterface: React.FC = () => {
                         {amp.status}
                       </Badge>
                     </div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">{amp.reach}</div>
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                      {amp.reach}
+                    </div>
                   </motion.div>
                 ))}
 
@@ -719,7 +771,9 @@ const CheatCalViralInterface: React.FC = () => {
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05, borderColor: '#6366f1' }}
                 >
-                  <h5 className="font-semibold text-indigo-300 /* TODO: Use semantic token */ mb-2">{template.title}</h5>
+                  <h5 className="font-semibold text-indigo-300 /* TODO: Use semantic token */ mb-2">
+                    {template.title}
+                  </h5>
                   <p className="text-sm text-white mb-3">{template.hook}</p>
                   <div className="text-xs text-gray-400 /* TODO: Use semantic token */ mb-3">
                     <div>Target: {template.target}</div>
@@ -750,7 +804,7 @@ const CheatCalViralInterface: React.FC = () => {
             <div className="space-y-4">
               <div className="text-center p-6 bg-gradient-to-r from-emerald-600/20 to-blue-600/20 rounded-lg">
                 <h3 className="text-2xl font-bold text-emerald-400 mb-2">
-                  💎 CheatCal → Mainstream Product Pipeline
+                  💎 Command Center → Mainstream Product Pipeline
                 </h3>
                 <p className="text-gray-300 /* TODO: Use semantic token */ mb-4">
                   "Build controversy → Generate revenue → Bootstrap mainstream products"
@@ -758,18 +812,28 @@ const CheatCalViralInterface: React.FC = () => {
 
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div className="p-3 bg-gray-800 /* TODO: Use semantic token */ rounded">
-                    <div className="text-lg font-bold text-red-400 /* TODO: Use semantic token */">Phase 1</div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Controversial CheatCal</div>
+                    <div className="text-lg font-bold text-red-400 /* TODO: Use semantic token */">
+                      Phase 1
+                    </div>
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                      Controversial Command Center
+                    </div>
                     <div className="text-sm text-white">$10M+ ARR Target</div>
                   </div>
                   <div className="p-3 bg-gray-800 /* TODO: Use semantic token */ rounded">
                     <div className="text-lg font-bold text-orange-400">Phase 2</div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Mainstream Expansion</div>
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                      Mainstream Expansion
+                    </div>
                     <div className="text-sm text-white">Bootstrap Funding</div>
                   </div>
                   <div className="p-3 bg-gray-800 /* TODO: Use semantic token */ rounded">
-                    <div className="text-lg font-bold text-green-400 /* TODO: Use semantic token */">Phase 3</div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">Product Empire</div>
+                    <div className="text-lg font-bold text-green-400 /* TODO: Use semantic token */">
+                      Phase 3
+                    </div>
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                      Product Empire
+                    </div>
                     <div className="text-sm text-white">Market Domination</div>
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 /**
- * CheatCal Enterprise Demo Page
+ * Command Center Enterprise Demo Page
  *
  * Demonstrates the comprehensive enterprise-grade interface that restores
  * all sophisticated functionality while adding AI coordination optimization.
@@ -12,7 +12,7 @@
  * - Multi-modal AI coordination
  * - Enterprise monitoring and controls
  *
- * @version CheatCal v1.0 Foundation
+ * @version Command Center v1.0 Foundation
  */
 
 'use client';
@@ -255,7 +255,7 @@ export default function CheatCalEnterprisePage() {
             <Calendar className="w-16 h-16 text-primary" />
           </motion.div>
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold">Initializing CheatCal Enterprise</h1>
+            <h1 className="text-2xl font-bold">Initializing Command Center Enterprise</h1>
             <p className="text-muted-foreground">Loading comprehensive calendar intelligence...</p>
           </div>
           <motion.div
@@ -287,7 +287,7 @@ export default function CheatCalEnterprisePage() {
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold">CheatCal Enterprise</h1>
+                <h1 className="text-xl font-bold">Command Center Enterprise</h1>
                 <p className="text-sm text-muted-foreground">
                   AI-Powered Coordination Optimization
                 </p>
@@ -358,7 +358,7 @@ export default function CheatCalEnterprisePage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">Welcome to CheatCal Enterprise</h2>
+              <h2 className="text-3xl font-bold mb-2">Welcome to Command Center Enterprise</h2>
               <p className="text-muted-foreground text-lg">
                 The world's most sophisticated AI-powered calendar coordination platform
               </p>
@@ -472,7 +472,7 @@ export default function CheatCalEnterprisePage() {
 
             <div className="flex justify-center">
               <Button onClick={() => setShowFeatures(false)} size="lg" className="px-8">
-                Start Using CheatCal Enterprise
+                Start Using Command Center Enterprise
                 <Sparkles className="w-4 h-4 ml-2" />
               </Button>
             </div>

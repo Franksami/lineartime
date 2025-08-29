@@ -2,7 +2,7 @@
 ## **Whop-Inspired Value-Sharing Model for Coordination Services**
 
 **Date**: August 27, 2025  
-**Strategic Evolution**: LinearTime → CoordSync Marketplace  
+**Strategic Evolution**: Command Center Calendar → CoordSync Marketplace  
 **Business Model**: Platform (10-30% of value created) vs SaaS (fixed monthly)  
 **Target Scale**: $100M+ GMV following Whop's success model  
 **Value Proposition**: "Pay for performance - we only make money when we create value"  

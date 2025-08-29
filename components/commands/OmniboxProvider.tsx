@@ -3,117 +3,119 @@
  * Research validation: Rasa intent classification + Vercel AI SDK streaming
  */
 
-'use client'
+'use client';
 
-import { useState, useCallback, useMemo } from 'react'
-import { useCompletion } from '@ai-sdk/react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Loader2, Sparkles, AlertCircle, Check } from 'lucide-react'
-import { CommandExecutor, type CommandDefinition } from '@/lib/commands/CommandRegistry'
-import { useFeatureFlag, COMMAND_WORKSPACE_FLAGS } from '@/lib/features/useFeatureFlags'
-import { cn } from '@/lib/utils'
+import { useState, useCallback, useMemo } from 'react';
+import { useCompletion } from '@ai-sdk/react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Sparkles, AlertCircle, Check } from 'lucide-react';
+import { CommandExecutor, type CommandDefinition } from '@/lib/commands/CommandRegistry';
+import { useFeatureFlag, COMMAND_WORKSPACE_FLAGS } from '@/lib/features/useFeatureFlags';
+import { cn } from '@/lib/utils';
 
 /**
  * Intent classification interface (research: Rasa patterns)
  */
 interface ParsedIntent {
-  intent: string
-  confidence: number
-  entities: Record<string, any>
+  intent: string;
+  confidence: number;
+  entities: Record<string, any>;
   action?: {
-    type: string
-    parameters: Record<string, any>
-  }
+    type: string;
+    parameters: Record<string, any>;
+  };
   suggestions?: Array<{
-    title: string
-    description: string
-    action: () => void
-    confidence: number
-  }>
+    title: string;
+    description: string;
+    action: () => void;
+    confidence: number;
+  }>;
 }
 
 /**
  * Omnibox state management
  */
 function useOmnibox() {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [parsedIntent, setParsedIntent] = useState<ParsedIntent | null>(null)
-  const omniboxEnabled = useFeatureFlag(COMMAND_WORKSPACE_FLAGS.OMNIBOX_ENABLED)
-  const streamingEnabled = useFeatureFlag(COMMAND_WORKSPACE_FLAGS.OMNIBOX_STREAMING)
-  
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [parsedIntent, setParsedIntent] = useState<ParsedIntent | null>(null);
+  const omniboxEnabled = useFeatureFlag(COMMAND_WORKSPACE_FLAGS.OMNIBOX_ENABLED);
+  const streamingEnabled = useFeatureFlag(COMMAND_WORKSPACE_FLAGS.OMNIBOX_STREAMING);
+
   const { completion, input, handleInputChange, handleSubmit, isLoading, stop } = useCompletion({
     api: '/api/omnibox',
     onFinish: async (result) => {
       try {
-        const parsed: ParsedIntent = JSON.parse(result)
-        setParsedIntent(parsed)
-        
+        const parsed: ParsedIntent = JSON.parse(result);
+        setParsedIntent(parsed);
+
         // Auto-execute high confidence intents (research: Rasa ≥0.8 threshold)
         if (parsed.confidence >= 0.8 && parsed.action) {
-          await executeIntent(parsed)
+          await executeIntent(parsed);
         }
       } catch (error) {
-        console.error('Failed to parse omnibox result:', error)
+        console.error('Failed to parse omnibox result:', error);
         setParsedIntent({
           intent: 'error',
           confidence: 0,
           entities: {},
-          suggestions: [{
-            title: 'Try again',
-            description: 'Could not understand the request',
-            action: () => setIsExpanded(true),
-            confidence: 0
-          }]
-        })
+          suggestions: [
+            {
+              title: 'Try again',
+              description: 'Could not understand the request',
+              action: () => setIsExpanded(true),
+              confidence: 0,
+            },
+          ],
+        });
       }
     },
     onError: (error) => {
-      console.error('Omnibox error:', error)
-      setParsedIntent(null)
-    }
-  })
-  
+      console.error('Omnibox error:', error);
+      setParsedIntent(null);
+    },
+  });
+
   const executeIntent = useCallback(async (intent: ParsedIntent) => {
-    if (!intent.action) return
-    
+    if (!intent.action) return;
+
     try {
       // Map intent actions to command registry commands
       const commandMap: Record<string, string> = {
-        'create_event': 'create.event',
-        'create_task': 'create.task',
-        'create_note': 'create.note',
-        'switch_view': 'navigate.view.week',
-        'toggle_ai': 'toggle.panel.ai',
-        'toggle_details': 'toggle.panel.details',
-        'resolve_conflicts': 'tool.resolve.conflicts',
-        'auto_schedule': 'tool.auto.schedule',
-      }
-      
-      const commandId = commandMap[intent.action.type] || intent.action.parameters?.commandId
-      
+        create_event: 'create.event',
+        create_task: 'create.task',
+        create_note: 'create.note',
+        switch_view: 'navigate.view.week',
+        toggle_ai: 'toggle.panel.ai',
+        toggle_details: 'toggle.panel.details',
+        resolve_conflicts: 'tool.resolve.conflicts',
+        auto_schedule: 'tool.auto.schedule',
+      };
+
+      const commandId = commandMap[intent.action.type] || intent.action.parameters?.commandId;
+
       if (commandId) {
-        const command = CommandExecutor.getCommandById(commandId)
+        const command = CommandExecutor.getCommandById(commandId);
         if (command) {
-          await CommandExecutor.executeCommand(command, intent.entities)
-          console.log('✅ Omnibox executed command:', commandId)
+          await CommandExecutor.executeCommand(command, intent.entities);
+          console.log('✅ Omnibox executed command:', commandId);
         } else {
-          console.warn('Command not found:', commandId)
+          console.warn('Command not found:', commandId);
         }
       } else {
-        console.log('Executing raw intent:', intent.action)
+        console.log('Executing raw intent:', intent.action);
       }
-      
+
       // Reset state after successful execution
-      setParsedIntent(null)
-      setIsExpanded(false)
+      setParsedIntent(null);
+      setIsExpanded(false);
     } catch (error) {
-      console.error('Intent execution failed:', error)
+      console.error('Intent execution failed:', error);
     }
-  }, [])
-  
+  }, []);
+
   return {
     isExpanded,
     setIsExpanded,
@@ -127,8 +129,8 @@ function useOmnibox() {
     handleSubmit,
     isLoading,
     stop,
-    completion
-  }
+    completion,
+  };
 }
 
 /**
@@ -146,20 +148,17 @@ export function OmniboxProvider() {
     handleInputChange,
     handleSubmit,
     isLoading,
-    completion
-  } = useOmnibox()
-  
+    completion,
+  } = useOmnibox();
+
   if (!omniboxEnabled) {
-    return null
+    return null;
   }
-  
+
   return (
     <div className="relative">
       {/* Omnibox Input */}
-      <div className={cn(
-        'transition-all duration-200',
-        isExpanded ? 'w-96' : 'w-64'
-      )}>
+      <div className={cn('transition-all duration-200', isExpanded ? 'w-96' : 'w-64')}>
         <form onSubmit={handleSubmit}>
           <div className="relative">
             <Input
@@ -174,25 +173,30 @@ export function OmniboxProvider() {
               onFocus={() => setIsExpanded(true)}
               data-testid="omnibox-input"
             />
-            
+
             {/* Loading indicator */}
             {isLoading && (
-              <div className="absolute right-8 top-1/2 transform -translate-y-1/2" data-testid="omnibox-streaming">
+              <div
+                className="absolute right-8 top-1/2 transform -translate-y-1/2"
+                data-testid="omnibox-streaming"
+              >
                 <Loader2 className="h-4 w-4 animate-spin text-primary" />
               </div>
             )}
-            
+
             {/* Sparkles icon */}
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-              <Sparkles className={cn(
-                'h-4 w-4 transition-colors',
-                isExpanded || input ? 'text-primary' : 'text-muted-foreground'
-              )} />
+              <Sparkles
+                className={cn(
+                  'h-4 w-4 transition-colors',
+                  isExpanded || input ? 'text-primary' : 'text-muted-foreground'
+                )}
+              />
             </div>
           </div>
         </form>
       </div>
-      
+
       {/* Intent Results (when expanded and has results) */}
       {isExpanded && (parsedIntent || completion) && (
         <Card className="absolute top-12 left-0 w-96 z-50 shadow-lg">
@@ -204,13 +208,16 @@ export function OmniboxProvider() {
                   <Sparkles className="h-4 w-4 text-primary" />
                   <span className="text-sm font-medium">Processing...</span>
                 </div>
-                
-                <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg font-mono" data-testid="omnibox-response">
+
+                <div
+                  className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg font-mono"
+                  data-testid="omnibox-response"
+                >
                   {completion}
                 </div>
               </div>
             )}
-            
+
             {/* Parsed intent display */}
             {parsedIntent && (
               <div className="space-y-3">
@@ -226,27 +233,25 @@ export function OmniboxProvider() {
                       Intent: {parsedIntent.intent}
                     </span>
                   </div>
-                  
-                  <Badge 
+
+                  <Badge
                     variant={parsedIntent.confidence >= 0.8 ? 'default' : 'secondary'}
                     data-testid="omnibox-confidence"
                   >
                     {(parsedIntent.confidence * 100).toFixed(0)}%
                   </Badge>
                 </div>
-                
+
                 {/* Auto-execute notification */}
                 {parsedIntent.confidence >= 0.8 && parsedIntent.action && (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                     <div className="text-sm font-medium text-green-800">
                       Auto-executing (confidence ≥80%)
                     </div>
-                    <div className="text-xs text-green-600 mt-1">
-                      {parsedIntent.action.type}
-                    </div>
+                    <div className="text-xs text-green-600 mt-1">{parsedIntent.action.type}</div>
                   </div>
                 )}
-                
+
                 {/* Manual confirmation required */}
                 {parsedIntent.confidence < 0.8 && parsedIntent.suggestions && (
                   <div className="space-y-2">
@@ -266,7 +271,7 @@ export function OmniboxProvider() {
                             {suggestion.description}
                           </span>
                         </div>
-                        
+
                         <Badge variant="outline" className="ml-auto">
                           {(suggestion.confidence * 100).toFixed(0)}%
                         </Badge>
@@ -274,7 +279,7 @@ export function OmniboxProvider() {
                     ))}
                   </div>
                 )}
-                
+
                 {/* Entity extraction display */}
                 {Object.keys(parsedIntent.entities).length > 0 && (
                   <div className="space-y-2">
@@ -296,7 +301,7 @@ export function OmniboxProvider() {
         </Card>
       )}
     </div>
-  )
+  );
 }
 
 /**
@@ -304,30 +309,29 @@ export function OmniboxProvider() {
  * Monitors NL processing performance against research targets
  */
 export function useOmniboxPerformance() {
-  const [processingTimes, setProcessingTimes] = useState<number[]>([])
-  
+  const [processingTimes, setProcessingTimes] = useState<number[]>([]);
+
   const recordProcessingTime = useCallback((time: number) => {
-    setProcessingTimes(prev => {
-      const newTimes = [...prev, time].slice(-10) // Keep last 10
-      
+    setProcessingTimes((prev) => {
+      const newTimes = [...prev, time].slice(-10); // Keep last 10
+
       // Performance target: <400ms for first token (research validated)
       if (time > 400) {
-        console.warn(`⚠️ Omnibox first token: ${time.toFixed(2)}ms (target: <400ms)`)
+        console.warn(`⚠️ Omnibox first token: ${time.toFixed(2)}ms (target: <400ms)`);
       }
-      
-      return newTimes
-    })
-  }, [])
-  
+
+      return newTimes;
+    });
+  }, []);
+
   return {
     recordProcessingTime,
-    averageProcessingTime: processingTimes.length > 0 
-      ? processingTimes.reduce((a, b) => a + b, 0) / processingTimes.length 
-      : 0,
-    isPerformant: processingTimes.length > 0 
-      ? processingTimes.every(time => time < 400) 
-      : true
-  }
+    averageProcessingTime:
+      processingTimes.length > 0
+        ? processingTimes.reduce((a, b) => a + b, 0) / processingTimes.length
+        : 0,
+    isPerformant: processingTimes.length > 0 ? processingTimes.every((time) => time < 400) : true,
+  };
 }
 
 /**
@@ -335,11 +339,11 @@ export function useOmniboxPerformance() {
  */
 export const EXAMPLE_OMNIBOX_PATTERNS = [
   'create meeting with Dan tomorrow at 3pm for 1 hour',
-  'schedule focus time every morning 9-11am', 
+  'schedule focus time every morning 9-11am',
   'find conflicts in my calendar this week',
-  'summarize yesterday\'s meetings',
+  "summarize yesterday's meetings",
   'convert this email to a task',
   'link this note to the project meeting',
   'auto-schedule my unscheduled tasks',
-  'show me my capacity for next week'
-]
+  'show me my capacity for next week',
+];

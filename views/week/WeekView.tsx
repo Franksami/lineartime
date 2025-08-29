@@ -3,39 +3,39 @@
  * Research validation: Schedule X keyboard patterns + existing calendar integration
  */
 
-'use client'
+'use client';
 
-import { useState, useMemo, useEffect } from 'react'
-import { format, startOfWeek, endOfWeek, eachDayOfInterval, addWeeks, subWeeks } from 'date-fns'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Plus, 
+import { useState, useMemo, useEffect } from 'react';
+import { format, startOfWeek, endOfWeek, eachDayOfInterval, addWeeks, subWeeks } from 'date-fns';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Plus,
   Search,
   Filter,
   Calendar as CalendarIcon,
   Clock,
   Users,
-  MapPin
-} from 'lucide-react'
-import { ViewScaffold, useViewScaffold } from '@/components/shell/TabWorkspace/ViewScaffold'
-import { useViewKeyboard } from '@/lib/keyboard/KeyboardManager'
-import { useCalendarEvents } from '@/hooks/useCalendarEvents' // Preserve backend integration
-import { useFeatureFlag, COMMAND_WORKSPACE_FLAGS } from '@/lib/features/useFeatureFlags'
-import { cn } from '@/lib/utils'
+  MapPin,
+} from 'lucide-react';
+import { ViewScaffold, useViewScaffold } from '@/components/_deprecated/ViewScaffold';
+import { useViewKeyboard } from '@/lib/keyboard/KeyboardManager';
+import { useCalendarEvents } from '@/hooks/useCalendarEvents'; // Preserve backend integration
+import { useFeatureFlag, COMMAND_WORKSPACE_FLAGS } from '@/lib/features/useFeatureFlags';
+import { cn } from '@/lib/utils';
 
 /**
  * Week View State Management
  */
 interface WeekViewState {
-  currentDate: Date
-  selectedTimeSlot: { date: Date; hour: number } | null
-  selectedEvent: any | null
-  viewMode: 'week' | 'workweek' | 'compact'
-  showWeekends: boolean
+  currentDate: Date;
+  selectedTimeSlot: { date: Date; hour: number } | null;
+  selectedEvent: any | null;
+  viewMode: 'week' | 'workweek' | 'compact';
+  showWeekends: boolean;
 }
 
 function useWeekView() {
@@ -44,78 +44,77 @@ function useWeekView() {
     selectedTimeSlot: null,
     selectedEvent: null,
     viewMode: 'week',
-    showWeekends: true
-  })
-  
+    showWeekends: true,
+  });
+
   // Preserve existing calendar integration
-  const { events, createEvent, updateEvent, deleteEvent } = useCalendarEvents()
-  
+  const { events, createEvent, updateEvent, deleteEvent } = useCalendarEvents();
+
   // Performance monitoring
-  const { measureRender, announceViewChange } = useViewScaffold('Week')
-  
+  const { measureRender, announceViewChange } = useViewScaffold('Week');
+
   // Keyboard navigation (research: Schedule X patterns)
-  const { setupViewShortcuts } = useViewKeyboard('week')
-  
+  const { setupViewShortcuts } = useViewKeyboard('week');
+
   useEffect(() => {
-    announceViewChange()
-    measureRender()
-  }, [])
-  
+    announceViewChange();
+    measureRender();
+  }, []);
+
   // Week navigation
   const navigateWeek = (direction: 'prev' | 'next' | 'today') => {
-    setState(prev => {
-      let newDate: Date
-      
+    setState((prev) => {
+      let newDate: Date;
+
       switch (direction) {
         case 'prev':
-          newDate = subWeeks(prev.currentDate, 1)
-          break
+          newDate = subWeeks(prev.currentDate, 1);
+          break;
         case 'next':
-          newDate = addWeeks(prev.currentDate, 1)
-          break
+          newDate = addWeeks(prev.currentDate, 1);
+          break;
         case 'today':
         default:
-          newDate = new Date()
-          break
+          newDate = new Date();
+          break;
       }
-      
-      return { ...prev, currentDate: newDate }
-    })
-  }
-  
+
+      return { ...prev, currentDate: newDate };
+    });
+  };
+
   // Double-click event creation (research: Schedule X onDoubleClickDateTime pattern)
   const handleDoubleClickTimeSlot = async (date: Date, hour: number) => {
-    const startTime = new Date(date)
-    startTime.setHours(hour, 0, 0, 0)
-    
-    const endTime = new Date(startTime)
-    endTime.setHours(hour + 1, 0, 0, 0)
-    
+    const startTime = new Date(date);
+    startTime.setHours(hour, 0, 0, 0);
+
+    const endTime = new Date(startTime);
+    endTime.setHours(hour + 1, 0, 0, 0);
+
     try {
       // Performance target: <120ms for event creation response
-      const creationStart = performance.now()
-      
+      const creationStart = performance.now();
+
       await createEvent({
         title: 'New Event',
         start: startTime.toISOString(),
         end: endTime.toISOString(),
-        allDay: false
-      })
-      
-      const creationTime = performance.now() - creationStart
-      
+        allDay: false,
+      });
+
+      const creationTime = performance.now() - creationStart;
+
       // Validate against research target
       if (creationTime > 120) {
-        console.warn(`⚠️ Event creation: ${creationTime.toFixed(2)}ms (target: <120ms)`)
+        console.warn(`⚠️ Event creation: ${creationTime.toFixed(2)}ms (target: <120ms)`);
       } else {
-        console.log(`✅ Event creation: ${creationTime.toFixed(2)}ms`)
+        console.log(`✅ Event creation: ${creationTime.toFixed(2)}ms`);
       }
-      
     } catch (error) {
-      console.error('Failed to create event:', error)
+      console.error('Failed to create event:', error);
     }
-  }
-  
+  };
+
   // Keyboard shortcuts setup (research: Schedule X keyboard patterns)
   setupViewShortcuts({
     PREV_WEEK: () => navigateWeek('prev'),
@@ -123,11 +122,11 @@ function useWeekView() {
     TODAY: () => navigateWeek('today'),
     CREATE_EVENT_AT_TIME: () => {
       if (state.selectedTimeSlot) {
-        handleDoubleClickTimeSlot(state.selectedTimeSlot.date, state.selectedTimeSlot.hour)
+        handleDoubleClickTimeSlot(state.selectedTimeSlot.date, state.selectedTimeSlot.hour);
       }
-    }
-  })
-  
+    },
+  });
+
   return {
     state,
     setState,
@@ -136,29 +135,32 @@ function useWeekView() {
     handleDoubleClickTimeSlot,
     createEvent,
     updateEvent,
-    deleteEvent
-  }
+    deleteEvent,
+  };
 }
 
 /**
  * Week View Header Component
  */
-function WeekViewHeader({ 
-  currentDate, 
-  onNavigate, 
-  viewMode, 
-  onViewModeChange 
+function WeekViewHeader({
+  currentDate,
+  onNavigate,
+  viewMode,
+  onViewModeChange,
 }: {
-  currentDate: Date
-  onNavigate: (direction: 'prev' | 'next' | 'today') => void
-  viewMode: WeekViewState['viewMode']
-  onViewModeChange: (mode: WeekViewState['viewMode']) => void
+  currentDate: Date;
+  onNavigate: (direction: 'prev' | 'next' | 'today') => void;
+  viewMode: WeekViewState['viewMode'];
+  onViewModeChange: (mode: WeekViewState['viewMode']) => void;
 }) {
-  const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 }) // Monday start
-  const weekEnd = endOfWeek(currentDate, { weekStartsOn: 1 })
-  
+  const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 }); // Monday start
+  const weekEnd = endOfWeek(currentDate, { weekStartsOn: 1 });
+
   return (
-    <div data-testid="view-header" className="flex items-center justify-between p-4 border-b border-border bg-background">
+    <div
+      data-testid="view-header"
+      className="flex items-center justify-between p-4 border-b border-border bg-background"
+    >
       {/* Week navigation */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1">
@@ -170,7 +172,7 @@ function WeekViewHeader({
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          
+
           <Button
             variant="outline"
             size="sm"
@@ -179,7 +181,7 @@ function WeekViewHeader({
           >
             Today
           </Button>
-          
+
           <Button
             variant="outline"
             size="sm"
@@ -190,24 +192,21 @@ function WeekViewHeader({
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
-        
+
         {/* Week range display */}
         <div className="text-lg font-semibold" data-testid="week-display">
           {format(weekStart, 'MMM d')} - {format(weekEnd, 'MMM d, yyyy')}
         </div>
       </div>
-      
+
       {/* View controls */}
       <div className="flex items-center gap-3">
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search events..."
-            className="w-64 pl-10 h-8"
-          />
+          <Input placeholder="Search events..." className="w-64 pl-10 h-8" />
         </div>
-        
+
         {/* View mode selector */}
         <div className="flex items-center gap-1 bg-muted/50 rounded-lg p-1">
           {(['week', 'workweek', 'compact'] as const).map((mode) => (
@@ -222,7 +221,7 @@ function WeekViewHeader({
             </Button>
           ))}
         </div>
-        
+
         {/* Quick actions */}
         <Button size="sm" className="h-8">
           <Plus className="h-4 w-4 mr-2" />
@@ -230,58 +229,58 @@ function WeekViewHeader({
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 /**
  * Week Grid Component with Schedule X patterns
  */
-function WeekGrid({ 
-  currentDate, 
-  events, 
+function WeekGrid({
+  currentDate,
+  events,
   onDoubleClickTimeSlot,
   selectedTimeSlot,
   onSelectTimeSlot,
   viewMode,
-  showWeekends
+  showWeekends,
 }: {
-  currentDate: Date
-  events: any[]
-  onDoubleClickTimeSlot: (date: Date, hour: number) => void
-  selectedTimeSlot: { date: Date; hour: number } | null
-  onSelectTimeSlot: (date: Date, hour: number) => void
-  viewMode: WeekViewState['viewMode']
-  showWeekends: boolean
+  currentDate: Date;
+  events: any[];
+  onDoubleClickTimeSlot: (date: Date, hour: number) => void;
+  selectedTimeSlot: { date: Date; hour: number } | null;
+  onSelectTimeSlot: (date: Date, hour: number) => void;
+  viewMode: WeekViewState['viewMode'];
+  showWeekends: boolean;
 }) {
-  const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 })
-  const weekEnd = endOfWeek(currentDate, { weekStartsOn: 1 })
-  
+  const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
+  const weekEnd = endOfWeek(currentDate, { weekStartsOn: 1 });
+
   // Generate days for the week
   const weekDays = useMemo(() => {
-    const days = eachDayOfInterval({ start: weekStart, end: weekEnd })
-    
+    const days = eachDayOfInterval({ start: weekStart, end: weekEnd });
+
     if (viewMode === 'workweek') {
-      return days.filter(day => {
-        const dayOfWeek = day.getDay()
-        return dayOfWeek !== 0 && dayOfWeek !== 6 // Exclude weekends
-      })
+      return days.filter((day) => {
+        const dayOfWeek = day.getDay();
+        return dayOfWeek !== 0 && dayOfWeek !== 6; // Exclude weekends
+      });
     }
-    
+
     if (!showWeekends) {
-      return days.filter(day => {
-        const dayOfWeek = day.getDay()
-        return dayOfWeek !== 0 && dayOfWeek !== 6
-      })
+      return days.filter((day) => {
+        const dayOfWeek = day.getDay();
+        return dayOfWeek !== 0 && dayOfWeek !== 6;
+      });
     }
-    
-    return days
-  }, [weekStart, weekEnd, viewMode, showWeekends])
-  
+
+    return days;
+  }, [weekStart, weekEnd, viewMode, showWeekends]);
+
   // Generate hours (business hours focus)
-  const hours = Array.from({ length: 24 }, (_, i) => i)
-  const businessHours = hours.filter(hour => hour >= 8 && hour <= 18)
-  const displayHours = viewMode === 'compact' ? businessHours : hours
-  
+  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const businessHours = hours.filter((hour) => hour >= 8 && hour <= 18);
+  const displayHours = viewMode === 'compact' ? businessHours : hours;
+
   return (
     <div className="flex-1 overflow-auto" data-testid="view-content">
       <div className="min-w-full" data-testid="week-grid">
@@ -289,20 +288,23 @@ function WeekGrid({
         <div className="sticky top-0 bg-background border-b border-border z-10">
           <div className="grid grid-cols-[80px_1fr] h-12">
             <div></div> {/* Time column spacer */}
-            <div className={cn(
-              'grid gap-px',
-              `grid-cols-${weekDays.length}`
-            )}>
+            <div className={cn('grid gap-px', `grid-cols-${weekDays.length}`)}>
               {weekDays.map((day, index) => (
-                <div key={day.toISOString()} data-testid={`day-column-${index}`} className="flex flex-col items-center justify-center p-2 bg-muted/20">
+                <div
+                  key={day.toISOString()}
+                  data-testid={`day-column-${index}`}
+                  className="flex flex-col items-center justify-center p-2 bg-muted/20"
+                >
                   <div className="text-xs text-muted-foreground uppercase">
                     {format(day, 'EEE')}
                   </div>
-                  <div className={cn(
-                    'text-sm font-medium',
-                    format(day, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd') && 
-                    'bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center'
-                  )}>
+                  <div
+                    className={cn(
+                      'text-sm font-medium',
+                      format(day, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd') &&
+                        'bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center'
+                    )}
+                  >
                     {format(day, 'd')}
                   </div>
                 </div>
@@ -310,31 +312,32 @@ function WeekGrid({
             </div>
           </div>
         </div>
-        
+
         {/* Time grid */}
         <div className="grid grid-cols-[80px_1fr]">
           {/* Time column */}
           <div className="bg-muted/10">
             {displayHours.map((hour) => (
-              <div key={hour} className="h-16 border-b border-border/50 flex items-start justify-end pr-3 pt-1">
+              <div
+                key={hour}
+                className="h-16 border-b border-border/50 flex items-start justify-end pr-3 pt-1"
+              >
                 <span className="text-xs text-muted-foreground">
                   {format(new Date().setHours(hour, 0, 0, 0), 'ha')}
                 </span>
               </div>
             ))}
           </div>
-          
+
           {/* Calendar grid */}
-          <div className={cn(
-            'grid gap-px bg-border/20',
-            `grid-cols-${weekDays.length}`
-          )}>
+          <div className={cn('grid gap-px bg-border/20', `grid-cols-${weekDays.length}`)}>
             {weekDays.map((day) => (
               <div key={day.toISOString()} className="bg-background">
                 {displayHours.map((hour) => {
-                  const isSelected = selectedTimeSlot?.date.getTime() === day.getTime() && 
-                                   selectedTimeSlot?.hour === hour
-                  
+                  const isSelected =
+                    selectedTimeSlot?.date.getTime() === day.getTime() &&
+                    selectedTimeSlot?.hour === hour;
+
                   return (
                     <div
                       key={`${day.toISOString()}-${hour}`}
@@ -351,10 +354,12 @@ function WeekGrid({
                       <div className="absolute inset-0 p-1">
                         {/* TODO: Render events for this time slot */}
                         {events
-                          .filter(event => {
-                            const eventDate = new Date(event.start)
-                            return format(eventDate, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd') &&
-                                   eventDate.getHours() === hour
+                          .filter((event) => {
+                            const eventDate = new Date(event.start);
+                            return (
+                              format(eventDate, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd') &&
+                              eventDate.getHours() === hour
+                            );
                           })
                           .map((event, index) => (
                             <div
@@ -368,7 +373,7 @@ function WeekGrid({
                               style={{
                                 top: '2px',
                                 height: '56px', // Fill most of hour slot
-                                zIndex: 10
+                                zIndex: 10,
                               }}
                             >
                               <div className="font-medium truncate">{event.title}</div>
@@ -382,7 +387,7 @@ function WeekGrid({
                           ))}
                       </div>
                     </div>
-                  )
+                  );
                 })}
               </div>
             ))}
@@ -390,7 +395,7 @@ function WeekGrid({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 /**
@@ -403,29 +408,23 @@ function WeekViewActions() {
         <Plus className="h-4 w-4 mr-2" />
         Quick Event
       </Button>
-      
+
       <Button variant="outline" size="sm" className="shadow-lg">
         <Clock className="h-4 w-4 mr-2" />
         Focus Block
       </Button>
     </div>
-  )
+  );
 }
 
 /**
  * Main WeekView Component
  */
 export function WeekView() {
-  const {
-    state,
-    setState,
-    events,
-    navigateWeek,
-    handleDoubleClickTimeSlot
-  } = useWeekView()
-  
-  const weekViewEnabled = useFeatureFlag(COMMAND_WORKSPACE_FLAGS.VIEWS_WEEK)
-  
+  const { state, setState, events, navigateWeek, handleDoubleClickTimeSlot } = useWeekView();
+
+  const weekViewEnabled = useFeatureFlag(COMMAND_WORKSPACE_FLAGS.VIEWS_WEEK);
+
   if (!weekViewEnabled) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -436,9 +435,9 @@ export function WeekView() {
           <Badge variant="outline">views.week</Badge>
         </div>
       </div>
-    )
+    );
   }
-  
+
   return (
     <ViewScaffold
       header={
@@ -446,7 +445,7 @@ export function WeekView() {
           currentDate={state.currentDate}
           onNavigate={navigateWeek}
           viewMode={state.viewMode}
-          onViewModeChange={(mode) => setState(prev => ({ ...prev, viewMode: mode }))}
+          onViewModeChange={(mode) => setState((prev) => ({ ...prev, viewMode: mode }))}
         />
       }
       content={
@@ -455,10 +454,12 @@ export function WeekView() {
           events={events || []} // Preserve backend integration
           onDoubleClickTimeSlot={handleDoubleClickTimeSlot}
           selectedTimeSlot={state.selectedTimeSlot}
-          onSelectTimeSlot={(date, hour) => setState(prev => ({ 
-            ...prev, 
-            selectedTimeSlot: { date, hour } 
-          }))}
+          onSelectTimeSlot={(date, hour) =>
+            setState((prev) => ({
+              ...prev,
+              selectedTimeSlot: { date, hour },
+            }))
+          }
           viewMode={state.viewMode}
           showWeekends={state.showWeekends}
         />
@@ -467,7 +468,7 @@ export function WeekView() {
       contextPanels={['conflicts', 'capacity', 'details']}
       scrollable={false} // Custom scroll handling for calendar grid
     />
-  )
+  );
 }
 
 /**
@@ -477,25 +478,25 @@ export function useWeekViewPerformance() {
   const [renderMetrics, setRenderMetrics] = useState({
     gridRenderTime: 0,
     eventRenderTime: 0,
-    totalRenderTime: 0
-  })
-  
+    totalRenderTime: 0,
+  });
+
   return {
     measureGridRender: () => {
-      const start = performance.now()
+      const start = performance.now();
       // Measure in useEffect after render
       requestAnimationFrame(() => {
-        const time = performance.now() - start
-        setRenderMetrics(prev => ({ ...prev, gridRenderTime: time }))
-        
+        const time = performance.now() - start;
+        setRenderMetrics((prev) => ({ ...prev, gridRenderTime: time }));
+
         // Research target: <200ms for view switches
         if (time > 200) {
-          console.warn(`⚠️ Week grid render: ${time.toFixed(2)}ms (target: <200ms)`)
+          console.warn(`⚠️ Week grid render: ${time.toFixed(2)}ms (target: <200ms)`);
         }
-      })
+      });
     },
-    
+
     metrics: renderMetrics,
-    isPerformant: renderMetrics.totalRenderTime < 200
-  }
+    isPerformant: renderMetrics.totalRenderTime < 200,
+  };
 }

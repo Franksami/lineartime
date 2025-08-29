@@ -1,7 +1,7 @@
 # Next.js Bundle Analyzer Setup and Configuration
 
 ## Overview
-Successfully configured Next.js bundle analyzer and optimization features for the LinearTime Calendar Integration Platform.
+Successfully configured Next.js bundle analyzer and optimization features for the Command Center Calendar Calendar Integration Platform.
 
 ## Installation
 ```bash

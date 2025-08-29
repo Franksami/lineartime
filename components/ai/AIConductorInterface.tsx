@@ -1,7 +1,7 @@
 /**
  * AI Conductor Interface - Advanced AI Orchestration Dashboard
  *
- * Orchestrates and monitors all AI systems in the LinearTime Quantum Calendar platform.
+ * Orchestrates and monitors all AI systems in the Command Center Calendar Quantum Calendar platform.
  * Integrates with existing AI ecosystem including AIConflictDetector, AIInsightPanel,
  * AICapacityRibbon, and all quantum calendar systems.
  *
@@ -13,7 +13,7 @@
  * - System health monitoring and load balancing
  *
  * @version Phase 6.0+ (Quantum Calendar Integration)
- * @author LinearTime AI Conductor System
+ * @author Command Center Calendar AI Conductor System
  */
 
 'use client';
@@ -462,7 +462,9 @@ const AIConductorInterface: React.FC = () => {
                     <div className="text-xs text-muted-foreground">Active Agents</div>
                   </div>
                   <div className="p-3 bg-muted rounded-lg">
-                    <div className="text-2xl font-bold text-green-500 /* TODO: Use semantic token */">{resolvedConflicts}</div>
+                    <div className="text-2xl font-bold text-green-500 /* TODO: Use semantic token */">
+                      {resolvedConflicts}
+                    </div>
                     <div className="text-xs text-muted-foreground">Resolved Today</div>
                   </div>
                 </div>
@@ -523,7 +525,9 @@ const AIConductorInterface: React.FC = () => {
                             {conflict.severity.toUpperCase()}
                           </Badge>
                           <Badge variant="outline">{conflict.type}</Badge>
-                          {conflict.resolved && <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />}
+                          {conflict.resolved && (
+                            <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />
+                          )}
                         </div>
                         <p className="text-sm mb-2">{conflict.description}</p>
                         <div className="flex items-center space-x-4 text-xs text-muted-foreground">

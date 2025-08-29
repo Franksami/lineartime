@@ -1244,8 +1244,8 @@ export function LinearCalendarHorizontal({
         // AAA compliance with enhanced focus indicators
         ...aaaColors.getContrastSafeStyles('calendar', 'background'),
         // RTL support with logical properties
-        paddingInlineStart: tokens.spacing.calendar.padding,
-        paddingInlineEnd: tokens.spacing.calendar.padding,
+        paddingInlineStart: tokens.spacing?.calendar?.padding || '16px',
+        paddingInlineEnd: tokens.spacing?.calendar?.padding || '16px',
       }}
       onKeyDown={(e) => {
         // Enhanced keyboard navigation with AAA support

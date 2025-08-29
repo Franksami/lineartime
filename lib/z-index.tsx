@@ -1,4 +1,4 @@
-// Centralized Z-Index Management System for LinearCalendar
+// Centralized Z-Index Management System for CommandCenterCalendar
 // Fixes overlapping UI issues reported by user
 
 import type React from 'react';

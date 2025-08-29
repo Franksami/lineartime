@@ -87,7 +87,10 @@ export function TestToast() {
             Test Info Toast
           </Button>
 
-          <Button onClick={testLoadingWithUpdate} className="bg-blue-600 /* TODO: Use semantic token */ hover:bg-blue-700 /* TODO: Use semantic token */">
+          <Button
+            onClick={testLoadingWithUpdate}
+            className="bg-blue-600 /* TODO: Use semantic token */ hover:bg-blue-700 /* TODO: Use semantic token */"
+          >
             Test Loading → Success
           </Button>
 

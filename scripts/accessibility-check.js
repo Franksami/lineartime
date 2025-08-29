@@ -12,17 +12,17 @@ const ACCESSIBILITY_STANDARDS = {
   WCAG_AAA: {
     contrastRatio: {
       normal: 7,
-      large: 4.5
+      large: 4.5,
     },
     requirements: [
       'alt-text',
-      'keyboard-navigation', 
+      'keyboard-navigation',
       'aria-labels',
       'semantic-markup',
       'color-independence',
-      'motion-reduction'
-    ]
-  }
+      'motion-reduction',
+    ],
+  },
 };
 
 class AccessibilityGovernor {
@@ -43,17 +43,16 @@ class AccessibilityGovernor {
       await this.checkKeyboardNavigation();
 
       this.generateReport();
-      
+
       if (this.errors.length > 0) {
         console.error('\n❌ Accessibility governance failed!');
         console.error('Fix the following issues:\n');
-        this.errors.forEach(error => console.error(`  • ${error}`));
+        this.errors.forEach((error) => console.error(`  • ${error}`));
         process.exit(1);
       }
 
       console.log('\n✅ Accessibility governance passed!');
       return true;
-
     } catch (error) {
       console.error('\n💥 Accessibility check failed:', error.message);
       process.exit(1);
@@ -62,14 +61,14 @@ class AccessibilityGovernor {
 
   async checkTokenCompliance() {
     console.log('🎨 Checking token compliance...');
-    
+
     // Check for hardcoded colors using grep as fallback
     try {
       const result = execSync(
         'grep -r -n "\\(bg\\|text\\|border\\)-\\(blue\\|green\\|red\\|yellow\\|purple\\|pink\\|indigo\\|cyan\\|lime\\|emerald\\|violet\\|rose\\|amber\\|teal\\|sky\\|slate\\|gray\\|zinc\\|neutral\\|stone\\)-[0-9]\\{3\\}" components/ app/ --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" 2>/dev/null || true',
         { encoding: 'utf8' }
       );
-      
+
       if (result.trim()) {
         this.errors.push('Hardcoded Tailwind colors found - use design tokens instead');
       } else {
@@ -83,7 +82,7 @@ class AccessibilityGovernor {
 
   async checkContrastRatios() {
     console.log('🌈 Checking contrast ratios...');
-    
+
     const tokenFiles = this.findTokenFiles();
     for (const file of tokenFiles) {
       await this.validateContrastInFile(file);
@@ -92,12 +91,12 @@ class AccessibilityGovernor {
 
   async checkMotionCompliance() {
     console.log('🎬 Checking motion compliance...');
-    
+
     // Check for reduced motion support
     const motionFiles = [
       'design-tokens/motion/transitions.json',
       'lib/design-system/motion/MotionConfig.ts',
-      'hooks/useReducedMotion.ts'
+      'hooks/useReducedMotion.ts',
     ];
 
     for (const file of motionFiles) {
@@ -119,18 +118,19 @@ class AccessibilityGovernor {
 
   async checkSemanticMarkup() {
     console.log('📝 Checking semantic markup...');
-    
+
     // Check React components for semantic HTML usage
     try {
-      const result = execSync(
-        'rg -n "\\<div\\>" --type tsx --type jsx components/ | head -20',
-        { encoding: 'utf8' }
-      );
-      
+      const result = execSync('rg -n "\\<div\\>" --type tsx --type jsx components/ | head -20', {
+        encoding: 'utf8',
+      });
+
       if (result.trim()) {
         const divCount = result.split('\n').length;
         if (divCount > 50) {
-          this.warnings.push(`High div usage detected (${divCount}) - consider semantic HTML elements`);
+          this.warnings.push(
+            `High div usage detected (${divCount}) - consider semantic HTML elements`
+          );
         }
       }
     } catch (e) {
@@ -140,7 +140,7 @@ class AccessibilityGovernor {
     // Check for semantic HTML elements
     const semanticElements = ['header', 'nav', 'main', 'section', 'article', 'aside', 'footer'];
     let semanticCount = 0;
-    
+
     for (const element of semanticElements) {
       try {
         const result = execSync(
@@ -158,30 +158,25 @@ class AccessibilityGovernor {
     if (semanticCount >= 4) {
       this.passed.push(`Good semantic HTML usage (${semanticCount}/7 elements found)`);
     } else {
-      this.warnings.push(`Low semantic HTML usage (${semanticCount}/7 elements) - consider using more semantic elements`);
+      this.warnings.push(
+        `Low semantic HTML usage (${semanticCount}/7 elements) - consider using more semantic elements`
+      );
     }
   }
 
   async checkKeyboardNavigation() {
     console.log('⌨️ Checking keyboard navigation...');
-    
+
     // Check for focus management
-    const focusPatterns = [
-      'onKeyDown',
-      'tabIndex',
-      'focus(',
-      'blur(',
-      'aria-hidden'
-    ];
+    const focusPatterns = ['onKeyDown', 'tabIndex', 'focus(', 'blur(', 'aria-hidden'];
 
     let focusScore = 0;
-    
+
     for (const pattern of focusPatterns) {
       try {
-        const result = execSync(
-          `rg -n "${pattern}" --type tsx --type jsx components/`,
-          { encoding: 'utf8' }
-        );
+        const result = execSync(`rg -n "${pattern}" --type tsx --type jsx components/`, {
+          encoding: 'utf8',
+        });
         if (result.trim()) {
           focusScore++;
         }
@@ -193,14 +188,16 @@ class AccessibilityGovernor {
     if (focusScore >= 3) {
       this.passed.push(`Good keyboard navigation support (${focusScore}/5 patterns)`);
     } else {
-      this.warnings.push(`Limited keyboard navigation support (${focusScore}/5 patterns) - add more focus management`);
+      this.warnings.push(
+        `Limited keyboard navigation support (${focusScore}/5 patterns) - add more focus management`
+      );
     }
   }
 
   findTokenFiles() {
     const tokenDir = path.join(process.cwd(), 'design-tokens');
     if (!fs.existsSync(tokenDir)) return [];
-    
+
     const files = [];
     const walk = (dir) => {
       const items = fs.readdirSync(dir);
@@ -213,7 +210,7 @@ class AccessibilityGovernor {
         }
       }
     };
-    
+
     walk(tokenDir);
     return files;
   }
@@ -231,7 +228,7 @@ class AccessibilityGovernor {
     // This is a simplified check - in practice you'd want to
     // calculate actual contrast ratios between color pairs
     let colorTokenCount = 0;
-    
+
     const traverse = (obj) => {
       for (const key in obj) {
         if (obj[key] && typeof obj[key] === 'object') {
@@ -242,9 +239,9 @@ class AccessibilityGovernor {
         }
       }
     };
-    
+
     traverse(obj);
-    
+
     if (colorTokenCount > 0) {
       this.passed.push(`Color tokens validated in ${fileName} (${colorTokenCount} tokens)`);
     }
@@ -258,12 +255,12 @@ class AccessibilityGovernor {
 
     if (this.warnings.length > 0) {
       console.log('\n⚠️  Warnings:');
-      this.warnings.forEach(warning => console.log(`   • ${warning}`));
+      this.warnings.forEach((warning) => console.log(`   • ${warning}`));
     }
 
     if (this.passed.length > 0) {
       console.log('\n✅ Passed checks:');
-      this.passed.forEach(check => console.log(`   • ${check}`));
+      this.passed.forEach((check) => console.log(`   • ${check}`));
     }
   }
 }

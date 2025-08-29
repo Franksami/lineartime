@@ -1,8 +1,8 @@
 /**
- * CheatCal Enterprise Interface
+ * Command Center Enterprise Interface
  *
  * Comprehensive enterprise-grade calendar coordination platform that restores
- * ALL sophisticated functionality built for CheatCal. Inspired by Sunsama's
+ * ALL sophisticated functionality built for Command Center. Inspired by Sunsama's
  * professional design and Notion Calendar's enterprise features.
  *
  * DESIGN PROCESS FOLLOWED:
@@ -19,7 +19,7 @@
  * - Real-time sync with 4 calendar providers
  * - Motion system with audio-visual feedback
  *
- * @version 2.0.0 (CheatCal Enterprise Restoration)
+ * @version 2.0.0 (Command Center Enterprise Restoration)
  */
 
 'use client';
@@ -37,11 +37,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { AIDragDropIntegration } from '@/components/calendar/AIDragDropIntegration';
-// Enhanced Calendar Components (Existing Sophisticated Components)
-import EnhancedCalendarToolbar from '@/components/calendar/EnhancedCalendarToolbar';
-import { EnhancedDragDropSystem } from '@/components/calendar/EnhancedDragDropSystem';
-import { LinearCalendarHorizontal } from '@/components/calendar/LinearCalendarHorizontal';
+// Command Workspace View Integration
+import { WeekView } from '@/views/week/WeekView';
+import { PlannerView } from '@/views/planner/PlannerView';
+import { ViewScaffold } from '@/components/_deprecated/ViewScaffold';
 
 import { AICapacityRibbon } from '@/components/ai/AICapacityRibbon';
 import AIConductorInterface from '@/components/ai/AIConductorInterface';
@@ -49,8 +48,8 @@ import AIConductorInterface from '@/components/ai/AIConductorInterface';
 import { AIConflictDetector } from '@/components/ai/AIConflictDetector';
 import { AIInsightPanel } from '@/components/ai/AIInsightPanel';
 
-// Calendar Provider System
-import { useCalendarProvider } from '@/components/calendar/providers/CalendarProvider';
+// Preserve backend calendar integration
+import { useCalendarEvents } from '@/hooks/useCalendarEvents';
 
 import { useAccessibilityAAA } from '@/hooks/useAccessibilityAAA';
 import { useMotionSystem } from '@/hooks/useMotionSystem';
@@ -109,17 +108,8 @@ export default function CheatCalEnterpriseInterface() {
   >('calendar');
   const [showAIPanel, setShowAIPanel] = useState(true);
 
-  // Calendar Integration
-  const {
-    selectedLibrary,
-    switchLibrary,
-    events,
-    onEventCreate,
-    onEventUpdate,
-    onEventDelete,
-    loading,
-    syncStatus,
-  } = useCalendarProvider();
+  // Command Workspace calendar integration
+  const { events, createEvent, updateEvent, deleteEvent } = useCalendarEvents();
 
   // Revenue-focused mock events (sophisticated data)
   const mockEvents: CheatCalEvent[] = [
@@ -173,11 +163,15 @@ export default function CheatCalEnterpriseInterface() {
   // Professional event color mapping
   const getEventTypeColor = (type: CheatCalEvent['type']) => {
     const colors = {
-      revenue: 'bg-green-600 /* TODO: Use semantic token */ border-green-600 /* TODO: Use semantic token */',
-      coordination: 'bg-blue-600 /* TODO: Use semantic token */ border-blue-600 /* TODO: Use semantic token */',
-      focus: 'bg-purple-600 /* TODO: Use semantic token */ border-purple-600 /* TODO: Use semantic token */',
+      revenue:
+        'bg-green-600 /* TODO: Use semantic token */ border-green-600 /* TODO: Use semantic token */',
+      coordination:
+        'bg-blue-600 /* TODO: Use semantic token */ border-blue-600 /* TODO: Use semantic token */',
+      focus:
+        'bg-purple-600 /* TODO: Use semantic token */ border-purple-600 /* TODO: Use semantic token */',
       client: 'bg-orange-600 border-orange-600',
-      optimization: 'bg-yellow-600 /* TODO: Use semantic token */ border-yellow-600 /* TODO: Use semantic token */',
+      optimization:
+        'bg-yellow-600 /* TODO: Use semantic token */ border-yellow-600 /* TODO: Use semantic token */',
     };
     return colors[type] || 'bg-muted border-border';
   };
@@ -272,7 +266,9 @@ export default function CheatCalEnterpriseInterface() {
               >
                 <Brain className="h-6 w-6 text-primary" />
                 <div>
-                  <h1 className="text-xl font-semibold text-foreground">CheatCal Enterprise</h1>
+                  <h1 className="text-xl font-semibold text-foreground">
+                    Command Center Enterprise
+                  </h1>
                   <p className="text-xs text-muted-foreground">AI Coordination Platform</p>
                 </div>
               </motion.div>
@@ -399,13 +395,17 @@ export default function CheatCalEnterpriseInterface() {
 
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-muted-foreground">Coordination Efficiency</span>
-                  <span className="text-sm font-medium text-blue-600 /* TODO: Use semantic token */">94%</span>
+                  <span className="text-sm font-medium text-blue-600 /* TODO: Use semantic token */">
+                    94%
+                  </span>
                 </div>
                 <Progress value={94} className="h-1" />
 
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-muted-foreground">AI Optimization</span>
-                  <span className="text-sm font-medium text-purple-600 /* TODO: Use semantic token */">87%</span>
+                  <span className="text-sm font-medium text-purple-600 /* TODO: Use semantic token */">
+                    87%
+                  </span>
                 </div>
                 <Progress value={87} className="h-1" />
               </div>
@@ -588,7 +588,7 @@ export default function CheatCalEnterpriseInterface() {
           {/* Tab Content Areas */}
           <div className="flex-1 p-6">
             <Tabs value={activePanel} className="h-full">
-              {/* Calendar Tab - Full Linear Calendar with Drag & Drop */}
+              {/* Calendar Tab - Command Workspace Week View */}
               <TabsContent value="calendar" className="h-full mt-0">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.98 }}
@@ -596,24 +596,9 @@ export default function CheatCalEnterpriseInterface() {
                   transition={{ duration: 0.3 }}
                   className="h-full"
                 >
-                  {/* Enhanced Drag & Drop Integration */}
-                  <AIDragDropIntegration>
-                    <EnhancedDragDropSystem>
-                      <Card className="h-full border-0 shadow-sm">
-                        <CardContent className="p-0 h-full">
-                          <LinearCalendarHorizontal
-                            year={2025}
-                            events={events}
-                            onEventCreate={onEventCreate}
-                            onEventUpdate={onEventUpdate}
-                            onEventDelete={onEventDelete}
-                            enableInfiniteCanvas={true}
-                            className="w-full h-full"
-                          />
-                        </CardContent>
-                      </Card>
-                    </EnhancedDragDropSystem>
-                  </AIDragDropIntegration>
+                  <ViewScaffold title="Enterprise Calendar">
+                    <WeekView />
+                  </ViewScaffold>
                 </motion.div>
               </TabsContent>
 
@@ -625,31 +610,9 @@ export default function CheatCalEnterpriseInterface() {
                   transition={{ duration: 0.3 }}
                   className="h-full"
                 >
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
-                    <div className="lg:col-span-2">
-                      {/* AI Revenue Planner Interface Here */}
-                      <Card className="h-full">
-                        <CardHeader>
-                          <CardTitle className="flex items-center space-x-2">
-                            <Brain className="w-5 h-5 text-primary" />
-                            <span>AI Revenue Coordination</span>
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-center text-muted-foreground">
-                            AI Revenue Planner Interface
-                            <br />
-                            (Integration with existing PlannerInterface.tsx)
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-
-                    <div className="space-y-4">
-                      <AICapacityRibbon />
-                      <AIInsightPanel />
-                    </div>
-                  </div>
+                  <ViewScaffold title="AI Task Planner">
+                    <PlannerView />
+                  </ViewScaffold>
                 </motion.div>
               </TabsContent>
 
@@ -749,7 +712,10 @@ export default function CheatCalEnterpriseInterface() {
                 <div className="space-y-4 mb-6">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">AI Processing</span>
-                    <Badge variant="outline" className="bg-green-600 /* TODO: Use semantic token *//10 text-green-600 /* TODO: Use semantic token */">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-600 /* TODO: Use semantic token *//10 text-green-600 /* TODO: Use semantic token */"
+                    >
                       <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ rounded-full mr-2 animate-pulse" />
                       Active
                     </Badge>

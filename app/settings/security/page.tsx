@@ -300,7 +300,9 @@ export default function SecuritySettingsPage() {
         <div className="flex items-start mb-4">
           <Monitor className="h-6 w-6 text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ mt-1 mr-3" />
           <div>
-            <h2 className="text-lg font-semibold text-foreground dark:text-white">Active Sessions</h2>
+            <h2 className="text-lg font-semibold text-foreground dark:text-white">
+              Active Sessions
+            </h2>
             <p className="mt-1 text-sm text-gray-600 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
               Manage devices and locations where you&apos;re currently signed in
             </p>

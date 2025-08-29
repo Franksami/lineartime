@@ -3,7 +3,7 @@
  *
  * Complete react-hook-form + @hookform/resolvers implementation providing
  * professional schema validation, real-time feedback, and enterprise UX
- * across all form components in the LinearTime/CheatCal platform.
+ * across all form components in the Command Center Calendar/Command Center platform.
  *
  * Replaces: Manual validation scattered across components
  * With: Centralized professional form validation system
@@ -26,7 +26,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -111,65 +117,75 @@ PROFESSIONAL FEATURES: Schema Validation | Type Safety | Real-time UX | Enterpri
 // ==========================================
 
 // Event creation form schema
-export const EventFormSchema = z.object({
-  title: z.string()
-    .min(1, 'Event title is required')
-    .max(100, 'Title must be less than 100 characters')
-    .regex(/^[a-zA-Z0-9\s\-_.,!?]+$/, 'Title contains invalid characters'),
-    
-  description: z.string()
-    .max(500, 'Description must be less than 500 characters')
-    .optional(),
-    
-  startDate: z.date({
-    required_error: 'Start date is required',
-    invalid_type_error: 'Please enter a valid date',
-  }),
-  
-  endDate: z.date({
-    required_error: 'End date is required', 
-    invalid_type_error: 'Please enter a valid date',
-  }),
-  
-  startTime: z.string()
-    .regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Please enter time in HH:MM format'),
-    
-  endTime: z.string()
-    .regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Please enter time in HH:MM format'),
-    
-  attendees: z.array(z.string().email('Invalid email address')).optional(),
-  
-  location: z.string().max(200, 'Location must be less than 200 characters').optional(),
-  
-  priority: z.enum(['low', 'medium', 'high', 'urgent']).default('medium'),
-  
-  provider: z.enum(['google', 'microsoft', 'apple', 'caldav']).optional(),
-  
-  timezone: z.string().default('UTC'),
-}).refine((data) => {
-  // Cross-field validation: end date must be after start date
-  const start = new Date(data.startDate);
-  const end = new Date(data.endDate);
-  return end >= start;
-}, {
-  message: 'End date must be after start date',
-  path: ['endDate'],
-}).refine((data) => {
-  // Cross-field validation: end time must be after start time if same date
-  const start = new Date(data.startDate);
-  const end = new Date(data.endDate);
-  if (start.toDateString() === end.toDateString()) {
-    const [startHour, startMin] = data.startTime.split(':').map(Number);
-    const [endHour, endMin] = data.endTime.split(':').map(Number);
-    const startMinutes = startHour * 60 + startMin;
-    const endMinutes = endHour * 60 + endMin;
-    return endMinutes > startMinutes;
-  }
-  return true;
-}, {
-  message: 'End time must be after start time',
-  path: ['endTime'],
-});
+export const EventFormSchema = z
+  .object({
+    title: z
+      .string()
+      .min(1, 'Event title is required')
+      .max(100, 'Title must be less than 100 characters')
+      .regex(/^[a-zA-Z0-9\s\-_.,!?]+$/, 'Title contains invalid characters'),
+
+    description: z.string().max(500, 'Description must be less than 500 characters').optional(),
+
+    startDate: z.date({
+      required_error: 'Start date is required',
+      invalid_type_error: 'Please enter a valid date',
+    }),
+
+    endDate: z.date({
+      required_error: 'End date is required',
+      invalid_type_error: 'Please enter a valid date',
+    }),
+
+    startTime: z
+      .string()
+      .regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Please enter time in HH:MM format'),
+
+    endTime: z
+      .string()
+      .regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Please enter time in HH:MM format'),
+
+    attendees: z.array(z.string().email('Invalid email address')).optional(),
+
+    location: z.string().max(200, 'Location must be less than 200 characters').optional(),
+
+    priority: z.enum(['low', 'medium', 'high', 'urgent']).default('medium'),
+
+    provider: z.enum(['google', 'microsoft', 'apple', 'caldav']).optional(),
+
+    timezone: z.string().default('UTC'),
+  })
+  .refine(
+    (data) => {
+      // Cross-field validation: end date must be after start date
+      const start = new Date(data.startDate);
+      const end = new Date(data.endDate);
+      return end >= start;
+    },
+    {
+      message: 'End date must be after start date',
+      path: ['endDate'],
+    }
+  )
+  .refine(
+    (data) => {
+      // Cross-field validation: end time must be after start time if same date
+      const start = new Date(data.startDate);
+      const end = new Date(data.endDate);
+      if (start.toDateString() === end.toDateString()) {
+        const [startHour, startMin] = data.startTime.split(':').map(Number);
+        const [endHour, endMin] = data.endTime.split(':').map(Number);
+        const startMinutes = startHour * 60 + startMin;
+        const endMinutes = endHour * 60 + endMin;
+        return endMinutes > startMinutes;
+      }
+      return true;
+    },
+    {
+      message: 'End time must be after start time',
+      path: ['endTime'],
+    }
+  );
 
 // Settings form schema
 export const SettingsFormSchema = z.object({
@@ -179,31 +195,37 @@ export const SettingsFormSchema = z.object({
     highContrast: z.boolean().default(false),
     reducedMotion: z.boolean().default(false),
   }),
-  
+
   calendar: z.object({
     defaultView: z.enum(['linear', 'month', 'week', 'day']).default('linear'),
     weekStart: z.enum(['sunday', 'monday']).default('sunday'),
     workingHours: z.object({
-      start: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/).default('09:00'),
-      end: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/).default('17:00'),
+      start: z
+        .string()
+        .regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
+        .default('09:00'),
+      end: z
+        .string()
+        .regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
+        .default('17:00'),
     }),
     timeFormat: z.enum(['12h', '24h']).default('12h'),
   }),
-  
+
   notifications: z.object({
     enableEmail: z.boolean().default(true),
     enablePush: z.boolean().default(true),
     reminderMinutes: z.number().min(0).max(1440).default(15),
     digestFrequency: z.enum(['daily', 'weekly', 'monthly', 'never']).default('weekly'),
   }),
-  
+
   privacy: z.object({
     dataCollection: z.boolean().default(false),
     analytics: z.boolean().default(false),
     aiProcessing: z.boolean().default(false),
     crossProviderSync: z.boolean().default(true),
   }),
-  
+
   ai: z.object({
     enableVision: z.boolean().default(false),
     enableVoice: z.boolean().default(false),
@@ -223,7 +245,7 @@ export const AIConfigFormSchema = z.object({
     textAnalysis: z.boolean().default(false),
     appDetection: z.boolean().default(true),
   }),
-  
+
   voice: z.object({
     enabled: z.boolean().default(false),
     primaryProvider: z.enum(['whisper', 'deepgram', 'native']).default('whisper'),
@@ -231,7 +253,7 @@ export const AIConfigFormSchema = z.object({
     confidenceThreshold: z.number().min(0).max(1).default(0.8),
     language: z.string().default('en-US'),
   }),
-  
+
   coordination: z.object({
     enableMultiModal: z.boolean().default(true),
     correlationThreshold: z.number().min(0).max(1).default(0.75),
@@ -278,7 +300,7 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
 
   const { playSound } = useSoundEffects();
   const accessibility = useAccessibilityAAA();
-  
+
   const fieldValue = watch(name);
   const fieldError = errors[name];
   const hasError = !!fieldError;
@@ -306,7 +328,11 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
       onFocus: handleFocus,
       onBlur: handleBlur,
       'aria-invalid': hasError,
-      'aria-describedby': hasError ? `${name}-error` : description ? `${name}-description` : undefined,
+      'aria-describedby': hasError
+        ? `${name}-error`
+        : description
+          ? `${name}-description`
+          : undefined,
     };
 
     switch (type) {
@@ -315,34 +341,40 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
           <Textarea
             {...inputProps}
             className={cn(
-              "min-h-20 resize-none",
-              hasError && "border-destructive focus:ring-destructive",
-              hasValue && !hasError && "border-green-500 /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */",
+              'min-h-20 resize-none',
+              hasError && 'border-destructive focus:ring-destructive',
+              hasValue &&
+                !hasError &&
+                'border-green-500 /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */',
               className
             )}
           />
         );
-        
+
       case 'password':
         return (
           <PasswordField
             {...inputProps}
             className={cn(
-              hasError && "border-destructive focus:ring-destructive",
-              hasValue && !hasError && "border-green-500 /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */", 
+              hasError && 'border-destructive focus:ring-destructive',
+              hasValue &&
+                !hasError &&
+                'border-green-500 /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */',
               className
             )}
           />
         );
-        
+
       default:
         return (
           <Input
             {...inputProps}
             type={type}
             className={cn(
-              hasError && "border-destructive focus:ring-destructive",
-              hasValue && !hasError && "border-green-500 /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */",
+              hasError && 'border-destructive focus:ring-destructive',
+              hasValue &&
+                !hasError &&
+                'border-green-500 /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */',
               className
             )}
           />
@@ -354,22 +386,22 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
     <div className="space-y-2">
       {/* Professional Label */}
       <div className="flex items-center space-x-2">
-        <Label 
+        <Label
           htmlFor={name}
           className={cn(
-            "font-medium text-foreground",
+            'font-medium text-foreground',
             required && "after:content-['*'] after:text-destructive after:ml-1",
-            hasError && "text-destructive"
+            hasError && 'text-destructive'
           )}
         >
           {label}
         </Label>
-        
+
         {hasValue && !hasError && (
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
           >
             <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />
           </motion.div>
@@ -378,27 +410,21 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
 
       {/* Description */}
       {description && (
-        <p 
-          id={`${name}-description`}
-          className="text-sm text-muted-foreground"
-        >
+        <p id={`${name}-description`} className="text-sm text-muted-foreground">
           {description}
         </p>
       )}
 
       {/* Professional Input with Animation */}
-      <motion.div
-        layout
-        className="relative"
-      >
+      <motion.div layout className="relative">
         {renderInput()}
-        
+
         {/* Loading indicator for async validation */}
         {isSubmitting && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
               className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full"
             />
           </div>
@@ -412,7 +438,7 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
             initial={{ opacity: 0, y: -10, height: 0 }}
             animate={{ opacity: 1, y: 0, height: 'auto' }}
             exit={{ opacity: 0, y: -10, height: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             className="flex items-start space-x-2 text-sm text-destructive"
             id={`${name}-error`}
             role="alert"
@@ -432,13 +458,13 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
 
 const PasswordField: React.FC<any> = ({ className, ...props }) => {
   const [showPassword, setShowPassword] = useState(false);
-  
+
   return (
     <div className="relative">
       <Input
         {...props}
         type={showPassword ? 'text' : 'password'}
-        className={cn("pr-10", className)}
+        className={cn('pr-10', className)}
       />
       <button
         type="button"
@@ -485,38 +511,28 @@ export const ProfessionalSelectField: React.FC<SelectFieldProps> = ({
 
   return (
     <div className="space-y-2">
-      <Label 
+      <Label
         className={cn(
-          "font-medium text-foreground",
+          'font-medium text-foreground',
           required && "after:content-['*'] after:text-destructive after:ml-1",
-          hasError && "text-destructive"
+          hasError && 'text-destructive'
         )}
       >
         {label}
       </Label>
 
-      {description && (
-        <p className="text-sm text-muted-foreground">{description}</p>
-      )}
+      {description && <p className="text-sm text-muted-foreground">{description}</p>}
 
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
-          <Select
-            onValueChange={field.onChange}
-            defaultValue={field.value}
-            disabled={disabled}
-          >
-            <SelectTrigger 
-              className={cn(
-                hasError && "border-destructive focus:ring-destructive"
-              )}
-            >
+          <Select onValueChange={field.onChange} defaultValue={field.value} disabled={disabled}>
+            <SelectTrigger className={cn(hasError && 'border-destructive focus:ring-destructive')}>
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>
-              {options.map(option => (
+              {options.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -581,14 +597,8 @@ export const ProfessionalToggleField: React.FC<ToggleFieldProps> = ({
               className="mt-0.5"
             />
             <div className="space-y-1">
-              <Label className="font-medium text-foreground cursor-pointer">
-                {label}
-              </Label>
-              {description && (
-                <p className="text-sm text-muted-foreground">
-                  {description}
-                </p>
-              )}
+              <Label className="font-medium text-foreground cursor-pointer">{label}</Label>
+              {description && <p className="text-sm text-muted-foreground">{description}</p>}
             </div>
           </div>
         )}
@@ -629,7 +639,7 @@ export const ProfessionalForm: React.FC<ProfessionalFormProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { playSound } = useSoundEffects();
   const performanceMonitor = usePerformanceMonitor();
-  
+
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues,
@@ -637,32 +647,36 @@ export const ProfessionalForm: React.FC<ProfessionalFormProps> = ({
     reValidateMode: 'onChange',
   });
 
-  const { handleSubmit, formState: { errors, isValid, isDirty } } = form;
+  const {
+    handleSubmit,
+    formState: { errors, isValid, isDirty },
+  } = form;
 
   // Professional form submission
-  const handleFormSubmit = useCallback(async (data: any) => {
-    try {
-      setIsSubmitting(true);
-      performanceMonitor.startMeasurement('form-submission');
-      
-      await onSubmit(data);
-      
-      // Success feedback
-      playSound?.('success');
-      console.log('✅ Form submitted successfully:', Object.keys(data));
-      
-    } catch (error) {
-      console.error('❌ Form submission failed:', error);
-      playSound?.('error');
-      
-      // Professional error handling
-      // Could set form-level errors here
-      
-    } finally {
-      setIsSubmitting(false);
-      performanceMonitor.endMeasurement('form-submission');
-    }
-  }, [onSubmit, playSound]);
+  const handleFormSubmit = useCallback(
+    async (data: any) => {
+      try {
+        setIsSubmitting(true);
+        performanceMonitor.startMeasurement('form-submission');
+
+        await onSubmit(data);
+
+        // Success feedback
+        playSound?.('success');
+        console.log('✅ Form submitted successfully:', Object.keys(data));
+      } catch (error) {
+        console.error('❌ Form submission failed:', error);
+        playSound?.('error');
+
+        // Professional error handling
+        // Could set form-level errors here
+      } finally {
+        setIsSubmitting(false);
+        performanceMonitor.endMeasurement('form-submission');
+      }
+    },
+    [onSubmit, playSound]
+  );
 
   // Auto-save functionality
   useEffect(() => {
@@ -670,13 +684,13 @@ export const ProfessionalForm: React.FC<ProfessionalFormProps> = ({
       const timeoutId = setTimeout(() => {
         handleSubmit(handleFormSubmit)();
       }, 2000); // Auto-save after 2 seconds of inactivity
-      
+
       return () => clearTimeout(timeoutId);
     }
   }, [enableAutoSave, isDirty, isValid, handleSubmit, handleFormSubmit]);
 
   return (
-    <div className={cn("professional-form-container", className)}>
+    <div className={cn('professional-form-container', className)}>
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
           {/* Form Header */}
@@ -689,17 +703,13 @@ export const ProfessionalForm: React.FC<ProfessionalFormProps> = ({
                     <span>{title}</span>
                   </CardTitle>
                 )}
-                {description && (
-                  <CardDescription>{description}</CardDescription>
-                )}
+                {description && <CardDescription>{description}</CardDescription>}
               </CardHeader>
             </Card>
           )}
 
           {/* Form Content */}
-          <div className="space-y-6">
-            {children}
-          </div>
+          <div className="space-y-6">{children}</div>
 
           {/* Professional Form Footer */}
           <Card className="mt-6">
@@ -733,20 +743,13 @@ export const ProfessionalForm: React.FC<ProfessionalFormProps> = ({
                 </div>
 
                 {/* Submit Button */}
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button
-                    type="submit"
-                    disabled={!isValid || isSubmitting}
-                    className="min-w-24"
-                  >
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <Button type="submit" disabled={!isValid || isSubmitting} className="min-w-24">
                     {isSubmitting ? (
                       <div className="flex items-center space-x-2">
                         <motion.div
                           animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                           className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full"
                         />
                         <span>Submitting...</span>
@@ -769,12 +772,16 @@ export const ProfessionalForm: React.FC<ProfessionalFormProps> = ({
             🔍 Form Debug Info
           </summary>
           <pre className="text-xs mt-2 overflow-auto bg-background p-4 rounded border">
-            {JSON.stringify({ 
-              isValid, 
-              isDirty, 
-              errors: Object.keys(errors),
-              values: form.watch() 
-            }, null, 2)}
+            {JSON.stringify(
+              {
+                isValid,
+                isDirty,
+                errors: Object.keys(errors),
+                values: form.watch(),
+              },
+              null,
+              2
+            )}
           </pre>
         </details>
       )}
@@ -786,10 +793,6 @@ export const ProfessionalForm: React.FC<ProfessionalFormProps> = ({
 // Export Professional Form Schemas
 // ==========================================
 
-export {
-  EventFormSchema,
-  SettingsFormSchema, 
-  AIConfigFormSchema,
-};
+export { EventFormSchema, SettingsFormSchema, AIConfigFormSchema };
 
 export default ProfessionalForm;

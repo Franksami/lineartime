@@ -36,7 +36,9 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Manage Events</h1>
-          <p className="text-gray-600 /* TODO: Use semantic token */">Organize and manage your calendar events</p>
+          <p className="text-gray-600 /* TODO: Use semantic token */">
+            Organize and manage your calendar events
+          </p>
         </div>
 
         {/* Search and Filter Bar */}
@@ -109,7 +111,9 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
                       {format(event.endDate, 'MMM d, yyyy')}
                     </p>
                     {event.description && (
-                      <p className="text-sm text-gray-500 /* TODO: Use semantic token */">{event.description}</p>
+                      <p className="text-sm text-gray-500 /* TODO: Use semantic token */">
+                        {event.description}
+                      </p>
                     )}
                   </div>
                   <div className="flex items-center gap-2 ml-4">
@@ -132,7 +136,9 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
 
           {filteredEvents.length === 0 && (
             <div className="p-12 text-center">
-              <p className="text-gray-500 /* TODO: Use semantic token */">No events found matching your criteria.</p>
+              <p className="text-gray-500 /* TODO: Use semantic token */">
+                No events found matching your criteria.
+              </p>
             </div>
           )}
         </div>

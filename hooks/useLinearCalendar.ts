@@ -7,7 +7,7 @@ interface CalendarRange {
   to: Date;
 }
 
-export function useLinearCalendar(year: number, userId = 'default-user') {
+export function useCommandCenterCalendar(year: number, userId = 'default-user') {
   // Use IndexedDB for persistent storage
   const {
     events: dbEvents,

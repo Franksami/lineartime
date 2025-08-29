@@ -18,7 +18,7 @@ interface Event {
   category?: string;
 }
 
-interface LinearCalendarRowsProps {
+interface CommandCenterCalendarRowsProps {
   events: Event[];
   onEventsChange: (events: Event[]) => void;
   year: number;
@@ -285,7 +285,11 @@ const EventLayer = memo(
 
 EventLayer.displayName = 'EventLayer';
 
-export function LinearCalendarRows({ events, onEventsChange, year }: LinearCalendarRowsProps) {
+export function CommandCenterCalendarRows({
+  events,
+  onEventsChange,
+  year,
+}: CommandCenterCalendarRowsProps) {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showPerformanceOverlay, setShowPerformanceOverlay] = useState(false);
   const _calendarRef = useRef<HTMLDivElement>(null);

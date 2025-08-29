@@ -218,7 +218,9 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
         <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="flex items-center space-x-2">
             <i className="pi pi-spin pi-spinner text-2xl text-primary" />
-            <span className="text-sm text-gray-600 /* TODO: Use semantic token */">Loading events...</span>
+            <span className="text-sm text-gray-600 /* TODO: Use semantic token */">
+              Loading events...
+            </span>
           </div>
         </div>
       )}
@@ -417,11 +419,15 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                 <h4 className="font-medium mb-3">Statistics</h4>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 /* TODO: Use semantic token */">Total Events</span>
+                    <span className="text-sm text-gray-600 /* TODO: Use semantic token */">
+                      Total Events
+                    </span>
                     <Badge value={events.length} severity="info" />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 /* TODO: Use semantic token */">High Priority</span>
+                    <span className="text-sm text-gray-600 /* TODO: Use semantic token */">
+                      High Priority
+                    </span>
                     <Badge
                       value={
                         events.filter((e) => e.priority === 'high' || e.priority === 'critical')
@@ -431,7 +437,9 @@ const PrimeReactCalendarView: React.FC<PrimeReactCalendarViewProps> = ({
                     />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 /* TODO: Use semantic token */">This Month</span>
+                    <span className="text-sm text-gray-600 /* TODO: Use semantic token */">
+                      This Month
+                    </span>
                     <Badge
                       value={
                         events.filter((event) => {

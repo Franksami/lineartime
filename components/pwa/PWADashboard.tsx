@@ -94,7 +94,7 @@ export function PWADashboard({ className }: PWADashboardProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'LinearTime Calendar',
+          title: 'Command Center Calendar Calendar',
           text: 'Life is bigger than a week - A comprehensive linear calendar for long-term planning',
           url: window.location.origin,
         });
@@ -123,12 +123,24 @@ export function PWADashboard({ className }: PWADashboardProps) {
 
   const getEngagementLevel = () => {
     if (metrics.engagementEvents >= 100)
-      return { level: 'High', color: 'text-green-600 /* TODO: Use semantic token */', progress: 100 };
+      return {
+        level: 'High',
+        color: 'text-green-600 /* TODO: Use semantic token */',
+        progress: 100,
+      };
     if (metrics.engagementEvents >= 50)
-      return { level: 'Medium', color: 'text-yellow-600 /* TODO: Use semantic token */', progress: 75 };
+      return {
+        level: 'Medium',
+        color: 'text-yellow-600 /* TODO: Use semantic token */',
+        progress: 75,
+      };
     if (metrics.engagementEvents >= 20)
       return { level: 'Low', color: 'text-orange-600', progress: 50 };
-    return { level: 'Minimal', color: 'text-gray-600 /* TODO: Use semantic token */', progress: 25 };
+    return {
+      level: 'Minimal',
+      color: 'text-gray-600 /* TODO: Use semantic token */',
+      progress: 25,
+    };
   };
 
   const engagement = getEngagementLevel();
@@ -425,7 +437,7 @@ export function PWADashboard({ className }: PWADashboardProps) {
                       <div className="space-y-1">
                         <div className="font-medium">Install App</div>
                         <div className="text-sm text-muted-foreground">
-                          Add LinearTime to your home screen for quick access
+                          Add Command Center Calendar to your home screen for quick access
                         </div>
                       </div>
                       <Button onClick={handleInstallApp}>
@@ -479,7 +491,7 @@ export function PWADashboard({ className }: PWADashboardProps) {
           <TabsContent value="share" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Share LinearTime</CardTitle>
+                <CardTitle>Share Command Center Calendar</CardTitle>
                 <CardDescription>
                   Share the app with others or test share functionality
                 </CardDescription>
@@ -489,7 +501,7 @@ export function PWADashboard({ className }: PWADashboardProps) {
                   <div className="p-4 border border-border rounded-lg space-y-3">
                     <h3 className="font-medium">Share App</h3>
                     <p className="text-sm text-muted-foreground">
-                      Share LinearTime with friends and colleagues
+                      Share Command Center Calendar with friends and colleagues
                     </p>
                     <Button
                       onClick={handleShareApp}
@@ -497,7 +509,7 @@ export function PWADashboard({ className }: PWADashboardProps) {
                       className="w-full"
                     >
                       <Share2 className="h-4 w-4 mr-2" />
-                      Share LinearTime
+                      Share Command Center Calendar
                     </Button>
                   </div>
 

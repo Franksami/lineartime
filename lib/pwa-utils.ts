@@ -14,7 +14,7 @@ export interface OfflineEvent {
 
 // IndexedDB setup for offline storage
 export class OfflineStorage {
-  private dbName = 'LinearTimeCalendar';
+  private dbName = 'Command Center CalendarCalendar';
   private version = 1;
   private db: IDBDatabase | null = null;
 

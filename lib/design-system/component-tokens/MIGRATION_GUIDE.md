@@ -2,7 +2,7 @@
 
 ## 🎯 Overview
 
-This guide documents the systematic migration of 150+ LinearTime components from hardcoded values to the Component Token Registry system. Based on [Design Tokens Community Group standards](https://design-tokens.github.io/community-group/format/#composite-types), this migration ensures:
+This guide documents the systematic migration of 150+ Command Center Calendar components from hardcoded values to the Component Token Registry system. Based on [Design Tokens Community Group standards](https://design-tokens.github.io/community-group/format/#composite-types), this migration ensures:
 
 - **Zero Breaking Changes**: Gradual migration with fallback patterns
 - **Type Safety**: Full TypeScript support with composite token types  
@@ -333,7 +333,7 @@ migrateNewComponent() {
 - [Design Tokens Community Group Format Specification](https://design-tokens.github.io/community-group/format/)
 - [Composite Types Documentation](https://design-tokens.github.io/community-group/format/#composite-types)
 - [Token Aliasing Patterns](https://design-tokens.github.io/community-group/format/#aliases-references)
-- [LinearTime Design System Documentation](./DESIGN_SYSTEM_IMPLEMENTATION.md)
+- [Command Center Calendar Design System Documentation](./DESIGN_SYSTEM_IMPLEMENTATION.md)
 - [Governance System Integration](../../../GOVERNANCE_SYSTEM_IMPLEMENTATION.md)
 
 ---

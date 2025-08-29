@@ -11,12 +11,12 @@ import { FilterPanel } from "./FilterPanel"
 import { ReflectionModal } from "./ReflectionModal"
 import { ZoomControls } from "./ZoomControls"
 import { DayDetailView } from "./DayDetailView"
-import { useLinearCalendar } from "@/hooks/useLinearCalendar"
+import { useCommandCenterCalendar } from "@/hooks/useCommandCenterCalendar"
 import type { Event } from "@/types/calendar"
 import { getDayAriaLabel, getMonthAriaLabel, announceToScreenReader } from "@/lib/accessibility"
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation"
 
-interface LinearCalendarVerticalProps {
+interface CommandCenterCalendarVerticalProps {
   initialYear?: number
   className?: string
   userId?: string
@@ -26,11 +26,11 @@ const WEEKDAY_ABBREVIATIONS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const COLUMNS_PER_ROW = 42 // 6 weeks × 7 days
 
-export function LinearCalendarVertical({ 
+export function CommandCenterCalendarVertical({ 
   initialYear = new Date().getFullYear(), 
   className,
   userId = 'default-user' 
-}: LinearCalendarVerticalProps) {
+}: CommandCenterCalendarVerticalProps) {
   const [year, setYear] = React.useState(initialYear)
   const [zoomLevel, setZoomLevel] = React.useState(1)
   
@@ -57,7 +57,7 @@ export function LinearCalendarVertical({
     endSelection,
     checkForOverlaps,
     loading
-  } = useLinearCalendar(year, userId)
+  } = useCommandCenterCalendar(year, userId)
 
   const [showFilters, setShowFilters] = React.useState(false)
   const [showDayDetail, setShowDayDetail] = React.useState(false)

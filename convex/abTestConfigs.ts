@@ -1,5 +1,5 @@
 /**
- * Production A/B Test Configurations for LinearTime
+ * Production A/B Test Configurations for Command Center Calendar
  * Horizontal Timeline Validation and User Experience Optimization
  */
 
@@ -37,7 +37,7 @@ export const initializeProductionTests = mutation({
         hypothesis:
           'Users will have better calendar overview and planning experience with horizontal timeline layout compared to traditional month view',
         description:
-          'Validate the core LinearTime value proposition: horizontal timeline provides superior calendar visualization and planning capabilities',
+          'Validate the core Command Center Calendar value proposition: horizontal timeline provides superior calendar visualization and planning capabilities',
         variants: [
           {
             id: 'horizontal_timeline',

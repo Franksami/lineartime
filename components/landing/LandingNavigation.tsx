@@ -14,7 +14,7 @@ export function LandingNavigation() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold">LinearTime</span>
+            <span className="text-xl font-bold">Command Center Calendar</span>
             <Badge variant="secondary" className="hidden sm:inline-flex ml-2">
               Beta
             </Badge>

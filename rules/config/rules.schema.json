@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Command Center Calendar Rules Schema",
+  "description": "Schema for validating Command Center Calendar rule files",
+  "type": "object",
+  "required": ["version", "priority"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the rule file"
+    },
+    "extends": {
+      "type": ["string", "null"],
+      "description": "Parent rule file to extend from"
+    },
+    "module": {
+      "type": "string",
+      "enum": [
+        "master",
+        "architecture",
+        "workflow",
+        "testing",
+        "performance",
+        "ai-integration",
+        "shared",
+        "claude",
+        "cursor"
+      ],
+      "description": "Module category for the rules"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["highest", "high", "medium", "low"],
+      "description": "Priority level for rule enforcement"
+    },
+    "override": {
+      "type": ["string", "boolean"],
+      "enum": [false, true, "partial"],
+      "description": "Whether child rules can override these rules"
+    },
+    "created": {
+      "type": "string",
+      "format": "date",
+      "description": "Creation date of the rule file"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author or team responsible for the rules"
+    },
+    "applies_to": {
+      "type": "string",
+      "description": "Scope of application for the rules"
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "priority", "enforcement"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Z]+-[A-Z0-9]+$",
+            "description": "Unique rule identifier"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+          },
+          "enforcement": {
+            "type": "string",
+            "enum": ["Automatic", "Manual", "Git hooks", "CI/CD", "ESLint", "Build guards"]
+          },
+          "description": {
+            "type": "string"
+          },
+          "violations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "examples": {
+            "type": "object",
+            "properties": {
+              "good": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "bad": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "priority"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path to the module rule file"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          },
+          "override": {
+            "type": ["boolean", "string"],
+            "enum": [false, true, "partial"]
+          }
+        }
+      }
+    }
+  }
+}

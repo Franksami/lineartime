@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * LinearCalendarModern - Phase 5.0 Comprehensive Integration
+ * CommandCenterCalendarModern - Phase 5.0 Comprehensive Integration
  *
  * The modernized calendar component preserving the immutable ASCII horizontal foundation
  * while integrating all 12+ systems for ultimate user experience.
@@ -114,7 +114,7 @@ import { type DayContentContext, DotDayContent, NumberDayContent } from '../slot
 // TYPE DEFINITIONS & INTERFACES
 // ═══════════════════════════════════════════════════════════════════════════
 
-interface LinearCalendarModernProps {
+interface CommandCenterCalendarModernProps {
   year: number;
   events: Event[];
   className?: string;
@@ -620,7 +620,7 @@ function FullYearGridModern({
 // MAIN LINEAR CALENDAR MODERN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════
 
-export function LinearCalendarModern({
+export function CommandCenterCalendarModern({
   year,
   events,
   className,
@@ -643,7 +643,7 @@ export function LinearCalendarModern({
   locale = 'en',
   maxEvents = 10000,
   virtualScrolling = true,
-}: LinearCalendarModernProps) {
+}: CommandCenterCalendarModernProps) {
   // ═══════════════════════════════════════════════════════════════════════════
   // SYSTEM INTEGRATION INITIALIZATION
   // ═══════════════════════════════════════════════════════════════════════════
@@ -2274,5 +2274,5 @@ export function LinearCalendarModern({
 // EXPORT & TYPE DECLARATIONS
 // ═══════════════════════════════════════════════════════════════════════════
 
-export type { LinearCalendarModernProps, SystemIntegrationState };
-export default LinearCalendarModern;
+export type { CommandCenterCalendarModernProps, SystemIntegrationState };
+export default CommandCenterCalendarModern;

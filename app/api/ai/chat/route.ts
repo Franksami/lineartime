@@ -223,7 +223,7 @@ export async function POST(request: Request) {
           },
         }),
       },
-      system: `You are an AI scheduling assistant for LinearTime, a revolutionary year-at-a-glance calendar application.
+      system: `You are an AI scheduling assistant for Command Center Calendar, a revolutionary year-at-a-glance calendar application.
         
         Philosophy: "Life is bigger than a week" - Help users think beyond weekly planning and optimize their entire year.
         

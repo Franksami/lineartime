@@ -892,7 +892,9 @@ export function CalendarLibrarySwitcher({
                           <h4 className="font-medium mb-2">Pros & Cons</h4>
                           <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <h5 className="text-sm font-medium text-green-600 /* TODO: Use semantic token */ mb-1">Pros</h5>
+                              <h5 className="text-sm font-medium text-green-600 /* TODO: Use semantic token */ mb-1">
+                                Pros
+                              </h5>
                               <ul className="text-xs space-y-1">
                                 {currentLib.pros.map((pro, index) => (
                                   <li key={index} className="flex items-start gap-2">
@@ -903,7 +905,9 @@ export function CalendarLibrarySwitcher({
                               </ul>
                             </div>
                             <div>
-                              <h5 className="text-sm font-medium text-red-600 /* TODO: Use semantic token */ mb-1">Cons</h5>
+                              <h5 className="text-sm font-medium text-red-600 /* TODO: Use semantic token */ mb-1">
+                                Cons
+                              </h5>
                               <ul className="text-xs space-y-1">
                                 {currentLib.cons.map((con, index) => (
                                   <li key={index} className="flex items-start gap-2">

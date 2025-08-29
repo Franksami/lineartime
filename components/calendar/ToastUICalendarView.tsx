@@ -476,7 +476,9 @@ export function ToastUICalendarView({
                         <p className="text-xs text-muted-foreground">Total Events</p>
                       </div>
                       <div className="space-y-1">
-                        <p className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">{stats.upcoming}</p>
+                        <p className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">
+                          {stats.upcoming}
+                        </p>
                         <p className="text-xs text-muted-foreground">Upcoming</p>
                       </div>
                       <div className="space-y-1">
@@ -484,7 +486,9 @@ export function ToastUICalendarView({
                         <p className="text-xs text-muted-foreground">Today</p>
                       </div>
                       <div className="space-y-1">
-                        <p className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">{stats.completed}</p>
+                        <p className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">
+                          {stats.completed}
+                        </p>
                         <p className="text-xs text-muted-foreground">Completed</p>
                       </div>
                     </div>

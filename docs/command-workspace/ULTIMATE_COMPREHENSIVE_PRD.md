@@ -1,4 +1,4 @@
-# LinearTime Command Workspace Hybrid — Ultimate Comprehensive PRD
+# Command Center Calendar Command Workspace Hybrid — Ultimate Comprehensive PRD
 
 Version: v2.0 (optimized, gap‑filled, governance‑ready)
 Owner: FE Platform + Calendar + AI
@@ -8,7 +8,7 @@ Status: Approved direction; implementation pending feature flags
 
 ## 0) Executive Summary
 
-We are adopting a Command Workspace Hybrid as the new, permanent product direction for LinearTime. The shell is a three‑pane workspace (Sidebar + Tabs + Context Dock) with a command‑first experience (⌘/Ctrl‑K) and an Omnibox (NL→Actions). All primary surfaces—calendar, tasks, notes, mailbox, automations—are unified as first‑class entities with consistent view scaffolds (Header + Content + Context). AI is integrated via Context Dock agents and Omnibox tool‑calls. Computer Vision (OpenCV) is consent‑first and local‑only with redaction.
+We are adopting a Command Workspace Hybrid as the new, permanent product direction for Command Center Calendar. The shell is a three‑pane workspace (Sidebar + Tabs + Context Dock) with a command‑first experience (⌘/Ctrl‑K) and an Omnibox (NL→Actions). All primary surfaces—calendar, tasks, notes, mailbox, automations—are unified as first‑class entities with consistent view scaffolds (Header + Content + Context). AI is integrated via Context Dock agents and Omnibox tool‑calls. Computer Vision (OpenCV) is consent‑first and local‑only with redaction.
 
 DEPRECATION: The “locked 12‑month horizontal foundation” is no longer the app shell. It is re‑scoped as an optional view (Year Lens). All shell work must target the new architecture and must not depend on legacy 12‑row invariants.
 

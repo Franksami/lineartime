@@ -38,7 +38,7 @@ import { useAccessibilityAAA } from '@/lib/accessibility';
 import { performanceMonitor } from '@/lib/performance/engagementPerformanceMonitor';
 
 // Analytics Integration
-import { useABTestContext } from '@/components/research/ABTestProvider';
+// import { useABTestContext } from '@/components/research/ABTestProvider';
 
 interface QuantumCalendarCoreProps {
   year: number;
@@ -201,7 +201,8 @@ export function QuantumCalendarCore({
   const tokens = useTokens();
   const featureFlags = useFeatureFlags();
   const { getAccessibleLabel, announceToScreenReader } = useAccessibilityAAA();
-  const { trackTimelineEvent } = useABTestContext();
+  // const { trackTimelineEvent } = useABTestContext();
+  const trackTimelineEvent = () => {}; // Stub for AB testing
 
   // Component State
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);

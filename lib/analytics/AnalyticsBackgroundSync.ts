@@ -501,7 +501,7 @@ export class AnalyticsBackgroundSync {
     }
 
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('LinearTimeAnalytics', 1);
+      const request = indexedDB.open('Command Center CalendarAnalytics', 1);
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => {
@@ -530,7 +530,7 @@ export class AnalyticsBackgroundSync {
     }
 
     return new Promise((resolve, _reject) => {
-      const request = indexedDB.open('LinearTimeAnalytics', 1);
+      const request = indexedDB.open('Command Center CalendarAnalytics', 1);
 
       request.onerror = () => resolve(null); // Fail gracefully
       request.onsuccess = () => {

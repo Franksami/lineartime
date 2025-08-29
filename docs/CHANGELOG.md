@@ -362,7 +362,7 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_[placeholder]
 
 ### Technical Details
 - **Components Removed:**
-  - LinearCalendar.tsx (old horizontal implementation)
+  - CommandCenterCalendar.tsx (old horizontal implementation)
   - MonthGrid.tsx, WeekRow.tsx, DayCell.tsx (grid components)
   - YearGrid.tsx, CalendarHeader.tsx (obsolete layouts)
   - EventList.tsx, EventBar.tsx (unused event displays)

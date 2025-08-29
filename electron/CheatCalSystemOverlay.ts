@@ -1,15 +1,15 @@
 /**
- * CheatCal Electron System Overlay - Superior to Cluely
+ * Command Center Electron System Overlay - Superior to Cluely
  * 
  * Revolutionary transparent overlay system that surpasses Cluely's implementation
  * through enhanced calendar coordination, multi-modal analysis, and sophisticated
  * controversial positioning for money-focused professionals.
  * 
  * Cluely Advantages: Transparent overlay, stealth operation, real-time analysis
- * CheatCal Superiority: + Calendar specialization + Multi-modal + Marketplace integration
+ * Command Center Superiority: + Calendar specialization + Multi-modal + Marketplace integration
  * 
  * @version 1.0.0 (Revolutionary Overlay Release)
- * @author CheatCal System Team
+ * @author Command Center System Team
  */
 
 import { BrowserWindow, screen, desktopCapturer, ipcMain, app } from 'electron';
@@ -75,7 +75,7 @@ SYSTEM OVERLAY LAYERS:
 `;
 
 /**
- * CheatCal System Overlay Configuration
+ * Command Center System Overlay Configuration
  */
 interface OverlayConfig {
   // Window configuration (Cluely-inspired + enhanced)
@@ -131,7 +131,7 @@ const DEFAULT_OVERLAY_CONFIG: OverlayConfig = {
 };
 
 /**
- * CheatCal System Overlay Manager
+ * Command Center System Overlay Manager
  * 
  * Superior to Cluely through calendar specialization and marketplace integration
  */
@@ -148,7 +148,7 @@ export class CheatCalSystemOverlay {
     this.visionEngine = new CheatCalVisionEngine();
     this.contextEngine = new CheatCalContextEngine();
     
-    console.log("🖥️ CheatCal System Overlay initializing (Superior to Cluely)...");
+    console.log("🖥️ Command Center System Overlay initializing (Superior to Cluely)...");
     console.log(SYSTEM_OVERLAY_ARCHITECTURE);
   }
 
@@ -172,7 +172,7 @@ export class CheatCalSystemOverlay {
       // Setup enhanced screen capture (beyond Cluely capabilities)
       await this.setupEnhancedScreenCapture();
       
-      // Initialize calendar coordination integration (CheatCal advantage)
+      // Initialize calendar coordination integration (Command Center advantage)
       this.setupCalendarCoordination();
       
       // Start superior analysis pipeline
@@ -182,11 +182,11 @@ export class CheatCalSystemOverlay {
       this.enableStealthMode();
       
       this.isActive = true;
-      console.log("🔥 CheatCal Superior Overlay System active!");
+      console.log("🔥 Command Center Superior Overlay System active!");
       
     } catch (error) {
       console.error("Superior overlay system initialization failed:", error);
-      throw new Error(`CheatCal System Overlay failed to initialize: ${error}`);
+      throw new Error(`Command Center System Overlay failed to initialize: ${error}`);
     }
   }
 
@@ -304,13 +304,13 @@ export class CheatCalSystemOverlay {
   }
 
   /**
-   * Setup Calendar Coordination Integration (CheatCal Advantage)
+   * Setup Calendar Coordination Integration (Command Center Advantage)
    * 
    * This is our key advantage over Cluely - deep calendar integration
    * for coordination optimization and productivity enhancement.
    */
   private setupCalendarCoordination(): void {
-    console.log("📅 Setting up calendar coordination integration (CheatCal advantage)...");
+    console.log("📅 Setting up calendar coordination integration (Command Center advantage)...");
 
     // Integration with existing quantum calendar infrastructure
     // This leverages our 133,222+ lines of calendar technology
@@ -348,7 +348,7 @@ export class CheatCalSystemOverlay {
       try {
         if (!this.isActive) return;
 
-        // Multi-modal analysis (CheatCal advantage)
+        // Multi-modal analysis (Command Center advantage)
         const screenContext = await this.visionEngine.analyzeScreenContent();
         const fullContext = await this.contextEngine.analyzeCurrentContext();
         
@@ -408,7 +408,7 @@ export class CheatCalSystemOverlay {
   }
 
   /**
-   * Analyze Coordination Opportunities (CheatCal Specialization)
+   * Analyze Coordination Opportunities (Command Center Specialization)
    * 
    * This is our key differentiation from Cluely - specialized coordination
    * analysis for productivity optimization and money-making enhancement.
@@ -426,7 +426,7 @@ export class CheatCalSystemOverlay {
         if (emailOpportunity) opportunities.push(emailOpportunity);
       }
 
-      // Calendar coordination opportunities (Unique CheatCal advantage)
+      // Calendar coordination opportunities (Unique Command Center advantage)
       if (screenContext.application === 'Google Calendar' || fullContext.calendar_context) {
         const calendarOpportunity = await this.analyzeCalendarCoordination(fullContext);
         if (calendarOpportunity) opportunities.push(calendarOpportunity);
@@ -438,7 +438,7 @@ export class CheatCalSystemOverlay {
         if (meetingOpportunity) opportunities.push(meetingOpportunity);
       }
 
-      // Workflow coordination opportunities (CheatCal specialization)
+      // Workflow coordination opportunities (Command Center specialization)
       if (this.detectProductivityWorkflow(screenContext)) {
         const workflowOpportunity = await this.analyzeWorkflowCoordination(screenContext, fullContext);
         if (workflowOpportunity) opportunities.push(workflowOpportunity);
@@ -635,7 +635,7 @@ export class CheatCalSystemOverlay {
     <div class="cheatcal-overlay-container" id="overlay-container">
         <!-- Controversial monitoring status -->
         <div class="cheatcal-monitoring-status monitoring-pulse" id="monitoring-status">
-            👁️ CheatCal Active - Optimizing Productivity
+            👁️ Command Center Active - Optimizing Productivity
         </div>
         
         <!-- Dynamic suggestion containers will be inserted here -->
@@ -685,7 +685,7 @@ export class CheatCalSystemOverlay {
                 const fps = Math.round((frameCount * 1000) / (now - lastFPSCheck));
                 
                 if (fps < 60) {
-                    console.warn('CheatCal FPS below target:', fps);
+                    console.warn('Command Center FPS below target:', fps);
                 }
                 
                 frameCount = 0;
@@ -697,7 +697,7 @@ export class CheatCalSystemOverlay {
         
         monitorPerformance();
         
-        console.log("🔥 CheatCal Superior Overlay Interface loaded");
+        console.log("🔥 Command Center Superior Overlay Interface loaded");
     </script>
 </body>
 </html>`;
@@ -743,7 +743,7 @@ export class CheatCalSystemOverlay {
     
     return `
       <div class="cheatcal-suggestion-header">
-        🧠 CheatCal Coordination Opportunity
+        🧠 Command Center Coordination Opportunity
         <span style="color: #10b981; font-size: 12px;">
           $${(primaryOpportunity.value_estimate / 1000).toFixed(0)}K impact
         </span>
@@ -861,7 +861,7 @@ export class CheatCalSystemOverlay {
     // Performance monitoring to ensure 60+ FPS maintained
     const memoryUsage = process.memoryUsage();
     if (memoryUsage.heapUsed > 100 * 1024 * 1024) { // 100MB threshold
-      console.warn("⚠️ CheatCal overlay memory usage high:", memoryUsage.heapUsed / 1024 / 1024, "MB");
+      console.warn("⚠️ Command Center overlay memory usage high:", memoryUsage.heapUsed / 1024 / 1024, "MB");
     }
   }
 
@@ -876,7 +876,7 @@ export class CheatCalSystemOverlay {
    * Destroy Overlay System
    */
   destroy(): void {
-    console.log("🛑 Destroying CheatCal superior overlay system...");
+    console.log("🛑 Destroying Command Center superior overlay system...");
     
     if (this.analysisTimer) {
       clearInterval(this.analysisTimer);

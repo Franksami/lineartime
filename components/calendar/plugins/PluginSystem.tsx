@@ -342,7 +342,7 @@ export const samplePlugins = {
     name: 'Event Statistics',
     version: '1.0.0',
     description: 'Provides real-time statistics about events',
-    author: 'LinearTime Team',
+    author: 'Command Center Calendar Team',
 
     install(api: PluginAPI) {
       api.registerAction('getEventStats', () => {
@@ -372,7 +372,7 @@ export const samplePlugins = {
     name: 'Quick Actions',
     version: '1.0.0',
     description: 'Adds quick action buttons for common tasks',
-    author: 'LinearTime Team',
+    author: 'Command Center Calendar Team',
 
     install(api: PluginAPI) {
       api.registerAction('duplicateEvent', (eventId: string) => {
@@ -406,7 +406,7 @@ export const samplePlugins = {
     name: 'Auto Backup',
     version: '1.0.0',
     description: 'Automatically backs up events to local storage',
-    author: 'LinearTime Team',
+    author: 'Command Center Calendar Team',
 
     settings: {
       backupInterval: 300000, // 5 minutes

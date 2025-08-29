@@ -68,7 +68,7 @@ export function PrivacySettings() {
             <div className="space-y-0.5">
               <Label htmlFor="analytics">Usage Analytics</Label>
               <p className="text-sm text-muted-foreground">
-                Help improve LinearTime by sharing anonymous usage data
+                Help improve Command Center Calendar by sharing anonymous usage data
               </p>
             </div>
             <Switch
@@ -119,7 +119,7 @@ export function PrivacySettings() {
                 <div className="space-y-0.5">
                   <p className="text-sm font-medium">Export All Data</p>
                   <p className="text-xs text-muted-foreground">
-                    Download all your LinearTime data as JSON
+                    Download all your Command Center Calendar data as JSON
                   </p>
                 </div>
                 <Button variant="outline" size="sm" onClick={exportData}>
@@ -146,9 +146,9 @@ export function PrivacySettings() {
               <div className="space-y-1">
                 <p className="text-sm font-medium">Privacy Notice</p>
                 <p className="text-xs text-muted-foreground">
-                  LinearTime stores all data locally in your browser. No data is sent to external
-                  servers unless you explicitly enable analytics or crash reporting. Your calendar
-                  events and settings never leave your device.
+                  Command Center Calendar stores all data locally in your browser. No data is sent
+                  to external servers unless you explicitly enable analytics or crash reporting.
+                  Your calendar events and settings never leave your device.
                 </p>
               </div>
             </div>

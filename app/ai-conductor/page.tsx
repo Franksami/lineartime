@@ -1,5 +1,5 @@
 /**
- * CheatCal AI Conductor - Revolutionary Multi-Modal AI Dashboard
+ * Command Center AI Conductor - Revolutionary Multi-Modal AI Dashboard
  *
  * Demonstration page showcasing the integrated AI enhancement layer with
  * computer vision, voice processing, and OpenAI integration for controversial
@@ -8,8 +8,8 @@
  * Core Controversy: "The AI that orchestrates your entire digital experience"
  * Value Proposition: Invisible productivity amplification through multi-modal AI
  *
- * @version CheatCal Phase 3.0 (Revolutionary Enhancement)
- * @author CheatCal AI Enhancement Showcase
+ * @version Command Center Phase 3.0 (Revolutionary Enhancement)
+ * @author Command Center AI Enhancement Showcase
  */
 
 'use client';
@@ -37,7 +37,7 @@ import { AICapacityRibbon } from '@/components/ai/AICapacityRibbon';
 import AIConductorInterface from '@/components/ai/AIConductorInterface';
 import { AIConflictDetector } from '@/components/ai/AIConflictDetector';
 import { AIInsightPanel } from '@/components/ai/AIInsightPanel';
-// CheatCal AI Components
+// Command Center AI Components
 import { CheatCalAIEnhancementLayer } from '@/components/ai/CheatCalAIEnhancementLayer';
 
 import { Badge } from '@/components/ui/badge';
@@ -193,7 +193,7 @@ export default function AIConductorPage() {
                   />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold">CheatCal AI Conductor</h1>
+                  <h1 className="text-3xl font-bold">Command Center AI Conductor</h1>
                   <p className="text-muted-foreground">
                     Revolutionary Multi-Modal AI Integration Showcase
                   </p>
@@ -278,7 +278,9 @@ export default function AIConductorPage() {
               whileHover={{ scale: 1.05 }}
             >
               <Activity className="w-8 h-8 mx-auto mb-2 text-green-500 /* TODO: Use semantic token */" />
-              <div className="text-3xl font-bold text-green-500 /* TODO: Use semantic token */">{currentFPS}</div>
+              <div className="text-3xl font-bold text-green-500 /* TODO: Use semantic token */">
+                {currentFPS}
+              </div>
               <div className="text-sm text-muted-foreground">FPS Maintained</div>
               <Progress value={(currentFPS / 120) * 100} className="mt-2" />
             </motion.div>
@@ -298,7 +300,9 @@ export default function AIConductorPage() {
               whileHover={{ scale: 1.05 }}
             >
               <Zap className="w-8 h-8 mx-auto mb-2 text-yellow-500 /* TODO: Use semantic token */" />
-              <div className="text-3xl font-bold text-yellow-500 /* TODO: Use semantic token */">{aiProcessingTime}ms</div>
+              <div className="text-3xl font-bold text-yellow-500 /* TODO: Use semantic token */">
+                {aiProcessingTime}ms
+              </div>
               <div className="text-sm text-muted-foreground">AI Processing</div>
               <Progress value={(aiProcessingTime / 50) * 100} className="mt-2" />
             </motion.div>
@@ -312,7 +316,9 @@ export default function AIConductorPage() {
                 {formatCurrency(totalRevenueOptimized)}
               </div>
               <div className="text-sm text-muted-foreground">Revenue Optimized</div>
-              <div className="mt-2 text-xs text-green-600 /* TODO: Use semantic token */">+{insights.length} opportunities</div>
+              <div className="mt-2 text-xs text-green-600 /* TODO: Use semantic token */">
+                +{insights.length} opportunities
+              </div>
             </motion.div>
           </div>
         </Card>
@@ -636,8 +642,9 @@ export default function AIConductorPage() {
             <div>
               <h2 className="text-2xl font-bold mb-2">Ready to Experience Revolutionary AI?</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                CheatCal's AI enhancement layer represents the future of productivity optimization.
-                Experience controversial but powerful multi-modal AI that transforms how you work.
+                Command Center's AI enhancement layer represents the future of productivity
+                optimization. Experience controversial but powerful multi-modal AI that transforms
+                how you work.
               </p>
             </div>
 

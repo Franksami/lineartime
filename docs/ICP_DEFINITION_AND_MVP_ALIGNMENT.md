@@ -5,7 +5,7 @@
 
 ## 📋 **EXECUTIVE SUMMARY**
 
-Based on comprehensive market research, YC analysis, and LinearTime's Phase 6 validation (96.2% statistical significance), we have identified the precise ICP and core pain point for our Vibe-Coding Calendar Agent MVP.
+Based on comprehensive market research, YC analysis, and Command Center Calendar's Phase 6 validation (96.2% statistical significance), we have identified the precise ICP and core pain point for our Vibe-Coding Calendar Agent MVP.
 
 **The Bottom Line**: We're building the **"Cursor for Calendars"** for **Creative Developers & Technical Creators** who need intelligent scheduling that understands their flow states.
 
@@ -146,7 +146,7 @@ Based on ICP analysis, our MVP focuses on **3 core features** that directly solv
 
 ### **Design Principles for Creative Developers**
 
-Based on LinearTime's existing design research and ICP analysis:
+Based on Command Center Calendar's existing design research and ICP analysis:
 
 #### **1. Cursor-Inspired Interface**
 - **Clean, minimal aesthetic** (like Cursor's interface)

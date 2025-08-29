@@ -1,11 +1,11 @@
 /**
- * CheatCal Vision Consent Component
+ * Command Center Vision Consent Component
  *
  * Privacy-first computer vision consent UI with transparent controls.
  * Revolutionary screen analysis with user consent and control.
  *
- * @version CheatCal Phase 3.0
- * @author CheatCal AI Enhancement System
+ * @version Command Center Phase 3.0
+ * @author Command Center AI Enhancement System
  */
 
 'use client';
@@ -288,7 +288,7 @@ export function CheatCalVisionConsent({
                   <Eye className="w-6 h-6" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold">CheatCal Computer Vision</h2>
+                  <h2 className="text-2xl font-bold">Command Center Computer Vision</h2>
                   <p className="text-muted-foreground">
                     Revolutionary productivity monitoring with your consent
                   </p>
@@ -345,7 +345,7 @@ export function CheatCalVisionConsent({
                         The AI That Watches Everything You Do
                       </h3>
                       <p className="text-muted-foreground max-w-2xl mx-auto">
-                        CheatCal's computer vision system analyzes your screen in real-time to
+                        Command Center's computer vision system analyzes your screen in real-time to
                         optimize productivity and find coordination opportunities. This is
                         controversial but powerful technology.
                       </p>
@@ -431,7 +431,7 @@ export function CheatCalVisionConsent({
                   <div className="text-center">
                     <h3 className="text-xl font-bold mb-2">Permission Controls</h3>
                     <p className="text-muted-foreground">
-                      Choose exactly what CheatCal can monitor. You have complete control.
+                      Choose exactly what Command Center can monitor. You have complete control.
                     </p>
                   </div>
 
@@ -441,7 +441,7 @@ export function CheatCalVisionConsent({
                         key: 'screenCapture' as keyof VisionPermissions,
                         icon: <Monitor className="w-5 h-5" />,
                         title: 'Screen Capture Access',
-                        description: 'Allow CheatCal to capture your screen for analysis',
+                        description: 'Allow Command Center to capture your screen for analysis',
                         required: true,
                         privacy: 'Processed locally, not stored permanently',
                       },
@@ -542,7 +542,7 @@ export function CheatCalVisionConsent({
                   <div className="text-center">
                     <h3 className="text-xl font-bold mb-2">System Preview</h3>
                     <p className="text-muted-foreground">
-                      Ready to activate CheatCal's computer vision system
+                      Ready to activate Command Center's computer vision system
                     </p>
                   </div>
 
@@ -570,7 +570,9 @@ export function CheatCalVisionConsent({
                         <div className="text-sm text-muted-foreground">Analyses Completed</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-green-500 /* TODO: Use semantic token */">90%</div>
+                        <div className="text-2xl font-bold text-green-500 /* TODO: Use semantic token */">
+                          90%
+                        </div>
                         <div className="text-sm text-muted-foreground">On-Device Processing</div>
                       </div>
                     </div>
@@ -609,8 +611,9 @@ export function CheatCalVisionConsent({
                           Ready for Productivity Cheating
                         </h4>
                         <p className="text-blue-700 /* TODO: Use semantic token */ dark:text-blue-300 /* TODO: Use semantic token */ text-sm">
-                          Your CheatCal computer vision system is configured and ready to help you
-                          optimize productivity through controversial but powerful screen analysis.
+                          Your Command Center computer vision system is configured and ready to help
+                          you optimize productivity through controversial but powerful screen
+                          analysis.
                         </p>
                       </div>
                     </div>
@@ -631,7 +634,7 @@ export function CheatCalVisionConsent({
                   </div>
 
                   <div>
-                    <h3 className="text-2xl font-bold mb-2">CheatCal Vision Activated!</h3>
+                    <h3 className="text-2xl font-bold mb-2">Command Center Vision Activated!</h3>
                     <p className="text-muted-foreground max-w-md mx-auto">
                       Your controversial but powerful productivity monitoring system is now active
                       and ready to help you cheat at productivity.

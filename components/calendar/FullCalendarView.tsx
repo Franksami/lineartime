@@ -2,7 +2,7 @@
  * FullCalendar Pro Integration View
  *
  * Professional calendar component using FullCalendar library with drag & drop,
- * multiple views, and enterprise features for CheatCal platform.
+ * multiple views, and enterprise features for Command Center platform.
  *
  * Features:
  * - Multiple view types (month, week, day, list)
@@ -11,7 +11,7 @@
  * - Real-time sync with calendar providers
  * - Professional styling with shadcn/ui integration
  *
- * @version 2.0.0 (CheatCal Integration)
+ * @version 2.0.0 (Command Center Integration)
  */
 
 'use client';

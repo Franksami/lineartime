@@ -1,0 +1,169 @@
+# Rule Inheritance Tree Configuration
+# Defines how rules inherit and override each other
+
+version: 1.0.0
+updated: 2024-12-28
+
+# Root level - highest authority
+root:
+  file: RULES_MASTER.md
+  priority: highest
+  override: false  # Cannot be overridden
+  
+  # Core immutable rules
+  immutable_rules:
+    - CORE-001  # Command Workspace Architecture
+    - CORE-002  # Foundation Protection
+    - CORE-003  # Performance Requirements
+    - CORE-004  # Testing Requirements
+
+# Module level - extends root
+modules:
+  architecture:
+    file: modules/architecture.rules.md
+    extends: root
+    priority: high
+    override: false
+    rules:
+      - ARCH-001 through ARCH-016
+      - ARCH-M001 through ARCH-M016
+    
+  workflow:
+    file: modules/workflow.rules.md
+    extends: root
+    priority: high
+    override: false
+    rules:
+      - WORK-001 through WORK-003
+      - WORK-M001 through WORK-M015
+    
+  testing:
+    file: modules/testing.rules.md
+    extends: root
+    priority: medium
+    override: false
+    rules:
+      - TEST-001 through TEST-003
+      - TEST-M001 through TEST-M015
+    
+  performance:
+    file: modules/performance.rules.md
+    extends: root
+    priority: medium
+    override: false
+    rules:
+      - PERF-001 through PERF-002
+      - PERF-M001 through PERF-M014
+    
+  ai_integration:
+    file: modules/ai-integration.rules.md
+    extends: root
+    priority: high
+    override: partial  # Can override non-critical rules
+    rules:
+      - AI-001 through AI-003
+      - AI-M001 through AI-M014
+
+# AI Assistant level - extends modules
+ai_assistants:
+  shared:
+    file: ai-assistants/_shared.config.md
+    extends: all_modules
+    priority: base
+    applies_to: 
+      - claude
+      - cursor
+      - windsurf
+      - gemini
+      - trae
+      - roo
+      - cline
+    
+  claude:
+    file: ai-assistants/claude.config.md
+    extends: shared
+    priority: high
+    specific_rules:
+      - Context window: 200K tokens
+      - MCP preferences
+      - Sequential thinking patterns
+    
+  cursor:
+    file: ai-assistants/cursor.config.md
+    extends: shared
+    priority: high
+    specific_rules:
+      - IDE integration
+      - Agent/Ask/Inline modes
+      - Keybindings
+
+# Rule precedence order
+precedence:
+  1: RULES_MASTER.md (immutable rules)
+  2: Module rules (by priority)
+  3: AI assistant shared config
+  4: AI assistant specific config
+  5: User overrides (if allowed)
+
+# Conflict resolution
+conflict_resolution:
+  strategy: highest_priority_wins
+  tiebreaker: most_specific_wins
+  fallback: RULES_MASTER.md
+
+# Validation requirements
+validation:
+  schema: config/rules.schema.json
+  required_fields:
+    - version
+    - priority
+    - extends (except root)
+  
+  enforcement_levels:
+    CRITICAL: 
+      action: block_build
+      cannot_override: true
+    HIGH:
+      action: require_review
+      can_override: with_justification
+    MEDIUM:
+      action: warning
+      can_override: true
+    LOW:
+      action: info_only
+      can_override: true
+
+# Auto-activation triggers
+auto_activation:
+  complexity_based:
+    low: []
+    medium: [testing, performance]
+    high: [architecture, workflow, ai_integration]
+    critical: [all_modules]
+  
+  pattern_based:
+    imports: [architecture]
+    testing: [testing, performance]
+    ui_components: [architecture, performance]
+    api_endpoints: [architecture, workflow, testing]
+  
+  file_based:
+    "*.test.tsx": [testing]
+    "*.e2e.tsx": [testing, performance]
+    "components/**": [architecture]
+    "api/**": [workflow, testing]
+
+# Inheritance chain example
+example_chain:
+  # For a Claude AI working on a UI component:
+  1: RULES_MASTER.md
+  2: architecture.rules.md
+  3: performance.rules.md
+  4: _shared.config.md
+  5: claude.config.md
+  
+  # Resolution order:
+  # - Claude-specific overrides shared
+  # - Shared overrides modules
+  # - Modules extend master
+  # - Master rules are final

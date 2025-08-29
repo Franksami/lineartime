@@ -2,7 +2,7 @@
  * Motion System Hook
  *
  * Custom 5KB motion system (vs 32KB Framer Motion) with audio-visual sync
- * and enterprise-grade performance optimization for CheatCal platform.
+ * and enterprise-grade performance optimization for Command Center platform.
  *
  * Features:
  * - Physics-based animations with 112+ FPS targets
@@ -10,7 +10,7 @@
  * - Reduced motion accessibility compliance
  * - Performance monitoring and optimization
  *
- * @version 2.0.0 (CheatCal Motion System)
+ * @version 2.0.0 (Command Center Motion System)
  */
 
 'use client';

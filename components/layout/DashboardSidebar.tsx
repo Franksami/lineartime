@@ -62,7 +62,7 @@ const navigationItems: NavigationItem[] = [
     isNew: true,
   },
   {
-    name: 'CheatCal 💀',
+    name: 'Command Center 💀',
     href: '/cheatcal',
     icon: Brain,
     description: 'The controversial AI that cheats at productivity',
@@ -125,7 +125,7 @@ export function DashboardSidebar() {
           <div className="flex items-center space-x-2">
             <Calendar className="h-8 w-8 text-primary" />
             <div>
-              <h1 className="text-xl font-bold">LinearTime</h1>
+              <h1 className="text-xl font-bold">Command Center Calendar</h1>
               <p className="text-xs text-muted-foreground">Life is bigger than a week</p>
             </div>
           </div>

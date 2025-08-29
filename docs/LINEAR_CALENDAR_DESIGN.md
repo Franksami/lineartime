@@ -366,7 +366,7 @@ Legend:
 
 ### Complete Props Interface
 ```typescript
-interface LinearCalendarProps {
+interface CommandCenterCalendarProps {
   // Data
   year: number;
   events: CalendarEvent[];

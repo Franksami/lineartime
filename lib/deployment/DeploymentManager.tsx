@@ -834,7 +834,7 @@ export class DeploymentManager {
         timeout: healthCheck.timeout,
         headers: {
           Accept: 'application/json',
-          'User-Agent': 'LinearTime-HealthCheck/1.0',
+          'User-Agent': 'Command Center Calendar-HealthCheck/1.0',
         },
       });
 
@@ -1723,7 +1723,7 @@ export class DeploymentManager {
 
     const payload = {
       channel: slackConfig.channel,
-      username: 'LinearTime Deployment Bot',
+      username: 'Command Center Calendar Deployment Bot',
       icon_emoji: ':rocket:',
       attachments: [
         {
@@ -1752,7 +1752,7 @@ export class DeploymentManager {
     // In production, would send actual email using SMTP
     console.log('Email notification:', {
       to: emailConfig.recipients,
-      subject: `LinearTime Deployment: ${data.message}`,
+      subject: `Command Center Calendar Deployment: ${data.message}`,
       body: `
         Level: ${data.level}
         Message: ${data.message}

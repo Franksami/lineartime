@@ -1,6 +1,6 @@
 {
-  "name": "LinearTime Calendar",
-  "short_name": "LinearTime",
+  "name": "Command Center Calendar",
+  "short_name": "Command Center Calendar",
   "description": "Life is bigger than a week - A comprehensive linear calendar for long-term planning",
   "start_url": "/",
   "display": "standalone",
@@ -35,14 +35,14 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "LinearTime Calendar Desktop View"
+      "label": "Command Center Calendar Calendar Desktop View"
     },
     {
       "src": "/screenshot-mobile.png", 
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "LinearTime Calendar Mobile View"
+      "label": "Command Center Calendar Calendar Mobile View"
     }
   ],
   "shortcuts": [

@@ -3,10 +3,10 @@
  * Main route for the new three-pane shell architecture
  */
 
-import { Suspense } from 'react'
-import { AppShell } from '@/components/shell/AppShell'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
+import { Suspense } from 'react';
+import { AppShell } from '@/components/shell/AppShell';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 
 /**
  * Main Command Workspace Page
@@ -19,7 +19,7 @@ export default function CommandWorkspaceApp() {
         <AppShell />
       </Suspense>
     </div>
-  )
+  );
 }
 
 /**
@@ -32,18 +32,17 @@ function CommandWorkspaceLoading() {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
         <h2 className="text-xl font-semibold">Loading Command Workspace...</h2>
         <p className="text-muted-foreground">Setting up three-pane shell</p>
-        <div className="text-xs text-muted-foreground">
-          Research-validated architecture loading
-        </div>
+        <div className="text-xs text-muted-foreground">Research-validated architecture loading</div>
       </div>
     </div>
-  )
+  );
 }
 
 /**
  * Metadata for the Command Workspace app
  */
 export const metadata = {
-  title: 'Command Workspace | LinearTime',
-  description: 'AI-powered productivity platform with command-first navigation and contextual AI agents',
-}
+  title: 'Command Workspace | Command Center Calendar',
+  description:
+    'AI-powered productivity platform with command-first navigation and contextual AI agents',
+};

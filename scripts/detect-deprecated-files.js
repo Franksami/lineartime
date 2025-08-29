@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
- * CheatCal Deprecated File Detection System
- * 
+ * Command Center Deprecated File Detection System
+ *
  * Automatically detects and reports deprecated files, unused imports,
  * dead code, and outdated dependencies for clean codebase maintenance.
- * 
- * Part of the comprehensive quality assurance system for CheatCal development.
- * 
+ *
+ * Part of the comprehensive quality assurance system for Command Center development.
+ *
  * @version 1.0.0 (Automated Cleanup Release)
- * @author CheatCal Quality Team
+ * @author Command Center Quality Team
  */
 
 const fs = require('fs');
@@ -53,8 +53,8 @@ class DeprecatedFileDetector {
     this.unusedImports = [];
     this.deadCode = [];
     this.outdatedDependencies = [];
-    
-    console.log('🔍 CheatCal Deprecated File Detection initializing...');
+
+    console.log('🔍 Command Center Deprecated File Detection initializing...');
     console.log(CLEANUP_ARCHITECTURE);
   }
 
@@ -75,9 +75,8 @@ class DeprecatedFileDetector {
         deprecatedFiles: this.deprecatedFiles,
         unusedImports: this.unusedImports,
         deadCode: this.deadCode,
-        outdatedDependencies: this.outdatedDependencies
+        outdatedDependencies: this.outdatedDependencies,
       };
-
     } catch (error) {
       console.error('\n💥 Detection failed:', error.message);
       throw error;
@@ -92,28 +91,27 @@ class DeprecatedFileDetector {
 
     try {
       // Use knip for dead code detection
-      const knipOutput = execSync('npx knip --reporter json', { 
+      const knipOutput = execSync('npx knip --reporter json', {
         encoding: 'utf8',
-        cwd: this.projectRoot 
+        cwd: this.projectRoot,
       });
-      
+
       const knipResults = JSON.parse(knipOutput);
-      
+
       // Extract unused files
-      Object.keys(knipResults).forEach(file => {
+      Object.keys(knipResults).forEach((file) => {
         const issues = knipResults[file];
         if (issues.unlisted || issues.unused) {
           this.deprecatedFiles.push({
             file,
             type: 'unused_file',
             reason: issues.unlisted ? 'Not listed in package.json' : 'No imports detected',
-            safeToDelete: this.isSafeToDelete(file)
+            safeToDelete: this.isSafeToDelete(file),
           });
         }
       });
 
       console.log(`   Found ${this.deprecatedFiles.length} potentially unused files`);
-
     } catch (error) {
       console.warn('   Knip analysis failed, using manual detection');
       await this.manualUnusedFileDetection();
@@ -130,25 +128,25 @@ class DeprecatedFileDetector {
       // Get all TypeScript/JavaScript files
       const files = glob.sync('**/*.{ts,tsx,js,jsx}', {
         cwd: this.projectRoot,
-        ignore: ['node_modules/**', 'dist/**', '.next/**', 'coverage/**']
+        ignore: ['node_modules/**', 'dist/**', '.next/**', 'coverage/**'],
       });
 
-      for (const file of files.slice(0, 50)) { // Limit for performance
+      for (const file of files.slice(0, 50)) {
+        // Limit for performance
         const filePath = path.join(this.projectRoot, file);
         const content = fs.readFileSync(filePath, 'utf8');
-        
+
         const unusedImports = this.findUnusedImports(content, file);
         if (unusedImports.length > 0) {
           this.unusedImports.push({
             file,
             unusedImports,
-            canAutoFix: true
+            canAutoFix: true,
           });
         }
       }
 
       console.log(`   Found ${this.unusedImports.length} files with unused imports`);
-
     } catch (error) {
       console.error('   Unused import detection failed:', error.message);
     }
@@ -164,29 +162,29 @@ class DeprecatedFileDetector {
       {
         pattern: /\/\* TODO:.*\*\/|\/\/ TODO:/g,
         type: 'todo_comments',
-        severity: 'info'
+        severity: 'info',
       },
       {
         pattern: /console\.log|console\.debug/g,
-        type: 'debug_statements', 
-        severity: 'warning'
+        type: 'debug_statements',
+        severity: 'warning',
       },
       {
         pattern: /function\s+\w+.*{[\s\S]*?\/\*\s*deprecated\s*\*\//gi,
         type: 'deprecated_functions',
-        severity: 'high'
+        severity: 'high',
       },
       {
         pattern: /import.*from\s+['"][^'"]*deprecated[^'"]*['"]/g,
         type: 'deprecated_imports',
-        severity: 'high'
-      }
+        severity: 'high',
+      },
     ];
 
     try {
       const files = glob.sync('**/*.{ts,tsx,js,jsx}', {
         cwd: this.projectRoot,
-        ignore: ['node_modules/**', 'dist/**', '.next/**']
+        ignore: ['node_modules/**', 'dist/**', '.next/**'],
       });
 
       for (const file of files) {
@@ -201,17 +199,16 @@ class DeprecatedFileDetector {
               type,
               severity,
               instances: matches.length,
-              locations: matches.map(match => ({
+              locations: matches.map((match) => ({
                 line: content.substring(0, match.index).split('\n').length,
-                content: match[0]
-              }))
+                content: match[0],
+              })),
             });
           }
         });
       }
 
       console.log(`   Found ${this.deadCode.length} dead code patterns`);
-
     } catch (error) {
       console.error('   Dead code detection failed:', error.message);
     }
@@ -225,14 +222,14 @@ class DeprecatedFileDetector {
 
     try {
       // Use npm outdated for dependency analysis
-      const outdatedOutput = execSync('pnpm outdated --format json', { 
+      const outdatedOutput = execSync('pnpm outdated --format json', {
         encoding: 'utf8',
-        cwd: this.projectRoot 
+        cwd: this.projectRoot,
       });
-      
+
       const outdated = JSON.parse(outdatedOutput);
-      
-      Object.keys(outdated).forEach(pkg => {
+
+      Object.keys(outdated).forEach((pkg) => {
         const info = outdated[pkg];
         this.outdatedDependencies.push({
           package: pkg,
@@ -240,12 +237,11 @@ class DeprecatedFileDetector {
           wanted: info.wanted,
           latest: info.latest,
           severity: this.calculateUpdateSeverity(info),
-          autoUpdateSafe: this.isAutoUpdateSafe(pkg, info)
+          autoUpdateSafe: this.isAutoUpdateSafe(pkg, info),
         });
       });
 
       console.log(`   Found ${this.outdatedDependencies.length} outdated dependencies`);
-
     } catch (error) {
       console.warn('   Outdated dependency detection failed, continuing...');
     }
@@ -258,28 +254,27 @@ class DeprecatedFileDetector {
     console.log('🔒 Detecting security vulnerabilities...');
 
     try {
-      const auditOutput = execSync('pnpm audit --audit-level moderate --json', { 
+      const auditOutput = execSync('pnpm audit --audit-level moderate --json', {
         encoding: 'utf8',
-        cwd: this.projectRoot 
+        cwd: this.projectRoot,
       });
-      
+
       const auditResults = JSON.parse(auditOutput);
-      
+
       if (auditResults.vulnerabilities) {
-        Object.keys(auditResults.vulnerabilities).forEach(pkg => {
+        Object.keys(auditResults.vulnerabilities).forEach((pkg) => {
           const vuln = auditResults.vulnerabilities[pkg];
           this.securityIssues.push({
             package: pkg,
             severity: vuln.severity,
             title: vuln.title,
             fixAvailable: vuln.fixAvailable,
-            autoFixable: vuln.severity !== 'critical'
+            autoFixable: vuln.severity !== 'critical',
           });
         });
       }
 
       console.log(`   Found ${(this.securityIssues || []).length} security vulnerabilities`);
-
     } catch (error) {
       console.warn('   Security audit failed:', error.message);
     }
@@ -289,39 +284,39 @@ class DeprecatedFileDetector {
    * Generate Comprehensive Detection Report
    */
   generateReport() {
-    console.log('\n📋 CheatCal Cleanup Detection Report');
-    console.log('=' .repeat(50));
+    console.log('\n📋 Command Center Cleanup Detection Report');
+    console.log('='.repeat(50));
 
     // Deprecated Files Summary
     console.log('\n📁 Deprecated Files:');
     console.log(`   Total: ${this.deprecatedFiles.length}`);
-    const safeToDelete = this.deprecatedFiles.filter(f => f.safeToDelete);
+    const safeToDelete = this.deprecatedFiles.filter((f) => f.safeToDelete);
     console.log(`   Safe to delete: ${safeToDelete.length}`);
-    
+
     if (safeToDelete.length > 0) {
       console.log('\n   Safe deletion candidates:');
-      safeToDelete.forEach(file => {
+      safeToDelete.forEach((file) => {
         console.log(`   • ${file.file} (${file.reason})`);
       });
     }
 
-    // Unused Imports Summary  
+    // Unused Imports Summary
     console.log('\n📥 Unused Imports:');
     console.log(`   Files affected: ${this.unusedImports.length}`);
-    const autoFixable = this.unusedImports.filter(f => f.canAutoFix);
+    const autoFixable = this.unusedImports.filter((f) => f.canAutoFix);
     console.log(`   Auto-fixable: ${autoFixable.length}`);
 
     // Dead Code Summary
     console.log('\n⚰️ Dead Code Patterns:');
-    const highSeverity = this.deadCode.filter(c => c.severity === 'high');
-    const warnings = this.deadCode.filter(c => c.severity === 'warning');
+    const highSeverity = this.deadCode.filter((c) => c.severity === 'high');
+    const warnings = this.deadCode.filter((c) => c.severity === 'warning');
     console.log(`   High severity: ${highSeverity.length}`);
     console.log(`   Warnings: ${warnings.length}`);
 
     // Dependencies Summary
     console.log('\n📦 Outdated Dependencies:');
     console.log(`   Total outdated: ${this.outdatedDependencies.length}`);
-    const autoUpdatable = this.outdatedDependencies.filter(d => d.autoUpdateSafe);
+    const autoUpdatable = this.outdatedDependencies.filter((d) => d.autoUpdateSafe);
     console.log(`   Auto-updatable: ${autoUpdatable.length}`);
 
     // Recommendations
@@ -343,42 +338,41 @@ class DeprecatedFileDetector {
   // Helper Methods
 
   isSafeToDelete(file) {
-    const safePaths = [
-      'test-results',
-      '.next',
-      'coverage',
-      'dist',
-      'build'
-    ];
+    const safePaths = ['test-results', '.next', 'coverage', 'dist', 'build'];
 
     const unsafePaths = [
       'components/calendar/LinearCalendarHorizontal',
-      'app/dashboard', 
+      'app/dashboard',
       'app/cheatcal',
       'convex',
       'lib/ai',
-      'lib/marketplace'
+      'lib/marketplace',
     ];
 
-    return safePaths.some(safe => file.includes(safe)) && 
-           !unsafePaths.some(unsafe => file.includes(unsafe));
+    return (
+      safePaths.some((safe) => file.includes(safe)) &&
+      !unsafePaths.some((unsafe) => file.includes(unsafe))
+    );
   }
 
   findUnusedImports(content, file) {
     const unusedImports = [];
-    
+
     try {
       // Simple regex-based detection (could be enhanced with AST parsing)
       const importLines = content.match(/^import .* from .*;$/gm) || [];
-      
-      importLines.forEach(line => {
+
+      importLines.forEach((line) => {
         const importMatch = line.match(/import\s+{([^}]+)}/);
         if (importMatch) {
-          const imports = importMatch[1].split(',').map(i => i.trim());
-          
-          imports.forEach(imp => {
+          const imports = importMatch[1].split(',').map((i) => i.trim());
+
+          imports.forEach((imp) => {
             const cleanImp = imp.replace(/\s+as\s+\w+/, '');
-            if (!content.includes(cleanImp) || content.indexOf(cleanImp) === content.indexOf(line)) {
+            if (
+              !content.includes(cleanImp) ||
+              content.indexOf(cleanImp) === content.indexOf(line)
+            ) {
               unusedImports.push(cleanImp);
             }
           });
@@ -394,19 +388,17 @@ class DeprecatedFileDetector {
   calculateUpdateSeverity(info) {
     const currentMajor = parseInt(info.current.split('.')[0]);
     const latestMajor = parseInt(info.latest.split('.')[0]);
-    
+
     if (latestMajor > currentMajor) return 'major';
     if (info.wanted !== info.current) return 'minor';
     return 'patch';
   }
 
   isAutoUpdateSafe(pkg, info) {
-    const riskyPackages = [
-      'react', 'react-dom', 'next', '@clerk/nextjs', 'convex'
-    ];
-    
+    const riskyPackages = ['react', 'react-dom', 'next', '@clerk/nextjs', 'convex'];
+
     if (riskyPackages.includes(pkg)) return false;
-    
+
     const severity = this.calculateUpdateSeverity(info);
     return severity === 'patch' || severity === 'minor';
   }
@@ -415,20 +407,20 @@ class DeprecatedFileDetector {
     // Fallback manual detection when knip fails
     const potentialUnusedPatterns = [
       '**/*.backup.*',
-      '**/*.old.*', 
+      '**/*.old.*',
       '**/*.deprecated.*',
       '**/temp/**',
-      '**/tmp/**'
+      '**/tmp/**',
     ];
 
-    potentialUnusedPatterns.forEach(pattern => {
+    potentialUnusedPatterns.forEach((pattern) => {
       const matches = glob.sync(pattern, { cwd: this.projectRoot });
-      matches.forEach(file => {
+      matches.forEach((file) => {
         this.deprecatedFiles.push({
           file,
           type: 'potentially_unused',
           reason: 'Matches deprecated file pattern',
-          safeToDelete: this.isSafeToDelete(file)
+          safeToDelete: this.isSafeToDelete(file),
         });
       });
     });
@@ -438,7 +430,7 @@ class DeprecatedFileDetector {
 // CLI Usage
 if (require.main === module) {
   const detector = new DeprecatedFileDetector();
-  detector.detect().catch(error => {
+  detector.detect().catch((error) => {
     console.error('💥 Detection failed:', error);
     process.exit(1);
   });

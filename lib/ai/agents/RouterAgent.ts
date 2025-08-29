@@ -1,7 +1,7 @@
 /**
- * RouterAgent - Intent Classification & Entity Routing  
+ * RouterAgent - Intent Classification & Entity Routing
  * Research validation: Rasa intent classification with confidence thresholds + entity routing
- * 
+ *
  * Key patterns implemented:
  * - Intent classification with confidence thresholds (≥0.8 auto-execute, <0.8 confirm)
  * - Entity conversion from emails, notes, and natural language
@@ -9,70 +9,70 @@
  * - Multi-modal input processing (text, email, calendar data)
  */
 
-import { streamText } from 'ai'
-import { openai } from '@ai-sdk/openai'
-import { useState } from 'react'
+import { streamText } from 'ai';
+import { openai } from '@ai-sdk/openai';
+import { useState } from 'react';
 
 /**
  * Intent classification result (Rasa research patterns)
  */
 interface IntentClassification {
-  intent: string
-  confidence: number
+  intent: string;
+  confidence: number;
   entities: Array<{
-    type: string
-    value: any
-    confidence: number
-    startIndex?: number
-    endIndex?: number
-  }>
+    type: string;
+    value: any;
+    confidence: number;
+    startIndex?: number;
+    endIndex?: number;
+  }>;
   context: {
-    sourceType: 'user_input' | 'email' | 'note' | 'calendar_event'
-    sourceId?: string
-    workspaceState: any
-  }
-  processingTime: number
+    sourceType: 'user_input' | 'email' | 'note' | 'calendar_event';
+    sourceId?: string;
+    workspaceState: any;
+  };
+  processingTime: number;
 }
 
 /**
  * Entity conversion result for email/note to task/event transformation
  */
 interface EntityConversion {
-  id: string
-  sourceType: 'email' | 'note' | 'text'
-  sourceId: string
-  targetType: 'event' | 'task' | 'note' | 'contact'
-  
+  id: string;
+  sourceType: 'email' | 'note' | 'text';
+  sourceId: string;
+  targetType: 'event' | 'task' | 'note' | 'contact';
+
   extractedData: {
-    title: string
-    description?: string
-    datetime?: string
-    location?: string
-    attendees?: string[]
-    priority?: 'low' | 'medium' | 'high'
-    tags?: string[]
-    estimatedDuration?: number
-  }
-  
-  confidence: number
-  reasoning: string
+    title: string;
+    description?: string;
+    datetime?: string;
+    location?: string;
+    attendees?: string[];
+    priority?: 'low' | 'medium' | 'high';
+    tags?: string[];
+    estimatedDuration?: number;
+  };
+
+  confidence: number;
+  reasoning: string;
   suggestedActions?: Array<{
-    action: string
-    description: string
-    autoApprove: boolean
-  }>
+    action: string;
+    description: string;
+    autoApprove: boolean;
+  }>;
 }
 
 /**
  * Tool routing decision interface
  */
 interface ToolRoutingDecision {
-  toolName: string
-  parameters: Record<string, any>
-  confidence: number
-  requiresConfirmation: boolean
-  estimatedExecutionTime: number
-  safetyLevel: 'auto_approve' | 'confirm' | 'manual_only'
+  toolName: string;
+  parameters: Record<string, any>;
+  confidence: number;
+  requiresConfirmation: boolean;
+  estimatedExecutionTime: number;
+  safetyLevel: 'auto_approve' | 'confirm' | 'manual_only';
 }
 
 /**
@@ -80,14 +80,14 @@ interface ToolRoutingDecision {
  * Handles intent classification, entity routing, and tool coordination
  */
 export class RouterAgent {
-  private isProcessing = false
+  private isProcessing = false;
   private routingHistory: Array<{
-    intent: string
-    route: ToolRoutingDecision
-    executedAt: string
-    success: boolean
-  }> = []
-  
+    intent: string;
+    route: ToolRoutingDecision;
+    executedAt: string;
+    success: boolean;
+  }> = [];
+
   /**
    * Main routing method - classify intent and route to appropriate tools
    * Research pattern: Rasa intent classification with confidence-based routing
@@ -98,63 +98,67 @@ export class RouterAgent {
     sourceId?: string,
     workspaceContext?: any
   ): Promise<{
-    classification: IntentClassification
-    routing: ToolRoutingDecision[]
-    autoExecutable: boolean
-    totalProcessingTime: number
+    classification: IntentClassification;
+    routing: ToolRoutingDecision[];
+    autoExecutable: boolean;
+    totalProcessingTime: number;
   }> {
-    const startTime = performance.now()
-    this.isProcessing = true
-    
+    const startTime = performance.now();
+    this.isProcessing = true;
+
     try {
-      console.log(`🧭 RouterAgent: Classifying intent and routing request...`)
-      
+      console.log(`🧭 RouterAgent: Classifying intent and routing request...`);
+
       // Step 1: Classify intent with workspace context
-      const classification = await this.classifyIntent(input, sourceType, sourceId, workspaceContext)
-      
+      const classification = await this.classifyIntent(
+        input,
+        sourceType,
+        sourceId,
+        workspaceContext
+      );
+
       // Step 2: Determine tool routing based on intent
-      const routing = await this.determineToolRouting(classification)
-      
+      const routing = await this.determineToolRouting(classification);
+
       // Step 3: Check if auto-executable (research: ≥0.8 confidence threshold)
-      const autoExecutable = classification.confidence >= 0.8 && 
-                             routing.every(r => r.safetyLevel === 'auto_approve')
-      
-      const totalProcessingTime = performance.now() - startTime
-      
+      const autoExecutable =
+        classification.confidence >= 0.8 && routing.every((r) => r.safetyLevel === 'auto_approve');
+
+      const totalProcessingTime = performance.now() - startTime;
+
       // Performance validation (research target: ≤1s for classification)
       if (totalProcessingTime > 1000) {
-        console.warn(`⚠️ RouterAgent processing: ${totalProcessingTime.toFixed(2)}ms (target: ≤1s)`)
+        console.warn(`⚠️ RouterAgent processing: ${totalProcessingTime.toFixed(2)}ms (target: ≤1s)`);
       } else {
-        console.log(`✅ RouterAgent processing: ${totalProcessingTime.toFixed(2)}ms`)
+        console.log(`✅ RouterAgent processing: ${totalProcessingTime.toFixed(2)}ms`);
       }
-      
+
       return {
         classification,
         routing,
         autoExecutable,
-        totalProcessingTime
-      }
-      
+        totalProcessingTime,
+      };
     } finally {
-      this.isProcessing = false
+      this.isProcessing = false;
     }
   }
-  
+
   /**
    * Convert email to structured entity (email-to-task/event conversion)
    */
   async convertEmailToEntity(
     emailContent: string,
     emailMetadata: {
-      subject: string
-      sender: string
-      receivedAt: string
-      hasAttachments?: boolean
+      subject: string;
+      sender: string;
+      receivedAt: string;
+      hasAttachments?: boolean;
     },
     targetType: 'auto' | 'event' | 'task' | 'note' = 'auto'
   ): Promise<EntityConversion> {
-    const startTime = performance.now()
-    
+    const startTime = performance.now();
+
     const conversionPrompt = `
     Analyze this email and extract structured data for conversion to a productivity entity.
     
@@ -175,20 +179,20 @@ export class RouterAgent {
     - Relevant tags
     
     Return JSON with extracted data and confidence score.
-    `
-    
+    `;
+
     try {
       const result = await streamText({
         model: openai('gpt-4-turbo'),
         system: conversionPrompt,
         prompt: `Convert this email to structured entity data.`,
         temperature: 0.2,
-        maxTokens: 600
-      })
-      
-      const aiResponse = await result.text
-      const processingTime = performance.now() - startTime
-      
+        maxTokens: 600,
+      });
+
+      const aiResponse = await result.text;
+      const processingTime = performance.now() - startTime;
+
       // Parse AI response (would need proper JSON parsing)
       const mockConversion: EntityConversion = {
         id: `conversion-${Date.now()}`,
@@ -206,44 +210,43 @@ export class RouterAgent {
           {
             action: 'create_calendar_event',
             description: 'Create calendar event from email details',
-            autoApprove: true
-          }
-        ]
-      }
-      
-      console.log(`✅ Email conversion completed (${processingTime.toFixed(2)}ms)`)
-      return mockConversion
-      
+            autoApprove: true,
+          },
+        ],
+      };
+
+      console.log(`✅ Email conversion completed (${processingTime.toFixed(2)}ms)`);
+      return mockConversion;
     } catch (error) {
-      console.error('Email conversion failed:', error)
-      throw error
+      console.error('Email conversion failed:', error);
+      throw error;
     }
   }
-  
+
   /**
    * Convert note content to tasks (task extraction from notes)
    */
   async extractTasksFromNote(
     noteContent: string,
     noteMetadata: {
-      title: string
-      tags: string[]
-      createdAt: string
+      title: string;
+      tags: string[];
+      createdAt: string;
     }
   ): Promise<{
     extractedTasks: Array<{
-      title: string
-      description: string
-      priority: 'low' | 'medium' | 'high'
-      dueDate?: string
-      estimatedHours?: number
-      context: string // Where in note the task was found
-    }>
-    confidence: number
-    processingTime: number
+      title: string;
+      description: string;
+      priority: 'low' | 'medium' | 'high';
+      dueDate?: string;
+      estimatedHours?: number;
+      context: string; // Where in note the task was found
+    }>;
+    confidence: number;
+    processingTime: number;
   }> {
-    const startTime = performance.now()
-    
+    const startTime = performance.now();
+
     const extractionPrompt = `
     Extract actionable tasks from this note content.
     
@@ -258,19 +261,19 @@ export class RouterAgent {
     - Follow-up items
     
     Return structured task data with context.
-    `
-    
+    `;
+
     try {
       const result = await streamText({
         model: openai('gpt-4-turbo'),
         system: extractionPrompt,
         prompt: 'Extract tasks from this note.',
         temperature: 0.1,
-        maxTokens: 800
-      })
-      
-      const processingTime = performance.now() - startTime
-      
+        maxTokens: 800,
+      });
+
+      const processingTime = performance.now() - startTime;
+
       // Mock task extraction for development
       const extractedTasks = [
         {
@@ -278,26 +281,25 @@ export class RouterAgent {
           description: 'Finish Phase 4 AI agent implementation',
           priority: 'high' as const,
           estimatedHours: 8,
-          context: 'Action item from implementation notes'
-        }
-      ]
-      
+          context: 'Action item from implementation notes',
+        },
+      ];
+
       return {
         extractedTasks,
         confidence: 0.82,
-        processingTime
-      }
-      
+        processingTime,
+      };
     } catch (error) {
-      console.error('Task extraction failed:', error)
+      console.error('Task extraction failed:', error);
       return {
         extractedTasks: [],
         confidence: 0,
-        processingTime: performance.now() - startTime
-      }
+        processingTime: performance.now() - startTime,
+      };
     }
   }
-  
+
   /**
    * Classify intent with workspace context (Rasa patterns)
    */
@@ -307,8 +309,8 @@ export class RouterAgent {
     sourceId?: string,
     workspaceContext?: any
   ): Promise<IntentClassification> {
-    const startTime = performance.now()
-    
+    const startTime = performance.now();
+
     const classificationPrompt = `
     Classify the intent of this user input within a productivity workspace context.
     
@@ -328,21 +330,21 @@ export class RouterAgent {
     Source: ${sourceType}
     
     Return JSON: { "intent": "...", "confidence": 0.0-1.0, "entities": [...] }
-    `
-    
+    `;
+
     try {
       const result = await streamText({
         model: openai('gpt-4-turbo'),
         system: classificationPrompt,
         prompt: input,
         temperature: 0.1,
-        maxTokens: 300
-      })
-      
-      const aiResponse = await result.text
-      const parsed = JSON.parse(aiResponse)
-      const processingTime = performance.now() - startTime
-      
+        maxTokens: 300,
+      });
+
+      const aiResponse = await result.text;
+      const parsed = JSON.parse(aiResponse);
+      const processingTime = performance.now() - startTime;
+
       return {
         intent: parsed.intent,
         confidence: parsed.confidence,
@@ -350,29 +352,30 @@ export class RouterAgent {
         context: {
           sourceType,
           sourceId,
-          workspaceState: workspaceContext
+          workspaceState: workspaceContext,
         },
-        processingTime
-      }
-      
+        processingTime,
+      };
     } catch (error) {
-      console.error('Intent classification failed:', error)
+      console.error('Intent classification failed:', error);
       return {
         intent: 'find_information',
         confidence: 0.1,
         entities: [],
         context: { sourceType, sourceId, workspaceState: workspaceContext },
-        processingTime: performance.now() - startTime
-      }
+        processingTime: performance.now() - startTime,
+      };
     }
   }
-  
+
   /**
    * Determine tool routing based on classified intent
    */
-  private async determineToolRouting(classification: IntentClassification): Promise<ToolRoutingDecision[]> {
-    const routing: ToolRoutingDecision[] = []
-    
+  private async determineToolRouting(
+    classification: IntentClassification
+  ): Promise<ToolRoutingDecision[]> {
+    const routing: ToolRoutingDecision[] = [];
+
     switch (classification.intent) {
       case 'create_event':
         routing.push({
@@ -381,10 +384,10 @@ export class RouterAgent {
           confidence: classification.confidence,
           requiresConfirmation: classification.confidence < 0.8,
           estimatedExecutionTime: 500,
-          safetyLevel: classification.confidence >= 0.8 ? 'auto_approve' : 'confirm'
-        })
-        break
-        
+          safetyLevel: classification.confidence >= 0.8 ? 'auto_approve' : 'confirm',
+        });
+        break;
+
       case 'create_task':
         routing.push({
           toolName: 'tasks.create',
@@ -392,10 +395,10 @@ export class RouterAgent {
           confidence: classification.confidence,
           requiresConfirmation: classification.confidence < 0.8,
           estimatedExecutionTime: 300,
-          safetyLevel: 'auto_approve' // Task creation is generally safe
-        })
-        break
-        
+          safetyLevel: 'auto_approve', // Task creation is generally safe
+        });
+        break;
+
       case 'resolve_conflicts':
         routing.push({
           toolName: 'calendar.resolveConflicts',
@@ -403,24 +406,24 @@ export class RouterAgent {
           confidence: classification.confidence,
           requiresConfirmation: true, // Always confirm conflict resolution
           estimatedExecutionTime: 2000,
-          safetyLevel: 'confirm'
-        })
-        break
-        
+          safetyLevel: 'confirm',
+        });
+        break;
+
       case 'convert_email':
         routing.push({
           toolName: 'mail.convertToEntity',
-          parameters: { 
+          parameters: {
             emailId: classification.context.sourceId,
-            targetType: 'auto' // Let AI decide best conversion
+            targetType: 'auto', // Let AI decide best conversion
           },
           confidence: classification.confidence,
           requiresConfirmation: classification.confidence < 0.9,
           estimatedExecutionTime: 1000,
-          safetyLevel: 'confirm'
-        })
-        break
-        
+          safetyLevel: 'confirm',
+        });
+        break;
+
       case 'extract_tasks':
         routing.push({
           toolName: 'notes.extractTasks',
@@ -428,10 +431,10 @@ export class RouterAgent {
           confidence: classification.confidence,
           requiresConfirmation: false,
           estimatedExecutionTime: 1500,
-          safetyLevel: 'auto_approve'
-        })
-        break
-        
+          safetyLevel: 'auto_approve',
+        });
+        break;
+
       default:
         // Default to summarization for unknown intents
         routing.push({
@@ -440,105 +443,108 @@ export class RouterAgent {
           confidence: 0.5,
           requiresConfirmation: true,
           estimatedExecutionTime: 2000,
-          safetyLevel: 'manual_only'
-        })
+          safetyLevel: 'manual_only',
+        });
     }
-    
-    return routing
+
+    return routing;
   }
-  
+
   /**
    * Execute routing decision with tool safety (ImageSorcery MCP patterns)
    */
   async executeRouting(
     routing: ToolRoutingDecision[],
-    options: { 
-      dryRun?: boolean
-      skipConfirmation?: boolean
-      maxExecutionTime?: number
+    options: {
+      dryRun?: boolean;
+      skipConfirmation?: boolean;
+      maxExecutionTime?: number;
     } = {}
   ): Promise<{
     results: Array<{
-      tool: string
-      success: boolean
-      result: any
-      executionTime: number
-      error?: string
-    }>
-    totalTime: number
-    allSuccessful: boolean
+      tool: string;
+      success: boolean;
+      result: any;
+      executionTime: number;
+      error?: string;
+    }>;
+    totalTime: number;
+    allSuccessful: boolean;
   }> {
-    const startTime = performance.now()
-    const results = []
-    
-    console.log(`🧭 RouterAgent: Executing ${routing.length} tool routes...`)
-    
+    const startTime = performance.now();
+    const results = [];
+
+    console.log(`🧭 RouterAgent: Executing ${routing.length} tool routes...`);
+
     for (const route of routing) {
-      const routeStart = performance.now()
-      
+      const routeStart = performance.now();
+
       try {
         // Safety check: Confirm if required
         if (route.requiresConfirmation && !options.skipConfirmation && !options.dryRun) {
-          const confirmed = confirm(`Execute ${route.toolName} with confidence ${(route.confidence * 100).toFixed(0)}%?`)
+          const confirmed = confirm(
+            `Execute ${route.toolName} with confidence ${(route.confidence * 100).toFixed(0)}%?`
+          );
           if (!confirmed) {
             results.push({
               tool: route.toolName,
               success: false,
               result: null,
               executionTime: performance.now() - routeStart,
-              error: 'User cancelled confirmation'
-            })
-            continue
+              error: 'User cancelled confirmation',
+            });
+            continue;
           }
         }
-        
+
         // Execute tool (or simulate for dry run)
-        const result = options.dryRun 
+        const result = options.dryRun
           ? await this.simulateToolExecution(route)
-          : await this.executeToolRoute(route)
-        
-        const executionTime = performance.now() - routeStart
-        
+          : await this.executeToolRoute(route);
+
+        const executionTime = performance.now() - routeStart;
+
         results.push({
           tool: route.toolName,
           success: true,
           result,
-          executionTime
-        })
-        
+          executionTime,
+        });
+
         // Log routing success
         this.routingHistory.push({
           intent: route.toolName,
           route,
           executedAt: new Date().toISOString(),
-          success: true
-        })
-        
+          success: true,
+        });
       } catch (error) {
-        console.error(`Tool execution failed: ${route.toolName}`, error)
-        
+        console.error(`Tool execution failed: ${route.toolName}`, error);
+
         results.push({
           tool: route.toolName,
           success: false,
           result: null,
           executionTime: performance.now() - routeStart,
-          error: error.message
-        })
+          error: error.message,
+        });
       }
     }
-    
-    const totalTime = performance.now() - startTime
-    const allSuccessful = results.every(r => r.success)
-    
-    console.log(`✅ RouterAgent execution completed: ${results.length} tools (${totalTime.toFixed(2)}ms)`)
-    
+
+    const totalTime = performance.now() - startTime;
+    const allSuccessful = results.every((r) => r.success);
+
+    console.log(
+      `✅ RouterAgent execution completed: ${results.length} tools (${totalTime.toFixed(2)}ms)`
+    );
+
     return {
       results,
       totalTime,
-      allSuccessful
-    }
+      allSuccessful,
+    };
   }
-  
+
   /**
    * Smart entity conversion from natural language or structured content
    */
@@ -565,19 +571,19 @@ export class RouterAgent {
     - Priority indicators
     
     Return confidence score based on data quality and completeness.
-    `
-    
+    `;
+
     try {
       const result = await streamText({
         model: openai('gpt-4-turbo'),
         system: conversionPrompt,
         prompt: `Convert to ${targetType} entity.`,
         temperature: 0.2,
-        maxTokens: 500
-      })
-      
-      const aiResponse = await result.text
-      
+        maxTokens: 500,
+      });
+
+      const aiResponse = await result.text;
+
       // Mock structured conversion for development
       return {
         id: `conversion-${Date.now()}`,
@@ -587,7 +593,7 @@ export class RouterAgent {
         extractedData: {
           title: content.slice(0, 50) + '...',
           description: content.slice(0, 200),
-          priority: 'medium'
+          priority: 'medium',
         },
         confidence: 0.85,
         reasoning: `${contentType} content contains structured information suitable for ${targetType} conversion`,
@@ -595,106 +601,106 @@ export class RouterAgent {
           {
             action: `create_${targetType}`,
             description: `Create ${targetType} from extracted data`,
-            autoApprove: true
-          }
-        ]
-      }
-      
+            autoApprove: true,
+          },
+        ],
+      };
     } catch (error) {
-      console.error('Entity conversion failed:', error)
-      throw error
+      console.error('Entity conversion failed:', error);
+      throw error;
     }
   }
-  
+
   // Parameter extraction utilities
   private extractEventParameters(entities: any[]): Record<string, any> {
-    const params: Record<string, any> = {}
-    
-    entities.forEach(entity => {
+    const params: Record<string, any> = {};
+
+    entities.forEach((entity) => {
       switch (entity.type) {
         case 'datetime':
-          params.start = entity.value
-          break
+          params.start = entity.value;
+          break;
         case 'duration':
-          params.duration = entity.value
-          break
+          params.duration = entity.value;
+          break;
         case 'location':
-          params.location = entity.value
-          break
+          params.location = entity.value;
+          break;
         case 'person':
-          if (!params.attendees) params.attendees = []
-          params.attendees.push(entity.value)
-          break
+          if (!params.attendees) params.attendees = [];
+          params.attendees.push(entity.value);
+          break;
         case 'title':
-          params.title = entity.value
-          break
+          params.title = entity.value;
+          break;
       }
-    })
-    
-    return params
+    });
+
+    return params;
   }
-  
+
   private extractTaskParameters(entities: any[]): Record<string, any> {
-    const params: Record<string, any> = {}
-    
-    entities.forEach(entity => {
+    const params: Record<string, any> = {};
+
+    entities.forEach((entity) => {
       switch (entity.type) {
         case 'title':
-          params.title = entity.value
-          break
+          params.title = entity.value;
+          break;
         case 'priority':
-          params.priority = entity.value
-          break
+          params.priority = entity.value;
+          break;
         case 'duedate':
-          params.dueDate = entity.value
-          break
+          params.dueDate = entity.value;
+          break;
         case 'duration':
-          params.estimatedHours = entity.value
-          break
+          params.estimatedHours = entity.value;
+          break;
       }
-    })
-    
-    return params
+    });
+
+    return params;
   }
-  
+
   private extractNoteParameters(classification: IntentClassification): Record<string, any> {
     return {
       noteId: classification.context.sourceId,
       extractTasksOnly: true,
-      includePriorities: true
-    }
+      includePriorities: true,
+    };
   }
-  
+
   private async simulateToolExecution(route: ToolRoutingDecision): Promise<any> {
     // Simulate tool execution for dry runs
     return {
       tool: route.toolName,
       parameters: route.parameters,
       simulated: true,
-      timestamp: new Date().toISOString()
-    }
+      timestamp: new Date().toISOString(),
+    };
   }
-  
+
   private async executeToolRoute(route: ToolRoutingDecision): Promise<any> {
     // TODO: Integrate with actual MCP tool system
-    console.log(`Executing tool: ${route.toolName}`, route.parameters)
-    
+    console.log(`Executing tool: ${route.toolName}`, route.parameters);
+
     return {
       tool: route.toolName,
       parameters: route.parameters,
       executed: true,
-      timestamp: new Date().toISOString()
-    }
+      timestamp: new Date().toISOString(),
+    };
   }
-  
+
   /**
    * Get routing statistics and performance metrics
    */
   getRoutingStatus() {
-    const successRate = this.routingHistory.length > 0 
-      ? (this.routingHistory.filter(h => h.success).length / this.routingHistory.length * 100)
-      : 0
-    
+    const successRate =
+      this.routingHistory.length > 0
+        ? (this.routingHistory.filter((h) => h.success).length / this.routingHistory.length) * 100
+        : 0;
+
     return {
       isProcessing: this.isProcessing,
       totalRoutings: this.routingHistory.length,
@@ -704,9 +710,9 @@ export class RouterAgent {
         'intent classification with confidence thresholds',
         'email-to-entity conversion',
         'task extraction from notes',
-        'tool routing with safety validation'
-      ]
-    }
+        'tool routing with safety validation',
+      ],
+    };
   }
 }
 
@@ -714,42 +720,47 @@ export class RouterAgent {
  * Router Agent Hook for React components
  */
 export function useRouterAgent() {
-  const [agent] = useState(() => new RouterAgent())
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [lastRouting, setLastRouting] = useState<any>(null)
-  
-  const routeRequest = async (input: string, sourceType?: any, sourceId?: string, context?: any) => {
-    setIsProcessing(true)
-    
+  const [agent] = useState(() => new RouterAgent());
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [lastRouting, setLastRouting] = useState<any>(null);
+
+  const routeRequest = async (
+    input: string,
+    sourceType?: any,
+    sourceId?: string,
+    context?: any
+  ) => {
+    setIsProcessing(true);
+
     try {
-      const result = await agent.routeRequest(input, sourceType, sourceId, context)
-      setLastRouting(result)
-      return result
+      const result = await agent.routeRequest(input, sourceType, sourceId, context);
+      setLastRouting(result);
+      return result;
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
-  }
-  
+  };
+
   const convertEmail = async (content: string, metadata: any, targetType?: any) => {
-    setIsProcessing(true)
-    
+    setIsProcessing(true);
+
     try {
-      return await agent.convertEmailToEntity(content, metadata, targetType)
+      return await agent.convertEmailToEntity(content, metadata, targetType);
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
-  }
-  
+  };
+
   const extractTasks = async (noteContent: string, metadata: any) => {
-    setIsProcessing(true)
-    
+    setIsProcessing(true);
+
     try {
-      return await agent.extractTasksFromNote(noteContent, metadata)
+      return await agent.extractTasksFromNote(noteContent, metadata);
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
-  }
-  
+  };
+
   return {
     agent,
     isProcessing,
@@ -757,6 +768,6 @@ export function useRouterAgent() {
     routeRequest,
     convertEmail,
     extractTasks,
-    getStatus: agent.getRoutingStatus.bind(agent)
-  }
+    getStatus: agent.getRoutingStatus.bind(agent),
+  };
 }

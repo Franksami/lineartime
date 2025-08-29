@@ -7,7 +7,7 @@
 export * from './aaa-color-system';
 export * from './focus-management-aaa';
 
-// Additional accessibility utilities for LinearTime components
+// Additional accessibility utilities for Command Center Calendar components
 export function announceToScreenReader(
   message: string,
   priority: 'polite' | 'assertive' = 'polite'

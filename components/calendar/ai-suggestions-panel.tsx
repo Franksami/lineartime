@@ -105,9 +105,11 @@ export function AISuggestionsPanel({
               <div
                 className={cn(
                   'flex items-center gap-2 p-2 rounded-md text-sm',
-                  dragFeedback.type === 'success' && 'bg-green-50 /* TODO: Use semantic token */ text-green-700 /* TODO: Use semantic token */',
+                  dragFeedback.type === 'success' &&
+                    'bg-green-50 /* TODO: Use semantic token */ text-green-700 /* TODO: Use semantic token */',
                   dragFeedback.type === 'warning' && 'bg-amber-50 text-amber-700',
-                  dragFeedback.type === 'error' && 'bg-red-50 /* TODO: Use semantic token */ text-red-700 /* TODO: Use semantic token */'
+                  dragFeedback.type === 'error' &&
+                    'bg-red-50 /* TODO: Use semantic token */ text-red-700 /* TODO: Use semantic token */'
                 )}
               >
                 {getFeedbackIcon(dragFeedback.type)}

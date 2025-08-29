@@ -1,5 +1,5 @@
 /**
- * AI Revenue Planner Interface - CheatCal Default Interface
+ * AI Revenue Planner Interface - Command Center Default Interface
  * 
  * Professional AI-powered coordination optimization for money-focused professionals.
  * Built with Vercel AI SDK v5, AI Elements, and sophisticated design patterns.
@@ -11,8 +11,8 @@
  * - Professional aesthetics inspired by Sunsama
  * - Voice input and audio feedback integration
  * 
- * @version 2.0.0 (CheatCal Transformation)
- * @author CheatCal Revenue Optimization Platform
+ * @version 2.0.0 (Command Center Transformation)
+ * @author Command Center Revenue Optimization Platform
  */
 
 'use client';
@@ -76,24 +76,22 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { AIDragDropIntegration } from '@/components/calendar/AIDragDropIntegration';
-// Enhanced Calendar System Integration (restore ALL functionality)
-import EnhancedCalendarToolbar from '@/components/calendar/EnhancedCalendarToolbar';
-import { EnhancedDragDropSystem } from '@/components/calendar/EnhancedDragDropSystem';
-import { LinearCalendarHorizontal } from '@/components/calendar/LinearCalendarHorizontal';
-import { MotionEnhancedCalendarToolbar } from '@/components/calendar/MotionEnhancedCalendarToolbar';
+// Command Workspace View Integration
+import { WeekView } from '@/views/week/WeekView';
+import { PlannerView } from '@/views/planner/PlannerView';
+import { ViewScaffold } from '@/components/_deprecated/ViewScaffold';
 
-// Calendar Provider System (10 libraries)
-import { useCalendarProvider } from '@/components/calendar/providers/CalendarProvider';
+// Preserve backend calendar integration
+import { useCalendarEvents } from '@/hooks/useCalendarEvents';
 
-// CheatCal Enterprise Interface Integration
+// Command Center Enterprise Interface Integration
 import CheatCalEnterpriseInterface from '@/components/enterprise/CheatCalEnterpriseInterface';
 
 // Existing integrations
 import { useSoundEffects } from '@/lib/sound-service';
 import { cn } from '@/lib/utils';
 
-// CheatCal AI Revenue Planner Architecture Documentation
+// Command Center AI Revenue Planner Architecture Documentation
 // This component provides a sophisticated 3-panel interface for AI-powered coordination optimization
 
 interface RevenueGoal {
@@ -140,51 +138,8 @@ export default function PlannerInterface() {
   const [isRecording, setIsRecording] = useState(false);
   const [activeTab, setActiveTab] = useState('planner');
 
-  // Demo events for calendar integration
-  const [calendarEvents] = useState([
-    {
-      id: '1',
-      title: 'Q4 Launch Strategy Call',
-      description: 'Strategic planning for course launch',
-      start: new Date(2025, 0, 28, 14, 0),
-      end: new Date(2025, 0, 28, 16, 0),
-      allDay: false,
-      category: 'work',
-      priority: 'critical' as const,
-      backgroundColor: '#3b82f6',
-      textColor: '#ffffff',
-      borderColor: '#3b82f6',
-      editable: true,
-      location: 'Conference Room A',
-      attendees: 5,
-      tags: ['strategy', 'launch'],
-      extendedProps: {
-        priority: 'critical' as const,
-        estimatedRevenue: 45000,
-      }
-    },
-    {
-      id: '2',
-      title: 'Client Onboarding Session',
-      description: 'New agency client coordination meeting',
-      start: new Date(2025, 0, 29, 10, 0),
-      end: new Date(2025, 0, 29, 12, 0),
-      allDay: false,
-      category: 'work',
-      priority: 'high' as const,
-      backgroundColor: '#10b981',
-      textColor: '#ffffff',
-      borderColor: '#10b981',
-      editable: true,
-      location: 'Virtual',
-      attendees: 3,
-      tags: ['client', 'onboarding'],
-      extendedProps: {
-        priority: 'high' as const,
-        estimatedRevenue: 25000,
-      }
-    }
-  ]);
+  // Use Command Workspace calendar integration
+  const { events, createEvent, updateEvent, deleteEvent } = useCalendarEvents();
   
   // Revenue and coordination metrics (real-time updates)
   const [revenueGoals] = useState<RevenueGoal[]>([
@@ -270,13 +225,13 @@ export default function PlannerInterface() {
                   >
                     <Brain className="w-8 h-8 text-primary" />
                     <div className="absolute -top-1 -right-1">
-                      <div className="w-3 h-3 bg-green-500 /* TODO: Use semantic token */ rounded-full animate-pulse" />
+                      <div className="w-3 h-3 bg-primary rounded-full animate-pulse" />
                     </div>
                   </motion.div>
                   
                   <div>
                     <h1 className="text-2xl font-bold text-foreground">
-                      CheatCal AI Planner
+                      Command Center AI Planner
                     </h1>
                     <p className="text-sm text-muted-foreground">
                       Revenue Coordination Optimization
@@ -336,7 +291,7 @@ export default function PlannerInterface() {
               <Card className="h-fit">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-lg">
-                    <DollarSign className="w-5 h-5 text-green-500 /* TODO: Use semantic token */" />
+                    <DollarSign className="w-5 h-5 text-primary" />
                     <span>Revenue Goals</span>
                   </CardTitle>
                 </CardHeader>
@@ -412,7 +367,7 @@ export default function PlannerInterface() {
               <Card className="h-fit">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-lg">
-                    <Zap className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */" />
+                    <Zap className="w-5 h-5 text-primary" />
                     <span>Quick Actions</span>
                   </CardTitle>
                 </CardHeader>
@@ -460,8 +415,8 @@ export default function PlannerInterface() {
                     </CardTitle>
                     
                     <div className="flex items-center space-x-2">
-                      <Badge variant="outline" className="bg-green-500 /* TODO: Use semantic token *//10 text-green-500 /* TODO: Use semantic token */">
-                        <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded-full mr-2 animate-pulse" />
+                      <Badge variant="outline" className="bg-primary/10 text-primary">
+                        <div className="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse" />
                         Online
                       </Badge>
                       
@@ -507,7 +462,7 @@ export default function PlannerInterface() {
                             <div className="flex-1">
                               <div className="flex items-center space-x-2 mb-1">
                                 <span className="text-sm font-medium">
-                                  {message.role === 'user' ? 'You' : 'CheatCal AI'}
+                                  {message.role === 'user' ? 'You' : 'Command Center AI'}
                                 </span>
                                 <span className="text-xs text-muted-foreground">
                                   {(message as any).createdAt?.toLocaleTimeString() || 'now'}
@@ -570,7 +525,7 @@ export default function PlannerInterface() {
                           </Avatar>
                           <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-2">
-                              <span className="text-sm font-medium">CheatCal AI</span>
+                              <span className="text-sm font-medium">Command Center AI</span>
                               <div className="flex space-x-1">
                                 <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
                                 <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
@@ -660,7 +615,7 @@ export default function PlannerInterface() {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-lg">
-                    <Zap className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */" />
+                    <Zap className="w-5 h-5 text-primary" />
                     <span>AI Tools</span>
                   </CardTitle>
                 </CardHeader>
@@ -682,7 +637,7 @@ export default function PlannerInterface() {
                           <div className="text-sm font-medium">{tool.name}</div>
                           <div className="text-xs text-muted-foreground">{tool.description}</div>
                         </div>
-                        <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded-full" />
+                        <div className="w-2 h-2 bg-primary rounded-full" />
                       </motion.div>
                     ))}
                   </div>
@@ -693,7 +648,7 @@ export default function PlannerInterface() {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-lg">
-                    <TrendingUp className="w-5 h-5 text-green-500 /* TODO: Use semantic token */" />
+                    <TrendingUp className="w-5 h-5 text-primary" />
                     <span>Recent Insights</span>
                   </CardTitle>
                 </CardHeader>
@@ -749,22 +704,9 @@ export default function PlannerInterface() {
 
       <TabsContent value="calendar" className="h-full">
         <div className="h-full">
-          <CheatCalEnterpriseInterface 
-            events={calendarEvents}
-            onEventCreate={(event) => {
-              console.log('Creating event:', event);
-              // Add event creation logic here
-            }}
-            onEventUpdate={(event) => {
-              console.log('Updating event:', event);
-              // Add event update logic here  
-            }}
-            onEventDelete={(eventId) => {
-              console.log('Deleting event:', eventId);
-              // Add event deletion logic here
-            }}
-            className="h-full"
-          />
+          <ViewScaffold title="Calendar View">
+            <WeekView />
+          </ViewScaffold>
         </div>
       </TabsContent>
 
@@ -778,7 +720,7 @@ export default function PlannerInterface() {
                 </div>
               </div>
               <div>
-                <h2 className="text-3xl font-bold mb-4">CheatCal Enterprise Demo</h2>
+                <h2 className="text-3xl font-bold mb-4">Command Center Enterprise Demo</h2>
                 <p className="text-muted-foreground text-lg mb-6">
                   Experience the complete enterprise-grade calendar interface with all sophisticated functionality restored.
                 </p>

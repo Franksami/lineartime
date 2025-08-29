@@ -1,10 +1,10 @@
 /**
  * Accessibility AAA Compliance Hook
  *
- * Provides WCAG 2.1 AAA level accessibility features for CheatCal components.
+ * Provides WCAG 2.1 AAA level accessibility features for Command Center components.
  * Includes color contrast validation, focus management, and screen reader support.
  *
- * @version 2.0.0 (CheatCal AAA Accessibility)
+ * @version 2.0.0 (Command Center AAA Accessibility)
  */
 
 'use client';

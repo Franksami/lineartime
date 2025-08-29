@@ -38,7 +38,7 @@ export function TestimonialsSection() {
       company: 'TechCorp',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=sarah',
       content:
-        'LinearTime completely transformed how our team manages projects. The year-at-a-glance view helped us identify patterns we never saw before. Our productivity increased by 40% in just 3 months.',
+        'Command Center Calendar completely transformed how our team manages projects. The year-at-a-glance view helped us identify patterns we never saw before. Our productivity increased by 40% in just 3 months.',
       rating: 5,
       highlight: 'Increased productivity by 40%',
       videoThumbnail: true,
@@ -51,7 +51,7 @@ export function TestimonialsSection() {
       company: 'StartupXYZ',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=marcus',
       content:
-        "As a startup founder, time is everything. LinearTime's AI suggestions have saved me countless hours on scheduling. The insights dashboard shows exactly where I'm spending time and how to optimize it.",
+        "As a startup founder, time is everything. Command Center Calendar's AI suggestions have saved me countless hours on scheduling. The insights dashboard shows exactly where I'm spending time and how to optimize it.",
       rating: 5,
       highlight: 'Saves 2+ hours per week',
       videoThumbnail: false,
@@ -64,7 +64,7 @@ export function TestimonialsSection() {
       company: 'CreativeStudio',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=emily',
       content:
-        "The design is absolutely beautiful, and the user experience is seamless. Our entire design team switched to LinearTime, and we love how it integrates with all our tools. Best calendar app we've ever used.",
+        "The design is absolutely beautiful, and the user experience is seamless. Our entire design team switched to Command Center Calendar, and we love how it integrates with all our tools. Best calendar app we've ever used.",
       rating: 5,
       highlight: 'Best calendar app ever',
       videoThumbnail: true,
@@ -90,7 +90,7 @@ export function TestimonialsSection() {
       company: 'GlobalInc',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=lisa',
       content:
-        "LinearTime helped us visualize our quarterly planning like never before. The analytics showed us bottlenecks we didn't know existed. It's become essential to our operations.",
+        "Command Center Calendar helped us visualize our quarterly planning like never before. The analytics showed us bottlenecks we didn't know existed. It's become essential to our operations.",
       rating: 5,
       highlight: 'Essential to operations',
       videoThumbnail: true,
@@ -197,8 +197,8 @@ export function TestimonialsSection() {
             </span>
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed">
-            Join thousands of professionals who've transformed their productivity with LinearTime.
-            Here's what they have to say about their experience.
+            Join thousands of professionals who've transformed their productivity with Command
+            Center Calendar. Here's what they have to say about their experience.
           </p>
         </motion.div>
 
@@ -408,7 +408,7 @@ export function TestimonialsSection() {
               Ready to join thousands of happy customers?
             </h3>
             <p className="text-muted-foreground mb-6">
-              Start your free trial today and see why teams love LinearTime
+              Start your free trial today and see why teams love Command Center Calendar
             </p>
             <HStack spacing={4} className="justify-center">
               <Button size="lg" className="shadow-lg hover:shadow-xl transition-all duration-300">

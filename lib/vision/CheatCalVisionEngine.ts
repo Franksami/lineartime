@@ -1,12 +1,12 @@
 /**
- * CheatCal Vision Engine - Privacy-First Computer Vision System
+ * Command Center Vision Engine - Privacy-First Computer Vision System
  *
  * Revolutionary screen analysis with user consent and privacy controls.
  * Uses controversial but powerful computer vision for productivity optimization.
  * 90% on-device processing with transparent user control.
  *
- * @version CheatCal Phase 3.0
- * @author CheatCal AI Enhancement System
+ * @version Command Center Phase 3.0
+ * @author Command Center AI Enhancement System
  */
 
 'use client';
@@ -85,7 +85,7 @@ export interface ProductivityAnalysis {
 }
 
 // ==========================================
-// CheatCal Vision Engine Class
+// Command Center Vision Engine Class
 // ==========================================
 
 export class CheatCalVisionEngine {
@@ -155,7 +155,7 @@ export class CheatCalVisionEngine {
       ...config,
     };
 
-    console.log('📷 CheatCal Vision Engine created');
+    console.log('📷 Command Center Vision Engine created');
     console.log('Privacy Mode:', this.config.privacyMode);
 
     this.initializePrivacyControls();
@@ -167,7 +167,7 @@ export class CheatCalVisionEngine {
 
   async initialize(): Promise<void> {
     try {
-      console.log('🚀 Initializing CheatCal Vision Engine...');
+      console.log('🚀 Initializing Command Center Vision Engine...');
 
       // Check for required permissions
       await this.checkPermissions();
@@ -187,7 +187,7 @@ export class CheatCalVisionEngine {
       this.isInitialized = true;
       this.isRunning = true;
 
-      console.log('✅ CheatCal Vision Engine ready');
+      console.log('✅ Command Center Vision Engine ready');
       console.log(`Privacy Mode: ${this.config.privacyMode}`);
       console.log(`Analysis Interval: ${this.config.analysisInterval}ms`);
 

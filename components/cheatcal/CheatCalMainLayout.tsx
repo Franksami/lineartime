@@ -1,5 +1,5 @@
 /**
- * CheatCal Main Layout - Timepage-Inspired Excellence + Controversial Edge
+ * Command Center Main Layout - Timepage-Inspired Excellence + Controversial Edge
  * 
  * Combines Moleskine Timepage award-winning design sophistication with
  * controversial "productivity cheating" positioning for money-focused professionals.
@@ -8,7 +8,7 @@
  * Target: Money-getters who embrace controversial methods for extraordinary outcomes
  * 
  * @version 1.0.0 (Revolutionary Design Release)
- * @author CheatCal UI/UX Team
+ * @author Command Center UI/UX Team
  */
 
 "use client";
@@ -502,7 +502,7 @@ export const CheatCalMainLayout: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-foreground">CheatCal</h1>
+                  <h1 className="text-2xl font-bold text-foreground">Command Center</h1>
                   <p className="text-sm text-muted-foreground">Elite Productivity Command Center</p>
                 </div>
               </motion.div>
@@ -642,7 +642,7 @@ export const CheatCalMainLayout: React.FC = () => {
                       {option.label}
                     </button>
                   ))}
-                </div>
+                </motion.div>
               </div>
 
               {/* Elite Metrics Grid */}
@@ -668,7 +668,7 @@ export const CheatCalMainLayout: React.FC = () => {
               >
                 <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <Grid3X3 className="w-5 h-5" />
-                  CheatCal Architecture (Elite Design)
+                  Command Center Architecture (Elite Design)
                 </h3>
                 <pre className="text-xs text-muted-foreground font-mono overflow-x-auto leading-relaxed">
                   {CHEATCAL_LAYOUT_ARCHITECTURE}

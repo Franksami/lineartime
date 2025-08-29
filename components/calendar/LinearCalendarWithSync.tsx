@@ -29,7 +29,7 @@ import { FilterPanel } from './FilterPanel';
 import { ReflectionModal } from './ReflectionModal';
 import { ZoomControls } from './ZoomControls';
 
-interface LinearCalendarWithSyncProps {
+interface CommandCenterCalendarWithSyncProps {
   initialYear?: number;
   className?: string;
   enableSync?: boolean;
@@ -52,11 +52,11 @@ const MONTH_NAMES = [
 ];
 const COLUMNS_PER_ROW = 42; // 6 weeks × 7 days
 
-function LinearCalendarContent({
+function CommandCenterCalendarContent({
   initialYear = new Date().getFullYear(),
   className,
   enableSync = true,
-}: LinearCalendarWithSyncProps) {
+}: CommandCenterCalendarWithSyncProps) {
   const [year, setYear] = React.useState(initialYear);
   const [zoomLevel, setZoomLevel] = React.useState(1);
   const [selectedDetailDate, setSelectedDetailDate] = React.useState<Date | null>(null);
@@ -441,10 +441,10 @@ function LinearCalendarContent({
   );
 }
 
-export function LinearCalendarWithSync(props: LinearCalendarWithSyncProps) {
+export function CommandCenterCalendarWithSync(props: CommandCenterCalendarWithSyncProps) {
   return (
     <CalendarErrorBoundary>
-      <LinearCalendarContent {...props} />
+      <CommandCenterCalendarContent {...props} />
     </CalendarErrorBoundary>
   );
 }

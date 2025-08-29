@@ -1,11 +1,11 @@
 /**
- * CheatCal Security Manager - Privacy-First AI Security System
+ * Command Center Security Manager - Privacy-First AI Security System
  *
  * Comprehensive security and privacy controls for controversial AI monitoring.
  * Implements transparency, user control, and data protection standards.
  *
- * @version CheatCal Phase 3.0
- * @author CheatCal Security & Privacy Team
+ * @version Command Center Phase 3.0
+ * @author Command Center Security & Privacy Team
  */
 
 import { logger } from '@/lib/utils/logger';
@@ -180,7 +180,7 @@ TRANSPARENCY & CONTROL DASHBOARD:
     // Initialize security monitoring
     this.initializeSecurityMonitoring();
 
-    logger.info('🛡️ CheatCal Security Manager initialized');
+    logger.info('🛡️ Command Center Security Manager initialized');
     logger.info(CheatCalSecurityManager.SECURITY_ARCHITECTURE);
   }
 
@@ -935,7 +935,7 @@ TRANSPARENCY & CONTROL DASHBOARD:
     // Clear intervals
     // (This would be implemented with proper interval tracking)
 
-    logger.info('🛡️ CheatCal Security Manager destroyed');
+    logger.info('🛡️ Command Center Security Manager destroyed');
   }
 }
 

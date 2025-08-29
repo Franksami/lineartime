@@ -1,7 +1,7 @@
 /**
  * AI Drag Drop Integration - Temporary Simplified Version
  *
- * Simplified version using @dnd-kit for testing the CheatCal interface.
+ * Simplified version using @dnd-kit for testing the Command Center interface.
  * This ensures the server can start while maintaining functionality.
  */
 

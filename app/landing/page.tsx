@@ -56,9 +56,9 @@ function HeroSection() {
           </h1>
 
           <p className="text-md relative z-10 max-w-[550px] font-medium text-muted-foreground sm:text-xl">
-            Experience time differently with LinearTime Calendar. Our revolutionary horizontal
-            12-month timeline view helps you see the bigger picture and plan beyond traditional
-            weekly constraints.
+            Experience time differently with Command Center Calendar Calendar. Our revolutionary
+            horizontal 12-month timeline view helps you see the bigger picture and plan beyond
+            traditional weekly constraints.
           </p>
 
           <div className="relative z-10 flex justify-center gap-4">
@@ -97,7 +97,9 @@ function HeroSection() {
                 <div className="w-full h-[400px] bg-gradient-to-r from-primary/20 to-secondary/20 flex items-center justify-center rounded-md">
                   <div className="text-center space-y-4">
                     <Calendar className="w-24 h-24 mx-auto text-primary" />
-                    <p className="text-2xl font-semibold">LinearTime Calendar Interface</p>
+                    <p className="text-2xl font-semibold">
+                      Command Center Calendar Calendar Interface
+                    </p>
                     <p className="text-muted-foreground">Horizontal 12-month timeline view</p>
                   </div>
                 </div>
@@ -194,7 +196,7 @@ function TestimonialCarousel() {
       name: 'Sarah Chen',
       title: 'Product Manager at TechCorp',
       description:
-        'LinearTime Calendar has revolutionized how our team manages projects. The horizontal timeline view gives us unprecedented clarity into our roadmap.',
+        'Command Center Calendar Calendar has revolutionized how our team manages projects. The horizontal timeline view gives us unprecedented clarity into our roadmap.',
       imageUrl:
         'https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&w=600&q=80',
       githubUrl: '#',
@@ -461,7 +463,7 @@ function LandingNavigation() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold">LinearTime</span>
+            <span className="text-xl font-bold">Command Center Calendar</span>
             <Badge variant="secondary" className="hidden sm:inline-flex ml-2">
               Beta
             </Badge>

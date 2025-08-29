@@ -2,7 +2,7 @@ import { PricingTable } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Pricing - LinearTime',
+  title: 'Pricing - Command Center Calendar',
   description: 'Choose the perfect plan for your scheduling needs with Clerk integrated billing',
 };
 

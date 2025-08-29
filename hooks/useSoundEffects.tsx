@@ -2,9 +2,9 @@
  * Sound Effects Hook (Extended)
  *
  * Extended version of the sound effects system with additional features
- * for enhanced user feedback in CheatCal platform.
+ * for enhanced user feedback in Command Center platform.
  *
- * @version 2.0.0 (CheatCal Enhanced Audio)
+ * @version 2.0.0 (Command Center Enhanced Audio)
  */
 
 'use client';

@@ -31,17 +31,16 @@ class I18nGovernor {
       await this.checkNumberFormatting();
 
       this.generateReport();
-      
+
       if (this.errors.length > 0) {
         console.error('\n❌ i18n governance failed!');
         console.error('Fix the following issues:\n');
-        this.errors.forEach(error => console.error(`  • ${error}`));
+        this.errors.forEach((error) => console.error(`  • ${error}`));
         process.exit(1);
       }
 
       console.log('\n✅ i18n governance passed!');
       return true;
-
     } catch (error) {
       console.error('\n💥 i18n check failed:', error.message);
       process.exit(1);
@@ -50,14 +49,14 @@ class I18nGovernor {
 
   async checkTranslationCompleteness() {
     console.log('📝 Checking translation completeness...');
-    
+
     try {
       // Find translation files
-      const translationFiles = glob.sync('**/messages/*.json', { 
+      const translationFiles = glob.sync('**/messages/*.json', {
         cwd: process.cwd(),
-        ignore: ['node_modules/**']
+        ignore: ['node_modules/**'],
       });
-      
+
       if (translationFiles.length === 0) {
         this.warnings.push('No translation files found - ensure i18n is properly configured');
         return;
@@ -66,19 +65,19 @@ class I18nGovernor {
       // Analyze each locale
       const baseTranslation = this.loadTranslations(translationFiles[0]);
       const baseKeys = this.extractKeys(baseTranslation);
-      
+
       this.passed.push(`Base translation loaded with ${baseKeys.size} keys`);
 
       for (const file of translationFiles) {
         const locale = this.extractLocaleFromPath(file);
         const translation = this.loadTranslations(file);
         const keys = this.extractKeys(translation);
-        
+
         const completeness = (keys.size / baseKeys.size) * 100;
         this.translationStats.set(locale, {
           total: baseKeys.size,
           translated: keys.size,
-          completeness: Math.round(completeness)
+          completeness: Math.round(completeness),
         });
 
         if (completeness < 80) {
@@ -87,7 +86,6 @@ class I18nGovernor {
           this.passed.push(`Translation complete for ${locale}: ${Math.round(completeness)}%`);
         }
       }
-
     } catch (error) {
       this.warnings.push(`Translation completeness check failed: ${error.message}`);
     }
@@ -95,27 +93,20 @@ class I18nGovernor {
 
   async checkRTLSupport() {
     console.log('↔️ Checking RTL support...');
-    
+
     try {
       // Check for RTL CSS
-      const rtlPatterns = [
-        'dir="rtl"',
-        '[dir="rtl"]',
-        'rtl:',
-        'ltr:',
-        'text-right',
-        'text-left'
-      ];
+      const rtlPatterns = ['dir="rtl"', '[dir="rtl"]', 'rtl:', 'ltr:', 'text-right', 'text-left'];
 
       let rtlSupport = 0;
-      
+
       for (const pattern of rtlPatterns) {
         try {
           const result = execSync(
             `rg -n "${pattern}" --type css --type tsx --type jsx --type html`,
             { encoding: 'utf8' }
           );
-          
+
           if (result.trim()) {
             rtlSupport++;
           }
@@ -127,7 +118,9 @@ class I18nGovernor {
       if (rtlSupport >= 3) {
         this.passed.push(`RTL support detected (${rtlSupport}/6 patterns)`);
       } else {
-        this.warnings.push(`Limited RTL support (${rtlSupport}/6 patterns) - consider adding RTL styles`);
+        this.warnings.push(
+          `Limited RTL support (${rtlSupport}/6 patterns) - consider adding RTL styles`
+        );
       }
 
       // Check for logical properties
@@ -135,18 +128,17 @@ class I18nGovernor {
         'margin-inline',
         'padding-inline',
         'border-inline',
-        'inset-inline'
+        'inset-inline',
       ];
 
       let logicalSupport = 0;
-      
+
       for (const property of logicalProperties) {
         try {
-          const result = execSync(
-            `rg -n "${property}" --type css --type tsx`,
-            { encoding: 'utf8' }
-          );
-          
+          const result = execSync(`rg -n "${property}" --type css --type tsx`, {
+            encoding: 'utf8',
+          });
+
           if (result.trim()) {
             logicalSupport++;
           }
@@ -160,7 +152,6 @@ class I18nGovernor {
       } else {
         this.warnings.push(`Consider using CSS logical properties for better RTL support`);
       }
-
     } catch (error) {
       this.warnings.push(`RTL support check failed: ${error.message}`);
     }
@@ -168,17 +159,19 @@ class I18nGovernor {
 
   async checkHardcodedText() {
     console.log('🔤 Checking for hardcoded text...');
-    
+
     try {
       // Check for potential hardcoded text in JSX
       const result = execSync(
         'rg -n ">[A-Z][a-z ]{10,}<" --type tsx --type jsx components/ | head -20',
         { encoding: 'utf8' }
       );
-      
+
       if (result.trim()) {
         const hardcodedCount = result.split('\n').length;
-        this.warnings.push(`Potential hardcoded text found (${hardcodedCount} instances) - consider using translation keys`);
+        this.warnings.push(
+          `Potential hardcoded text found (${hardcodedCount} instances) - consider using translation keys`
+        );
       } else {
         this.passed.push('No obvious hardcoded text patterns found');
       }
@@ -186,14 +179,13 @@ class I18nGovernor {
       // Check for translation function usage
       const translationPatterns = ['t(', 'useTranslations', 'formatMessage'];
       let translationUsage = 0;
-      
+
       for (const pattern of translationPatterns) {
         try {
-          const result = execSync(
-            `rg -n "${pattern}" --type ts --type tsx --type js --type jsx`,
-            { encoding: 'utf8' }
-          );
-          
+          const result = execSync(`rg -n "${pattern}" --type ts --type tsx --type js --type jsx`, {
+            encoding: 'utf8',
+          });
+
           if (result.trim()) {
             translationUsage++;
           }
@@ -207,7 +199,6 @@ class I18nGovernor {
       } else {
         this.warnings.push('No translation function usage detected - ensure i18n is implemented');
       }
-
     } catch (error) {
       this.warnings.push(`Hardcoded text check failed: ${error.message}`);
     }
@@ -215,16 +206,16 @@ class I18nGovernor {
 
   async checkLocaleConfiguration() {
     console.log('⚙️ Checking locale configuration...');
-    
+
     const configFiles = [
       'next-intl.config.js',
       'i18n.config.js',
       'intl.config.ts',
-      'next.config.ts'
+      'next.config.ts',
     ];
 
     let configFound = false;
-    
+
     for (const file of configFiles) {
       if (fs.existsSync(path.join(process.cwd(), file))) {
         configFound = true;
@@ -253,25 +244,24 @@ class I18nGovernor {
 
   async checkDateTimeFormatting() {
     console.log('📅 Checking date/time formatting...');
-    
+
     try {
       // Check for internationalized date formatting
       const datePatterns = [
         'Intl.DateTimeFormat',
         'toLocaleDateString',
         'format(',
-        'date-fns/locale'
+        'date-fns/locale',
       ];
 
       let dateFormatting = 0;
-      
+
       for (const pattern of datePatterns) {
         try {
-          const result = execSync(
-            `rg -n "${pattern}" --type ts --type tsx --type js --type jsx`,
-            { encoding: 'utf8' }
-          );
-          
+          const result = execSync(`rg -n "${pattern}" --type ts --type tsx --type js --type jsx`, {
+            encoding: 'utf8',
+          });
+
           if (result.trim()) {
             dateFormatting++;
           }
@@ -281,11 +271,14 @@ class I18nGovernor {
       }
 
       if (dateFormatting >= 2) {
-        this.passed.push(`Internationalized date formatting detected (${dateFormatting}/4 patterns)`);
+        this.passed.push(
+          `Internationalized date formatting detected (${dateFormatting}/4 patterns)`
+        );
       } else {
-        this.warnings.push(`Limited date formatting i18n (${dateFormatting}/4 patterns) - consider locale-aware formatting`);
+        this.warnings.push(
+          `Limited date formatting i18n (${dateFormatting}/4 patterns) - consider locale-aware formatting`
+        );
       }
-
     } catch (error) {
       this.warnings.push(`Date formatting check failed: ${error.message}`);
     }
@@ -293,25 +286,19 @@ class I18nGovernor {
 
   async checkNumberFormatting() {
     console.log('🔢 Checking number formatting...');
-    
+
     try {
       // Check for internationalized number formatting
-      const numberPatterns = [
-        'Intl.NumberFormat',
-        'toLocaleString',
-        'currency',
-        'decimal'
-      ];
+      const numberPatterns = ['Intl.NumberFormat', 'toLocaleString', 'currency', 'decimal'];
 
       let numberFormatting = 0;
-      
+
       for (const pattern of numberPatterns) {
         try {
-          const result = execSync(
-            `rg -n "${pattern}" --type ts --type tsx --type js --type jsx`,
-            { encoding: 'utf8' }
-          );
-          
+          const result = execSync(`rg -n "${pattern}" --type ts --type tsx --type js --type jsx`, {
+            encoding: 'utf8',
+          });
+
           if (result.trim()) {
             numberFormatting++;
           }
@@ -321,11 +308,14 @@ class I18nGovernor {
       }
 
       if (numberFormatting >= 2) {
-        this.passed.push(`Internationalized number formatting detected (${numberFormatting}/4 patterns)`);
+        this.passed.push(
+          `Internationalized number formatting detected (${numberFormatting}/4 patterns)`
+        );
       } else {
-        this.warnings.push(`Limited number formatting i18n (${numberFormatting}/4 patterns) - consider locale-aware formatting`);
+        this.warnings.push(
+          `Limited number formatting i18n (${numberFormatting}/4 patterns) - consider locale-aware formatting`
+        );
       }
-
     } catch (error) {
       this.warnings.push(`Number formatting check failed: ${error.message}`);
     }
@@ -341,18 +331,18 @@ class I18nGovernor {
 
   extractKeys(obj, prefix = '') {
     const keys = new Set();
-    
+
     for (const key in obj) {
       const fullKey = prefix ? `${prefix}.${key}` : key;
-      
+
       if (typeof obj[key] === 'object' && obj[key] !== null) {
         const nestedKeys = this.extractKeys(obj[key], fullKey);
-        nestedKeys.forEach(k => keys.add(k));
+        nestedKeys.forEach((k) => keys.add(k));
       } else {
         keys.add(fullKey);
       }
     }
-    
+
     return keys;
   }
 
@@ -372,20 +362,23 @@ class I18nGovernor {
     if (this.translationStats.size > 0) {
       console.log('\n🌐 Translation Completeness:');
       this.translationStats.forEach((stats, locale) => {
-        const bar = '█'.repeat(Math.floor(stats.completeness / 10)) + 
-                   '░'.repeat(10 - Math.floor(stats.completeness / 10));
-        console.log(`   ${locale.padEnd(4)} ${bar} ${stats.completeness}% (${stats.translated}/${stats.total})`);
+        const bar =
+          '█'.repeat(Math.floor(stats.completeness / 10)) +
+          '░'.repeat(10 - Math.floor(stats.completeness / 10));
+        console.log(
+          `   ${locale.padEnd(4)} ${bar} ${stats.completeness}% (${stats.translated}/${stats.total})`
+        );
       });
     }
 
     if (this.warnings.length > 0) {
       console.log('\n⚠️  Warnings:');
-      this.warnings.forEach(warning => console.log(`   • ${warning}`));
+      this.warnings.forEach((warning) => console.log(`   • ${warning}`));
     }
 
     if (this.passed.length > 0) {
       console.log('\n✅ Passed checks:');
-      this.passed.forEach(check => console.log(`   • ${check}`));
+      this.passed.forEach((check) => console.log(`   • ${check}`));
     }
 
     // i18n score

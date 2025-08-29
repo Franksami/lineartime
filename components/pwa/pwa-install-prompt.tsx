@@ -92,7 +92,7 @@ export function PWAInstallPrompt() {
                 <Download className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <CardTitle className="text-lg">Install LinearTime</CardTitle>
+                <CardTitle className="text-lg">Install Command Center Calendar</CardTitle>
                 <CardDescription className="text-sm">Get the full app experience</CardDescription>
               </div>
             </div>

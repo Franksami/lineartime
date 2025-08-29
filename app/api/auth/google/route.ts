@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify state token
-    let stateData;
+    let stateData: any;
     try {
       stateData = JSON.parse(Buffer.from(state, 'base64').toString());
     } catch {
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
     const { data: calendarList } = await calendar.calendarList.list();
 
     // Store provider connection with server-side encryption
-    const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+    const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL || '');
 
     // Get Convex user ID
     const convexUser = await convex.query(api.users.getUserByClerkId, {
@@ -118,15 +118,15 @@ export async function POST(request: NextRequest) {
     // Store the provider connection using server-side encryption
     await convex.action(api.calendar.encryption.connectProviderWithTokens, {
       provider: 'google',
-      accessToken: tokens.access_token!,
+      accessToken: tokens.access_token || '',
       refreshToken: tokens.refresh_token || undefined,
       expiresAt: tokens.expiry_date || undefined,
-      providerAccountId: userInfo.id!,
+      providerAccountId: userInfo.id || '',
       settings: {
         calendars:
           calendarList.items?.map((cal) => ({
-            id: cal.id!,
-            name: cal.summary!,
+            id: cal.id || '',
+            name: cal.summary || '',
             color: cal.backgroundColor || '#4285F4',
             syncEnabled: cal.primary || false, // Enable primary calendar by default
             isPrimary: cal.primary || false,

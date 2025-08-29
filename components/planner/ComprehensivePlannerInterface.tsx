@@ -1,5 +1,5 @@
 /**
- * Comprehensive CheatCal AI Revenue Planner Interface
+ * Comprehensive Command Center AI Revenue Planner Interface
  *
  * Complete integration hub that provides access to ALL sophisticated features:
  * - Enhanced Calendar Toolbar with 10 library switching
@@ -12,7 +12,7 @@
  * This is the sophisticated interface that restores all functionality
  * while adding AI revenue optimization as the primary focus.
  *
- * @version 2.0.0 (CheatCal Complete Integration)
+ * @version 2.0.0 (Command Center Complete Integration)
  */
 
 'use client';
@@ -50,16 +50,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { AIDragDropIntegration } from '@/components/calendar/AIDragDropIntegration';
-import { ConflictResolutionModal } from '@/components/calendar/ConflictResolutionModal';
-// Complete Calendar System Integration
-import EnhancedCalendarToolbar from '@/components/calendar/EnhancedCalendarToolbar';
-import { EnhancedDragDropSystem } from '@/components/calendar/EnhancedDragDropSystem';
-import { EnhancedEventManagement } from '@/components/calendar/EnhancedEventManagement';
-import { EventManagement } from '@/components/calendar/EventManagement';
-import { EventModal } from '@/components/calendar/EventModal';
-import { LinearCalendarHorizontal } from '@/components/calendar/LinearCalendarHorizontal';
-import { MotionEnhancedCalendarToolbar } from '@/components/calendar/MotionEnhancedCalendarToolbar';
+// Command Workspace View Integration
+import { WeekView } from '@/views/week/WeekView';
+import { PlannerView } from '@/views/planner/PlannerView';
+import { ViewScaffold } from '@/components/_deprecated/ViewScaffold';
 
 import { AICapacityRibbon } from '@/components/ai/AICapacityRibbon';
 // Advanced AI Components
@@ -67,14 +61,8 @@ import { AIConflictDetector } from '@/components/ai/AIConflictDetector';
 import { AIInsightPanel } from '@/components/ai/AIInsightPanel';
 import { AINLPInput } from '@/components/ai/AINLPInput';
 
-// Calendar Provider System
-import { useCalendarProvider } from '@/components/calendar/providers/CalendarProvider';
-
-import { LibraryTransitionAnimator } from '@/components/calendar/LibraryTransitionAnimator';
-import { LiveCollaborationLayer } from '@/components/calendar/LiveCollaborationLayer';
-// Advanced Features
-import { TouchGestureHandler } from '@/components/calendar/TouchGestureHandler';
-import { WebSocketSyncManager } from '@/components/calendar/WebSocketSyncManager';
+// Preserve backend calendar integration
+import { useCalendarEvents } from '@/hooks/useCalendarEvents';
 
 // Business Logic
 import { useSoundEffects } from '@/lib/sound-service';
@@ -125,9 +113,8 @@ export default function ComprehensivePlannerInterface() {
   const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
   const [showToolbar, setShowToolbar] = useState(true);
 
-  // Calendar Integration
-  const { selectedLibrary, switchLibrary, events, onEventCreate, onEventUpdate, onEventDelete } =
-    useCalendarProvider();
+  // Command Workspace calendar integration
+  const { events, createEvent, updateEvent, deleteEvent } = useCalendarEvents();
 
   // Form submission
   const handleSubmit = useCallback(
@@ -143,19 +130,21 @@ export default function ComprehensivePlannerInterface() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Enhanced Calendar Toolbar - Full Functionality Restored */}
+      {/* Command Workspace Header */}
       {showToolbar && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="border-b border-border bg-card"
+          className="border-b border-border bg-card p-4"
         >
-          <MotionEnhancedCalendarToolbar
-            showSyncStatus={true}
-            enableKeyboardShortcuts={true}
-            showLibrarySelector={true}
-            compactMode={false}
-          />
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Command Workspace Features</h2>
+            <div className="flex space-x-2">
+              <Button variant="outline" size="sm">Calendar</Button>
+              <Button variant="outline" size="sm">Planner</Button>
+              <Button variant="outline" size="sm">Notes</Button>
+            </div>
+          </div>
         </motion.div>
       )}
 
@@ -172,13 +161,13 @@ export default function ComprehensivePlannerInterface() {
                 >
                   <Brain className="w-8 h-8 text-primary" />
                   <div className="absolute -top-1 -right-1">
-                    <div className="w-3 h-3 bg-green-600 /* TODO: Use semantic token */ rounded-full animate-pulse" />
+                    <div className="w-3 h-3 bg-primary rounded-full animate-pulse" />
                   </div>
                 </motion.div>
 
                 <div>
                   <h1 className="text-2xl font-bold text-foreground">
-                    CheatCal AI Revenue Planner
+                    Command Center AI Revenue Planner
                   </h1>
                   <p className="text-sm text-muted-foreground">
                     Complete Coordination Optimization Platform
@@ -245,7 +234,7 @@ export default function ComprehensivePlannerInterface() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
-                      <DollarSign className="w-5 h-5 text-green-600 /* TODO: Use semantic token */" />
+                      <DollarSign className="w-5 h-5 text-primary" />
                       <span>Revenue Goals</span>
                     </CardTitle>
                   </CardHeader>
@@ -259,7 +248,7 @@ export default function ComprehensivePlannerInterface() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
-                      <Zap className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */" />
+                      <Zap className="w-5 h-5 text-primary" />
                       <span>Quick Actions</span>
                     </CardTitle>
                   </CardHeader>
@@ -383,7 +372,9 @@ export default function ComprehensivePlannerInterface() {
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Conflicts</span>
-                      <span className="font-mono text-green-600 /* TODO: Use semantic token */">0 active</span>
+                      <span className="font-mono text-primary">
+                        0 active
+                      </span>
                     </div>
                   </CardContent>
                 </Card>
@@ -391,34 +382,11 @@ export default function ComprehensivePlannerInterface() {
             </div>
           </TabsContent>
 
-          {/* Calendar Tab - Full Linear Calendar with All Features */}
+          {/* Calendar Tab - Command Workspace Week View */}
           <TabsContent value="calendar" className="space-y-4">
-            {/* Enhanced Drag & Drop Integration */}
-            <AIDragDropIntegration>
-              <EnhancedDragDropSystem>
-                {/* Live Collaboration Layer */}
-                <LiveCollaborationLayer>
-                  <WebSocketSyncManager>
-                    {/* Main Calendar with Touch Gestures */}
-                    <TouchGestureHandler>
-                      <LibraryTransitionAnimator>
-                        <Card className="min-h-[600px]">
-                          <LinearCalendarHorizontal
-                            year={2025}
-                            events={events}
-                            onEventCreate={onEventCreate}
-                            onEventUpdate={onEventUpdate}
-                            onEventDelete={onEventDelete}
-                            enableInfiniteCanvas={true}
-                            className="w-full h-full"
-                          />
-                        </Card>
-                      </LibraryTransitionAnimator>
-                    </TouchGestureHandler>
-                  </WebSocketSyncManager>
-                </LiveCollaborationLayer>
-              </EnhancedDragDropSystem>
-            </AIDragDropIntegration>
+            <ViewScaffold title="Calendar View">
+              <WeekView />
+            </ViewScaffold>
           </TabsContent>
 
           {/* Insights Tab - AI Analytics & Performance */}
@@ -444,7 +412,9 @@ export default function ComprehensivePlannerInterface() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-green-600 /* TODO: Use semantic token */">+$12,847</div>
+                  <div className="text-3xl font-bold text-green-600 /* TODO: Use semantic token */">
+                    +$12,847
+                  </div>
                   <div className="text-sm text-muted-foreground">
                     This month's optimization value
                   </div>
@@ -460,34 +430,20 @@ export default function ComprehensivePlannerInterface() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-blue-600 /* TODO: Use semantic token */">94%</div>
+                  <div className="text-3xl font-bold text-blue-600 /* TODO: Use semantic token */">
+                    94%
+                  </div>
                   <div className="text-sm text-muted-foreground">Coordination efficiency</div>
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
 
-          {/* Coordination Tab - Team & Service Provider Management */}
+          {/* Coordination Tab - Task Management */}
           <TabsContent value="coordination" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Enhanced Event Management */}
-              <Card className="lg:col-span-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Users className="w-5 h-5 text-purple-600 /* TODO: Use semantic token */" />
-                    <span>Team Coordination Management</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <EnhancedEventManagement
-                    events={events}
-                    onEventCreate={onEventCreate}
-                    onEventUpdate={onEventUpdate}
-                    onEventDelete={onEventDelete}
-                  />
-                </CardContent>
-              </Card>
-            </div>
+            <ViewScaffold title="Task Coordination">
+              <PlannerView />
+            </ViewScaffold>
           </TabsContent>
         </Tabs>
       </div>
@@ -510,9 +466,7 @@ export default function ComprehensivePlannerInterface() {
         </motion.div>
       )}
 
-      {/* Modals and Overlays */}
-      <EventModal />
-      <ConflictResolutionModal />
+      {/* Command Workspace Integration Complete */}
     </div>
   );
 }

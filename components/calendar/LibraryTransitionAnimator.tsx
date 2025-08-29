@@ -1263,7 +1263,11 @@ export const LibraryTransitionAnimator: React.FC<LibraryTransitionAnimatorProps>
                     <div className="text-sm">
                       <div className="font-medium">{config.displayName}</div>
                       <div className="text-muted-foreground">Transition: {transitionType}</div>
-                      {isPreloaded && <div className="text-green-500 /* TODO: Use semantic token */">✓ Preloaded</div>}
+                      {isPreloaded && (
+                        <div className="text-green-500 /* TODO: Use semantic token */">
+                          ✓ Preloaded
+                        </div>
+                      )}
                     </div>
                   </TooltipContent>
                 </Tooltip>

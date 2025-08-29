@@ -1,4 +1,4 @@
-# LinearTime Security Architecture
+# Command Center Calendar Security Architecture
 
 > **Phase 2.6 Foundation Documentation**  
 > **Security Classification**: Production-Ready Enterprise Architecture  
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-LinearTime implements enterprise-grade security for the 4-provider calendar integration platform with **zero-trust architecture**, **server-side AES-256-GCM encryption**, and **comprehensive audit capabilities**. No sensitive credentials are ever stored client-side.
+Command Center Calendar implements enterprise-grade security for the 4-provider calendar integration platform with **zero-trust architecture**, **server-side AES-256-GCM encryption**, and **comprehensive audit capabilities**. No sensitive credentials are ever stored client-side.
 
 ## Core Security Principles
 
@@ -894,7 +894,7 @@ const securityAlerts = {
 
 ## Conclusion
 
-LinearTime's security architecture provides enterprise-grade protection for the 4-provider calendar integration platform through:
+Command Center Calendar's security architecture provides enterprise-grade protection for the 4-provider calendar integration platform through:
 
 - **Zero-Trust Model**: Never trust, always verify approach
 - **Defense in Depth**: Multiple layers of security controls  
@@ -903,4 +903,4 @@ LinearTime's security architecture provides enterprise-grade protection for the 
 - **Compliance Ready**: GDPR, SOC 2, and ISO 27001 alignment
 - **Incident Response**: Automated containment and recovery procedures
 
-This security foundation ensures LinearTime meets the highest security standards while maintaining usability and performance for enterprise calendar integration.
+This security foundation ensures Command Center Calendar meets the highest security standards while maintaining usability and performance for enterprise calendar integration.

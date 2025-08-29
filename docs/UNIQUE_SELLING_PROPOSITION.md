@@ -1,4 +1,4 @@
-# LinearTime Unique Selling Proposition (USP)
+# Command Center Calendar Unique Selling Proposition (USP)
 ## The World's First AI-Powered Multi-Provider Calendar Unification Platform
 
 ---
@@ -14,11 +14,11 @@
 
 ### **Primary USP Statement**
 
-> **"LinearTime is the only platform that unifies Google + Microsoft + Apple calendars with AI that prevents conflicts before they happen, while giving you quarterly visibility through our patent-pending 12-month horizontal timeline. Stop losing 2+ hours/week to calendar chaos and see your entire life at a glance."**
+> **"Command Center Calendar is the only platform that unifies Google + Microsoft + Apple calendars with AI that prevents conflicts before they happen, while giving you quarterly visibility through our patent-pending 12-month horizontal timeline. Stop losing 2+ hours/week to calendar chaos and see your entire life at a glance."**
 
 ### **Elevator Pitch (30 seconds)**
 
-*"Modern teams waste 2+ hours per week coordinating meetings across fragmented calendar systems. LinearTime solves this with the world's first AI-powered multi-provider calendar platform. We unify Google, Microsoft, and Apple calendars, prevent conflicts with advanced AI, and show your entire quarter on one screen. No competitor offers this combination of true multi-provider integration, predictive AI, and quarterly visibility."*
+*"Modern teams waste 2+ hours per week coordinating meetings across fragmented calendar systems. Command Center Calendar solves this with the world's first AI-powered multi-provider calendar platform. We unify Google, Microsoft, and Apple calendars, prevent conflicts with advanced AI, and show your entire quarter on one screen. No competitor offers this combination of true multi-provider integration, predictive AI, and quarterly visibility."*
 
 ---
 
@@ -223,18 +223,18 @@ interface PerformanceComparison {
 ### **Core Message Hierarchy**
 
 #### **Level 1: Core Problem + Solution**
-*"Stop losing 2+ hours/week to calendar chaos. LinearTime unifies all your calendars with AI that prevents conflicts before they happen."*
+*"Stop losing 2+ hours/week to calendar chaos. Command Center Calendar unifies all your calendars with AI that prevents conflicts before they happen."*
 
 #### **Level 2: Unique Differentiators**
 *"The only platform with true multi-provider AI conflict prevention and quarterly timeline visibility. See your entire life at a glance while AI handles the scheduling complexity."*
 
 #### **Level 3: Complete Value Proposition**
-*"LinearTime transforms calendar management from reactive chaos to proactive intelligence. Our patent-pending 12-month timeline, advanced AI conflict prevention, and enterprise security create the world's most powerful scheduling efficiency platform."*
+*"Command Center Calendar transforms calendar management from reactive chaos to proactive intelligence. Our patent-pending 12-month timeline, advanced AI conflict prevention, and enterprise security create the world's most powerful scheduling efficiency platform."*
 
 ### **Audience-Specific USP Variations**
 
 #### **For B2B Operations Managers (Primary ICP)**
-*"LinearTime eliminates the 3+ hours your team wastes weekly on calendar coordination. Our AI prevents conflicts across Google + Microsoft, while our quarterly timeline helps you plan team capacity like never before. Enterprise security included."*
+*"Command Center Calendar eliminates the 3+ hours your team wastes weekly on calendar coordination. Our AI prevents conflicts across Google + Microsoft, while our quarterly timeline helps you plan team capacity like never before. Enterprise security included."*
 
 **Key Benefits:**
 - Reduce team coordination overhead by 50-75%
@@ -243,7 +243,7 @@ interface PerformanceComparison {
 - ROI: Save $120+ weekly per team member for $39/month
 
 #### **For Freelancers/Consultants (Secondary ICP)**
-*"Never double-book clients again. LinearTime unifies all your calendars with AI that prevents conflicts automatically. See your quarterly workload and maintain professional reliability across all client relationships."*
+*"Never double-book clients again. Command Center Calendar unifies all your calendars with AI that prevents conflicts automatically. See your quarterly workload and maintain professional reliability across all client relationships."*
 
 **Key Benefits:**
 - Zero double-booking across client calendars
@@ -252,7 +252,7 @@ interface PerformanceComparison {
 - ROI: Save 2+ hours weekly for $19/month
 
 #### **For Enterprise IT Directors (Influencer)**
-*"LinearTime is the only calendar platform built enterprise-first. SOC 2 ready, AES-256-GCM encryption, comprehensive audit logs, and SAML SSO. Deploy with confidence knowing security and compliance are built-in."*
+*"Command Center Calendar is the only calendar platform built enterprise-first. SOC 2 ready, AES-256-GCM encryption, comprehensive audit logs, and SAML SSO. Deploy with confidence knowing security and compliance are built-in."*
 
 **Key Benefits:**
 - SOC 2 Type II compliance ready
@@ -266,7 +266,7 @@ interface PerformanceComparison {
 
 ### **Feature Differentiation Matrix**
 
-| Feature | LinearTime | Motion | Reclaim | Calendly | Google/MS |
+| Feature | Command Center Calendar | Motion | Reclaim | Calendly | Google/MS |
 |---------|------------|--------|---------|----------|-----------|
 | **12-Month Timeline** | ✅ **UNIQUE** | ❌ | ❌ | ❌ | ❌ |
 | **Multi-Provider AI** | ✅ **ADVANCED** | ⚠️ Limited | ⚠️ Basic | ❌ | ❌ |
@@ -278,7 +278,7 @@ interface PerformanceComparison {
 
 ### **Market Position Statement**
 
-> **LinearTime occupies the unique "AI-Powered Calendar Unification" category - a blue ocean space with no direct competitors. We combine the enterprise readiness of Microsoft/Google with the AI innovation of Motion/Reclaim, while adding breakthrough timeline visualization that no one else offers.**
+> **Command Center Calendar occupies the unique "AI-Powered Calendar Unification" category - a blue ocean space with no direct competitors. We combine the enterprise readiness of Microsoft/Google with the AI innovation of Motion/Reclaim, while adding breakthrough timeline visualization that no one else offers.**
 
 ---
 
@@ -348,7 +348,7 @@ interface USPValidation {
 
 #### **Supporting Messages**
 - **Problem Agitation**: "Modern teams waste 2.4 hours per week coordinating meetings across fragmented calendar systems, with 73% of conflicts going undetected until they cause disruption."
-- **Solution Introduction**: "LinearTime unifies Google + Microsoft + Apple calendars with advanced AI that prevents conflicts before they happen."
+- **Solution Introduction**: "Command Center Calendar unifies Google + Microsoft + Apple calendars with advanced AI that prevents conflicts before they happen."
 - **Unique Value**: "Our patent-pending 12-month horizontal timeline gives you quarterly visibility that no competitor offers."
 - **Proof**: "Save 2+ hours weekly with 80% conflict reduction and enterprise-grade security."
 
@@ -376,15 +376,15 @@ interface USPValidation {
 5. **ROI Calculator**: Demonstrate 2,526% return on investment
 
 #### **Objection Handling**
-- **"We already use Google/Microsoft"**: *"But you're missing 60% of scheduling efficiency by being locked into one ecosystem. LinearTime unifies everything while adding AI intelligence they don't have."*
+- **"We already use Google/Microsoft"**: *"But you're missing 60% of scheduling efficiency by being locked into one ecosystem. Command Center Calendar unifies everything while adding AI intelligence they don't have."*
 - **"Motion/Reclaim already does AI scheduling"**: *"They focus on personal optimization, not multi-provider conflict prevention. Plus, no one offers our quarterly timeline visibility."*
 - **"This seems expensive"**: *"At $19/month, you save $480 in time monthly - that's 2,526% ROI. Plus, what's the cost of a single major scheduling conflict?"*
 
 ---
 
-## 🎯 Conclusion: The LinearTime Advantage
+## 🎯 Conclusion: The Command Center Calendar Advantage
 
-LinearTime's USP is built on **five unassailable competitive advantages**:
+Command Center Calendar's USP is built on **five unassailable competitive advantages**:
 
 1. **Patent-Pending Timeline Innovation** - Unique market position
 2. **True Multi-Provider AI** - Technical superiority  
@@ -394,7 +394,7 @@ LinearTime's USP is built on **five unassailable competitive advantages**:
 
 **This combination creates a defensible market position in the $320M calendar scheduling efficiency opportunity, with no direct competitors offering the same comprehensive solution.**
 
-**Our USP transforms LinearTime from "another calendar app" into "the future of scheduling intelligence" - a category-defining platform that makes "Life bigger than a week" for millions of users worldwide.**
+**Our USP transforms Command Center Calendar from "another calendar app" into "the future of scheduling intelligence" - a category-defining platform that makes "Life bigger than a week" for millions of users worldwide.**
 
 ---
 

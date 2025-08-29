@@ -474,7 +474,7 @@ export function ProfessionalDragDropSystem({
     // Example conflict detection (would be enhanced with real AI)
     if (dragData.event && dropTarget.data?.current) {
       // Time overlap conflict
-      if (/* conflict logic */) {
+      if (false) { // TODO: Implement conflict logic
         conflicts.push({
           id: 'time-overlap',
           type: 'time-overlap',
@@ -486,7 +486,7 @@ export function ProfessionalDragDropSystem({
       }
       
       // Provider compatibility conflict
-      if (/* provider logic */) {
+      if (false) { // TODO: Implement provider logic
         conflicts.push({
           id: 'provider-limit',
           type: 'provider-limitation',

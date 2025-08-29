@@ -1,7 +1,7 @@
 ## Linear Calendar Foundation Specification
 
 ### Purpose
-- Define the exact, locked visual foundation of the LinearTime 12-month horizontal timeline
+- Define the exact, locked visual foundation of the Command Center Calendar 12-month horizontal timeline
 - Preserve the unique layout while allowing implementation improvements
 - Ensure year-agnostic correctness (proper day-of-week alignment for any year)
 - Align with PRDs for AI, capacity, security, performance, and testing

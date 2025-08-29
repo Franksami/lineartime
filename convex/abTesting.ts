@@ -1,6 +1,6 @@
 /**
  * Convex Backend Functions for A/B Testing Framework
- * Integrates with LinearTime's existing infrastructure for production-ready testing
+ * Integrates with Command Center Calendar's existing infrastructure for production-ready testing
  */
 
 import { v } from 'convex/values';

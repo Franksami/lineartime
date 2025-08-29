@@ -381,6 +381,6 @@ export function AIDragDropIntegration({ children, className }) {
 ---
 
 **Authored by**: Backend Architect Persona + Accessibility Specialist  
-**Methodology**: Proven LinearTime/CheatCal development framework  
+**Methodology**: Proven Command Center Calendar/Command Center development framework  
 **Quality**: Context7 research + @dnd-kit professional best practices  
 **Date**: August 27, 2025

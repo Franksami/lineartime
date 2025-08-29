@@ -598,7 +598,9 @@ export function MultiProviderEventCreator({
                   {index + 1}
                 </div>
                 <span className="text-sm capitalize">{stepName}</span>
-                {index < 2 && <div className="w-8 h-px bg-gray-300 /* TODO: Use semantic token */" />}
+                {index < 2 && (
+                  <div className="w-8 h-px bg-gray-300 /* TODO: Use semantic token */" />
+                )}
               </div>
             ))}
           </div>

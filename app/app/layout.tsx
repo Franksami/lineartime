@@ -3,12 +3,12 @@
  * Layout configuration for the /app route with Geist fonts and providers
  */
 
-import { ReactNode } from 'react'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
+import { ReactNode } from 'react';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 
 interface CommandWorkspaceLayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 /**
@@ -18,11 +18,9 @@ interface CommandWorkspaceLayoutProps {
 export default function CommandWorkspaceLayout({ children }: CommandWorkspaceLayoutProps) {
   return (
     <div className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <main className="font-sans bg-background text-foreground">
-        {children}
-      </main>
+      <main className="font-sans bg-background text-foreground">{children}</main>
     </div>
-  )
+  );
 }
 
 /**
@@ -31,7 +29,8 @@ export default function CommandWorkspaceLayout({ children }: CommandWorkspaceLay
 export const metadata = {
   title: {
     template: '%s | Command Workspace',
-    default: 'Command Workspace | LinearTime'
+    default: 'Command Workspace | Command Center Calendar',
   },
-  description: 'Research-validated Command Workspace with three-pane architecture and contextual AI integration'
-}
+  description:
+    'Research-validated Command Workspace with three-pane architecture and contextual AI integration',
+};

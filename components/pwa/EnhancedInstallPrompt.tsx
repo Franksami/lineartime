@@ -140,11 +140,11 @@ export function EnhancedInstallPrompt({
     const level = getEngagementLevel();
     switch (level) {
       case 'high':
-        return "You're actively using LinearTime! Install it for the best experience.";
+        return "You're actively using Command Center Calendar! Install it for the best experience.";
       case 'medium':
-        return 'Enjoying LinearTime? Install it to access it quickly anytime.';
+        return 'Enjoying Command Center Calendar? Install it to access it quickly anytime.';
       default:
-        return 'Get the full LinearTime experience with our desktop app.';
+        return 'Get the full Command Center Calendar experience with our desktop app.';
     }
   };
 
@@ -183,7 +183,7 @@ export function EnhancedInstallPrompt({
             </div>
 
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm mb-1">Install LinearTime</h3>
+              <h3 className="font-semibold text-sm mb-1">Install Command Center Calendar</h3>
               <p className="text-xs text-muted-foreground mb-3">{getEngagementMessage()}</p>
 
               <div className="flex items-center gap-2 mb-3">
@@ -246,7 +246,7 @@ export function EnhancedInstallPrompt({
         <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
           <Download className="w-8 h-8 text-primary" />
         </div>
-        <CardTitle>Install LinearTime</CardTitle>
+        <CardTitle>Install Command Center Calendar</CardTitle>
         <CardDescription>{getEngagementMessage()}</CardDescription>
       </CardHeader>
 

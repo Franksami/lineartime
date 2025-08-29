@@ -292,7 +292,9 @@ const SecurityMonitoringDashboard: React.FC = () => {
                 <p className="text-sm font-medium text-green-700 /* TODO: Use semantic token */ dark:text-green-300 /* TODO: Use semantic token */">
                   Security Status
                 </p>
-                <p className="text-xl font-bold text-green-800 /* TODO: Use semantic token */ dark:text-green-200 /* TODO: Use semantic token */">Secure</p>
+                <p className="text-xl font-bold text-green-800 /* TODO: Use semantic token */ dark:text-green-200 /* TODO: Use semantic token */">
+                  Secure
+                </p>
               </div>
             </div>
             <div className="mt-3 flex items-center gap-2">
@@ -311,12 +313,18 @@ const SecurityMonitoringDashboard: React.FC = () => {
                 <Lock className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium text-blue-700 /* TODO: Use semantic token */ dark:text-blue-300 /* TODO: Use semantic token */">Encryption</p>
-                <p className="text-xl font-bold text-blue-800 /* TODO: Use semantic token */ dark:text-blue-200 /* TODO: Use semantic token */">AES-256-GCM</p>
+                <p className="text-sm font-medium text-blue-700 /* TODO: Use semantic token */ dark:text-blue-300 /* TODO: Use semantic token */">
+                  Encryption
+                </p>
+                <p className="text-xl font-bold text-blue-800 /* TODO: Use semantic token */ dark:text-blue-200 /* TODO: Use semantic token */">
+                  AES-256-GCM
+                </p>
               </div>
             </div>
             <div className="mt-3">
-              <span className="text-xs text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */">All tokens encrypted</span>
+              <span className="text-xs text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */">
+                All tokens encrypted
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -331,7 +339,9 @@ const SecurityMonitoringDashboard: React.FC = () => {
                 <p className="text-sm font-medium text-purple-700 /* TODO: Use semantic token */ dark:text-purple-300 /* TODO: Use semantic token */">
                   Active Monitoring
                 </p>
-                <p className="text-xl font-bold text-purple-800 /* TODO: Use semantic token */ dark:text-purple-200 /* TODO: Use semantic token */">24/7</p>
+                <p className="text-xl font-bold text-purple-800 /* TODO: Use semantic token */ dark:text-purple-200 /* TODO: Use semantic token */">
+                  24/7
+                </p>
               </div>
             </div>
             <div className="mt-3">
@@ -515,7 +525,9 @@ const SecurityMonitoringDashboard: React.FC = () => {
         <div className="flex items-center gap-3 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ animate-pulse" />
-            <span className="text-green-600 /* TODO: Use semantic token */ font-medium">Security Status: Healthy</span>
+            <span className="text-green-600 /* TODO: Use semantic token */ font-medium">
+              Security Status: Healthy
+            </span>
           </div>
           <div className="w-px h-4 bg-border" />
           <span className="text-muted-foreground">

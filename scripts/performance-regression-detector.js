@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
- * CheatCal Performance Regression Detection System
+ * Command Center Performance Regression Detection System
  * 
- * Monitors performance metrics for CheatCal's advanced features including
+ * Monitors performance metrics for Command Center's advanced features including
  * Electron overlay, computer vision, and AI systems to ensure 60+ FPS
  * performance targets are maintained.
  * 
  * @version 1.0.0 (Performance Monitoring Release)
- * @author CheatCal Performance Team
+ * @author Command Center Performance Team
  */
 
 const { chromium } = require('playwright');
@@ -58,7 +58,7 @@ class PerformanceRegressionDetector {
       cpuUsagePercent: 30
     };
 
-    console.log('⚡ CheatCal Performance Regression Detector initializing...');
+    console.log('⚡ Command Center Performance Regression Detector initializing...');
     console.log(PERFORMANCE_MONITORING_ARCHITECTURE);
   }
 
@@ -69,7 +69,7 @@ class PerformanceRegressionDetector {
       // Load baseline metrics
       this.loadBaseline();
 
-      // Test CheatCal platform performance  
+      // Test Command Center platform performance  
       await this.testCheatCalPerformance();
 
       // Test foundation performance (ensure no degradation)
@@ -91,10 +91,10 @@ class PerformanceRegressionDetector {
   }
 
   /**
-   * Test CheatCal Platform Performance
+   * Test Command Center Platform Performance
    */
   async testCheatCalPerformance() {
-    console.log('💀 Testing CheatCal platform performance...');
+    console.log('💀 Testing Command Center platform performance...');
 
     const browser = await chromium.launch();
     const page = await browser.newPage();
@@ -103,8 +103,8 @@ class PerformanceRegressionDetector {
       // Enable performance monitoring
       await page.coverage.startJSCoverage();
       
-      // Navigate to CheatCal platform
-      console.log('   Loading CheatCal platform...');
+      // Navigate to Command Center platform
+      console.log('   Loading Command Center platform...');
       const startTime = Date.now();
       await page.goto('http://localhost:3000/cheatcal');
       await page.waitForLoadState('networkidle');
@@ -157,12 +157,12 @@ class PerformanceRegressionDetector {
         performanceScore: this.calculatePerformanceScore(performanceMetrics)
       };
 
-      console.log(`   CheatCal FPS: ${this.currentMetrics.cheatcal.fps}`);
+      console.log(`   Command Center FPS: ${this.currentMetrics.cheatcal.fps}`);
       console.log(`   Memory usage: ${this.currentMetrics.cheatcal.memoryMB}MB`);
       console.log(`   Load time: ${this.currentMetrics.cheatcal.loadTimeMs}ms`);
 
     } catch (error) {
-      console.error('   CheatCal performance test failed:', error);
+      console.error('   Command Center performance test failed:', error);
       this.currentMetrics.cheatcal = { error: error.message };
     } finally {
       await browser.close();
@@ -247,13 +247,13 @@ class PerformanceRegressionDetector {
     
     const regressions = [];
 
-    // Compare CheatCal performance against targets
+    // Compare Command Center performance against targets
     if (this.currentMetrics.cheatcal) {
       const cheatcal = this.currentMetrics.cheatcal;
       
       if (cheatcal.fps && cheatcal.fps < this.performanceTargets.fps) {
         regressions.push({
-          feature: 'CheatCal FPS',
+          feature: 'Command Center FPS',
           current: cheatcal.fps,
           target: this.performanceTargets.fps,
           severity: 'high',
@@ -263,7 +263,7 @@ class PerformanceRegressionDetector {
 
       if (cheatcal.memoryMB > this.performanceTargets.memoryMB) {
         regressions.push({
-          feature: 'CheatCal Memory Usage', 
+          feature: 'Command Center Memory Usage', 
           current: `${cheatcal.memoryMB}MB`,
           target: `${this.performanceTargets.memoryMB}MB`,
           severity: 'medium',
@@ -273,7 +273,7 @@ class PerformanceRegressionDetector {
 
       if (cheatcal.loadTimeMs > this.performanceTargets.loadTimeMs) {
         regressions.push({
-          feature: 'CheatCal Load Time',
+          feature: 'Command Center Load Time',
           current: `${cheatcal.loadTimeMs}ms`,
           target: `${this.performanceTargets.loadTimeMs}ms`,
           severity: 'medium',
@@ -351,13 +351,13 @@ class PerformanceRegressionDetector {
    * Generate Performance Report
    */
   generatePerformanceReport(regressions) {
-    console.log('\n📋 CheatCal Performance Report');
+    console.log('\n📋 Command Center Performance Report');
     console.log('=' .repeat(50));
 
     // Performance Summary
     console.log('\n⚡ Performance Summary:');
     if (this.currentMetrics.cheatcal) {
-      console.log(`   CheatCal Platform: ${this.currentMetrics.cheatcal.performanceScore || 'N/A'}/100`);
+      console.log(`   Command Center Platform: ${this.currentMetrics.cheatcal.performanceScore || 'N/A'}/100`);
     }
     if (this.currentMetrics.foundation) {
       console.log(`   Foundation: ${this.currentMetrics.foundation.performanceScore || 'N/A'}/100`);

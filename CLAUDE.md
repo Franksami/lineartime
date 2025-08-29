@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Checkpoint**: Research Validation Complete + Command Workspace PRD Approved
 - **Implementation Status**: Phase 1 Ready (Shell + Views + Command System)
 
-**LinearTime Command Workspace** - AI-powered productivity platform with three-pane workspace architecture (Sidebar + Tabs + Context Dock). Features command-first experience, contextual AI agents, and privacy-first computer vision integration.
+**Command Center Calendar Command Workspace** - AI-powered productivity platform with three-pane workspace architecture (Sidebar + Tabs + Context Dock). Features command-first experience, contextual AI agents, and privacy-first computer vision integration.
 
 **Current Version**: v2.0.0 (Command Workspace Architecture - Research Validated)
 **Previous Foundation**: Calendar Integration Platform (PRESERVED as backend infrastructure)

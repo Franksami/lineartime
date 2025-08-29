@@ -79,7 +79,7 @@ const providerConfigs: Record<Provider, ProviderConfig> = {
     authType: 'oauth',
     description: 'Sync with Google Calendar for seamless integration with your Google Workspace',
     setupInstructions: [
-      'Click "Connect" to authorize LinearTime',
+      'Click "Connect" to authorize Command Center Calendar',
       'Select the calendars you want to sync',
       'Events will sync automatically in real-time',
     ],

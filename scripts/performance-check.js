@@ -21,9 +21,9 @@ const PERFORMANCE_BUDGETS = {
   },
   coreWebVitals: {
     lcp: 2500, // Largest Contentful Paint
-    fid: 100,  // First Input Delay
-    cls: 0.1,  // Cumulative Layout Shift
-  }
+    fid: 100, // First Input Delay
+    cls: 0.1, // Cumulative Layout Shift
+  },
 };
 
 class PerformanceGovernor {
@@ -45,17 +45,16 @@ class PerformanceGovernor {
       await this.checkMemoryLeaks();
 
       this.generateReport();
-      
+
       if (this.errors.length > 0) {
         console.error('\n❌ Performance governance failed!');
         console.error('Fix the following issues:\n');
-        this.errors.forEach(error => console.error(`  • ${error}`));
+        this.errors.forEach((error) => console.error(`  • ${error}`));
         process.exit(1);
       }
 
       console.log('\n✅ Performance governance passed!');
       return true;
-
     } catch (error) {
       console.error('\n💥 Performance check failed:', error.message);
       process.exit(1);
@@ -64,7 +63,7 @@ class PerformanceGovernor {
 
   async checkBundleSize() {
     console.log('📦 Checking bundle size...');
-    
+
     try {
       // Check if build exists
       const buildDir = path.join(process.cwd(), '.next');
@@ -76,7 +75,7 @@ class PerformanceGovernor {
       // Analyze bundle (simplified check)
       const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
       const depCount = Object.keys(packageJson.dependencies || {}).length;
-      
+
       if (depCount > 100) {
         this.warnings.push(`High dependency count (${depCount}) - consider bundle optimization`);
       } else {
@@ -89,7 +88,6 @@ class PerformanceGovernor {
       } else {
         this.warnings.push('Bundle analyzer not configured - add build:analyze script');
       }
-
     } catch (error) {
       this.warnings.push(`Bundle size check failed: ${error.message}`);
     }
@@ -97,22 +95,22 @@ class PerformanceGovernor {
 
   async checkComponentSize() {
     console.log('🧩 Checking component sizes...');
-    
+
     try {
       // Find large components (simplified heuristic)
       const result = execSync(
         'find components/ -name "*.tsx" -exec wc -l {} \\; | sort -nr | head -10',
         { encoding: 'utf8' }
       );
-      
+
       const lines = result.trim().split('\n');
       let largeComponents = 0;
-      
-      lines.forEach(line => {
+
+      lines.forEach((line) => {
         const parts = line.trim().split(/\s+/);
         const lineCount = parseInt(parts[0]);
         const fileName = parts[1];
-        
+
         if (lineCount > 500) {
           largeComponents++;
           this.warnings.push(`Large component detected: ${fileName} (${lineCount} lines)`);
@@ -122,7 +120,6 @@ class PerformanceGovernor {
       if (largeComponents === 0) {
         this.passed.push('All components are reasonably sized');
       }
-
     } catch (error) {
       this.warnings.push(`Component size check failed: ${error.message}`);
     }
@@ -130,22 +127,21 @@ class PerformanceGovernor {
 
   async checkImageOptimization() {
     console.log('🖼️ Checking image optimization...');
-    
+
     try {
       // Check for unoptimized images
       const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif'];
       let unoptimizedImages = 0;
       let optimizedImages = 0;
-      
+
       for (const ext of imageExtensions) {
         try {
-          const result = execSync(
-            `find public/ -name "*.${ext}" 2>/dev/null | wc -l`,
-            { encoding: 'utf8' }
-          );
-          
+          const result = execSync(`find public/ -name "*.${ext}" 2>/dev/null | wc -l`, {
+            encoding: 'utf8',
+          });
+
           const count = parseInt(result.trim());
-          
+
           if (['webp', 'avif'].includes(ext)) {
             optimizedImages += count;
           } else {
@@ -159,11 +155,10 @@ class PerformanceGovernor {
       if (optimizedImages > 0) {
         this.passed.push(`Modern image formats found: ${optimizedImages} files`);
       }
-      
+
       if (unoptimizedImages > optimizedImages * 2) {
         this.warnings.push(`Consider converting ${unoptimizedImages} images to WebP/AVIF`);
       }
-
     } catch (error) {
       this.warnings.push(`Image optimization check failed: ${error.message}`);
     }
@@ -171,14 +166,13 @@ class PerformanceGovernor {
 
   async checkCodeSplitting() {
     console.log('📤 Checking code splitting...');
-    
+
     try {
       // Check for dynamic imports
-      const result = execSync(
-        'rg -n "import\\(" --type ts --type tsx --type js --type jsx',
-        { encoding: 'utf8' }
-      );
-      
+      const result = execSync('rg -n "import\\(" --type ts --type tsx --type js --type jsx', {
+        encoding: 'utf8',
+      });
+
       if (result.trim()) {
         const dynamicImports = result.split('\n').length;
         this.passed.push(`Dynamic imports found: ${dynamicImports} instances`);
@@ -187,17 +181,15 @@ class PerformanceGovernor {
       }
 
       // Check for lazy loading
-      const lazyResult = execSync(
-        'rg -n "lazy\\(|Suspense" --type tsx --type jsx',
-        { encoding: 'utf8' }
-      );
-      
+      const lazyResult = execSync('rg -n "lazy\\(|Suspense" --type tsx --type jsx', {
+        encoding: 'utf8',
+      });
+
       if (lazyResult.trim()) {
         this.passed.push('Lazy loading patterns found');
       } else {
         this.warnings.push('Consider implementing lazy loading for non-critical components');
       }
-
     } catch (error) {
       this.warnings.push('No dynamic imports found - consider code splitting');
     }
@@ -205,19 +197,19 @@ class PerformanceGovernor {
 
   async checkAnimationPerformance() {
     console.log('🎬 Checking animation performance...');
-    
+
     try {
       // Check for GPU-accelerated properties
       const gpuProperties = ['transform', 'opacity', 'will-change'];
       let gpuOptimizedAnimations = 0;
-      
+
       for (const property of gpuProperties) {
         try {
           const result = execSync(
             `rg -n "${property}" --type css --type scss --type ts --type tsx`,
             { encoding: 'utf8' }
           );
-          
+
           if (result.trim()) {
             gpuOptimizedAnimations++;
           }
@@ -235,14 +227,14 @@ class PerformanceGovernor {
       // Check for expensive properties
       const expensiveProperties = ['box-shadow', 'border-radius', 'background-image'];
       let expensiveAnimations = 0;
-      
+
       for (const property of expensiveProperties) {
         try {
           const result = execSync(
             `rg -n "animate.*${property}|transition.*${property}" --type css --type scss`,
             { encoding: 'utf8' }
           );
-          
+
           if (result.trim()) {
             expensiveAnimations++;
           }
@@ -254,7 +246,6 @@ class PerformanceGovernor {
       if (expensiveAnimations > 0) {
         this.warnings.push(`Expensive properties in animations detected - consider alternatives`);
       }
-
     } catch (error) {
       this.warnings.push(`Animation performance check failed: ${error.message}`);
     }
@@ -262,39 +253,36 @@ class PerformanceGovernor {
 
   async checkMemoryLeaks() {
     console.log('💾 Checking for potential memory leaks...');
-    
+
     try {
       // Check for event listeners without cleanup
-      const eventPatterns = [
-        'addEventListener',
-        'setInterval',
-        'setTimeout'
-      ];
+      const eventPatterns = ['addEventListener', 'setInterval', 'setTimeout'];
 
       let potentialLeaks = 0;
-      
+
       for (const pattern of eventPatterns) {
         try {
-          const result = execSync(
-            `rg -n "${pattern}" --type ts --type tsx --type js --type jsx`,
-            { encoding: 'utf8' }
-          );
-          
+          const result = execSync(`rg -n "${pattern}" --type ts --type tsx --type js --type jsx`, {
+            encoding: 'utf8',
+          });
+
           if (result.trim()) {
             const addCount = result.split('\n').length;
-            
+
             // Check for cleanup
             const cleanupPattern = pattern.replace('add', 'remove').replace('set', 'clear');
             const cleanupResult = execSync(
               `rg -n "${cleanupPattern}" --type ts --type tsx --type js --type jsx`,
               { encoding: 'utf8' }
             );
-            
+
             const cleanupCount = cleanupResult.trim() ? cleanupResult.split('\n').length : 0;
-            
+
             if (addCount > cleanupCount * 1.5) {
               potentialLeaks++;
-              this.warnings.push(`Potential ${pattern} memory leak - ${addCount} additions vs ${cleanupCount} cleanups`);
+              this.warnings.push(
+                `Potential ${pattern} memory leak - ${addCount} additions vs ${cleanupCount} cleanups`
+              );
             }
           }
         } catch (e) {
@@ -305,7 +293,6 @@ class PerformanceGovernor {
       if (potentialLeaks === 0) {
         this.passed.push('No obvious memory leak patterns detected');
       }
-
     } catch (error) {
       this.warnings.push(`Memory leak check failed: ${error.message}`);
     }
@@ -319,12 +306,12 @@ class PerformanceGovernor {
 
     if (this.warnings.length > 0) {
       console.log('\n⚠️  Warnings:');
-      this.warnings.forEach(warning => console.log(`   • ${warning}`));
+      this.warnings.forEach((warning) => console.log(`   • ${warning}`));
     }
 
     if (this.passed.length > 0) {
       console.log('\n✅ Passed checks:');
-      this.passed.forEach(check => console.log(`   • ${check}`));
+      this.passed.forEach((check) => console.log(`   • ${check}`));
     }
 
     // Performance score

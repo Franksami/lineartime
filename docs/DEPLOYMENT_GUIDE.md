@@ -1,4 +1,4 @@
-# LinearTime Production Deployment Guide
+# Command Center Calendar Production Deployment Guide
 
 > **Phase 2.6 Foundation Documentation**  
 > **Production Deployment for Calendar Integration Platform**  
@@ -6,7 +6,7 @@
 
 ## Overview
 
-This guide covers the complete production deployment of LinearTime's calendar integration platform including 4-provider synchronization, enterprise security, and scalable architecture.
+This guide covers the complete production deployment of Command Center Calendar's calendar integration platform including 4-provider synchronization, enterprise security, and scalable architecture.
 
 ## Infrastructure Requirements
 
@@ -42,7 +42,7 @@ This guide covers the complete production deployment of LinearTime's calendar in
 
 ```bash
 #!/bin/bash
-# LinearTime Production Environment Configuration
+# Command Center Calendar Production Environment Configuration
 
 # === CORE PLATFORM (REQUIRED) ===
 export NODE_ENV="production"
@@ -270,7 +270,7 @@ expirationDateTime: [72 hours from creation]
 # User Instructions
 1. Sign in to appleid.apple.com
 2. Go to Security > App-Specific Passwords
-3. Generate password for LinearTime
+3. Generate password for Command Center Calendar
 4. Use Apple ID email + app-specific password for authentication
 
 # CalDAV Server Configuration
@@ -1261,4 +1261,4 @@ const costMonitoring = {
 
 ---
 
-This deployment guide provides comprehensive instructions for deploying LinearTime's Phase 2.6 calendar integration platform to production with enterprise-grade security, scalability, and reliability. Follow this guide to ensure a successful deployment that meets all technical and business requirements.
+This deployment guide provides comprehensive instructions for deploying Command Center Calendar's Phase 2.6 calendar integration platform to production with enterprise-grade security, scalability, and reliability. Follow this guide to ensure a successful deployment that meets all technical and business requirements.

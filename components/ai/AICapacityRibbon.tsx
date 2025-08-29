@@ -6,7 +6,7 @@
  * Provides real-time capacity analysis with AI-powered suggestions.
  *
  * @version Phase 5.0
- * @author LinearTime AI Enhancement System
+ * @author Command Center Calendar AI Enhancement System
  */
 
 'use client';

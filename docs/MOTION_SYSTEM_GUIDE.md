@@ -1,10 +1,10 @@
 # Motion System Implementation Guide
 
-**LinearTime Motion System** - A comprehensive motion design language built on Motion library with 84% bundle size reduction (32KB → 5KB) and audio-visual synchronization.
+**Command Center Calendar Motion System** - A comprehensive motion design language built on Motion library with 84% bundle size reduction (32KB → 5KB) and audio-visual synchronization.
 
 ## 🎯 Overview
 
-The LinearTime Motion System replaces Framer Motion with the Motion library while providing:
+The Command Center Calendar Motion System replaces Framer Motion with the Motion library while providing:
 
 - **Performance**: 112+ FPS targets with hardware acceleration
 - **Audio-Visual Sync**: Coordinated animations with sound effects

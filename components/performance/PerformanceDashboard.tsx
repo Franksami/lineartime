@@ -20,8 +20,10 @@ interface MetricCardProps {
 const MetricCard: React.FC<MetricCardProps> = ({ label, value, unit, status = 'good', trend }) => {
   const statusColors = {
     good: 'text-green-600 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */',
-    warning: 'text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */',
-    error: 'text-red-600 /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */',
+    warning:
+      'text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */',
+    error:
+      'text-red-600 /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */',
   };
 
   const trendIcons = {
@@ -32,12 +34,18 @@ const MetricCard: React.FC<MetricCardProps> = ({ label, value, unit, status = 'g
 
   return (
     <div className="bg-white dark:bg-gray-800 /* TODO: Use semantic token */ rounded-lg p-4 shadow-sm border border-border dark:border-gray-700 /* TODO: Use semantic token */">
-      <div className="text-sm text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ mb-1">{label}</div>
+      <div className="text-sm text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ mb-1">
+        {label}
+      </div>
       <div className="flex items-baseline space-x-2">
         <span className={cn('text-2xl font-semibold', statusColors[status])}>
           {typeof value === 'number' ? value.toFixed(1) : value}
         </span>
-        {unit && <span className="text-sm text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">{unit}</span>}
+        {unit && (
+          <span className="text-sm text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
+            {unit}
+          </span>
+        )}
         {trend && <span className="text-sm">{trendIcons[trend]}</span>}
       </div>
     </div>
@@ -63,7 +71,9 @@ const HealthIndicator: React.FC<HealthIndicatorProps> = ({ health, score }) => {
       <div className="flex-1">
         <div className="flex justify-between mb-1">
           <span className="text-sm font-medium">Overall Health</span>
-          <span className="text-sm text-gray-500 /* TODO: Use semantic token */">{score.toFixed(0)}%</span>
+          <span className="text-sm text-gray-500 /* TODO: Use semantic token */">
+            {score.toFixed(0)}%
+          </span>
         </div>
         <div className="w-full bg-gray-200 /* TODO: Use semantic token */ dark:bg-gray-700 /* TODO: Use semantic token */ rounded-full h-2">
           <div
@@ -91,9 +101,11 @@ interface AlertItemProps {
 const AlertItem: React.FC<AlertItemProps> = ({ alert }) => {
   const severityColors = {
     info: 'border-blue-200 /* TODO: Use semantic token */ bg-blue-50 /* TODO: Use semantic token */ dark:border-blue-800 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//20',
-    warning: 'border-yellow-200 /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//20',
+    warning:
+      'border-yellow-200 /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//20',
     error: 'border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-900/20',
-    critical: 'border-red-200 /* TODO: Use semantic token */ bg-red-50 /* TODO: Use semantic token */ dark:border-red-800 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//20',
+    critical:
+      'border-red-200 /* TODO: Use semantic token */ bg-red-50 /* TODO: Use semantic token */ dark:border-red-800 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//20',
   };
 
   const severityIcons = {
@@ -175,11 +187,15 @@ export const PerformanceDashboard: React.FC = () => {
           onClick={() => setIsExpanded(true)}
           className={cn(
             'flex items-center space-x-2 px-4 py-2 rounded-full shadow-lg transition-colors',
-            metrics.overallHealth === 'excellent' && 'bg-green-500 /* TODO: Use semantic token */ hover:bg-green-600 /* TODO: Use semantic token */ text-white',
-            metrics.overallHealth === 'good' && 'bg-primary hover:bg-blue-600 /* TODO: Use semantic token */ text-white',
-            metrics.overallHealth === 'fair' && 'bg-yellow-500 /* TODO: Use semantic token */ hover:bg-yellow-600 /* TODO: Use semantic token */ text-white',
+            metrics.overallHealth === 'excellent' &&
+              'bg-green-500 /* TODO: Use semantic token */ hover:bg-green-600 /* TODO: Use semantic token */ text-white',
+            metrics.overallHealth === 'good' &&
+              'bg-primary hover:bg-blue-600 /* TODO: Use semantic token */ text-white',
+            metrics.overallHealth === 'fair' &&
+              'bg-yellow-500 /* TODO: Use semantic token */ hover:bg-yellow-600 /* TODO: Use semantic token */ text-white',
             metrics.overallHealth === 'poor' && 'bg-orange-500 hover:bg-orange-600 text-white',
-            metrics.overallHealth === 'critical' && 'bg-red-500 /* TODO: Use semantic token */ hover:bg-red-600 /* TODO: Use semantic token */ text-white'
+            metrics.overallHealth === 'critical' &&
+              'bg-red-500 /* TODO: Use semantic token */ hover:bg-red-600 /* TODO: Use semantic token */ text-white'
           )}
         >
           <span className="text-sm font-medium">Performance</span>

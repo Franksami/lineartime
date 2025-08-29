@@ -1,7 +1,7 @@
 /**
- * CheatCal Middleware - Simplified Authentication
+ * Command Center Middleware - Simplified Authentication
  * 
- * Clean middleware focused on Clerk authentication for CheatCal AI Revenue Planner.
+ * Clean middleware focused on Clerk authentication for Command Center AI Revenue Planner.
  * Removed i18n and A/B testing complexity to focus on core functionality.
  */
 

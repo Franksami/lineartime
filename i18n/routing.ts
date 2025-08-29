@@ -1,7 +1,7 @@
 /**
  * i18n Routing Configuration
  * 
- * Basic internationalization setup for CheatCal enterprise interface.
+ * Basic internationalization setup for Command Center enterprise interface.
  * Default English locale with support for future localization.
  */
 

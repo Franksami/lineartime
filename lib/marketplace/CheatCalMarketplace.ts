@@ -1,5 +1,5 @@
 /**
- * CheatCal Marketplace - Controversial Coordination Services Platform
+ * Command Center Marketplace - Controversial Coordination Services Platform
  *
  * Revolutionary marketplace combining Andrew Tate viral marketing model
  * with productivity coordination services. Controversy + Value = Viral Growth.
@@ -7,8 +7,8 @@
  * Viral Strategy: Controversial positioning + massive creator army + clipper network
  * Business Model: Service providers + content creators + platform revenue sharing
  *
- * @version 1.0.0 (CheatCal Controversial Release)
- * @author CheatCal Viral Marketing Team
+ * @version 1.0.0 (Command Center Controversial Release)
+ * @author Command Center Viral Marketing Team
  */
 
 import { logRevenueEvent, logger } from '@/lib/utils/logger';
@@ -68,7 +68,7 @@ ANDREW TATE VIRAL MODEL + COORDINATION SERVICES:
 │ ┌─────────────────────────────────────────────────────────────┐ │
 │ │ 🎭 CUSTOMERS BECOME MARKETERS                               │ │
 │ │ ├── Success stories automatically become marketing content │ │
-│ │ ├── "How CheatCal helped me cheat my way to $X" viral angle│ │
+│ │ ├── "How Command Center helped me cheat my way to $X" viral angle│ │
 │ │ ├── Controversy engagement drives organic reach             │ │
 │ │ └── Network effects: More success = more viral content     │ │
 │ │                                                             │ │
@@ -122,7 +122,7 @@ interface ServiceSuccessMetrics {
 }
 
 /**
- * CheatCal Controversial Marketplace Platform
+ * Command Center Controversial Marketplace Platform
  *
  * Combines coordination services with Andrew Tate viral marketing model:
  * Service providers deliver value + create viral content about results
@@ -135,7 +135,7 @@ export class CheatCalMarketplace {
 
   constructor() {
     this.contextEngine = new CheatCalContextEngine();
-    logger.info('🎭 CheatCal Controversial Marketplace initializing...');
+    logger.info('🎭 Command Center Controversial Marketplace initializing...');
     logger.info(MARKETPLACE_ARCHITECTURE);
   }
 
@@ -162,11 +162,11 @@ export class CheatCalMarketplace {
       this.setupControversyAmplification();
 
       logger.info(
-        '💀 CheatCal Marketplace ready - Controversial productivity coordination active!'
+        '💀 Command Center Marketplace ready - Controversial productivity coordination active!'
       );
     } catch (error) {
       logger.error('Marketplace initialization failed:', error);
-      throw new Error(`CheatCal Marketplace failed to initialize: ${error}`);
+      throw new Error(`Command Center Marketplace failed to initialize: ${error}`);
     }
   }
 
@@ -236,7 +236,7 @@ export class CheatCalMarketplace {
    * Setup Andrew Tate Viral Creator Army
    *
    * Recruit and coordinate content creators who make viral content
-   * about CheatCal's controversial productivity methods.
+   * about Command Center's controversial productivity methods.
    */
   private setupViralCreatorArmy(): void {
     logger.info('🎬 Setting up Andrew Tate viral creator army...');
@@ -265,7 +265,7 @@ export class CheatCalMarketplace {
 
     // Controversial content templates (Andrew Tate style)
     const viralContentTemplates = [
-      '🔥 How I cheated my way to a $100K course launch (CheatCal method)',
+      '🔥 How I cheated my way to a $100K course launch (Command Center method)',
       '💀 The controversial AI that privacy advocates HATE (and why I love it)',
       '⚡ Why working hard is for losers (let AI cheat for you instead)',
       '👁️ I let AI watch everything I do and it made me $50K richer',
@@ -283,7 +283,7 @@ export class CheatCalMarketplace {
    * Setup Clipper Network (Andrew Tate Model)
    *
    * Create network of content editors who clip customer success stories
-   * into viral content that promotes CheatCal through controversy.
+   * into viral content that promotes Command Center through controversy.
    */
   private setupClipperNetwork(): void {
     logger.info('✂️ Setting up Andrew Tate clipper network...');
@@ -308,17 +308,17 @@ export class CheatCalMarketplace {
       competitive_analysts: {
         focus: 'vs competitors → Differentiation content',
         pay_model: '$100-400/month + comparison bonuses',
-        content_type: 'CheatCal vs traditional productivity tools',
+        content_type: 'Command Center vs traditional productivity tools',
       },
     };
 
     // Viral clip templates (controversial but effective)
     const clipTemplates = [
-      'Customer goes from $30K to $75K launch using CheatCal coordination cheating',
-      'Privacy advocate debates productivity enthusiast about CheatCal monitoring',
-      'Family office saves $10M through CheatCal investment coordination',
+      'Customer goes from $30K to $75K launch using Command Center coordination cheating',
+      'Privacy advocate debates productivity enthusiast about Command Center monitoring',
+      'Family office saves $10M through Command Center investment coordination',
       "Agency owner 10x's efficiency with controversial AI monitoring",
-      'The productivity method that breaks the internet (CheatCal revealed)',
+      'The productivity method that breaks the internet (Command Center revealed)',
       "Why everyone's talking about this controversial calendar AI",
     ];
 
@@ -516,7 +516,7 @@ export class CheatCalMarketplace {
         target_engagement: '100K+ views through controversial positioning',
       },
       competitive_callout_content: {
-        trigger: 'Customer switches from competitor to CheatCal',
+        trigger: 'Customer switches from competitor to Command Center',
         response: 'Create "Why [Competitor] is for losers" viral content',
         target_engagement: 'Direct competitive controversy for attention',
       },

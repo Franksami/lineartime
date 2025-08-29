@@ -2,7 +2,7 @@
  * React Day Picker Calendar View
  *
  * Flexible day picker calendar using react-day-picker with advanced customization
- * for CheatCal platform integration.
+ * for Command Center platform integration.
  *
  * Features:
  * - Single, multiple, and range selection modes
@@ -11,7 +11,7 @@
  * - Professional appearance with semantic tokens
  * - Event integration with calendar system
  *
- * @version 2.0.0 (CheatCal Integration)
+ * @version 2.0.0 (Command Center Integration)
  */
 
 'use client';

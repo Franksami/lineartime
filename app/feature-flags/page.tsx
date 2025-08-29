@@ -10,8 +10,8 @@
 
 'use client';
 
-import { FeatureFlagDashboard } from '@/components/deployment/FeatureFlagDashboard';
-import { ProductionMonitor } from '@/components/monitoring/ProductionMonitor';
+// Using the most recent components - FeatureFlagManager already imported below (line 24-26)
+// ProductionMonitor replaced with PerformanceMonitoringDashboard (most recent version)
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -24,6 +24,7 @@ import {
   FeatureFlagManager,
   defaultFeatureFlagConfig,
 } from '@/lib/featureFlags/FeatureFlagManager';
+import PerformanceMonitoringDashboard from '@/components/dashboard/PerformanceMonitoringDashboard';
 import {
   Activity,
   AlertTriangle,
@@ -417,7 +418,7 @@ export default function FeatureFlagsPage() {
 
         {/* Feature Flag Dashboard */}
         <TabsContent value="dashboard" className="space-y-6">
-          <FeatureFlagDashboard
+          <FeatureFlagManager
             featureFlagManager={featureFlagManager}
             rolloutEngine={rolloutEngine}
             onFeatureToggle={handleFeatureToggle}
@@ -428,7 +429,7 @@ export default function FeatureFlagsPage() {
 
         {/* Production Monitoring */}
         <TabsContent value="monitoring" className="space-y-6">
-          <ProductionMonitor
+          <PerformanceMonitoringDashboard
             featureFlagManager={featureFlagManager}
             rolloutEngine={rolloutEngine}
             deploymentManager={deploymentManager}

@@ -1,4 +1,4 @@
-# LinearTime Command Workspace Implementation PRD
+# Command Center Calendar Command Workspace Implementation PRD
 
 **Version**: v3.0.0 (Comprehensive Implementation Guide)  
 **Owner**: Full-Stack Platform Team  
@@ -10,7 +10,7 @@
 
 ## 🎯 **EXECUTIVE SUMMARY**
 
-Transform LinearTime from calendar-centric to **Command Workspace architecture** using research-validated patterns from 7+ industry tools. Preserve all 133,222+ lines of enterprise infrastructure while implementing three-pane shell (Sidebar + Tabs + Context Dock) with command-first experience, AI constraint solving, and privacy-first computer vision.
+Transform Command Center Calendar from calendar-centric to **Command Workspace architecture** using research-validated patterns from 7+ industry tools. Preserve all 133,222+ lines of enterprise infrastructure while implementing three-pane shell (Sidebar + Tabs + Context Dock) with command-first experience, AI constraint solving, and privacy-first computer vision.
 
 **Success Metrics**: <500ms shell render, <120ms keyboard response, >60% command adoption, 100% feature preservation
 
@@ -590,7 +590,7 @@ export const useConversationContext = create<ConversationState>()(
 │  EXISTING SYSTEM (Preserved)     │         NEW SYSTEM (Parallel)           │
 │  ┌─────────────────────────┐     │     ┌─────────────────────────────┐     │
 │  │ Calendar Foundation     │     │     │ Command Workspace Shell     │     │
-│  │ • LinearCalendarHoriz   │ ────┼──── │ • Three-pane layout        │     │
+│  │ • CommandCenterCalendarHoriz   │ ────┼──── │ • Three-pane layout        │     │
 │  │ • All existing routes   │     │     │ • Feature flag controlled   │     │
 │  │ • Backend preserved     │     │     │ • Gradual rollout          │     │
 │  └─────────────────────────┘     │     └─────────────────────────────┘     │

@@ -66,7 +66,7 @@ components/ai-elements/
 
 app/
 ├── ai-conductor/page.tsx             # AI conductor dashboard
-└── cheatcal/page.tsx                 # CheatCal branded interface
+└── cheatcal/page.tsx                 # Command Center branded interface
 ```
 
 ### **AI Core & Engines**

@@ -1,15 +1,15 @@
 /**
- * CheatCal Multi-Modal Context Engine - Enhanced Integration
+ * Command Center Multi-Modal Context Engine - Enhanced Integration
  *
  * Revolutionary context fusion system that combines visual, audio, calendar,
  * email, and document data to create comprehensive understanding superior to Cluely.
  *
  * Core Innovation: "The AI that understands everything before suggesting anything"
  * Controversy: "Advanced surveillance for advanced optimization"
- * CheatCal Advantage: Calendar specialization + financial focus + coordination expertise
+ * Command Center Advantage: Calendar specialization + financial focus + coordination expertise
  *
  * @version 2.0.0 (Enhanced Multi-Modal Release)
- * @author CheatCal AI Team
+ * @author Command Center AI Team
  */
 
 import { useCalendarEvents } from '@/hooks/useCalendarEvents';
@@ -111,7 +111,7 @@ interface ContextualOptimization {
 }
 
 /**
- * CheatCal Multi-Modal Context Engine
+ * Command Center Multi-Modal Context Engine
  * The controversial AI that understands everything before suggesting anything
  */
 export class CheatCalContextEngine {
@@ -121,7 +121,7 @@ export class CheatCalContextEngine {
 
   constructor() {
     this.visionEngine = new CheatCalVisionEngine();
-    logger.info('🧠 CheatCal Context Engine initializing...');
+    logger.info('🧠 Command Center Context Engine initializing...');
     logger.info(CONTEXT_ENGINE_ARCHITECTURE);
   }
 
@@ -150,7 +150,7 @@ export class CheatCalContextEngine {
       logger.info('🔥 Multi-modal context engine ready - Advanced productivity cheating enabled!');
     } catch (error) {
       logger.error('Context engine initialization failed:', error);
-      throw new Error(`CheatCal Context Engine failed to initialize: ${error}`);
+      throw new Error(`Command Center Context Engine failed to initialize: ${error}`);
     }
   }
 

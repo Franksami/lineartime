@@ -458,7 +458,9 @@ const SyncQueueMonitor: React.FC = () => {
         <div className="flex items-center gap-3 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-blue-600 /* TODO: Use semantic token */ font-medium">Queue Active</span>
+            <span className="text-blue-600 /* TODO: Use semantic token */ font-medium">
+              Queue Active
+            </span>
           </div>
           <div className="w-px h-4 bg-border" />
           <span className="text-muted-foreground">

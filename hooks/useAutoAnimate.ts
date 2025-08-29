@@ -125,7 +125,7 @@ export function useAutoAnimateForm<T extends HTMLElement = HTMLFormElement>(
   });
 }
 
-// Custom animation presets for LinearTime
+// Custom animation presets for Command Center Calendar
 
 /**
  * Smooth slide animations for calendar transitions

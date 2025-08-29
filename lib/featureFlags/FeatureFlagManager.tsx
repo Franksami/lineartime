@@ -143,14 +143,14 @@ export const getOrGenerateVisitorId = dedupe(
       localStorage.setItem('linear-visitor-id', newId);
       return { value: newId, fresh: true };
     }
-    
+
     // Server-side would use cookies here
     // const cookieStore = await cookies();
     // const visitorIdCookie = cookieStore.get('linear-visitor-id')?.value;
     // return visitorIdCookie
     //   ? { value: visitorIdCookie, fresh: false }
     //   : { value: nanoid(), fresh: true };
-    
+
     return { value: nanoid(), fresh: true };
   }
 );
@@ -160,12 +160,12 @@ export const getOrGenerateVisitorId = dedupe(
  */
 export const getUserContext = dedupe(async () => {
   const visitorId = await getOrGenerateVisitorId();
-  
+
   // Client-side fallback
   if (typeof window !== 'undefined') {
     const userAgent = navigator.userAgent || '';
     const referer = document.referrer || '';
-    
+
     // Determine user group based on various factors
     let userGroup = 'default';
     if (userAgent.includes('bot') || userAgent.includes('crawler')) {
@@ -175,7 +175,7 @@ export const getUserContext = dedupe(async () => {
     } else if (visitorId.value.startsWith('premium_')) {
       userGroup = 'premium';
     }
-    
+
     return {
       userId: visitorId.value,
       userGroup,
@@ -185,12 +185,12 @@ export const getUserContext = dedupe(async () => {
       isNewUser: visitorId.fresh,
     };
   }
-  
+
   // Server-side fallback (commented out for client compatibility)
   // const headersList = await headers();
   // const userAgent = headersList.get('user-agent') || '';
   // const referer = headersList.get('referer') || '';
-  
+
   return {
     userId: visitorId.value,
     userGroup: 'default',
@@ -642,17 +642,17 @@ async function checkReducedMotionPreference(): Promise<boolean> {
       // Check CSS media query for prefers-reduced-motion
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (prefersReducedMotion) return true;
-      
+
       // Check localStorage preference
       const motionPreference = localStorage.getItem('motion-preference');
       return motionPreference === 'reduced';
     }
-    
+
     // Server-side would check cookies/database here
     // const cookieStore = await cookies();
     // const motionPreference = cookieStore.get('motion-preference')?.value;
     // return motionPreference === 'reduced';
-    
+
     return false; // Default to allowing motion
   } catch {
     return false; // Default to allowing motion

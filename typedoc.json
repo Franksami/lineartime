@@ -1,0 +1,93 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "Command Center Calendar API Documentation",
+  "entryPoints": ["./lib/**/*.ts", "./hooks/**/*.ts", "./components/**/*.tsx"],
+  "entryPointStrategy": "expand",
+  "out": "docs/api",
+  "includeVersion": true,
+  "readme": "README.md",
+  "theme": "default",
+  "navigationLinks": {
+    "GitHub": "https://github.com/lineartime/lineartime",
+    "Getting Started": "/docs/getting-started",
+    "Examples": "/docs/examples"
+  },
+  "sidebarLinks": {
+    "API Reference": "/docs/api",
+    "Playground": "/docs/playground",
+    "FAQ": "/docs/faq"
+  },
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/node_modules/**",
+    "**/.next/**"
+  ],
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": true,
+  "excludeNotDocumented": false,
+  "excludeNotDocumentedKinds": [
+    "Variable",
+    "TypeAlias"
+  ],
+  "categorizeByGroup": true,
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "treatWarningsAsErrors": false,
+  "requiredToBeDocumented": [
+    "Enum",
+    "EnumMember",
+    "Function",
+    "Class",
+    "Interface",
+    "Property",
+    "Method",
+    "TypeAlias"
+  ],
+  "jsDocCompatibility": {
+    "exampleTag": true,
+    "defaultTag": true,
+    "inheritDocTag": true
+  },
+  "blockTags": [
+    "@param",
+    "@returns",
+    "@example",
+    "@see",
+    "@deprecated",
+    "@since",
+    "@category",
+    "@group",
+    "@public",
+    "@internal",
+    "@beta",
+    "@alpha"
+  ],
+  "searchInComments": true,
+  "searchInDocuments": true,
+  "githubPages": true,
+  "hostedBaseUrl": "https://lineartime.app/docs",
+  "customCss": "./docs/assets/custom.css",
+  "visibilityFilters": {
+    "protected": true,
+    "private": false,
+    "inherited": true,
+    "external": true,
+    "@alpha": false,
+    "@beta": true
+  },
+  "plugin": [
+    "typedoc-plugin-markdown",
+    "typedoc-plugin-mermaid"
+  ],
+  "pluginOptions": {
+    "typedoc-plugin-markdown": {
+      "hideBreadcrumbs": false,
+      "hideInPageTOC": false
+    }
+  }
+}

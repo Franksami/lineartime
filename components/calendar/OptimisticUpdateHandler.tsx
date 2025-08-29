@@ -114,7 +114,7 @@ const DEFAULT_CONFIG: OptimisticUpdateConfig = {
 /**
  * OptimisticUpdateHandler Component
  *
- * Provides immediate UI updates with intelligent rollback capabilities for LinearTime's
+ * Provides immediate UI updates with intelligent rollback capabilities for Command Center Calendar's
  * real-time calendar synchronization system. Integrates with WebSocketSyncManager for
  * server coordination and implements ShareDB-inspired operational transforms.
  *

@@ -1,10 +1,10 @@
 /**
  * Design Tokens Hook
  *
- * Provides access to CheatCal design token system with semantic tokens
+ * Provides access to Command Center design token system with semantic tokens
  * and dynamic theme management for professional interface consistency.
  *
- * @version 2.0.0 (CheatCal Design System)
+ * @version 2.0.0 (Command Center Design System)
  */
 
 'use client';

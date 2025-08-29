@@ -1,6 +1,6 @@
 /**
  * Motion System - Main Entry Point
- * Comprehensive motion design language for LinearTime
+ * Comprehensive motion design language for Command Center Calendar
  * Built on Motion library (5KB) - 84% smaller than Framer Motion (32KB)
  *
  * Features:

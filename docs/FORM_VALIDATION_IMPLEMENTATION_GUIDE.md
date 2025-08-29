@@ -250,6 +250,6 @@ const uxTests = {
 ---
 
 **Authored by**: UI/UX Engineer Persona + Form Validation Specialist  
-**Methodology**: Proven LinearTime/CheatCal development framework  
+**Methodology**: Proven Command Center Calendar/Command Center development framework  
 **Quality**: Context7 research + react-hook-form professional best practices  
 **Date**: August 27, 2025

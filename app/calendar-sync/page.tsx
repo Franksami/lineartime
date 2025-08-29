@@ -1,6 +1,6 @@
 'use client';
 
-import { LinearCalendarWithSync } from '@/components/calendar/LinearCalendarWithSync';
+import { CommandCenterCalendarWithSync } from '@/components/calendar/LinearCalendarWithSync';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar, Info, Settings } from 'lucide-react';
@@ -15,7 +15,7 @@ export default function CalendarSyncPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Calendar className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl font-bold">LinearTime Calendar</h1>
+              <h1 className="text-2xl font-bold">Command Center Calendar Calendar</h1>
             </div>
             <div className="flex items-center gap-2">
               <Link href="/settings/integrations">
@@ -52,7 +52,7 @@ export default function CalendarSyncPage() {
 
       {/* Calendar Component */}
       <div className="container max-w-7xl mx-auto px-4 pb-8">
-        <LinearCalendarWithSync initialYear={new Date().getFullYear()} enableSync={true} />
+        <CommandCenterCalendarWithSync initialYear={new Date().getFullYear()} enableSync={true} />
       </div>
 
       {/* Features Section */}

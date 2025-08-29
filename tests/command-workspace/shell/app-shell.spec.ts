@@ -16,11 +16,11 @@ test.describe('AppShell Three-Pane Architecture', () => {
     // Verify Sidebar is present
     const sidebar = page.locator('[data-testid="app-shell-sidebar"]');
     await expect(sidebar).toBeVisible();
-    
+
     // Verify TabWorkspace is present
     const tabWorkspace = page.locator('[data-testid="tab-workspace"]');
     await expect(tabWorkspace).toBeVisible();
-    
+
     // Verify ContextDock is present
     const contextDock = page.locator('[data-testid="context-dock"]');
     await expect(contextDock).toBeVisible();
@@ -54,15 +54,15 @@ test.describe('AppShell Three-Pane Architecture', () => {
     const collapseButton = page.locator('[data-testid="dock-collapse-button"]');
     if (await collapseButton.isVisible()) {
       await collapseButton.click();
-      
+
       // Verify dock is collapsed
       const collapsedDock = page.locator('[data-testid="context-dock-collapsed"]');
       await expect(collapsedDock).toBeVisible();
-      
+
       // Reload page
       await page.reload();
       await page.waitForLoadState('networkidle');
-      
+
       // Verify dock remains collapsed
       await expect(collapsedDock).toBeVisible();
     }
@@ -77,7 +77,7 @@ test.describe('AppShell Three-Pane Architecture', () => {
     // Test tablet view (should hide sidebar on smaller screens)
     await page.setViewportSize({ width: 768, height: 1024 });
     const mobileMenu = page.locator('[data-testid="mobile-menu-button"]');
-    
+
     // On mobile, sidebar might be hidden by default
     if (await mobileMenu.isVisible()) {
       await expect(sidebar).toBeHidden();
@@ -93,10 +93,10 @@ test.describe('AppShell Three-Pane Architecture', () => {
 
   test('should render with proper performance (<500ms)', async ({ page }) => {
     const startTime = Date.now();
-    
+
     await page.goto('/app');
     await page.waitForSelector('[data-testid="app-shell"]');
-    
+
     const loadTime = Date.now() - startTime;
     expect(loadTime).toBeLessThan(500); // Target: <500ms render
   });
@@ -110,9 +110,11 @@ test.describe('Sidebar Navigation', () => {
 
   test('should display all sidebar sections', async ({ page }) => {
     const sections = ['Calendar', 'Tasks', 'Notes', 'Mailbox'];
-    
+
     for (const section of sections) {
-      const sectionElement = page.locator(`[data-testid="sidebar-section-${section.toLowerCase()}"]`);
+      const sectionElement = page.locator(
+        `[data-testid="sidebar-section-${section.toLowerCase()}"]`
+      );
       await expect(sectionElement).toBeVisible();
     }
   });
@@ -121,14 +123,14 @@ test.describe('Sidebar Navigation', () => {
     // Click on Tasks section
     const tasksSection = page.locator('[data-testid="sidebar-section-tasks"]');
     await tasksSection.click();
-    
+
     // Verify active state
     await expect(tasksSection).toHaveAttribute('data-active', 'true');
-    
+
     // Click on Notes section
     const notesSection = page.locator('[data-testid="sidebar-section-notes"]');
     await notesSection.click();
-    
+
     // Verify active state changed
     await expect(notesSection).toHaveAttribute('data-active', 'true');
     await expect(tasksSection).toHaveAttribute('data-active', 'false');
@@ -138,11 +140,11 @@ test.describe('Sidebar Navigation', () => {
     // Focus on first sidebar item
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab'); // Skip to sidebar
-    
+
     // Navigate with arrow keys
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('Enter');
-    
+
     // Verify navigation occurred
     const activeSection = page.locator('[data-active="true"]');
     await expect(activeSection).toBeVisible();
@@ -159,14 +161,14 @@ test.describe('Tab Management', () => {
     // Verify initial tab
     const weekTab = page.locator('[data-testid="tab-week"]');
     await expect(weekTab).toBeVisible();
-    
+
     // Open planner tab
     const newTabButton = page.locator('[data-testid="new-tab-button"]');
     if (await newTabButton.isVisible()) {
       await newTabButton.click();
       const plannerOption = page.locator('[data-testid="tab-option-planner"]');
       await plannerOption.click();
-      
+
       const plannerTab = page.locator('[data-testid="tab-planner"]');
       await expect(plannerTab).toBeVisible();
     }
@@ -176,12 +178,12 @@ test.describe('Tab Management', () => {
     // Create multiple tabs first
     const tabs = page.locator('[data-testid^="tab-"]');
     const initialCount = await tabs.count();
-    
+
     // Try to close a tab (if multiple exist)
     if (initialCount > 1) {
       const closeButton = page.locator('[data-testid^="tab-close-"]').first();
       await closeButton.click();
-      
+
       // Verify tab count decreased
       const newCount = await tabs.count();
       expect(newCount).toBe(initialCount - 1);
@@ -191,11 +193,11 @@ test.describe('Tab Management', () => {
   test('should persist tab state', async ({ page }) => {
     // Get current tab configuration
     const tabs = await page.locator('[data-testid^="tab-"]').allTextContents();
-    
+
     // Reload page
     await page.reload();
     await page.waitForLoadState('networkidle');
-    
+
     // Verify same tabs are present
     const reloadedTabs = await page.locator('[data-testid^="tab-"]').allTextContents();
     expect(reloadedTabs).toEqual(tabs);
@@ -210,7 +212,7 @@ test.describe('Context Dock Panels', () => {
 
   test('should display panel tabs', async ({ page }) => {
     const panels = ['ai', 'details', 'conflicts', 'capacity', 'backlinks'];
-    
+
     for (const panel of panels) {
       const panelTab = page.locator(`[data-testid="dock-panel-tab-${panel}"]`);
       // Panel might be behind a tab or collapsed, so we check if it exists
@@ -222,13 +224,13 @@ test.describe('Context Dock Panels', () => {
   test('should switch between panels', async ({ page }) => {
     const aiTab = page.locator('[data-testid="dock-panel-tab-ai"]');
     const detailsTab = page.locator('[data-testid="dock-panel-tab-details"]');
-    
-    if (await aiTab.isVisible() && await detailsTab.isVisible()) {
+
+    if ((await aiTab.isVisible()) && (await detailsTab.isVisible())) {
       // Click AI tab
       await aiTab.click();
       const aiPanel = page.locator('[data-testid="dock-panel-content-ai"]');
       await expect(aiPanel).toBeVisible();
-      
+
       // Click Details tab
       await detailsTab.click();
       const detailsPanel = page.locator('[data-testid="dock-panel-content-details"]');
@@ -238,13 +240,13 @@ test.describe('Context Dock Panels', () => {
 
   test('should collapse and expand dock', async ({ page }) => {
     const collapseButton = page.locator('[data-testid="dock-collapse-button"]');
-    
+
     if (await collapseButton.isVisible()) {
       // Collapse
       await collapseButton.click();
       const collapsedDock = page.locator('[data-testid="context-dock-collapsed"]');
       await expect(collapsedDock).toBeVisible();
-      
+
       // Expand
       const expandButton = page.locator('[data-testid="dock-expand-button"]');
       await expandButton.click();
@@ -258,22 +260,22 @@ test.describe('Performance Metrics', () => {
   test('should maintain 60fps during scrolling', async ({ page }) => {
     await page.goto('/app');
     await page.waitForLoadState('networkidle');
-    
+
     // Start performance measurement
     await page.evaluate(() => {
       (window as any).frameTimes = [];
       let lastTime = performance.now();
-      
+
       function measureFrame() {
         const currentTime = performance.now();
         (window as any).frameTimes.push(currentTime - lastTime);
         lastTime = currentTime;
         requestAnimationFrame(measureFrame);
       }
-      
+
       measureFrame();
     });
-    
+
     // Perform scrolling
     const scrollableArea = page.locator('[data-testid="tab-workspace-content"]');
     if (await scrollableArea.isVisible()) {
@@ -282,11 +284,11 @@ test.describe('Performance Metrics', () => {
         await page.waitForTimeout(100);
       }
     }
-    
+
     // Check frame times
     const frameTimes = await page.evaluate(() => (window as any).frameTimes);
     const avgFrameTime = frameTimes.reduce((a: number, b: number) => a + b, 0) / frameTimes.length;
-    
+
     // 60fps = 16.67ms per frame, allow some variance
     expect(avgFrameTime).toBeLessThan(20);
   });
@@ -294,7 +296,7 @@ test.describe('Performance Metrics', () => {
   test('should use less than 100MB memory', async ({ page }) => {
     await page.goto('/app');
     await page.waitForLoadState('networkidle');
-    
+
     // Check memory usage if available
     const memoryInfo = await page.evaluate(() => {
       if ('memory' in performance) {
@@ -302,7 +304,7 @@ test.describe('Performance Metrics', () => {
       }
       return 0;
     });
-    
+
     if (memoryInfo > 0) {
       const memoryInMB = memoryInfo / 1024 / 1024;
       expect(memoryInMB).toBeLessThan(100);

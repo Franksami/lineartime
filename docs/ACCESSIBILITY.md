@@ -2,7 +2,7 @@
 
 ## Overview
 
-LinearTime is committed to providing an accessible experience for all users. This document outlines our accessibility features, implementation guidelines, and testing procedures.
+Command Center Calendar is committed to providing an accessible experience for all users. This document outlines our accessibility features, implementation guidelines, and testing procedures.
 
 ## WCAG 2.1 AA Compliance
 

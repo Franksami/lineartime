@@ -1,4 +1,4 @@
-# LinearTime Sound Effects Implementation Guide
+# Command Center Calendar Sound Effects Implementation Guide
 
 ## ✅ IMPLEMENTATION COMPLETE - January 26, 2025
 
@@ -12,7 +12,7 @@
 
 ## Overview
 
-This comprehensive guide details the step-by-step implementation of professional sound effects for LinearTime, ensuring tasteful, non-intrusive audio feedback that enhances the user experience without compromising professionalism.
+This comprehensive guide details the step-by-step implementation of professional sound effects for Command Center Calendar, ensuring tasteful, non-intrusive audio feedback that enhances the user experience without compromising professionalism.
 
 **✅ IMPLEMENTATION NOTE**: The actual implementation was streamlined using the `use-sound` React hook instead of direct Howler.js integration, reducing complexity while maintaining all desired functionality.
 
@@ -341,8 +341,8 @@ export { Slider }
 
 ### Phase 3: Event Integration Points (Week 2)
 
-#### 3.1 Integrate with LinearCalendar Hook
-**File:** `hooks/useLinearCalendar.ts`
+#### 3.1 Integrate with CommandCenterCalendar Hook
+**File:** `hooks/useCommandCenterCalendar.ts`
 
 ```typescript
 // Add import
@@ -798,7 +798,7 @@ test.describe('Sound Performance', () => {
 # Sound Effects Implementation
 
 ## Overview
-LinearTime includes optional sound effects to enhance user feedback while maintaining professionalism.
+Command Center Calendar includes optional sound effects to enhance user feedback while maintaining professionalism.
 
 ## Features
 - Tasteful, non-intrusive sounds for key interactions
@@ -873,7 +873,7 @@ Users can configure sound effects in Settings > Notifications:
 - [ ] Test settings persistence
 
 ### Phase 3: Event Integration
-- [ ] Integrate with useLinearCalendar
+- [ ] Integrate with useCommandCenterCalendar
 - [ ] Integrate with useSyncedCalendar
 - [ ] Add sound feedback to event modals
 - [ ] Test event operation sounds
@@ -954,4 +954,4 @@ Users can configure sound effects in Settings > Notifications:
 
 ---
 
-This guide provides comprehensive step-by-step instructions for implementing professional sound effects in LinearTime. Follow each phase sequentially and test thoroughly before proceeding to the next phase.
+This guide provides comprehensive step-by-step instructions for implementing professional sound effects in Command Center Calendar. Follow each phase sequentially and test thoroughly before proceeding to the next phase.

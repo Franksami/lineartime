@@ -66,7 +66,7 @@ export function NavigationHeader({
           </SheetTrigger>
           <SheetContent side="left" className="w-80">
             <SheetHeader>
-              <SheetTitle>LinearTime</SheetTitle>
+              <SheetTitle>Command Center Calendar</SheetTitle>
               <SheetDescription>Navigate your calendar views</SheetDescription>
             </SheetHeader>
             <div className="mt-6 space-y-4">
@@ -112,14 +112,14 @@ export function NavigationHeader({
               <Button
                 variant="outline"
                 className="w-full justify-start border-primary/20 text-primary hover:bg-primary/10"
-                aria-label="Open CheatCal Enterprise demo"
+                aria-label="Open Command Center Enterprise demo"
                 onClick={() => {
                   window.open('/cheatcal-enterprise', '_blank');
                   setSidebarOpen(false);
                 }}
               >
                 <span className="mr-2 text-sm">✨</span>
-                CheatCal Enterprise
+                Command Center Enterprise
               </Button>
             </div>
           </SheetContent>
@@ -127,7 +127,7 @@ export function NavigationHeader({
 
         {/* Logo/Title */}
         <div className="flex items-center gap-2">
-          <div className="text-xl font-bold">LinearTime</div>
+          <div className="text-xl font-bold">Command Center Calendar</div>
           <span className="text-xs text-muted-foreground hidden sm:inline">
             Life is bigger than a week
           </span>
@@ -169,11 +169,11 @@ export function NavigationHeader({
             variant="outline"
             size="sm"
             onClick={() => window.open('/cheatcal-enterprise', '_blank')}
-            aria-label="Open CheatCal Enterprise demo"
+            aria-label="Open Command Center Enterprise demo"
             className="border-primary/20 text-primary hover:bg-primary/10"
           >
             <span className="mr-2 text-xs">✨</span>
-            CheatCal Enterprise
+            Command Center Enterprise
           </Button>
         </nav>
 

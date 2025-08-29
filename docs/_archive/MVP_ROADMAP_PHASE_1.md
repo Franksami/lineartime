@@ -67,7 +67,7 @@ Based on comprehensive market research and ICP validation, this roadmap defines 
 - **Calendar Integration**: Sync with Google/Outlook/Apple calendars
 
 **Technical Requirements:**
-- Enhanced scheduling algorithm (based on LinearTime's proven engine)
+- Enhanced scheduling algorithm (based on Command Center Calendar's proven engine)
 - Multi-calendar integration
 - Real-time conflict detection
 - Preference learning system
@@ -190,7 +190,7 @@ interface MVPInterface {
 - [ ] Add privacy-first data processing
 
 **Days 11-12: Smart Scheduling Engine**
-- [ ] Port LinearTime's scheduling algorithm
+- [ ] Port Command Center Calendar's scheduling algorithm
 - [ ] Add energy-based optimization
 - [ ] Implement conflict detection
 - [ ] Create optimal time finding
@@ -282,7 +282,7 @@ interface MVPInterface {
 
 ### **Pricing Validation**
 - **Market Research**: $25-75/month sweet spot confirmed
-- **LinearTime Data**: $12-15 willingness validated (we're pricing premium for AI)
+- **Command Center Calendar Data**: $12-15 willingness validated (we're pricing premium for AI)
 - **Competitor Analysis**: 3-5x premium justified for AI capabilities
 
 ---

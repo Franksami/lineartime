@@ -92,8 +92,10 @@ export function SchedulingSuggestions({
   }, [title, duration, events, preferences]);
 
   const getScoreColor = (score: number) => {
-    if (score >= 0.8) return 'text-green-600 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */';
-    if (score >= 0.6) return 'text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */';
+    if (score >= 0.8)
+      return 'text-green-600 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */';
+    if (score >= 0.6)
+      return 'text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */';
     return 'text-orange-600 dark:text-orange-400';
   };
 

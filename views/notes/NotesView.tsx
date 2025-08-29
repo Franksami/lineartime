@@ -3,16 +3,16 @@
  * Research validation: Obsidian patterns for note-taking and backlinks
  */
 
-'use client'
+'use client';
 
-import { useState, useMemo, useCallback } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardHeader, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { 
+import { useState, useMemo, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import {
   FileText,
   Plus,
   Search,
@@ -23,34 +23,34 @@ import {
   Mail,
   ExternalLink,
   Edit,
-  Eye
-} from 'lucide-react'
-import { ViewScaffold, useViewScaffold } from '@/components/shell/TabWorkspace/ViewScaffold'
-import { useFeatureFlag, COMMAND_WORKSPACE_FLAGS } from '@/lib/features/useFeatureFlags'
-import { cn } from '@/lib/utils'
+  Eye,
+} from 'lucide-react';
+import { ViewScaffold, useViewScaffold } from '@/components/_deprecated/ViewScaffold';
+import { useFeatureFlag, COMMAND_WORKSPACE_FLAGS } from '@/lib/features/useFeatureFlags';
+import { cn } from '@/lib/utils';
 
 /**
  * Note interface with entity linking (research: Obsidian note structure)
  */
 interface Note {
-  id: string
-  title: string
-  content: string
-  tags: string[]
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
   links: Array<{
-    id: string
-    type: 'event' | 'task' | 'note' | 'contact'
-    title: string
-    createdAt: string
-  }>
+    id: string;
+    type: 'event' | 'task' | 'note' | 'contact';
+    title: string;
+    createdAt: string;
+  }>;
   backlinks: Array<{
-    noteId: string
-    noteTitle: string
-    context: string // Surrounding text where link appears
-  }>
-  createdAt: string
-  updatedAt: string
-  wordCount: number
+    noteId: string;
+    noteTitle: string;
+    context: string; // Surrounding text where link appears
+  }>;
+  createdAt: string;
+  updatedAt: string;
+  wordCount: number;
 }
 
 /**
@@ -94,19 +94,19 @@ Currently implementing WeekView and PlannerView.
         id: 'meeting-1',
         type: 'event',
         title: 'AI Integration Planning',
-        createdAt: '2025-08-28T14:00:00Z'
+        createdAt: '2025-08-28T14:00:00Z',
       },
       {
-        id: 'task-1', 
+        id: 'task-1',
         type: 'task',
         title: 'Implement conflict resolution',
-        createdAt: '2025-08-28T10:00:00Z'
-      }
+        createdAt: '2025-08-28T10:00:00Z',
+      },
     ],
     backlinks: [],
     createdAt: '2025-08-28T09:00:00Z',
     updatedAt: '2025-08-28T16:30:00Z',
-    wordCount: 180
+    wordCount: 180,
   },
   {
     id: '2',
@@ -141,66 +141,67 @@ Our comprehensive research validated all 7 workspace patterns:
 
 ## Links
 - [[Note: Command Workspace Implementation Notes]]
-- [[Project: LinearTime Transformation]]`,
+- [[Project: Command Center Calendar Transformation]]`,
     tags: ['meeting', 'research', 'decisions'],
     links: [
       {
         id: 'note-1',
-        type: 'note', 
+        type: 'note',
         title: 'Command Workspace Implementation Notes',
-        createdAt: '2025-08-28T09:00:00Z'
-      }
+        createdAt: '2025-08-28T09:00:00Z',
+      },
     ],
     backlinks: [
       {
         noteId: '1',
         noteTitle: 'Command Workspace Implementation Notes',
-        context: '...planning session with research validation...'
-      }
+        context: '...planning session with research validation...',
+      },
     ],
     createdAt: '2025-08-27T15:00:00Z',
     updatedAt: '2025-08-27T15:30:00Z',
-    wordCount: 165
-  }
-]
+    wordCount: 165,
+  },
+];
 
 /**
  * Notes View state management
  */
 function useNotesView() {
-  const [notes, setNotes] = useState<Note[]>(SAMPLE_NOTES)
-  const [activeNoteId, setActiveNoteId] = useState<string | null>(SAMPLE_NOTES[0]?.id || null)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedTag, setSelectedTag] = useState<string | null>(null)
-  const [editMode, setEditMode] = useState(false)
-  
-  const { measureRender, announceViewChange } = useViewScaffold('Notes')
-  
+  const [notes, setNotes] = useState<Note[]>(SAMPLE_NOTES);
+  const [activeNoteId, setActiveNoteId] = useState<string | null>(SAMPLE_NOTES[0]?.id || null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [editMode, setEditMode] = useState(false);
+
+  const { measureRender, announceViewChange } = useViewScaffold('Notes');
+
   // Get active note
-  const activeNote = useMemo(() => 
-    notes.find(note => note.id === activeNoteId),
+  const activeNote = useMemo(
+    () => notes.find((note) => note.id === activeNoteId),
     [notes, activeNoteId]
-  )
-  
+  );
+
   // Filter notes by search and tag
   const filteredNotes = useMemo(() => {
-    return notes.filter(note => {
-      const matchesSearch = !searchQuery ||
+    return notes.filter((note) => {
+      const matchesSearch =
+        !searchQuery ||
         note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        note.content.toLowerCase().includes(searchQuery.toLowerCase())
-      
-      const matchesTag = !selectedTag || note.tags.includes(selectedTag)
-      
-      return matchesSearch && matchesTag
-    })
-  }, [notes, searchQuery, selectedTag])
-  
+        note.content.toLowerCase().includes(searchQuery.toLowerCase());
+
+      const matchesTag = !selectedTag || note.tags.includes(selectedTag);
+
+      return matchesSearch && matchesTag;
+    });
+  }, [notes, searchQuery, selectedTag]);
+
   // Get all unique tags
-  const allTags = useMemo(() => 
-    Array.from(new Set(notes.flatMap(note => note.tags))).sort(),
+  const allTags = useMemo(
+    () => Array.from(new Set(notes.flatMap((note) => note.tags))).sort(),
     [notes]
-  )
-  
+  );
+
   // Create new note
   const createNote = useCallback(() => {
     const newNote: Note = {
@@ -212,28 +213,30 @@ function useNotesView() {
       backlinks: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      wordCount: 3
-    }
-    
-    setNotes(prev => [newNote, ...prev])
-    setActiveNoteId(newNote.id)
-    setEditMode(true)
-  }, [])
-  
+      wordCount: 3,
+    };
+
+    setNotes((prev) => [newNote, ...prev]);
+    setActiveNoteId(newNote.id);
+    setEditMode(true);
+  }, []);
+
   // Update note content
   const updateNote = useCallback((noteId: string, updates: Partial<Note>) => {
-    setNotes(prev => prev.map(note => 
-      note.id === noteId 
-        ? { 
-            ...note, 
-            ...updates, 
-            updatedAt: new Date().toISOString(),
-            wordCount: updates.content ? updates.content.split(/\s+/).length : note.wordCount
-          }
-        : note
-    ))
-  }, [])
-  
+    setNotes((prev) =>
+      prev.map((note) =>
+        note.id === noteId
+          ? {
+              ...note,
+              ...updates,
+              updatedAt: new Date().toISOString(),
+              wordCount: updates.content ? updates.content.split(/\s+/).length : note.wordCount,
+            }
+          : note
+      )
+    );
+  }, []);
+
   return {
     notes: filteredNotes,
     activeNote,
@@ -248,8 +251,8 @@ function useNotesView() {
     setEditMode,
     createNote,
     updateNote,
-    measureRender
-  }
+    measureRender,
+  };
 }
 
 /**
@@ -257,24 +260,24 @@ function useNotesView() {
  */
 function NotesList({
   notes,
-  activeNoteId, 
+  activeNoteId,
   onSelectNote,
   searchQuery,
   onSearchChange,
   selectedTag,
   onTagSelect,
   allTags,
-  onCreateNote
+  onCreateNote,
 }: {
-  notes: Note[]
-  activeNoteId: string | null
-  onSelectNote: (noteId: string) => void
-  searchQuery: string
-  onSearchChange: (query: string) => void
-  selectedTag: string | null
-  onTagSelect: (tag: string | null) => void
-  allTags: string[]
-  onCreateNote: () => void
+  notes: Note[];
+  activeNoteId: string | null;
+  onSelectNote: (noteId: string) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  selectedTag: string | null;
+  onTagSelect: (tag: string | null) => void;
+  allTags: string[];
+  onCreateNote: () => void;
 }) {
   return (
     <div className="w-80 border-r border-border bg-muted/20 flex flex-col">
@@ -286,7 +289,7 @@ function NotesList({
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-        
+
         {/* Search */}
         <div className="relative mb-3">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -297,7 +300,7 @@ function NotesList({
             className="pl-10 h-8"
           />
         </div>
-        
+
         {/* Tag filter */}
         <div className="flex flex-wrap gap-1">
           <Button
@@ -308,7 +311,7 @@ function NotesList({
           >
             All
           </Button>
-          {allTags.slice(0, 4).map(tag => (
+          {allTags.slice(0, 4).map((tag) => (
             <Button
               key={tag}
               variant={selectedTag === tag ? 'secondary' : 'outline'}
@@ -321,7 +324,7 @@ function NotesList({
           ))}
         </div>
       </div>
-      
+
       {/* Notes list */}
       <div className="flex-1 overflow-auto">
         <div className="p-2 space-y-2">
@@ -336,17 +339,15 @@ function NotesList({
             >
               <CardContent className="p-3">
                 <div className="space-y-2">
-                  <h4 className="font-medium text-sm leading-tight line-clamp-2">
-                    {note.title}
-                  </h4>
-                  
+                  <h4 className="font-medium text-sm leading-tight line-clamp-2">{note.title}</h4>
+
                   <p className="text-xs text-muted-foreground line-clamp-3">
                     {note.content.replace(/[#*`]/g, '').slice(0, 150)}...
                   </p>
-                  
+
                   <div className="flex items-center justify-between">
                     <div className="flex flex-wrap gap-1">
-                      {note.tags.slice(0, 2).map(tag => (
+                      {note.tags.slice(0, 2).map((tag) => (
                         <Badge key={tag} variant="secondary" className="text-xs">
                           {tag}
                         </Badge>
@@ -357,7 +358,7 @@ function NotesList({
                         </Badge>
                       )}
                     </div>
-                    
+
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       {note.links.length > 0 && (
                         <div className="flex items-center gap-1">
@@ -375,44 +376,44 @@ function NotesList({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 /**
  * Note Editor Component (right panel)
  */
-function NoteEditor({ 
+function NoteEditor({
   note,
   editMode,
   onToggleEdit,
-  onUpdateNote
+  onUpdateNote,
 }: {
-  note: Note | null
-  editMode: boolean
-  onToggleEdit: () => void
-  onUpdateNote: (updates: Partial<Note>) => void
+  note: Note | null;
+  editMode: boolean;
+  onToggleEdit: () => void;
+  onUpdateNote: (updates: Partial<Note>) => void;
 }) {
-  const [editContent, setEditContent] = useState(note?.content || '')
-  const [editTitle, setEditTitle] = useState(note?.title || '')
-  
+  const [editContent, setEditContent] = useState(note?.content || '');
+  const [editTitle, setEditTitle] = useState(note?.title || '');
+
   // Update local state when note changes
   useState(() => {
     if (note) {
-      setEditContent(note.content)
-      setEditTitle(note.title)
+      setEditContent(note.content);
+      setEditTitle(note.title);
     }
-  })
-  
+  });
+
   const handleSave = () => {
-    if (!note) return
-    
+    if (!note) return;
+
     onUpdateNote({
       title: editTitle,
-      content: editContent
-    })
-    onToggleEdit()
-  }
-  
+      content: editContent,
+    });
+    onToggleEdit();
+  };
+
   if (!note) {
     return (
       <div className="flex-1 flex items-center justify-center">
@@ -422,9 +423,9 @@ function NoteEditor({
           <p className="text-muted-foreground">Select a note to view or edit</p>
         </div>
       </div>
-    )
+    );
   }
-  
+
   return (
     <div className="flex-1 flex flex-col">
       {/* Note header */}
@@ -440,17 +441,13 @@ function NoteEditor({
           ) : (
             <h2 className="text-lg font-semibold">{note.title}</h2>
           )}
-          
+
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onToggleEdit}
-            >
+            <Button variant="outline" size="sm" onClick={onToggleEdit}>
               {editMode ? <Eye className="h-4 w-4" /> : <Edit className="h-4 w-4" />}
               {editMode ? 'Preview' : 'Edit'}
             </Button>
-            
+
             {editMode && (
               <Button size="sm" onClick={handleSave}>
                 Save
@@ -458,7 +455,7 @@ function NoteEditor({
             )}
           </div>
         </div>
-        
+
         {/* Note metadata */}
         <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
           <span>{note.wordCount} words</span>
@@ -467,7 +464,7 @@ function NoteEditor({
           <span>{note.backlinks.length} backlinks</span>
         </div>
       </div>
-      
+
       {/* Note content */}
       <div className="flex-1 overflow-auto">
         {editMode ? (
@@ -485,13 +482,25 @@ function NoteEditor({
             <div className="prose prose-sm max-w-none">
               {note.content.split('\n').map((line, index) => {
                 if (line.startsWith('# ')) {
-                  return <h1 key={index} className="text-xl font-bold mt-6 mb-3">{line.slice(2)}</h1>
+                  return (
+                    <h1 key={index} className="text-xl font-bold mt-6 mb-3">
+                      {line.slice(2)}
+                    </h1>
+                  );
                 }
                 if (line.startsWith('## ')) {
-                  return <h2 key={index} className="text-lg font-semibold mt-4 mb-2">{line.slice(3)}</h2>
+                  return (
+                    <h2 key={index} className="text-lg font-semibold mt-4 mb-2">
+                      {line.slice(3)}
+                    </h2>
+                  );
                 }
                 if (line.startsWith('### ')) {
-                  return <h3 key={index} className="text-base font-medium mt-3 mb-2">{line.slice(4)}</h3>
+                  return (
+                    <h3 key={index} className="text-base font-medium mt-3 mb-2">
+                      {line.slice(4)}
+                    </h3>
+                  );
                 }
                 if (line.startsWith('- ')) {
                   return (
@@ -499,16 +508,16 @@ function NoteEditor({
                       <span className="text-primary">•</span>
                       <span>{line.slice(2)}</span>
                     </div>
-                  )
+                  );
                 }
                 if (line.includes('[[') && line.includes(']]')) {
                   // Entity link rendering (research: Obsidian link patterns)
-                  const parts = line.split(/(\[\[.*?\]\])/)
+                  const parts = line.split(/(\[\[.*?\]\])/);
                   return (
                     <p key={index} className="my-2">
                       {parts.map((part, partIndex) => {
                         if (part.startsWith('[[') && part.endsWith(']]')) {
-                          const linkText = part.slice(2, -2)
+                          const linkText = part.slice(2, -2);
                           return (
                             <Button
                               key={partIndex}
@@ -517,23 +526,27 @@ function NoteEditor({
                             >
                               {linkText}
                             </Button>
-                          )
+                          );
                         }
-                        return part
+                        return part;
                       })}
                     </p>
-                  )
+                  );
                 }
                 if (line.trim()) {
-                  return <p key={index} className="my-2">{line}</p>
+                  return (
+                    <p key={index} className="my-2">
+                      {line}
+                    </p>
+                  );
                 }
-                return <br key={index} />
+                return <br key={index} />;
               })}
             </div>
           </div>
         )}
       </div>
-      
+
       {/* Note footer - Links and tags */}
       <div className="border-t border-border p-4 bg-muted/20">
         {/* Tags */}
@@ -541,7 +554,7 @@ function NoteEditor({
           <div className="space-y-2 mb-4">
             <div className="text-xs font-medium text-muted-foreground">Tags</div>
             <div className="flex flex-wrap gap-1">
-              {note.tags.map(tag => (
+              {note.tags.map((tag) => (
                 <Badge key={tag} variant="secondary" className="text-xs">
                   <Hash className="h-3 w-3 mr-1" />
                   {tag}
@@ -550,23 +563,23 @@ function NoteEditor({
             </div>
           </div>
         )}
-        
+
         {/* Entity links */}
         {note.links.length > 0 && (
           <div className="space-y-2">
             <div className="text-xs font-medium text-muted-foreground">Linked Entities</div>
             <div className="space-y-1">
-              {note.links.map(link => (
+              {note.links.map((link) => (
                 <div key={link.id} className="flex items-center gap-2 text-sm">
                   {link.type === 'event' && <Calendar className="h-4 w-4 text-primary" />}
                   {link.type === 'task' && <CheckSquare className="h-4 w-4 text-primary" />}
                   {link.type === 'note' && <FileText className="h-4 w-4 text-primary" />}
                   {link.type === 'contact' && <Mail className="h-4 w-4 text-primary" />}
-                  
+
                   <Button variant="link" className="p-0 h-auto text-sm">
                     {link.title}
                   </Button>
-                  
+
                   <ExternalLink className="h-3 w-3 text-muted-foreground" />
                 </div>
               ))}
@@ -575,7 +588,7 @@ function NoteEditor({
         )}
       </div>
     </div>
-  )
+  );
 }
 
 /**
@@ -590,24 +603,24 @@ function NotesViewHeader() {
           Markdown + Entity Linking
         </Badge>
       </div>
-      
+
       <div className="flex items-center gap-2">
         <Button variant="outline" size="sm">
           <Link className="h-4 w-4 mr-2" />
           Link Entity
         </Button>
-        
+
         <Button size="sm">
           <Plus className="h-4 w-4 mr-2" />
           New Note
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 /**
- * Main Notes View Component  
+ * Main Notes View Component
  */
 export function NotesView() {
   const {
@@ -623,11 +636,11 @@ export function NotesView() {
     editMode,
     setEditMode,
     createNote,
-    updateNote
-  } = useNotesView()
-  
-  const notesViewEnabled = useFeatureFlag(COMMAND_WORKSPACE_FLAGS.VIEWS_NOTES)
-  
+    updateNote,
+  } = useNotesView();
+
+  const notesViewEnabled = useFeatureFlag(COMMAND_WORKSPACE_FLAGS.VIEWS_NOTES);
+
   if (!notesViewEnabled) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -638,9 +651,9 @@ export function NotesView() {
           <Badge variant="outline">views.notes</Badge>
         </div>
       </div>
-    )
+    );
   }
-  
+
   return (
     <ViewScaffold
       header={<NotesViewHeader />}
@@ -657,14 +670,14 @@ export function NotesView() {
             allTags={allTags}
             onCreateNote={createNote}
           />
-          
+
           <NoteEditor
             note={activeNote}
             editMode={editMode}
             onToggleEdit={() => setEditMode(!editMode)}
             onUpdateNote={(updates) => {
               if (activeNoteId) {
-                updateNote(activeNoteId, updates)
+                updateNote(activeNoteId, updates);
               }
             }}
           />
@@ -673,5 +686,5 @@ export function NotesView() {
       contextPanels={['backlinks', 'details', 'ai']}
       scrollable={false} // Custom scroll in editor
     />
-  )
+  );
 }

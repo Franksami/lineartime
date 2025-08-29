@@ -43,19 +43,16 @@ import { PerformanceSLOProvider } from '@/components/dashboard/PerformanceSLOPro
 import SecurityMonitoringDashboard from '@/components/dashboard/SecurityMonitoringDashboard';
 import SyncQueueMonitor from '@/components/dashboard/SyncQueueMonitor';
 
-// Lazy load calendar components for performance
-const LinearCalendarHorizontal = dynamic(
-  () =>
-    import('@/components/calendar/LinearCalendarHorizontal').then((mod) => ({
-      default: mod.LinearCalendarHorizontal,
-    })),
+// Command Workspace Views for modern dashboard
+const WeekView = dynamic(
+  () => import('@/views/week/WeekView').then((mod) => ({ default: mod.WeekView })),
   { loading: () => <div className="h-64 w-full bg-muted animate-pulse rounded-md" /> }
 );
 
-const LinearCalendarPro = dynamic(
+const CommandCenterCalendarPro = dynamic(
   () =>
     import('@/components/calendar/LinearCalendarPro').then((mod) => ({
-      default: mod.LinearCalendarPro,
+      default: mod.CommandCenterCalendarPro,
     })),
   { loading: () => <div className="h-64 w-full bg-muted animate-pulse rounded-md" /> }
 );
@@ -174,8 +171,8 @@ const _mockSyncQueue: SyncJob[] = [
 ];
 
 const calendarLibraries = [
-  { id: 'linear', name: 'Linear Calendar (Foundation)', component: 'LinearCalendarHorizontal' },
-  { id: 'fullcalendar', name: 'FullCalendar Pro', component: 'LinearCalendarPro' },
+  { id: 'week', name: 'Command Workspace Week View', component: 'WeekView' },
+  { id: 'fullcalendar', name: 'FullCalendar Pro', component: 'CommandCenterCalendarPro' },
   { id: 'toast-ui', name: 'Toast UI Calendar', component: 'ToastUICalendarView' },
   { id: 'progress', name: 'Progress Calendar', component: 'ProgressCalendarView' },
   { id: 'react-big', name: 'React Big Calendar', component: 'ReactBigCalendarView' },
@@ -187,7 +184,7 @@ const calendarLibraries = [
 ];
 
 export default function IntegrationDashboardPage() {
-  const [selectedLibrary, setSelectedLibrary] = useState('linear');
+  const [selectedLibrary, setSelectedLibrary] = useState('week');
   const [_showSecurityDetails, _setShowSecurityDetails] = useState(false);
   const currentYear = new Date().getFullYear();
 
@@ -286,21 +283,15 @@ export default function IntegrationDashboardPage() {
 
   const renderCalendarComponent = () => {
     switch (selectedLibrary) {
-      case 'linear':
+      case 'week':
         return (
-          <LinearCalendarHorizontal
-            year={currentYear}
-            events={mockEvents}
-            className="h-full w-full"
-            onEventCreate={() => {}}
-            onEventUpdate={() => {}}
-            onEventDelete={() => {}}
-            enableInfiniteCanvas={true}
-          />
+          <div className="h-full w-full">
+            <WeekView />
+          </div>
         );
       case 'fullcalendar':
         return (
-          <LinearCalendarPro
+          <CommandCenterCalendarPro
             year={currentYear}
             events={mockEvents}
             className="h-full w-full"
@@ -355,7 +346,8 @@ export default function IntegrationDashboardPage() {
             <div>
               <h1 className="text-3xl font-bold">Integration Platform Dashboard</h1>
               <p className="text-muted-foreground mt-1">
-                LinearTime Phase 2.6 Foundation - Enterprise Calendar Integration Platform
+                Command Center Calendar Phase 2.6 Foundation - Enterprise Calendar Integration
+                Platform
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -421,7 +413,9 @@ export default function IntegrationDashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Security Status</p>
-                    <p className="text-lg font-bold text-green-600 /* TODO: Use semantic token */">Secure</p>
+                    <p className="text-lg font-bold text-green-600 /* TODO: Use semantic token */">
+                      Secure
+                    </p>
                   </div>
                   <Shield className="h-8 w-8 text-green-500 /* TODO: Use semantic token */" />
                 </div>

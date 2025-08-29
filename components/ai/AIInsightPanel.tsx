@@ -6,7 +6,7 @@
  * Provides comprehensive schedule analysis and productivity metrics.
  *
  * @version Phase 5.0
- * @author LinearTime AI Enhancement System
+ * @author Command Center Calendar AI Enhancement System
  */
 
 'use client';

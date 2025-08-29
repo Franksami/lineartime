@@ -880,10 +880,14 @@ export function LiveCollaborationLayer({
                     className={cn(
                       'w-10 h-10 rounded-full border-2 border-white shadow-md flex items-center justify-center text-white font-medium text-sm',
                       {
-                        'ring-2 ring-green-400 /* TODO: Use semantic token */': user.status === 'active',
-                        'ring-2 ring-yellow-400 /* TODO: Use semantic token */': user.status === 'idle',
-                        'ring-2 ring-gray-400 /* TODO: Use semantic token */': user.status === 'away',
-                        'ring-2 ring-red-400 /* TODO: Use semantic token */': user.status === 'offline',
+                        'ring-2 ring-green-400 /* TODO: Use semantic token */':
+                          user.status === 'active',
+                        'ring-2 ring-yellow-400 /* TODO: Use semantic token */':
+                          user.status === 'idle',
+                        'ring-2 ring-gray-400 /* TODO: Use semantic token */':
+                          user.status === 'away',
+                        'ring-2 ring-red-400 /* TODO: Use semantic token */':
+                          user.status === 'offline',
                       }
                     )}
                     style={{ backgroundColor: user.color }}
@@ -951,10 +955,13 @@ export function LiveCollaborationLayer({
                   <div className="flex items-start gap-3">
                     <div
                       className={cn('flex-shrink-0 p-1.5 rounded-full', {
-                        'bg-red-100 /* TODO: Use semantic token */ text-red-600 /* TODO: Use semantic token */': conflict.severity === 'critical',
+                        'bg-red-100 /* TODO: Use semantic token */ text-red-600 /* TODO: Use semantic token */':
+                          conflict.severity === 'critical',
                         'bg-orange-100 text-orange-600': conflict.severity === 'high',
-                        'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-600 /* TODO: Use semantic token */': conflict.severity === 'medium',
-                        'bg-blue-100 /* TODO: Use semantic token */ text-blue-600 /* TODO: Use semantic token */': conflict.severity === 'low',
+                        'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-600 /* TODO: Use semantic token */':
+                          conflict.severity === 'medium',
+                        'bg-blue-100 /* TODO: Use semantic token */ text-blue-600 /* TODO: Use semantic token */':
+                          conflict.severity === 'low',
                       })}
                     >
                       <AlertTriangle className="w-4 h-4" />
@@ -1102,10 +1109,13 @@ export function LiveCollaborationLayer({
                         <strong>Severity:</strong>
                         <span
                           className={cn('ml-2 px-2 py-1 rounded-full text-xs', {
-                            'bg-red-100 /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */': selectedConflict.severity === 'critical',
+                            'bg-red-100 /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */':
+                              selectedConflict.severity === 'critical',
                             'bg-orange-100 text-orange-800': selectedConflict.severity === 'high',
-                            'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */': selectedConflict.severity === 'medium',
-                            'bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */': selectedConflict.severity === 'low',
+                            'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */':
+                              selectedConflict.severity === 'medium',
+                            'bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */':
+                              selectedConflict.severity === 'low',
                           })}
                         >
                           {selectedConflict.severity}
@@ -1203,7 +1213,9 @@ export function LiveCollaborationLayer({
             <div
               className={cn(
                 'w-2 h-2 rounded-full',
-                webSocketAPI.isConnected ? 'bg-green-500 /* TODO: Use semantic token */' : 'bg-red-500 /* TODO: Use semantic token */'
+                webSocketAPI.isConnected
+                  ? 'bg-green-500 /* TODO: Use semantic token */'
+                  : 'bg-red-500 /* TODO: Use semantic token */'
               )}
             />
             <span className="text-muted-foreground">

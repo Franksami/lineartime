@@ -6,7 +6,7 @@
  * Provides intelligent conflict resolution with multi-provider support.
  *
  * @version Phase 5.0
- * @author LinearTime AI Enhancement System
+ * @author Command Center Calendar AI Enhancement System
  */
 
 'use client';
@@ -877,10 +877,13 @@ export function AIConflictDetector({
                       <strong>Severity:</strong>
                       <span
                         className={cn('ml-2 px-2 py-1 rounded-full text-xs', {
-                          'bg-red-100 /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */': selectedConflict.severity === 'critical',
+                          'bg-red-100 /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */':
+                            selectedConflict.severity === 'critical',
                           'bg-orange-100 text-orange-800': selectedConflict.severity === 'high',
-                          'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */': selectedConflict.severity === 'medium',
-                          'bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */': selectedConflict.severity === 'low',
+                          'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */':
+                            selectedConflict.severity === 'medium',
+                          'bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */':
+                            selectedConflict.severity === 'low',
                         })}
                       >
                         {selectedConflict.severity}

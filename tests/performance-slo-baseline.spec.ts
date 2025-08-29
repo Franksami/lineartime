@@ -28,7 +28,7 @@ const SLO_TARGETS: SLOTargets = {
   maxCLS: 0.1,
   maxBundleSize: 500 * 1024, // 500KB in bytes
   maxMemoryUsage: 100, // MB
-  minFPS: 112
+  minFPS: 112,
 };
 
 test.describe('Performance SLO Baseline Measurements', () => {
@@ -46,15 +46,15 @@ test.describe('Performance SLO Baseline Measurements', () => {
     }
 
     const startTime = Date.now();
-    
+
     // Navigate to main application
     await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
-    
+
     // Check if we're on landing page based on URL or content
     const currentUrl = page.url();
-    const isLandingPage = currentUrl.includes('/landing') || 
-                         await page.locator('header').first().isVisible();
-    
+    const isLandingPage =
+      currentUrl.includes('/landing') || (await page.locator('header').first().isVisible());
+
     if (isLandingPage) {
       console.log('Landing page detected, measuring landing page performance instead');
       // Wait for landing page components to render
@@ -64,7 +64,7 @@ test.describe('Performance SLO Baseline Measurements', () => {
       // Wait for calendar to fully render if authenticated
       await page.waitForSelector('[role="grid"]', { timeout: 10000 });
     }
-    
+
     const loadTime = Date.now() - startTime;
 
     // Collect Core Web Vitals
@@ -72,7 +72,7 @@ test.describe('Performance SLO Baseline Measurements', () => {
       return new Promise((resolve) => {
         // Import Web Vitals library if available, otherwise use manual collection
         const metrics: any = {};
-        
+
         // Manual LCP collection
         if ('PerformanceObserver' in window) {
           try {
@@ -120,10 +120,14 @@ test.describe('Performance SLO Baseline Measurements', () => {
         // Fallback to manual timing
         setTimeout(() => {
           resolve({
-            fcp: metrics.fcp || performance.timing?.domContentLoadedEventStart - performance.timing?.navigationStart || 0,
+            fcp:
+              metrics.fcp ||
+              performance.timing?.domContentLoadedEventStart -
+                performance.timing?.navigationStart ||
+              0,
             lcp: metrics.lcp || 0,
             cls: metrics.cls || 0,
-            fid: 0 // Will be measured separately during interaction
+            fid: 0, // Will be measured separately during interaction
           });
         }, 1000);
       });
@@ -134,7 +138,7 @@ test.describe('Performance SLO Baseline Measurements', () => {
       if ('performance' in window && 'getEntriesByType' in performance) {
         const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
         return resources
-          .filter(resource => resource.name.includes('.js') && resource.transferSize)
+          .filter((resource) => resource.name.includes('.js') && resource.transferSize)
           .reduce((total, resource) => total + (resource.transferSize || 0), 0);
       }
       return 0;
@@ -143,11 +147,13 @@ test.describe('Performance SLO Baseline Measurements', () => {
     // Measure memory usage
     const memoryMetrics = await page.evaluate(() => {
       // @ts-expect-error - Chrome-specific memory API
-      return performance.memory ? {
-        used: performance.memory.usedJSHeapSize / 1048576, // MB
-        total: performance.memory.totalJSHeapSize / 1048576,
-        limit: performance.memory.jsHeapSizeLimit / 1048576
-      } : { used: 0, total: 0, limit: 0 };
+      return performance.memory
+        ? {
+            used: performance.memory.usedJSHeapSize / 1048576, // MB
+            total: performance.memory.totalJSHeapSize / 1048576,
+            limit: performance.memory.jsHeapSizeLimit / 1048576,
+          }
+        : { used: 0, total: 0, limit: 0 };
     });
 
     // Measure FPS during scrolling
@@ -171,14 +177,14 @@ test.describe('Performance SLO Baseline Measurements', () => {
       // Perform scroll test
       for (let i = 0; i < 10; i++) {
         scrollContainer.scrollTo({ top: i * 100, behavior: 'smooth' });
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await new Promise((resolve) => setTimeout(resolve, 200));
       }
 
       // Wait for frame counting to complete
-      await new Promise(resolve => setTimeout(resolve, duration));
+      await new Promise((resolve) => setTimeout(resolve, duration));
 
       return {
-        fps: frameCount / (duration / 1000)
+        fps: frameCount / (duration / 1000),
       };
     });
 
@@ -186,7 +192,7 @@ test.describe('Performance SLO Baseline Measurements', () => {
     const fidMetrics = await page.evaluate(async () => {
       return new Promise<number>((resolve) => {
         let fid = 0;
-        
+
         if ('PerformanceObserver' in window) {
           try {
             const observer = new PerformanceObserver((list) => {
@@ -202,7 +208,8 @@ test.describe('Performance SLO Baseline Measurements', () => {
         }
 
         // Trigger an interaction to measure FID
-        const button = document.querySelector('button') || document.querySelector('[role="button"]');
+        const button =
+          document.querySelector('button') || document.querySelector('[role="button"]');
         if (button) {
           const startTime = performance.now();
           (button as HTMLElement).click();
@@ -223,18 +230,28 @@ test.describe('Performance SLO Baseline Measurements', () => {
       cumulativeLayoutShift: (webVitals as any).cls,
       bundleSize,
       memoryUsage: memoryMetrics.used,
-      fps: fpsMetrics.fps
+      fps: fpsMetrics.fps,
     };
 
     // Log all metrics
     console.log('=== PERFORMANCE BASELINE METRICS ===');
     console.log(`Load Time: ${metrics.loadTime}ms (Target: <${SLO_TARGETS.maxLoadTime}ms)`);
     console.log(`First Contentful Paint: ${metrics.firstContentfulPaint}ms`);
-    console.log(`Largest Contentful Paint: ${metrics.largestContentfulPaint}ms (Target: <${SLO_TARGETS.maxLCP}ms)`);
-    console.log(`First Input Delay: ${metrics.firstInputDelay}ms (Target: <${SLO_TARGETS.maxFID}ms)`);
-    console.log(`Cumulative Layout Shift: ${metrics.cumulativeLayoutShift} (Target: <${SLO_TARGETS.maxCLS})`);
-    console.log(`Bundle Size: ${(metrics.bundleSize / 1024).toFixed(2)}KB (Target: <${SLO_TARGETS.maxBundleSize / 1024}KB)`);
-    console.log(`Memory Usage: ${metrics.memoryUsage.toFixed(2)}MB (Target: <${SLO_TARGETS.maxMemoryUsage}MB)`);
+    console.log(
+      `Largest Contentful Paint: ${metrics.largestContentfulPaint}ms (Target: <${SLO_TARGETS.maxLCP}ms)`
+    );
+    console.log(
+      `First Input Delay: ${metrics.firstInputDelay}ms (Target: <${SLO_TARGETS.maxFID}ms)`
+    );
+    console.log(
+      `Cumulative Layout Shift: ${metrics.cumulativeLayoutShift} (Target: <${SLO_TARGETS.maxCLS})`
+    );
+    console.log(
+      `Bundle Size: ${(metrics.bundleSize / 1024).toFixed(2)}KB (Target: <${SLO_TARGETS.maxBundleSize / 1024}KB)`
+    );
+    console.log(
+      `Memory Usage: ${metrics.memoryUsage.toFixed(2)}MB (Target: <${SLO_TARGETS.maxMemoryUsage}MB)`
+    );
     console.log(`FPS: ${metrics.fps.toFixed(2)} (Target: >${SLO_TARGETS.minFPS})`);
 
     // SLO compliance checks (warnings, not failures for baseline)
@@ -245,7 +262,7 @@ test.describe('Performance SLO Baseline Measurements', () => {
       cls: metrics.cumulativeLayoutShift <= SLO_TARGETS.maxCLS,
       bundleSize: metrics.bundleSize <= SLO_TARGETS.maxBundleSize,
       memoryUsage: metrics.memoryUsage <= SLO_TARGETS.maxMemoryUsage,
-      fps: metrics.fps >= SLO_TARGETS.minFPS
+      fps: metrics.fps >= SLO_TARGETS.minFPS,
     };
 
     console.log('=== SLO COMPLIANCE ===');
@@ -253,7 +270,8 @@ test.describe('Performance SLO Baseline Measurements', () => {
       console.log(`${metric}: ${passes ? '✅ PASS' : '⚠️  NEEDS IMPROVEMENT'}`);
     });
 
-    const overallCompliance = Object.values(sloResults).filter(Boolean).length / Object.values(sloResults).length * 100;
+    const overallCompliance =
+      (Object.values(sloResults).filter(Boolean).length / Object.values(sloResults).length) * 100;
     console.log(`Overall SLO Compliance: ${overallCompliance.toFixed(1)}%`);
 
     // Store baseline for comparison
@@ -269,14 +287,14 @@ test.describe('Performance SLO Baseline Measurements', () => {
 
   test('measure design system token resolution performance', async ({ page }) => {
     await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
-    
+
     // Wait for page to be ready (landing page or calendar)
     await page.waitForTimeout(2000);
 
     // Test CSS custom property resolution performance
     const tokenResolutionMetrics = await page.evaluate(() => {
       const startTime = performance.now();
-      
+
       // Force style recalculation with token changes
       const testElement = document.createElement('div');
       testElement.style.cssText = `
@@ -288,28 +306,30 @@ test.describe('Performance SLO Baseline Measurements', () => {
         border-radius: var(--radius);
         font-size: var(--text-sm);
       `;
-      
+
       document.body.appendChild(testElement);
-      
+
       // Force reflow
       const computedStyle = getComputedStyle(testElement);
       const bgColor = computedStyle.backgroundColor;
       const textColor = computedStyle.color;
       const borderColor = computedStyle.borderColor;
-      
+
       document.body.removeChild(testElement);
-      
+
       return {
         tokenResolutionTime: performance.now() - startTime,
         resolvedValues: {
           background: bgColor,
           foreground: textColor,
-          border: borderColor
-        }
+          border: borderColor,
+        },
       };
     });
 
-    console.log(`Design System Token Resolution: ${tokenResolutionMetrics.tokenResolutionTime.toFixed(2)}ms`);
+    console.log(
+      `Design System Token Resolution: ${tokenResolutionMetrics.tokenResolutionTime.toFixed(2)}ms`
+    );
     console.log('Resolved token values:', tokenResolutionMetrics.resolvedValues);
 
     // Token resolution should be fast (< 10ms)
@@ -318,48 +338,50 @@ test.describe('Performance SLO Baseline Measurements', () => {
 
   test('component render performance with events', async ({ page }) => {
     await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
-    
+
     // Wait for page to be ready (landing page has component rendering too)
     await page.waitForTimeout(2000);
 
     // Add events and measure render performance
     const renderMetrics = await page.evaluate(async () => {
       const results: any[] = [];
-      
+
       // Add progressively more events and measure render time
       for (const eventCount of [10, 50, 100, 500, 1000]) {
         const startTime = performance.now();
-        
+
         // Simulate events data
         const events = Array.from({ length: eventCount }, (_, i) => ({
           id: `test-${i}`,
           title: `Event ${i}`,
           startDate: new Date(2025, Math.floor(i / 30), (i % 30) + 1),
           endDate: new Date(2025, Math.floor(i / 30), (i % 30) + 2),
-          category: 'work'
+          category: 'work',
         }));
 
         // Store in window and trigger a re-render
         (window as any).testEvents = events;
         window.dispatchEvent(new CustomEvent('events-updated'));
-        
+
         // Wait for render
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
         const renderTime = performance.now() - startTime;
         results.push({
           eventCount,
           renderTime,
-          renderTimePerEvent: renderTime / eventCount
+          renderTimePerEvent: renderTime / eventCount,
         });
       }
-      
+
       return results;
     });
 
     console.log('=== COMPONENT RENDER PERFORMANCE ===');
-    renderMetrics.forEach(metric => {
-      console.log(`${metric.eventCount} events: ${metric.renderTime.toFixed(2)}ms (${metric.renderTimePerEvent.toFixed(3)}ms/event)`);
+    renderMetrics.forEach((metric) => {
+      console.log(
+        `${metric.eventCount} events: ${metric.renderTime.toFixed(2)}ms (${metric.renderTimePerEvent.toFixed(3)}ms/event)`
+      );
     });
 
     // Performance should scale reasonably with event count
@@ -373,7 +395,7 @@ test.describe('SLO Monitoring and Alerting', () => {
   test('validate SLO targets are measurable', async ({ page }) => {
     // This test validates that we can measure all our SLO targets
     await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
-    
+
     // Wait for page to be ready
     await page.waitForTimeout(2000);
 
@@ -385,7 +407,7 @@ test.describe('SLO Monitoring and Alerting', () => {
         networkTiming: 'getEntriesByType' in performance,
         paintTiming: 'PerformancePaintTiming' in window,
         layoutShift: 'PerformanceObserver' in window, // Will check specific support
-        largestContentfulPaint: 'PerformanceObserver' in window
+        largestContentfulPaint: 'PerformanceObserver' in window,
       };
 
       // Test specific observer support
@@ -398,7 +420,10 @@ test.describe('SLO Monitoring and Alerting', () => {
         }
 
         try {
-          new PerformanceObserver(() => {}).observe({ type: 'largest-contentful-paint', buffered: true });
+          new PerformanceObserver(() => {}).observe({
+            type: 'largest-contentful-paint',
+            buffered: true,
+          });
           capabilities.largestContentfulPaint = true;
         } catch {
           capabilities.largestContentfulPaint = false;

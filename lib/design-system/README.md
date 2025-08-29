@@ -1,8 +1,8 @@
-# LinearTime Design System
+# Command Center Calendar Design System
 
 ## 🎨 Overview
 
-This design system provides a comprehensive token-based architecture for LinearTime's UI components, built on Style Dictionary and compatible with all major UI frameworks.
+This design system provides a comprehensive token-based architecture for Command Center Calendar's UI components, built on Style Dictionary and compatible with all major UI frameworks.
 
 ## 📁 Architecture
 
@@ -373,4 +373,4 @@ const styles = {
 
 ---
 
-Built with ❤️ for the LinearTime Calendar Platform
+Built with ❤️ for the Command Center Calendar Calendar Platform

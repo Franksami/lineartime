@@ -1,6 +1,6 @@
 /**
  * TypeScript interfaces and types for Production A/B Testing Framework
- * Comprehensive type definitions for LinearTime horizontal timeline validation
+ * Comprehensive type definitions for Command Center Calendar horizontal timeline validation
  */
 
 import type { Id } from '@/convex/_generated/dataModel';

@@ -1,4 +1,4 @@
-# LinearTime Webhook & Sync Queue Architecture
+# Command Center Calendar Webhook & Sync Queue Architecture
 
 > **Phase 2.6 Foundation Documentation**  
 > **Real-Time Synchronization Platform**  
@@ -6,13 +6,13 @@
 
 ## Executive Summary
 
-LinearTime implements a sophisticated **real-time webhook system** with **automatic renewal capabilities** and **intelligent sync queue processing** to maintain seamless calendar synchronization across 4 major providers (Google, Microsoft, Apple CalDAV, Generic CalDAV).
+Command Center Calendar implements a sophisticated **real-time webhook system** with **automatic renewal capabilities** and **intelligent sync queue processing** to maintain seamless calendar synchronization across 4 major providers (Google, Microsoft, Apple CalDAV, Generic CalDAV).
 
 ## Architecture Overview
 
 ### Hybrid Sync Strategy
 
-LinearTime employs a **hybrid synchronization approach** combining:
+Command Center Calendar employs a **hybrid synchronization approach** combining:
 
 1. **Push Notifications** (Google, Microsoft) - Real-time webhook delivery
 2. **Polling Sync** (CalDAV providers) - Scheduled incremental sync
@@ -1154,7 +1154,7 @@ export async function GET() {
 
 ## Conclusion
 
-LinearTime's webhook and sync queue architecture provides **enterprise-grade real-time synchronization** through:
+Command Center Calendar's webhook and sync queue architecture provides **enterprise-grade real-time synchronization** through:
 
 - **Hybrid Sync Strategy**: Optimal combination of push notifications and polling
 - **Automatic Renewal**: Zero-downtime webhook subscription management

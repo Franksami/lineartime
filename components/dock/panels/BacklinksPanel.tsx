@@ -3,14 +3,14 @@
  * Research validation: Obsidian graph view patterns + entity relationship visualization
  */
 
-'use client'
+'use client';
 
-import { useState, useEffect, useMemo } from 'react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { useState, useEffect, useMemo } from 'react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Network,
   Search,
@@ -22,69 +22,69 @@ import {
   Mail,
   User,
   FolderOpen,
-  Zap
-} from 'lucide-react'
-import { useEntityLinking } from '@/lib/entities/EntityLinkingSystem'
-import { useAppShell } from '@/contexts/AppShellProvider'
-import { useFeatureFlag, COMMAND_WORKSPACE_FLAGS } from '@/lib/features/useFeatureFlags'
-import { cn } from '@/lib/utils'
+  Zap,
+} from 'lucide-react';
+import { useEntityLinking } from '@/lib/entities/EntityLinkingSystem';
+import { useAppShell } from '@/contexts/AppShellProvider';
+import { useFeatureFlag, COMMAND_WORKSPACE_FLAGS } from '@/lib/features/useFeatureFlags';
+import { cn } from '@/lib/utils';
 
 /**
  * Backlinks Panel Hook
  */
 function useBacklinksPanel() {
-  const entityLinking = useEntityLinking()
-  const { activeView } = useAppShell()
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedEntityType, setSelectedEntityType] = useState<string | null>(null)
-  const [graphView, setGraphView] = useState(false)
-  const backlinksEnabled = useFeatureFlag(COMMAND_WORKSPACE_FLAGS.DOCK_BACKLINKS_PANEL)
-  
+  const entityLinking = useEntityLinking();
+  const { activeView } = useAppShell();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedEntityType, setSelectedEntityType] = useState<string | null>(null);
+  const [graphView, setGraphView] = useState(false);
+  const backlinksEnabled = useFeatureFlag(COMMAND_WORKSPACE_FLAGS.DOCK_BACKLINKS_PANEL);
+
   // Get graph data for visualization
   const graphData = useMemo(() => {
-    if (!entityLinking.selectedEntity) return null
-    
+    if (!entityLinking.selectedEntity) return null;
+
     return entityLinking.getEntityGraph(
       entityLinking.selectedEntity.id,
       2, // Max depth
       {
         entityTypes: selectedEntityType ? [selectedEntityType as any] : undefined,
-        minStrength: 0.3
+        minStrength: 0.3,
       }
-    )
-  }, [entityLinking.selectedEntity, selectedEntityType])
-  
+    );
+  }, [entityLinking.selectedEntity, selectedEntityType]);
+
   // Filter backlinks by search query
   const filteredBacklinks = useMemo(() => {
-    if (!entityLinking.backlinks) return null
-    
-    let incomingLinks = entityLinking.backlinks.incomingLinks
-    let outgoingLinks = entityLinking.backlinks.outgoingLinks
-    
+    if (!entityLinking.backlinks) return null;
+
+    let incomingLinks = entityLinking.backlinks.incomingLinks;
+    let outgoingLinks = entityLinking.backlinks.outgoingLinks;
+
     if (searchQuery) {
-      const query = searchQuery.toLowerCase()
-      incomingLinks = incomingLinks.filter(link => 
-        link.from.title.toLowerCase().includes(query) ||
-        link.type.toLowerCase().includes(query)
-      )
-      outgoingLinks = outgoingLinks.filter(link =>
-        link.to.title.toLowerCase().includes(query) ||
-        link.type.toLowerCase().includes(query)
-      )
+      const query = searchQuery.toLowerCase();
+      incomingLinks = incomingLinks.filter(
+        (link) =>
+          link.from.title.toLowerCase().includes(query) || link.type.toLowerCase().includes(query)
+      );
+      outgoingLinks = outgoingLinks.filter(
+        (link) =>
+          link.to.title.toLowerCase().includes(query) || link.type.toLowerCase().includes(query)
+      );
     }
-    
+
     if (selectedEntityType) {
-      incomingLinks = incomingLinks.filter(link => link.from.type === selectedEntityType)
-      outgoingLinks = outgoingLinks.filter(link => link.to.type === selectedEntityType)
+      incomingLinks = incomingLinks.filter((link) => link.from.type === selectedEntityType);
+      outgoingLinks = outgoingLinks.filter((link) => link.to.type === selectedEntityType);
     }
-    
+
     return {
       ...entityLinking.backlinks,
       incomingLinks,
-      outgoingLinks
-    }
-  }, [entityLinking.backlinks, searchQuery, selectedEntityType])
-  
+      outgoingLinks,
+    };
+  }, [entityLinking.backlinks, searchQuery, selectedEntityType]);
+
   return {
     selectedEntity: entityLinking.selectedEntity,
     backlinks: filteredBacklinks,
@@ -100,74 +100,79 @@ function useBacklinksPanel() {
     searchEntities: entityLinking.searchEntities,
     handleDragToLink: entityLinking.handleDragToLink,
     backlinksEnabled,
-    stats: entityLinking.getStats()
-  }
+    stats: entityLinking.getStats(),
+  };
 }
 
 /**
  * Entity Type Icon Component
  */
-function EntityTypeIcon({ type, className }: { type: string, className?: string }) {
+function EntityTypeIcon({ type, className }: { type: string; className?: string }) {
   const icons = {
     event: Calendar,
     task: CheckSquare,
     note: FileText,
     contact: User,
     project: FolderOpen,
-    email: Mail
-  }
-  
-  const Icon = icons[type as keyof typeof icons] || FileText
-  return <Icon className={className} />
+    email: Mail,
+  };
+
+  const Icon = icons[type as keyof typeof icons] || FileText;
+  return <Icon className={className} />;
 }
 
 /**
  * Backlink Item Component
  */
-function BacklinkItem({ 
-  link, 
-  direction, 
-  onSelect 
-}: { 
-  link: any
-  direction: 'incoming' | 'outgoing'
-  onSelect: (entityId: string) => void
+function BacklinkItem({
+  link,
+  direction,
+  onSelect,
+}: {
+  link: any;
+  direction: 'incoming' | 'outgoing';
+  onSelect: (entityId: string) => void;
 }) {
-  const entity = direction === 'incoming' ? link.from : link.to
+  const entity = direction === 'incoming' ? link.from : link.to;
   const linkTypeColors = {
     related: 'bg-blue-100 text-blue-800',
     depends_on: 'bg-orange-100 text-orange-800',
     part_of: 'bg-green-100 text-green-800',
     references: 'bg-purple-100 text-purple-800',
-    mentions: 'bg-gray-100 text-gray-800'
-  }
-  
+    mentions: 'bg-gray-100 text-gray-800',
+  };
+
   return (
     <Card className="cursor-pointer hover:shadow-sm transition-all duration-200">
       <CardContent className="p-3">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-start gap-2 flex-1">
             <EntityTypeIcon type={entity.type} className="h-4 w-4 mt-0.5 text-muted-foreground" />
-            
+
             <div className="flex-1 min-w-0">
               <div className="text-sm font-medium truncate">{entity.title}</div>
-              
+
               <div className="flex items-center gap-2 mt-1">
                 <Badge variant="outline" className="text-xs">
                   {entity.type}
                 </Badge>
-                
-                <Badge className={cn('text-xs', linkTypeColors[link.type] || 'bg-gray-100 text-gray-800')}>
+
+                <Badge
+                  className={cn(
+                    'text-xs',
+                    linkTypeColors[link.type] || 'bg-gray-100 text-gray-800'
+                  )}
+                >
                   {link.type.replace('_', ' ')}
                 </Badge>
-                
+
                 {link.strength && (
                   <div className="text-xs text-muted-foreground">
                     {(link.strength * 100).toFixed(0)}%
                   </div>
                 )}
               </div>
-              
+
               {/* Link context */}
               {link.context?.sourceText && (
                 <div className="text-xs text-muted-foreground mt-2 bg-muted/50 p-2 rounded italic">
@@ -176,13 +181,13 @@ function BacklinkItem({
               )}
             </div>
           </div>
-          
+
           <Button
             variant="ghost"
             size="sm"
             onClick={(e) => {
-              e.stopPropagation()
-              onSelect(entity.id)
+              e.stopPropagation();
+              onSelect(entity.id);
             }}
             className="h-6 w-6 p-0"
           >
@@ -191,15 +196,15 @@ function BacklinkItem({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 /**
  * Simple Graph Visualization (text-based for MVP)
  */
 function SimpleGraphView({ graphData }: { graphData: any }) {
-  if (!graphData) return null
-  
+  if (!graphData) return null;
+
   return (
     <div className="space-y-4">
       <div className="text-center">
@@ -211,21 +216,25 @@ function SimpleGraphView({ graphData }: { graphData: any }) {
           {graphData.stats.totalNodes} entities • {graphData.stats.totalEdges} connections
         </div>
       </div>
-      
+
       {/* Connected entities */}
       <div className="space-y-2">
         <h5 className="text-xs font-medium text-muted-foreground">Connected Entities</h5>
-        
-        {graphData.nodes.slice(1, 6).map((node: any) => ( // Skip center node, show 5 connected
-          <div key={node.id} className="flex items-center gap-2 p-2 bg-muted/30 rounded">
-            <EntityTypeIcon type={node.type} className="h-3 w-3" />
-            <span className="text-xs flex-1 truncate">{node.title}</span>
-            <Badge variant="outline" className="text-xs">
-              {node.type}
-            </Badge>
-          </div>
-        ))}
-        
+
+        {graphData.nodes.slice(1, 6).map(
+          (
+            node: any // Skip center node, show 5 connected
+          ) => (
+            <div key={node.id} className="flex items-center gap-2 p-2 bg-muted/30 rounded">
+              <EntityTypeIcon type={node.type} className="h-3 w-3" />
+              <span className="text-xs flex-1 truncate">{node.title}</span>
+              <Badge variant="outline" className="text-xs">
+                {node.type}
+              </Badge>
+            </div>
+          )
+        )}
+
         {graphData.nodes.length > 6 && (
           <div className="text-xs text-muted-foreground text-center">
             +{graphData.nodes.length - 6} more entities
@@ -233,7 +242,7 @@ function SimpleGraphView({ graphData }: { graphData: any }) {
         )}
       </div>
     </div>
-  )
+  );
 }
 
 /**
@@ -254,9 +263,9 @@ export function BacklinksPanel() {
     createLink,
     searchEntities,
     backlinksEnabled,
-    stats
-  } = useBacklinksPanel()
-  
+    stats,
+  } = useBacklinksPanel();
+
   if (!backlinksEnabled) {
     return (
       <div className="flex items-center justify-center h-full p-4">
@@ -264,12 +273,14 @@ export function BacklinksPanel() {
           <Network className="h-8 w-8 text-muted-foreground mx-auto" />
           <h3 className="text-sm font-semibold">Backlinks Panel</h3>
           <p className="text-xs text-muted-foreground">Feature flag disabled</p>
-          <Badge variant="outline" className="text-xs">dock.backlinksPanel</Badge>
+          <Badge variant="outline" className="text-xs">
+            dock.backlinksPanel
+          </Badge>
         </div>
       </div>
-    )
+    );
   }
-  
+
   if (!selectedEntity) {
     return (
       <div className="flex flex-col h-full">
@@ -279,12 +290,12 @@ export function BacklinksPanel() {
             Select an entity to view its relationships
           </p>
         </div>
-        
+
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center space-y-4">
             <Network className="h-8 w-8 text-muted-foreground mx-auto" />
             <p className="text-sm text-muted-foreground">No entity selected</p>
-            
+
             {/* System stats */}
             <div className="bg-muted/50 p-3 rounded-lg text-xs space-y-1">
               <div className="font-medium">System Statistics</div>
@@ -295,16 +306,16 @@ export function BacklinksPanel() {
           </div>
         </div>
       </div>
-    )
+    );
   }
-  
+
   return (
     <div className="flex flex-col h-full">
       {/* Panel header */}
       <div className="p-4 border-b border-border space-y-3">
         <div className="flex items-center justify-between">
           <h4 className="text-sm font-semibold">Backlinks</h4>
-          
+
           <div className="flex gap-1">
             <Button
               variant={!graphView ? 'secondary' : 'outline'}
@@ -315,7 +326,7 @@ export function BacklinksPanel() {
               List
             </Button>
             <Button
-              variant={graphView ? 'secondary' : 'outline'}  
+              variant={graphView ? 'secondary' : 'outline'}
               size="sm"
               onClick={() => setGraphView(true)}
               className="h-6 px-2 text-xs"
@@ -324,7 +335,7 @@ export function BacklinksPanel() {
             </Button>
           </div>
         </div>
-        
+
         {/* Selected entity info */}
         <div className="flex items-center gap-2 p-2 bg-muted/30 rounded">
           <EntityTypeIcon type={selectedEntity.type} className="h-4 w-4" />
@@ -335,7 +346,7 @@ export function BacklinksPanel() {
             </div>
           </div>
         </div>
-        
+
         {/* Search and filters */}
         <div className="space-y-2">
           <div className="relative">
@@ -347,7 +358,7 @@ export function BacklinksPanel() {
               className="pl-8 h-7 text-xs"
             />
           </div>
-          
+
           <div className="flex gap-1 flex-wrap">
             <Button
               variant={selectedEntityType === null ? 'secondary' : 'outline'}
@@ -357,7 +368,7 @@ export function BacklinksPanel() {
             >
               All
             </Button>
-            {['event', 'task', 'note', 'contact'].map(type => (
+            {['event', 'task', 'note', 'contact'].map((type) => (
               <Button
                 key={type}
                 variant={selectedEntityType === type ? 'secondary' : 'outline'}
@@ -371,7 +382,7 @@ export function BacklinksPanel() {
           </div>
         </div>
       </div>
-      
+
       {/* Panel content */}
       <ScrollArea className="flex-1">
         {graphView ? (
@@ -388,7 +399,7 @@ export function BacklinksPanel() {
                     Incoming Links ({backlinks.incomingLinks.length})
                   </h5>
                 </div>
-                
+
                 {backlinks.incomingLinks.map((link) => (
                   <BacklinkItem
                     key={link.id}
@@ -399,7 +410,7 @@ export function BacklinksPanel() {
                 ))}
               </div>
             )}
-            
+
             {/* Outgoing links */}
             {backlinks && backlinks.outgoingLinks.length > 0 && (
               <div className="space-y-2">
@@ -408,7 +419,7 @@ export function BacklinksPanel() {
                     Outgoing Links ({backlinks.outgoingLinks.length})
                   </h5>
                 </div>
-                
+
                 {backlinks.outgoingLinks.map((link) => (
                   <BacklinkItem
                     key={link.id}
@@ -419,7 +430,7 @@ export function BacklinksPanel() {
                 ))}
               </div>
             )}
-            
+
             {/* Related entities */}
             {backlinks && backlinks.relatedEntities.length > 0 && (
               <div className="space-y-2">
@@ -428,7 +439,7 @@ export function BacklinksPanel() {
                     Related Entities ({backlinks.relatedEntities.length})
                   </h5>
                 </div>
-                
+
                 {backlinks.relatedEntities.slice(0, 5).map((related, index) => (
                   <Card key={index} className="cursor-pointer hover:shadow-sm transition-all">
                     <CardContent className="p-2">
@@ -444,20 +455,25 @@ export function BacklinksPanel() {
                 ))}
               </div>
             )}
-            
+
             {/* Empty state */}
-            {(!backlinks || (backlinks.incomingLinks.length === 0 && backlinks.outgoingLinks.length === 0)) && (
+            {(!backlinks ||
+              (backlinks.incomingLinks.length === 0 && backlinks.outgoingLinks.length === 0)) && (
               <div className="text-center py-8">
                 <Network className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
                 <p className="text-sm font-medium">No Links Found</p>
                 <p className="text-xs text-muted-foreground mt-1">
                   This entity has no connections yet
                 </p>
-                
-                <Button size="sm" className="mt-3" onClick={() => {
-                  // TODO: Open link creation dialog
-                  console.log('Create new link')
-                }}>
+
+                <Button
+                  size="sm"
+                  className="mt-3"
+                  onClick={() => {
+                    // TODO: Open link creation dialog
+                    console.log('Create new link');
+                  }}
+                >
                   <Zap className="h-3 w-3 mr-1" />
                   Create Link
                 </Button>
@@ -466,7 +482,7 @@ export function BacklinksPanel() {
           </div>
         )}
       </ScrollArea>
-      
+
       {/* Panel footer - Metrics */}
       {backlinks && (
         <div className="border-t border-border p-3">
@@ -487,7 +503,7 @@ export function BacklinksPanel() {
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default BacklinksPanel
+export default BacklinksPanel;

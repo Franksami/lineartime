@@ -19,16 +19,16 @@ const fontMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'LinearTime - Experience Time as Flow',
+  title: 'Command Center Calendar - Experience Time as Flow',
   description:
     "The world's first true linear calendar. Experience time as a continuous flow, not fragmented blocks. Life is bigger than a week.",
   generator: 'Next.js',
   metadataBase: new URL('https://lineartime.app'),
-  applicationName: 'LinearTime Calendar',
-  authors: [{ name: 'LinearTime Team' }],
+  applicationName: 'Command Center Calendar Calendar',
+  authors: [{ name: 'Command Center Calendar Team' }],
   keywords: ['calendar', 'linear', 'productivity', 'planning', 'time management', 'PWA'],
-  creator: 'LinearTime Team',
-  publisher: 'LinearTime',
+  creator: 'Command Center Calendar Team',
+  publisher: 'Command Center Calendar',
   formatDetection: {
     email: false,
     address: false,
@@ -38,19 +38,19 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'LinearTime',
+    title: 'Command Center Calendar',
     startupImage: ['/icon-192x192.png'],
   },
   openGraph: {
     type: 'website',
-    siteName: 'LinearTime Calendar',
-    title: 'LinearTime - Experience Time as Flow',
+    siteName: 'Command Center Calendar Calendar',
+    title: 'Command Center Calendar - Experience Time as Flow',
     description: "The world's first true linear calendar. Life is bigger than a week.",
     images: ['/screenshot-desktop.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'LinearTime - Experience Time as Flow',
+    title: 'Command Center Calendar - Experience Time as Flow',
     description: "The world's first true linear calendar. Life is bigger than a week.",
     images: ['/screenshot-desktop.png'],
   },
@@ -79,7 +79,7 @@ export default async function RootLayout({
         <meta name="theme-color" content="#2196F3" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="LinearTime" />
+        <meta name="apple-mobile-web-app-title" content="Command Center Calendar" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
       <body className="font-sans antialiased bg-background text-foreground min-h-screen">

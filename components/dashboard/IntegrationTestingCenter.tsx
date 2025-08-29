@@ -213,7 +213,11 @@ const IntegrationTestingCenter: React.FC = () => {
           </Badge>
         );
       default:
-        return <Badge className="bg-muted text-gray-800 /* TODO: Use semantic token */ border-border">Unknown</Badge>;
+        return (
+          <Badge className="bg-muted text-gray-800 /* TODO: Use semantic token */ border-border">
+            Unknown
+          </Badge>
+        );
     }
   };
 
@@ -877,7 +881,9 @@ const IntegrationTestingCenter: React.FC = () => {
                             <TableCell className="font-mono">
                               <span
                                 className={
-                                  result.response.status >= 400 ? 'text-red-600 /* TODO: Use semantic token */' : 'text-green-600 /* TODO: Use semantic token */'
+                                  result.response.status >= 400
+                                    ? 'text-red-600 /* TODO: Use semantic token */'
+                                    : 'text-green-600 /* TODO: Use semantic token */'
                                 }
                               >
                                 {result.response.status}

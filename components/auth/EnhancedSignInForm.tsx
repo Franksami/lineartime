@@ -67,9 +67,17 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
   }
 
   const features = [
-    { icon: Shield, text: 'Enterprise Security', color: 'bg-green-500 /* TODO: Use semantic token */' },
+    {
+      icon: Shield,
+      text: 'Enterprise Security',
+      color: 'bg-green-500 /* TODO: Use semantic token */',
+    },
     { icon: Zap, text: 'Lightning Fast', color: 'bg-primary' },
-    { icon: Users, text: 'Team Collaboration', color: 'bg-purple-500 /* TODO: Use semantic token */' },
+    {
+      icon: Users,
+      text: 'Team Collaboration',
+      color: 'bg-purple-500 /* TODO: Use semantic token */',
+    },
   ];
 
   return (
@@ -114,7 +122,7 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
                 Welcome Back
               </CardTitle>
               <CardDescription className="text-muted-foreground">
-                Sign in to your LinearTime account
+                Sign in to your Command Center Calendar account
               </CardDescription>
             </div>
 

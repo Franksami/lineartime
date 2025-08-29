@@ -351,8 +351,8 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                   <Avatar size="md" src="https://api.dicebear.com/7.x/avataaars/svg?seed=happy" />
                   <div>
                     <ChakraText fontSize="sm" className="text-foreground italic">
-                      "LinearTime completely changed how our team manages projects. The year view is
-                      a game-changer!"
+                      "Command Center Calendar completely changed how our team manages projects. The
+                      year view is a game-changer!"
                     </ChakraText>
                     <ChakraText fontSize="xs" className="text-muted-foreground mt-2">
                       Sarah Chen, Product Manager at TechCorp

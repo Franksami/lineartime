@@ -1,11 +1,11 @@
 /**
  * AI Enhancement Components Index
  *
- * Complete AI enhancement UI layer for LinearTime Phase 5.0
+ * Complete AI enhancement UI layer for Command Center Calendar Phase 5.0
  * Integrates with design tokens, motion system, and accessibility standards.
  *
  * @version Phase 5.0
- * @author LinearTime AI Enhancement System
+ * @author Command Center Calendar AI Enhancement System
  */
 
 // ==========================================

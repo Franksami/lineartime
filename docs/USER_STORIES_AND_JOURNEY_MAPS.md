@@ -1,5 +1,5 @@
 # User Stories and Journey Maps
-## LinearTime AI-Powered Scheduling Efficiency Platform
+## Command Center Calendar AI-Powered Scheduling Efficiency Platform
 
 ---
 
@@ -44,7 +44,7 @@ Feature: Connect Multiple Calendar Providers
   So that I have one unified view of my schedule
 
 Background:
-  Given I am a new LinearTime user
+  Given I am a new Command Center Calendar user
   And I have calendars in Google, Microsoft, and Apple
   
 Scenario: Connect Google Calendar
@@ -89,7 +89,7 @@ journey
     title Sarah's Provider Connection Journey
     section Discovery
         Realizes need for unified calendar: 3: Sarah
-        Researches LinearTime solution: 4: Sarah
+        Researches Command Center Calendar solution: 4: Sarah
         Signs up for account: 4: Sarah
     section Onboarding
         Sees provider connection page: 4: Sarah
@@ -119,14 +119,14 @@ Scenario: Create Event in Any Provider
   
 Scenario: Edit Cross-Provider Event
   Given I have an event from Google Calendar
-  When I edit the event in LinearTime
+  When I edit the event in Command Center Calendar
   Then the changes should sync back to Google Calendar
   And I should see real-time update confirmation
   And the event should maintain its provider association
 
 Scenario: Delete Event with Confirmation
   Given I have an event from Microsoft Calendar
-  When I delete the event in LinearTime
+  When I delete the event in Command Center Calendar
   Then I should see a confirmation dialog
   When I confirm the deletion
   Then the event should be deleted from Microsoft Calendar
@@ -186,12 +186,12 @@ Scenario: Detect Capacity Overload
 ```mermaid
 journey
     title Marcus's Conflict Prevention Journey
-    section Before LinearTime
+    section Before Command Center Calendar
         Manually checks 3 calendars: 2: Marcus
         Double-books client meeting: 1: Marcus
         Apologizes and reschedules: 1: Marcus
         Loses client trust: 1: Marcus
-    section With LinearTime
+    section With Command Center Calendar
         Schedules new client meeting: 4: Marcus
         AI detects potential conflict: 5: Marcus
         Reviews suggested alternatives: 5: Marcus
@@ -324,7 +324,7 @@ journey
         Manually tracks team schedules: 2: Sarah
         Discovers overload after problems: 1: Sarah
         Reactive firefighting mode: 1: Sarah
-    section LinearTime Capacity View
+    section Command Center Calendar Capacity View
         Sees quarterly capacity overview: 4: Sarah
         Identifies upcoming overload periods: 5: Sarah
         Proactively redistributes workload: 5: Sarah
@@ -416,21 +416,21 @@ Scenario: Capacity-Based Project Planning
 ```gherkin
 Feature: Enterprise SSO Integration
   As an IT administrator
-  I want to integrate LinearTime with our SSO system
+  I want to integrate Command Center Calendar with our SSO system
   So that users can access securely without additional passwords
 
 Scenario: Configure SAML SSO
   Given I am an IT administrator
   When I configure SAML SSO integration
   And provide our identity provider metadata
-  Then LinearTime should integrate with our SSO system
+  Then Command Center Calendar should integrate with our SSO system
   And users should be able to login with corporate credentials
   And user provisioning should be automated
   And access should be centrally managed
 
 Scenario: Enforce Multi-Factor Authentication
   Given SSO is configured with MFA requirements
-  When users attempt to access LinearTime
+  When users attempt to access Command Center Calendar
   Then they should be required to complete MFA
   And MFA should be handled by our identity provider
   And failed MFA attempts should be logged and reported
@@ -457,7 +457,7 @@ Scenario: Role-Based Access Control
 journey
     title Jennifer's Enterprise Security Journey
     section Security Evaluation
-        Reviews LinearTime security documentation: 4: Jennifer
+        Reviews Command Center Calendar security documentation: 4: Jennifer
         Conducts security assessment: 4: Jennifer
         Tests SSO integration: 5: Jennifer
         Validates compliance features: 5: Jennifer
@@ -481,7 +481,7 @@ Feature: Comprehensive Audit Logging
   So that I can demonstrate compliance and investigate incidents
 
 Scenario: Generate Audit Trail
-  Given users are actively using LinearTime
+  Given users are actively using Command Center Calendar
   When any security-relevant action occurs
   Then it should be logged with complete details
   And logs should include user, action, timestamp, and context
@@ -561,7 +561,7 @@ Feature: Mobile Calendar Experience
   So that I can manage my schedule while on the go
 
 Scenario: Mobile Timeline Navigation
-  Given I am using LinearTime on my mobile device
+  Given I am using Command Center Calendar on my mobile device
   When I view the 12-month horizontal timeline
   Then it should be optimized for touch interaction
   And I should be able to scroll horizontally smoothly
@@ -598,7 +598,7 @@ journey
     title Marcus's Mobile Experience Journey
     section On-the-Go Scheduling
         Client calls with urgent meeting request: 3: Marcus
-        Opens LinearTime on mobile: 4: Marcus
+        Opens Command Center Calendar on mobile: 4: Marcus
         Quickly checks availability: 5: Marcus
         Creates meeting with conflict detection: 5: Marcus
         Confirms with client immediately: 5: Marcus
@@ -617,7 +617,7 @@ Feature: Offline Calendar Access
   So that I can stay productive without internet connection
 
 Scenario: Offline Calendar Viewing
-  Given I have used LinearTime recently while online
+  Given I have used Command Center Calendar recently while online
   When I lose internet connection
   Then I should still be able to view my recent calendar data
   And see events for the next 30 days
@@ -693,12 +693,12 @@ Scenario: Focus Time Analysis
 ```gherkin
 Feature: Third-Party Tool Integration
   As a user of multiple productivity tools
-  I want LinearTime to integrate with my existing workflow
+  I want Command Center Calendar to integrate with my existing workflow
   So that I can maintain productivity without switching contexts
 
 Scenario: Slack Integration
   Given I use Slack for team communication
-  When I connect LinearTime to Slack
+  When I connect Command Center Calendar to Slack
   Then I should receive meeting reminders in Slack
   And be able to create events from Slack messages
   And share availability status in Slack
@@ -706,7 +706,7 @@ Scenario: Slack Integration
 
 Scenario: Project Management Integration
   Given I use Asana for project management
-  When I connect LinearTime to Asana
+  When I connect Command Center Calendar to Asana
   Then project deadlines should appear in my calendar
   And I should be able to schedule project work time
   And see project-related meetings in context
@@ -714,7 +714,7 @@ Scenario: Project Management Integration
 
 Scenario: Video Conferencing Integration
   Given I use Zoom for video meetings
-  When I create a meeting in LinearTime
+  When I create a meeting in Command Center Calendar
   Then Zoom meeting links should be automatically generated
   And meeting details should be synced to Zoom
   And I should receive unified meeting notifications
@@ -832,7 +832,7 @@ interface SatisfactionMetrics {
 
 ```mermaid
 journey
-    title Sarah's Complete LinearTime Adoption Journey
+    title Sarah's Complete Command Center Calendar Adoption Journey
     section Problem Recognition
         Team coordination takes 3+ hours/week: 2: Sarah
         Frequent meeting conflicts cause delays: 1: Sarah
@@ -840,7 +840,7 @@ journey
         Security team blocks personal tools: 1: Sarah
     section Solution Discovery
         Researches calendar integration solutions: 3: Sarah
-        Discovers LinearTime through content marketing: 4: Sarah
+        Discovers Command Center Calendar through content marketing: 4: Sarah
         Reviews security and compliance features: 4: Sarah
         Requests pilot program for her team: 5: Sarah
     section Pilot Implementation
@@ -857,7 +857,7 @@ journey
         Achieves 75% conflict reduction: 5: Sarah
         Improves quarterly planning visibility: 5: Sarah
         Receives recognition for efficiency improvements: 5: Sarah
-        Recommends LinearTime to industry peers: 5: Sarah
+        Recommends Command Center Calendar to industry peers: 5: Sarah
 ```
 
 ### Journey Map 2: Marcus's Freelancer Success Journey
@@ -871,7 +871,7 @@ journey
         Spends 2+ hours/week on coordination: 1: Marcus
         Loses client due to scheduling issues: 1: Marcus
     section Discovery and Hope
-        Discovers LinearTime through freelancer community: 4: Marcus
+        Discovers Command Center Calendar through freelancer community: 4: Marcus
         Signs up for free trial: 4: Marcus
         Connects all calendar providers: 5: Marcus
         Sees unified calendar for first time: 5: Marcus
@@ -898,7 +898,7 @@ journey
 journey
     title Jennifer's Enterprise Security Validation Journey
     section Initial Assessment
-        Receives LinearTime evaluation request: 3: Jennifer
+        Receives Command Center Calendar evaluation request: 3: Jennifer
         Reviews security documentation: 4: Jennifer
         Conducts preliminary security assessment: 4: Jennifer
         Identifies potential compliance benefits: 4: Jennifer
@@ -921,14 +921,14 @@ journey
         Deploys to 800+ users: 5: Jennifer
         Maintains security posture: 5: Jennifer
         Achieves compliance objectives: 5: Jennifer
-        Recommends LinearTime to industry network: 5: Jennifer
+        Recommends Command Center Calendar to industry network: 5: Jennifer
 ```
 
 ---
 
 ## 🎯 Conclusion
 
-These comprehensive user stories and journey maps provide the detailed blueprint for implementing LinearTime's AI-powered scheduling efficiency platform. Each story includes:
+These comprehensive user stories and journey maps provide the detailed blueprint for implementing Command Center Calendar's AI-powered scheduling efficiency platform. Each story includes:
 
 - **Detailed scenarios** with acceptance criteria
 - **Performance requirements** aligned with technical architecture
@@ -943,6 +943,6 @@ These comprehensive user stories and journey maps provide the detailed blueprint
 4. **Epic 5** - Mobile optimization and cross-platform experience
 5. **Epic 6** - Advanced integrations and automation
 
-These stories directly support the Ultimate PRD objectives and provide clear guidance for development teams, ensuring that every feature delivers measurable user value while maintaining the technical excellence that sets LinearTime apart from competitors.
+These stories directly support the Ultimate PRD objectives and provide clear guidance for development teams, ensuring that every feature delivers measurable user value while maintaining the technical excellence that sets Command Center Calendar apart from competitors.
 
 **Ready for implementation with clear success criteria and user-centric design principles.**

@@ -6,7 +6,7 @@
  * Provides AI-powered scheduling suggestions with multi-provider support.
  *
  * @version Phase 5.0
- * @author LinearTime AI Enhancement System
+ * @author Command Center Calendar AI Enhancement System
  */
 
 'use client';
@@ -1031,9 +1031,11 @@ export function AISmartScheduling({
                                   <li
                                     key={i}
                                     className={cn({
-                                      'text-red-600 /* TODO: Use semantic token */': conflict.severity === 'high',
+                                      'text-red-600 /* TODO: Use semantic token */':
+                                        conflict.severity === 'high',
                                       'text-orange-600': conflict.severity === 'medium',
-                                      'text-yellow-600 /* TODO: Use semantic token */': conflict.severity === 'low',
+                                      'text-yellow-600 /* TODO: Use semantic token */':
+                                        conflict.severity === 'low',
                                     })}
                                   >
                                     {conflict.description}

@@ -1,4 +1,4 @@
-# API Reference - Phase 5.0 LinearTime Calendar Modernization
+# API Reference - Phase 5.0 Command Center Calendar Calendar Modernization
 
 **Version**: 5.0.0-beta  
 **Release Date**: January 2025  
@@ -24,13 +24,13 @@
 
 ## 🎯 Overview
 
-The Phase 5.0 API provides a comprehensive suite of AI-enhanced calendar components built on LinearTime's immutable ASCII foundation. This documentation follows TSDoc specifications and provides complete TypeScript coverage for enterprise development.
+The Phase 5.0 API provides a comprehensive suite of AI-enhanced calendar components built on Command Center Calendar's immutable ASCII foundation. This documentation follows TSDoc specifications and provides complete TypeScript coverage for enterprise development.
 
 ### Core Architectural Principles
 
 ```typescript
 /**
- * LinearTime Phase 5.0 follows a layered architecture pattern:
+ * Command Center Calendar Phase 5.0 follows a layered architecture pattern:
  * 
  * Foundation Layer (Immutable)
  * ├── ASCII 42×12 Grid Layout
@@ -52,19 +52,19 @@ The Phase 5.0 API provides a comprehensive suite of AI-enhanced calendar compone
 ### Quick Start
 
 ```tsx
-import { LinearCalendarModern, CompleteAISuite } from '@lineartime/calendar';
+import { CommandCenterCalendarModern, CompleteAISuite } from '@lineartime/calendar';
 import { defaultAIConfig } from '@lineartime/ai-config';
 
 function MyCalendarApp() {
   return (
-    <LinearCalendarModern
+    <CommandCenterCalendarModern
       year={2025}
       events={calendarEvents}
       aiConfig={defaultAIConfig}
       enableAllFeatures={true}
     >
       <CompleteAISuite />
-    </LinearCalendarModern>
+    </CommandCenterCalendarModern>
   );
 }
 ```
@@ -1575,7 +1575,7 @@ interface MotionAnimation {
  *   choreography={defaultMotionConfig}
  *   onMotionComplete={trackAnimationMetrics}
  * >
- *   <LinearCalendarModern {...calendarProps} />
+ *   <CommandCenterCalendarModern {...calendarProps} />
  * </MotionEnhancedCalendarWrapper>
  * ```
  */
@@ -1936,7 +1936,7 @@ interface HapticPattern {
  *   onPinch={handleCalendarZoom}
  *   onTap={handleEventSelection}
  * >
- *   <LinearCalendarModern {...calendarProps} />
+ *   <CommandCenterCalendarModern {...calendarProps} />
  * </TouchGestureHandler>
  * ```
  */

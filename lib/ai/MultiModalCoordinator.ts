@@ -8,8 +8,8 @@
  * Core Controversy: "The AI that connects everything you do"
  * Value Proposition: Invisible coordination through multi-modal intelligence fusion
  *
- * @version CheatCal Phase 3.0 (Revolutionary Enhancement)
- * @author CheatCal Multi-Modal Coordination Team
+ * @version Command Center Phase 3.0 (Revolutionary Enhancement)
+ * @author Command Center Multi-Modal Coordination Team
  */
 
 import { logger } from '@/lib/utils/logger';
@@ -713,7 +713,7 @@ export class MultiModalCoordinator {
         action: 'Analyze multi-modal correlation',
         description: 'Review the correlation between different data sources',
         estimated_time: 2,
-        tools_required: ['CheatCal AI', 'Calendar access'],
+        tools_required: ['Command Center AI', 'Calendar access'],
         validation: 'Correlation confidence >75%',
       },
       {
@@ -736,7 +736,7 @@ export class MultiModalCoordinator {
 
     return {
       steps,
-      prerequisites: ['CheatCal AI active', 'Multi-modal permissions granted'],
+      prerequisites: ['Command Center AI active', 'Multi-modal permissions granted'],
       estimated_time: '15-20 minutes',
       success_metrics: [
         'Increased productivity score',

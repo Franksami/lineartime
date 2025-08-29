@@ -82,7 +82,7 @@ export interface Reflection {
 }
 
 // Props interfaces for each component
-export interface LinearCalendarGridProps {
+export interface CommandCenterCalendarGridProps {
   year: number;
   events: Event[];
   selectedDateRange?: DateRange;

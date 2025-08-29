@@ -1,4 +1,4 @@
-// Enhanced Service Worker for LinearTime Calendar
+// Enhanced Service Worker for Command Center Calendar Calendar
 // Version 2.0 - Advanced caching strategies with drag-drop analytics integration
 
 const CACHE_VERSION = 'v2.1.0'
@@ -164,11 +164,11 @@ self.addEventListener('push', (event) => {
   try {
     data = event.data ? event.data.json() : {}
   } catch (e) {
-    data = { title: 'LinearTime Calendar', body: event.data ? event.data.text() : 'New notification' }
+    data = { title: 'Command Center Calendar Calendar', body: event.data ? event.data.text() : 'New notification' }
   }
   
   const options = {
-    title: data.title || 'LinearTime Calendar',
+    title: data.title || 'Command Center Calendar Calendar',
     body: data.body || 'New calendar notification',
     icon: data.icon || '/icon-192x192.png',
     badge: '/icon-72x72.png',
@@ -594,7 +594,7 @@ async function forceSyncAll() {
 
 async function openIndexedDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('LinearTimeCalendar', 1)
+    const request = indexedDB.open('Command Center CalendarCalendar', 1)
     
     request.onerror = () => reject(request.error)
     request.onsuccess = () => resolve(request.result)

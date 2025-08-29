@@ -142,7 +142,7 @@ const DEFAULT_CONFIG: WebSocketSyncConfig = {
 /**
  * WebSocketSyncManager Component
  *
- * Manages real-time WebSocket communication for LinearTime's calendar synchronization system.
+ * Manages real-time WebSocket communication for Command Center Calendar's calendar synchronization system.
  * Provides enterprise-grade reliability, security, and performance optimization for multi-provider
  * calendar integration with <100ms message latency and seamless provider coordination.
  *

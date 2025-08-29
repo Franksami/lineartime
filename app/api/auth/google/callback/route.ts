@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify state token
-    let stateData;
+    let stateData: any;
     try {
       stateData = JSON.parse(Buffer.from(state, 'base64').toString());
 
@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
     // Tokens will be encrypted server-side in Convex function
 
     // Store provider connection in Convex
-    const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+    const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL || '');
 
     // Get Convex user ID
     const convexUser = await convex.query(api.users.getUserByClerkId, {
@@ -103,12 +103,12 @@ export async function GET(request: NextRequest) {
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token || undefined,
       expiresAt: tokens.expiry_date || undefined,
-      providerAccountId: userInfo.id!,
+      providerAccountId: userInfo.id || '',
       settings: {
         calendars:
           calendarList.items?.map((cal) => ({
-            id: cal.id!,
-            name: cal.summary!,
+            id: cal.id || '',
+            name: cal.summary || '',
             color: cal.backgroundColor || '#4285F4',
             syncEnabled: cal.id === userInfo.email, // Enable primary calendar by default
             isPrimary: cal.primary || false,

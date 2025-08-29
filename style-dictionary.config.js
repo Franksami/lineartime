@@ -1,6 +1,6 @@
 /**
  * Style Dictionary Configuration
- * Enterprise Design Token System for LinearTime Calendar
+ * Enterprise Design Token System for Command Center Calendar Calendar
  * 
  * Supports: CSS, SCSS, JS, TS, JSON outputs
  * Compatible with: Tailwind CSS 4, shadcn/ui, Mantine, Ant Design

@@ -551,7 +551,7 @@ const LinearCalendarHorizontalAAA: React.FC<LinearCalendarHorizontalAAAProps> = 
           className
         )}
         role="application"
-        aria-label={`LinearTime Calendar for ${year}, Life is bigger than a week`}
+        aria-label={`Command Center Calendar Calendar for ${year}, Life is bigger than a week`}
         aria-describedby="calendar-instructions"
         data-focus-enhanced="true"
         data-region="calendar-main"
@@ -604,7 +604,7 @@ const LinearCalendarHorizontalAAA: React.FC<LinearCalendarHorizontalAAAProps> = 
                   </button>
                 }
                 title="Calendar Help & Keyboard Shortcuts"
-                description="Learn how to navigate and use the LinearTime calendar effectively."
+                description="Learn how to navigate and use the Command Center Calendar calendar effectively."
                 size="lg"
               >
                 <div className="space-y-4">

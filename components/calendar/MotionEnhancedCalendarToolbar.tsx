@@ -348,7 +348,7 @@ export const MotionEnhancedCalendarToolbar: React.FC<MotionEnhancedCalendarToolb
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
           <Calendar className="h-5 w-5 text-primary" />
-          <span className="font-semibold text-lg">LinearTime</span>
+          <span className="font-semibold text-lg">Command Center Calendar</span>
         </div>
 
         <Separator orientation="vertical" className="h-6" />

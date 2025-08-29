@@ -206,7 +206,10 @@ const IntegrationAnalyticsCharts: React.FC = () => {
                 <p className="text-xs text-muted-foreground">Success Rate</p>
                 <p className="text-lg font-semibold text-foreground">{metrics.successRate}%</p>
               </div>
-              <Badge variant="secondary" className="text-xs text-green-600 /* TODO: Use semantic token */">
+              <Badge
+                variant="secondary"
+                className="text-xs text-green-600 /* TODO: Use semantic token */"
+              >
                 Excellent
               </Badge>
             </div>
@@ -260,7 +263,9 @@ const IntegrationAnalyticsCharts: React.FC = () => {
               <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ animate-pulse" />
               <div className="flex-1">
                 <p className="text-xs text-muted-foreground">System Status</p>
-                <p className="text-lg font-semibold text-green-600 /* TODO: Use semantic token */">Healthy</p>
+                <p className="text-lg font-semibold text-green-600 /* TODO: Use semantic token */">
+                  Healthy
+                </p>
               </div>
             </div>
           </CardContent>

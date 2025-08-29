@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/governance",
   "version": "1.0.0",
-  "description": "CheatCal development governance - streamlined for rapid iteration while maintaining quality",
+  "description": "Command Center development governance - streamlined for rapid iteration while maintaining quality",
   "governance": {
     "enabled": true,
     "level": "development",
@@ -16,7 +16,7 @@
       "weight": 0.40,
       "priority": "critical",
       "rules": {
-        "preserveLinearCalendar": true,
+        "preserveCommandCenterCalendar": true,
         "maintainPerformance": true,
         "noBreakingChanges": true
       }
@@ -121,7 +121,7 @@
       "enabled": true,
       "approvalRequired": false,
       "maxDuration": "30d",
-      "reason": "CheatCal rapid development phase"
+      "reason": "Command Center rapid development phase"
     }
   }
 }

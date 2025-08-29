@@ -1,4 +1,4 @@
-# LinearTime Calendar Integration Platform Architecture
+# Command Center Calendar Calendar Integration Platform Architecture
 
 > **Phase 2.6 Foundation Documentation**  
 > **Status**: New Foundation (Everything before this is considered outdated)  
@@ -6,7 +6,7 @@
 
 ## Overview
 
-LinearTime has evolved from a single calendar application to an enterprise-grade **Calendar Integration Platform** supporting 4 major calendar providers with unified synchronization, security, and real-time capabilities.
+Command Center Calendar has evolved from a single calendar application to an enterprise-grade **Calendar Integration Platform** supporting 4 major calendar providers with unified synchronization, security, and real-time capabilities.
 
 ### Platform Identity
 
@@ -23,7 +23,7 @@ LinearTime has evolved from a single calendar application to an enterprise-grade
 
 ### 4-Provider Calendar Integration Platform
 
-LinearTime supports comprehensive integration with major calendar platforms:
+Command Center Calendar supports comprehensive integration with major calendar platforms:
 
 #### **1. Google Calendar Integration**
 - **Protocol**: OAuth 2.0 with REST API
@@ -216,7 +216,7 @@ interface SyncJob {
 
 ### Bidirectional Event Mapping
 
-Events are transformed between provider-specific formats and LinearTime's unified format:
+Events are transformed between provider-specific formats and Command Center Calendar's unified format:
 
 ```typescript
 // Provider-specific transformers
@@ -551,7 +551,7 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_[configured]
 
 ## Conclusion
 
-LinearTime's Phase 2.6 foundation establishes a comprehensive **Calendar Integration Platform** that transforms the application from a simple calendar tool into an enterprise-grade synchronization platform. The architecture provides:
+Command Center Calendar's Phase 2.6 foundation establishes a comprehensive **Calendar Integration Platform** that transforms the application from a simple calendar tool into an enterprise-grade synchronization platform. The architecture provides:
 
 - **Unified Experience**: Single interface for all calendar providers
 - **Enterprise Security**: Server-side encryption and comprehensive audit trails  
@@ -559,4 +559,4 @@ LinearTime's Phase 2.6 foundation establishes a comprehensive **Calendar Integra
 - **Scalable Architecture**: Designed for high availability and horizontal scaling
 - **Developer-Friendly**: Comprehensive APIs and extension points
 
-This foundation enables LinearTime to serve as a central calendar hub while maintaining the core philosophy that "Life is bigger than a week."
+This foundation enables Command Center Calendar to serve as a central calendar hub while maintaining the core philosophy that "Life is bigger than a week."

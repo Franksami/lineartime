@@ -116,7 +116,9 @@ export function AIChatInterface({ events, onEventCreate, onEventUpdate }: AIChat
           </div>
           <div>
             <h3 className="font-semibold text-foreground">AI Calendar Assistant</h3>
-            <p className="text-xs text-gray-500 /* TODO: Use semantic token */">Powered by Grok & Groq</p>
+            <p className="text-xs text-gray-500 /* TODO: Use semantic token */">
+              Powered by Grok & Groq
+            </p>
           </div>
         </div>
       </div>
@@ -135,7 +137,9 @@ export function AIChatInterface({ events, onEventCreate, onEventUpdate }: AIChat
             )}
             <div
               className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                message.type === 'user' ? 'bg-blue-600 /* TODO: Use semantic token */ text-white' : 'bg-muted text-foreground'
+                message.type === 'user'
+                  ? 'bg-blue-600 /* TODO: Use semantic token */ text-white'
+                  : 'bg-muted text-foreground'
               }`}
             >
               <p className="text-sm">{message.content}</p>

@@ -285,6 +285,6 @@ performanceMode="enterprise" // 5,000+ events
 ---
 
 **Authored by**: UI/UX Engineer Persona + Performance Specialist  
-**Methodology**: Proven LinearTime/CheatCal Layout → Theming → Animation → Code  
+**Methodology**: Proven Command Center Calendar/Command Center Layout → Theming → Animation → Code  
 **Quality**: Context7 research + TanStack Virtual best practices integration  
 **Date**: August 27, 2025

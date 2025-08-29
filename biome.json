@@ -1,7 +1,23 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
   "files": {
-    "include": ["app/**", "components/**", "contexts/**", "hooks/**", "convex/**", "lib/**"],
+    "include": [
+      "app/**",
+      "components/**",
+      "contexts/**",
+      "hooks/**",
+      "convex/**",
+      "lib/**",
+      "views/**",
+      "rules/**",
+      "tests/**",
+      "scripts/**"
+    ],
     "ignore": [
       ".next/**",
       "node_modules/**",
@@ -17,7 +33,10 @@
       "**/dist/**",
       "**/build/**",
       "**/*.min.*",
-      "**/*.generated.*"
+      "**/*.generated.*",
+      ".migration-backup/**",
+      "volta.json",
+      "bruno/**"
     ]
   },
   "linter": {
@@ -97,7 +116,7 @@
               "options": {
                 "hooks": [
                   {
-                    "name": "useLinearCalendar",
+                    "name": "useCommandCenterCalendar",
                     "closureIndex": 0,
                     "dependenciesIndex": 1
                   },

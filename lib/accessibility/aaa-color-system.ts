@@ -460,7 +460,7 @@ ${highContrastProperties.join('\n')}
    */
   private createDefaultTheme(): ColorSystemTheme {
     return {
-      name: 'LinearTime AAA Default',
+      name: 'Command Center Calendar AAA Default',
       colors: AAAcolorSystem.BASE_COLORS,
       semantic_tokens: {
         background: 'neutral-50',

@@ -91,7 +91,7 @@ export class CalendarAI {
 
       const result = await generateText({
         model: this.aiModel,
-        prompt: `You are an AI calendar assistant for LinearTime, a revolutionary year-at-a-glance calendar application.
+        prompt: `You are an AI calendar assistant for Command Center Calendar, a revolutionary year-at-a-glance calendar application.
 
 Philosophy: "Life is bigger than a week" - Help users optimize their time across months and years.
 

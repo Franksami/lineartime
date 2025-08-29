@@ -8,9 +8,9 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 const msalConfig = {
   auth: {
-    clientId: process.env.MICROSOFT_CLIENT_ID!,
+    clientId: process.env.MICROSOFT_CLIENT_ID || '',
     authority: `https://login.microsoftonline.com/${process.env.MICROSOFT_TENANT_ID || 'common'}`,
-    clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
+    clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
   },
 };
 
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify state token
-    let stateData;
+    let stateData: any;
     try {
       stateData = JSON.parse(Buffer.from(state, 'base64').toString());
 
@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
     // Tokens will be encrypted server-side in Convex function
 
     // Store provider connection in Convex
-    const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+    const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL || '');
 
     // Get Convex user ID
     const convexUser = await convex.query(api.users.getUserByClerkId, {
@@ -135,7 +135,7 @@ export async function GET(request: NextRequest) {
       providerAccountId: msUser.id,
       settings: {
         calendars:
-          calendars.value?.map((cal: any) => ({
+          calendars.value?.map((cal: unknown) => ({
             id: cal.id,
             name: cal.name,
             color: cal.color?.toLowerCase() || '#0078d4',

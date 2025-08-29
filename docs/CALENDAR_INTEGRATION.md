@@ -2,7 +2,7 @@
 
 ## Overview
 
-LinearTime supports bidirectional synchronization with multiple calendar providers, allowing you to manage all your events in one place while keeping them synced across platforms.
+Command Center Calendar supports bidirectional synchronization with multiple calendar providers, allowing you to manage all your events in one place while keeping them synced across platforms.
 
 ## Supported Providers
 
@@ -40,14 +40,14 @@ LinearTime supports bidirectional synchronization with multiple calendar provide
 ### Google Calendar
 
 1. **Navigate to Settings**
-   - Go to `/settings/integrations` in LinearTime
+   - Go to `/settings/integrations` in Command Center Calendar
    - Find the Google Calendar card
 
 2. **Connect Your Account**
    - Click "Connect Google Calendar"
    - You'll be redirected to Google's authorization page
    - Sign in with your Google account
-   - Grant LinearTime permission to access your calendars
+   - Grant Command Center Calendar permission to access your calendars
 
 3. **Select Calendars**
    - After authorization, you'll see a list of your calendars
@@ -73,7 +73,7 @@ LinearTime supports bidirectional synchronization with multiple calendar provide
 2. **Register Application**
    - Navigate to **Azure Active Directory** > **App registrations**
    - Click **New registration**
-   - **Name**: "LinearTime Calendar"
+   - **Name**: "Command Center Calendar Calendar"
    - **Supported account types**: "Accounts in any organizational directory (Any Azure AD directory - Multitenant)"
    - **Redirect URI**: `http://localhost:3000/api/auth/microsoft/callback` (for development)
    - Click **Register**
@@ -103,7 +103,7 @@ LinearTime supports bidirectional synchronization with multiple calendar provide
 1. **Generate Secret**
    - Go to **Certificates & secrets** in your app
    - Click **New client secret**
-   - **Description**: "LinearTime Calendar Secret"
+   - **Description**: "Command Center Calendar Calendar Secret"
    - **Expires**: "24 months" (recommended)
    - Click **Add**
 
@@ -126,10 +126,10 @@ MICROSOFT_REDIRECT_URI=http://localhost:3000/api/auth/microsoft/callback
 MICROSOFT_WEBHOOK_SECRET=your_random_webhook_secret
 ```
 
-#### Step 5: Connect in LinearTime
+#### Step 5: Connect in Command Center Calendar
 
 1. **Navigate to Settings**
-   - Go to `/settings/integrations` in LinearTime
+   - Go to `/settings/integrations` in Command Center Calendar
    - Find the **Microsoft Outlook** card
 
 2. **Initiate Connection**
@@ -141,7 +141,7 @@ MICROSOFT_WEBHOOK_SECRET=your_random_webhook_secret
    - Review and accept the permissions:
      - Read and write to your calendars
      - Access your basic profile information
-   - You'll be redirected back to LinearTime
+   - You'll be redirected back to Command Center Calendar
 
 4. **Configure Sync Settings**
    - Select which calendars to synchronize
@@ -156,8 +156,8 @@ MICROSOFT_WEBHOOK_SECRET=your_random_webhook_secret
    - Initial sync may take a few minutes for large calendars
 
 2. **Test Sync**
-   - Create an event in LinearTime - it should appear in Outlook
-   - Create an event in Outlook - it should appear in LinearTime
+   - Create an event in Command Center Calendar - it should appear in Outlook
+   - Create an event in Outlook - it should appear in Command Center Calendar
    - Changes sync in real-time via Microsoft Graph webhooks
 
 #### Troubleshooting
@@ -184,9 +184,9 @@ MICROSOFT_WEBHOOK_SECRET=your_random_webhook_secret
    - Go to [appleid.apple.com](https://appleid.apple.com)
    - Sign in and navigate to Security
    - Under "App-Specific Passwords", click "Generate Password"
-   - Name it "LinearTime" and copy the password
+   - Name it "Command Center Calendar" and copy the password
 
-2. **Connect in LinearTime**
+2. **Connect in Command Center Calendar**
    - Go to `/settings/integrations`
    - Click "Connect Apple iCloud"
    - Enter your Apple ID email
@@ -204,14 +204,14 @@ MICROSOFT_WEBHOOK_SECRET=your_random_webhook_secret
    - Username and password
    - Calendar paths (if known)
 
-2. **Connect in LinearTime**
+2. **Connect in Command Center Calendar**
    - Go to `/settings/integrations`
    - Click "Connect CalDAV Server"
    - Enter server URL, username, and password
    - Optionally provide a custom name
 
 3. **Test and Configure**
-   - LinearTime will test the connection
+   - Command Center Calendar will test the connection
    - Select calendars to sync
    - Configure sync settings
 
@@ -254,7 +254,7 @@ NEXT_PUBLIC_URL=http://localhost:3000
 
 ### Conflict Resolution
 
-When LinearTime detects conflicting changes:
+When Command Center Calendar detects conflicting changes:
 
 1. **Automatic Resolution** (when possible)
    - Uses vector clocks to determine causality
@@ -281,7 +281,7 @@ When LinearTime detects conflicting changes:
 - IP allowlisting (optional)
 
 ### Privacy
-- LinearTime only accesses calendar data
+- Command Center Calendar only accesses calendar data
 - No data is shared with third parties
 - You can revoke access at any time
 
@@ -433,11 +433,11 @@ A: Yes, you can configure the sync range in settings (default: 1 year back, 1 ye
 **Q: What happens if I delete an event?**
 A: Deletions sync based on your sync direction settings (bidirectional by default).
 
-**Q: Can I use LinearTime offline?**
+**Q: Can I use Command Center Calendar offline?**
 A: Yes, with limited functionality. Changes sync when reconnected.
 
 **Q: How do I revoke calendar access?**
-A: Disconnect in LinearTime settings or revoke in your calendar provider's security settings.
+A: Disconnect in Command Center Calendar settings or revoke in your calendar provider's security settings.
 
 ## Changelog
 

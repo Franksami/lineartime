@@ -5,7 +5,7 @@
 
 ## 📋 **EXECUTIVE SUMMARY**
 
-Based on comprehensive analysis of LinearTime's existing design documentation, award-winning calendar interfaces (Moleskine Timepage, Amie, Fantastical), and modern AI-first design patterns, this design system defines the visual and interaction standards for our Vibe-Coding Calendar Agent.
+Based on comprehensive analysis of Command Center Calendar's existing design documentation, award-winning calendar interfaces (Moleskine Timepage, Amie, Fantastical), and modern AI-first design patterns, this design system defines the visual and interaction standards for our Vibe-Coding Calendar Agent.
 
 **Core Philosophy**: "Design damn near comes first" - Create award-winning visual experiences that match the intelligence of our AI backend.
 
@@ -417,7 +417,7 @@ test('focused vibe visual consistency', async ({ page }) => {
 
 ## 🔗 **INTEGRATION WITH EXISTING SYSTEMS**
 
-### **LinearTime Foundation Compatibility**
+### **Command Center Calendar Foundation Compatibility**
 - ✅ **Preserves** horizontal timeline foundation
 - ✅ **Extends** existing AI scheduling engine  
 - ✅ **Maintains** 112+ FPS performance targets
@@ -431,4 +431,4 @@ test('focused vibe visual consistency', async ({ page }) => {
 
 ---
 
-*This design system transforms LinearTime's proven foundation into an AI-first interface that adapts to users' creative flow states while maintaining award-winning visual excellence.*
+*This design system transforms Command Center Calendar's proven foundation into an AI-first interface that adapts to users' creative flow states while maintaining award-winning visual excellence.*

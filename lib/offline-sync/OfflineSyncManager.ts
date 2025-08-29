@@ -565,7 +565,7 @@ export class OfflineSyncManager {
   // Database helpers
   private async openIndexedDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('LinearTimeCalendar', 2);
+      const request = indexedDB.open('Command Center CalendarCalendar', 2);
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => resolve(request.result);

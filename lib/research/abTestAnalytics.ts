@@ -1,5 +1,5 @@
 /**
- * A/B Test Analytics Integration with LinearTime Analytics Infrastructure
+ * A/B Test Analytics Integration with Command Center Calendar Analytics Infrastructure
  * Seamless integration with existing analytics pipeline and performance monitoring
  */
 
@@ -18,7 +18,7 @@ class ABTestAnalyticsIntegration {
   }
 
   /**
-   * Integrate with LinearTime's existing analytics infrastructure
+   * Integrate with Command Center Calendar's existing analytics infrastructure
    */
   async integrateWithLinearTimeAnalytics(event: TestEvent): Promise<void> {
     try {
@@ -76,7 +76,7 @@ class ABTestAnalyticsIntegration {
       };
 
       // This would be sent to the existing analytics pipeline
-      console.log('Sending to LinearTime analytics:', analyticsData);
+      console.log('Sending to Command Center Calendar analytics:', analyticsData);
     } catch (error) {
       console.error('Usage analytics update failed:', error);
     }
@@ -405,7 +405,7 @@ export const validatePerformanceTargets = (metrics: PerformanceMetrics) => {
   };
 };
 
-// Integration hooks for existing LinearTime analytics
+// Integration hooks for existing Command Center Calendar analytics
 export const integrationHooks = {
   // Hook into existing event creation tracking
   onEventCreate: (eventData: any, testVariant?: string) => {

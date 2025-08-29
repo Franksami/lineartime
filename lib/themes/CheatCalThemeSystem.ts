@@ -1,5 +1,5 @@
 /**
- * CheatCal Controversial Theme System
+ * Command Center Controversial Theme System
  *
  * Sophisticated design system combining Timepage award-winning excellence
  * with Andrew Tate controversial positioning for money-focused professionals.
@@ -8,7 +8,7 @@
  * Visual Strategy: Professional polish + polarizing edge + money focus
  *
  * @version 1.0.0 (Revolutionary Theme Release)
- * @author CheatCal Design Team
+ * @author Command Center Design Team
  */
 
 // ASCII Theme System Architecture
@@ -48,7 +48,7 @@ SOPHISTICATED CONTROVERSY DESIGN PRINCIPLES:
 `;
 
 /**
- * CheatCal Theme Configuration Interface
+ * Command Center Theme Configuration Interface
  */
 export interface CheatCalTheme {
   name: string;
@@ -134,7 +134,7 @@ export interface CheatCalTheme {
 }
 
 /**
- * CheatCal Theme Definitions
+ * Command Center Theme Definitions
  */
 
 // STEALTH MODE: Professional discretion with controlled controversy
@@ -418,14 +418,14 @@ export const ELITE_SUCCESS_THEME: CheatCalTheme = {
 };
 
 /**
- * CheatCal Theme System Manager
+ * Command Center Theme System Manager
  */
 export class CheatCalThemeSystem {
   private currentTheme: CheatCalTheme = AGGRESSIVE_THEME;
   private themeChangeCallbacks: ((theme: CheatCalTheme) => void)[] = [];
 
   constructor() {
-    console.log('🎨 CheatCal Theme System initializing...');
+    console.log('🎨 Command Center Theme System initializing...');
     console.log(CHEATCAL_THEME_ARCHITECTURE);
   }
 
@@ -451,7 +451,7 @@ export class CheatCalThemeSystem {
     const newTheme = themes.find((theme) => theme.name === themeName);
 
     if (!newTheme) {
-      throw new Error(`Theme '${themeName}' not found in CheatCal theme system`);
+      throw new Error(`Theme '${themeName}' not found in Command Center theme system`);
     }
 
     console.log(
@@ -503,7 +503,7 @@ export class CheatCalThemeSystem {
    */
   generateCSSVariables(theme: CheatCalTheme): string {
     return `
-/* CheatCal ${theme.displayName} Theme Variables */
+/* Command Center ${theme.displayName} Theme Variables */
 :root.cheatcal-theme-${theme.name} {
   /* Controversial Color System */
   --cheatcal-controversy-red: ${theme.colors.controversy_red};
@@ -604,10 +604,10 @@ export class CheatCalThemeSystem {
 
     const messagingMap = {
       privacy_warning: {
-        minimal: 'CheatCal optimizes your workflow through intelligent analysis',
-        moderate: 'CheatCal monitors your productivity to help you make more money',
-        maximum: 'CheatCal watches everything you do to maximize your wealth',
-        chaos: 'CheatCal surveils your entire workflow for maximum money-making optimization',
+        minimal: 'Command Center optimizes your workflow through intelligent analysis',
+        moderate: 'Command Center monitors your productivity to help you make more money',
+        maximum: 'Command Center watches everything you do to maximize your wealth',
+        chaos: 'Command Center surveils your entire workflow for maximum money-making optimization',
       },
 
       success_message: {
@@ -626,7 +626,7 @@ export class CheatCalThemeSystem {
     };
 
     const messages = messagingMap[messageType as keyof typeof messagingMap];
-    return messages?.[theme.controversy_level] || 'CheatCal: Elite productivity optimization';
+    return messages?.[theme.controversy_level] || 'Command Center: Elite productivity optimization';
   }
 
   /**
@@ -636,7 +636,7 @@ export class CheatCalThemeSystem {
     const theme = this.currentTheme;
 
     return `
-/* CheatCal ${theme.displayName} Theme Classes */
+/* Command Center ${theme.displayName} Theme Classes */
 
 .cheatcal-controversial-header {
   background: linear-gradient(135deg, ${theme.colors.stealth_black}, ${theme.colors.controversy_red});
@@ -688,7 +688,7 @@ export class CheatCalThemeSystem {
 }
 
 /**
- * React Hook for CheatCal Theme System
+ * React Hook for Command Center Theme System
  */
 export const useCheatCalTheme = () => {
   const [themeSystem] = useState(() => new CheatCalThemeSystem());

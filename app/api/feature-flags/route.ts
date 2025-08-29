@@ -1,5 +1,5 @@
 /**
- * Modern Feature Flags API Route - Optimized for LinearTime
+ * Modern Feature Flags API Route - Optimized for Command Center Calendar
  * Replaces deprecated @vercel/flags with lightweight, performant solution
  */
 

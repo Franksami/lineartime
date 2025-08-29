@@ -271,7 +271,7 @@ export function KBarPlayground() {
           <KBarProvider>
             <div className="p-4 border rounded-lg bg-accent/5">
               <p className="text-sm text-muted-foreground mb-4">
-                This simulates KBar integration with your LinearTime Calendar commands
+                This simulates KBar integration with your Command Center Calendar Calendar commands
               </p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm">
@@ -290,7 +290,7 @@ export function KBarPlayground() {
             </div>
 
             <KBarPortal>
-              <KBarSearch placeholder="Search LinearTime actions..." />
+              <KBarSearch placeholder="Search Command Center Calendar actions..." />
               <KBarResults />
             </KBarPortal>
           </KBarProvider>

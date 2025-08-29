@@ -1,10 +1,10 @@
 /**
- * Logger Utility for CheatCal AI Enhancement System
+ * Logger Utility for Command Center AI Enhancement System
  *
  * Simple logging utility with levels and formatting for development and production.
  *
- * @version CheatCal Phase 3.0
- * @author CheatCal AI Enhancement System
+ * @version Command Center Phase 3.0
+ * @author Command Center AI Enhancement System
  */
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';

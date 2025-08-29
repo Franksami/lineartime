@@ -106,12 +106,30 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
   };
 
   const getSyncHealthStatus = () => {
-    if (!stats.isOnline) return { status: 'offline', color: 'text-gray-500 /* TODO: Use semantic token */', icon: WifiOff };
+    if (!stats.isOnline)
+      return {
+        status: 'offline',
+        color: 'text-gray-500 /* TODO: Use semantic token */',
+        icon: WifiOff,
+      };
     if (stats.syncInProgress) return { status: 'syncing', color: 'text-primary', icon: RefreshCw };
-    if (stats.size === 0) return { status: 'healthy', color: 'text-green-500 /* TODO: Use semantic token */', icon: CheckCircle2 };
+    if (stats.size === 0)
+      return {
+        status: 'healthy',
+        color: 'text-green-500 /* TODO: Use semantic token */',
+        icon: CheckCircle2,
+      };
     if (stats.size > 100)
-      return { status: 'warning', color: 'text-yellow-500 /* TODO: Use semantic token */', icon: AlertTriangle };
-    return { status: 'normal', color: 'text-green-500 /* TODO: Use semantic token */', icon: Activity };
+      return {
+        status: 'warning',
+        color: 'text-yellow-500 /* TODO: Use semantic token */',
+        icon: AlertTriangle,
+      };
+    return {
+      status: 'normal',
+      color: 'text-green-500 /* TODO: Use semantic token */',
+      icon: Activity,
+    };
   };
 
   const health = getSyncHealthStatus();
@@ -182,7 +200,9 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">High Priority</span>
               </div>
-              <div className="text-2xl font-bold text-red-600 /* TODO: Use semantic token */">{stats.byPriority.high}</div>
+              <div className="text-2xl font-bold text-red-600 /* TODO: Use semantic token */">
+                {stats.byPriority.high}
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -190,7 +210,9 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <Activity className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Medium Priority</span>
               </div>
-              <div className="text-2xl font-bold text-yellow-600 /* TODO: Use semantic token */">{stats.byPriority.medium}</div>
+              <div className="text-2xl font-bold text-yellow-600 /* TODO: Use semantic token */">
+                {stats.byPriority.medium}
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -198,7 +220,9 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Low Priority</span>
               </div>
-              <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">{stats.byPriority.low}</div>
+              <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">
+                {stats.byPriority.low}
+              </div>
             </div>
           </div>
 

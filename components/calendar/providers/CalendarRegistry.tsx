@@ -8,10 +8,10 @@ import type {
   CalendarLibraryConfig,
 } from './types';
 
-// Lazy load all calendar components for performance
-const LinearCalendarHorizontal = lazy(() =>
-  import('@/components/calendar/LinearCalendarHorizontal').then((module) => ({
-    default: module.LinearCalendarHorizontal,
+// Command Workspace views - replacing deprecated LinearCalendarHorizontal
+const WeekView = lazy(() =>
+  import('@/views/week/WeekView').then((module) => ({
+    default: module.WeekView,
   }))
 );
 
@@ -488,7 +488,7 @@ const transformEventBackFromLibrary = (event: any, library: CalendarLibrary): Ca
 // Calendar adapters registry
 export const calendarAdapters: Record<CalendarLibrary, CalendarLibraryAdapter> = {
   linear: {
-    component: LinearCalendarHorizontal as any,
+    component: WeekView as any,
     config: libraryConfigs.linear,
     transformEvents: (events) => transformEventsForLibrary(events, 'linear'),
     transformEventBack: (event) => transformEventBackFromLibrary(event, 'linear'),

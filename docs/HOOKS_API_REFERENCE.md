@@ -1,6 +1,6 @@
 # Calendar Hooks API Reference
 
-## Complete Hook Documentation for LinearTime
+## Complete Hook Documentation for Command Center Calendar
 
 Version: 1.0.0  
 Generated: August 23, 2025

@@ -1,7 +1,7 @@
 /**
- * CheatCal Default Route - AI Revenue Planner Interface
+ * Command Center Default Route - AI Revenue Planner Interface
  *
- * According to CheatCal architecture plan, AI Planner is now the default interface
+ * According to Command Center architecture plan, AI Planner is now the default interface
  * for authenticated users, with traditional calendar moved to Planning tab.
  *
  * Navigation structure: [Planner|Week|Day|Planning|Settings]
@@ -20,6 +20,6 @@ export default async function HomePage() {
     redirect('/landing');
   }
 
-  // Authenticated users get working CheatCal Enterprise interface
+  // Authenticated users get working Command Center Enterprise interface
   return <SimpleCheatCalInterface />;
 }

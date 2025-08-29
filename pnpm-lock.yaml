@@ -218,6 +218,9 @@ importers:
       convex:
         specifier: ^1.25.4
         version: 1.25.4(@clerk/clerk-react@5.43.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+      crypto-js:
+        specifier: ^4.2.0
+        version: 4.2.0
       d3:
         specifier: ^7.9.0
         version: 7.9.0
@@ -3006,6 +3009,9 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
+
+  crypto-js@4.2.0:
+    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
 
   cssom@0.3.8:
     resolution: {integrity: sha512-b0tGHbfegbhPJpxpiBPU2sCkigAqtM9O121le6bbOlgyV+NyGyCmVfJ6QW9eRjz8CpNfWEOYBIMIGRYkLwsIYg==}
@@ -8220,6 +8226,8 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  crypto-js@4.2.0: {}
 
   cssom@0.3.8: {}
 

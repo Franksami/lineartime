@@ -4,8 +4,8 @@
  * Integrates Whisper v3 and Deepgram Nova 2 for sophisticated voice processing.
  * Supports real-time transcription, voice commands, and multi-modal coordination.
  *
- * @version CheatCal Phase 3.0
- * @author CheatCal AI Enhancement System
+ * @version Command Center Phase 3.0
+ * @author Command Center AI Enhancement System
  */
 
 import { logger } from '@/lib/utils/logger';

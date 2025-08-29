@@ -1,5 +1,5 @@
 /**
- * Modern Feature Flag System - Optimized for LinearTime
+ * Modern Feature Flag System - Optimized for Command Center Calendar
  * Replaces deprecated @vercel/flags with lightweight, performant solution
  */
 
@@ -12,7 +12,7 @@ interface FeatureFlagConfig {
   [key: string]: boolean | number | string;
 }
 
-// Default feature flags for LinearTime
+// Default feature flags for Command Center Calendar
 const DEFAULT_FLAGS: FeatureFlagConfig = {
   // AI Enhancement Components (Phase 5.0)
   ENABLE_AI_CAPACITY_RIBBON: true,

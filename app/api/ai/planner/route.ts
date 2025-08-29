@@ -1,5 +1,5 @@
 /**
- * CheatCal AI Revenue Planner API Route
+ * Command Center AI Revenue Planner API Route
  *
  * Vercel AI SDK v5 implementation with advanced tool calling for:
  * - Revenue-focused goal planning and optimization
@@ -10,8 +10,8 @@
  * Features Anthropic Claude 3.5 Sonnet with OpenAI GPT-4o fallback
  * and specialized tools for money-focused professionals.
  *
- * @version 2.0.0 (CheatCal AI Planner)
- * @author CheatCal Revenue Optimization Platform
+ * @version 2.0.0 (Command Center AI Planner)
+ * @author Command Center Revenue Optimization Platform
  */
 
 import { anthropic } from '@ai-sdk/anthropic';
@@ -399,7 +399,7 @@ export async function POST(request: NextRequest) {
         revenueCalculation: revenueCalculationTool,
         marketplaceRecommendation: marketplaceRecommendationTool,
       },
-      system: `You are CheatCal AI, the world's most sophisticated coordination optimization assistant for money-focused professionals.
+      system: `You are Command Center AI, the world's most sophisticated coordination optimization assistant for money-focused professionals.
 
 CORE IDENTITY:
 - You help high-revenue professionals ($30K+ monthly) optimize their coordination for maximum financial impact

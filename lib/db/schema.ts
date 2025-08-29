@@ -165,7 +165,7 @@ export interface PerformanceMetric {
 /**
  * Main Database Class
  */
-export class LinearTimeDB extends Dexie {
+export class CommandCenterCalendarDB extends Dexie {
   // Tables
   events!: Table<StoredEvent>;
   categories!: Table<StoredCategory>;
@@ -178,7 +178,7 @@ export class LinearTimeDB extends Dexie {
   metrics!: Table<PerformanceMetric>;
 
   constructor() {
-    super('LinearTimeDB');
+    super('Command Center CalendarDB');
 
     // Define schema versions
     this.version(1).stores({
@@ -347,7 +347,7 @@ export class LinearTimeDB extends Dexie {
 }
 
 // Create and export database instance
-export const db = new LinearTimeDB();
+export const db = new CommandCenterCalendarDB();
 
 // Export database types
 export type { Table } from 'dexie';

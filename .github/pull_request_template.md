@@ -1,4 +1,4 @@
-# 🔒 LinearTime Pull Request - Foundation Protection Required
+# 🔒 Command Center Calendar Pull Request - Foundation Protection Required
 
 ## 📋 **Foundation Compliance Checklist (MANDATORY)**
 

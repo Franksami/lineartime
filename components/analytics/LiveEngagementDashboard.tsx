@@ -64,8 +64,10 @@ const MetricCard: React.FC<MetricCardProps> = ({
 }) => {
   const statusColors = {
     good: 'text-green-600 /* TODO: Use semantic token */ border-green-200 /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */',
-    warning: 'text-yellow-600 /* TODO: Use semantic token */ border-yellow-200 /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */',
-    critical: 'text-red-600 /* TODO: Use semantic token */ border-red-200 /* TODO: Use semantic token */ bg-red-50 /* TODO: Use semantic token */',
+    warning:
+      'text-yellow-600 /* TODO: Use semantic token */ border-yellow-200 /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */',
+    critical:
+      'text-red-600 /* TODO: Use semantic token */ border-red-200 /* TODO: Use semantic token */ bg-red-50 /* TODO: Use semantic token */',
   };
 
   return (
@@ -82,7 +84,9 @@ const MetricCard: React.FC<MetricCardProps> = ({
             <div
               className={cn(
                 'flex items-center text-xs',
-                change >= 0 ? 'text-green-600 /* TODO: Use semantic token */' : 'text-red-600 /* TODO: Use semantic token */'
+                change >= 0
+                  ? 'text-green-600 /* TODO: Use semantic token */'
+                  : 'text-red-600 /* TODO: Use semantic token */'
               )}
             >
               <TrendingUp className="mr-1 h-3 w-3" />
@@ -495,19 +499,25 @@ export const LiveEngagementDashboard: React.FC<LiveEngagementDashboardProps> = (
                     <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">
                       {timelineMetrics.timelineEngagementScore?.toFixed(1) || 0}/100
                     </div>
-                    <div className="text-sm text-blue-600 /* TODO: Use semantic token */">Engagement Score</div>
+                    <div className="text-sm text-blue-600 /* TODO: Use semantic token */">
+                      Engagement Score
+                    </div>
                   </div>
                   <div className="text-center p-4 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50">
                     <div className="text-lg font-bold text-green-600 /* TODO: Use semantic token */ capitalize">
                       {timelineMetrics.monthNavigationEfficiency || 'N/A'}
                     </div>
-                    <div className="text-sm text-green-600 /* TODO: Use semantic token */">Navigation Efficiency</div>
+                    <div className="text-sm text-green-600 /* TODO: Use semantic token */">
+                      Navigation Efficiency
+                    </div>
                   </div>
                   <div className="text-center p-4 rounded-lg bg-gradient-to-br from-purple-50 to-violet-50">
                     <div className="text-lg font-bold text-purple-600 /* TODO: Use semantic token */ capitalize">
                       {timelineMetrics.scrollBehaviorHealth || 'N/A'}
                     </div>
-                    <div className="text-sm text-purple-600 /* TODO: Use semantic token */">Scroll Health</div>
+                    <div className="text-sm text-purple-600 /* TODO: Use semantic token */">
+                      Scroll Health
+                    </div>
                   </div>
                 </div>
               </CardContent>

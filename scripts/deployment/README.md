@@ -1,6 +1,6 @@
-# LinearTime UI/UX Transformation Deployment Guide
+# Command Center Calendar UI/UX Transformation Deployment Guide
 
-This guide provides comprehensive step-by-step procedures for deploying the LinearTime Calendar UI/UX transformation safely and efficiently.
+This guide provides comprehensive step-by-step procedures for deploying the Command Center Calendar Calendar UI/UX transformation safely and efficiently.
 
 ## Quick Start
 
@@ -29,7 +29,7 @@ This guide provides comprehensive step-by-step procedures for deploying the Line
 ### Pre-Deployment Checklist
 - [ ] Current codebase is committed to git
 - [ ] Working in feature branch (recommended)
-- [ ] LinearTime foundation tests passing
+- [ ] Command Center Calendar foundation tests passing
 - [ ] Team approval for transformation plan
 - [ ] Backup strategy confirmed
 
@@ -116,7 +116,7 @@ This guide provides comprehensive step-by-step procedures for deploying the Line
 - Fuzzy search for actions
 - Keyboard-first navigation
 - Extensible action system
-- Custom LinearTime commands
+- Custom Command Center Calendar commands
 
 **Testing:**
 ```bash
@@ -163,7 +163,7 @@ This guide provides comprehensive step-by-step procedures for deploying the Line
 - Sidebar replaces current navigation (if any)
 - Main content area adjusts automatically  
 - Mobile-first responsive design
-- Maintains LinearTime branding
+- Maintains Command Center Calendar branding
 
 ---
 
@@ -458,4 +458,4 @@ npm run type-check
 
 ---
 
-**Remember:** This transformation improves the LinearTime Calendar platform significantly, but it's a complex change. Take your time, test thoroughly, and don't hesitate to rollback if issues arise.
+**Remember:** This transformation improves the Command Center Calendar Calendar platform significantly, but it's a complex change. Take your time, test thoroughly, and don't hesitate to rollback if issues arise.

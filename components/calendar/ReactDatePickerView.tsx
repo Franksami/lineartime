@@ -1,7 +1,7 @@
 /**
  * React DatePicker Calendar View
  *
- * Date picker calendar with popup integration for CheatCal platform.
+ * Date picker calendar with popup integration for Command Center platform.
  * Provides professional date selection with calendar popup functionality.
  *
  * Features:
@@ -11,7 +11,7 @@
  * - Event creation capabilities
  * - Mobile responsive design
  *
- * @version 2.0.0 (CheatCal Integration)
+ * @version 2.0.0 (Command Center Integration)
  */
 
 'use client';

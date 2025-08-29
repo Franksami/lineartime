@@ -1,5 +1,5 @@
 /**
- * CheatCal 60+ FPS Animation Framework
+ * Command Center 60+ FPS Animation Framework
  *
  * Enterprise-grade animation system combining Timepage sophistication
  * with controversial elements for money-focused professional interface.
@@ -8,7 +8,7 @@
  * Design Quality: Award-winning smoothness with controversial polish
  *
  * @version 1.0.0 (High Performance Animation Release)
- * @author CheatCal Animation Team
+ * @author Command Center Animation Team
  */
 
 import {
@@ -134,7 +134,7 @@ const DEFAULT_ANIMATION_CONFIG: AnimationConfig = {
 };
 
 /**
- * CheatCal Animation System Manager
+ * Command Center Animation System Manager
  */
 export class CheatCalAnimationSystem {
   private config: AnimationConfig;
@@ -145,7 +145,7 @@ export class CheatCalAnimationSystem {
     this.config = config;
     this.performanceMonitor = new PerformanceMonitor();
 
-    console.log('⚡ CheatCal Animation System initializing...');
+    console.log('⚡ Command Center Animation System initializing...');
     console.log(ANIMATION_FRAMEWORK_ARCHITECTURE);
 
     this.initializePerformanceOptimization();
@@ -444,7 +444,7 @@ export class CheatCalAnimationSystem {
 
         // Warn if FPS drops below target
         if (fps < this.config.fps_target) {
-          console.warn(`⚠️ CheatCal FPS below target: ${fps}/${this.config.fps_target}`);
+          console.warn(`⚠️ Command Center FPS below target: ${fps}/${this.config.fps_target}`);
           this.optimizeForPerformance();
         }
 
@@ -511,7 +511,7 @@ export class CheatCalAnimationSystem {
 }
 
 /**
- * React Hooks for CheatCal Animations
+ * React Hooks for Command Center Animations
  */
 
 /**
@@ -676,7 +676,7 @@ class PerformanceMonitor {
 }
 
 /**
- * Animation Presets for Common CheatCal Interactions
+ * Animation Presets for Common Command Center Interactions
  */
 export const CheatCalAnimationPresets = {
   // Standard sophisticated interactions

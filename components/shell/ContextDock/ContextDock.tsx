@@ -3,40 +3,40 @@
  * Research-validated dock patterns based on Notion properties panel + Obsidian graph
  */
 
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { 
-  Bot, 
-  Info, 
-  AlertTriangle, 
-  BarChart3, 
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import {
+  Bot,
+  Info,
+  AlertTriangle,
+  BarChart3,
   Network,
   X,
   ChevronLeft,
-  ChevronRight
-} from 'lucide-react'
-import { useAppShell, useAppShellPerformance } from '@/contexts/AppShellProvider'
-import { useContextDock } from '@/lib/features/useFeatureFlags'
-import AIAssistantPanel from '@/components/dock/panels/AIAssistantPanel'
-import ConflictsPanel from '@/components/dock/panels/ConflictsPanel'
-import BacklinksPanel from '@/components/dock/panels/BacklinksPanel'
-import { cn } from '@/lib/utils'
+  ChevronRight,
+} from 'lucide-react';
+import { useAppShell, useAppShellPerformance } from '@/contexts/AppShellProvider';
+import { useContextDock } from '@/lib/features/useFeatureFlags';
+import AIAssistantPanel from '@/components/dock/panels/AIAssistantPanel';
+import ConflictsPanel from '@/components/dock/panels/ConflictsPanel';
+import BacklinksPanel from '@/components/dock/panels/BacklinksPanel';
+import { cn } from '@/lib/utils';
 
 /**
  * Context Dock Panel Definitions
  */
 interface DockPanel {
-  id: string
-  title: string
-  icon: React.ComponentType<{ className?: string }>
-  description: string
-  component: React.ComponentType
-  shortcut?: string
+  id: string;
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  description: string;
+  component: React.ComponentType;
+  shortcut?: string;
 }
 
 /**
@@ -49,15 +49,15 @@ const DOCK_PANELS: DockPanel[] = [
     icon: Bot,
     description: 'Contextual AI agents with streaming responses',
     component: AIAssistantPanel,
-    shortcut: 'mod+shift+a'
+    shortcut: 'mod+shift+a',
   },
   {
     id: 'details',
     title: 'Details',
-    icon: Info, 
+    icon: Info,
     description: 'Entity properties and metadata (Notion pattern)',
     component: DetailsPanel,
-    shortcut: 'mod+shift+d'
+    shortcut: 'mod+shift+d',
   },
   {
     id: 'conflicts',
@@ -65,7 +65,7 @@ const DOCK_PANELS: DockPanel[] = [
     icon: AlertTriangle,
     description: 'Real-time conflict visualization (Timefold pattern)',
     component: ConflictsPanel,
-    shortcut: 'mod+shift+c'
+    shortcut: 'mod+shift+c',
   },
   {
     id: 'capacity',
@@ -73,7 +73,7 @@ const DOCK_PANELS: DockPanel[] = [
     icon: BarChart3,
     description: 'Resource capacity and utilization analysis',
     component: CapacityPanel,
-    shortcut: 'mod+shift+r'
+    shortcut: 'mod+shift+r',
   },
   {
     id: 'backlinks',
@@ -81,39 +81,43 @@ const DOCK_PANELS: DockPanel[] = [
     icon: Network,
     description: 'Entity relationship graph (Obsidian pattern)',
     component: BacklinksPanel,
-    shortcut: 'mod+shift+b'
-  }
-]
+    shortcut: 'mod+shift+b',
+  },
+];
 
 /**
  * Main Context Dock Component
  */
 export function ContextDock() {
-  const { dockPanels, activeDockPanel, setActiveDockPanel, preferences } = useAppShell()
-  const { isDockEnabled, enabledPanels } = useContextDock()
-  const { metrics } = useAppShellPerformance()
-  
-  const [collapsed, setCollapsed] = useState(preferences.dockCollapsed)
-  
+  const { dockPanels, activeDockPanel, setActiveDockPanel, preferences } = useAppShell();
+  const { isDockEnabled, enabledPanels } = useContextDock();
+  const { metrics } = useAppShellPerformance();
+
+  const [collapsed, setCollapsed] = useState(preferences.dockCollapsed);
+
   // Filter enabled panels based on feature flags
-  const availablePanels = DOCK_PANELS.filter(panel => 
-    enabledPanels.includes(panel.id)
-  )
-  
+  const availablePanels = DOCK_PANELS.filter((panel) => enabledPanels.includes(panel.id));
+
   if (!isDockEnabled || availablePanels.length === 0) {
     return (
-      <div data-testid="context-dock" className="flex items-center justify-center h-full bg-muted/20">
+      <div
+        data-testid="context-dock"
+        className="flex items-center justify-center h-full bg-muted/20"
+      >
         <div className="text-center space-y-2">
           <div className="text-sm text-muted-foreground">Context Dock</div>
           <div className="text-xs text-muted-foreground">No panels enabled</div>
         </div>
       </div>
-    )
+    );
   }
-  
+
   if (collapsed) {
     return (
-      <div data-testid="context-dock-collapsed" className="flex flex-col h-full bg-muted/20 border-l border-border">
+      <div
+        data-testid="context-dock-collapsed"
+        className="flex flex-col h-full bg-muted/20 border-l border-border"
+      >
         <div className="p-2">
           <Button
             variant="ghost"
@@ -125,31 +129,31 @@ export function ContextDock() {
             <ChevronLeft className="h-4 w-4" />
           </Button>
         </div>
-        
+
         <div className="flex-1 flex flex-col gap-2 p-2">
-          {availablePanels.map(panel => {
-            const Icon = panel.icon
+          {availablePanels.map((panel) => {
+            const Icon = panel.icon;
             return (
               <Button
                 key={panel.id}
                 variant={activeDockPanel === panel.id ? 'secondary' : 'ghost'}
-                size="sm" 
+                size="sm"
                 className="w-full justify-center p-2"
                 onClick={() => {
-                  setActiveDockPanel(panel.id)
-                  setCollapsed(false)
+                  setActiveDockPanel(panel.id);
+                  setCollapsed(false);
                 }}
                 title={panel.title}
               >
                 <Icon className="h-4 w-4" />
               </Button>
-            )
+            );
           })}
         </div>
       </div>
-    )
+    );
   }
-  
+
   return (
     <div data-testid="context-dock" className="flex flex-col h-full bg-background">
       {/* Dock Header */}
@@ -168,16 +172,16 @@ export function ContextDock() {
           </Button>
         </div>
       </div>
-      
+
       {/* Panel Tabs */}
-      <Tabs 
-        value={activeDockPanel || availablePanels[0]?.id} 
+      <Tabs
+        value={activeDockPanel || availablePanels[0]?.id}
         onValueChange={setActiveDockPanel}
         className="flex-1 flex flex-col"
       >
         <TabsList className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 h-auto p-1 bg-transparent">
-          {availablePanels.map(panel => {
-            const Icon = panel.icon
+          {availablePanels.map((panel) => {
+            const Icon = panel.icon;
             return (
               <TabsTrigger
                 key={panel.id}
@@ -191,16 +195,16 @@ export function ContextDock() {
                 <Icon className="h-3 w-3" />
                 <span className="hidden sm:inline">{panel.title}</span>
               </TabsTrigger>
-            )
+            );
           })}
         </TabsList>
-        
+
         {/* Panel Content */}
         <div className="flex-1 overflow-hidden">
-          {availablePanels.map(panel => {
-            const PanelComponent = panel.component
+          {availablePanels.map((panel) => {
+            const PanelComponent = panel.component;
             return (
-              <TabsContent 
+              <TabsContent
                 key={panel.id}
                 value={panel.id}
                 data-testid={`dock-panel-content-${panel.id}`}
@@ -209,11 +213,11 @@ export function ContextDock() {
               >
                 <PanelComponent />
               </TabsContent>
-            )
+            );
           })}
         </div>
       </Tabs>
-      
+
       {/* Dock Footer - Performance info */}
       {process.env.NODE_ENV === 'development' && (
         <div className="border-t border-border p-2">
@@ -224,7 +228,7 @@ export function ContextDock() {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 /**
@@ -239,11 +243,10 @@ function DetailsPanel() {
         <div className="space-y-2">
           <h4 className="text-sm font-semibold">Details & Properties</h4>
           <p className="text-xs text-muted-foreground">
-            Entity metadata and properties panel.
-            Research validation: Notion right-side properties.
+            Entity metadata and properties panel. Research validation: Notion right-side properties.
           </p>
         </div>
-        
+
         <div className="bg-muted/50 p-3 rounded-lg">
           <div className="text-xs text-blue-600 /* TODO: Use semantic token */ font-mono">
             Phase 3: Views Implementation
@@ -254,7 +257,7 @@ function DetailsPanel() {
         </div>
       </div>
     </ScrollArea>
-  )
+  );
 }
 
 function CapacityPanel() {
@@ -267,7 +270,7 @@ function CapacityPanel() {
             Resource capacity and utilization analysis.
           </p>
         </div>
-        
+
         <div className="bg-muted/50 p-3 rounded-lg">
           <div className="text-xs text-blue-600 /* TODO: Use semantic token */ font-mono">
             Phase 5: Advanced Features
@@ -278,5 +281,5 @@ function CapacityPanel() {
         </div>
       </div>
     </ScrollArea>
-  )
+  );
 }

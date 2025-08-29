@@ -22,7 +22,7 @@ import React from 'react';
 import { EventModal } from './EventModal';
 import { FloatingToolbar } from './FloatingToolbar';
 
-interface LinearCalendarFullBleedProps {
+interface CommandCenterCalendarFullBleedProps {
   year: number;
   events?: Event[];
   className?: string;
@@ -210,7 +210,7 @@ function DraggableEventItem({
   );
 }
 
-export function LinearCalendarFullBleed({
+export function CommandCenterCalendarFullBleed({
   year,
   events = [],
   className,
@@ -220,7 +220,7 @@ export function LinearCalendarFullBleed({
   onEventDelete,
   onEventCreate,
   userId = 'default-user',
-}: LinearCalendarFullBleedProps) {
+}: CommandCenterCalendarFullBleedProps) {
   const [dimensions, setDimensions] = React.useState({ width: 0, height: 0 });
   const [selectedEvent, setSelectedEvent] = React.useState<Event | null>(null);
   const [toolbarPosition, setToolbarPosition] = React.useState<{ x: number; y: number } | null>(

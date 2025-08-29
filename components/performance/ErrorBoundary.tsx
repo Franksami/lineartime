@@ -305,7 +305,9 @@ export function AsyncErrorBoundary({
             <h3 className="text-sm font-medium text-yellow-800 /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */">
               Async Error
             </h3>
-            <p className="mt-1 text-sm text-yellow-700 /* TODO: Use semantic token */ dark:text-yellow-300 /* TODO: Use semantic token */">{error.message}</p>
+            <p className="mt-1 text-sm text-yellow-700 /* TODO: Use semantic token */ dark:text-yellow-300 /* TODO: Use semantic token */">
+              {error.message}
+            </p>
             <button
               onClick={() => setError(null)}
               className="mt-2 text-sm text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */ hover:text-yellow-500 /* TODO: Use semantic token */"

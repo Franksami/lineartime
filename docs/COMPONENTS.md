@@ -89,7 +89,7 @@ export default function CalendarPage() {
 - [`RealtimeCalendarView`](mdc:components/calendar/RealtimeCalendarView.tsx) — future collab
 
 ### Archived (do not import; kept for history)
-- [`LinearCalendarVertical`](mdc:components/calendar/_archive/LinearCalendarVertical.tsx)
+- [`CommandCenterCalendarVertical`](mdc:components/calendar/_archive/CommandCenterCalendarVertical.tsx)
 - [`MobileCalendarView`](mdc:components/mobile/_archive/MobileCalendarView.tsx)
 
 **🔒 Foundation Features (LOCKED LAYOUT):**
@@ -263,12 +263,12 @@ type ZoomLevel = 'compact' | 'standard' | 'expanded'
 
 ## Hooks
 
-### useLinearCalendar
+### useCommandCenterCalendar
 
 Central state management hook for the calendar application.
 
 ```typescript
-interface UseLinearCalendarReturn {
+interface UseCommandCenterCalendarReturn {
   // State
   currentYear: number
   events: Map<string, Event[]>
@@ -295,7 +295,7 @@ interface UseLinearCalendarReturn {
 
 **Usage:**
 ```tsx
-import { useLinearCalendar } from '@/hooks/useLinearCalendar'
+import { useCommandCenterCalendar } from '@/hooks/useCommandCenterCalendar'
 
 function CalendarComponent() {
   const {
@@ -303,7 +303,7 @@ function CalendarComponent() {
     filters,
     addEvent,
     setFilters
-  } = useLinearCalendar()
+  } = useCommandCenterCalendar()
   
   // Use calendar state and actions
 }

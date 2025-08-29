@@ -1,8 +1,8 @@
-# LinearTime AAA Accessibility Implementation Guide
+# Command Center Calendar AAA Accessibility Implementation Guide
 
 ## Overview
 
-This guide provides complete implementation details for upgrading LinearTime from WCAG 2.1 AA to AAA compliance. The implementation includes advanced focus management, 7:1 contrast ratios, enhanced screen reader support, and Radix UI primitive integration.
+This guide provides complete implementation details for upgrading Command Center Calendar from WCAG 2.1 AA to AAA compliance. The implementation includes advanced focus management, 7:1 contrast ratios, enhanced screen reader support, and Radix UI primitive integration.
 
 ## 🚀 Implementation Summary
 
@@ -461,4 +461,4 @@ For accessibility-related questions or issues:
 - Test with actual assistive technology
 - Consult WCAG 2.1 AAA guidelines for edge cases
 
-This implementation positions LinearTime as a leader in calendar application accessibility, providing an inclusive experience for all users while maintaining high performance and modern design standards.
+This implementation positions Command Center Calendar as a leader in calendar application accessibility, providing an inclusive experience for all users while maintaining high performance and modern design standards.

@@ -83,7 +83,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
 
   const _testimonials = [
     {
-      text: "LinearTime revolutionized how we manage our team's schedule",
+      text: "Command Center Calendar revolutionized how we manage our team's schedule",
       author: 'Sarah Chen, Product Manager',
     },
     { text: 'The AI suggestions saved me hours every week', author: 'David Rodriguez, CEO' },
@@ -103,7 +103,8 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
             <Alert className="border-green-200 /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */">
               <CheckCircle className="h-4 w-4" />
               <AlertDescription>
-                <strong>Welcome to LinearTime!</strong> Your account is ready. Let's get started!
+                <strong>Welcome to Command Center Calendar!</strong> Your account is ready. Let's
+                get started!
               </AlertDescription>
             </Alert>
           </motion.div>
@@ -130,7 +131,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
 
             <div className="space-y-2">
               <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                Join LinearTime
+                Join Command Center Calendar
               </CardTitle>
               <CardDescription className="text-muted-foreground">
                 Get started with your free account
@@ -168,7 +169,10 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
             >
               <div className="flex space-x-1">
                 {[...Array(5)].map((_, i) => (
-                  <div key={i} className="w-3 h-3 bg-yellow-400 /* TODO: Use semantic token */ rounded-full" />
+                  <div
+                    key={i}
+                    className="w-3 h-3 bg-yellow-400 /* TODO: Use semantic token */ rounded-full"
+                  />
                 ))}
               </div>
               <span className="text-xs text-muted-foreground">Rated 5/5 by 10,000+ users</span>
@@ -290,7 +294,10 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                 <p className="text-xs text-muted-foreground">Trusted by professionals worldwide</p>
                 <div className="flex justify-center space-x-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400 /* TODO: Use semantic token */" />
+                    <Star
+                      key={i}
+                      className="w-3 h-3 fill-yellow-400 text-yellow-400 /* TODO: Use semantic token */"
+                    />
                   ))}
                 </div>
               </motion.div>

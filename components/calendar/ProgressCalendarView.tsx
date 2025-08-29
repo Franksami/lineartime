@@ -188,11 +188,15 @@ export function ProgressCalendarView({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="text-center p-3 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">{progressStats.completed}</div>
+                  <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">
+                    {progressStats.completed}
+                  </div>
                   <div className="text-xs text-muted-foreground">Completed</div>
                 </div>
                 <div className="text-center p-3 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">{progressStats.inProgress}</div>
+                  <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">
+                    {progressStats.inProgress}
+                  </div>
                   <div className="text-xs text-muted-foreground">In Progress</div>
                 </div>
                 <div className="text-center p-3 bg-muted/50 rounded-lg">
@@ -386,7 +390,9 @@ export function ProgressCalendarView({
                                       key={idx}
                                       className={cn(
                                         'w-1.5 h-1.5 rounded-full',
-                                        isCompleted ? 'bg-green-500 /* TODO: Use semantic token */' : getProgressColor(progress)
+                                        isCompleted
+                                          ? 'bg-green-500 /* TODO: Use semantic token */'
+                                          : getProgressColor(progress)
                                       )}
                                       title={`${event.title} - ${progress}%`}
                                     />

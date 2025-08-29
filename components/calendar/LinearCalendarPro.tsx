@@ -33,7 +33,7 @@ import React, {
 } from 'react';
 import LinearYearPlugin from './plugins/LinearYearPlugin';
 
-interface LinearCalendarProProps {
+interface CommandCenterCalendarProProps {
   year: number;
   events: Event[];
   className?: string;
@@ -57,7 +57,7 @@ interface LinearCalendarProProps {
   eventRenderMode?: 'standard' | 'virtual' | 'lazy';
 }
 
-export function LinearCalendarPro({
+export function CommandCenterCalendarPro({
   year,
   events,
   className,
@@ -75,7 +75,7 @@ export function LinearCalendarPro({
   onDateRangeChange,
   maxEvents = 10000,
   eventRenderMode = 'virtual',
-}: LinearCalendarProProps) {
+}: CommandCenterCalendarProProps) {
   const calendarRef = useRef<FullCalendar>(null);
   const [isPending, startTransition] = useTransition();
   const [isLoading, setIsLoading] = useState(false);
@@ -87,7 +87,7 @@ export function LinearCalendarPro({
   // React 19: Deferred value for expensive computations
   const deferredEvents = useDeferredValue(events);
 
-  // Convert LinearTime events to FullCalendar format with enhanced props
+  // Convert Command Center Calendar events to FullCalendar format with enhanced props
   const fullCalendarEvents: EventInput[] = useMemo(() => {
     const eventsToProcess = enableVirtualRendering ? deferredEvents : events;
 
@@ -99,7 +99,7 @@ export function LinearCalendarPro({
         title: event.title,
         start: event.startDate,
         end: event.endDate,
-        allDay: true, // LinearTime events are typically all-day by default
+        allDay: true, // Command Center Calendar events are typically all-day by default
         extendedProps: {
           category: event.category,
           description: event.description,

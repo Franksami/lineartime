@@ -333,7 +333,7 @@ export const createOrUpdateEvent = internalAction({
       // Create iCalendar event
       const vcalendar = new ICAL.Component(['vcalendar', [], []]);
       vcalendar.addPropertyWithValue('version', '2.0');
-      vcalendar.addPropertyWithValue('prodid', '-//LinearTime//CalDAV Client//EN');
+      vcalendar.addPropertyWithValue('prodid', '-//Command Center Calendar//CalDAV Client//EN');
 
       const vevent = new ICAL.Component('vevent');
       const uid =
@@ -732,7 +732,7 @@ function createICalEvent(eventData: any, eventId: string): string {
   const icalContent = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//LinearTime//Calendar//EN',
+    'PRODID:-//Command Center Calendar//Calendar//EN',
     'BEGIN:VEVENT',
     `UID:${eventId}@lineartime.app`,
     `DTSTAMP:${dtstamp}${eventData.allDay ? '' : 'Z'}`,

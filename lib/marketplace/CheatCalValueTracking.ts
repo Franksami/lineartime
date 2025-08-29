@@ -1,15 +1,15 @@
 /**
- * CheatCal Value Tracking & Revenue Sharing System
+ * Command Center Value Tracking & Revenue Sharing System
  *
  * Comprehensive value measurement and automated revenue distribution system
- * for the CheatCal coordination marketplace. Ensures accurate attribution
+ * for the Command Center coordination marketplace. Ensures accurate attribution
  * of coordination improvements and fair revenue sharing.
  *
  * Business Model: Platform takes 15-25% of measurable coordination value created
  * Value Philosophy: "We only win when our customers win"
  *
  * @version 1.0.0 (Value Tracking Release)
- * @author CheatCal Marketplace Economics Team
+ * @author Command Center Marketplace Economics Team
  */
 
 import { logRevenueEvent, logger } from '../utils/logger';
@@ -165,7 +165,7 @@ interface OptimizationAssessment {
 }
 
 /**
- * CheatCal Value Tracking Engine
+ * Command Center Value Tracking Engine
  */
 export class CheatCalValueTrackingEngine {
   private config: ValueTrackingConfig;
@@ -195,7 +195,7 @@ export class CheatCalValueTrackingEngine {
       ...config,
     };
 
-    console.log('💰 CheatCal Value Tracking Engine initializing...');
+    console.log('💰 Command Center Value Tracking Engine initializing...');
     console.log(VALUE_TRACKING_ARCHITECTURE);
   }
 

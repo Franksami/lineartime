@@ -107,7 +107,9 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
           <div className="p-4 bg-green-50 /* TODO: Use semantic token */ border border-green-200 /* TODO: Use semantic token */ rounded-md space-y-3">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
-              <span className="font-medium text-green-800 /* TODO: Use semantic token */">Event Parsed Successfully!</span>
+              <span className="font-medium text-green-800 /* TODO: Use semantic token */">
+                Event Parsed Successfully!
+              </span>
             </div>
 
             <div className="space-y-2 text-sm">

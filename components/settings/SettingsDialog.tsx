@@ -80,7 +80,7 @@ export function SettingsDialog({
         >
           <DialogHeader>
             <DialogTitle>Settings</DialogTitle>
-            <DialogDescription>Customize your LinearTime experience</DialogDescription>
+            <DialogDescription>Customize your Command Center Calendar experience</DialogDescription>
           </DialogHeader>
 
           <Tabs defaultValue="appearance" className="flex-1 overflow-hidden flex flex-col">

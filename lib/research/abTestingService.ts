@@ -1,5 +1,5 @@
 /**
- * Enhanced A/B Testing Service for LinearTime Horizontal Timeline Validation
+ * Enhanced A/B Testing Service for Command Center Calendar Horizontal Timeline Validation
  * Production-ready integration with Convex backend and real-time analytics
  * Uses Confidence framework for dynamic configuration management
  */

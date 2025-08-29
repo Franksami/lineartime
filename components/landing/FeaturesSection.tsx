@@ -316,7 +316,7 @@ export function FeaturesSection() {
                 Your Journey to Better Time Management
               </h3>
               <p className="text-muted-foreground">
-                See how LinearTime transforms your productivity in just a few steps
+                See how Command Center Calendar transforms your productivity in just a few steps
               </p>
             </div>
 

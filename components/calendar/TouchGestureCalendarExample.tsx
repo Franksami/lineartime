@@ -162,7 +162,9 @@ const GestureMetrics = ({ metrics }: { metrics: any }) => {
       <CardContent className="space-y-3">
         <div className="grid grid-cols-3 gap-3 text-center">
           <div>
-            <div className="text-lg font-bold text-blue-600 /* TODO: Use semantic token */">{metrics.totalGestures}</div>
+            <div className="text-lg font-bold text-blue-600 /* TODO: Use semantic token */">
+              {metrics.totalGestures}
+            </div>
             <div className="text-xs text-muted-foreground">Total</div>
           </div>
           <div>

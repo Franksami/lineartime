@@ -727,7 +727,9 @@ export function EnhancedEventManagement({
                     </Badge>
                   )}
                   <Badge>{event.category}</Badge>
-                  {event.isPinned && <Pin className="h-4 w-4 text-yellow-500 /* TODO: Use semantic token */" />}
+                  {event.isPinned && (
+                    <Pin className="h-4 w-4 text-yellow-500 /* TODO: Use semantic token */" />
+                  )}
                 </div>
               </div>
             </Card>

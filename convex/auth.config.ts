@@ -1,7 +1,7 @@
 /**
  * Convex Authentication Configuration
  *
- * Configures Clerk authentication for CheatCal platform with proper JWT verification.
+ * Configures Clerk authentication for Command Center platform with proper JWT verification.
  * This enables secure user authentication throughout the Convex backend.
  */
 

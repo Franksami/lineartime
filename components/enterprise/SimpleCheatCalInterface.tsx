@@ -1,5 +1,5 @@
 /**
- * CheatCal Enterprise Interface - Working Version
+ * Command Center Enterprise Interface - Working Version
  *
  * Professional calendar interface inspired by Sunsama and Notion Calendar
  * that focuses on working functionality first, then adds sophisticated features.
@@ -10,7 +10,7 @@
  * 3. Animation - Micro animations for professional feel
  * 4. Code - Clean implementation with proper documentation
  *
- * @version 2.0.0 (CheatCal Working Enterprise)
+ * @version 2.0.0 (Command Center Working Enterprise)
  */
 
 'use client';
@@ -28,13 +28,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import EnhancedCalendarToolbar from '@/components/calendar/EnhancedCalendarToolbar';
-import { LibraryTransitionAnimator } from '@/components/calendar/LibraryTransitionAnimator';
-// Calendar Components - Professional Enterprise Suite
-import { LinearCalendarHorizontal } from '@/components/calendar/LinearCalendarHorizontal';
-import { CalendarProvider } from '@/components/calendar/providers/CalendarProvider';
-import { CalendarRenderer } from '@/components/calendar/providers/CalendarRenderer';
-import type { CalendarEvent } from '@/components/calendar/providers/types';
+// Command Workspace View Integration
+import { WeekView } from '@/views/week/WeekView';
+import { ViewScaffold } from '@/components/_deprecated/ViewScaffold';
+
+// Preserve backend calendar integration
+import { useCalendarEvents } from '@/hooks/useCalendarEvents';
+import type { CalendarEvent } from '@/hooks/useCalendarEvents';
 
 // Icons
 import {
@@ -62,7 +62,6 @@ import {
 } from 'lucide-react';
 
 import { useSettingsContext } from '@/contexts/SettingsContext';
-import { useCalendarEvents } from '@/hooks/useCalendarEvents';
 // Business logic & Performance
 import { useSoundEffects } from '@/lib/sound-service';
 import { cn } from '@/lib/utils';
@@ -366,7 +365,7 @@ export default function SimpleCheatCalInterface() {
             <motion.div whileHover={{ scale: 1.02 }} className="flex items-center space-x-3">
               <Brain className="h-6 w-6 text-primary" />
               <div>
-                <h1 className="text-xl font-semibold text-foreground">CheatCal Enterprise</h1>
+                <h1 className="text-xl font-semibold text-foreground">Command Center Enterprise</h1>
                 <p className="text-xs text-muted-foreground">AI Coordination Platform</p>
               </div>
             </motion.div>
@@ -485,7 +484,9 @@ export default function SimpleCheatCalInterface() {
 
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-muted-foreground">Efficiency Score</span>
-                  <span className="text-sm font-medium text-blue-600 /* TODO: Use semantic token */">94%</span>
+                  <span className="text-sm font-medium text-blue-600 /* TODO: Use semantic token */">
+                    94%
+                  </span>
                 </div>
                 <Progress value={94} className="h-1" />
               </div>
@@ -665,58 +666,19 @@ export default function SimpleCheatCalInterface() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="h-[calc(100%-4rem)] p-0">
-                      {/* Calendar Provider Wrapper */}
-                      <CalendarProvider initialLibrary="linear">
-                        <div className="h-full flex flex-col">
-                          {/* Enhanced Calendar Toolbar */}
-                          <EnhancedCalendarToolbar
-                            className="border-b border-border"
-                            showSyncStatus={true}
-                            enableKeyboardShortcuts={true}
-                            showLibrarySelector={true}
-                            compactMode={false}
-                          />
+                      {/* Command Workspace Calendar */}
+                      <div className="h-full flex flex-col">
+                          {/* Command Workspace Header */}
+                          <div className="border-b border-border p-4">
+                            <h3 className="text-lg font-semibold">Enterprise Calendar</h3>
+                          </div>
 
-                          {/* Library Transition Animator (Optional) */}
-                          {showLibraryTransitioner && (
-                            <div className="border-b border-border bg-muted/30 p-2">
-                              <LibraryTransitionAnimator
-                                showControls={true}
-                                showMetrics={false}
-                                enablePreview={true}
-                                maxPreloadedLibraries={3}
-                                onTransitionStart={(from, to) => {
-                                  console.log(`Transitioning from ${from} to ${to}`);
-                                  playSound('notification');
-                                }}
-                                onTransitionComplete={(metrics) => {
-                                  console.log('Transition completed:', metrics);
-                                  playSound('success');
-                                }}
-                                onTransitionError={(error) => {
-                                  console.error('Transition error:', error);
-                                  playSound('error');
-                                }}
-                              />
-                            </div>
-                          )}
 
-                          {/* Main Calendar Renderer */}
+                          {/* Command Workspace Calendar View */}
                           <div className="flex-1 relative overflow-hidden">
-                            <CalendarRenderer className="h-full w-full" />
-
-                            {/* Real LinearCalendarHorizontal for Foundation */}
-                            <div className="absolute inset-0 opacity-0 pointer-events-none">
-                              <LinearCalendarHorizontal
-                                year={currentDate.getFullYear()}
-                                events={events}
-                                className="h-full w-full"
-                                onEventCreate={handleSecureEventCreate}
-                                onEventUpdate={(event) => handleSecureEventUpdate(event.id, event)}
-                                onEventDelete={handleSecureEventDelete}
-                                enableInfiniteCanvas={true}
-                              />
-                            </div>
+                            <ViewScaffold title="Enterprise Calendar">
+                              <WeekView />
+                            </ViewScaffold>
                           </div>
 
                           {/* Loading Overlay */}
@@ -731,7 +693,6 @@ export default function SimpleCheatCalInterface() {
                             </div>
                           )}
                         </div>
-                      </CalendarProvider>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -813,7 +774,9 @@ export default function SimpleCheatCalInterface() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-3xl font-bold text-blue-600 /* TODO: Use semantic token */ mb-2">112 FPS</div>
+                        <div className="text-3xl font-bold text-blue-600 /* TODO: Use semantic token */ mb-2">
+                          112 FPS
+                        </div>
                         <div className="text-sm text-muted-foreground">Animation performance</div>
                         <div className="mt-4">
                           <div className="text-xs text-muted-foreground mb-1">System Health</div>
@@ -834,27 +797,35 @@ export default function SimpleCheatCalInterface() {
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <div className="text-sm text-muted-foreground">Calendar Events</div>
-                            <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">{events.length}</div>
+                            <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">
+                              {events.length}
+                            </div>
                           </div>
                           <div className="space-y-2">
                             <div className="text-sm text-muted-foreground">Security Status</div>
                             <div className="flex items-center space-x-2">
                               <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ rounded-full"></div>
-                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ font-medium">Secure</span>
+                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ font-medium">
+                                Secure
+                              </span>
                             </div>
                           </div>
                           <div className="space-y-2">
                             <div className="text-sm text-muted-foreground">Input Validation</div>
                             <div className="flex items-center space-x-2">
                               <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ rounded-full"></div>
-                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ font-medium">Active</span>
+                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ font-medium">
+                                Active
+                              </span>
                             </div>
                           </div>
                           <div className="space-y-2">
                             <div className="text-sm text-muted-foreground">XSS Protection</div>
                             <div className="flex items-center space-x-2">
                               <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ rounded-full"></div>
-                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ font-medium">Enabled</span>
+                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ font-medium">
+                                Enabled
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -1081,7 +1052,10 @@ export default function SimpleCheatCalInterface() {
                             <div className="text-sm text-foreground">{activity.action}</div>
                             <div className="text-xs text-muted-foreground">{activity.time}</div>
                           </div>
-                          <Badge variant="outline" className="bg-green-600 /* TODO: Use semantic token *//10 text-green-600 /* TODO: Use semantic token */">
+                          <Badge
+                            variant="outline"
+                            className="bg-green-600 /* TODO: Use semantic token *//10 text-green-600 /* TODO: Use semantic token */"
+                          >
                             +{activity.value}
                           </Badge>
                         </motion.div>

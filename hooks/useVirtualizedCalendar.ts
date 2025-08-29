@@ -20,7 +20,7 @@ import { usePerformanceMonitor } from '@/hooks/use-performance-monitor';
 import { useSoundEffects } from '@/lib/sound-service';
 
 // ==========================================
-// Types & Interfaces  
+// Types & Interfaces
 // ==========================================
 
 interface VirtualCalendarConfig {
@@ -69,21 +69,21 @@ export interface UseVirtualizedCalendarReturn {
   // Virtualization controls
   eventVirtualizer: ReturnType<typeof useVirtualizer>;
   monthVirtualizer: ReturnType<typeof useVirtualizer>;
-  
+
   // Data organization
   virtualEvents: VirtualEventData[];
   eventsByMonth: Map<number, Event[]>;
-  
+
   // Performance metrics
   metrics: VirtualizationMetrics;
   isScrolling: boolean;
-  
+
   // Utility functions
   getVisibleEvents: () => VirtualEventData[];
   scrollToEvent: (eventId: string) => void;
   scrollToMonth: (monthIndex: number) => void;
   optimizePerformance: () => void;
-  
+
   // Event handlers
   handleScroll: () => void;
   handleEventResize: (eventId: string, newSize: number) => void;
@@ -114,22 +114,25 @@ export function useVirtualizedCalendar({
   onPerformanceAlert,
 }: UseVirtualizedCalendarProps): UseVirtualizedCalendarReturn {
   // Configuration with defaults
-  const virtualConfig = useMemo(() => ({
-    ...DEFAULT_CONFIG,
-    ...config,
-  }), [config]);
+  const virtualConfig = useMemo(
+    () => ({
+      ...DEFAULT_CONFIG,
+      ...config,
+    }),
+    [config]
+  );
 
   // State management
   const [isScrolling, setIsScrolling] = useState(false);
   const [lastScrollTime, setLastScrollTime] = useState(0);
-  
+
   // Performance monitoring
   const performanceMonitor = usePerformanceMonitor({
     targetFPS: virtualConfig.fpsTarget,
     memoryThreshold: virtualConfig.memoryThreshold,
     trackVirtualization: true,
   });
-  
+
   const { playSound } = useSoundEffects();
 
   // ==========================================
@@ -139,14 +142,14 @@ export function useVirtualizedCalendar({
   // Organize events by month for efficient virtualization
   const eventsByMonth = useMemo(() => {
     const monthsMap = new Map<number, Event[]>();
-    
+
     // Initialize all 12 months (preserving foundation)
     for (let i = 0; i < 12; i++) {
       monthsMap.set(i, []);
     }
-    
+
     // Group events by month with performance optimization
-    events.forEach(event => {
+    events.forEach((event) => {
       const eventDate = new Date(event.startDate);
       if (eventDate.getFullYear() === year) {
         const monthIndex = eventDate.getMonth();
@@ -155,25 +158,26 @@ export function useVirtualizedCalendar({
         monthsMap.set(monthIndex, monthEvents);
       }
     });
-    
+
     return monthsMap;
   }, [events, year]);
 
   // Create virtual event data structure
   const virtualEvents = useMemo(() => {
     const items: VirtualEventData[] = [];
-    
+
     eventsByMonth.forEach((monthEvents, monthIndex) => {
       monthEvents.forEach((event, eventIndex) => {
         const eventDate = new Date(event.startDate);
         const dayIndex = eventDate.getDate() - 1;
-        
+
         // Calculate dynamic event width based on duration
         const duration = new Date(event.endDate).getTime() - new Date(event.startDate).getTime();
         const hours = duration / (1000 * 60 * 60);
-        const width = virtualConfig.eventSizeStrategy === 'dynamic' 
-          ? Math.max(120, Math.min(400, hours * 60))
-          : 200;
+        const width =
+          virtualConfig.eventSizeStrategy === 'dynamic'
+            ? Math.max(120, Math.min(400, hours * 60))
+            : 200;
 
         items.push({
           id: `${monthIndex}-${event.id}`,
@@ -191,7 +195,7 @@ export function useVirtualizedCalendar({
         });
       });
     });
-    
+
     return items;
   }, [eventsByMonth, virtualConfig.eventSizeStrategy]);
 
@@ -203,20 +207,23 @@ export function useVirtualizedCalendar({
   const eventVirtualizer = useVirtualizer({
     count: virtualEvents.length,
     getScrollElement: () => containerRef.current,
-    estimateSize: useCallback((index: number) => {
-      const item = virtualEvents[index];
-      if (!item) return 200;
-      
-      if (virtualConfig.eventSizeStrategy === 'fixed') {
-        return 200;
-      }
-      
-      return item.position.width;
-    }, [virtualEvents, virtualConfig.eventSizeStrategy]),
+    estimateSize: useCallback(
+      (index: number) => {
+        const item = virtualEvents[index];
+        if (!item) return 200;
+
+        if (virtualConfig.eventSizeStrategy === 'fixed') {
+          return 200;
+        }
+
+        return item.position.width;
+      },
+      [virtualEvents, virtualConfig.eventSizeStrategy]
+    ),
     horizontal: true,
     overscan: virtualConfig.overscanCount,
-    measureElement: 
-      typeof ResizeObserver !== 'undefined' 
+    measureElement:
+      typeof ResizeObserver !== 'undefined'
         ? (el) => el?.getBoundingClientRect().width ?? 200
         : undefined,
   });
@@ -239,7 +246,7 @@ export function useVirtualizedCalendar({
     const visibleItems = eventVirtualizer.getVirtualItems();
     const totalEvents = virtualEvents.length;
     const renderedEvents = visibleItems.length;
-    
+
     return {
       totalEvents,
       renderedEvents,
@@ -253,11 +260,13 @@ export function useVirtualizedCalendar({
 
   // Performance alerting
   useEffect(() => {
-    if (metrics.currentFPS < virtualConfig.fpsTarget * 0.8) { // 80% of target
+    if (metrics.currentFPS < virtualConfig.fpsTarget * 0.8) {
+      // 80% of target
       onPerformanceAlert?.('fps', metrics.currentFPS);
     }
-    
-    if (metrics.memoryUsage > virtualConfig.memoryThreshold * 0.9) { // 90% of threshold
+
+    if (metrics.memoryUsage > virtualConfig.memoryThreshold * 0.9) {
+      // 90% of threshold
       onPerformanceAlert?.('memory', metrics.memoryUsage);
     }
   }, [metrics, virtualConfig, onPerformanceAlert]);
@@ -268,16 +277,16 @@ export function useVirtualizedCalendar({
 
   const handleScroll = useCallback(() => {
     const now = performance.now();
-    
+
     if (!isScrolling) {
       setIsScrolling(true);
       performanceMonitor.startMeasurement('scroll');
       setLastScrollTime(now);
     }
-    
+
     // Debounced scroll end detection
     const scrollEndDelay = virtualConfig.performanceMode === 'enterprise' ? 100 : 150;
-    
+
     setTimeout(() => {
       if (now - lastScrollTime >= scrollEndDelay - 10) {
         setIsScrolling(false);
@@ -292,33 +301,37 @@ export function useVirtualizedCalendar({
 
   const getVisibleEvents = useCallback(() => {
     const visibleItems = eventVirtualizer.getVirtualItems();
-    return visibleItems
-      .map(item => virtualEvents[item.index])
-      .filter(Boolean);
+    return visibleItems.map((item) => virtualEvents[item.index]).filter(Boolean);
   }, [eventVirtualizer, virtualEvents]);
 
-  const scrollToEvent = useCallback((eventId: string) => {
-    const eventIndex = virtualEvents.findIndex(item => item.event.id === eventId);
-    if (eventIndex >= 0) {
-      eventVirtualizer.scrollToIndex(eventIndex, {
-        align: 'center',
-        behavior: 'smooth',
-      });
-      
-      playSound?.('notification');
-    }
-  }, [virtualEvents, eventVirtualizer, playSound]);
+  const scrollToEvent = useCallback(
+    (eventId: string) => {
+      const eventIndex = virtualEvents.findIndex((item) => item.event.id === eventId);
+      if (eventIndex >= 0) {
+        eventVirtualizer.scrollToIndex(eventIndex, {
+          align: 'center',
+          behavior: 'smooth',
+        });
 
-  const scrollToMonth = useCallback((monthIndex: number) => {
-    if (monthIndex >= 0 && monthIndex < 12) {
-      monthVirtualizer.scrollToIndex(monthIndex, {
-        align: 'start',
-        behavior: 'smooth',
-      });
-      
-      playSound?.('notification');
-    }
-  }, [monthVirtualizer, playSound]);
+        playSound?.('notification');
+      }
+    },
+    [virtualEvents, eventVirtualizer, playSound]
+  );
+
+  const scrollToMonth = useCallback(
+    (monthIndex: number) => {
+      if (monthIndex >= 0 && monthIndex < 12) {
+        monthVirtualizer.scrollToIndex(monthIndex, {
+          align: 'start',
+          behavior: 'smooth',
+        });
+
+        playSound?.('notification');
+      }
+    },
+    [monthVirtualizer, playSound]
+  );
 
   const optimizePerformance = useCallback(() => {
     // Trigger performance optimization
@@ -327,20 +340,23 @@ export function useVirtualizedCalendar({
       if ('gc' in window) {
         (window as any).gc();
       }
-      
+
       // Reduce overscan temporarily
       console.log('🧹 Performance optimization triggered');
     }
   }, [metrics.memoryUsage, virtualConfig.memoryThreshold]);
 
-  const handleEventResize = useCallback((eventId: string, newSize: number) => {
-    // Handle dynamic event resizing
-    const eventIndex = virtualEvents.findIndex(item => item.event.id === eventId);
-    if (eventIndex >= 0) {
-      // Update virtual item size
-      eventVirtualizer.resizeItem(eventIndex, newSize);
-    }
-  }, [virtualEvents, eventVirtualizer]);
+  const handleEventResize = useCallback(
+    (eventId: string, newSize: number) => {
+      // Handle dynamic event resizing
+      const eventIndex = virtualEvents.findIndex((item) => item.event.id === eventId);
+      if (eventIndex >= 0) {
+        // Update virtual item size
+        eventVirtualizer.resizeItem(eventIndex, newSize);
+      }
+    },
+    [virtualEvents, eventVirtualizer]
+  );
 
   // ==========================================
   // Development Logging
@@ -366,21 +382,21 @@ export function useVirtualizedCalendar({
     // Virtualization controls
     eventVirtualizer,
     monthVirtualizer,
-    
+
     // Data organization
     virtualEvents,
     eventsByMonth,
-    
+
     // Performance metrics
     metrics,
     isScrolling,
-    
+
     // Utility functions
     getVisibleEvents,
     scrollToEvent,
     scrollToMonth,
     optimizePerformance,
-    
+
     // Event handlers
     handleScroll,
     handleEventResize,

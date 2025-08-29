@@ -5,9 +5,9 @@ import { type NextRequest, NextResponse } from 'next/server';
 // Microsoft OAuth configuration
 const msalConfig = {
   auth: {
-    clientId: process.env.MICROSOFT_CLIENT_ID!,
+    clientId: process.env.MICROSOFT_CLIENT_ID || '',
     authority: `https://login.microsoftonline.com/${process.env.MICROSOFT_TENANT_ID || 'common'}`,
-    clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
+    clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
   },
 };
 

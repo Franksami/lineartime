@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { LinearCalendarHorizontal } from './LinearCalendarHorizontal';
+// DEPRECATED: Command Workspace migration - use WeekView or YearLensView instead
 import TouchGestureHandler, {
   type GestureEvent,
   type TouchGestureHandlerRef,
@@ -71,7 +71,7 @@ const ANIMATION_PRESETS = {
 /**
  * MotionEnhancedCalendarWrapper
  *
- * Wraps LinearCalendarHorizontal with advanced touch gesture capabilities:
+ * DEPRECATED: Command Workspace migration - use WeekView with ViewScaffold instead
  * - Multi-touch gesture recognition
  * - Smooth motion animations
  * - Haptic feedback integration
@@ -519,18 +519,16 @@ export function MotionEnhancedCalendarWrapper({
           transformOrigin: 'center center',
         }}
       >
-        <LinearCalendarHorizontal
-          year={year}
-          events={events}
-          className="w-full h-full"
-          onDateSelect={onDateSelect}
-          onEventClick={onEventClick}
-          onEventUpdate={onEventUpdate}
-          onEventCreate={onEventCreate}
-          onEventDelete={onEventDelete}
-          enableInfiniteCanvas={enableInfiniteCanvas}
-          dayContent={dayContent}
-        />
+        <div className="w-full h-full flex items-center justify-center bg-muted/50 rounded-lg">
+          <div className="text-center space-y-2">
+            <h3 className="text-lg font-medium text-muted-foreground">
+              Command Workspace Migration
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              LinearCalendarHorizontal deprecated. Use views/week/WeekView.tsx or views/year-lens/YearLensView.tsx
+            </p>
+          </div>
+        </div>
       </motion.div>
 
       {/* Gesture feedback overlay */}
