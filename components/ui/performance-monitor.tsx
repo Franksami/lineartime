@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 
 interface PerformanceMetrics {
   fps: number;
@@ -16,16 +16,16 @@ interface PerformanceMonitorProps {
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 }
 
-export function PerformanceMonitor({ 
-  eventCount, 
+export function PerformanceMonitor({
+  eventCount,
   className,
-  position = 'bottom-right' 
+  position = 'bottom-right',
 }: PerformanceMonitorProps) {
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     fps: 0,
     renderTime: 0,
     memoryUsed: 0,
-    eventCount: 0
+    eventCount: 0,
   });
   const [isVisible, setIsVisible] = useState(true);
 
@@ -37,27 +37,27 @@ export function PerformanceMonitor({
     const measureFPS = () => {
       frameCount++;
       const currentTime = performance.now();
-      
+
       if (currentTime >= lastTime + 1000) {
-        const fps = Math.round(frameCount * 1000 / (currentTime - lastTime));
-        
+        const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+
         // Measure memory if available
         let memoryUsed = 0;
         if ('memory' in performance) {
           memoryUsed = Math.round((performance as any).memory.usedJSHeapSize / 1048576);
         }
-        
-        setMetrics(prev => ({
+
+        setMetrics((prev) => ({
           ...prev,
           fps,
           memoryUsed,
-          eventCount
+          eventCount,
         }));
-        
+
         frameCount = 0;
         lastTime = currentTime;
       }
-      
+
       animationId = requestAnimationFrame(measureFPS);
     };
 
@@ -73,12 +73,12 @@ export function PerformanceMonitor({
   // Track render time
   useEffect(() => {
     const startTime = performance.now();
-    
+
     requestAnimationFrame(() => {
       const endTime = performance.now();
-      setMetrics(prev => ({
+      setMetrics((prev) => ({
         ...prev,
-        renderTime: Math.round(endTime - startTime)
+        renderTime: Math.round(endTime - startTime),
       }));
     });
   }, [eventCount]);
@@ -89,31 +89,49 @@ export function PerformanceMonitor({
     'top-left': 'top-4 left-4',
     'top-right': 'top-4 right-4',
     'bottom-left': 'bottom-4 left-4',
-    'bottom-right': 'bottom-4 right-4'
+    'bottom-right': 'bottom-4 right-4',
   };
 
   const getMetricColor = (metric: string, value: number) => {
     switch (metric) {
       case 'fps':
-        return value >= 60 ? 'text-green-500' : value >= 30 ? 'text-yellow-500' : 'text-red-500';
+        return value >= 60
+          ? 'text-primary'
+          : value >= 30
+            ? 'text-muted-foreground'
+            : 'text-destructive';
       case 'memory':
-        return value < 100 ? 'text-green-500' : value < 200 ? 'text-yellow-500' : 'text-red-500';
+        return value < 100
+          ? 'text-primary'
+          : value < 200
+            ? 'text-muted-foreground'
+            : 'text-destructive';
       case 'renderTime':
-        return value < 16 ? 'text-green-500' : value < 50 ? 'text-yellow-500' : 'text-red-500';
+        return value < 16
+          ? 'text-primary'
+          : value < 50
+            ? 'text-muted-foreground'
+            : 'text-destructive';
       case 'events':
-        return value < 1000 ? 'text-green-500' : value < 5000 ? 'text-yellow-500' : 'text-red-500';
+        return value < 1000
+          ? 'text-primary'
+          : value < 5000
+            ? 'text-muted-foreground'
+            : 'text-destructive';
       default:
         return 'text-foreground';
     }
   };
 
   return (
-    <div className={cn(
-      "fixed z-50 bg-background/90 backdrop-blur-sm border rounded-lg p-3 shadow-lg",
-      "font-mono text-xs space-y-1 min-w-[180px]",
-      positionClasses[position],
-      className
-    )}>
+    <div
+      className={cn(
+        'fixed z-50 bg-card border border-border rounded-lg p-3 shadow-sm',
+        'font-mono text-xs space-y-1 min-w-[180px]',
+        positionClasses[position],
+        className
+      )}
+    >
       <div className="flex justify-between items-center mb-2">
         <span className="font-semibold text-foreground">Performance</span>
         <button
@@ -124,22 +142,20 @@ export function PerformanceMonitor({
           ×
         </button>
       </div>
-      
+
       <div className="space-y-1">
         <div className="flex justify-between">
           <span>FPS:</span>
-          <span className={getMetricColor('fps', metrics.fps)}>
-            {metrics.fps}
-          </span>
+          <span className={getMetricColor('fps', metrics.fps)}>{metrics.fps}</span>
         </div>
-        
+
         <div className="flex justify-between">
           <span>Render:</span>
           <span className={getMetricColor('renderTime', metrics.renderTime)}>
             {metrics.renderTime}ms
           </span>
         </div>
-        
+
         {metrics.memoryUsed > 0 && (
           <div className="flex justify-between">
             <span>Memory:</span>
@@ -148,15 +164,13 @@ export function PerformanceMonitor({
             </span>
           </div>
         )}
-        
+
         <div className="flex justify-between">
           <span>Events:</span>
-          <span className={getMetricColor('events', metrics.eventCount)}>
-            {metrics.eventCount}
-          </span>
+          <span className={getMetricColor('events', metrics.eventCount)}>{metrics.eventCount}</span>
         </div>
       </div>
-      
+
       <div className="mt-2 pt-2 border-t border-border text-[10px] text-muted-foreground">
         <div>Target: 60fps / &lt;16ms</div>
         <div>Memory: &lt;100MB</div>

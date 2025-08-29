@@ -3,8 +3,8 @@
  * Includes caching, indexing strategies, and query optimization
  */
 
-import { db } from './schema';
 import { CacheOperations, PerformanceMonitor } from './operations';
+import { db } from './schema';
 
 /**
  * Query Optimizer
@@ -24,11 +24,11 @@ export class QueryOptimizer {
       ttl?: number;
     } = {}
   ): Promise<T> {
-    const { cache = true, ttl = this.CACHE_TTL } = options;
+    const { cache = true, ttl = QueryOptimizer.CACHE_TTL } = options;
 
     // Check memory cache first
     if (cache) {
-      const cached = this.queryCache.get(queryKey);
+      const cached = QueryOptimizer.queryCache.get(queryKey);
       if (cached && Date.now() - cached.timestamp < ttl) {
         return cached.data;
       }
@@ -38,7 +38,7 @@ export class QueryOptimizer {
     const dbCached = await CacheOperations.get(queryKey);
     if (dbCached) {
       // Update memory cache
-      this.queryCache.set(queryKey, { data: dbCached, timestamp: Date.now() });
+      QueryOptimizer.queryCache.set(queryKey, { data: dbCached, timestamp: Date.now() });
       return dbCached;
     }
 
@@ -49,7 +49,7 @@ export class QueryOptimizer {
 
     // Cache results
     if (cache) {
-      this.queryCache.set(queryKey, { data: result, timestamp: Date.now() });
+      QueryOptimizer.queryCache.set(queryKey, { data: result, timestamp: Date.now() });
       await CacheOperations.set(queryKey, result, ttl);
     }
 
@@ -67,11 +67,9 @@ export class QueryOptimizer {
   /**
    * Batch query optimization
    */
-  static async batchQuery<T>(
-    queries: Array<() => Promise<T>>
-  ): Promise<T[]> {
+  static async batchQuery<T>(queries: Array<() => Promise<T>>): Promise<T[]> {
     const start = performance.now();
-    
+
     // Execute queries in parallel
     const results = await Promise.all(
       queries.map(async (query, index) => {
@@ -93,7 +91,7 @@ export class QueryOptimizer {
       recordCount: queries.length,
     });
 
-    return results.filter(r => r !== null) as T[];
+    return results.filter((r) => r !== null) as T[];
   }
 
   /**
@@ -101,13 +99,13 @@ export class QueryOptimizer {
    */
   static clearCache(pattern?: string): void {
     if (pattern) {
-      for (const key of this.queryCache.keys()) {
+      for (const key of QueryOptimizer.queryCache.keys()) {
         if (key.includes(pattern)) {
-          this.queryCache.delete(key);
+          QueryOptimizer.queryCache.delete(key);
         }
       }
     } else {
-      this.queryCache.clear();
+      QueryOptimizer.queryCache.clear();
     }
   }
 }
@@ -130,12 +128,12 @@ export class IndexManager {
 
     // Analyze recent queries
     const recentMetrics = await PerformanceMonitor.getMetrics(undefined, 1000);
-    
+
     // Group by operation type
     const operationCounts = new Map<string, number>();
     const slowOperations = new Map<string, number[]>();
 
-    recentMetrics.forEach(metric => {
+    recentMetrics.forEach((metric) => {
       const count = operationCounts.get(metric.operation) || 0;
       operationCounts.set(metric.operation, count + 1);
 
@@ -150,7 +148,9 @@ export class IndexManager {
     slowOperations.forEach((durations, operation) => {
       const avgDuration = durations.reduce((a, b) => a + b, 0) / durations.length;
       if (avgDuration > 200) {
-        suggestions.push(`Consider adding index for operation: ${operation} (avg: ${avgDuration.toFixed(2)}ms)`);
+        suggestions.push(
+          `Consider adding index for operation: ${operation} (avg: ${avgDuration.toFixed(2)}ms)`
+        );
       }
     });
 
@@ -171,11 +171,11 @@ export class IndexManager {
    */
   static async rebuildIndexes(tableName: string): Promise<void> {
     console.log(`Rebuilding indexes for ${tableName}...`);
-    
+
     // This would trigger Dexie's internal index rebuild
     // In practice, this happens automatically when schema changes
     await db.open();
-    
+
     console.log(`Indexes rebuilt for ${tableName}`);
   }
 }
@@ -203,12 +203,13 @@ export class MemoryManager {
     ]);
 
     // Rough estimation: 1KB per event, 0.5KB per category, 0.5KB per calendar
-    this.memoryUsage = (eventsCount * 1024 + categoriesCount * 512 + calendarsCount * 512) / (1024 * 1024);
+    MemoryManager.memoryUsage =
+      (eventsCount * 1024 + categoriesCount * 512 + calendarsCount * 512) / (1024 * 1024);
 
     return {
-      usage: this.memoryUsage,
-      limit: this.MAX_MEMORY_MB,
-      percentage: (this.memoryUsage / this.MAX_MEMORY_MB) * 100,
+      usage: MemoryManager.memoryUsage,
+      limit: MemoryManager.MAX_MEMORY_MB,
+      percentage: (MemoryManager.memoryUsage / MemoryManager.MAX_MEMORY_MB) * 100,
     };
   }
 
@@ -216,14 +217,11 @@ export class MemoryManager {
    * Free up memory by clearing old cache entries
    */
   static async freeMemory(): Promise<number> {
-    const before = this.memoryUsage;
+    const before = MemoryManager.memoryUsage;
 
     // Clear old cache entries
-    const cutoff = Date.now() - (60 * 60 * 1000); // 1 hour old
-    await db.cache
-      .where('createdAt')
-      .below(cutoff)
-      .delete();
+    const cutoff = Date.now() - 60 * 60 * 1000; // 1 hour old
+    await db.cache.where('createdAt').below(cutoff).delete();
 
     // Clear old metrics
     await PerformanceMonitor.clearOld(1);
@@ -231,7 +229,7 @@ export class MemoryManager {
     // Clear memory cache
     QueryOptimizer.clearCache();
 
-    const after = (await this.checkMemoryUsage()).usage;
+    const after = (await MemoryManager.checkMemoryUsage()).usage;
     return before - after;
   }
 }
@@ -248,15 +246,15 @@ export class ConnectionManager {
    */
   static initialize(): void {
     if (typeof window === 'undefined') return;
-    
+
     window.addEventListener('online', () => {
-      this.isOnline = true;
-      this.notifyListeners(true);
+      ConnectionManager.isOnline = true;
+      ConnectionManager.notifyListeners(true);
     });
 
     window.addEventListener('offline', () => {
-      this.isOnline = false;
-      this.notifyListeners(false);
+      ConnectionManager.isOnline = false;
+      ConnectionManager.notifyListeners(false);
     });
   }
 
@@ -264,22 +262,22 @@ export class ConnectionManager {
    * Get connection status
    */
   static getStatus(): boolean {
-    return this.isOnline;
+    return ConnectionManager.isOnline;
   }
 
   /**
    * Subscribe to connection changes
    */
   static onStatusChange(callback: (online: boolean) => void): () => void {
-    this.listeners.add(callback);
-    return () => this.listeners.delete(callback);
+    ConnectionManager.listeners.add(callback);
+    return () => ConnectionManager.listeners.delete(callback);
   }
 
   /**
    * Notify listeners
    */
   private static notifyListeners(online: boolean): void {
-    this.listeners.forEach(callback => callback(online));
+    ConnectionManager.listeners.forEach((callback) => callback(online));
   }
 }
 
@@ -312,11 +310,13 @@ export class PerformanceTuner {
     // Check query performance
     const avgQueryTime = await PerformanceMonitor.getAverageTime('query');
     if (avgQueryTime > 100) {
-      optimizations.push(`Consider enabling query caching (avg time: ${avgQueryTime.toFixed(2)}ms)`);
+      optimizations.push(
+        `Consider enabling query caching (avg time: ${avgQueryTime.toFixed(2)}ms)`
+      );
     }
 
     // Clear old data
-    const oldDataCleared = await this.clearOldData();
+    const oldDataCleared = await PerformanceTuner.clearOldData();
     if (oldDataCleared > 0) {
       optimizations.push(`Cleared ${oldDataCleared} old records`);
     }
@@ -336,24 +336,24 @@ export class PerformanceTuner {
     // Clear old sync queue items
     const oldSyncItems = await db.syncQueue
       .where('createdAt')
-      .below(Date.now() - (7 * 24 * 60 * 60 * 1000)) // 7 days old
-      .and(item => item.attempts >= 3)
+      .below(Date.now() - 7 * 24 * 60 * 60 * 1000) // 7 days old
+      .and((item) => item.attempts >= 3)
       .toArray();
 
     if (oldSyncItems.length > 0) {
-      await db.syncQueue.bulkDelete(oldSyncItems.map(i => i.id!));
+      await db.syncQueue.bulkDelete(oldSyncItems.map((i) => i.id!));
       cleared += oldSyncItems.length;
     }
 
     // Clear old soft-deleted events
     const oldDeletedEvents = await db.events
       .where('updatedAt')
-      .below(Date.now() - (30 * 24 * 60 * 60 * 1000)) // 30 days old
-      .and(event => event.isDeleted === true)
+      .below(Date.now() - 30 * 24 * 60 * 60 * 1000) // 30 days old
+      .and((event) => event.isDeleted === true)
       .toArray();
 
     if (oldDeletedEvents.length > 0) {
-      await db.events.bulkDelete(oldDeletedEvents.map(e => e.id!));
+      await db.events.bulkDelete(oldDeletedEvents.map((e) => e.id!));
       cleared += oldDeletedEvents.length;
     }
 
@@ -366,8 +366,8 @@ export class PerformanceTuner {
   static async optimizeUserQueries(userId: string): Promise<void> {
     // Pre-cache common queries for the user
     const now = Date.now();
-    const weekAgo = now - (7 * 24 * 60 * 60 * 1000);
-    const monthAhead = now + (30 * 24 * 60 * 60 * 1000);
+    const weekAgo = now - 7 * 24 * 60 * 60 * 1000;
+    const monthAhead = now + 30 * 24 * 60 * 60 * 1000;
 
     // Pre-fetch and cache upcoming events
     await QueryOptimizer.optimizedQuery(
@@ -397,10 +397,7 @@ export class PerformanceTuner {
     await QueryOptimizer.optimizedQuery(
       `categories_${userId}`,
       async () => {
-        return await db.categories
-          .where('userId')
-          .equals(userId)
-          .toArray();
+        return await db.categories.where('userId').equals(userId).toArray();
       },
       { ttl: 300000 } // Cache for 5 minutes
     );
@@ -433,7 +430,9 @@ export class DatabaseOptimizer {
 
     // Check memory
     const memory = await MemoryManager.checkMemoryUsage();
-    improvements.push(`Memory usage: ${memory.usage.toFixed(2)}MB / ${memory.limit}MB (${memory.percentage.toFixed(1)}%)`);
+    improvements.push(
+      `Memory usage: ${memory.usage.toFixed(2)}MB / ${memory.limit}MB (${memory.percentage.toFixed(1)}%)`
+    );
 
     // Clear query cache periodically
     QueryOptimizer.clearCache();
@@ -457,16 +456,19 @@ export class DatabaseOptimizer {
    */
   static scheduleOptimization(intervalHours = 24): void {
     // Run initial optimization
-    this.optimize().then(result => {
+    DatabaseOptimizer.optimize().then((result) => {
       console.log('Database optimization completed:', result);
     });
 
     // Schedule periodic optimization
-    setInterval(() => {
-      this.optimize().then(result => {
-        console.log('Periodic database optimization:', result);
-      });
-    }, intervalHours * 60 * 60 * 1000);
+    setInterval(
+      () => {
+        DatabaseOptimizer.optimize().then((result) => {
+          console.log('Periodic database optimization:', result);
+        });
+      },
+      intervalHours * 60 * 60 * 1000
+    );
   }
 }
 
@@ -475,4 +477,5 @@ ConnectionManager.initialize();
 
 // Export convenience function for optimization
 export const optimizeDatabase = () => DatabaseOptimizer.optimize();
-export const scheduleOptimization = (hours?: number) => DatabaseOptimizer.scheduleOptimization(hours);
+export const scheduleOptimization = (hours?: number) =>
+  DatabaseOptimizer.scheduleOptimization(hours);

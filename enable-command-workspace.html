@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enable Command Workspace</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f23;
+            color: #ffffff;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #4CAF50; }
+        .error { background: #f44336; }
+        .info { background: #2196F3; }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        button:hover { background: #45a049; }
+        button:disabled { background: #666; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Enable Command Workspace Features</h1>
+    <p>This tool will enable the Command Workspace MVP features for testing.</p>
+
+    <div id="status"></div>
+
+    <button id="enableShellBtn" onclick="enableShellTesting()">Enable Shell Testing</button>
+    <button id="enablePhase3Btn" onclick="enablePhase3Views()">Enable Phase 3 Views</button>
+    <button id="enableAllBtn" onclick="enableAllFeatures()">Enable All Features</button>
+    <button id="checkStatusBtn" onclick="checkFeatureStatus()">Check Status</button>
+
+    <script>
+        function setFlag(flag, enabled) {
+            localStorage.setItem(`flag_${flag}`, enabled.toString());
+            window.dispatchEvent(new CustomEvent('flag-update', {
+                detail: { flag, enabled }
+            }));
+            return true;
+        }
+
+        function enableShellTesting() {
+            try {
+                setFlag('shell.commandWorkspace', true);
+                setFlag('shell.threePaneLayout', true);
+                setFlag('shell.sidebarEnabled', true);
+                updateStatus('✅ Shell testing features enabled successfully!', 'success');
+            } catch (error) {
+                updateStatus('❌ Error enabling shell testing: ' + error.message, 'error');
+            }
+        }
+
+        function enablePhase3Views() {
+            try {
+                setFlag('views.week', true);
+                setFlag('views.planner', true);
+                setFlag('views.notes', true);
+                setFlag('views.mailbox', true);
+                setFlag('commands.paletteEnabled', true);
+                setFlag('commands.fuzzySearch', true);
+                setFlag('commands.keyboardShortcuts', true);
+                updateStatus('✅ Phase 3 views and commands enabled successfully!', 'success');
+            } catch (error) {
+                updateStatus('❌ Error enabling Phase 3 views: ' + error.message, 'error');
+            }
+        }
+
+        function enableAllFeatures() {
+            try {
+                enableShellTesting();
+                enablePhase3Views();
+                setFlag('omnibox.enabled', true);
+                setFlag('dock.aiAssistant', true);
+                updateStatus('✅ All Command Workspace features enabled!', 'success');
+            } catch (error) {
+                updateStatus('❌ Error enabling all features: ' + error.message, 'error');
+            }
+        }
+
+        function checkFeatureStatus() {
+            const flags = [
+                'shell.commandWorkspace',
+                'shell.threePaneLayout',
+                'shell.sidebarEnabled',
+                'views.week',
+                'views.planner',
+                'views.notes',
+                'views.mailbox',
+                'commands.paletteEnabled',
+                'commands.fuzzySearch',
+                'commands.keyboardShortcuts',
+                'omnibox.enabled',
+                'dock.aiAssistant'
+            ];
+
+            let statusHtml = '<h3>Feature Flag Status:</h3><ul>';
+            flags.forEach(flag => {
+                const enabled = localStorage.getItem(`flag_${flag}`) === 'true';
+                statusHtml += `<li>${flag}: ${enabled ? '✅ ENABLED' : '❌ DISABLED'}</li>`;
+            });
+            statusHtml += '</ul>';
+
+            updateStatus(statusHtml, 'info');
+        }
+
+        function updateStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        // Auto-check status on load
+        checkFeatureStatus();
+    </script>
+</body>
+</html>

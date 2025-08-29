@@ -3,8 +3,19 @@
  * Handles data migration from LocalStorage and version upgrades
  */
 
-import { db, StoredEvent, StoredCategory, StoredCalendar, StoredPreferences } from './schema';
-import { EventOperations, CategoryOperations, CalendarOperations, PreferencesOperations } from './operations';
+import {
+  CalendarOperations,
+  CategoryOperations,
+  EventOperations,
+  PreferencesOperations,
+} from './operations';
+import {
+  type StoredCalendar,
+  type StoredCategory,
+  type StoredEvent,
+  type StoredPreferences,
+  db,
+} from './schema';
 
 /**
  * Migration from LocalStorage to IndexedDB
@@ -15,9 +26,9 @@ export class LocalStorageMigration {
    */
   static async isNeeded(): Promise<boolean> {
     // Check if there's data in localStorage but not in IndexedDB
-    const hasLocalStorageData = this.hasLocalStorageData();
-    const hasIndexedDBData = await this.hasIndexedDBData();
-    
+    const hasLocalStorageData = LocalStorageMigration.hasLocalStorageData();
+    const hasIndexedDBData = await LocalStorageMigration.hasIndexedDBData();
+
     return hasLocalStorageData && !hasIndexedDBData;
   }
 
@@ -27,11 +38,12 @@ export class LocalStorageMigration {
   static hasLocalStorageData(): boolean {
     try {
       const keys = Object.keys(localStorage);
-      return keys.some(key => 
-        key.startsWith('events_') || 
-        key.startsWith('categories_') || 
-        key.startsWith('preferences_') ||
-        key.startsWith('calendar_')
+      return keys.some(
+        (key) =>
+          key.startsWith('events_') ||
+          key.startsWith('categories_') ||
+          key.startsWith('preferences_') ||
+          key.startsWith('calendar_')
       );
     } catch {
       return false;
@@ -67,10 +79,11 @@ export class LocalStorageMigration {
     console.log('Starting migration from LocalStorage to IndexedDB...');
 
     // Start transaction for atomic migration
-    await db.transaction('rw', 
-      db.events, 
-      db.categories, 
-      db.calendars, 
+    await db.transaction(
+      'rw',
+      db.events,
+      db.categories,
+      db.calendars,
       db.preferences,
       db.migrations,
       async () => {
@@ -173,7 +186,7 @@ export class LocalStorageMigration {
 
     // Archive localStorage data if migration was successful
     if (results.errors.length === 0) {
-      this.archiveLocalStorageData(userId);
+      LocalStorageMigration.archiveLocalStorageData(userId);
     }
 
     console.log('Migration completed:', results);
@@ -192,7 +205,7 @@ export class LocalStorageMigration {
       `preferences_${userId}`,
     ];
 
-    keys.forEach(key => {
+    keys.forEach((key) => {
       const data = localStorage.getItem(key);
       if (data) {
         // Archive with timestamp
@@ -214,9 +227,8 @@ export class LocalStorageMigration {
     if (!migrationTimestamp) return false;
 
     const keys = Object.keys(localStorage);
-    const archiveKeys = keys.filter(key => 
-      key.startsWith(`archived_${migrationTimestamp}_`) && 
-      key.includes(userId)
+    const archiveKeys = keys.filter(
+      (key) => key.startsWith(`archived_${migrationTimestamp}_`) && key.includes(userId)
     );
 
     if (archiveKeys.length === 0) return false;
@@ -242,17 +254,14 @@ export class SchemaMigration {
    */
   static async applyPendingMigrations(): Promise<void> {
     const currentVersion = db.verno;
-    const lastMigration = await db.migrations
-      .orderBy('version')
-      .reverse()
-      .first();
+    const lastMigration = await db.migrations.orderBy('version').reverse().first();
 
     const lastVersion = lastMigration?.version || 0;
 
     if (currentVersion > lastVersion) {
       // Apply migrations for versions between lastVersion and currentVersion
       for (let v = lastVersion + 1; v <= currentVersion; v++) {
-        await this.applyMigration(v);
+        await SchemaMigration.applyMigration(v);
       }
     }
   }
@@ -273,7 +282,7 @@ export class SchemaMigration {
 
         case 3:
           // Version 3: Added recurring events support
-          await this.migrateToVersion3();
+          await SchemaMigration.migrateToVersion3();
           break;
 
         default:
@@ -303,7 +312,7 @@ export class SchemaMigration {
    */
   static async migrateToVersion3(): Promise<void> {
     // Update existing events to have new fields if missing
-    await db.events.toCollection().modify(event => {
+    await db.events.toCollection().modify((event) => {
       if (event.allDay === undefined) {
         event.allDay = false;
       }
@@ -322,7 +331,7 @@ export class SchemaMigration {
     // This would require keeping backup data
     // For now, just log the intention
     console.warn(`Rollback to version ${targetVersion} requested. Manual intervention required.`);
-    
+
     // In production, you would:
     // 1. Restore from backup
     // 2. Downgrade schema
@@ -389,68 +398,62 @@ export class DataPortability {
       preferences: false,
     };
 
-    await db.transaction('rw',
-      db.events,
-      db.categories,
-      db.calendars,
-      db.preferences,
-      async () => {
-        // Clear existing data if overwrite
-        if (options.overwrite) {
-          await db.events.where('userId').equals(userId).delete();
-          await db.categories.where('userId').equals(userId).delete();
-          await db.calendars.where('userId').equals(userId).delete();
-        }
+    await db.transaction('rw', db.events, db.categories, db.calendars, db.preferences, async () => {
+      // Clear existing data if overwrite
+      if (options.overwrite) {
+        await db.events.where('userId').equals(userId).delete();
+        await db.categories.where('userId').equals(userId).delete();
+        await db.calendars.where('userId').equals(userId).delete();
+      }
 
-        // Import events
-        if (data.data?.events) {
-          for (const event of data.data.events) {
-            await EventOperations.create({
-              ...event,
-              id: undefined, // Let DB assign new ID
-              userId,
-              syncStatus: 'local',
-            });
-            results.events++;
-          }
-        }
-
-        // Import categories
-        if (data.data?.categories) {
-          for (const category of data.data.categories) {
-            await CategoryOperations.create({
-              ...category,
-              id: undefined,
-              userId,
-              syncStatus: 'local',
-            });
-            results.categories++;
-          }
-        }
-
-        // Import calendars
-        if (data.data?.calendars) {
-          for (const calendar of data.data.calendars) {
-            await CalendarOperations.create({
-              ...calendar,
-              id: undefined,
-              userId,
-              syncStatus: 'local',
-            });
-            results.calendars++;
-          }
-        }
-
-        // Import preferences
-        if (data.data?.preferences) {
-          await PreferencesOperations.save({
-            ...data.data.preferences,
+      // Import events
+      if (data.data?.events) {
+        for (const event of data.data.events) {
+          await EventOperations.create({
+            ...event,
+            id: undefined, // Let DB assign new ID
             userId,
+            syncStatus: 'local',
           });
-          results.preferences = true;
+          results.events++;
         }
       }
-    );
+
+      // Import categories
+      if (data.data?.categories) {
+        for (const category of data.data.categories) {
+          await CategoryOperations.create({
+            ...category,
+            id: undefined,
+            userId,
+            syncStatus: 'local',
+          });
+          results.categories++;
+        }
+      }
+
+      // Import calendars
+      if (data.data?.calendars) {
+        for (const calendar of data.data.calendars) {
+          await CalendarOperations.create({
+            ...calendar,
+            id: undefined,
+            userId,
+            syncStatus: 'local',
+          });
+          results.calendars++;
+        }
+      }
+
+      // Import preferences
+      if (data.data?.preferences) {
+        await PreferencesOperations.save({
+          ...data.data.preferences,
+          userId,
+        });
+        results.preferences = true;
+      }
+    });
 
     return results;
   }
@@ -459,10 +462,7 @@ export class DataPortability {
    * Export to CSV (events only)
    */
   static async exportToCSV(userId: string): Promise<string> {
-    const events = await db.events
-      .where('userId')
-      .equals(userId)
-      .toArray();
+    const events = await db.events.where('userId').equals(userId).toArray();
 
     const headers = [
       'Title',
@@ -474,7 +474,7 @@ export class DataPortability {
       'Category',
     ];
 
-    const rows = events.map(event => [
+    const rows = events.map((event) => [
       event.title,
       event.description || '',
       new Date(event.startTime).toISOString(),
@@ -486,7 +486,7 @@ export class DataPortability {
 
     const csv = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
+      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(',')),
     ].join('\n');
 
     return csv;

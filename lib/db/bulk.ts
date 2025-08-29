@@ -3,8 +3,8 @@
  * Efficient batch processing for large data sets
  */
 
-import { db, StoredEvent, StoredCategory, StoredCalendar } from './schema';
 import { SyncQueueOperations } from './operations';
+import { StoredCalendar, type StoredCategory, type StoredEvent, db } from './schema';
 
 /**
  * Bulk operation result
@@ -46,19 +46,15 @@ export class BulkEventOperations {
         .equals(events[0]?.userId || '')
         .toArray();
 
-      const existingSet = new Set(
-        existingEvents.map(e => `${e.title}_${e.startTime}`)
-      );
+      const existingSet = new Set(existingEvents.map((e) => `${e.title}_${e.startTime}`));
 
-      events = events.filter(e => 
-        !existingSet.has(`${e.title}_${e.startTime}`)
-      );
+      events = events.filter((e) => !existingSet.has(`${e.title}_${e.startTime}`));
     }
 
     // Process in batches
     for (let i = 0; i < events.length; i += batchSize) {
       const batch = events.slice(i, i + batchSize);
-      
+
       try {
         await db.transaction('rw', db.events, async () => {
           for (let j = 0; j < batch.length; j++) {
@@ -74,7 +70,7 @@ export class BulkEventOperations {
             }
           }
         });
-      } catch (error) {
+      } catch (_error) {
         // Transaction failed, all items in batch failed
         for (let j = 0; j < batch.length; j++) {
           result.failed++;
@@ -122,7 +118,7 @@ export class BulkEventOperations {
     // Process in batches
     for (let i = 0; i < updates.length; i += batchSize) {
       const batch = updates.slice(i, i + batchSize);
-      
+
       await db.transaction('rw', db.events, db.syncQueue, async () => {
         for (const update of batch) {
           try {
@@ -197,7 +193,7 @@ export class BulkEventOperations {
     // Process in batches
     for (let i = 0; i < ids.length; i += batchSize) {
       const batch = ids.slice(i, i + batchSize);
-      
+
       await db.transaction('rw', db.events, db.syncQueue, async () => {
         for (const id of batch) {
           try {
@@ -265,9 +261,9 @@ export class BulkEventOperations {
     } = {}
   ): Promise<BulkResult> {
     const { deduplicate = true, mapFields } = options;
-    
+
     // Map fields if custom mapper provided
-    const mappedEvents: Omit<StoredEvent, 'id'>[] = events.map(event => {
+    const mappedEvents: Omit<StoredEvent, 'id'>[] = events.map((event) => {
       const mapped = mapFields ? mapFields(event) : event;
       return {
         ...mapped,
@@ -279,7 +275,7 @@ export class BulkEventOperations {
       } as Omit<StoredEvent, 'id'>;
     });
 
-    return await this.bulkCreate(mappedEvents, {
+    return await BulkEventOperations.bulkCreate(mappedEvents, {
       validateDuplicates: deduplicate,
     });
   }
@@ -307,7 +303,7 @@ export class BulkCategoryOperations {
 
     for (let i = 0; i < categories.length; i += batchSize) {
       const batch = categories.slice(i, i + batchSize);
-      
+
       await db.transaction('rw', db.categories, async () => {
         for (let j = 0; j < batch.length; j++) {
           try {
@@ -347,7 +343,7 @@ export class BulkCategoryOperations {
 
     for (let i = 0; i < eventIds.length; i += batchSize) {
       const batch = eventIds.slice(i, i + batchSize);
-      
+
       await db.transaction('rw', db.events, async () => {
         for (const id of batch) {
           try {
@@ -407,7 +403,7 @@ export class BulkCalendarOperations {
 
     for (let i = 0; i < eventIds.length; i += batchSize) {
       const batch = eventIds.slice(i, i + batchSize);
-      
+
       await db.transaction('rw', db.events, async () => {
         for (const id of batch) {
           try {
@@ -439,7 +435,7 @@ export class BulkCalendarOperations {
    */
   static async bulkShareCalendars(
     calendarIds: number[],
-    shareWith: string[],
+    _shareWith: string[],
     options: { batchSize?: number } = {}
   ): Promise<BulkResult> {
     const { batchSize = 20 } = options;
@@ -453,7 +449,7 @@ export class BulkCalendarOperations {
 
     for (let i = 0; i < calendarIds.length; i += batchSize) {
       const batch = calendarIds.slice(i, i + batchSize);
-      
+
       await db.transaction('rw', db.calendars, async () => {
         for (const id of batch) {
           try {
@@ -511,14 +507,12 @@ export class BulkUtils {
     } = {}
   ): Promise<R[]> {
     const { batchSize = 100, maxParallel = 3 } = options;
-    const batches = this.chunk(items, batchSize);
+    const batches = BulkUtils.chunk(items, batchSize);
     const results: R[] = [];
 
     for (let i = 0; i < batches.length; i += maxParallel) {
       const parallelBatches = batches.slice(i, i + maxParallel);
-      const parallelResults = await Promise.all(
-        parallelBatches.map(batch => processor(batch))
-      );
+      const parallelResults = await Promise.all(parallelBatches.map((batch) => processor(batch)));
       results.push(...parallelResults);
     }
 
@@ -529,14 +523,14 @@ export class BulkUtils {
    * Optimize batch size based on performance
    */
   static async findOptimalBatchSize(
-    testSizes: number[] = [10, 50, 100, 200, 500],
+    testSizes: number[],
     testOperation: (size: number) => Promise<number>
   ): Promise<number> {
     const results: Array<{ size: number; avgTime: number }> = [];
 
     for (const size of testSizes) {
       const times: number[] = [];
-      
+
       // Run 3 tests for each size
       for (let i = 0; i < 3; i++) {
         const time = await testOperation(size);

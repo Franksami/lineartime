@@ -74,7 +74,7 @@ As a [type of user], I want [functionality] so that [benefit/goal].
 ## 🔗 **Related Information**
 
 ### **Similar Features**
-[List any similar features in LinearTime or other calendar apps]
+[List any similar features in Command Center Calendar or other calendar apps]
 
 ### **Technical References**
 [Link to relevant documentation, APIs, or technical resources]

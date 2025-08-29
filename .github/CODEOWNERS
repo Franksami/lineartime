@@ -1,0 +1,69 @@
+# LinearTime CODEOWNERS
+# Automatic review assignment for trunk-based development
+
+# Global owners (fallback for all files)
+* @lineartime/maintainers
+
+# Command Workspace Architecture (critical paths)
+/components/shell/ @lineartime/architects @lineartime/maintainers
+/components/commands/ @lineartime/architects @lineartime/maintainers
+/components/dock/ @lineartime/architects @lineartime/maintainers
+/contexts/AppShellProvider.tsx @lineartime/architects
+/contexts/CommandProvider.tsx @lineartime/architects
+/views/ @lineartime/frontend @lineartime/architects
+
+# AI Integration (specialized review)
+/lib/ai/ @lineartime/ai-team @lineartime/architects
+/lib/cv/ @lineartime/ai-team @lineartime/security
+/lib/mcp/ @lineartime/ai-team @lineartime/architects
+
+# Backend & Infrastructure (security-critical)
+/convex/ @lineartime/backend @lineartime/security
+/app/api/ @lineartime/backend @lineartime/security
+/.github/workflows/ @lineartime/devops @lineartime/maintainers
+/scripts/ @lineartime/devops @lineartime/maintainers
+
+# Testing & Quality
+/tests/ @lineartime/qa @lineartime/maintainers
+/vitest.config.ts @lineartime/qa @lineartime/maintainers
+/playwright.config.ts @lineartime/qa @lineartime/maintainers
+
+# Documentation
+/docs/ @lineartime/docs @lineartime/maintainers
+/rules/ @lineartime/architects @lineartime/maintainers
+*.md @lineartime/docs
+
+# Configuration files (sensitive)
+.env* @lineartime/security @lineartime/maintainers
+*.config.js @lineartime/devops @lineartime/maintainers
+*.config.ts @lineartime/devops @lineartime/maintainers
+package.json @lineartime/maintainers
+package-lock.json @lineartime/maintainers
+tsconfig.json @lineartime/architects @lineartime/maintainers
+
+# Security-sensitive paths
+/lib/auth/ @lineartime/security @lineartime/backend
+/lib/encryption/ @lineartime/security @lineartime/backend
+/middleware/ @lineartime/security @lineartime/backend
+
+# Design system and UI components
+/components/ui/ @lineartime/design @lineartime/frontend
+/styles/ @lineartime/design @lineartime/frontend
+/public/ @lineartime/design @lineartime/frontend
+
+# Calendar integration (legacy but critical)
+/components/calendar/LinearCalendarHorizontal.tsx @lineartime/architects @lineartime/maintainers
+/components/calendar/providers/ @lineartime/backend @lineartime/maintainers
+
+# Performance-critical paths
+/lib/performance/ @lineartime/performance @lineartime/architects
+/hooks/useVirtualization.ts @lineartime/performance
+/hooks/useIntersectionObserver.ts @lineartime/performance
+
+# Mobile-specific code
+/components/mobile/ @lineartime/mobile @lineartime/frontend
+/hooks/useTouchGestures.ts @lineartime/mobile @lineartime/frontend
+
+# Billing and payments (high security)
+/app/api/billing/ @lineartime/security @lineartime/maintainers
+/convex/billing.ts @lineartime/security @lineartime/maintainers

@@ -95,7 +95,7 @@ static initialize(): void {
 
 ### Core Components
 1. **app/page.tsx** - Full-screen layout with edge-to-edge design
-2. **LinearCalendarVertical** - Theme variables for all colors
+2. **CommandCenterCalendarVertical** - Theme variables for all colors
 3. **ViewSwitcher** - Replaced gray backgrounds with card colors
 4. **EventManagement** - Updated filters and panels
 5. **EventCard** - Category colors with alpha transparency

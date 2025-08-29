@@ -3,7 +3,7 @@
 ## 🎯 Design Philosophy - "Life is bigger than a week"
 A **horizontal timeline** calendar that reveals an entire year instantly. The revolutionary 12-month row structure allows users to identify patterns, conflicts, and opportunities across the complete year within 3 seconds.
 
-**🔒 LOCKED FOUNDATION**: This design represents the definitive LinearCalendar structure achieved August 23, 2025.
+**🔒 LOCKED FOUNDATION**: The canonical rules are defined in `docs/LINEAR_CALENDAR_FOUNDATION_SPEC.md`. This document illustrates the layout; the spec governs.
 
 ---
 
@@ -366,7 +366,7 @@ Legend:
 
 ### Complete Props Interface
 ```typescript
-interface LinearCalendarProps {
+interface CommandCenterCalendarProps {
   // Data
   year: number;
   events: CalendarEvent[];

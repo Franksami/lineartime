@@ -1,0 +1,48 @@
+{
+  "version": "1",
+  "name": "Command Center Calendar API",
+  "type": "collection",
+  "environments": [
+    {
+      "name": "local",
+      "variables": {
+        "baseUrl": "http://localhost:3000",
+        "convexUrl": "https://incredible-ibis-307.convex.cloud",
+        "authToken": "{{process.env.AUTH_TOKEN_LOCAL}}"
+      }
+    },
+    {
+      "name": "preview",
+      "variables": {
+        "baseUrl": "https://preview.lineartime.app",
+        "convexUrl": "https://incredible-ibis-307.convex.cloud",
+        "authToken": "{{process.env.AUTH_TOKEN_PREVIEW}}"
+      }
+    },
+    {
+      "name": "production",
+      "variables": {
+        "baseUrl": "https://lineartime.app",
+        "convexUrl": "https://incredible-ibis-307.convex.cloud",
+        "authToken": "{{process.env.AUTH_TOKEN_PROD}}"
+      }
+    }
+  ],
+  "preRequestScript": "",
+  "tests": "",
+  "proxy": {
+    "enabled": false,
+    "protocol": "http",
+    "hostname": "localhost",
+    "port": 8080
+  },
+  "clientCertificates": {
+    "enabled": false
+  },
+  "auth": {
+    "mode": "bearer",
+    "bearer": {
+      "token": "{{authToken}}"
+    }
+  }
+}

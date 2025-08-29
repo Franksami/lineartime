@@ -1,9 +1,10 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
-import { useQuery, useMutation } from 'convex/react';
+import { notify } from '@/components/ui/notify';
+import { useSettingsContext } from '@/contexts/SettingsContext';
 import { api } from '@/convex/_generated/api';
-import { Id } from '@/convex/_generated/dataModel';
+import type { Id } from '@/convex/_generated/dataModel';
 import type { Event, FilterState } from '@/types/calendar';
-import { toast } from 'sonner';
+import { useMutation, useQuery } from 'convex/react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 interface CalendarRange {
   from: Date;
@@ -19,12 +20,13 @@ interface SyncStatus {
 
 interface SyncedEvent extends Event {
   syncStatus?: 'synced' | 'pending' | 'conflict' | 'local';
-  providerId?: Id<"calendarProviders">;
+  providerId?: Id<'calendarProviders'>;
   providerEventId?: string;
   lastSyncedAt?: Date;
 }
 
 export function useSyncedCalendar(year: number) {
+  const { playSound } = useSettingsContext();
   const [filters, setFilters] = useState<FilterState>({
     personal: true,
     work: true,
@@ -64,8 +66,8 @@ export function useSyncedCalendar(year: number) {
   // Convert Convex events to the expected format
   const events = useMemo<SyncedEvent[]>(() => {
     if (!convexEvents) return [];
-    
-    return convexEvents.map(event => ({
+
+    return convexEvents.map((event) => ({
       id: event._id,
       title: event.title,
       startDate: new Date(event.startDate),
@@ -84,10 +86,10 @@ export function useSyncedCalendar(year: number) {
   useEffect(() => {
     if (syncQueue) {
       const isProcessing = syncQueue.processing > 0 || syncQueue.pending > 0;
-      setSyncStatus(prev => ({
+      setSyncStatus((prev) => ({
         ...prev,
         isSyncing: isProcessing,
-        lastSync: syncQueue.items?.[0]?.completedAt 
+        lastSync: syncQueue.items?.[0]?.completedAt
           ? new Date(syncQueue.items[0].completedAt)
           : prev.lastSync,
       }));
@@ -104,31 +106,37 @@ export function useSyncedCalendar(year: number) {
   }, [conflicts]);
 
   // Trigger sync for all providers
-  const triggerSync = useCallback(async (provider?: string) => {
-    try {
-      if (provider) {
-        await scheduleSync({
-          provider,
-          operation: 'incremental_sync',
-          priority: 5,
-        });
-        toast.success(`Syncing ${provider} calendar...`);
-      } else if (providers) {
-        // Sync all providers
-        for (const p of providers) {
+  const triggerSync = useCallback(
+    async (provider?: string) => {
+      try {
+        if (provider) {
           await scheduleSync({
-            provider: p.provider,
+            provider,
             operation: 'incremental_sync',
             priority: 5,
           });
+          notify.info(`Syncing ${provider} calendar...`);
+          playSound('notification');
+        } else if (providers) {
+          // Sync all providers
+          for (const p of providers) {
+            await scheduleSync({
+              provider: p.provider,
+              operation: 'incremental_sync',
+              priority: 5,
+            });
+          }
+          notify.info('Syncing all calendars...');
+          playSound('notification');
         }
-        toast.success('Syncing all calendars...');
+      } catch (error) {
+        console.error('Sync error:', error);
+        notify.error('Failed to start sync');
+        playSound('error');
       }
-    } catch (error) {
-      console.error('Sync error:', error);
-      toast.error('Failed to start sync');
-    }
-  }, [providers, scheduleSync]);
+    },
+    [providers, scheduleSync, playSound]
+  );
 
   const handleDateSelect = useCallback((date: Date) => {
     setSelectedDate(date);
@@ -144,97 +152,112 @@ export function useSyncedCalendar(year: number) {
     setShowEventModal(true);
   }, []);
 
-  const handleEventSave = useCallback(async (event: Partial<SyncedEvent>) => {
-    try {
-      if (event.id) {
-        // Update existing event
-        await updateEvent({
-          id: event.id as Id<"events">,
-          title: event.title,
-          description: event.description,
-          startDate: event.startDate?.toISOString(),
-          endDate: event.endDate?.toISOString(),
-          category: event.category,
-        });
-        toast.success('Event updated');
-        
-        // Trigger sync if event is synced
-        if (event.providerId) {
-          const provider = providers?.find(p => p._id === event.providerId);
-          if (provider) {
+  const handleEventSave = useCallback(
+    async (event: Partial<SyncedEvent>) => {
+      try {
+        if (event.id) {
+          // Update existing event
+          await updateEvent({
+            id: event.id as Id<'events'>,
+            title: event.title,
+            description: event.description,
+            startDate: event.startDate?.toISOString(),
+            endDate: event.endDate?.toISOString(),
+            category: event.category,
+          });
+          notify.success('Event updated');
+          playSound('success');
+
+          // Trigger sync if event is synced
+          if (event.providerId) {
+            const provider = providers?.find((p) => p._id === event.providerId);
+            if (provider) {
+              await scheduleSync({
+                provider: provider.provider,
+                operation: 'event_update',
+                priority: 10,
+                data: { eventId: event.id },
+              });
+            }
+          }
+        } else {
+          // Add new event
+          await createEvent({
+            title: event.title || '',
+            startDate: event.startDate?.toISOString() || new Date().toISOString(),
+            endDate: event.endDate?.toISOString() || new Date().toISOString(),
+            category: event.category || 'personal',
+            description: event.description,
+          });
+          notify.success('Event created');
+          playSound('success');
+
+          // Trigger sync for new events
+          if (providers && providers.length > 0) {
             await scheduleSync({
-              provider: provider.provider,
-              operation: 'event_update',
+              provider: providers[0].provider,
+              operation: 'event_create',
               priority: 10,
-              data: { eventId: event.id },
             });
           }
         }
-      } else {
-        // Add new event
-        await createEvent({
-          title: event.title || '',
-          startDate: event.startDate?.toISOString() || new Date().toISOString(),
-          endDate: event.endDate?.toISOString() || new Date().toISOString(),
-          category: event.category || 'personal',
-          description: event.description,
-        });
-        toast.success('Event created');
-        
-        // Trigger sync for new events
-        if (providers && providers.length > 0) {
-          await scheduleSync({
-            provider: providers[0].provider,
-            operation: 'event_create',
-            priority: 10,
-          });
-        }
+      } catch (error) {
+        console.error('Error saving event:', error);
+        notify.error('Failed to save event');
+        playSound('error');
       }
-    } catch (error) {
-      console.error('Error saving event:', error);
-      toast.error('Failed to save event');
-    }
-  }, [createEvent, updateEvent, providers, scheduleSync]);
+    },
+    [createEvent, updateEvent, providers, scheduleSync, playSound]
+  );
 
-  const handleEventDelete = useCallback(async (id: string) => {
-    try {
-      const event = events.find(e => e.id === id);
-      
-      await deleteEvent({ id: id as Id<"events"> });
-      toast.success('Event deleted');
-      
-      // Trigger sync if event was synced
-      if (event?.providerId) {
-        const provider = providers?.find(p => p._id === event.providerId);
-        if (provider) {
-          await scheduleSync({
-            provider: provider.provider,
-            operation: 'event_delete',
-            priority: 10,
-            data: { eventId: id, providerEventId: event.providerEventId },
-          });
+  const handleEventDelete = useCallback(
+    async (id: string) => {
+      try {
+        const event = events.find((e) => e.id === id);
+
+        await deleteEvent({ id: id as Id<'events'> });
+        notify.success('Event deleted');
+        playSound('success');
+
+        // Trigger sync if event was synced
+        if (event?.providerId) {
+          const provider = providers?.find((p) => p._id === event.providerId);
+          if (provider) {
+            await scheduleSync({
+              provider: provider.provider,
+              operation: 'event_delete',
+              priority: 10,
+              data: { eventId: id, providerEventId: event.providerEventId },
+            });
+          }
         }
+      } catch (error) {
+        console.error('Error deleting event:', error);
+        notify.error('Failed to delete event');
+        playSound('error');
       }
-    } catch (error) {
-      console.error('Error deleting event:', error);
-      toast.error('Failed to delete event');
-    }
-  }, [deleteEvent, events, providers, scheduleSync]);
+    },
+    [deleteEvent, events, providers, scheduleSync, playSound]
+  );
 
-  const handleFilterChange = useCallback((newFilters: FilterState | { viewOptions: { compactMode: boolean } }) => {
-    if ('viewOptions' in newFilters && newFilters.viewOptions) {
-      setViewMode(newFilters.viewOptions.compactMode ? 'compact' : 'full');
-    }
-    if ('personal' in newFilters) {
-      setFilters(newFilters as FilterState);
-    }
-  }, []);
+  const handleFilterChange = useCallback(
+    (newFilters: FilterState | { viewOptions: { compactMode: boolean } }) => {
+      if ('viewOptions' in newFilters && newFilters.viewOptions) {
+        setViewMode(newFilters.viewOptions.compactMode ? 'compact' : 'full');
+      }
+      if ('personal' in newFilters) {
+        setFilters(newFilters as FilterState);
+      }
+    },
+    []
+  );
 
   const handleConflictResolved = useCallback(() => {
     setShowConflictModal(false);
     setCurrentConflict(null);
-    toast.success('Conflict resolved');
-  }, []);
+    notify.success('Conflict resolved');
+    playSound('success');
+  }, [playSound]);
 
   const startSelection = useCallback((date: Date) => {
     setIsSelecting(true);
@@ -242,22 +265,28 @@ export function useSyncedCalendar(year: number) {
     setHoveredDate(date);
   }, []);
 
-  const updateSelection = useCallback((date: Date) => {
-    if (isSelecting && selectionStart) {
-      setHoveredDate(date);
-    }
-  }, [isSelecting, selectionStart]);
+  const updateSelection = useCallback(
+    (date: Date) => {
+      if (isSelecting && selectionStart) {
+        setHoveredDate(date);
+      }
+    },
+    [isSelecting, selectionStart]
+  );
 
-  const endSelection = useCallback((date: Date) => {
-    if (isSelecting && selectionStart) {
-      const start = selectionStart < date ? selectionStart : date;
-      const end = selectionStart < date ? date : selectionStart;
-      handleRangeSelect({ from: start, to: end });
-    }
-    setIsSelecting(false);
-    setSelectionStart(null);
-    setHoveredDate(null);
-  }, [isSelecting, selectionStart, handleRangeSelect]);
+  const endSelection = useCallback(
+    (date: Date) => {
+      if (isSelecting && selectionStart) {
+        const start = selectionStart < date ? selectionStart : date;
+        const end = selectionStart < date ? date : selectionStart;
+        handleRangeSelect({ from: start, to: end });
+      }
+      setIsSelecting(false);
+      setSelectionStart(null);
+      setHoveredDate(null);
+    },
+    [isSelecting, selectionStart, handleRangeSelect]
+  );
 
   const filteredEvents = useMemo(() => {
     return events.filter((event) => {
@@ -277,14 +306,14 @@ export function useSyncedCalendar(year: number) {
     events: filteredEvents,
     allEvents: events,
     filters,
-    
+
     // Selection state
     selectedDate,
     selectedRange,
     hoveredDate,
     isSelecting,
     selectionStart,
-    
+
     // UI state
     viewMode,
     showEventModal,
@@ -292,13 +321,13 @@ export function useSyncedCalendar(year: number) {
     currentEvent,
     showConflictModal,
     currentConflict,
-    
+
     // Sync state
     syncStatus,
     providers,
     syncQueue,
     conflicts,
-    
+
     // Actions
     handleDateSelect,
     handleRangeSelect,

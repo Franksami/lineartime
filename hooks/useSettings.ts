@@ -1,17 +1,15 @@
-'use client'
+'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { UserSettings, createDefaultSettings } from '@/lib/settings/types';
 import { settingsStorage } from '@/lib/settings/storage';
+import { type UserSettings, createDefaultSettings } from '@/lib/settings/types';
+import { useCallback, useEffect, useState } from 'react';
 
 /**
  * React hook for managing user settings
  * Provides settings state and update functions with automatic persistence
  */
 export function useSettings() {
-  const [settings, setSettings] = useState<UserSettings>(() => 
-    settingsStorage.getSettings()
-  );
+  const [settings, setSettings] = useState<UserSettings>(() => settingsStorage.getSettings());
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,18 +34,18 @@ export function useSettings() {
   }, []);
 
   // Update nested settings category
-  const updateCategory = useCallback(<K extends keyof UserSettings>(
-    category: K,
-    updates: Partial<UserSettings[K]>
-  ) => {
-    try {
-      setError(null);
-      settingsStorage.updateNestedSettings(category, updates);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update settings');
-      console.error('Settings update error:', err);
-    }
-  }, []);
+  const updateCategory = useCallback(
+    <K extends keyof UserSettings>(category: K, updates: Partial<UserSettings[K]>) => {
+      try {
+        setError(null);
+        settingsStorage.updateNestedSettings(category, updates);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to update settings');
+        console.error('Settings update error:', err);
+      }
+    },
+    []
+  );
 
   // Reset all settings to defaults
   const resetSettings = useCallback(() => {
@@ -98,7 +96,7 @@ export function useSettings() {
     return new Promise((resolve) => {
       setIsLoading(true);
       setError(null);
-      
+
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
@@ -116,47 +114,72 @@ export function useSettings() {
           setIsLoading(false);
         }
       };
-      
+
       reader.onerror = () => {
         setError('Failed to read settings file');
         setIsLoading(false);
         resolve(false);
       };
-      
+
       reader.readAsText(file);
     });
   }, []);
 
   // Toggle boolean settings
-  const toggleSetting = useCallback(<K extends keyof UserSettings>(
-    category: K,
-    key: keyof UserSettings[K]
-  ) => {
-    const currentValue = settings[category][key];
-    if (typeof currentValue === 'boolean') {
-      updateCategory(category, { [key]: !currentValue } as Partial<UserSettings[K]>);
-    }
-  }, [settings, updateCategory]);
+  const toggleSetting = useCallback(
+    <K extends keyof UserSettings>(category: K, key: keyof UserSettings[K]) => {
+      const currentValue = settings[category][key];
+      if (typeof currentValue === 'boolean') {
+        updateCategory(category, { [key]: !currentValue } as Partial<UserSettings[K]>);
+      }
+    },
+    [settings, updateCategory]
+  );
 
   // Update theme (convenience method)
-  const setTheme = useCallback((theme: UserSettings['appearance']['theme']) => {
-    updateCategory('appearance', { theme });
-  }, [updateCategory]);
+  const setTheme = useCallback(
+    (theme: UserSettings['appearance']['theme']) => {
+      updateCategory('appearance', { theme });
+    },
+    [updateCategory]
+  );
 
   // Update time format (convenience method)
-  const setTimeFormat = useCallback((format: UserSettings['time']['format']) => {
-    updateCategory('time', { format });
-  }, [updateCategory]);
+  const setTimeFormat = useCallback(
+    (format: UserSettings['time']['format']) => {
+      updateCategory('time', { format });
+    },
+    [updateCategory]
+  );
 
   // Update date format (convenience method)
-  const setDateFormat = useCallback((dateFormat: UserSettings['time']['dateFormat']) => {
-    updateCategory('time', { dateFormat });
-  }, [updateCategory]);
+  const setDateFormat = useCallback(
+    (dateFormat: UserSettings['time']['dateFormat']) => {
+      updateCategory('time', { dateFormat });
+    },
+    [updateCategory]
+  );
 
   // Update default view (convenience method)
-  const setDefaultView = useCallback((defaultView: UserSettings['calendar']['defaultView']) => {
-    updateCategory('calendar', { defaultView });
-  }, [updateCategory]);
+  const setDefaultView = useCallback(
+    (defaultView: UserSettings['calendar']['defaultView']) => {
+      updateCategory('calendar', { defaultView });
+    },
+    [updateCategory]
+  );
+
+  // Update calendar day style (convenience method)
+  const setCalendarDayStyle = useCallback(
+    (calendarDayStyle: UserSettings['calendar']['calendarDayStyle']) => {
+      updateCategory('calendar', { calendarDayStyle });
+    },
+    [updateCategory]
+  );
+
+  // Toggle days left counter (convenience method)
+  const toggleDaysLeftCounter = useCallback(() => {
+    updateCategory('calendar', { showDaysLeft: !settings.calendar.showDaysLeft });
+  }, [updateCategory, settings.calendar.showDaysLeft]);
 
   // Check if high contrast is enabled
   const isHighContrast = settings.appearance.highContrast;
@@ -190,6 +213,8 @@ export function useSettings() {
     setTimeFormat,
     setDateFormat,
     setDefaultView,
+    setCalendarDayStyle,
+    toggleDaysLeftCounter,
     isHighContrast,
     isReducedMotion,
     getEffectiveTheme,

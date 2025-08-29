@@ -1,10 +1,17 @@
 'use client';
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, RefreshCw, Home, Bug } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { AlertCircle, Bug, Home, RefreshCw } from 'lucide-react';
+import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -21,32 +28,32 @@ interface State {
 export class CalendarErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { 
-      hasError: false, 
-      error: null, 
+    this.state = {
+      hasError: false,
+      error: null,
       errorInfo: null,
-      errorCount: 0 
+      errorCount: 0,
     };
   }
 
   static getDerivedStateFromError(error: Error): State {
-    return { 
-      hasError: true, 
-      error, 
+    return {
+      hasError: true,
+      error,
       errorInfo: null,
-      errorCount: 0 
+      errorCount: 0,
     };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error to error reporting service
     console.error('Calendar Error Boundary caught an error:', error, errorInfo);
-    
+
     // Update state with error details
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       error,
       errorInfo,
-      errorCount: prevState.errorCount + 1
+      errorCount: prevState.errorCount + 1,
     }));
 
     // Report to error tracking service (e.g., Sentry)
@@ -66,7 +73,7 @@ export class CalendarErrorBoundary extends Component<Props, State> {
       url: window.location.href,
       userAgent: navigator.userAgent,
     };
-    
+
     // Send to error tracking endpoint
     fetch('/api/errors/report', {
       method: 'POST',
@@ -76,11 +83,11 @@ export class CalendarErrorBoundary extends Component<Props, State> {
   }
 
   handleReset = () => {
-    this.setState({ 
-      hasError: false, 
-      error: null, 
+    this.setState({
+      hasError: false,
+      error: null,
       errorInfo: null,
-      errorCount: 0 
+      errorCount: 0,
     });
   };
 
@@ -100,9 +107,12 @@ export class CalendarErrorBoundary extends Component<Props, State> {
       }
 
       const { error, errorInfo, errorCount } = this.state;
-      const isCalendarSyncError = error?.message?.includes('sync') || error?.message?.includes('calendar');
-      const isNetworkError = error?.message?.includes('network') || error?.message?.includes('fetch');
-      const isAuthError = error?.message?.includes('auth') || error?.message?.includes('permission');
+      const isCalendarSyncError =
+        error?.message?.includes('sync') || error?.message?.includes('calendar');
+      const isNetworkError =
+        error?.message?.includes('network') || error?.message?.includes('fetch');
+      const isAuthError =
+        error?.message?.includes('auth') || error?.message?.includes('permission');
 
       return (
         <div className="min-h-[400px] flex items-center justify-center p-4">
@@ -116,11 +126,13 @@ export class CalendarErrorBoundary extends Component<Props, State> {
                 {isCalendarSyncError && 'There was an issue with calendar synchronization.'}
                 {isNetworkError && 'Unable to connect to the server. Please check your connection.'}
                 {isAuthError && 'There was an authentication issue. Please try signing in again.'}
-                {!isCalendarSyncError && !isNetworkError && !isAuthError && 
+                {!isCalendarSyncError &&
+                  !isNetworkError &&
+                  !isAuthError &&
                   'An unexpected error occurred in the calendar component.'}
               </CardDescription>
             </CardHeader>
-            
+
             <CardContent className="space-y-4">
               {/* Error Details (Development Only) */}
               {process.env.NODE_ENV === 'development' && error && (
@@ -129,7 +141,9 @@ export class CalendarErrorBoundary extends Component<Props, State> {
                   <AlertTitle>Error Details</AlertTitle>
                   <AlertDescription className="mt-2 font-mono text-xs">
                     <div className="space-y-1">
-                      <p><strong>Message:</strong> {error.message}</p>
+                      <p>
+                        <strong>Message:</strong> {error.message}
+                      </p>
                       {error.stack && (
                         <details className="cursor-pointer">
                           <summary>Stack Trace</summary>
@@ -157,7 +171,8 @@ export class CalendarErrorBoundary extends Component<Props, State> {
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>Multiple Errors Detected</AlertTitle>
                   <AlertDescription>
-                    This error has occurred {errorCount} times. Consider refreshing the page or contacting support if the issue persists.
+                    This error has occurred {errorCount} times. Consider refreshing the page or
+                    contacting support if the issue persists.
                   </AlertDescription>
                 </Alert>
               )}
@@ -193,7 +208,7 @@ export class CalendarErrorBoundary extends Component<Props, State> {
                 </ul>
               </div>
             </CardContent>
-            
+
             <CardFooter className="flex gap-2">
               <Button onClick={this.handleReset} variant="default">
                 <RefreshCw className="h-4 w-4 mr-2" />

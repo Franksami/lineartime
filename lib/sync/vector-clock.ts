@@ -34,18 +34,18 @@ export class VectorClock {
   compare(other: VectorClock): 'before' | 'after' | 'concurrent' | 'equal' {
     let isLessOrEqual = true;
     let isGreaterOrEqual = true;
-    
+
     // Get all nodes from both clocks
     const allNodes = new Set([...this.clocks.keys(), ...other.clocks.keys()]);
-    
+
     for (const nodeId of allNodes) {
       const thisValue = this.clocks.get(nodeId) || 0;
       const otherValue = other.clocks.get(nodeId) || 0;
-      
+
       if (thisValue > otherValue) isLessOrEqual = false;
       if (thisValue < otherValue) isGreaterOrEqual = false;
     }
-    
+
     // Determine the relationship
     if (isLessOrEqual && isGreaterOrEqual) return 'equal';
     if (isLessOrEqual) return 'before';
@@ -59,7 +59,7 @@ export class VectorClock {
    */
   merge(other: VectorClock): void {
     const allNodes = new Set([...this.clocks.keys(), ...other.clocks.keys()]);
-    
+
     for (const nodeId of allNodes) {
       const thisValue = this.clocks.get(nodeId) || 0;
       const otherValue = other.clocks.get(nodeId) || 0;
@@ -142,14 +142,11 @@ export function detectConflict(
   localClock: VectorClock | Record<string, number>,
   remoteClock: VectorClock | Record<string, number>
 ): boolean {
-  const local = localClock instanceof VectorClock 
-    ? localClock 
-    : VectorClock.fromObject(localClock);
-  
-  const remote = remoteClock instanceof VectorClock
-    ? remoteClock
-    : VectorClock.fromObject(remoteClock);
-  
+  const local = localClock instanceof VectorClock ? localClock : VectorClock.fromObject(localClock);
+
+  const remote =
+    remoteClock instanceof VectorClock ? remoteClock : VectorClock.fromObject(remoteClock);
+
   return local.isConcurrent(remote);
 }
 
@@ -171,22 +168,18 @@ export function threeWayMerge<T extends MergeableEvent>(
   base: T,
   local: T,
   remote: T,
-  preferLocal: boolean = true
+  preferLocal = true
 ): T {
   const merged = { ...base } as T;
-  
+
   // Get all keys from all three versions
-  const allKeys = new Set([
-    ...Object.keys(base),
-    ...Object.keys(local),
-    ...Object.keys(remote)
-  ]);
-  
+  const allKeys = new Set([...Object.keys(base), ...Object.keys(local), ...Object.keys(remote)]);
+
   for (const key of allKeys) {
     const baseValue = base[key as keyof T];
     const localValue = local[key as keyof T];
     const remoteValue = remote[key as keyof T];
-    
+
     // If both changed the same way, use that change
     if (JSON.stringify(localValue) === JSON.stringify(remoteValue)) {
       merged[key as keyof T] = localValue;
@@ -203,17 +196,17 @@ export function threeWayMerge<T extends MergeableEvent>(
     else {
       // Use preference to resolve
       merged[key as keyof T] = preferLocal ? localValue : remoteValue;
-      
+
       // For certain fields, we might want to merge differently
       if (key === 'attendees' && Array.isArray(localValue) && Array.isArray(remoteValue)) {
         // Merge attendee lists
         const mergedAttendees = new Set([
           ...(localValue as string[]),
-          ...(remoteValue as string[])
+          ...(remoteValue as string[]),
         ]);
         merged[key as keyof T] = Array.from(mergedAttendees) as T[keyof T];
       }
-      
+
       if (key === 'description') {
         // Concatenate descriptions if both changed
         if (localValue && remoteValue && localValue !== remoteValue) {
@@ -222,6 +215,6 @@ export function threeWayMerge<T extends MergeableEvent>(
       }
     }
   }
-  
+
   return merged;
 }

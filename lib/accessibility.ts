@@ -2,31 +2,34 @@
  * Accessibility utilities and helpers for WCAG 2.1 AA compliance
  */
 
+// Re-export comprehensive accessibility features
+export * from './accessibility/index';
+
 /**
  * Generate ARIA label for calendar day
  */
-export function getDayAriaLabel(date: Date, eventCount: number = 0): string {
+export function getDayAriaLabel(date: Date, eventCount = 0): string {
   const formatter = new Intl.DateTimeFormat('en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   });
-  
+
   const dateString = formatter.format(date);
   const today = new Date();
   const isToday = date.toDateString() === today.toDateString();
-  
+
   let label = dateString;
-  
+
   if (isToday) {
     label += ', Today';
   }
-  
+
   if (eventCount > 0) {
     label += `, ${eventCount} ${eventCount === 1 ? 'event' : 'events'}`;
   }
-  
+
   return label;
 }
 
@@ -35,10 +38,20 @@ export function getDayAriaLabel(date: Date, eventCount: number = 0): string {
  */
 export function getMonthAriaLabel(month: number, year: number): string {
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
-  
+
   return `${monthNames[month]} ${year}`;
 }
 
@@ -56,25 +69,25 @@ export function getEventAriaLabel(
     month: 'short',
     day: 'numeric',
     hour: 'numeric',
-    minute: '2-digit'
+    minute: '2-digit',
   });
-  
+
   let label = `${title}, `;
-  
+
   if (category) {
     label += `${category} event, `;
   }
-  
+
   label += `starts ${formatter.format(startDate)}`;
-  
+
   if (endDate && endDate.getTime() !== startDate.getTime()) {
     label += `, ends ${formatter.format(endDate)}`;
   }
-  
+
   if (location) {
     label += `, at ${location}`;
   }
-  
+
   return label;
 }
 
@@ -101,13 +114,13 @@ export function trapFocus(element: HTMLElement): () => void {
   const focusableElements = element.querySelectorAll<HTMLElement>(
     'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select, [tabindex]:not([tabindex="-1"])'
   );
-  
+
   const firstFocusable = focusableElements[0];
   const lastFocusable = focusableElements[focusableElements.length - 1];
-  
+
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key !== 'Tab') return;
-    
+
     if (e.shiftKey) {
       if (document.activeElement === firstFocusable) {
         lastFocusable?.focus();
@@ -120,10 +133,10 @@ export function trapFocus(element: HTMLElement): () => void {
       }
     }
   };
-  
+
   element.addEventListener('keydown', handleKeyDown);
   firstFocusable?.focus();
-  
+
   return () => {
     element.removeEventListener('keydown', handleKeyDown);
   };
@@ -132,16 +145,19 @@ export function trapFocus(element: HTMLElement): () => void {
 /**
  * Announce message to screen readers
  */
-export function announceToScreenReader(message: string, priority: 'polite' | 'assertive' = 'polite'): void {
+export function announceToScreenReader(
+  message: string,
+  priority: 'polite' | 'assertive' = 'polite'
+): void {
   const announcement = document.createElement('div');
   announcement.setAttribute('role', 'status');
   announcement.setAttribute('aria-live', priority);
   announcement.setAttribute('aria-atomic', 'true');
   announcement.className = 'sr-only';
   announcement.textContent = message;
-  
+
   document.body.appendChild(announcement);
-  
+
   setTimeout(() => {
     document.body.removeChild(announcement);
   }, 1000);
@@ -168,7 +184,7 @@ export function prefersHighContrast(): boolean {
  * @returns {string} className for skip link
  */
 export function getSkipLinkClassName(): string {
-  return "sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md";
+  return 'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md';
 }
 
 /**
@@ -176,7 +192,7 @@ export function getSkipLinkClassName(): string {
  * @returns {string} className for screen reader only text
  */
 export function getVisuallyHiddenClassName(): string {
-  return "sr-only";
+  return 'sr-only';
 }
 
 /**
@@ -189,6 +205,6 @@ export function getLiveRegionAttributes(priority: 'polite' | 'assertive' = 'poli
     role: 'status',
     'aria-live': priority,
     'aria-atomic': 'true',
-    className: 'sr-only'
+    className: 'sr-only',
   };
 }

@@ -1,0 +1,2055 @@
+{
+  "exportedAt": "2025-08-25T12:21:30.821Z",
+  "year": 2025,
+  "version": "1.0",
+  "calendarAnalytics": {
+    "totalEvents": 146,
+    "totalDays": 292,
+    "avgEventsPerMonth": 12,
+    "categoryStats": {
+      "work": 45,
+      "note": 25,
+      "personal": 37,
+      "effort": 39
+    },
+    "priorityStats": {
+      "medium": 37,
+      "critical": 27,
+      "low": 32,
+      "optional": 26,
+      "high": 24
+    },
+    "monthlyStats": [
+      {
+        "month": "Jan",
+        "events": 9,
+        "days": 18
+      },
+      {
+        "month": "Feb",
+        "events": 14,
+        "days": 28
+      },
+      {
+        "month": "Mar",
+        "events": 16,
+        "days": 32
+      },
+      {
+        "month": "Apr",
+        "events": 9,
+        "days": 18
+      },
+      {
+        "month": "May",
+        "events": 19,
+        "days": 38
+      },
+      {
+        "month": "Jun",
+        "events": 10,
+        "days": 20
+      },
+      {
+        "month": "Jul",
+        "events": 10,
+        "days": 20
+      },
+      {
+        "month": "Aug",
+        "events": 18,
+        "days": 36
+      },
+      {
+        "month": "Sep",
+        "events": 17,
+        "days": 34
+      },
+      {
+        "month": "Oct",
+        "events": 10,
+        "days": 20
+      },
+      {
+        "month": "Nov",
+        "events": 5,
+        "days": 10
+      },
+      {
+        "month": "Dec",
+        "events": 9,
+        "days": 18
+      }
+    ],
+    "mostProductiveMonth": {
+      "month": "May",
+      "events": 19,
+      "days": 38
+    },
+    "leastProductiveMonth": {
+      "month": "Nov",
+      "events": 5,
+      "days": 10
+    }
+  },
+  "dragDropAnalytics": {
+    "metrics": {
+      "totalDragOperations": 20,
+      "successfulDrops": 17,
+      "cancelledDrags": 3,
+      "averageDragDuration": 0,
+      "mostDraggedCategory": "personal",
+      "aiSuggestionUsageRate": 0.5882352941176471,
+      "conflictResolutionRate": 0.23529411764705882,
+      "optimizationAcceptanceRate": 0.5294117647058824,
+      "dragsByDayOfWeek": {
+        "Sunday": 0,
+        "Monday": 17,
+        "Tuesday": 0,
+        "Wednesday": 0,
+        "Thursday": 0,
+        "Friday": 0,
+        "Saturday": 0
+      },
+      "dragsByTimeOfDay": {
+        "Morning (6-12)": 17,
+        "Afternoon (12-17)": 0,
+        "Evening (17-22)": 0,
+        "Night (22-6)": 0
+      },
+      "dragEfficiencyScore": 45
+    },
+    "events": [
+      {
+        "id": "aa3b995d-f8b0-4c6c-b806-d8a62e58e876",
+        "timestamp": "2025-08-25T12:17:30.358Z",
+        "eventType": "drop_success",
+        "eventId": "sample-19",
+        "eventTitle": "Call with Client",
+        "sourceDate": "2025-08-24T12:17:30.355Z",
+        "targetDate": "2025-08-24T15:10:20.981Z",
+        "duration": 1,
+        "category": "work",
+        "aiSuggestionUsed": true,
+        "conflictResolved": false,
+        "optimizedTimeSlot": true
+      },
+      {
+        "id": "10b8d467-8518-414e-9216-c5aace496e5b",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drop_cancel",
+        "eventId": "sample-13",
+        "eventTitle": "Team Meeting",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "duration": 1,
+        "category": "note"
+      },
+      {
+        "id": "e9a406cd-98d3-4858-9b55-900938aa3cfa",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drag_start",
+        "eventId": "sample-14",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-25T12:17:30.355Z",
+        "duration": 0,
+        "category": "personal"
+      },
+      {
+        "id": "ee60fdce-9014-44ed-8e05-39eddb01af3b",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drop_success",
+        "eventId": "sample-14",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-25T12:17:30.355Z",
+        "targetDate": "2025-08-25T13:44:33.321Z",
+        "duration": 0,
+        "category": "personal",
+        "aiSuggestionUsed": true,
+        "conflictResolved": false,
+        "optimizedTimeSlot": false
+      },
+      {
+        "id": "baf6c2e0-f334-4970-9652-444945b06f86",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drag_start",
+        "eventId": "sample-15",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "duration": 0,
+        "category": "note"
+      },
+      {
+        "id": "75bcd659-393e-4095-8519-78a62ee7b8af",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drop_success",
+        "eventId": "sample-15",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "targetDate": "2025-08-22T12:31:40.273Z",
+        "duration": 0,
+        "category": "note",
+        "aiSuggestionUsed": true,
+        "conflictResolved": false,
+        "optimizedTimeSlot": false
+      },
+      {
+        "id": "7a27594e-e57a-4f57-8068-020db80f645b",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drag_start",
+        "eventId": "sample-16",
+        "eventTitle": "Team Meeting",
+        "sourceDate": "2025-08-25T12:17:30.355Z",
+        "duration": 0,
+        "category": "effort"
+      },
+      {
+        "id": "02096213-4cad-4554-9330-cd7d3e6a5d2b",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drop_success",
+        "eventId": "sample-16",
+        "eventTitle": "Team Meeting",
+        "sourceDate": "2025-08-25T12:17:30.355Z",
+        "targetDate": "2025-08-25T13:57:23.226Z",
+        "duration": 0,
+        "category": "effort",
+        "aiSuggestionUsed": false,
+        "conflictResolved": false,
+        "optimizedTimeSlot": false
+      },
+      {
+        "id": "b3e78842-03f8-45b6-9628-2f9f9f6eed79",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drag_start",
+        "eventId": "sample-17",
+        "eventTitle": "Lunch Break",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "duration": 0,
+        "category": "work"
+      },
+      {
+        "id": "464be000-0572-4949-8f1f-d5aab8a05bf6",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drop_success",
+        "eventId": "sample-17",
+        "eventTitle": "Lunch Break",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "targetDate": "2025-08-22T13:35:34.574Z",
+        "duration": 0,
+        "category": "work",
+        "aiSuggestionUsed": true,
+        "conflictResolved": false,
+        "optimizedTimeSlot": false
+      },
+      {
+        "id": "c67cf498-4a72-491b-befa-78c913f652eb",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drag_start",
+        "eventId": "sample-18",
+        "eventTitle": "Call with Client",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "duration": 0,
+        "category": "personal"
+      },
+      {
+        "id": "548fb3d7-52f9-444a-943c-3ff315f0ab04",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drop_success",
+        "eventId": "sample-18",
+        "eventTitle": "Call with Client",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "targetDate": "2025-08-22T13:25:31.342Z",
+        "duration": 0,
+        "category": "personal",
+        "aiSuggestionUsed": false,
+        "conflictResolved": false,
+        "optimizedTimeSlot": true
+      },
+      {
+        "id": "a994a018-15bd-4bbc-8b67-399bf59bcdc5",
+        "timestamp": "2025-08-25T12:17:30.357Z",
+        "eventType": "drag_start",
+        "eventId": "sample-19",
+        "eventTitle": "Call with Client",
+        "sourceDate": "2025-08-24T12:17:30.355Z",
+        "duration": 0,
+        "category": "work"
+      },
+      {
+        "id": "68ccd172-a910-4859-86fe-12f78f97c349",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drag_start",
+        "eventId": "sample-5",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-20T12:17:30.355Z",
+        "duration": 0,
+        "category": "personal"
+      },
+      {
+        "id": "663995b0-88c2-4b8a-a6d3-e724f7ea9a54",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drop_success",
+        "eventId": "sample-5",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-20T12:17:30.355Z",
+        "targetDate": "2025-08-20T13:19:36.625Z",
+        "duration": 0,
+        "category": "personal",
+        "aiSuggestionUsed": true,
+        "conflictResolved": false,
+        "optimizedTimeSlot": true
+      },
+      {
+        "id": "cefd56df-ffe8-4939-9d67-3117a9f8b099",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drag_start",
+        "eventId": "sample-6",
+        "eventTitle": "Team Meeting",
+        "sourceDate": "2025-08-21T12:17:30.355Z",
+        "duration": 0,
+        "category": "effort"
+      },
+      {
+        "id": "bb0eb0ec-6cda-4adc-b623-75f16ebcd17d",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drop_success",
+        "eventId": "sample-6",
+        "eventTitle": "Team Meeting",
+        "sourceDate": "2025-08-21T12:17:30.355Z",
+        "targetDate": "2025-08-21T13:11:40.645Z",
+        "duration": 0,
+        "category": "effort",
+        "aiSuggestionUsed": false,
+        "conflictResolved": false,
+        "optimizedTimeSlot": true
+      },
+      {
+        "id": "fd29e139-173a-4e85-9390-e5a35a3f05c8",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drag_start",
+        "eventId": "sample-7",
+        "eventTitle": "Team Meeting",
+        "sourceDate": "2025-08-24T12:17:30.355Z",
+        "duration": 0,
+        "category": "note"
+      },
+      {
+        "id": "dc617e2f-4922-42be-b088-fb432222b237",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drop_success",
+        "eventId": "sample-7",
+        "eventTitle": "Team Meeting",
+        "sourceDate": "2025-08-24T12:17:30.355Z",
+        "targetDate": "2025-08-24T13:52:28.375Z",
+        "duration": 0,
+        "category": "note",
+        "aiSuggestionUsed": false,
+        "conflictResolved": false,
+        "optimizedTimeSlot": false
+      },
+      {
+        "id": "ba073347-7674-4a1a-8788-432a329e69c9",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drag_start",
+        "eventId": "sample-8",
+        "eventTitle": "Team Meeting",
+        "sourceDate": "2025-08-23T12:17:30.355Z",
+        "duration": 0,
+        "category": "personal"
+      },
+      {
+        "id": "ffbe38f6-fe1d-40a6-b0dc-67846fbce847",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drop_success",
+        "eventId": "sample-8",
+        "eventTitle": "Team Meeting",
+        "sourceDate": "2025-08-23T12:17:30.355Z",
+        "targetDate": "2025-08-23T12:38:57.080Z",
+        "duration": 0,
+        "category": "personal",
+        "aiSuggestionUsed": true,
+        "conflictResolved": true,
+        "optimizedTimeSlot": true
+      },
+      {
+        "id": "91b12aa5-de4d-48fa-82e7-eb5c556f508c",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drag_start",
+        "eventId": "sample-9",
+        "eventTitle": "Lunch Break",
+        "sourceDate": "2025-08-23T12:17:30.355Z",
+        "duration": 0,
+        "category": "personal"
+      },
+      {
+        "id": "8b2f3fb4-ec06-4bc5-b918-fd2ccb61bcdc",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drop_success",
+        "eventId": "sample-9",
+        "eventTitle": "Lunch Break",
+        "sourceDate": "2025-08-23T12:17:30.355Z",
+        "targetDate": "2025-08-23T14:23:46.917Z",
+        "duration": 0,
+        "category": "personal",
+        "aiSuggestionUsed": false,
+        "conflictResolved": true,
+        "optimizedTimeSlot": true
+      },
+      {
+        "id": "8d968563-0b71-4668-b0e0-c488319d9974",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drag_start",
+        "eventId": "sample-10",
+        "eventTitle": "Call with Client",
+        "sourceDate": "2025-08-24T12:17:30.355Z",
+        "duration": 0,
+        "category": "personal"
+      },
+      {
+        "id": "a5a5ed1a-2490-4f59-88f6-d43b528921ac",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drop_cancel",
+        "eventId": "sample-10",
+        "eventTitle": "Call with Client",
+        "sourceDate": "2025-08-24T12:17:30.355Z",
+        "duration": 0,
+        "category": "personal"
+      },
+      {
+        "id": "2c1de01c-a849-45b8-9f40-c81b00fc645a",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drag_start",
+        "eventId": "sample-11",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-21T12:17:30.355Z",
+        "duration": 0,
+        "category": "work"
+      },
+      {
+        "id": "9c1bfe10-88ea-4ebc-97f1-c3f6e3af6930",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drop_cancel",
+        "eventId": "sample-11",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-21T12:17:30.355Z",
+        "duration": 0,
+        "category": "work"
+      },
+      {
+        "id": "b3a4c015-9655-4d93-aefd-bea42c494eee",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drag_start",
+        "eventId": "sample-12",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-19T12:17:30.355Z",
+        "duration": 0,
+        "category": "personal"
+      },
+      {
+        "id": "86cbea78-9b68-4044-ac47-3de9515ceb02",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drop_success",
+        "eventId": "sample-12",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-19T12:17:30.355Z",
+        "targetDate": "2025-08-19T13:55:50.561Z",
+        "duration": 0,
+        "category": "personal",
+        "aiSuggestionUsed": true,
+        "conflictResolved": false,
+        "optimizedTimeSlot": true
+      },
+      {
+        "id": "b927bcd6-03aa-4676-a59f-18f5a1bd1c80",
+        "timestamp": "2025-08-25T12:17:30.356Z",
+        "eventType": "drag_start",
+        "eventId": "sample-13",
+        "eventTitle": "Team Meeting",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "duration": 0,
+        "category": "note"
+      },
+      {
+        "id": "8335272a-b09d-439d-b1a0-5137942dec35",
+        "timestamp": "2025-08-25T12:17:30.355Z",
+        "eventType": "drag_start",
+        "eventId": "sample-0",
+        "eventTitle": "Project Review",
+        "sourceDate": "2025-08-23T12:17:30.355Z",
+        "duration": 0,
+        "category": "effort"
+      },
+      {
+        "id": "d2d9055b-b6c9-4387-bcec-8ec00916c4bc",
+        "timestamp": "2025-08-25T12:17:30.355Z",
+        "eventType": "drop_success",
+        "eventId": "sample-0",
+        "eventTitle": "Project Review",
+        "sourceDate": "2025-08-23T12:17:30.355Z",
+        "targetDate": "2025-08-23T15:07:38.939Z",
+        "duration": 0,
+        "category": "effort",
+        "aiSuggestionUsed": true,
+        "conflictResolved": false,
+        "optimizedTimeSlot": true
+      },
+      {
+        "id": "dc0681ab-1cd7-4676-be2b-f4396f773f91",
+        "timestamp": "2025-08-25T12:17:30.355Z",
+        "eventType": "drag_start",
+        "eventId": "sample-1",
+        "eventTitle": "Call with Client",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "duration": 0,
+        "category": "work"
+      },
+      {
+        "id": "4e5c0f61-e0ab-4ecc-af4e-2f23324b094b",
+        "timestamp": "2025-08-25T12:17:30.355Z",
+        "eventType": "drop_success",
+        "eventId": "sample-1",
+        "eventTitle": "Call with Client",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "targetDate": "2025-08-22T13:27:30.233Z",
+        "duration": 0,
+        "category": "work",
+        "aiSuggestionUsed": true,
+        "conflictResolved": false,
+        "optimizedTimeSlot": false
+      },
+      {
+        "id": "e93430b0-248f-4d2c-85f4-d4b70891aeb9",
+        "timestamp": "2025-08-25T12:17:30.355Z",
+        "eventType": "drag_start",
+        "eventId": "sample-2",
+        "eventTitle": "Project Review",
+        "sourceDate": "2025-08-23T12:17:30.355Z",
+        "duration": 0,
+        "category": "note"
+      },
+      {
+        "id": "8418ea31-9a46-4ac7-9bf7-0c55bc46803b",
+        "timestamp": "2025-08-25T12:17:30.355Z",
+        "eventType": "drop_success",
+        "eventId": "sample-2",
+        "eventTitle": "Project Review",
+        "sourceDate": "2025-08-23T12:17:30.355Z",
+        "targetDate": "2025-08-23T14:22:47.619Z",
+        "duration": 0,
+        "category": "note",
+        "aiSuggestionUsed": false,
+        "conflictResolved": true,
+        "optimizedTimeSlot": false
+      },
+      {
+        "id": "0e48e2d9-9f9d-4462-af82-9acca469708e",
+        "timestamp": "2025-08-25T12:17:30.355Z",
+        "eventType": "drag_start",
+        "eventId": "sample-3",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "duration": 0,
+        "category": "note"
+      },
+      {
+        "id": "aba09708-31ea-4b64-80b4-4e0ec5069fd3",
+        "timestamp": "2025-08-25T12:17:30.355Z",
+        "eventType": "drop_success",
+        "eventId": "sample-3",
+        "eventTitle": "Workout",
+        "sourceDate": "2025-08-22T12:17:30.355Z",
+        "targetDate": "2025-08-22T12:24:09.312Z",
+        "duration": 0,
+        "category": "note",
+        "aiSuggestionUsed": false,
+        "conflictResolved": true,
+        "optimizedTimeSlot": false
+      },
+      {
+        "id": "a53cf65b-905e-4162-86de-a187d75042bc",
+        "timestamp": "2025-08-25T12:17:30.355Z",
+        "eventType": "drag_start",
+        "eventId": "sample-4",
+        "eventTitle": "Project Review",
+        "sourceDate": "2025-08-23T12:17:30.355Z",
+        "duration": 0,
+        "category": "work"
+      },
+      {
+        "id": "9d30efc6-fb04-4abf-b384-becd379e83dd",
+        "timestamp": "2025-08-25T12:17:30.355Z",
+        "eventType": "drop_success",
+        "eventId": "sample-4",
+        "eventTitle": "Project Review",
+        "sourceDate": "2025-08-23T12:17:30.355Z",
+        "targetDate": "2025-08-23T13:05:36.489Z",
+        "duration": 0,
+        "category": "work",
+        "aiSuggestionUsed": true,
+        "conflictResolved": false,
+        "optimizedTimeSlot": true
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "event-0-0",
+      "title": "Event 1.1",
+      "startDate": "2025-01-18T15:00:00.000Z",
+      "endDate": "2025-01-18T18:00:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-0-1",
+      "title": "Event 1.2",
+      "startDate": "2025-01-28T20:00:00.000Z",
+      "endDate": "2025-01-28T22:00:00.000Z",
+      "category": "note",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-0-2",
+      "title": "Event 1.3",
+      "startDate": "2025-01-26T20:00:00.000Z",
+      "endDate": "2025-01-26T23:00:00.000Z",
+      "category": "personal",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-0-3",
+      "title": "Event 1.4",
+      "startDate": "2025-01-04T14:00:00.000Z",
+      "endDate": "2025-01-04T17:00:00.000Z",
+      "category": "work",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-0-4",
+      "title": "Event 1.5",
+      "startDate": "2025-01-24T03:00:00.000Z",
+      "endDate": "2025-01-24T04:00:00.000Z",
+      "category": "work",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-0-5",
+      "title": "Event 1.6",
+      "startDate": "2025-01-21T22:00:00.000Z",
+      "endDate": "2025-01-22T00:00:00.000Z",
+      "category": "note",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-0-6",
+      "title": "Event 1.7",
+      "startDate": "2025-01-19T14:00:00.000Z",
+      "endDate": "2025-01-19T14:30:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-0-7",
+      "title": "Event 1.8",
+      "startDate": "2025-01-28T18:00:00.000Z",
+      "endDate": "2025-01-28T21:00:00.000Z",
+      "category": "work",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-0-8",
+      "title": "Event 1.9",
+      "startDate": "2025-01-16T00:00:00.000Z",
+      "endDate": "2025-01-16T01:30:00.000Z",
+      "category": "effort",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-0",
+      "title": "Event 2.1",
+      "startDate": "2025-02-04T17:00:00.000Z",
+      "endDate": "2025-02-04T18:00:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-1",
+      "title": "Event 2.2",
+      "startDate": "2025-02-02T00:00:00.000Z",
+      "endDate": "2025-02-02T01:30:00.000Z",
+      "category": "personal",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-2",
+      "title": "Event 2.3",
+      "startDate": "2025-02-13T21:00:00.000Z",
+      "endDate": "2025-02-13T21:30:00.000Z",
+      "category": "work",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-3",
+      "title": "Event 2.4",
+      "startDate": "2025-02-20T01:00:00.000Z",
+      "endDate": "2025-02-20T03:00:00.000Z",
+      "category": "effort",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-4",
+      "title": "Event 2.5",
+      "startDate": "2025-02-14T22:00:00.000Z",
+      "endDate": "2025-02-14T23:00:00.000Z",
+      "category": "effort",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-5",
+      "title": "Event 2.6",
+      "startDate": "2025-02-20T15:00:00.000Z",
+      "endDate": "2025-02-20T18:00:00.000Z",
+      "category": "note",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-6",
+      "title": "Event 2.7",
+      "startDate": "2025-02-01T17:00:00.000Z",
+      "endDate": "2025-02-01T17:30:00.000Z",
+      "category": "note",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-7",
+      "title": "Event 2.8",
+      "startDate": "2025-02-15T16:00:00.000Z",
+      "endDate": "2025-02-15T18:00:00.000Z",
+      "category": "work",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-8",
+      "title": "Event 2.9",
+      "startDate": "2025-02-02T19:00:00.000Z",
+      "endDate": "2025-02-02T22:00:00.000Z",
+      "category": "personal",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-9",
+      "title": "Event 2.10",
+      "startDate": "2025-02-03T13:00:00.000Z",
+      "endDate": "2025-02-03T14:30:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-10",
+      "title": "Event 2.11",
+      "startDate": "2025-03-01T00:00:00.000Z",
+      "endDate": "2025-03-01T01:30:00.000Z",
+      "category": "note",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-11",
+      "title": "Event 2.12",
+      "startDate": "2025-02-09T03:00:00.000Z",
+      "endDate": "2025-02-09T06:00:00.000Z",
+      "category": "personal",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-12",
+      "title": "Event 2.13",
+      "startDate": "2025-02-14T16:00:00.000Z",
+      "endDate": "2025-02-14T17:30:00.000Z",
+      "category": "work",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-1-13",
+      "title": "Event 2.14",
+      "startDate": "2025-02-23T02:00:00.000Z",
+      "endDate": "2025-02-23T03:00:00.000Z",
+      "category": "personal",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-0",
+      "title": "Event 3.1",
+      "startDate": "2025-03-15T20:00:00.000Z",
+      "endDate": "2025-03-15T22:00:00.000Z",
+      "category": "note",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-1",
+      "title": "Event 3.2",
+      "startDate": "2025-03-04T22:00:00.000Z",
+      "endDate": "2025-03-05T00:00:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-2",
+      "title": "Event 3.3",
+      "startDate": "2025-03-03T23:00:00.000Z",
+      "endDate": "2025-03-03T23:30:00.000Z",
+      "category": "effort",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-3",
+      "title": "Event 3.4",
+      "startDate": "2025-03-28T16:00:00.000Z",
+      "endDate": "2025-03-28T17:30:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-4",
+      "title": "Event 3.5",
+      "startDate": "2025-03-25T14:00:00.000Z",
+      "endDate": "2025-03-25T15:30:00.000Z",
+      "category": "effort",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-5",
+      "title": "Event 3.6",
+      "startDate": "2025-03-13T01:00:00.000Z",
+      "endDate": "2025-03-13T04:00:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-6",
+      "title": "Event 3.7",
+      "startDate": "2025-03-26T17:00:00.000Z",
+      "endDate": "2025-03-26T18:30:00.000Z",
+      "category": "work",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-7",
+      "title": "Event 3.8",
+      "startDate": "2025-03-24T14:00:00.000Z",
+      "endDate": "2025-03-24T17:00:00.000Z",
+      "category": "work",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-8",
+      "title": "Event 3.9",
+      "startDate": "2025-03-10T22:00:00.000Z",
+      "endDate": "2025-03-10T23:00:00.000Z",
+      "category": "work",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-9",
+      "title": "Event 3.10",
+      "startDate": "2025-03-02T04:00:00.000Z",
+      "endDate": "2025-03-02T05:30:00.000Z",
+      "category": "personal",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-10",
+      "title": "Event 3.11",
+      "startDate": "2025-03-15T19:00:00.000Z",
+      "endDate": "2025-03-15T21:00:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-11",
+      "title": "Event 3.12",
+      "startDate": "2025-03-17T13:00:00.000Z",
+      "endDate": "2025-03-17T13:30:00.000Z",
+      "category": "work",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-12",
+      "title": "Event 3.13",
+      "startDate": "2025-03-14T23:00:00.000Z",
+      "endDate": "2025-03-15T00:00:00.000Z",
+      "category": "personal",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-13",
+      "title": "Event 3.14",
+      "startDate": "2025-03-04T02:00:00.000Z",
+      "endDate": "2025-03-04T04:00:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-14",
+      "title": "Event 3.15",
+      "startDate": "2025-03-03T19:00:00.000Z",
+      "endDate": "2025-03-03T21:00:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-2-15",
+      "title": "Event 3.16",
+      "startDate": "2025-03-20T13:00:00.000Z",
+      "endDate": "2025-03-20T14:30:00.000Z",
+      "category": "work",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-3-0",
+      "title": "Event 4.1",
+      "startDate": "2025-04-02T20:00:00.000Z",
+      "endDate": "2025-04-02T23:00:00.000Z",
+      "category": "note",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-3-1",
+      "title": "Event 4.2",
+      "startDate": "2025-04-01T20:00:00.000Z",
+      "endDate": "2025-04-01T23:00:00.000Z",
+      "category": "effort",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-3-2",
+      "title": "Event 4.3",
+      "startDate": "2025-04-22T21:00:00.000Z",
+      "endDate": "2025-04-22T21:30:00.000Z",
+      "category": "effort",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-3-3",
+      "title": "Event 4.4",
+      "startDate": "2025-04-02T21:00:00.000Z",
+      "endDate": "2025-04-02T22:00:00.000Z",
+      "category": "work",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-3-4",
+      "title": "Event 4.5",
+      "startDate": "2025-04-15T23:00:00.000Z",
+      "endDate": "2025-04-16T00:30:00.000Z",
+      "category": "work",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-3-5",
+      "title": "Event 4.6",
+      "startDate": "2025-04-17T02:00:00.000Z",
+      "endDate": "2025-04-17T05:00:00.000Z",
+      "category": "work",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-3-6",
+      "title": "Event 4.7",
+      "startDate": "2025-04-02T15:00:00.000Z",
+      "endDate": "2025-04-02T16:30:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-3-7",
+      "title": "Event 4.8",
+      "startDate": "2025-04-12T12:00:00.000Z",
+      "endDate": "2025-04-12T13:30:00.000Z",
+      "category": "work",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-3-8",
+      "title": "Event 4.9",
+      "startDate": "2025-04-18T22:00:00.000Z",
+      "endDate": "2025-04-18T23:30:00.000Z",
+      "category": "work",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-0",
+      "title": "Event 5.1",
+      "startDate": "2025-05-26T16:00:00.000Z",
+      "endDate": "2025-05-26T17:30:00.000Z",
+      "category": "personal",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-1",
+      "title": "Event 5.2",
+      "startDate": "2025-05-13T20:00:00.000Z",
+      "endDate": "2025-05-13T21:00:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-2",
+      "title": "Event 5.3",
+      "startDate": "2025-05-25T02:00:00.000Z",
+      "endDate": "2025-05-25T02:30:00.000Z",
+      "category": "note",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-3",
+      "title": "Event 5.4",
+      "startDate": "2025-05-27T20:00:00.000Z",
+      "endDate": "2025-05-27T20:30:00.000Z",
+      "category": "work",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-4",
+      "title": "Event 5.5",
+      "startDate": "2025-05-07T23:00:00.000Z",
+      "endDate": "2025-05-07T23:30:00.000Z",
+      "category": "note",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-5",
+      "title": "Event 5.6",
+      "startDate": "2025-05-07T19:00:00.000Z",
+      "endDate": "2025-05-07T22:00:00.000Z",
+      "category": "personal",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-6",
+      "title": "Event 5.7",
+      "startDate": "2025-05-16T23:00:00.000Z",
+      "endDate": "2025-05-17T01:00:00.000Z",
+      "category": "work",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-7",
+      "title": "Event 5.8",
+      "startDate": "2025-05-17T03:00:00.000Z",
+      "endDate": "2025-05-17T04:00:00.000Z",
+      "category": "note",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-8",
+      "title": "Event 5.9",
+      "startDate": "2025-05-26T12:00:00.000Z",
+      "endDate": "2025-05-26T15:00:00.000Z",
+      "category": "work",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-9",
+      "title": "Event 5.10",
+      "startDate": "2025-05-22T21:00:00.000Z",
+      "endDate": "2025-05-23T00:00:00.000Z",
+      "category": "note",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-10",
+      "title": "Event 5.11",
+      "startDate": "2025-05-11T00:00:00.000Z",
+      "endDate": "2025-05-11T02:00:00.000Z",
+      "category": "personal",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-11",
+      "title": "Event 5.12",
+      "startDate": "2025-05-16T18:00:00.000Z",
+      "endDate": "2025-05-16T18:30:00.000Z",
+      "category": "personal",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-12",
+      "title": "Event 5.13",
+      "startDate": "2025-05-05T21:00:00.000Z",
+      "endDate": "2025-05-05T21:30:00.000Z",
+      "category": "note",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-13",
+      "title": "Event 5.14",
+      "startDate": "2025-05-09T19:00:00.000Z",
+      "endDate": "2025-05-09T19:30:00.000Z",
+      "category": "personal",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-14",
+      "title": "Event 5.15",
+      "startDate": "2025-05-14T02:00:00.000Z",
+      "endDate": "2025-05-14T02:30:00.000Z",
+      "category": "effort",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-15",
+      "title": "Event 5.16",
+      "startDate": "2025-05-01T15:00:00.000Z",
+      "endDate": "2025-05-01T18:00:00.000Z",
+      "category": "effort",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-16",
+      "title": "Event 5.17",
+      "startDate": "2025-05-04T20:00:00.000Z",
+      "endDate": "2025-05-04T21:00:00.000Z",
+      "category": "note",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-17",
+      "title": "Event 5.18",
+      "startDate": "2025-05-20T12:00:00.000Z",
+      "endDate": "2025-05-20T15:00:00.000Z",
+      "category": "effort",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-4-18",
+      "title": "Event 5.19",
+      "startDate": "2025-05-02T01:00:00.000Z",
+      "endDate": "2025-05-02T04:00:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-5-0",
+      "title": "Event 6.1",
+      "startDate": "2025-06-25T22:00:00.000Z",
+      "endDate": "2025-06-25T22:30:00.000Z",
+      "category": "effort",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-5-1",
+      "title": "Event 6.2",
+      "startDate": "2025-06-06T13:00:00.000Z",
+      "endDate": "2025-06-06T14:00:00.000Z",
+      "category": "note",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-5-2",
+      "title": "Event 6.3",
+      "startDate": "2025-06-20T18:00:00.000Z",
+      "endDate": "2025-06-20T21:00:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-5-3",
+      "title": "Event 6.4",
+      "startDate": "2025-06-04T15:00:00.000Z",
+      "endDate": "2025-06-04T16:30:00.000Z",
+      "category": "effort",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-5-4",
+      "title": "Event 6.5",
+      "startDate": "2025-06-01T14:00:00.000Z",
+      "endDate": "2025-06-01T15:00:00.000Z",
+      "category": "effort",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-5-5",
+      "title": "Event 6.6",
+      "startDate": "2025-06-05T13:00:00.000Z",
+      "endDate": "2025-06-05T13:30:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-5-6",
+      "title": "Event 6.7",
+      "startDate": "2025-06-15T14:00:00.000Z",
+      "endDate": "2025-06-15T15:30:00.000Z",
+      "category": "effort",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-5-7",
+      "title": "Event 6.8",
+      "startDate": "2025-06-15T20:00:00.000Z",
+      "endDate": "2025-06-15T20:30:00.000Z",
+      "category": "personal",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-5-8",
+      "title": "Event 6.9",
+      "startDate": "2025-06-27T17:00:00.000Z",
+      "endDate": "2025-06-27T19:00:00.000Z",
+      "category": "effort",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-5-9",
+      "title": "Event 6.10",
+      "startDate": "2025-06-20T14:00:00.000Z",
+      "endDate": "2025-06-20T16:00:00.000Z",
+      "category": "personal",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-6-0",
+      "title": "Event 7.1",
+      "startDate": "2025-07-12T03:00:00.000Z",
+      "endDate": "2025-07-12T03:30:00.000Z",
+      "category": "work",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-6-1",
+      "title": "Event 7.2",
+      "startDate": "2025-07-17T02:00:00.000Z",
+      "endDate": "2025-07-17T04:00:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-6-2",
+      "title": "Event 7.3",
+      "startDate": "2025-07-14T20:00:00.000Z",
+      "endDate": "2025-07-14T22:00:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-6-3",
+      "title": "Event 7.4",
+      "startDate": "2025-07-05T14:00:00.000Z",
+      "endDate": "2025-07-05T15:00:00.000Z",
+      "category": "note",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-6-4",
+      "title": "Event 7.5",
+      "startDate": "2025-07-05T14:00:00.000Z",
+      "endDate": "2025-07-05T16:00:00.000Z",
+      "category": "personal",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-6-5",
+      "title": "Event 7.6",
+      "startDate": "2025-07-02T12:00:00.000Z",
+      "endDate": "2025-07-02T15:00:00.000Z",
+      "category": "work",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-6-6",
+      "title": "Event 7.7",
+      "startDate": "2025-07-05T13:00:00.000Z",
+      "endDate": "2025-07-05T14:00:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-6-7",
+      "title": "Event 7.8",
+      "startDate": "2025-07-04T03:00:00.000Z",
+      "endDate": "2025-07-04T06:00:00.000Z",
+      "category": "work",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-6-8",
+      "title": "Event 7.9",
+      "startDate": "2025-07-08T20:00:00.000Z",
+      "endDate": "2025-07-08T21:30:00.000Z",
+      "category": "effort",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-6-9",
+      "title": "Event 7.10",
+      "startDate": "2025-07-02T01:00:00.000Z",
+      "endDate": "2025-07-02T03:00:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-0",
+      "title": "Event 8.1",
+      "startDate": "2025-08-10T20:00:00.000Z",
+      "endDate": "2025-08-10T23:00:00.000Z",
+      "category": "personal",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-1",
+      "title": "Event 8.2",
+      "startDate": "2025-08-05T01:00:00.000Z",
+      "endDate": "2025-08-05T01:30:00.000Z",
+      "category": "note",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-2",
+      "title": "Event 8.3",
+      "startDate": "2025-08-02T14:00:00.000Z",
+      "endDate": "2025-08-02T16:00:00.000Z",
+      "category": "note",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-3",
+      "title": "Event 8.4",
+      "startDate": "2025-08-01T14:00:00.000Z",
+      "endDate": "2025-08-01T15:30:00.000Z",
+      "category": "note",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-4",
+      "title": "Event 8.5",
+      "startDate": "2025-08-23T00:00:00.000Z",
+      "endDate": "2025-08-23T03:00:00.000Z",
+      "category": "note",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-5",
+      "title": "Event 8.6",
+      "startDate": "2025-08-22T16:00:00.000Z",
+      "endDate": "2025-08-22T17:30:00.000Z",
+      "category": "work",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-6",
+      "title": "Event 8.7",
+      "startDate": "2025-08-06T20:00:00.000Z",
+      "endDate": "2025-08-06T23:00:00.000Z",
+      "category": "personal",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-7",
+      "title": "Event 8.8",
+      "startDate": "2025-08-26T18:00:00.000Z",
+      "endDate": "2025-08-26T20:00:00.000Z",
+      "category": "note",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-8",
+      "title": "Event 8.9",
+      "startDate": "2025-08-20T19:00:00.000Z",
+      "endDate": "2025-08-20T19:30:00.000Z",
+      "category": "effort",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-9",
+      "title": "Event 8.10",
+      "startDate": "2025-08-13T01:00:00.000Z",
+      "endDate": "2025-08-13T01:30:00.000Z",
+      "category": "effort",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-10",
+      "title": "Event 8.11",
+      "startDate": "2025-08-09T17:00:00.000Z",
+      "endDate": "2025-08-09T19:00:00.000Z",
+      "category": "effort",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-11",
+      "title": "Event 8.12",
+      "startDate": "2025-08-22T22:00:00.000Z",
+      "endDate": "2025-08-22T23:30:00.000Z",
+      "category": "note",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-12",
+      "title": "Event 8.13",
+      "startDate": "2025-08-16T16:00:00.000Z",
+      "endDate": "2025-08-16T17:00:00.000Z",
+      "category": "effort",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-13",
+      "title": "Event 8.14",
+      "startDate": "2025-08-15T19:00:00.000Z",
+      "endDate": "2025-08-15T21:00:00.000Z",
+      "category": "personal",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-14",
+      "title": "Event 8.15",
+      "startDate": "2025-08-01T12:00:00.000Z",
+      "endDate": "2025-08-01T13:00:00.000Z",
+      "category": "personal",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-15",
+      "title": "Event 8.16",
+      "startDate": "2025-08-17T23:00:00.000Z",
+      "endDate": "2025-08-17T23:30:00.000Z",
+      "category": "effort",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-16",
+      "title": "Event 8.17",
+      "startDate": "2025-08-13T12:00:00.000Z",
+      "endDate": "2025-08-13T12:30:00.000Z",
+      "category": "effort",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-7-17",
+      "title": "Event 8.18",
+      "startDate": "2025-08-11T19:00:00.000Z",
+      "endDate": "2025-08-11T19:30:00.000Z",
+      "category": "work",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-0",
+      "title": "Event 9.1",
+      "startDate": "2025-09-11T03:00:00.000Z",
+      "endDate": "2025-09-11T04:30:00.000Z",
+      "category": "work",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-1",
+      "title": "Event 9.2",
+      "startDate": "2025-09-14T20:00:00.000Z",
+      "endDate": "2025-09-14T21:00:00.000Z",
+      "category": "note",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-2",
+      "title": "Event 9.3",
+      "startDate": "2025-09-23T23:00:00.000Z",
+      "endDate": "2025-09-23T23:30:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-3",
+      "title": "Event 9.4",
+      "startDate": "2025-09-27T21:00:00.000Z",
+      "endDate": "2025-09-27T22:30:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-4",
+      "title": "Event 9.5",
+      "startDate": "2025-09-07T12:00:00.000Z",
+      "endDate": "2025-09-07T13:00:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-5",
+      "title": "Event 9.6",
+      "startDate": "2025-09-19T23:00:00.000Z",
+      "endDate": "2025-09-19T23:30:00.000Z",
+      "category": "work",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-6",
+      "title": "Event 9.7",
+      "startDate": "2025-09-15T18:00:00.000Z",
+      "endDate": "2025-09-15T19:30:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-7",
+      "title": "Event 9.8",
+      "startDate": "2025-09-11T18:00:00.000Z",
+      "endDate": "2025-09-11T19:30:00.000Z",
+      "category": "note",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-8",
+      "title": "Event 9.9",
+      "startDate": "2025-09-18T15:00:00.000Z",
+      "endDate": "2025-09-18T16:30:00.000Z",
+      "category": "work",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-9",
+      "title": "Event 9.10",
+      "startDate": "2025-09-03T16:00:00.000Z",
+      "endDate": "2025-09-03T16:30:00.000Z",
+      "category": "personal",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-10",
+      "title": "Event 9.11",
+      "startDate": "2025-09-06T20:00:00.000Z",
+      "endDate": "2025-09-06T21:00:00.000Z",
+      "category": "personal",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-11",
+      "title": "Event 9.12",
+      "startDate": "2025-09-19T15:00:00.000Z",
+      "endDate": "2025-09-19T16:00:00.000Z",
+      "category": "note",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-12",
+      "title": "Event 9.13",
+      "startDate": "2025-09-11T02:00:00.000Z",
+      "endDate": "2025-09-11T05:00:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-13",
+      "title": "Event 9.14",
+      "startDate": "2025-09-08T00:00:00.000Z",
+      "endDate": "2025-09-08T01:00:00.000Z",
+      "category": "effort",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-14",
+      "title": "Event 9.15",
+      "startDate": "2025-09-04T19:00:00.000Z",
+      "endDate": "2025-09-04T19:30:00.000Z",
+      "category": "work",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-15",
+      "title": "Event 9.16",
+      "startDate": "2025-09-21T16:00:00.000Z",
+      "endDate": "2025-09-21T16:30:00.000Z",
+      "category": "personal",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-8-16",
+      "title": "Event 9.17",
+      "startDate": "2025-09-23T22:00:00.000Z",
+      "endDate": "2025-09-24T01:00:00.000Z",
+      "category": "effort",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-9-0",
+      "title": "Event 10.1",
+      "startDate": "2025-10-08T03:00:00.000Z",
+      "endDate": "2025-10-08T05:00:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-9-1",
+      "title": "Event 10.2",
+      "startDate": "2025-10-28T17:00:00.000Z",
+      "endDate": "2025-10-28T19:00:00.000Z",
+      "category": "effort",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-9-2",
+      "title": "Event 10.3",
+      "startDate": "2025-10-20T12:00:00.000Z",
+      "endDate": "2025-10-20T12:30:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-9-3",
+      "title": "Event 10.4",
+      "startDate": "2025-10-27T19:00:00.000Z",
+      "endDate": "2025-10-27T21:00:00.000Z",
+      "category": "personal",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-9-4",
+      "title": "Event 10.5",
+      "startDate": "2025-10-27T19:00:00.000Z",
+      "endDate": "2025-10-27T22:00:00.000Z",
+      "category": "personal",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-9-5",
+      "title": "Event 10.6",
+      "startDate": "2025-10-14T19:00:00.000Z",
+      "endDate": "2025-10-14T20:30:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-9-6",
+      "title": "Event 10.7",
+      "startDate": "2025-10-20T00:00:00.000Z",
+      "endDate": "2025-10-20T01:00:00.000Z",
+      "category": "effort",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-9-7",
+      "title": "Event 10.8",
+      "startDate": "2025-10-10T15:00:00.000Z",
+      "endDate": "2025-10-10T16:00:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-9-8",
+      "title": "Event 10.9",
+      "startDate": "2025-10-16T21:00:00.000Z",
+      "endDate": "2025-10-16T23:00:00.000Z",
+      "category": "personal",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-9-9",
+      "title": "Event 10.10",
+      "startDate": "2025-10-02T18:00:00.000Z",
+      "endDate": "2025-10-02T19:00:00.000Z",
+      "category": "note",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-10-0",
+      "title": "Event 11.1",
+      "startDate": "2025-11-23T01:00:00.000Z",
+      "endDate": "2025-11-23T04:00:00.000Z",
+      "category": "work",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-10-1",
+      "title": "Event 11.2",
+      "startDate": "2025-11-14T22:00:00.000Z",
+      "endDate": "2025-11-14T23:30:00.000Z",
+      "category": "work",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-10-2",
+      "title": "Event 11.3",
+      "startDate": "2025-11-25T20:00:00.000Z",
+      "endDate": "2025-11-25T21:30:00.000Z",
+      "category": "work",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-10-3",
+      "title": "Event 11.4",
+      "startDate": "2025-11-27T17:00:00.000Z",
+      "endDate": "2025-11-27T18:30:00.000Z",
+      "category": "personal",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-10-4",
+      "title": "Event 11.5",
+      "startDate": "2025-11-18T02:00:00.000Z",
+      "endDate": "2025-11-18T03:00:00.000Z",
+      "category": "work",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-11-0",
+      "title": "Event 12.1",
+      "startDate": "2025-12-13T18:00:00.000Z",
+      "endDate": "2025-12-13T18:30:00.000Z",
+      "category": "work",
+      "priority": "optional",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-11-1",
+      "title": "Event 12.2",
+      "startDate": "2025-12-25T22:00:00.000Z",
+      "endDate": "2025-12-25T23:30:00.000Z",
+      "category": "effort",
+      "priority": "high",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-11-2",
+      "title": "Event 12.3",
+      "startDate": "2025-12-23T20:00:00.000Z",
+      "endDate": "2025-12-23T21:30:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-11-3",
+      "title": "Event 12.4",
+      "startDate": "2025-12-02T15:00:00.000Z",
+      "endDate": "2025-12-02T16:30:00.000Z",
+      "category": "effort",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-11-4",
+      "title": "Event 12.5",
+      "startDate": "2025-12-16T01:00:00.000Z",
+      "endDate": "2025-12-16T01:30:00.000Z",
+      "category": "personal",
+      "priority": "low",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-11-5",
+      "title": "Event 12.6",
+      "startDate": "2025-12-07T20:00:00.000Z",
+      "endDate": "2025-12-07T23:00:00.000Z",
+      "category": "work",
+      "priority": "critical",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-11-6",
+      "title": "Event 12.7",
+      "startDate": "2025-12-02T17:00:00.000Z",
+      "endDate": "2025-12-02T18:30:00.000Z",
+      "category": "work",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-11-7",
+      "title": "Event 12.8",
+      "startDate": "2025-12-02T04:00:00.000Z",
+      "endDate": "2025-12-02T05:30:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "event-11-8",
+      "title": "Event 12.9",
+      "startDate": "2025-12-07T21:00:00.000Z",
+      "endDate": "2025-12-07T22:00:00.000Z",
+      "category": "effort",
+      "priority": "medium",
+      "description": "Sample event for analytics demonstration",
+      "color": "#3b82f6"
+    }
+  ]
+}

@@ -11,20 +11,20 @@ async function navigateToView(page: Page, viewName: 'Year' | 'Timeline' | 'Manag
 async function createTestEvent(page: Page, title: string, category: string = 'personal') {
   // Navigate to Year view first
   await navigateToView(page, 'Year');
-  
+
   // Click on a date cell
   const cell = page.locator('[data-testid^="cell-2025-Januar-"]').first();
   await cell.click();
-  
+
   // Fill event details in modal
   await page.fill('input[placeholder="Event title"]', title);
-  
+
   // Select category if specified
   if (category !== 'personal') {
     await page.click('[data-testid="category-select"]');
     await page.click(`text=${category}`);
   }
-  
+
   // Save event
   await page.click('button:has-text("Save")');
   await page.waitForSelector('[role="dialog"]', { state: 'hidden' });
@@ -36,18 +36,30 @@ test.describe('Timeline View', () => {
     await page.waitForSelector('button:has-text("Timeline")');
   });
 
-  test('should render timeline with month columns', async ({ page }) => {
+  test('should render vertical month-by-month timeline', async ({ page }) => {
     await navigateToView(page, 'Timeline');
-    
+
     // Check if timeline container exists
     await expect(page.locator('[data-testid="timeline-container"]')).toBeVisible();
-    
-    // Check for month headers
-    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 
-                   'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    
-    for (const month of months.slice(0, 3)) { // Check first 3 months
-      await expect(page.locator(`text=${month}`).first()).toBeVisible();
+
+    // Check for month headers in long form
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    for (const month of months.slice(0, 3)) {
+      // Check first 3 months
+      await expect(page.locator(`text=${month} 2025`).first()).toBeVisible();
     }
   });
 
@@ -55,76 +67,24 @@ test.describe('Timeline View', () => {
     // Create test events first
     await createTestEvent(page, 'Timeline Event 1', 'work');
     await createTestEvent(page, 'Timeline Event 2', 'personal');
-    
+
     // Navigate to Timeline
     await navigateToView(page, 'Timeline');
-    
+
     // Check if events appear in timeline
     await expect(page.locator('text=Timeline Event 1')).toBeVisible();
     await expect(page.locator('text=Timeline Event 2')).toBeVisible();
   });
 
-  test('should handle zoom controls in timeline', async ({ page }) => {
-    await navigateToView(page, 'Timeline');
-    
-    // Find zoom controls
-    const zoomSelect = page.locator('select[aria-label="Zoom level"]');
-    if (await zoomSelect.isVisible()) {
-      // Test different zoom levels
-      await zoomSelect.selectOption('week');
-      await page.waitForTimeout(300);
-      
-      await zoomSelect.selectOption('month');
-      await page.waitForTimeout(300);
-      
-      await zoomSelect.selectOption('year');
-      await page.waitForTimeout(300);
-    }
-    
-    // Timeline should still be visible
-    await expect(page.locator('[data-testid="timeline-container"]')).toBeVisible();
-  });
+  // Zoom controls belonged to the old TimelineContainer; skipped for vertical view
 
-  test('should show heat map when enabled', async ({ page }) => {
-    await navigateToView(page, 'Timeline');
-    
-    // Check if heat map elements exist
-    const heatMapCells = page.locator('[data-heatmap-intensity]');
-    const count = await heatMapCells.count();
-    
-    // Should have heat map cells if feature is enabled
-    if (count > 0) {
-      expect(count).toBeGreaterThan(0);
-    }
-  });
+  // Heat map was specific to TimelineContainer; skipped in vertical view
 
-  test('should open event modal on day click', async ({ page }) => {
-    await navigateToView(page, 'Timeline');
-    
-    // Click on a day cell
-    const dayCell = page.locator('[data-testid^="timeline-day-"]').first();
-    if (await dayCell.isVisible()) {
-      await dayCell.click();
-      
-      // Check if modal opens
-      await expect(page.locator('[role="dialog"]')).toBeVisible();
-      
-      // Close modal
-      await page.keyboard.press('Escape');
-    }
-  });
+  // Vertical timeline is read-focused; no day-cell click handlers here
 
-  test('should handle keyboard navigation in timeline', async ({ page }) => {
+  test('timeline container remains visible after focus changes', async ({ page }) => {
     await navigateToView(page, 'Timeline');
-    
-    // Use arrow keys to navigate
     await page.keyboard.press('Tab');
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('ArrowLeft');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowUp');
-    
-    // Timeline should still be functional
     await expect(page.locator('[data-testid="timeline-container"]')).toBeVisible();
   });
 });
@@ -140,13 +100,13 @@ test.describe('Event Management View', () => {
     await createTestEvent(page, 'Managed Event 1', 'work');
     await createTestEvent(page, 'Managed Event 2', 'personal');
     await createTestEvent(page, 'Managed Event 3', 'effort');
-    
+
     // Navigate to Manage view
     await navigateToView(page, 'Manage');
-    
+
     // Check if event management container exists
     await expect(page.locator('[data-testid="event-management"]')).toBeVisible();
-    
+
     // Check if events are listed
     await expect(page.locator('text=Managed Event 1')).toBeVisible();
     await expect(page.locator('text=Managed Event 2')).toBeVisible();
@@ -157,22 +117,22 @@ test.describe('Event Management View', () => {
     // Create events with different categories
     await createTestEvent(page, 'Work Task', 'work');
     await createTestEvent(page, 'Personal Task', 'personal');
-    
+
     await navigateToView(page, 'Manage');
-    
+
     // Find category filter
     const categoryFilter = page.locator('[data-testid="category-filter"]');
     if (await categoryFilter.isVisible()) {
       // Filter by work
       await categoryFilter.selectOption('work');
-      
+
       // Should show only work events
       await expect(page.locator('text=Work Task')).toBeVisible();
       await expect(page.locator('text=Personal Task')).not.toBeVisible();
-      
+
       // Reset filter
       await categoryFilter.selectOption('all');
-      
+
       // Should show all events
       await expect(page.locator('text=Work Task')).toBeVisible();
       await expect(page.locator('text=Personal Task')).toBeVisible();
@@ -181,25 +141,27 @@ test.describe('Event Management View', () => {
 
   test('should edit event from management view', async ({ page }) => {
     await createTestEvent(page, 'Event to Edit', 'personal');
-    
+
     await navigateToView(page, 'Manage');
-    
+
     // Find edit button for the event
     const eventRow = page.locator('text=Event to Edit').locator('..');
-    const editButton = eventRow.locator('button[aria-label="Edit"]').or(eventRow.locator('text=Edit'));
-    
+    const editButton = eventRow
+      .locator('button[aria-label="Edit"]')
+      .or(eventRow.locator('text=Edit'));
+
     if (await editButton.isVisible()) {
       await editButton.click();
-      
+
       // Modal should open
       await expect(page.locator('[role="dialog"]')).toBeVisible();
-      
+
       // Update title
       await page.fill('input[placeholder="Event title"]', 'Updated Event Title');
-      
+
       // Save changes
       await page.click('button:has-text("Save")');
-      
+
       // Verify update
       await expect(page.locator('text=Updated Event Title')).toBeVisible();
     }
@@ -207,22 +169,26 @@ test.describe('Event Management View', () => {
 
   test('should delete event from management view', async ({ page }) => {
     await createTestEvent(page, 'Event to Delete', 'personal');
-    
+
     await navigateToView(page, 'Manage');
-    
+
     // Find delete button for the event
     const eventRow = page.locator('text=Event to Delete').locator('..');
-    const deleteButton = eventRow.locator('button[aria-label="Delete"]').or(eventRow.locator('text=Delete'));
-    
+    const deleteButton = eventRow
+      .locator('button[aria-label="Delete"]')
+      .or(eventRow.locator('text=Delete'));
+
     if (await deleteButton.isVisible()) {
       await deleteButton.click();
-      
+
       // Confirm deletion if dialog appears
-      const confirmButton = page.locator('button:has-text("Confirm")').or(page.locator('button:has-text("Delete")').last());
+      const confirmButton = page
+        .locator('button:has-text("Confirm")')
+        .or(page.locator('button:has-text("Delete")').last());
       if (await confirmButton.isVisible()) {
         await confirmButton.click();
       }
-      
+
       // Verify deletion
       await expect(page.locator('text=Event to Delete')).not.toBeVisible();
     }
@@ -233,25 +199,25 @@ test.describe('Event Management View', () => {
     await createTestEvent(page, 'Bulk Event 1', 'work');
     await createTestEvent(page, 'Bulk Event 2', 'work');
     await createTestEvent(page, 'Bulk Event 3', 'work');
-    
+
     await navigateToView(page, 'Manage');
-    
+
     // Check if bulk selection exists
     const selectAllCheckbox = page.locator('input[type="checkbox"][aria-label="Select all"]');
     if (await selectAllCheckbox.isVisible()) {
       await selectAllCheckbox.click();
-      
+
       // Find bulk delete button
       const bulkDeleteButton = page.locator('button:has-text("Delete Selected")');
       if (await bulkDeleteButton.isVisible()) {
         await bulkDeleteButton.click();
-        
+
         // Confirm bulk deletion
         const confirmButton = page.locator('button:has-text("Confirm")');
         if (await confirmButton.isVisible()) {
           await confirmButton.click();
         }
-        
+
         // Verify all events deleted
         await expect(page.locator('text=Bulk Event 1')).not.toBeVisible();
         await expect(page.locator('text=Bulk Event 2')).not.toBeVisible();
@@ -262,17 +228,17 @@ test.describe('Event Management View', () => {
 
   test('should export events', async ({ page }) => {
     await createTestEvent(page, 'Export Test Event', 'personal');
-    
+
     await navigateToView(page, 'Manage');
-    
+
     // Find export button
     const exportButton = page.locator('button:has-text("Export")');
     if (await exportButton.isVisible()) {
       // Set up download promise before clicking
       const downloadPromise = page.waitForEvent('download', { timeout: 5000 }).catch(() => null);
-      
+
       await exportButton.click();
-      
+
       // Check if download initiated
       const download = await downloadPromise;
       if (download) {
@@ -290,22 +256,22 @@ test.describe('Bug Discovery Tests', () => {
 
   test('should handle non-functional buttons', async ({ page }) => {
     const nonFunctionalButtons = [];
-    
+
     // Find all buttons
     const buttons = await page.locator('button').all();
-    
+
     for (const button of buttons) {
       const text = await button.textContent();
       const ariaLabel = await button.getAttribute('aria-label');
       const isDisabled = await button.isDisabled();
-      
+
       if (!isDisabled) {
         // Try clicking the button
         try {
           await button.click({ timeout: 1000 });
           // Check if anything happened (modal opened, navigation changed, etc.)
           await page.waitForTimeout(100);
-          
+
           // If no visible change, mark as potentially non-functional
           // This is a simple heuristic - you might need more sophisticated checks
         } catch (e) {
@@ -313,32 +279,36 @@ test.describe('Bug Discovery Tests', () => {
         }
       }
     }
-    
+
     // Report non-functional buttons
     if (nonFunctionalButtons.length > 0) {
       console.log('Potentially non-functional buttons:', nonFunctionalButtons);
     }
-    
+
     // Test should pass but log findings
     expect(nonFunctionalButtons.length).toBeLessThanOrEqual(5); // Allow some non-functional buttons
   });
 
   test('should not have overlapping UI elements', async ({ page }) => {
     // Check zoom buttons don't overlap text
-    const zoomButtons = page.locator('button[aria-label*="Zoom"]').or(page.locator('button:has-text("+")'));
+    const zoomButtons = page
+      .locator('button[aria-label*="Zoom"]')
+      .or(page.locator('button:has-text("+")'));
     const monthLabels = page.locator('text=/\\w+ 2025/');
-    
-    if (await zoomButtons.first().isVisible() && await monthLabels.first().isVisible()) {
+
+    if ((await zoomButtons.first().isVisible()) && (await monthLabels.first().isVisible())) {
       const zoomBox = await zoomButtons.first().boundingBox();
       const labelBox = await monthLabels.first().boundingBox();
-      
+
       if (zoomBox && labelBox) {
         // Check if they overlap
-        const overlap = !(zoomBox.x + zoomBox.width < labelBox.x || 
-                         labelBox.x + labelBox.width < zoomBox.x ||
-                         zoomBox.y + zoomBox.height < labelBox.y ||
-                         labelBox.y + labelBox.height < zoomBox.y);
-        
+        const overlap = !(
+          zoomBox.x + zoomBox.width < labelBox.x ||
+          labelBox.x + labelBox.width < zoomBox.x ||
+          zoomBox.y + zoomBox.height < labelBox.y ||
+          labelBox.y + labelBox.height < zoomBox.y
+        );
+
         expect(overlap).toBe(false);
       }
     }
@@ -348,7 +318,7 @@ test.describe('Bug Discovery Tests', () => {
     // Check all buttons for gradient styles
     const buttons = await page.locator('button').all();
     const gradientButtons = [];
-    
+
     for (const button of buttons) {
       const className = await button.getAttribute('class');
       if (className && className.includes('gradient')) {
@@ -356,7 +326,7 @@ test.describe('Bug Discovery Tests', () => {
         gradientButtons.push(text || 'Unknown button');
       }
     }
-    
+
     // Should have no gradient buttons
     expect(gradientButtons).toEqual([]);
   });
@@ -364,12 +334,12 @@ test.describe('Bug Discovery Tests', () => {
   test('should handle rapid clicking without errors', async ({ page }) => {
     // Monitor console errors
     const errors: string[] = [];
-    page.on('console', msg => {
+    page.on('console', (msg) => {
       if (msg.type() === 'error') {
         errors.push(msg.text());
       }
     });
-    
+
     // Rapid click on different elements
     const calendar = page.locator('[data-testid="calendar-fullbleed"]');
     if (await calendar.isVisible()) {
@@ -385,7 +355,7 @@ test.describe('Bug Discovery Tests', () => {
         }
       }
     }
-    
+
     // Should have no console errors
     expect(errors.length).toBe(0);
   });
@@ -395,19 +365,19 @@ test.describe('Bug Discovery Tests', () => {
     await page.click('[data-testid^="cell-2025-Januar-"]').first();
     await page.fill('input[placeholder="Event title"]', 'Persistence Test');
     await page.click('button:has-text("Save")');
-    
+
     // Change view
     await navigateToView(page, 'Timeline');
-    
+
     // Refresh page
     await page.reload();
-    
+
     // Should still be on Timeline view
     await expect(page.locator('[data-testid="timeline-container"]')).toBeVisible();
-    
+
     // Navigate back to Year view
     await navigateToView(page, 'Year');
-    
+
     // Event should still exist
     await expect(page.locator('text=Persistence Test')).toBeVisible();
   });
@@ -416,26 +386,26 @@ test.describe('Bug Discovery Tests', () => {
     // Test empty event creation
     await page.click('[data-testid^="cell-"]').first();
     await page.click('button:has-text("Save")');
-    
+
     // Should show validation error or not save
     const validationError = page.locator('text=/required|empty|provide/i');
     const eventCount = await page.locator('[data-testid^="event-"]').count();
-    
+
     // Either show error or don't create event
     const hasValidation = await validationError.isVisible();
     if (!hasValidation) {
       expect(eventCount).toBe(0);
     }
-    
+
     // Close modal
     await page.keyboard.press('Escape');
-    
+
     // Test very long event title
     await page.click('[data-testid^="cell-"]').first();
     const longTitle = 'A'.repeat(500);
     await page.fill('input[placeholder="Event title"]', longTitle);
     await page.click('button:has-text("Save")');
-    
+
     // Should handle gracefully (truncate or show error)
     await page.waitForTimeout(500);
   });
@@ -444,19 +414,20 @@ test.describe('Bug Discovery Tests', () => {
     // Check important interactive elements have ARIA labels
     const interactiveElements = await page.locator('button, input, select, [role="button"]').all();
     const missingLabels = [];
-    
-    for (const element of interactiveElements.slice(0, 20)) { // Check first 20 elements
+
+    for (const element of interactiveElements.slice(0, 20)) {
+      // Check first 20 elements
       const ariaLabel = await element.getAttribute('aria-label');
       const ariaLabelledBy = await element.getAttribute('aria-labelledby');
       const title = await element.getAttribute('title');
       const text = await element.textContent();
-      
+
       if (!ariaLabel && !ariaLabelledBy && !title && !text?.trim()) {
-        const tagName = await element.evaluate(el => el.tagName);
+        const tagName = await element.evaluate((el) => el.tagName);
         missingLabels.push(tagName);
       }
     }
-    
+
     // Should have minimal missing labels
     expect(missingLabels.length).toBeLessThanOrEqual(3);
   });

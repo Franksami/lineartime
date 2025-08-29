@@ -45,6 +45,9 @@ jobs:
         run: |
           echo "✨ Running code quality validation..."
           npm run lint
+          echo "🧪 Running advisory Biome and Knip checks (non-blocking)"
+          npx -y @biomejs/biome@latest check . || true
+          npx -y knip@latest || true
           
       - name: 📱 Cross-Platform Foundation Test
         run: |

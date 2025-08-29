@@ -97,7 +97,7 @@ lineartime/
 ### `hooks/` - Custom React Hooks
 **Purpose**: Reusable React logic
 **Contains**:
-- `useLinearCalendar.ts` - Calendar state management
+- `useCommandCenterCalendar.ts` - Calendar state management
 - `use-mobile.ts` - Responsive utilities
 
 ### `lib/` - Utility Functions

@@ -1,0 +1,151 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "include": [
+      "app/**",
+      "components/**",
+      "contexts/**",
+      "hooks/**",
+      "convex/**",
+      "lib/**",
+      "views/**",
+      "rules/**",
+      "tests/**",
+      "scripts/**"
+    ],
+    "ignore": [
+      ".next/**",
+      "node_modules/**",
+      ".playwright-report/**",
+      "playwright-report/**",
+      "public/**",
+      ".taskmaster/**",
+      ".ai-rules/**",
+      ".clerk/**",
+      ".cursor/**",
+      "coverage/**",
+      "**/_archive/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/*.min.*",
+      "**/*.generated.*",
+      ".migration-backup/**",
+      "volta.json",
+      "bruno/**"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "warn",
+        "noUselessFragments": "error"
+      },
+      "correctness": {
+        "noUnusedVariables": "error",
+        "noUndeclaredVariables": "error",
+        "useExhaustiveDependencies": "warn"
+      },
+      "style": {
+        "useConst": "error",
+        "useTemplate": "warn",
+        "noParameterAssign": "warn"
+      },
+      "suspicious": {
+        "noDoubleEquals": "error",
+        "noDebugger": "warn",
+        "noExplicitAny": "warn"
+      },
+      "nursery": {
+        "useCollapsedIf": "warn"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "error",
+        "useValidAriaValues": "error",
+        "useSemanticElements": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "error"
+      }
+    }
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "es5",
+      "semicolons": "always",
+      "arrowParentheses": "always"
+    }
+  },
+  "json": {
+    "parser": {
+      "allowComments": true
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
+  "overrides": [
+    {
+      "include": ["app/**/*.tsx", "components/**/*.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useConst": "error",
+            "useTemplate": "warn"
+          },
+          "correctness": {
+            "useExhaustiveDependencies": {
+              "level": "warn",
+              "options": {
+                "hooks": [
+                  {
+                    "name": "useCommandCenterCalendar",
+                    "closureIndex": 0,
+                    "dependenciesIndex": 1
+                  },
+                  {
+                    "name": "useCalendarEvents",
+                    "closureIndex": 0,
+                    "dependenciesIndex": 1
+                  },
+                  {
+                    "name": "useSyncedCalendar",
+                    "closureIndex": 0,
+                    "dependenciesIndex": 1
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "include": ["convex/**/*.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noDebugger": "off"
+          }
+        }
+      }
+    }
+  ]
+}

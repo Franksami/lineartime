@@ -1,41 +1,47 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Switch } from '@/components/ui/switch'
-import { useSettingsContext } from '@/contexts/SettingsContext'
-import { UserSettings } from '@/lib/settings/types'
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { useSettingsContext } from '@/contexts/SettingsContext';
+import type { UserSettings } from '@/lib/settings/types';
+import * as React from 'react';
 
 export function AppearanceSettings() {
-  const { settings, updateCategory } = useSettingsContext()
-  const appearance = settings.appearance
+  const { settings, updateCategory } = useSettingsContext();
+  const appearance = settings.appearance;
 
   const handleThemeChange = (theme: UserSettings['appearance']['theme']) => {
-    updateCategory('appearance', { theme })
-  }
+    updateCategory('appearance', { theme });
+  };
 
   const handleColorSchemeChange = (colorScheme: UserSettings['appearance']['colorScheme']) => {
-    updateCategory('appearance', { colorScheme })
-  }
+    updateCategory('appearance', { colorScheme });
+  };
 
   const handleFontSizeChange = (fontSize: UserSettings['appearance']['fontSize']) => {
-    updateCategory('appearance', { fontSize })
-  }
+    updateCategory('appearance', { fontSize });
+  };
 
   const toggleHighContrast = () => {
-    updateCategory('appearance', { highContrast: !appearance.highContrast })
-  }
+    updateCategory('appearance', { highContrast: !appearance.highContrast });
+  };
 
   const toggleReducedMotion = () => {
-    updateCategory('appearance', { reducedMotion: !appearance.reducedMotion })
-  }
+    updateCategory('appearance', { reducedMotion: !appearance.reducedMotion });
+  };
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium mb-4">Appearance</h3>
-        
+
         <div className="space-y-4">
           {/* Theme Selection */}
           <div className="flex items-center justify-between">
@@ -104,9 +110,7 @@ export function AppearanceSettings() {
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label htmlFor="reducedMotion">Reduced Motion</Label>
-              <p className="text-sm text-muted-foreground">
-                Minimize animations and transitions
-              </p>
+              <p className="text-sm text-muted-foreground">Minimize animations and transitions</p>
             </div>
             <Switch
               id="reducedMotion"
@@ -118,5 +122,5 @@ export function AppearanceSettings() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,0 +1,78 @@
+# Command Center Calendar - Cursor IDE Rules
+# SuperClaude Framework | Business Automation Integration
+
+## 🎯 Project Context
+**Command Center Calendar** - Frank Bibiloni's AI-powered productivity platform with:
+- **Three-pane workspace architecture** (Sidebar + Tabs + Context Dock)  
+- **Command-first experience** with contextual AI agents
+- **Enterprise calendar integration** (Google, Microsoft, Apple CalDAV)
+- **Build-in-public automation** for content generation
+- **$275K automation empire** integration
+
+## 📁 NEW ORGANIZED LOCATION
+- **Project Path**: ~/Development/Active-Projects/lineartime/
+- **Part of Business Ecosystem**: Development/Active-Projects/
+- **Integration**: Frank Bibiloni business automation workflow
+- **Focus**: Build → Auto-Content → Deploy → Profit
+
+## 🏗️ Current Architecture (MOST RECENT)
+- **Current Version**: v2.0.0 (Command Workspace Architecture)
+- **Primary Shell**: AppShell with three-pane layout
+- **Command System**: Palette (⌘/Ctrl-K) + Omnibox (NL→Actions)
+- **AI Integration**: Context Dock agents with MCP tools
+- **Testing Framework**: VTest + Playwright comprehensive validation
+
+## 🎯 Development Guidelines (UPDATED)
+
+### **Use Most Recent Components Only:**
+- **FeatureFlagManager** (in lib/featureFlags/) - NOT FeatureFlagDashboard
+- **PerformanceMonitoringDashboard** (in components/dashboard/) - NOT ProductionMonitor
+- **Command Center** naming throughout - NOT CheatCal or LinearTime
+- **AppShell architecture** - NOT legacy calendar layouts
+
+### **Business Automation Integration:**
+- **Content Generation**: Development progress → marketing content
+- **17 MCP Servers**: TaskMaster AI coordination active
+- **Multi-Platform**: Twitter, LinkedIn, Instagram, YouTube, Discord, Email
+- **Build-in-Public**: Real-time automation while developing
+
+### **Performance Targets (Research-Validated):**
+| Metric | Target | Critical |
+|--------|--------|----------|
+| Shell Render | <500ms | Yes |
+| Tab Switch | <200ms | Yes |
+| Keyboard Response | <120ms | Yes |
+| Memory Usage | <100MB | Yes |
+
+## 🧪 Testing Requirements (VTest Integration)
+
+```bash
+# MANDATORY before commits
+pnpm run test:foundation     # Foundation validation
+npx playwright test         # UI/UX testing  
+pnpm run build              # Build validation
+pnpm run lint               # Code quality
+```
+
+## 🚀 Quick Development Commands
+
+```bash
+# Development
+pnpm run dev                # Start Command Center Calendar
+cursor .                    # Open in Cursor (from project directory)
+
+# Testing  
+npx playwright test tests/command-workspace/  # Command system tests
+npx playwright test tests/ai-agents/          # AI integration tests
+npx playwright test tests/performance/        # Performance validation
+```
+
+## 🤖 AI Integration Context
+
+**Command Center Calendar** integrates with Frank Bibiloni's automation empire:
+- **Development Events**: Git commits, PRs, releases trigger content generation
+- **AI Coordination**: 9 AI providers via TaskMaster AI
+- **Content Distribution**: Automated build-in-public across 7 platforms
+- **Knowledge Management**: Obsidian vault → Notion content calendar
+
+Use this context to provide development assistance that supports the business automation workflow and Command Center Calendar architecture.

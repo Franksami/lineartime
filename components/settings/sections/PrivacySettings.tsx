@@ -1,56 +1,58 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { Button } from '@/components/ui/button'
-import { useSettingsContext } from '@/contexts/SettingsContext'
-import { Shield, Info } from 'lucide-react'
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { useSettingsContext } from '@/contexts/SettingsContext';
+import { Info, Shield } from 'lucide-react';
+import * as React from 'react';
 
 export function PrivacySettings() {
-  const { settings, updateCategory } = useSettingsContext()
-  const privacy = settings.privacy
+  const { settings, updateCategory } = useSettingsContext();
+  const privacy = settings.privacy;
 
   const toggleAnalytics = () => {
-    updateCategory('privacy', { analytics: !privacy.analytics })
-  }
+    updateCategory('privacy', { analytics: !privacy.analytics });
+  };
 
   const toggleCrashReports = () => {
-    updateCategory('privacy', { crashReports: !privacy.crashReports })
-  }
+    updateCategory('privacy', { crashReports: !privacy.crashReports });
+  };
 
   const toggleUsageData = () => {
-    updateCategory('privacy', { usageData: !privacy.usageData })
-  }
+    updateCategory('privacy', { usageData: !privacy.usageData });
+  };
 
   const clearAllData = () => {
-    if (window.confirm('Are you sure you want to clear all local data? This action cannot be undone.')) {
+    if (
+      window.confirm('Are you sure you want to clear all local data? This action cannot be undone.')
+    ) {
       // Clear all localStorage data
-      localStorage.clear()
+      localStorage.clear();
       // Reload the page to reset the app
-      window.location.reload()
+      window.location.reload();
     }
-  }
+  };
 
   const exportData = () => {
     // Gather all data
     const allData = {
       settings: settings,
       events: localStorage.getItem('linearCalendarEvents') || '[]',
-      exportDate: new Date().toISOString()
-    }
-    
+      exportDate: new Date().toISOString(),
+    };
+
     // Create download
-    const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `lineartime-data-export-${new Date().toISOString().split('T')[0]}.json`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
+    const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `lineartime-data-export-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="space-y-6">
@@ -59,14 +61,14 @@ export function PrivacySettings() {
           <Shield className="h-4 w-4" />
           Privacy & Data
         </h3>
-        
+
         <div className="space-y-4">
           {/* Analytics */}
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label htmlFor="analytics">Usage Analytics</Label>
               <p className="text-sm text-muted-foreground">
-                Help improve LinearTime by sharing anonymous usage data
+                Help improve Command Center Calendar by sharing anonymous usage data
               </p>
             </div>
             <Switch
@@ -117,14 +119,10 @@ export function PrivacySettings() {
                 <div className="space-y-0.5">
                   <p className="text-sm font-medium">Export All Data</p>
                   <p className="text-xs text-muted-foreground">
-                    Download all your LinearTime data as JSON
+                    Download all your Command Center Calendar data as JSON
                   </p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={exportData}
-                >
+                <Button variant="outline" size="sm" onClick={exportData}>
                   Export Data
                 </Button>
               </div>
@@ -132,15 +130,9 @@ export function PrivacySettings() {
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <p className="text-sm font-medium">Clear All Data</p>
-                  <p className="text-xs text-muted-foreground">
-                    Permanently delete all local data
-                  </p>
+                  <p className="text-xs text-muted-foreground">Permanently delete all local data</p>
                 </div>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={clearAllData}
-                >
+                <Button variant="destructive" size="sm" onClick={clearAllData}>
                   Clear Data
                 </Button>
               </div>
@@ -154,9 +146,9 @@ export function PrivacySettings() {
               <div className="space-y-1">
                 <p className="text-sm font-medium">Privacy Notice</p>
                 <p className="text-xs text-muted-foreground">
-                  LinearTime stores all data locally in your browser. No data is sent to external servers 
-                  unless you explicitly enable analytics or crash reporting. Your calendar events and 
-                  settings never leave your device.
+                  Command Center Calendar stores all data locally in your browser. No data is sent
+                  to external servers unless you explicitly enable analytics or crash reporting.
+                  Your calendar events and settings never leave your device.
                 </p>
               </div>
             </div>
@@ -164,5 +156,5 @@ export function PrivacySettings() {
         </div>
       </div>
     </div>
-  )
+  );
 }

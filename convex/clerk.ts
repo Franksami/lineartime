@@ -1,6 +1,6 @@
-import { v } from "convex/values";
-import { internalMutation, internalQuery } from "./_generated/server";
-import { internal } from "./_generated/api";
+import { v } from 'convex/values';
+import { internal } from './_generated/api';
+import { internalMutation, internalQuery } from './_generated/server';
 
 /**
  * Create or update user from Clerk webhook
@@ -16,8 +16,8 @@ export const upsertFromClerk = internalMutation({
   handler: async (ctx, args) => {
     // Check if user already exists
     const existingUser = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkUserId))
+      .query('users')
+      .withIndex('by_clerk_id', (q) => q.eq('clerkId', args.clerkUserId))
       .first();
 
     const now = Date.now();
@@ -31,46 +31,45 @@ export const upsertFromClerk = internalMutation({
         imageUrl: args.imageUrl,
         updatedAt: now,
       });
-      
+
       return existingUser._id;
-    } else {
-      // Create new user with default preferences
-      const userId = await ctx.db.insert("users", {
-        clerkId: args.clerkUserId,
-        email: args.email,
-        firstName: args.firstName,
-        lastName: args.lastName,
-        imageUrl: args.imageUrl,
-        preferences: {
-          theme: "auto",
-          firstDayOfWeek: 0, // Sunday
-          timeFormat: "12",
-          timezone: "America/New_York", // Default timezone
-          defaultEventDuration: 60, // 60 minutes
-          weekendDays: [0, 6], // Sunday and Saturday
-          workingHours: {
-            start: "09:00",
-            end: "17:00",
-          },
-        },
-        createdAt: now,
-        updatedAt: now,
-      });
-
-      // Create default calendar for the user
-      await ctx.db.insert("calendars", {
-        userId,
-        name: "Personal",
-        description: "My personal calendar",
-        color: "oklch(75% 0.15 320)", // Purple color
-        isDefault: true,
-        isShared: false,
-        createdAt: now,
-        updatedAt: now,
-      });
-
-      return userId;
     }
+    // Create new user with default preferences
+    const userId = await ctx.db.insert('users', {
+      clerkId: args.clerkUserId,
+      email: args.email,
+      firstName: args.firstName,
+      lastName: args.lastName,
+      imageUrl: args.imageUrl,
+      preferences: {
+        theme: 'auto',
+        firstDayOfWeek: 0, // Sunday
+        timeFormat: '12',
+        timezone: 'America/New_York', // Default timezone
+        defaultEventDuration: 60, // 60 minutes
+        weekendDays: [0, 6], // Sunday and Saturday
+        workingHours: {
+          start: '09:00',
+          end: '17:00',
+        },
+      },
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    // Create default calendar for the user
+    await ctx.db.insert('calendars', {
+      userId,
+      name: 'Personal',
+      description: 'My personal calendar',
+      color: 'oklch(75% 0.15 320)', // Purple color
+      isDefault: true,
+      isShared: false,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    return userId;
   },
 });
 
@@ -84,8 +83,8 @@ export const deleteFromClerk = internalMutation({
   handler: async (ctx, args) => {
     // Find user
     const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkUserId))
+      .query('users')
+      .withIndex('by_clerk_id', (q) => q.eq('clerkId', args.clerkUserId))
       .first();
 
     if (!user) {
@@ -93,65 +92,62 @@ export const deleteFromClerk = internalMutation({
       return;
     }
 
-    // Delete user's events
+    // Batch delete user's events
     const events = await ctx.db
-      .query("events")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .query('events')
+      .withIndex('by_user', (q) => q.eq('userId', user._id))
       .collect();
-    
-    for (const event of events) {
-      await ctx.db.delete(event._id);
+
+    // Process deletions in parallel batches for better performance
+    const BATCH_SIZE = 100;
+    for (let i = 0; i < events.length; i += BATCH_SIZE) {
+      const batch = events.slice(i, i + BATCH_SIZE);
+      await Promise.all(batch.map((event) => ctx.db.delete(event._id)));
     }
 
-    // Delete user's categories
+    // Batch delete user's categories
     const categories = await ctx.db
-      .query("categories")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .query('categories')
+      .withIndex('by_user', (q) => q.eq('userId', user._id))
       .collect();
-    
-    for (const category of categories) {
-      await ctx.db.delete(category._id);
-    }
 
-    // Delete user's calendars
+    await Promise.all(categories.map((category) => ctx.db.delete(category._id)));
+
+    // Batch delete user's calendars
     const calendars = await ctx.db
-      .query("calendars")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .query('calendars')
+      .withIndex('by_user', (q) => q.eq('userId', user._id))
       .collect();
-    
-    for (const calendar of calendars) {
-      await ctx.db.delete(calendar._id);
-    }
 
-    // Delete user's calendar providers
+    await Promise.all(calendars.map((calendar) => ctx.db.delete(calendar._id)));
+
+    // Batch delete user's calendar providers
     const providers = await ctx.db
-      .query("calendarProviders")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .query('calendarProviders')
+      .withIndex('by_user', (q) => q.eq('userId', user._id))
       .collect();
-    
-    for (const provider of providers) {
-      await ctx.db.delete(provider._id);
-    }
 
-    // Delete user's sync queue items
+    await Promise.all(providers.map((provider) => ctx.db.delete(provider._id)));
+
+    // Batch delete user's sync queue items
     const syncItems = await ctx.db
-      .query("syncQueue")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .query('syncQueue')
+      .withIndex('by_user', (q) => q.eq('userId', user._id))
       .collect();
-    
-    for (const item of syncItems) {
-      await ctx.db.delete(item._id);
+
+    // Process in batches if large
+    for (let i = 0; i < syncItems.length; i += BATCH_SIZE) {
+      const batch = syncItems.slice(i, i + BATCH_SIZE);
+      await Promise.all(batch.map((item) => ctx.db.delete(item._id)));
     }
 
-    // Delete user's AI scheduling sessions
+    // Batch delete user's AI scheduling sessions
     const aiSessions = await ctx.db
-      .query("aiSchedulingSessions")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .query('aiSchedulingSessions')
+      .withIndex('by_user', (q) => q.eq('userId', user._id))
       .collect();
-    
-    for (const session of aiSessions) {
-      await ctx.db.delete(session._id);
-    }
+
+    await Promise.all(aiSessions.map((session) => ctx.db.delete(session._id)));
 
     // Finally, delete the user
     await ctx.db.delete(user._id);
@@ -167,9 +163,8 @@ export const getUserByClerkId = internalQuery({
   },
   handler: async (ctx, args) => {
     return await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkUserId))
+      .query('users')
+      .withIndex('by_clerk_id', (q) => q.eq('clerkId', args.clerkUserId))
       .first();
   },
 });
-

@@ -3,8 +3,15 @@
  * Handles data backup, restore, and versioning
  */
 
-import { db, StoredEvent, StoredCategory, StoredCalendar, StoredPreferences, BackupMetadata } from './schema';
 import { DataPortability } from './migration';
+import {
+  type BackupMetadata,
+  type StoredCalendar,
+  type StoredCategory,
+  type StoredEvent,
+  type StoredPreferences,
+  db,
+} from './schema';
 
 /**
  * Backup format interface
@@ -55,29 +62,17 @@ export class BackupManager {
     const start = performance.now();
 
     // Fetch all data
-    let events = await db.events
-      .where('userId')
-      .equals(userId)
-      .toArray();
+    let events = await db.events.where('userId').equals(userId).toArray();
 
     if (!includeDeleted) {
-      events = events.filter(e => !e.isDeleted);
+      events = events.filter((e) => !e.isDeleted);
     }
 
-    const categories = await db.categories
-      .where('userId')
-      .equals(userId)
-      .toArray();
+    const categories = await db.categories.where('userId').equals(userId).toArray();
 
-    const calendars = await db.calendars
-      .where('userId')
-      .equals(userId)
-      .toArray();
+    const calendars = await db.calendars.where('userId').equals(userId).toArray();
 
-    const preferences = await db.preferences
-      .where('userId')
-      .equals(userId)
-      .first() || null;
+    const preferences = (await db.preferences.where('userId').equals(userId).first()) || null;
 
     // Prepare backup data
     const backupData: BackupData = {
@@ -108,17 +103,17 @@ export class BackupManager {
 
     // Compress if needed
     let finalData = dataStr;
-    if (compress && size > this.COMPRESSION_THRESHOLD) {
-      finalData = await this.compressData(dataStr);
+    if (compress && size > BackupManager.COMPRESSION_THRESHOLD) {
+      finalData = await BackupManager.compressData(dataStr);
       backupData.metadata.compressed = true;
     }
 
     // Calculate checksum
-    backupData.metadata.checksum = await this.calculateChecksum(finalData);
+    backupData.metadata.checksum = await BackupManager.calculateChecksum(finalData);
 
     // Encrypt if requested
     if (options.encrypt && options.password) {
-      finalData = await this.encryptData(finalData, options.password);
+      finalData = await BackupManager.encryptData(finalData, options.password);
     }
 
     // Store backup metadata
@@ -133,7 +128,7 @@ export class BackupManager {
     });
 
     // Clean old backups
-    await this.cleanOldBackups(userId);
+    await BackupManager.cleanOldBackups(userId);
 
     // Log performance
     await db.metrics.add({
@@ -188,13 +183,13 @@ export class BackupManager {
         // Decrypt if needed
         let data = backupData;
         if (options.decrypt && options.password) {
-          data = await this.decryptData(data, options.password);
+          data = await BackupManager.decryptData(data, options.password);
         }
 
         // Decompress if needed
         backup = JSON.parse(data);
         if (backup.metadata.compressed) {
-          const decompressed = await this.decompressData(data);
+          const decompressed = await BackupManager.decompressData(data);
           backup = JSON.parse(decompressed);
         }
       } else {
@@ -202,13 +197,14 @@ export class BackupManager {
       }
 
       // Verify checksum
-      const checksum = await this.calculateChecksum(JSON.stringify(backup));
+      const checksum = await BackupManager.calculateChecksum(JSON.stringify(backup));
       if (backup.metadata.checksum && backup.metadata.checksum !== checksum) {
         console.warn('Backup checksum mismatch - data may be corrupted');
       }
 
       // Start transaction
-      await db.transaction('rw',
+      await db.transaction(
+        'rw',
         db.events,
         db.categories,
         db.calendars,
@@ -233,7 +229,7 @@ export class BackupManager {
                   const existing = await db.events
                     .where('[userId+startTime]')
                     .equals([userId, event.startTime])
-                    .and(e => e.title === event.title)
+                    .and((e) => e.title === event.title)
                     .first();
 
                   if (!existing) {
@@ -314,7 +310,8 @@ export class BackupManager {
         duration: performance.now() - start,
         timestamp: Date.now(),
         success: result.success,
-        recordCount: result.restored.events + result.restored.categories + result.restored.calendars,
+        recordCount:
+          result.restored.events + result.restored.categories + result.restored.calendars,
       });
     } catch (error) {
       result.success = false;
@@ -328,11 +325,7 @@ export class BackupManager {
    * List available backups
    */
   static async listBackups(userId: string): Promise<BackupMetadata[]> {
-    return await db.backups
-      .where('userId')
-      .equals(userId)
-      .reverse()
-      .sortBy('timestamp');
+    return await db.backups.where('userId').equals(userId).reverse().sortBy('timestamp');
   }
 
   /**
@@ -346,25 +339,22 @@ export class BackupManager {
    * Clean old backups
    */
   private static async cleanOldBackups(userId: string): Promise<void> {
-    const backups = await this.listBackups(userId);
-    
-    if (backups.length > this.MAX_BACKUPS) {
-      const toDelete = backups.slice(this.MAX_BACKUPS);
-      await db.backups.bulkDelete(toDelete.map(b => b.id!));
+    const backups = await BackupManager.listBackups(userId);
+
+    if (backups.length > BackupManager.MAX_BACKUPS) {
+      const toDelete = backups.slice(BackupManager.MAX_BACKUPS);
+      await db.backups.bulkDelete(toDelete.map((b) => b.id!));
     }
   }
 
   /**
    * Export backup to file
    */
-  static async exportToFile(
-    backupData: BackupData,
-    filename?: string
-  ): Promise<void> {
+  static async exportToFile(backupData: BackupData, filename?: string): Promise<void> {
     const dataStr = JSON.stringify(backupData, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = filename || `lineartime-backup-${backupData.metadata.timestamp}.json`;
@@ -380,16 +370,16 @@ export class BackupManager {
   static async importFromFile(file: File): Promise<BackupData> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      
+
       reader.onload = (e) => {
         try {
           const data = JSON.parse(e.target?.result as string);
           resolve(data);
-        } catch (error) {
+        } catch (_error) {
           reject(new Error('Invalid backup file'));
         }
       };
-      
+
       reader.onerror = () => reject(new Error('Failed to read file'));
       reader.readAsText(file);
     });
@@ -401,12 +391,12 @@ export class BackupManager {
   private static async compressData(data: string): Promise<string> {
     const encoder = new TextEncoder();
     const dataBytes = encoder.encode(data);
-    
+
     const cs = new CompressionStream('gzip');
     const writer = cs.writable.getWriter();
     writer.write(dataBytes);
     writer.close();
-    
+
     const compressedBytes = await new Response(cs.readable).arrayBuffer();
     return btoa(String.fromCharCode(...new Uint8Array(compressedBytes)));
   }
@@ -415,13 +405,13 @@ export class BackupManager {
    * Decompress data
    */
   private static async decompressData(data: string): Promise<string> {
-    const compressedBytes = Uint8Array.from(atob(data), c => c.charCodeAt(0));
-    
+    const compressedBytes = Uint8Array.from(atob(data), (c) => c.charCodeAt(0));
+
     const ds = new DecompressionStream('gzip');
     const writer = ds.writable.getWriter();
     writer.write(compressedBytes);
     writer.close();
-    
+
     const decompressedBytes = await new Response(ds.readable).arrayBuffer();
     const decoder = new TextDecoder();
     return decoder.decode(decompressedBytes);
@@ -435,7 +425,7 @@ export class BackupManager {
     const dataBytes = encoder.encode(data);
     const hashBuffer = await crypto.subtle.digest('SHA-256', dataBytes);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 
   /**
@@ -446,13 +436,13 @@ export class BackupManager {
     const encoder = new TextEncoder();
     const dataBytes = encoder.encode(data);
     const passwordBytes = encoder.encode(password);
-    
+
     // Simple XOR encryption (NOT secure - for demo only)
     const encrypted = new Uint8Array(dataBytes.length);
     for (let i = 0; i < dataBytes.length; i++) {
       encrypted[i] = dataBytes[i] ^ passwordBytes[i % passwordBytes.length];
     }
-    
+
     return btoa(String.fromCharCode(...encrypted));
   }
 
@@ -461,16 +451,16 @@ export class BackupManager {
    */
   private static async decryptData(data: string, password: string): Promise<string> {
     // This is a simplified example - use proper decryption library in production
-    const encryptedBytes = Uint8Array.from(atob(data), c => c.charCodeAt(0));
+    const encryptedBytes = Uint8Array.from(atob(data), (c) => c.charCodeAt(0));
     const encoder = new TextEncoder();
     const passwordBytes = encoder.encode(password);
-    
+
     // Simple XOR decryption (NOT secure - for demo only)
     const decrypted = new Uint8Array(encryptedBytes.length);
     for (let i = 0; i < encryptedBytes.length; i++) {
       decrypted[i] = encryptedBytes[i] ^ passwordBytes[i % passwordBytes.length];
     }
-    
+
     const decoder = new TextDecoder();
     return decoder.decode(decrypted);
   }
@@ -486,24 +476,27 @@ export class AutoBackupScheduler {
    * Start auto-backup
    */
   static start(userId: string, intervalHours = 24): void {
-    this.stop();
-    
+    AutoBackupScheduler.stop();
+
     // Initial backup
     BackupManager.createBackup(userId).catch(console.error);
-    
+
     // Schedule regular backups
-    this.interval = window.setInterval(() => {
-      BackupManager.createBackup(userId).catch(console.error);
-    }, intervalHours * 60 * 60 * 1000);
+    AutoBackupScheduler.interval = window.setInterval(
+      () => {
+        BackupManager.createBackup(userId).catch(console.error);
+      },
+      intervalHours * 60 * 60 * 1000
+    );
   }
 
   /**
    * Stop auto-backup
    */
   static stop(): void {
-    if (this.interval) {
-      clearInterval(this.interval);
-      this.interval = null;
+    if (AutoBackupScheduler.interval) {
+      clearInterval(AutoBackupScheduler.interval);
+      AutoBackupScheduler.interval = null;
     }
   }
 }

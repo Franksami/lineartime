@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json.schemastore.org/governance",
+  "version": "1.0.0",
+  "description": "Command Center development governance - streamlined for rapid iteration while maintaining quality",
+  "governance": {
+    "enabled": true,
+    "level": "development",
+    "autoFix": false,
+    "autoRollback": false,
+    "failureThreshold": 60,
+    "warningThreshold": 75
+  },
+  "qualityGates": {
+    "foundationProtection": {
+      "enabled": true,
+      "weight": 0.40,
+      "priority": "critical",
+      "rules": {
+        "preserveCommandCenterCalendar": true,
+        "maintainPerformance": true,
+        "noBreakingChanges": true
+      }
+    },
+    "cheatcalFeatures": {
+      "enabled": true,
+      "weight": 0.25,
+      "rules": {
+        "controversialThemes": {
+          "implemented": true,
+          "professionalQuality": true
+        },
+        "aiIntegration": {
+          "contextEngine": true,
+          "computerVision": true,
+          "performanceOptimized": true
+        },
+        "marketplaceFeatures": {
+          "valueTracking": true,
+          "revenueSharing": true
+        }
+      }
+    },
+    "designTokens": {
+      "enabled": true,
+      "weight": 0.15,
+      "rules": {
+        "coverage": {
+          "minimum": 70,
+          "target": 85
+        },
+        "violations": {
+          "maximum": 10,
+          "warning": 20
+        },
+        "naming": {
+          "enforceConventions": false,
+          "allowedPatterns": ["camelCase", "kebab-case", "design-system", "numeric"]
+        }
+      }
+    },
+    "performance": {
+      "enabled": true,
+      "weight": 0.20,
+      "rules": {
+        "fps": {
+          "minimum": 60,
+          "target": 112,
+          "baseline": "preserve_existing"
+        },
+        "memoryUsage": {
+          "maximum": "120MB",
+          "baseline": "100MB"
+        },
+        "bundleSize": {
+          "initial": "600KB",
+          "total": "3MB",
+          "component": "75KB"
+        }
+      }
+    }
+  },
+  "enforcement": {
+    "preCommit": {
+      "enabled": true,
+      "skipOn": ["wip", "draft", "cheatcal-dev"],
+      "hooks": [
+        "test:foundation"
+      ]
+    },
+    "prePush": {
+      "enabled": true,
+      "hooks": [
+        "test:foundation",
+        "pnpm build"
+      ]
+    }
+  },
+  "exemptions": {
+    "files": [
+      "*.test.ts",
+      "*.spec.ts", 
+      "*.stories.ts",
+      "docs/**/*",
+      "scripts/**/*",
+      "design/**/*",
+      "lib/computer-vision/**/*",
+      "electron/**/*",
+      "lib/marketplace/**/*",
+      "lib/community/**/*",
+      "lib/viral/**/*",
+      "components/cheatcal/**/*",
+      "components/viral/**/*",
+      "app/cheatcal/**/*"
+    ],
+    "branches": [
+      "feature/cheatcal-*",
+      "experimental/*",
+      "prototype/*"
+    ],
+    "temporaryOverrides": {
+      "enabled": true,
+      "approvalRequired": false,
+      "maxDuration": "30d",
+      "reason": "Command Center rapid development phase"
+    }
+  }
+}

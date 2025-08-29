@@ -1,80 +1,86 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { useSettingsContext } from '@/contexts/SettingsContext'
-import { Keyboard } from 'lucide-react'
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { useSettingsContext } from '@/contexts/SettingsContext';
+import { Keyboard } from 'lucide-react';
+import * as React from 'react';
 
 export function ShortcutSettings() {
-  const { settings, updateCategory, resetCategory } = useSettingsContext()
-  const shortcuts = settings.shortcuts
-  const [editingKey, setEditingKey] = React.useState<string | null>(null)
-  const [newBinding, setNewBinding] = React.useState('')
+  const { settings, updateCategory, resetCategory } = useSettingsContext();
+  const shortcuts = settings.shortcuts;
+  const [editingKey, setEditingKey] = React.useState<string | null>(null);
+  const [newBinding, setNewBinding] = React.useState('');
 
   const toggleShortcuts = () => {
-    updateCategory('shortcuts', { enabled: !shortcuts.enabled })
-  }
+    updateCategory('shortcuts', { enabled: !shortcuts.enabled });
+  };
 
-  const handleKeyCapture = (e: React.KeyboardEvent<HTMLInputElement>, action: string) => {
-    e.preventDefault()
-    const key = e.key
-    const modifiers = []
-    
-    if (e.ctrlKey) modifiers.push('ctrl')
-    if (e.metaKey) modifiers.push('cmd')
-    if (e.altKey) modifiers.push('alt')
-    if (e.shiftKey) modifiers.push('shift')
-    
-    const binding = modifiers.length > 0 
-      ? `${modifiers.join('+')}+${key.toLowerCase()}`
-      : key.toLowerCase()
-    
-    setNewBinding(binding)
-  }
+  const handleKeyCapture = (e: React.KeyboardEvent<HTMLInputElement>, _action: string) => {
+    e.preventDefault();
+    const key = e.key;
+    const modifiers = [];
+
+    if (e.ctrlKey) modifiers.push('ctrl');
+    if (e.metaKey) modifiers.push('cmd');
+    if (e.altKey) modifiers.push('alt');
+    if (e.shiftKey) modifiers.push('shift');
+
+    const binding =
+      modifiers.length > 0 ? `${modifiers.join('+')}+${key.toLowerCase()}` : key.toLowerCase();
+
+    setNewBinding(binding);
+  };
 
   const saveBinding = (action: string) => {
     if (newBinding) {
       updateCategory('shortcuts', {
         customBindings: {
           ...shortcuts.customBindings,
-          [action]: newBinding
-        }
-      })
-      setEditingKey(null)
-      setNewBinding('')
+          [action]: newBinding,
+        },
+      });
+      setEditingKey(null);
+      setNewBinding('');
     }
-  }
+  };
 
   const resetBinding = (action: string) => {
-    const { [action]: _, ...rest } = shortcuts.customBindings
-    updateCategory('shortcuts', { customBindings: rest })
-  }
+    const { [action]: _, ...rest } = shortcuts.customBindings;
+    updateCategory('shortcuts', { customBindings: rest });
+  };
 
   const getBinding = (action: string): string => {
-    return shortcuts.customBindings[action] || shortcuts.defaultBindings[action as keyof typeof shortcuts.defaultBindings]
-  }
+    return (
+      shortcuts.customBindings[action] ||
+      shortcuts.defaultBindings[action as keyof typeof shortcuts.defaultBindings]
+    );
+  };
 
   const shortcutActions = [
     { key: 'newEvent', label: 'New Event', description: 'Create a new calendar event' },
     { key: 'search', label: 'Search', description: 'Open search/command palette' },
     { key: 'toggleView', label: 'Toggle View', description: 'Switch between calendar views' },
     { key: 'nextPeriod', label: 'Next Period', description: 'Navigate to next time period' },
-    { key: 'prevPeriod', label: 'Previous Period', description: 'Navigate to previous time period' },
+    {
+      key: 'prevPeriod',
+      label: 'Previous Period',
+      description: 'Navigate to previous time period',
+    },
     { key: 'today', label: 'Go to Today', description: 'Jump to current date' },
     { key: 'delete', label: 'Delete', description: 'Delete selected item' },
     { key: 'escape', label: 'Cancel/Close', description: 'Cancel action or close dialog' },
     { key: 'save', label: 'Save', description: 'Save current changes' },
     { key: 'settings', label: 'Open Settings', description: 'Open settings dialog' },
-  ]
+  ];
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium mb-4">Keyboard Shortcuts</h3>
-        
+
         <div className="space-y-4">
           {/* Master Toggle */}
           <div className="flex items-center justify-between">
@@ -101,15 +107,11 @@ export function ShortcutSettings() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between mb-2">
                   <Label>Shortcut Bindings</Label>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => resetCategory('shortcuts')}
-                  >
+                  <Button variant="outline" size="sm" onClick={() => resetCategory('shortcuts')}>
                     Reset All to Default
                   </Button>
                 </div>
-                
+
                 <div className="rounded-lg border">
                   <table className="w-full">
                     <thead>
@@ -151,8 +153,8 @@ export function ShortcutSettings() {
                                   size="sm"
                                   variant="ghost"
                                   onClick={() => {
-                                    setEditingKey(null)
-                                    setNewBinding('')
+                                    setEditingKey(null);
+                                    setNewBinding('');
                                   }}
                                 >
                                   Cancel
@@ -171,8 +173,8 @@ export function ShortcutSettings() {
                                   size="sm"
                                   variant="ghost"
                                   onClick={() => {
-                                    setEditingKey(action.key)
-                                    setNewBinding(getBinding(action.key))
+                                    setEditingKey(action.key);
+                                    setNewBinding(getBinding(action.key));
                                   }}
                                 >
                                   Edit
@@ -199,7 +201,7 @@ export function ShortcutSettings() {
               {/* Instructions */}
               <div className="pt-4 border-t">
                 <p className="text-sm text-muted-foreground">
-                  Click "Edit" to customize a shortcut. Press the key combination you want to use. 
+                  Click "Edit" to customize a shortcut. Press the key combination you want to use.
                   Use modifier keys (Cmd/Ctrl, Alt, Shift) for complex shortcuts.
                 </p>
               </div>
@@ -208,5 +210,5 @@ export function ShortcutSettings() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -3,7 +3,7 @@
  * Defines the structure for offline storage and caching
  */
 
-import Dexie, { Table } from 'dexie';
+import Dexie, { type Table } from 'dexie';
 
 /**
  * Event interface for IndexedDB storage
@@ -165,7 +165,7 @@ export interface PerformanceMetric {
 /**
  * Main Database Class
  */
-export class LinearTimeDB extends Dexie {
+export class CommandCenterCalendarDB extends Dexie {
   // Tables
   events!: Table<StoredEvent>;
   categories!: Table<StoredCategory>;
@@ -178,11 +178,12 @@ export class LinearTimeDB extends Dexie {
   metrics!: Table<PerformanceMetric>;
 
   constructor() {
-    super('LinearTimeDB');
+    super('Command Center CalendarDB');
 
     // Define schema versions
     this.version(1).stores({
-      events: '++id, convexId, userId, startTime, endTime, categoryId, syncStatus, [userId+startTime], [userId+categoryId], [userId+syncStatus], lastModified',
+      events:
+        '++id, convexId, userId, startTime, endTime, categoryId, syncStatus, [userId+startTime], [userId+categoryId], [userId+syncStatus], lastModified',
       categories: '++id, convexId, userId, name, syncStatus, [userId+name]',
       calendars: '++id, convexId, userId, name, isDefault, syncStatus, [userId+isDefault]',
       preferences: '++id, userId, lastSyncTime',
@@ -190,37 +191,44 @@ export class LinearTimeDB extends Dexie {
       cache: '++id, key, expiresAt, *tags',
       migrations: '++id, version, appliedAt',
       backups: '++id, userId, timestamp',
-      metrics: '++id, operation, timestamp, success'
+      metrics: '++id, operation, timestamp, success',
     });
 
     // Version 2: Add compound indexes for better query performance
     this.version(2).stores({
-      events: '++id, convexId, userId, startTime, endTime, categoryId, syncStatus, [userId+startTime], [userId+endTime], [userId+categoryId], [userId+syncStatus], [userId+startTime+endTime], lastModified, isDeleted',
+      events:
+        '++id, convexId, userId, startTime, endTime, categoryId, syncStatus, [userId+startTime], [userId+endTime], [userId+categoryId], [userId+syncStatus], [userId+startTime+endTime], lastModified, isDeleted',
       categories: '++id, convexId, userId, name, syncStatus, [userId+name], [userId+syncStatus]',
-      calendars: '++id, convexId, userId, name, isDefault, syncStatus, [userId+isDefault], [userId+syncStatus]',
+      calendars:
+        '++id, convexId, userId, name, isDefault, syncStatus, [userId+isDefault], [userId+syncStatus]',
       preferences: '++id, userId, lastSyncTime, offlineMode',
-      syncQueue: '++id, userId, operation, entity, entityId, createdAt, attempts, [userId+entity], [userId+operation]',
+      syncQueue:
+        '++id, userId, operation, entity, entityId, createdAt, attempts, [userId+entity], [userId+operation]',
       cache: '++id, key, expiresAt, *tags, createdAt',
       migrations: '++id, version, appliedAt, success',
       backups: '++id, userId, timestamp, version',
-      metrics: '++id, operation, timestamp, success, duration'
+      metrics: '++id, operation, timestamp, success, duration',
     });
 
     // Version 3: Add support for recurring events and advanced features
     this.version(3).stores({
-      events: '++id, convexId, userId, title, startTime, endTime, categoryId, syncStatus, [userId+startTime], [userId+endTime], [userId+categoryId], [userId+syncStatus], [userId+startTime+endTime], [userId+title], lastModified, isDeleted, allDay',
-      categories: '++id, convexId, userId, name, color, syncStatus, [userId+name], [userId+syncStatus]',
-      calendars: '++id, convexId, userId, name, isDefault, isShared, syncStatus, [userId+isDefault], [userId+syncStatus], [userId+isShared]',
+      events:
+        '++id, convexId, userId, title, startTime, endTime, categoryId, syncStatus, [userId+startTime], [userId+endTime], [userId+categoryId], [userId+syncStatus], [userId+startTime+endTime], [userId+title], lastModified, isDeleted, allDay',
+      categories:
+        '++id, convexId, userId, name, color, syncStatus, [userId+name], [userId+syncStatus]',
+      calendars:
+        '++id, convexId, userId, name, isDefault, isShared, syncStatus, [userId+isDefault], [userId+syncStatus], [userId+isShared]',
       preferences: '++id, userId, theme, timeFormat, timezone, lastSyncTime, offlineMode, autoSync',
-      syncQueue: '++id, userId, operation, entity, entityId, createdAt, attempts, lastAttempt, [userId+entity], [userId+operation], [attempts+lastAttempt]',
+      syncQueue:
+        '++id, userId, operation, entity, entityId, createdAt, attempts, lastAttempt, [userId+entity], [userId+operation], [attempts+lastAttempt]',
       cache: '++id, key, expiresAt, *tags, createdAt, [key+expiresAt]',
       migrations: '++id, version, appliedAt, success',
       backups: '++id, userId, timestamp, version, size, compressed',
-      metrics: '++id, operation, timestamp, success, duration, recordCount, [operation+timestamp]'
+      metrics: '++id, operation, timestamp, success, duration, recordCount, [operation+timestamp]',
     });
 
     // Hooks for automatic timestamps
-    this.events.hook('creating', (primKey, obj) => {
+    this.events.hook('creating', (_primKey, obj) => {
       const now = Date.now();
       obj.createdAt = obj.createdAt || now;
       obj.updatedAt = now;
@@ -228,7 +236,7 @@ export class LinearTimeDB extends Dexie {
       obj.syncStatus = obj.syncStatus || 'local';
     });
 
-    this.events.hook('updating', (modifications, primKey, obj) => {
+    this.events.hook('updating', (modifications, _primKey, obj) => {
       modifications.updatedAt = Date.now();
       modifications.lastModified = Date.now();
       if (!obj.syncStatus || obj.syncStatus === 'synced') {
@@ -236,7 +244,7 @@ export class LinearTimeDB extends Dexie {
       }
     });
 
-    this.categories.hook('creating', (primKey, obj) => {
+    this.categories.hook('creating', (_primKey, obj) => {
       const now = Date.now();
       obj.createdAt = obj.createdAt || now;
       obj.updatedAt = now;
@@ -250,7 +258,7 @@ export class LinearTimeDB extends Dexie {
       }
     });
 
-    this.calendars.hook('creating', (primKey, obj) => {
+    this.calendars.hook('creating', (_primKey, obj) => {
       const now = Date.now();
       obj.createdAt = obj.createdAt || now;
       obj.updatedAt = now;
@@ -270,7 +278,7 @@ export class LinearTimeDB extends Dexie {
    */
   async clearAllData(): Promise<void> {
     await this.transaction('rw', this.tables, async () => {
-      await Promise.all(this.tables.map(table => table.clear()));
+      await Promise.all(this.tables.map((table) => table.clear()));
     });
   }
 
@@ -309,7 +317,7 @@ export class LinearTimeDB extends Dexie {
   async cleanExpiredCache(): Promise<number> {
     const now = Date.now();
     const expired = await this.cache.where('expiresAt').below(now).toArray();
-    await this.cache.bulkDelete(expired.map(e => e.id!));
+    await this.cache.bulkDelete(expired.map((e) => e.id!));
     return expired.length;
   }
 
@@ -339,7 +347,7 @@ export class LinearTimeDB extends Dexie {
 }
 
 // Create and export database instance
-export const db = new LinearTimeDB();
+export const db = new CommandCenterCalendarDB();
 
 // Export database types
 export type { Table } from 'dexie';

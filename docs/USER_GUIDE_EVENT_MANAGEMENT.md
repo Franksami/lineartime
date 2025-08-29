@@ -1,4 +1,4 @@
-# LinearTime Event Management User Guide
+# Command Center Calendar Event Management User Guide
 
 ## Complete Guide to Creating, Editing, and Managing Events
 
@@ -24,7 +24,7 @@ Last Updated: August 23, 2025
 
 ## Quick Start
 
-LinearTime provides multiple intuitive ways to manage your calendar events. Here's what you can do in 30 seconds:
+Command Center Calendar provides multiple intuitive ways to manage your calendar events. Here's what you can do in 30 seconds:
 
 ### Your First Event in 3 Steps
 
@@ -295,7 +295,7 @@ Future updates will allow:
 
 ## Mobile Usage
 
-LinearTime is fully optimized for mobile devices with touch gestures.
+Command Center Calendar is fully optimized for mobile devices with touch gestures.
 
 ### Touch Gestures
 
@@ -621,7 +621,7 @@ Be the first to try new features:
 
 ---
 
-*Thank you for choosing LinearTime! We're committed to making calendar management intuitive and powerful.*
+*Thank you for choosing Command Center Calendar! We're committed to making calendar management intuitive and powerful.*
 
 *User Guide Version 1.0.0 | August 23, 2025*  
-*© 2025 LinearTime - "Life is bigger than a week"*
+*© 2025 Command Center Calendar - "Life is bigger than a week"*

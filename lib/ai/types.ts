@@ -1,4 +1,4 @@
-import { Event, EventCategory } from '@/types/calendar';
+import type { Event, EventCategory } from '@/types/calendar';
 
 // Time slot representation
 export interface TimeSlot {
@@ -117,7 +117,7 @@ export interface SchedulingResult {
 export interface SchedulingSuggestion {
   slot: TimeSlot;
   score: number;
-  reasoning: string[];
+  reasoningText: string[];
   constraints: {
     satisfied: string[];
     violated: string[];

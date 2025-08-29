@@ -1,0 +1,52 @@
+meta {
+  name: Google Calendar Authentication
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/providers/google/auth
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "redirectUrl": "{{baseUrl}}/calendar"
+  }
+}
+
+tests {
+  test("Status code is 200 or 302", function() {
+    const status = res.status;
+    expect(status).to.be.oneOf([200, 302]);
+  });
+
+  test("Response contains auth URL", function() {
+    if (res.status === 200) {
+      const data = res.body;
+      expect(data).to.have.property("authUrl");
+      expect(data.authUrl).to.include("accounts.google.com");
+    }
+  });
+
+  test("Response time under 1 second", function() {
+    expect(res.responseTime).to.be.below(1000);
+  });
+}
+
+docs {
+  # Google Calendar Authentication
+  
+  Initiates OAuth 2.0 authentication flow for Google Calendar integration.
+  
+  ## Response
+  - 200: Returns auth URL for user consent
+  - 302: Redirects to Google OAuth consent screen
+  - 401: Invalid or missing authentication token
+  - 500: Server error during auth initialization
+}

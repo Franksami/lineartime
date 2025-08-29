@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useQuery, useMutation } from 'convex/react'
-import { api } from '@/convex/_generated/api'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Switch } from '@/components/ui/switch'
-import { Label } from '@/components/ui/label'
-import { useSearchParams } from 'next/navigation'
-import { useToast } from '@/hooks/use-toast'
-import { 
-  Calendar, 
-  CheckCircle, 
-  AlertCircle, 
-  Settings,
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { api } from '@/convex/_generated/api';
+import { useToast } from '@/hooks/use-toast';
+import { useMutation, useQuery } from 'convex/react';
+import {
+  AlertCircle,
+  Calendar,
+  CheckCircle,
   ExternalLink,
   Loader2,
+  Plus,
   RefreshCw,
+  Settings,
   Trash2,
-  Plus
-} from 'lucide-react'
+} from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 // Provider configurations
 const PROVIDERS = [
@@ -59,33 +59,34 @@ const PROVIDERS = [
     authUrl: '/api/auth/notion',
     comingSoon: true,
   },
-]
+];
 
 export default function IntegrationsPage() {
-  const { toast } = useToast()
-  const searchParams = useSearchParams()
-  const [isConnecting, setIsConnecting] = useState<string | null>(null)
-  
+  const { toast } = useToast();
+  const searchParams = useSearchParams();
+  const [isConnecting, setIsConnecting] = useState<string | null>(null);
+
   // Convex queries and mutations
-  const connectedProviders = useQuery(api.calendar.providers.getConnectedProviders)
-  const disconnectProvider = useMutation(api.calendar.providers.disconnectProvider)
-  const updateProviderSettings = useMutation(api.calendar.providers.updateProviderSettings)
-  const syncQueueStatus = useQuery(api.calendar.sync.getSyncQueueStatus)
-  const scheduleSync = useMutation(api.calendar.sync.scheduleSync)
+  const connectedProviders = useQuery(api.calendar.providers.getConnectedProviders);
+  const disconnectProvider = useMutation(api.calendar.providers.disconnectProvider);
+  const updateProviderSettings = useMutation(api.calendar.providers.updateProviderSettings);
+  const syncQueueStatus = useQuery(api.calendar.sync.getSyncQueueStatus);
+  const scheduleSync = useMutation(api.calendar.sync.scheduleSync);
 
   // Handle OAuth callback results
   useEffect(() => {
-    const success = searchParams.get('success')
-    const error = searchParams.get('error')
-    const calendars = searchParams.get('calendars')
+    const success = searchParams.get('success');
+    const error = searchParams.get('error');
+    const calendars = searchParams.get('calendars');
 
     if (success) {
       toast({
         title: 'Connection successful!',
-        description: success === 'google_connected' 
-          ? `Connected to Google Calendar${calendars ? ` (${calendars} calendars found)` : ''}`
-          : 'Calendar provider connected successfully',
-      })
+        description:
+          success === 'google_connected'
+            ? `Connected to Google Calendar${calendars ? ` (${calendars} calendars found)` : ''}`
+            : 'Calendar provider connected successfully',
+      });
     }
 
     if (error) {
@@ -93,47 +94,47 @@ export default function IntegrationsPage() {
         title: 'Connection failed',
         description: getErrorMessage(error),
         variant: 'destructive',
-      })
+      });
     }
-  }, [searchParams, toast])
+  }, [searchParams, toast]);
 
   const getErrorMessage = (error: string) => {
     switch (error) {
       case 'access_denied':
-        return 'You denied access to your calendar'
+        return 'You denied access to your calendar';
       case 'invalid_state':
-        return 'Invalid authentication state. Please try again.'
+        return 'Invalid authentication state. Please try again.';
       case 'state_expired':
-        return 'Authentication expired. Please try again.'
+        return 'Authentication expired. Please try again.';
       case 'unauthorized':
-        return 'You must be logged in to connect calendars'
+        return 'You must be logged in to connect calendars';
       case 'callback_failed':
-        return 'Failed to process callback. Please try again.'
+        return 'Failed to process callback. Please try again.';
       default:
-        return `An error occurred: ${error}`
+        return `An error occurred: ${error}`;
     }
-  }
+  };
 
   const handleConnect = (providerId: string, authUrl: string) => {
-    setIsConnecting(providerId)
-    window.location.href = authUrl
-  }
+    setIsConnecting(providerId);
+    window.location.href = authUrl;
+  };
 
   const handleDisconnect = async (provider: any) => {
     try {
-      await disconnectProvider({ provider: provider.provider })
+      await disconnectProvider({ provider: provider.provider });
       toast({
         title: 'Disconnected',
         description: `${provider.provider} calendar has been disconnected`,
-      })
-    } catch (error) {
+      });
+    } catch (_error) {
       toast({
         title: 'Error',
         description: 'Failed to disconnect provider',
         variant: 'destructive',
-      })
+      });
     }
-  }
+  };
 
   const handleSync = async (provider: any) => {
     try {
@@ -141,46 +142,46 @@ export default function IntegrationsPage() {
         provider: provider.provider,
         operation: 'incremental_sync',
         priority: 8,
-      })
+      });
       toast({
         title: 'Sync scheduled',
         description: 'Your calendars will be synced shortly',
-      })
-    } catch (error) {
+      });
+    } catch (_error) {
       toast({
         title: 'Error',
         description: 'Failed to schedule sync',
         variant: 'destructive',
-      })
+      });
     }
-  }
+  };
 
   const handleCalendarToggle = async (provider: any, calendarId: string, enabled: boolean) => {
     try {
       const updatedCalendars = provider.settings.calendars.map((cal: any) =>
         cal.id === calendarId ? { ...cal, syncEnabled: enabled } : cal
-      )
-      
+      );
+
       await updateProviderSettings({
         provider: provider.provider,
         settings: {
           ...provider.settings,
           calendars: updatedCalendars,
         },
-      })
-      
+      });
+
       toast({
         title: enabled ? 'Calendar enabled' : 'Calendar disabled',
         description: `Sync ${enabled ? 'enabled' : 'disabled'} for this calendar`,
-      })
-    } catch (error) {
+      });
+    } catch (_error) {
       toast({
         title: 'Error',
         description: 'Failed to update calendar settings',
         variant: 'destructive',
-      })
+      });
     }
-  }
+  };
 
   return (
     <div className="container max-w-6xl py-8">
@@ -199,12 +200,11 @@ export default function IntegrationsPage() {
               <div className="flex items-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span className="text-sm">
-                  Syncing: {syncQueueStatus.processing} in progress, {syncQueueStatus.pending} pending
+                  Syncing: {syncQueueStatus.processing} in progress, {syncQueueStatus.pending}{' '}
+                  pending
                 </span>
               </div>
-              <Badge variant="secondary">
-                {syncQueueStatus.completed} completed
-              </Badge>
+              <Badge variant="secondary">{syncQueueStatus.completed} completed</Badge>
             </div>
           </CardContent>
         </Card>
@@ -213,49 +213,38 @@ export default function IntegrationsPage() {
       {/* Provider Cards */}
       <div className="grid gap-6 md:grid-cols-2">
         {PROVIDERS.map((provider) => {
-          const connected = connectedProviders?.find(
-            (p) => p.provider === provider.id
-          )
-          
+          const connected = connectedProviders?.find((p) => p.provider === provider.id);
+
           return (
             <Card key={provider.id} className="relative">
               {provider.comingSoon && (
-                <Badge 
-                  variant="secondary" 
-                  className="absolute top-4 right-4"
-                >
+                <Badge variant="secondary" className="absolute top-4 right-4">
                   Coming Soon
                 </Badge>
               )}
-              
+
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">{provider.icon}</span>
                     <div>
                       <CardTitle className="text-lg">{provider.name}</CardTitle>
-                      <CardDescription className="mt-1">
-                        {provider.description}
-                      </CardDescription>
+                      <CardDescription className="mt-1">{provider.description}</CardDescription>
                     </div>
                   </div>
                 </div>
               </CardHeader>
-              
+
               <CardContent>
                 {connected ? (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                         <span className="text-sm font-medium">Connected</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleSync(connected)}
-                        >
+                        <Button variant="ghost" size="sm" onClick={() => handleSync(connected)}>
                           <RefreshCw className="h-4 w-4" />
                         </Button>
                         <Button
@@ -267,13 +256,13 @@ export default function IntegrationsPage() {
                         </Button>
                       </div>
                     </div>
-                    
+
                     {connected.lastSyncAt && (
                       <p className="text-xs text-muted-foreground">
                         Last synced: {new Date(connected.lastSyncAt).toLocaleString()}
                       </p>
                     )}
-                    
+
                     {/* Calendar List */}
                     {connected.settings.calendars.length > 0 && (
                       <div className="space-y-2 border-t pt-3">
@@ -327,7 +316,7 @@ export default function IntegrationsPage() {
                 )}
               </CardContent>
             </Card>
-          )
+          );
         })}
       </div>
 
@@ -343,14 +332,14 @@ export default function IntegrationsPage() {
           <div className="space-y-2">
             <a
               href="/docs/integrations"
-              className="flex items-center gap-2 text-sm text-blue-600 hover:underline"
+              className="flex items-center gap-2 text-sm text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:underline"
             >
               <ExternalLink className="h-4 w-4" />
               Integration Guide
             </a>
             <a
               href="/docs/troubleshooting"
-              className="flex items-center gap-2 text-sm text-blue-600 hover:underline"
+              className="flex items-center gap-2 text-sm text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:underline"
             >
               <AlertCircle className="h-4 w-4" />
               Troubleshooting
@@ -359,5 +348,5 @@ export default function IntegrationsPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

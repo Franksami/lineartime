@@ -413,7 +413,7 @@
           {
             "id": 6,
             "title": "Integrate Event Stacking into Main Calendar",
-            "description": "Integrate the event stacking system from test-stacking into the main LinearCalendarVertical component with day/week detail views",
+            "description": "Integrate the event stacking system from test-stacking into the main CommandCenterCalendarVertical component with day/week detail views",
             "details": "",
             "status": "done",
             "dependencies": [],

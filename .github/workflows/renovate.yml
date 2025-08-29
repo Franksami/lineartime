@@ -1,0 +1,30 @@
+name: ♻️ Renovate (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: 'Run Renovate in dry-run mode'
+        required: false
+        default: 'true'
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: ♻️ Renovate
+        uses: renovatebot/github-action@v40.1.7
+        env:
+          LOG_LEVEL: info
+          RENOVATE_CONFIG_FILE: renovate.json
+          # Optional: set RENOVATE_TOKEN in repo secrets to enable authenticated runs
+          # RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
+        with:
+          configurationFile: renovate.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+          renovateVersion: latest
+          dryRun: ${{ github.event.inputs.dryRun }}
+

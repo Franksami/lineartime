@@ -1,18 +1,35 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, Calendar, Clock, MapPin, Users, FileText, RefreshCw, GitBranch } from 'lucide-react';
-import { format, parseISO } from 'date-fns';
-import { useMutation } from 'convex/react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { notify } from '@/components/ui/notify';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { api } from '@/convex/_generated/api';
-import { Id } from '@/convex/_generated/dataModel';
-import { toast } from 'sonner';
+import type { Id } from '@/convex/_generated/dataModel';
+import { useAutoAnimate, useAutoAnimateModal } from '@/hooks/useAutoAnimate';
+import { useMutation } from 'convex/react';
+import { format, parseISO } from 'date-fns';
+import {
+  AlertCircle,
+  Calendar,
+  Clock,
+  FileText,
+  GitBranch,
+  MapPin,
+  RefreshCw,
+  Users,
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 interface ConflictEvent {
   id?: string;
@@ -34,11 +51,11 @@ interface ConflictEvent {
 interface ConflictResolutionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  conflictId: Id<"syncConflicts"> | null;
+  conflictId: Id<'syncConflicts'> | null;
   localEvent: ConflictEvent | null;
   remoteEvent: ConflictEvent | null;
   baseEvent?: ConflictEvent | null;
-  providerId: Id<"calendarProviders"> | null;
+  providerId: Id<'calendarProviders'> | null;
   onResolved?: () => void;
 }
 
@@ -58,6 +75,10 @@ export function ConflictResolutionModal({
   const [mergedEvent, setMergedEvent] = useState<ConflictEvent | null>(null);
   const resolveConflict = useMutation(api.calendar.events.resolveSyncConflict);
 
+  // AutoAnimate refs for smooth transitions
+  const [modalContentRef] = useAutoAnimateModal();
+  const [radioGroupRef] = useAutoAnimate({ duration: 200 });
+
   if (!localEvent || !remoteEvent || !conflictId || !providerId) {
     return null;
   }
@@ -65,7 +86,7 @@ export function ConflictResolutionModal({
   const handleResolve = async () => {
     try {
       let resolution: any;
-      
+
       switch (selectedStrategy) {
         case 'local':
           resolution = {
@@ -79,7 +100,7 @@ export function ConflictResolutionModal({
             mergedData: remoteEvent,
           };
           break;
-        case 'merge':
+        case 'merge': {
           // Auto-merge: Take newer modifications for each field
           const merged = mergeEvents(localEvent, remoteEvent, baseEvent);
           resolution = {
@@ -88,6 +109,7 @@ export function ConflictResolutionModal({
           };
           setMergedEvent(merged);
           break;
+        }
         case 'both':
           resolution = {
             strategy: 'keep_both' as const,
@@ -100,20 +122,18 @@ export function ConflictResolutionModal({
         resolution,
       });
 
-      toast.success('Conflict resolved successfully');
+      notify.success('Conflict resolved successfully');
       onResolved?.();
       onClose();
     } catch (error) {
       console.error('Error resolving conflict:', error);
-      toast.error('Failed to resolve conflict');
+      notify.error('Failed to resolve conflict');
     }
   };
 
   const formatDate = (dateStr: string, allDay: boolean) => {
     const date = parseISO(dateStr);
-    return allDay 
-      ? format(date, 'MMM d, yyyy')
-      : format(date, 'MMM d, yyyy h:mm a');
+    return allDay ? format(date, 'MMM d, yyyy') : format(date, 'MMM d, yyyy h:mm a');
   };
 
   const EventCard = ({ event, source }: { event: ConflictEvent; source: string }) => (
@@ -121,9 +141,7 @@ export function ConflictResolutionModal({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base">{event.title}</CardTitle>
-          <Badge variant={source === 'Local' ? 'default' : 'secondary'}>
-            {source}
-          </Badge>
+          <Badge variant={source === 'Local' ? 'default' : 'secondary'}>{source}</Badge>
         </div>
         <CardDescription className="text-xs">
           Last updated: {format(parseISO(event.updated), 'MMM d, h:mm a')}
@@ -132,27 +150,31 @@ export function ConflictResolutionModal({
       <CardContent className="space-y-2 text-sm">
         <div className="flex items-center gap-2">
           <Clock className="h-3 w-3 text-muted-foreground" />
-          <span>{formatDate(event.startDate, event.allDay)} - {formatDate(event.endDate, event.allDay)}</span>
+          <span>
+            {formatDate(event.startDate, event.allDay)} - {formatDate(event.endDate, event.allDay)}
+          </span>
         </div>
-        
+
         {event.location && (
           <div className="flex items-center gap-2">
             <MapPin className="h-3 w-3 text-muted-foreground" />
             <span>{event.location}</span>
           </div>
         )}
-        
+
         {event.description && (
           <div className="flex items-start gap-2">
             <FileText className="h-3 w-3 text-muted-foreground mt-0.5" />
             <span className="line-clamp-2">{event.description}</span>
           </div>
         )}
-        
+
         {event.attendees && event.attendees.length > 0 && (
           <div className="flex items-center gap-2">
             <Users className="h-3 w-3 text-muted-foreground" />
-            <span>{event.attendees.length} attendee{event.attendees.length > 1 ? 's' : ''}</span>
+            <span>
+              {event.attendees.length} attendee{event.attendees.length > 1 ? 's' : ''}
+            </span>
           </div>
         )}
       </CardContent>
@@ -172,7 +194,7 @@ export function ConflictResolutionModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4">
+        <div ref={modalContentRef} className="grid gap-4">
           {/* Show conflicting versions */}
           <div className="grid md:grid-cols-2 gap-4">
             <EventCard event={localEvent} source="Local" />
@@ -182,8 +204,11 @@ export function ConflictResolutionModal({
           {/* Resolution strategies */}
           <div className="space-y-4">
             <Label>Resolution Strategy</Label>
-            <RadioGroup value={selectedStrategy} onValueChange={(value) => setSelectedStrategy(value as ResolutionStrategy)}>
-              <div className="space-y-3">
+            <RadioGroup
+              value={selectedStrategy}
+              onValueChange={(value) => setSelectedStrategy(value as ResolutionStrategy)}
+            >
+              <div ref={radioGroupRef} className="space-y-3">
                 <div className="flex items-start space-x-3">
                   <RadioGroupItem value="local" id="local" />
                   <div className="grid gap-0.5">
@@ -217,7 +242,8 @@ export function ConflictResolutionModal({
                       </span>
                     </Label>
                     <p className="text-xs text-muted-foreground">
-                      Automatically merge both versions, keeping the most recent changes for each field
+                      Automatically merge both versions, keeping the most recent changes for each
+                      field
                     </p>
                   </div>
                 </div>
@@ -247,10 +273,23 @@ export function ConflictResolutionModal({
                 Merged Result Preview
               </h4>
               <div className="text-sm space-y-1">
-                <p><strong>Title:</strong> {mergedEvent.title}</p>
-                <p><strong>Time:</strong> {formatDate(mergedEvent.startDate, mergedEvent.allDay)} - {formatDate(mergedEvent.endDate, mergedEvent.allDay)}</p>
-                {mergedEvent.location && <p><strong>Location:</strong> {mergedEvent.location}</p>}
-                {mergedEvent.description && <p><strong>Description:</strong> {mergedEvent.description}</p>}
+                <p>
+                  <strong>Title:</strong> {mergedEvent.title}
+                </p>
+                <p>
+                  <strong>Time:</strong> {formatDate(mergedEvent.startDate, mergedEvent.allDay)} -{' '}
+                  {formatDate(mergedEvent.endDate, mergedEvent.allDay)}
+                </p>
+                {mergedEvent.location && (
+                  <p>
+                    <strong>Location:</strong> {mergedEvent.location}
+                  </p>
+                )}
+                {mergedEvent.description && (
+                  <p>
+                    <strong>Description:</strong> {mergedEvent.description}
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -260,9 +299,7 @@ export function ConflictResolutionModal({
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleResolve}>
-            Resolve Conflict
-          </Button>
+          <Button onClick={handleResolve}>Resolve Conflict</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -286,7 +323,8 @@ function mergeEvents(
       merged.title = remote.title;
     } else if (local.title !== base.title && remote.title !== base.title) {
       // Both changed - use the more recently updated one
-      merged.title = parseISO(local.updated) > parseISO(remote.updated) ? local.title : remote.title;
+      merged.title =
+        parseISO(local.updated) > parseISO(remote.updated) ? local.title : remote.title;
     }
 
     // Apply same logic to other fields
@@ -295,7 +333,8 @@ function mergeEvents(
     } else if (remote.description !== base.description && local.description === base.description) {
       merged.description = remote.description;
     } else if (local.description !== base.description && remote.description !== base.description) {
-      merged.description = parseISO(local.updated) > parseISO(remote.updated) ? local.description : remote.description;
+      merged.description =
+        parseISO(local.updated) > parseISO(remote.updated) ? local.description : remote.description;
     }
 
     // For dates, location, etc., apply the same pattern
@@ -310,7 +349,7 @@ function mergeEvents(
   // Merge attendees (union of both lists)
   if (local.attendees || remote.attendees) {
     const attendeeMap = new Map<string, any>();
-    [...(local.attendees || []), ...(remote.attendees || [])].forEach(attendee => {
+    [...(local.attendees || []), ...(remote.attendees || [])].forEach((attendee) => {
       attendeeMap.set(attendee.email, attendee);
     });
     merged.attendees = Array.from(attendeeMap.values());

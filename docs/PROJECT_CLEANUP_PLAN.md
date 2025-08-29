@@ -25,7 +25,7 @@
    - **ACTION**: Major update to reflect foundation lock
 
 3. **docs/COMPONENTS.md**
-   - ❌ **Line 39**: References "LinearCalendarVertical" (deprecated)
+   - ❌ **Line 39**: References "CommandCenterCalendarVertical" (deprecated)
    - ❌ **Line 41**: "vertical year view" (wrong)
    - ❌ **Lines 294-296**: Mobile/desktop split (violates consistency)
    - ❌ **Line 474**: "LocalStorage sync" (outdated - we use IndexedDB)
@@ -77,13 +77,13 @@
 - `FullYearGrid` function - **LOCKED STRUCTURE** (12-month rows)
 
 ### **❌ DEPRECATED COMPONENTS (Conflicts with Foundation)**
-- `LinearCalendarVertical.tsx` - Violates horizontal foundation
+- `CommandCenterCalendarVertical.tsx` - Violates horizontal foundation
 - `MobileCalendarView.tsx` - **ACTIVE VIOLATION** (uses traditional monthly grid)
 - `HybridCalendar.tsx` - May conflict with foundation (needs analysis)
 
 ### **⚠️ EXPERIMENTAL COMPONENTS (Analyze Before Cleanup)**
 - `VirtualCalendar.tsx` - Performance component (potentially useful)
-- `LinearCalendarFullBleed.tsx` - Experimental version (may have useful features)
+- `CommandCenterCalendarFullBleed.tsx` - Experimental version (may have useful features)
 - `RealtimeCalendarView.tsx` - Real-time features (future use)
 
 ### **✅ SUPPORTING COMPONENTS (KEEP)**
@@ -118,7 +118,7 @@
 
 #### **Analyze Before Cleanup (Potential Future Use):**
 1. **VirtualCalendar.tsx** - May be useful for performance with large datasets
-2. **LinearCalendarFullBleed.tsx** - May have useful optimizations
+2. **CommandCenterCalendarFullBleed.tsx** - May have useful optimizations
 3. **HybridCalendar.tsx** - Analyze for useful features before removal
 
 #### **NEVER REMOVE (Preserve for Future):**
@@ -203,7 +203,7 @@ safe_to_update:
     
   deprecated_components:
     - MobileCalendarView.tsx (violates foundation)
-    - LinearCalendarVertical.tsx (violates foundation)
+    - CommandCenterCalendarVertical.tsx (violates foundation)
     
   outdated_references:
     - LocalStorage mentions (migrated to IndexedDB)

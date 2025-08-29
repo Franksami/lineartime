@@ -38,7 +38,7 @@ export function ComponentName({ className, ...props }: ComponentProps) {
 
 ### LinearCalendarHorizontal (PRIMARY COMPONENT)
 
-**🎯 THE DEFINITIVE CALENDAR COMPONENT** - Locked foundation implementing "Life is bigger than a week" philosophy.
+**🎯 THE DEFINITIVE CALENDAR COMPONENT** - Locked layout per `docs/LINEAR_CALENDAR_FOUNDATION_SPEC.md`. Implementation improvements are allowed if the layout remains intact.
 
 ```typescript
 interface LinearCalendarHorizontalProps {
@@ -89,15 +89,15 @@ export default function CalendarPage() {
 - [`RealtimeCalendarView`](mdc:components/calendar/RealtimeCalendarView.tsx) — future collab
 
 ### Archived (do not import; kept for history)
-- [`LinearCalendarVertical`](mdc:components/calendar/_archive/LinearCalendarVertical.tsx)
+- [`CommandCenterCalendarVertical`](mdc:components/calendar/_archive/CommandCenterCalendarVertical.tsx)
 - [`MobileCalendarView`](mdc:components/mobile/_archive/MobileCalendarView.tsx)
 
-**🔒 Foundation Features (LOCKED):**
-- **12 Horizontal Month Rows**: Complete Jan-Dec display  
-- **Week Day Headers**: Top and bottom "Su Mo Tu We Th Fr Sa" spanning full width
-- **Month Labels**: Both left and right sides of each row
-- **Complete Day Display**: 01-31 for each month with proper week alignment
-- **Professional Performance**: 112+ FPS, optimized memory usage
+**🔒 Foundation Features (LOCKED LAYOUT):**
+- 12 vertical month rows; each month a single continuous horizontal row
+- Week headers at top and bottom aligned with day columns
+- Month labels both left and right
+- Correct day-of-week alignment for any year; 42-cell invariant per month
+- Professional performance: 112+ FPS, optimized memory usage
 
 **State Management:**
 - Uses `useOfflineEvents` hook for IndexedDB persistence
@@ -263,12 +263,12 @@ type ZoomLevel = 'compact' | 'standard' | 'expanded'
 
 ## Hooks
 
-### useLinearCalendar
+### useCommandCenterCalendar
 
 Central state management hook for the calendar application.
 
 ```typescript
-interface UseLinearCalendarReturn {
+interface UseCommandCenterCalendarReturn {
   // State
   currentYear: number
   events: Map<string, Event[]>
@@ -295,7 +295,7 @@ interface UseLinearCalendarReturn {
 
 **Usage:**
 ```tsx
-import { useLinearCalendar } from '@/hooks/useLinearCalendar'
+import { useCommandCenterCalendar } from '@/hooks/useCommandCenterCalendar'
 
 function CalendarComponent() {
   const {
@@ -303,7 +303,7 @@ function CalendarComponent() {
     filters,
     addEvent,
     setFilters
-  } = useLinearCalendar()
+  } = useCommandCenterCalendar()
   
   // Use calendar state and actions
 }

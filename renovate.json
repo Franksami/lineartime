@@ -1,0 +1,53 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "schedule": ["every weekend"],
+  "packageRules": [
+    {
+      "packagePatterns": ["@next/", "next"],
+      "groupName": "Next.js",
+      "schedule": ["every 2 weeks on wednesday"],
+      "automerge": false
+    },
+    {
+      "packagePatterns": ["@ai-sdk/", "ai", "@anthropic", "@openai"],
+      "groupName": "AI SDK",
+      "schedule": ["weekly"],
+      "automerge": false,
+      "labels": ["ai-updates"]
+    },
+    {
+      "packagePatterns": ["react", "@types/react"],
+      "groupName": "React",
+      "schedule": ["monthly"],
+      "automerge": false
+    },
+    {
+      "packagePatterns": ["@clerk/", "clerk"],
+      "groupName": "Clerk Auth",
+      "schedule": ["every 2 weeks"],
+      "automerge": true,
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "packageNames": ["convex"],
+      "schedule": ["monthly"],
+      "automerge": false,
+      "labels": ["backend-updates"]
+    },
+    {
+      "packagePatterns": ["shadcn", "@radix-ui"],
+      "groupName": "UI Components",
+      "schedule": ["weekly"],
+      "automerge": true,
+      "minimumReleaseAge": "2 days"
+    }
+  ],
+  "assignees": ["@me"],
+  "reviewers": ["@me"],
+  "labels": ["dependencies"],
+  "commitMessagePrefix": "chore:",
+  "prHourlyLimit": 3,
+  "branchConcurrentLimit": 5
+}
+

@@ -3,23 +3,29 @@
  * Provides easy-to-use hooks for offline storage
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { db, StoredEvent, StoredCategory, StoredCalendar, StoredPreferences } from '@/lib/db/schema';
-import { 
-  EventOperations, 
-  CategoryOperations, 
-  CalendarOperations, 
+import { type BackupData, BackupManager } from '@/lib/db/backup';
+import { BulkEventOperations } from '@/lib/db/bulk';
+import { LocalStorageMigration } from '@/lib/db/migration';
+import {
+  CacheOperations,
+  CalendarOperations,
+  CategoryOperations,
+  EventOperations,
+  PerformanceMonitor,
   PreferencesOperations,
   SyncQueueOperations,
-  CacheOperations,
-  PerformanceMonitor
 } from '@/lib/db/operations';
-import { OfflineSyncManager, SyncStatus, SyncResult } from '@/lib/db/sync';
-import { BackupManager, BackupData } from '@/lib/db/backup';
-import { LocalStorageMigration } from '@/lib/db/migration';
-import { QueryOptimizer, DatabaseOptimizer } from '@/lib/db/performance';
-import { BulkEventOperations } from '@/lib/db/bulk';
+import { DatabaseOptimizer, QueryOptimizer } from '@/lib/db/performance';
+import {
+  type StoredCalendar,
+  type StoredCategory,
+  type StoredEvent,
+  type StoredPreferences,
+  db,
+} from '@/lib/db/schema';
+import { OfflineSyncManager, type SyncResult, type SyncStatus } from '@/lib/db/sync';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Hook for managing events with offline support
@@ -30,11 +36,14 @@ export function useOfflineEvents(userId: string) {
 
   // Live query for events
   const events = useLiveQuery(
-    () => userId ? db.events
-      .where('userId')
-      .equals(userId)
-      .and(event => !event.isDeleted)
-      .toArray() : [],
+    () =>
+      userId
+        ? db.events
+            .where('userId')
+            .equals(userId)
+            .and((event) => !event.isDeleted)
+            .toArray()
+        : [],
     [userId]
   );
 
@@ -90,37 +99,43 @@ export function useOfflineEvents(userId: string) {
   }, []);
 
   // Get events by date range
-  const getEventsByDateRange = useCallback(async (startTime: number, endTime: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const result = await QueryOptimizer.optimizedQuery(
-        `events_range_${userId}_${startTime}_${endTime}`,
-        () => EventOperations.getByDateRange(userId, startTime, endTime),
-        { ttl: 30000 } // Cache for 30 seconds
-      );
-      return result;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to get events');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [userId]);
+  const getEventsByDateRange = useCallback(
+    async (startTime: number, endTime: number) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const result = await QueryOptimizer.optimizedQuery(
+          `events_range_${userId}_${startTime}_${endTime}`,
+          () => EventOperations.getByDateRange(userId, startTime, endTime),
+          { ttl: 30000 } // Cache for 30 seconds
+        );
+        return result;
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to get events');
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [userId]
+  );
 
   // Search events
-  const searchEvents = useCallback(async (searchTerm: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      return await EventOperations.search(userId, searchTerm);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to search events');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [userId]);
+  const searchEvents = useCallback(
+    async (searchTerm: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        return await EventOperations.search(userId, searchTerm);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to search events');
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [userId]
+  );
 
   // Bulk create events
   const bulkCreateEvents = useCallback(async (events: Omit<StoredEvent, 'id'>[]) => {
@@ -162,7 +177,7 @@ export function useOfflineCategories(userId: string) {
 
   // Live query for categories
   const categories = useLiveQuery(
-    () => userId ? CategoryOperations.getByUser(userId) : [],
+    () => (userId ? CategoryOperations.getByUser(userId) : []),
     [userId]
   );
 
@@ -227,13 +242,13 @@ export function useOfflineCalendars(userId: string) {
 
   // Live query for calendars
   const calendars = useLiveQuery(
-    () => userId ? CalendarOperations.getByUser(userId) : [],
+    () => (userId ? CalendarOperations.getByUser(userId) : []),
     [userId]
   );
 
   // Get default calendar
   const defaultCalendar = useLiveQuery(
-    () => userId ? CalendarOperations.getDefault(userId) : undefined,
+    () => (userId ? CalendarOperations.getDefault(userId) : undefined),
     [userId]
   );
 
@@ -284,7 +299,7 @@ export function useOfflinePreferences(userId: string) {
 
   // Live query for preferences
   const preferences = useLiveQuery(
-    () => userId ? PreferencesOperations.get(userId) : undefined,
+    () => (userId ? PreferencesOperations.get(userId) : undefined),
     [userId]
   );
 
@@ -303,18 +318,21 @@ export function useOfflinePreferences(userId: string) {
   }, []);
 
   // Update specific preferences
-  const updatePreferences = useCallback(async (updates: Partial<StoredPreferences>) => {
-    setLoading(true);
-    setError(null);
-    try {
-      await PreferencesOperations.update(userId, updates);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update preferences');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [userId]);
+  const updatePreferences = useCallback(
+    async (updates: Partial<StoredPreferences>) => {
+      setLoading(true);
+      setError(null);
+      try {
+        await PreferencesOperations.update(userId, updates);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to update preferences');
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [userId]
+  );
 
   return {
     preferences: preferences || PreferencesOperations.getDefaults(),
@@ -361,7 +379,7 @@ export function useOfflineSync(userId: string) {
 
   // Get sync queue stats
   const syncQueueStats = useLiveQuery(
-    () => userId ? SyncQueueOperations.getStats(userId) : null,
+    () => (userId ? SyncQueueOperations.getStats(userId) : null),
     [userId]
   );
 
@@ -383,67 +401,73 @@ export function useBackup(userId: string) {
   const [error, setError] = useState<string | null>(null);
 
   // List backups
-  const backups = useLiveQuery(
-    () => userId ? BackupManager.listBackups(userId) : [],
+  const backups = useLiveQuery(() => (userId ? BackupManager.listBackups(userId) : []), [userId]);
+
+  // Create backup
+  const createBackup = useCallback(
+    async (options?: {
+      compress?: boolean;
+      includeDeleted?: boolean;
+    }) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const backup = await BackupManager.createBackup(userId, options);
+        return backup;
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to create backup');
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
     [userId]
   );
 
-  // Create backup
-  const createBackup = useCallback(async (options?: {
-    compress?: boolean;
-    includeDeleted?: boolean;
-  }) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const backup = await BackupManager.createBackup(userId, options);
-      return backup;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create backup');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [userId]);
-
   // Restore backup
-  const restoreBackup = useCallback(async (
-    backupData: BackupData | string,
-    options?: {
-      overwrite?: boolean;
-      merge?: boolean;
-    }
-  ) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const result = await BackupManager.restoreBackup(backupData, options);
-      if (!result.success) {
-        setError(result.errors.join(', '));
+  const restoreBackup = useCallback(
+    async (
+      backupData: BackupData | string,
+      options?: {
+        overwrite?: boolean;
+        merge?: boolean;
       }
-      return result;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to restore backup');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    ) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const result = await BackupManager.restoreBackup(backupData, options);
+        if (!result.success) {
+          setError(result.errors.join(', '));
+        }
+        return result;
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to restore backup');
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   // Export to file
-  const exportToFile = useCallback(async (filename?: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const backup = await BackupManager.createBackup(userId);
-      await BackupManager.exportToFile(backup, filename);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to export backup');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [userId]);
+  const exportToFile = useCallback(
+    async (filename?: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const backup = await BackupManager.createBackup(userId);
+        await BackupManager.exportToFile(backup, filename);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to export backup');
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [userId]
+  );
 
   // Import from file
   const importFromFile = useCallback(async (file: File) => {
@@ -534,10 +558,13 @@ export function usePerformanceMonitor() {
     return await PerformanceMonitor.getAverageTime(operation);
   }, []);
 
-  const clearOldMetrics = useCallback(async (daysToKeep = 7) => {
-    await PerformanceMonitor.clearOld(daysToKeep);
-    await loadMetrics();
-  }, [loadMetrics]);
+  const clearOldMetrics = useCallback(
+    async (daysToKeep = 7) => {
+      await PerformanceMonitor.clearOld(daysToKeep);
+      await loadMetrics();
+    },
+    [loadMetrics]
+  );
 
   const optimizeDatabase = useCallback(async () => {
     setLoading(true);
@@ -571,12 +598,7 @@ export function useCache() {
     return await CacheOperations.get<T>(key);
   }, []);
 
-  const setCache = useCallback(async (
-    key: string,
-    data: any,
-    ttl?: number,
-    tags?: string[]
-  ) => {
+  const setCache = useCallback(async (key: string, data: any, ttl?: number, tags?: string[]) => {
     await CacheOperations.set(key, data, ttl, tags);
   }, []);
 

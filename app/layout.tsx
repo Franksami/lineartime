@@ -1,37 +1,96 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter, JetBrains_Mono } from "next/font/google"
-import { Providers } from "./providers"
-import "./globals.css"
+import { PerformanceDashboard } from '@/components/performance/PerformanceDashboard';
+import { ReactScan } from '@/components/performance/ReactScan';
+import { PWAInstallPrompt } from '@/components/pwa/pwa-install-prompt';
+import { PWAStatus } from '@/components/pwa/pwa-status';
+import type { Metadata } from 'next';
+import { Inter, JetBrains_Mono } from 'next/font/google';
+import type React from 'react';
+import { Providers } from './providers';
+import './globals.css';
 
 const fontSans = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
 
 const fontMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
+  subsets: ['latin'],
+  variable: '--font-mono',
+});
 
 export const metadata: Metadata = {
-  title: "LinearTime - Experience Time as Flow",
-  description: "The world's first true linear calendar. Experience time as a continuous flow, not fragmented blocks.",
-  generator: "Next.js",
-}
+  title: 'Command Center Calendar - Experience Time as Flow',
+  description:
+    "The world's first true linear calendar. Experience time as a continuous flow, not fragmented blocks. Life is bigger than a week.",
+  generator: 'Next.js',
+  metadataBase: new URL('https://lineartime.app'),
+  applicationName: 'Command Center Calendar Calendar',
+  authors: [{ name: 'Command Center Calendar Team' }],
+  keywords: ['calendar', 'linear', 'productivity', 'planning', 'time management', 'PWA'],
+  creator: 'Command Center Calendar Team',
+  publisher: 'Command Center Calendar',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Command Center Calendar',
+    startupImage: ['/icon-192x192.png'],
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'Command Center Calendar Calendar',
+    title: 'Command Center Calendar - Experience Time as Flow',
+    description: "The world's first true linear calendar. Life is bigger than a week.",
+    images: ['/screenshot-desktop.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Command Center Calendar - Experience Time as Flow',
+    description: "The world's first true linear calendar. Life is bigger than a week.",
+    images: ['/screenshot-desktop.png'],
+  },
+  icons: {
+    icon: [
+      { url: '/icon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/icon-72x72.png', sizes: '72x72', type: 'image/png' },
+      { url: '/icon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/icon-144x144.png', sizes: '144x144', type: 'image/png' },
+      { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/icon-96x96.png',
+    apple: [{ url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' }],
+  },
+};
 
-export default function RootLayout({
-	children,
+export default async function RootLayout({
+  children,
 }: Readonly<{
-	children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-	return (
-		<html lang="en" className={`dark ${fontSans.variable} ${fontMono.variable}`}>
-			<body className="font-sans antialiased bg-background text-foreground min-h-screen">
-				<Providers>
-					{children}
-				</Providers>
-			</body>
-		</html>
-	)
+  return (
+    <html lang="en" dir="ltr" className={`dark ${fontSans.variable} ${fontMono.variable}`}>
+      <head>
+        <meta name="theme-color" content="#2196F3" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Command Center Calendar" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+      </head>
+      <body className="font-sans antialiased bg-background text-foreground min-h-screen">
+        <ReactScan />
+        <Providers>
+          {children}
+          <PWAInstallPrompt />
+          <PWAStatus />
+          <PerformanceDashboard />
+        </Providers>
+      </body>
+    </html>
+  );
 }

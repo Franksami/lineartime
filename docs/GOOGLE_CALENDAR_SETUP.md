@@ -1,18 +1,18 @@
 # Google Calendar OAuth Setup Guide
 
-This guide will walk you through setting up Google Calendar integration for LinearTime.
+This guide will walk you through setting up Google Calendar integration for Command Center Calendar.
 
 ## Prerequisites
 
 - Google Cloud Console account
-- LinearTime running locally or deployed
+- Command Center Calendar running locally or deployed
 - Admin access to Google Cloud project
 
 ## Step 1: Create a Google Cloud Project
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Click "Select a project" → "New Project"
-3. Name your project (e.g., "LinearTime Calendar")
+3. Name your project (e.g., "Command Center Calendar Calendar")
 4. Click "Create"
 
 ## Step 2: Enable Google Calendar API
@@ -29,9 +29,9 @@ This guide will walk you through setting up Google Calendar integration for Line
 3. Click "Create"
 
 ### App Information
-- **App name**: LinearTime
+- **App name**: Command Center Calendar
 - **User support email**: Your email
-- **App logo**: Optional (upload LinearTime logo)
+- **App logo**: Optional (upload Command Center Calendar logo)
 
 ### App Domain
 - **Application home page**: `http://localhost:3000` (or your production URL)
@@ -71,7 +71,7 @@ Click "Save and Continue"
 3. Choose "Web application"
 
 ### Configuration
-- **Name**: LinearTime Web Client
+- **Name**: Command Center Calendar Web Client
 - **Authorized JavaScript origins**:
   - `http://localhost:3000` (development)
   - Your production URL (if deployed)
@@ -83,7 +83,7 @@ Click "Save and Continue"
 4. Click "Create"
 5. **IMPORTANT**: Save the Client ID and Client Secret
 
-## Step 5: Configure LinearTime
+## Step 5: Configure Command Center Calendar
 
 1. Copy `.env.example` to `.env.local`:
 ```bash
@@ -132,14 +132,14 @@ NEXT_PUBLIC_URL=https://abc123.ngrok.io
 
 ### Register Webhook Channel
 
-The webhook registration happens automatically when a user connects their Google Calendar. LinearTime will:
+The webhook registration happens automatically when a user connects their Google Calendar. Command Center Calendar will:
 1. Create a unique channel for each calendar
 2. Register the webhook URL with Google
 3. Start receiving real-time updates
 
 ## Step 7: Test the Integration
 
-1. Start LinearTime:
+1. Start Command Center Calendar:
 ```bash
 pnpm dev
 ```
@@ -156,15 +156,15 @@ http://localhost:3000/settings/integrations
    - Review permissions
    - Click "Allow"
 
-5. You'll be redirected back to LinearTime
+5. You'll be redirected back to Command Center Calendar
    - Should see "Connected" status
    - Your calendars will be listed
    - Toggle calendars to sync
 
 6. Verify sync is working:
    - Create an event in Google Calendar
-   - Check if it appears in LinearTime
-   - Create an event in LinearTime
+   - Check if it appears in Command Center Calendar
+   - Create an event in Command Center Calendar
    - Check if it appears in Google Calendar
 
 ## Troubleshooting

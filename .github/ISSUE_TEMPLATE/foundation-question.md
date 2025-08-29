@@ -1,6 +1,6 @@
 ---
 name: 🔒 Foundation Question
-about: Questions about the locked LinearCalendar foundation structure
+about: Questions about the locked CommandCenterCalendar foundation structure
 title: '[FOUNDATION] '
 labels: ['foundation', 'question']
 assignees: ''
@@ -63,7 +63,7 @@ assignees: ''
 ⚠️ **WARNING**: The foundation structure is **IMMUTABLE** and **LOCKED**.
 
 If you're requesting a change to the foundation:
-- [ ] **I understand this may break the core identity of LinearTime**
+- [ ] **I understand this may break the core identity of Command Center Calendar**
 - [ ] **I've read the Foundation Protection Protocol**
 - [ ] **I have a compelling reason for this change**
 - [ ] **I understand this requires project owner approval**

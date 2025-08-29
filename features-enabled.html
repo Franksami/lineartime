@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enabling Command Workspace Features...</title>
+</head>
+<body>
+    <h1>🚀 Command Workspace Features Enabled!</h1>
+    <p>The following features have been enabled:</p>
+    <ul>
+        <li>shell.commandWorkspace: ✅ ENABLED</li>
+        <li>shell.threePaneLayout: ✅ ENABLED</li>
+        <li>shell.sidebarEnabled: ✅ ENABLED</li>
+        <li>views.week: ✅ ENABLED</li>
+        <li>views.planner: ✅ ENABLED</li>
+        <li>views.notes: ✅ ENABLED</li>
+        <li>views.mailbox: ✅ ENABLED</li>
+        <li>commands.paletteEnabled: ✅ ENABLED</li>
+        <li>commands.fuzzySearch: ✅ ENABLED</li>
+        <li>commands.keyboardShortcuts: ✅ ENABLED</li>
+        <li>omnibox.enabled: ✅ ENABLED</li>
+        <li>dock.aiAssistant: ✅ ENABLED</li>
+        <li>performance.monitoring: ✅ ENABLED</li>
+        <li>performance.bundleAnalysis: ✅ ENABLED</li>
+        <li>dev.storybookEnabled: ✅ ENABLED</li>
+    </ul>
+    <p><a href="http://localhost:3000/app" target="_blank">Open Command Workspace</a></p>
+
+    <script>
+        // Set all feature flags
+        localStorage.setItem('flag_shell.commandWorkspace', 'true');
+        localStorage.setItem('flag_shell.threePaneLayout', 'true');
+        localStorage.setItem('flag_shell.sidebarEnabled', 'true');
+        localStorage.setItem('flag_views.week', 'true');
+        localStorage.setItem('flag_views.planner', 'true');
+        localStorage.setItem('flag_views.notes', 'true');
+        localStorage.setItem('flag_views.mailbox', 'true');
+        localStorage.setItem('flag_commands.paletteEnabled', 'true');
+        localStorage.setItem('flag_commands.fuzzySearch', 'true');
+        localStorage.setItem('flag_commands.keyboardShortcuts', 'true');
+        localStorage.setItem('flag_omnibox.enabled', 'true');
+        localStorage.setItem('flag_dock.aiAssistant', 'true');
+        localStorage.setItem('flag_performance.monitoring', 'true');
+        localStorage.setItem('flag_performance.bundleAnalysis', 'true');
+        localStorage.setItem('flag_dev.storybookEnabled', 'true');
+
+        // Dispatch update events for real-time updates
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'shell.commandWorkspace', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'shell.threePaneLayout', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'shell.sidebarEnabled', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'views.week', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'views.planner', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'views.notes', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'views.mailbox', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'commands.paletteEnabled', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'commands.fuzzySearch', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'commands.keyboardShortcuts', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'omnibox.enabled', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'dock.aiAssistant', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'performance.monitoring', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'performance.bundleAnalysis', enabled: true }
+        }));
+        
+        window.dispatchEvent(new CustomEvent('flag-update', {
+            detail: { flag: 'dev.storybookEnabled', enabled: true }
+        }));
+
+        console.log('✅ All Command Workspace features enabled successfully!');
+    </script>
+</body>
+</html>

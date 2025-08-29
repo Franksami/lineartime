@@ -1,41 +1,42 @@
-'use client'
+'use client';
 
-import React, { useState, useCallback } from 'react'
-import { Resizable, ResizeDirection } from 're-resizable'
-import type { Event } from '@/types/calendar'
-import { cn } from '@/lib/utils'
-import { EventContextMenu } from './EventContextMenu'
+import { cn } from '@/lib/utils';
+import type { Event } from '@/types/calendar';
+import { Resizable, type ResizeDirection } from 're-resizable';
+import type React from 'react';
+import { useCallback, useState } from 'react';
+import { EventContextMenu } from './EventContextMenu';
 
 interface ResizableEventProps {
   event: Event & {
-    left: number
-    top: number
-    width: number
-    height: number
-  }
-  onResize?: (eventId: string, width: number, height: number) => void
-  onResizeStop?: (eventId: string, width: number, height: number) => void
-  onClick?: (event: Event) => void
-  onContextMenu?: (event: Event, e: React.MouseEvent) => void
-  onEdit?: (event: Event) => void
-  onDelete?: (event: Event) => void
-  onDuplicate?: (event: Event) => void
-  onMove?: (event: Event, date: Date) => void
-  onChangeCategory?: (event: Event, category: Event['category']) => void
-  className?: string
-  minHeight?: number
-  minWidth?: number
-  maxWidth?: number
-  gridSize?: number
-  enableContextMenu?: boolean
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  };
+  onResize?: (eventId: string, width: number, height: number) => void;
+  onResizeStop?: (eventId: string, width: number, height: number) => void;
+  onClick?: (event: Event) => void;
+  onContextMenu?: (event: Event, e: React.MouseEvent) => void;
+  onEdit?: (event: Event) => void;
+  onDelete?: (event: Event) => void;
+  onDuplicate?: (event: Event) => void;
+  onMove?: (event: Event, date: Date) => void;
+  onChangeCategory?: (event: Event, category: Event['category']) => void;
+  className?: string;
+  minHeight?: number;
+  minWidth?: number;
+  maxWidth?: number;
+  gridSize?: number;
+  enableContextMenu?: boolean;
 }
 
 const categoryColors = {
   personal: '#10b981',
   work: '#3b82f6',
   effort: '#f97316',
-  note: '#a855f7'
-}
+  note: '#a855f7',
+};
 
 export function ResizableEvent({
   event,
@@ -53,74 +54,84 @@ export function ResizableEvent({
   minWidth = 60,
   maxWidth = 600,
   gridSize = 10,
-  enableContextMenu = true
+  enableContextMenu = true,
 }: ResizableEventProps) {
-  const [isResizing, setIsResizing] = useState(false)
+  const [isResizing, setIsResizing] = useState(false);
   const [dimensions, setDimensions] = useState({
     width: event.width,
-    height: event.height
-  })
+    height: event.height,
+  });
 
   const handleResizeStart = useCallback(() => {
-    setIsResizing(true)
-  }, [])
+    setIsResizing(true);
+  }, []);
 
   const handleResize = useCallback(
-    (e: MouseEvent | TouchEvent, direction: ResizeDirection, ref: HTMLElement, delta: { width: number; height: number }) => {
-      const newWidth = event.width + delta.width
-      const newHeight = event.height + delta.height
-      
-      setDimensions({ width: newWidth, height: newHeight })
-      onResize?.(event.id, newWidth, newHeight)
+    (
+      _e: MouseEvent | TouchEvent,
+      _direction: ResizeDirection,
+      _ref: HTMLElement,
+      delta: { width: number; height: number }
+    ) => {
+      const newWidth = event.width + delta.width;
+      const newHeight = event.height + delta.height;
+
+      setDimensions({ width: newWidth, height: newHeight });
+      onResize?.(event.id, newWidth, newHeight);
     },
     [event.id, event.width, event.height, onResize]
-  )
+  );
 
   const handleResizeStop = useCallback(
-    (e: MouseEvent | TouchEvent, direction: ResizeDirection, ref: HTMLElement, delta: { width: number; height: number }) => {
-      const newWidth = event.width + delta.width
-      const newHeight = event.height + delta.height
-      
-      setIsResizing(false)
-      setDimensions({ width: newWidth, height: newHeight })
-      onResizeStop?.(event.id, newWidth, newHeight)
+    (
+      _e: MouseEvent | TouchEvent,
+      _direction: ResizeDirection,
+      _ref: HTMLElement,
+      delta: { width: number; height: number }
+    ) => {
+      const newWidth = event.width + delta.width;
+      const newHeight = event.height + delta.height;
+
+      setIsResizing(false);
+      setDimensions({ width: newWidth, height: newHeight });
+      onResizeStop?.(event.id, newWidth, newHeight);
     },
     [event.id, event.width, event.height, onResizeStop]
-  )
+  );
 
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
       if (!isResizing && onClick) {
-        e.stopPropagation()
-        onClick(event)
+        e.stopPropagation();
+        onClick(event);
       }
     },
     [isResizing, onClick, event]
-  )
+  );
 
   const handleContextMenu = useCallback(
     (e: React.MouseEvent) => {
-      e.preventDefault()
-      e.stopPropagation()
-      onContextMenu?.(event, e)
+      e.preventDefault();
+      e.stopPropagation();
+      onContextMenu?.(event, e);
     },
     [onContextMenu, event]
-  )
+  );
 
-  const color = categoryColors[event.category as keyof typeof categoryColors] || '#6b7280'
-  
+  const color = categoryColors[event.category as keyof typeof categoryColors] || '#6b7280';
+
   // Format time for display
   const formatTime = (date: Date) => {
-    const hours = date.getHours()
-    const minutes = date.getMinutes()
-    const ampm = hours >= 12 ? 'PM' : 'AM'
-    const displayHours = hours % 12 || 12
-    const displayMinutes = minutes.toString().padStart(2, '0')
-    return minutes === 0 ? `${displayHours}${ampm}` : `${displayHours}:${displayMinutes}${ampm}`
-  }
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    const displayMinutes = minutes.toString().padStart(2, '0');
+    return minutes === 0 ? `${displayHours}${ampm}` : `${displayHours}:${displayMinutes}${ampm}`;
+  };
 
-  const startTime = formatTime(new Date(event.startDate))
-  const endTime = formatTime(new Date(event.endDate))
+  const startTime = formatTime(new Date(event.startDate));
+  const endTime = formatTime(new Date(event.endDate));
 
   const resizableElement = (
     <Resizable
@@ -145,20 +156,20 @@ export function ResizableEvent({
         topRight: false,
         bottomRight: true,
         bottomLeft: false,
-        topLeft: false
+        topLeft: false,
       }}
       handleStyles={{
         right: {
           width: '4px',
           right: '0',
           cursor: 'ew-resize',
-          backgroundColor: 'transparent'
+          backgroundColor: 'transparent',
         },
         bottom: {
           height: '4px',
           bottom: '0',
           cursor: 'ns-resize',
-          backgroundColor: 'transparent'
+          backgroundColor: 'transparent',
         },
         bottomRight: {
           width: '8px',
@@ -166,13 +177,13 @@ export function ResizableEvent({
           right: '0',
           bottom: '0',
           cursor: 'nwse-resize',
-          backgroundColor: 'transparent'
-        }
+          backgroundColor: 'transparent',
+        },
       }}
       handleClasses={{
         right: 'hover:bg-white/30',
         bottom: 'hover:bg-white/30',
-        bottomRight: 'hover:bg-white/30'
+        bottomRight: 'hover:bg-white/30',
       }}
     >
       <div
@@ -189,9 +200,7 @@ export function ResizableEvent({
         onContextMenu={handleContextMenu}
       >
         <div className="p-1.5 text-white h-full flex flex-col">
-          <div className="font-medium text-xs truncate mb-0.5">
-            {event.title}
-          </div>
+          <div className="font-medium text-xs truncate mb-0.5">{event.title}</div>
           <div className="text-[10px] opacity-80">
             {startTime} - {endTime}
           </div>
@@ -208,7 +217,7 @@ export function ResizableEvent({
         </div>
       </div>
     </Resizable>
-  )
+  );
 
   if (enableContextMenu) {
     return (
@@ -222,8 +231,8 @@ export function ResizableEvent({
       >
         {resizableElement}
       </EventContextMenu>
-    )
+    );
   }
 
-  return resizableElement
+  return resizableElement;
 }

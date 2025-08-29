@@ -44,10 +44,7 @@ const DEFAULT_CSP_DIRECTIVES = {
     'https://images.clerk.dev',
     'https://www.gravatar.com',
   ],
-  'font-src': [
-    "'self'",
-    'https://fonts.gstatic.com',
-  ],
+  'font-src': ["'self'", 'https://fonts.gstatic.com'],
   'connect-src': [
     "'self'",
     'https://clerk.com',
@@ -59,11 +56,7 @@ const DEFAULT_CSP_DIRECTIVES = {
   'media-src': ["'self'"],
   'object-src': ["'none'"],
   'child-src': ["'self'"],
-  'frame-src': [
-    "'self'",
-    'https://clerk.com',
-    'https://*.clerk.accounts.dev',
-  ],
+  'frame-src': ["'self'", 'https://clerk.com', 'https://*.clerk.accounts.dev'],
   'worker-src': ["'self'", 'blob:'],
   'form-action': ["'self'"],
   'base-uri': ["'self'"],
@@ -90,7 +83,7 @@ function buildCSP(directives: Record<string, string[]> = DEFAULT_CSP_DIRECTIVES)
  */
 export function getDefaultSecurityHeaders(): SecurityHeadersConfig {
   const isDevelopment = process.env.NODE_ENV === 'development';
-  
+
   return {
     contentSecurityPolicy: buildCSP(
       isDevelopment
@@ -178,7 +171,7 @@ export function applySecurityHeaders(
 /**
  * Security headers middleware for Next.js
  */
-export function securityHeadersMiddleware(request: NextRequest): NextResponse {
+export function securityHeadersMiddleware(_request: NextRequest): NextResponse {
   const response = NextResponse.next();
   return applySecurityHeaders(response);
 }
@@ -188,7 +181,7 @@ export function securityHeadersMiddleware(request: NextRequest): NextResponse {
  */
 export function validateCSP(csp: string): { valid: boolean; warnings: string[] } {
   const warnings: string[] = [];
-  
+
   // Check for unsafe-inline in production
   if (process.env.NODE_ENV === 'production') {
     if (csp.includes("'unsafe-inline'")) {
@@ -198,12 +191,12 @@ export function validateCSP(csp: string): { valid: boolean; warnings: string[] }
       warnings.push("CSP contains 'unsafe-eval' which is not recommended for production");
     }
   }
-  
+
   // Check for wildcards
   if (csp.includes('*') && !csp.includes('*.')) {
     warnings.push('CSP contains wildcard (*) which may be too permissive');
   }
-  
+
   // Check for missing directives
   const requiredDirectives = ['default-src', 'script-src', 'style-src'];
   for (const directive of requiredDirectives) {
@@ -211,7 +204,7 @@ export function validateCSP(csp: string): { valid: boolean; warnings: string[] }
       warnings.push(`CSP missing recommended directive: ${directive}`);
     }
   }
-  
+
   return {
     valid: warnings.length === 0,
     warnings,
@@ -233,11 +226,11 @@ export function generateNonce(): string {
 export function addNonceToCSP(csp: string, nonce: string): string {
   const scriptSrcRegex = /script-src([^;]*)/;
   const match = csp.match(scriptSrcRegex);
-  
+
   if (match) {
     const updatedScriptSrc = `script-src${match[1]} 'nonce-${nonce}'`;
     return csp.replace(scriptSrcRegex, updatedScriptSrc);
   }
-  
+
   return `${csp}; script-src 'nonce-${nonce}'`;
 }

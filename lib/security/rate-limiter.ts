@@ -3,40 +3,40 @@
  * Protects API endpoints from abuse and DDoS attacks
  */
 
-import { NextRequest } from 'next/server';
 import { headers } from 'next/headers';
+import type { NextRequest } from 'next/server';
 
 export interface RateLimitConfig {
   /**
    * Maximum number of requests allowed in the window
    */
   limit: number;
-  
+
   /**
    * Time window in milliseconds
    */
   windowMs: number;
-  
+
   /**
    * Identifier extraction function
    */
   keyGenerator?: (req: NextRequest) => string;
-  
+
   /**
    * Skip rate limiting for certain conditions
    */
   skip?: (req: NextRequest) => boolean;
-  
+
   /**
    * Custom error message
    */
   message?: string;
-  
+
   /**
    * Custom status code for rate limit errors
    */
   statusCode?: number;
-  
+
   /**
    * Enable distributed rate limiting (requires Redis)
    */
@@ -56,14 +56,14 @@ interface TokenBucket {
 class RateLimitStore {
   private store: Map<string, TokenBucket> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
-  
+
   constructor() {
     // Clean up old entries every minute
     this.cleanupInterval = setInterval(() => {
       this.cleanup();
     }, 60000);
   }
-  
+
   /**
    * Get or create a token bucket for a key
    */
@@ -72,55 +72,53 @@ class RateLimitStore {
     if (existing) {
       return existing;
     }
-    
+
     const bucket: TokenBucket = {
       tokens: limit,
       lastRefill: Date.now(),
       requests: [],
     };
-    
+
     this.store.set(key, bucket);
     return bucket;
   }
-  
+
   /**
    * Consume a token from the bucket
    */
   consume(key: string, limit: number, windowMs: number): boolean {
     const bucket = this.getBucket(key, limit);
     const now = Date.now();
-    
+
     // Refill tokens based on time passed
     const timePassed = now - bucket.lastRefill;
     const tokensToAdd = Math.floor((timePassed / windowMs) * limit);
-    
+
     if (tokensToAdd > 0) {
       bucket.tokens = Math.min(limit, bucket.tokens + tokensToAdd);
       bucket.lastRefill = now;
     }
-    
+
     // Clean old requests
-    bucket.requests = bucket.requests.filter(
-      timestamp => now - timestamp < windowMs
-    );
-    
+    bucket.requests = bucket.requests.filter((timestamp) => now - timestamp < windowMs);
+
     // Check sliding window
     if (bucket.requests.length >= limit) {
       return false;
     }
-    
+
     // Check token bucket
     if (bucket.tokens <= 0) {
       return false;
     }
-    
+
     // Consume token
     bucket.tokens--;
     bucket.requests.push(now);
-    
+
     return true;
   }
-  
+
   /**
    * Get remaining tokens for a key
    */
@@ -129,17 +127,15 @@ class RateLimitStore {
     if (!bucket) {
       return limit;
     }
-    
+
     const now = Date.now();
-    
+
     // Clean old requests
-    bucket.requests = bucket.requests.filter(
-      timestamp => now - timestamp < windowMs
-    );
-    
+    bucket.requests = bucket.requests.filter((timestamp) => now - timestamp < windowMs);
+
     return Math.max(0, limit - bucket.requests.length);
   }
-  
+
   /**
    * Get reset time for a key
    */
@@ -148,32 +144,32 @@ class RateLimitStore {
     if (!bucket || bucket.requests.length === 0) {
       return new Date(Date.now() + windowMs);
     }
-    
+
     const oldestRequest = Math.min(...bucket.requests);
     return new Date(oldestRequest + windowMs);
   }
-  
+
   /**
    * Clean up old entries
    */
   private cleanup(): void {
     const now = Date.now();
     const maxAge = 3600000; // 1 hour
-    
+
     for (const [key, bucket] of this.store.entries()) {
       if (now - bucket.lastRefill > maxAge && bucket.requests.length === 0) {
         this.store.delete(key);
       }
     }
   }
-  
+
   /**
    * Clear all entries
    */
   clear(): void {
     this.store.clear();
   }
-  
+
   /**
    * Destroy the store
    */
@@ -197,12 +193,12 @@ function defaultKeyGenerator(req: NextRequest): string {
   const forwarded = req.headers.get('x-forwarded-for');
   const real = req.headers.get('x-real-ip');
   const cloudflare = req.headers.get('cf-connecting-ip');
-  
+
   const ip = cloudflare || real || forwarded?.split(',')[0] || 'unknown';
-  
+
   // Include path for more granular limiting
   const path = new URL(req.url).pathname;
-  
+
   return `${ip}:${path}`;
 }
 
@@ -220,19 +216,11 @@ export interface RateLimitResult {
 /**
  * Check rate limit for a request
  */
-export function checkRateLimit(
-  req: NextRequest,
-  config: RateLimitConfig
-): RateLimitResult {
-  const {
-    limit,
-    windowMs,
-    keyGenerator = defaultKeyGenerator,
-    skip,
-  } = config;
-  
+export function checkRateLimit(req: NextRequest, config: RateLimitConfig): RateLimitResult {
+  const { limit, windowMs, keyGenerator = defaultKeyGenerator, skip } = config;
+
   // Check if should skip
-  if (skip && skip(req)) {
+  if (skip?.(req)) {
     return {
       success: true,
       limit,
@@ -240,26 +228,26 @@ export function checkRateLimit(
       reset: new Date(Date.now() + windowMs),
     };
   }
-  
+
   // Generate key
   const key = keyGenerator(req);
-  
+
   // Check rate limit
   const success = globalStore.consume(key, limit, windowMs);
   const remaining = globalStore.getRemaining(key, limit, windowMs);
   const reset = globalStore.getResetTime(key, windowMs);
-  
+
   const result: RateLimitResult = {
     success,
     limit,
     remaining,
     reset,
   };
-  
+
   if (!success) {
     result.retryAfter = Math.ceil((reset.getTime() - Date.now()) / 1000);
   }
-  
+
   return result;
 }
 
@@ -282,28 +270,28 @@ export const RateLimitConfigs = {
     windowMs: 15 * 60 * 1000, // 15 minutes
     message: 'Too many authentication attempts, please try again later',
   },
-  
+
   // Standard API rate limiting
   api: {
     limit: 100,
     windowMs: 15 * 60 * 1000, // 15 minutes
     message: 'Too many requests, please try again later',
   },
-  
+
   // Relaxed rate limiting for GET requests
   read: {
     limit: 200,
     windowMs: 15 * 60 * 1000, // 15 minutes
     message: 'Too many requests, please try again later',
   },
-  
+
   // Strict rate limiting for write operations
   write: {
     limit: 20,
     windowMs: 15 * 60 * 1000, // 15 minutes
     message: 'Too many write operations, please try again later',
   },
-  
+
   // Very strict for password reset, email verification
   sensitive: {
     limit: 3,
@@ -331,14 +319,14 @@ export function getRateLimitHeaders(result: RateLimitResult): Record<string, str
  */
 export class IPRateLimiter {
   private configs: Map<string, RateLimitConfig> = new Map();
-  
+
   /**
    * Add rate limit config for IP range
    */
   addRange(cidr: string, config: RateLimitConfig): void {
     this.configs.set(cidr, config);
   }
-  
+
   /**
    * Check if IP matches CIDR range
    */
@@ -351,7 +339,7 @@ export class IPRateLimiter {
     // Add more sophisticated CIDR matching as needed
     return false;
   }
-  
+
   /**
    * Get config for IP
    */
