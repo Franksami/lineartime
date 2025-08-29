@@ -176,11 +176,11 @@ function AgentStatusCards({ agents, toolSafety }: { agents: any; toolSafety: any
   return (
     <div className="space-y-3">
       {/* Planner Agent Status */}
-      <Card className="bg-blue-50/50">
+      <Card className="bg-blue-50 /* TODO: Use semantic token *//50">
         <CardContent className="p-3">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <Brain className="h-4 w-4 text-blue-600" />
+              <Brain className="h-4 w-4 text-blue-600 /* TODO: Use semantic token */" />
               <span className="text-sm font-medium">Planner</span>
             </div>
             <Badge variant={agents.planner.isOptimizing ? 'default' : 'secondary'}>
@@ -210,11 +210,11 @@ function AgentStatusCards({ agents, toolSafety }: { agents: any; toolSafety: any
       </Card>
 
       {/* Summarizer Agent Status */}
-      <Card className="bg-green-50/50">
+      <Card className="bg-green-50 /* TODO: Use semantic token *//50">
         <CardContent className="p-3">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <FileText className="h-4 w-4 text-green-600" />
+              <FileText className="h-4 w-4 text-green-600 /* TODO: Use semantic token */" />
               <span className="text-sm font-medium">Summarizer</span>
             </div>
             <Badge variant={agents.summarizer.isProcessing ? 'default' : 'secondary'}>
@@ -226,11 +226,11 @@ function AgentStatusCards({ agents, toolSafety }: { agents: any; toolSafety: any
       </Card>
 
       {/* Router Agent Status */}
-      <Card className="bg-purple-50/50">
+      <Card className="bg-purple-50 /* TODO: Use semantic token *//50">
         <CardContent className="p-3">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <Route className="h-4 w-4 text-purple-600" />
+              <Route className="h-4 w-4 text-purple-600 /* TODO: Use semantic token */" />
               <span className="text-sm font-medium">Router</span>
             </div>
             <Badge variant={agents.router.isProcessing ? 'default' : 'secondary'}>
@@ -522,7 +522,7 @@ export function AIAssistantPanel() {
                     Detected Conflicts ({agents.conflict.conflicts.length})
                   </div>
                   {agents.conflict.conflicts.slice(0, 3).map((conflict: any, index: number) => (
-                    <Card key={index} className="bg-red-50/50">
+                    <Card key={index} className="bg-red-50 /* TODO: Use semantic token *//50">
                       <CardContent className="p-2">
                         <div className="text-xs">
                           <div className="font-medium">{conflict.description}</div>

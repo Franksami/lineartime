@@ -39,9 +39,9 @@ const getStatusBadge = (status: ToolUIPart['state']) => {
     'input-streaming': <CircleIcon className="size-4" />,
     'input-available': <ClockIcon className="size-4 animate-pulse" />,
     'output-available': (
-      <CheckCircleIcon className="size-4 text-green-600 /* TODO: Use semantic token */" />
+      <CheckCircleIcon className="size-4 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
     ),
-    'output-error': <XCircleIcon className="size-4 text-red-600 /* TODO: Use semantic token */" />,
+    'output-error': <XCircleIcon className="size-4 text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />,
   } as const;
 
   return (

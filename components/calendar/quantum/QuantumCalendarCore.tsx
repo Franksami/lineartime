@@ -758,7 +758,7 @@ DENSITY: ${visualDensity.toUpperCase()} LAYOUT
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 2.0 }}
         >
-          <details className="bg-black/90 text-green-400 /* TODO: Use semantic token */ rounded-lg p-4 max-w-md">
+          <details className="bg-black/90 text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg p-4 max-w-md">
             <summary className="cursor-pointer font-mono text-sm">🛠️ Quantum Debug Console</summary>
             <pre className="text-xs font-mono mt-2 whitespace-pre-wrap">
               {quantumFeaturesStatus}

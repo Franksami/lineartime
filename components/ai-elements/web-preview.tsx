@@ -204,7 +204,7 @@ export const WebPreviewConsole = ({
                 className={cn(
                   'text-xs',
                   log.level === 'error' && 'text-destructive',
-                  log.level === 'warn' && 'text-yellow-600 /* TODO: Use semantic token */',
+                  log.level === 'warn' && 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
                   log.level === 'log' && 'text-foreground'
                 )}
                 key={`${log.timestamp.getTime()}-${index}`}

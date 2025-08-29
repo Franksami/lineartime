@@ -448,7 +448,7 @@ export function CheatCalAIEnhancementLayer({
   const getSystemStatusColor = (status: SystemStatus[keyof SystemStatus]) => {
     switch (status) {
       case 'active':
-        return 'text-green-600 /* TODO: Use semantic token */ bg-green-100 /* TODO: Use semantic token *//10';
+        return 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10';
       case 'initializing':
         return 'text-primary bg-primary/10 animate-pulse';
       case 'error':
@@ -456,7 +456,7 @@ export function CheatCalAIEnhancementLayer({
       case 'consent_required':
       case 'permission_required':
       case 'api_key_required':
-        return 'text-yellow-500 /* TODO: Use semantic token */ bg-yellow-500 /* TODO: Use semantic token *//10';
+        return 'text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10';
       default:
         return 'text-muted-foreground bg-muted/10';
     }
@@ -499,7 +499,7 @@ export function CheatCalAIEnhancementLayer({
               <Brain className="w-8 h-8 text-primary" />
               {isInitialized && (
                 <motion.div
-                  className="absolute -top-1 -right-1 w-4 h-4 bg-green-600 /* TODO: Use semantic token */ rounded-full"
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full"
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}
                 />
@@ -608,13 +608,13 @@ export function CheatCalAIEnhancementLayer({
                 {orchestratorEnabled && (
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div className="p-3 bg-card rounded-lg">
-                      <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">
+                      <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                         {currentFPS}
                       </div>
                       <div className="text-xs text-muted-foreground">FPS</div>
                     </div>
                     <div className="p-3 bg-card rounded-lg">
-                      <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">
+                      <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                         {memoryUsage}MB
                       </div>
                       <div className="text-xs text-muted-foreground">Memory</div>
@@ -679,7 +679,7 @@ export function CheatCalAIEnhancementLayer({
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-2">
-                    <Mic className="w-5 h-5 text-green-600 /* TODO: Use semantic token */" />
+                    <Mic className="w-5 h-5 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span className="font-medium">Voice Processing</span>
                   </div>
                   <Badge className={getSystemStatusColor(systemStatus.voice)}>
@@ -758,7 +758,7 @@ export function CheatCalAIEnhancementLayer({
           <TabsContent value="insights" className="space-y-6">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold flex items-center space-x-2">
-                <Lightbulb className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */" />
+                <Lightbulb className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                 <span>Productivity Insights</span>
               </h3>
 
@@ -845,7 +845,7 @@ export function CheatCalAIEnhancementLayer({
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Card className="p-4">
                   <div className="flex items-center space-x-2 mb-2">
-                    <Activity className="w-5 h-5 text-green-600 /* TODO: Use semantic token */" />
+                    <Activity className="w-5 h-5 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span className="font-medium">Performance</span>
                   </div>
                   <div className="space-y-2">
@@ -868,7 +868,7 @@ export function CheatCalAIEnhancementLayer({
 
                 <Card className="p-4">
                   <div className="flex items-center space-x-2 mb-2">
-                    <Lightbulb className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */" />
+                    <Lightbulb className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span className="font-medium">Insights</span>
                   </div>
                   <div className="space-y-2">
@@ -928,7 +928,7 @@ export function CheatCalAIEnhancementLayer({
           {/* Settings Tab */}
           <TabsContent value="settings" className="space-y-6">
             <h3 className="text-lg font-semibold flex items-center space-x-2">
-              <Settings className="w-5 h-5 text-gray-500 /* TODO: Use semantic token */" />
+              <Settings className="w-5 h-5 text-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
               <span>Configuration</span>
             </h3>
 
@@ -1013,14 +1013,14 @@ export function CheatCalAIEnhancementLayer({
                       level === 'critical'
                         ? 'bg-destructive/5 border-destructive/20'
                         : level === 'medium'
-                          ? 'bg-yellow-100 /* TODO: Use semantic token *//10 border-yellow-200 /* TODO: Use semantic token *//30'
-                          : 'bg-green-100 /* TODO: Use semantic token *//10 border-green-200 /* TODO: Use semantic token *//30';
+                          ? 'bg-yellow-100 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 border-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30'
+                          : 'bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 border-green-200 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30';
                     const textColor =
                       level === 'critical'
                         ? 'text-destructive'
                         : level === 'medium'
-                          ? 'text-yellow-600 /* TODO: Use semantic token */'
-                          : 'text-green-600 /* TODO: Use semantic token */';
+                          ? 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
+                          : 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
 
                     return (
                       <motion.div
@@ -1063,8 +1063,8 @@ export function CheatCalAIEnhancementLayer({
                                   level === 'critical'
                                     ? 'bg-destructive'
                                     : level === 'medium'
-                                      ? 'bg-yellow-500 /* TODO: Use semantic token */'
-                                      : 'bg-green-600 /* TODO: Use semantic token */'
+                                      ? 'bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
+                                      : 'bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                                 )}
                                 initial={{ width: 0 }}
                                 animate={{ width: `${capacity}%` }}
@@ -1108,7 +1108,7 @@ export function CheatCalAIEnhancementLayer({
                         <div className="flex items-center space-x-2">
                           <Badge
                             variant="outline"
-                            className="text-green-600 /* TODO: Use semantic token */ border-green-600 /* TODO: Use semantic token */"
+                            className="text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                           >
                             +$1,500 value
                           </Badge>
@@ -1216,16 +1216,16 @@ export function CheatCalAIEnhancementLayer({
                       <div className="p-3 bg-card rounded-lg border border-border">
                         <div className="flex items-center justify-between">
                           <div>
-                            <span className="font-medium text-green-600 /* TODO: Use semantic token */">
+                            <span className="font-medium text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                               ✅ Move team standup to 3:15 PM
                             </span>
-                            <div className="text-xs text-green-600 /* TODO: Use semantic token */">
+                            <div className="text-xs text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                               Zero conflict, +15min buffer
                             </div>
                           </div>
                           <Button
                             size="sm"
-                            className="bg-green-600 /* TODO: Use semantic token */ hover:bg-green-700 /* TODO: Use semantic token */ text-white"
+                            className="bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:bg-green-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-white"
                           >
                             Apply
                           </Button>
@@ -1235,10 +1235,10 @@ export function CheatCalAIEnhancementLayer({
                       <div className="p-3 bg-card rounded-lg border border-border">
                         <div className="flex items-center justify-between">
                           <div>
-                            <span className="font-medium text-yellow-600 /* TODO: Use semantic token */">
+                            <span className="font-medium text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                               ⚠️ Move client to 1:00 PM
                             </span>
-                            <div className="text-xs text-yellow-600 /* TODO: Use semantic token */">
+                            <div className="text-xs text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                               Lunch conflict risk
                             </div>
                           </div>
@@ -1269,18 +1269,18 @@ export function CheatCalAIEnhancementLayer({
                 }}
                 layout
               >
-                <Card className="border-l-4 border-l-yellow-500 bg-yellow-100 /* TODO: Use semantic token *//10">
+                <Card className="border-l-4 border-l-yellow-500 bg-yellow-100 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10">
                   <div className="p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center space-x-2">
-                        <AlertTriangle className="w-5 h-5 text-yellow-600 /* TODO: Use semantic token */" />
-                        <span className="font-semibold text-yellow-700 /* TODO: Use semantic token */">
+                        <AlertTriangle className="w-5 h-5 text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
+                        <span className="font-semibold text-yellow-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           MEDIUM: Focus Block vs Optional Review
                         </span>
                       </div>
                       <Badge
                         variant="outline"
-                        className="text-yellow-600 /* TODO: Use semantic token */"
+                        className="text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                       >
                         $800 opportunity
                       </Badge>
@@ -1293,7 +1293,7 @@ export function CheatCalAIEnhancementLayer({
                     <div className="flex space-x-2">
                       <Button
                         size="sm"
-                        className="bg-green-600 /* TODO: Use semantic token */ hover:bg-green-700 /* TODO: Use semantic token */ text-white"
+                        className="bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:bg-green-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-white"
                       >
                         Protect Focus
                       </Button>
@@ -1325,18 +1325,18 @@ export function CheatCalAIEnhancementLayer({
                 }}
                 layout
               >
-                <Card className="border-l-4 border-l-green-500 bg-green-100 /* TODO: Use semantic token *//10">
+                <Card className="border-l-4 border-l-green-500 bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10">
                   <div className="p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center space-x-2">
-                        <CheckCircle className="w-5 h-5 text-green-600 /* TODO: Use semantic token */" />
-                        <span className="font-semibold text-green-600 /* TODO: Use semantic token */">
+                        <CheckCircle className="w-5 h-5 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
+                        <span className="font-semibold text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           RESOLVED: Personal Time Protected
                         </span>
                       </div>
                       <Badge
                         variant="outline"
-                        className="text-green-600 /* TODO: Use semantic token */ border-green-600 /* TODO: Use semantic token */"
+                        className="text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                       >
                         Auto-resolved
                       </Badge>
@@ -1399,7 +1399,7 @@ export function CheatCalAIEnhancementLayer({
                         </Badge>
                         <Badge
                           variant="outline"
-                          className="text-green-600 /* TODO: Use semantic token */ border-green-600 /* TODO: Use semantic token */"
+                          className="text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                         >
                           $1,200 value
                         </Badge>
@@ -1467,7 +1467,7 @@ export function CheatCalAIEnhancementLayer({
                         </Badge>
                         <Badge
                           variant="outline"
-                          className="text-green-600 /* TODO: Use semantic token */ border-green-600 /* TODO: Use semantic token */"
+                          className="text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                         >
                           $800 value
                         </Badge>
@@ -1590,7 +1590,7 @@ export function CheatCalAIEnhancementLayer({
                       <div className="text-xs text-muted-foreground">Local Processing</div>
                     </div>
                     <div>
-                      <div className="text-lg font-bold text-green-600 /* TODO: Use semantic token */">
+                      <div className="text-lg font-bold text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                         $4,200
                       </div>
                       <div className="text-xs text-muted-foreground">Value Generated</div>

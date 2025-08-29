@@ -109,7 +109,7 @@ export function DashboardOverview({
       case 'medium':
         return 'bg-warning/10 text-warning border-warning/20';
       case 'low':
-        return 'bg-green-500 /* TODO: Use semantic token *//10 text-green-500 /* TODO: Use semantic token */ border-green-500 /* TODO: Use semantic token *//20';
+        return 'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20';
       default:
         return 'bg-muted text-muted-foreground border-border';
     }
@@ -131,13 +131,13 @@ export function DashboardOverview({
   const getActivityIcon = (type: string) => {
     switch (type) {
       case 'completed':
-        return <CheckCircle className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />;
+        return <CheckCircle className="h-4 w-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       case 'added':
         return <Plus className="h-4 w-4 text-primary" />;
       case 'updated':
-        return <Settings className="h-4 w-4 text-yellow-500 /* TODO: Use semantic token */" />;
+        return <Settings className="h-4 w-4 text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       case 'reminder':
-        return <Bell className="h-4 w-4 text-purple-500 /* TODO: Use semantic token */" />;
+        return <Bell className="h-4 w-4 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       default:
         return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
@@ -492,12 +492,12 @@ export function DashboardOverview({
                   <span className="text-sm font-medium">{insight.title}</span>
                   <div className="flex items-center gap-1">
                     {insight.trend === 'up' ? (
-                      <TrendingUp className="h-3 w-3 text-green-500 /* TODO: Use semantic token */" />
+                      <TrendingUp className="h-3 w-3 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     ) : (
-                      <TrendingDown className="h-3 w-3 text-red-500 /* TODO: Use semantic token */" />
+                      <TrendingDown className="h-3 w-3 text-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     )}
                     <span
-                      className={`text-xs ${insight.trend === 'up' ? 'text-green-500 /* TODO: Use semantic token */' : 'text-red-500 /* TODO: Use semantic token */'}`}
+                      className={`text-xs ${insight.trend === 'up' ? 'text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */' : 'text-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */'}`}
                     >
                       {insight.change}
                     </span>
@@ -539,9 +539,9 @@ export function DashboardOverview({
                     <div
                       className={`w-2 h-2 rounded-full ${
                         calendar.status === 'syncing'
-                          ? 'bg-yellow-500 /* TODO: Use semantic token */ animate-pulse'
+                          ? 'bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ animate-pulse'
                           : calendar.status === 'synced'
-                            ? 'bg-green-500 /* TODO: Use semantic token */'
+                            ? 'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                             : 'bg-destructive'
                       }`}
                     />
@@ -551,9 +551,9 @@ export function DashboardOverview({
                     <div
                       className={`text-xs ${
                         calendar.status === 'syncing'
-                          ? 'text-yellow-500 /* TODO: Use semantic token */'
+                          ? 'text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                           : calendar.status === 'synced'
-                            ? 'text-green-500 /* TODO: Use semantic token */'
+                            ? 'text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                             : 'text-destructive'
                       }`}
                     >

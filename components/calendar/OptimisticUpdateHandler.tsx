@@ -696,7 +696,7 @@ export function OptimisticUpdateHandler({
               config.enableRollbackAnimations && (
                 <motion.div
                   key={operationId}
-                  className="absolute inset-0 bg-red-500 /* TODO: Use semantic token *//10 pointer-events-none rounded-lg"
+                  className="absolute inset-0 bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 pointer-events-none rounded-lg"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -719,7 +719,7 @@ export function OptimisticUpdateHandler({
             exit={{ opacity: 0, y: -20 }}
           >
             <div className="flex items-center space-x-2 mb-2">
-              <div className="w-2 h-2 bg-yellow-500 /* TODO: Use semantic token */ rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full animate-pulse" />
               <span className="font-semibold">Optimistic Updates</span>
             </div>
 
@@ -733,7 +733,7 @@ export function OptimisticUpdateHandler({
             {optimisticState.failedCount > 0 && (
               <button
                 onClick={retryFailedOperations}
-                className="mt-2 px-2 py-1 bg-red-600 /* TODO: Use semantic token */ hover:bg-red-500 /* TODO: Use semantic token */ rounded text-xs"
+                className="mt-2 px-2 py-1 bg-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded text-xs"
               >
                 Retry Failed ({optimisticState.failedCount})
               </button>

@@ -390,7 +390,7 @@ export default function CheatCalAIShowcase() {
             <Badge
               variant={status.active ? 'default' : 'secondary'}
               className={
-                status.active ? 'bg-green-500 /* TODO: Use semantic token */ text-white' : ''
+                status.active ? 'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-white' : ''
               }
             >
               {status.active ? 'Active' : 'Inactive'}
@@ -441,7 +441,7 @@ export default function CheatCalAIShowcase() {
               >
                 <Brain className="w-10 h-10 text-primary" />
                 <div className="absolute -top-1 -right-1">
-                  <div className="w-4 h-4 bg-green-500 /* TODO: Use semantic token */ rounded-full animate-pulse" />
+                  <div className="w-4 h-4 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full animate-pulse" />
                 </div>
               </motion.div>
 
@@ -456,7 +456,7 @@ export default function CheatCalAIShowcase() {
 
               <Badge
                 variant="outline"
-                className="bg-yellow-100 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//30 text-yellow-800 /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */ border-yellow-300 /* TODO: Use semantic token */"
+                className="bg-yellow-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 text-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-yellow-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
               >
                 <Crown className="w-3 h-3 mr-1" />
                 Controversial AI
@@ -466,7 +466,7 @@ export default function CheatCalAIShowcase() {
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 text-sm">
                 <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded-full animate-pulse" />
+                  <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full animate-pulse" />
                   <span>Live Demo</span>
                 </div>
                 <Separator orientation="vertical" className="h-4" />
@@ -520,13 +520,13 @@ export default function CheatCalAIShowcase() {
               <Card className="text-center">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-center mb-2">
-                    <DollarSign className="w-8 h-8 text-green-500 /* TODO: Use semantic token */" />
+                    <DollarSign className="w-8 h-8 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   </div>
-                  <div className="text-3xl font-bold text-green-500 /* TODO: Use semantic token */ mb-1">
+                  <div className="text-3xl font-bold text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-1">
                     ${demoMetrics.totalValue.toLocaleString()}
                   </div>
                   <div className="text-sm text-muted-foreground">Value Created Today</div>
-                  <div className="text-xs text-green-600 /* TODO: Use semantic token */ mt-1">
+                  <div className="text-xs text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-1">
                     +18% vs yesterday
                   </div>
                 </CardContent>
@@ -541,7 +541,7 @@ export default function CheatCalAIShowcase() {
                     {demoMetrics.timeSaved.toFixed(1)}h
                   </div>
                   <div className="text-sm text-muted-foreground">Time Saved</div>
-                  <div className="text-xs text-blue-600 /* TODO: Use semantic token */ mt-1">
+                  <div className="text-xs text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-1">
                     ≈ ${(demoMetrics.timeSaved * 200).toFixed(0)} value
                   </div>
                 </CardContent>
@@ -550,13 +550,13 @@ export default function CheatCalAIShowcase() {
               <Card className="text-center">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-center mb-2">
-                    <TrendingUp className="w-8 h-8 text-purple-500 /* TODO: Use semantic token */" />
+                    <TrendingUp className="w-8 h-8 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   </div>
-                  <div className="text-3xl font-bold text-purple-500 /* TODO: Use semantic token */ mb-1">
+                  <div className="text-3xl font-bold text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-1">
                     {demoMetrics.optimizations}
                   </div>
                   <div className="text-sm text-muted-foreground">AI Optimizations</div>
-                  <div className="text-xs text-purple-600 /* TODO: Use semantic token */ mt-1">
+                  <div className="text-xs text-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-1">
                     Active today
                   </div>
                 </CardContent>
@@ -565,13 +565,13 @@ export default function CheatCalAIShowcase() {
               <Card className="text-center">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-center mb-2">
-                    <Brain className="w-8 h-8 text-pink-500 /* TODO: Use semantic token */" />
+                    <Brain className="w-8 h-8 text-pink-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   </div>
-                  <div className="text-3xl font-bold text-pink-500 /* TODO: Use semantic token */ mb-1">
+                  <div className="text-3xl font-bold text-pink-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-1">
                     {demoMetrics.accuracy}%
                   </div>
                   <div className="text-sm text-muted-foreground">AI Accuracy</div>
-                  <div className="text-xs text-pink-600 /* TODO: Use semantic token */ mt-1">
+                  <div className="text-xs text-pink-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-1">
                     Multi-modal fusion
                   </div>
                 </CardContent>
@@ -645,7 +645,7 @@ export default function CheatCalAIShowcase() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="bg-black text-green-400 /* TODO: Use semantic token */ rounded-lg p-4 font-mono text-xs overflow-x-auto">
+                <div className="bg-black text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg p-4 font-mono text-xs overflow-x-auto">
                   <pre>{`
 CHEATCAL AI SYSTEM ARCHITECTURE - LIVE STATUS
 ═══════════════════════════════════════════════════════════════════
@@ -706,7 +706,7 @@ MULTI-MODAL INPUT PROCESSING:
                               </div>
                             </div>
                             <div>
-                              <div className="text-2xl font-bold text-green-500 /* TODO: Use semantic token */">
+                              <div className="text-2xl font-bold text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                                 {systemStatus.vision.analyzing ? 'Active' : 'Idle'}
                               </div>
                               <div className="text-xs text-muted-foreground">Processing Status</div>
@@ -725,7 +725,7 @@ MULTI-MODAL INPUT PROCESSING:
                               key={index}
                               className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg"
                             >
-                              <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ mt-0.5" />
+                              <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-0.5" />
                               <div className="text-sm">{optimization}</div>
                             </div>
                           ))}
@@ -777,7 +777,7 @@ MULTI-MODAL INPUT PROCESSING:
                   <CardContent className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Local Processing</span>
-                      <Badge className="bg-green-500 /* TODO: Use semantic token */ text-white">
+                      <Badge className="bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-white">
                         90%
                       </Badge>
                     </div>
@@ -810,7 +810,7 @@ MULTI-MODAL INPUT PROCESSING:
                     <div className="bg-muted/50 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="font-semibold">Multi-Provider Voice Recognition</h3>
-                        <Badge className="bg-green-500 /* TODO: Use semantic token */ text-white">
+                        <Badge className="bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-white">
                           Online
                         </Badge>
                       </div>
@@ -935,7 +935,7 @@ MULTI-MODAL INPUT PROCESSING:
                         </div>
                         <div className="flex items-center justify-between p-3 bg-muted/30 rounded">
                           <span className="text-sm">Calendar Integration</span>
-                          <Badge className="bg-green-500 /* TODO: Use semantic token */ text-white">
+                          <Badge className="bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-white">
                             Active
                           </Badge>
                         </div>
@@ -1073,7 +1073,7 @@ MULTI-MODAL INPUT PROCESSING:
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center p-4 bg-muted/30 rounded">
-                      <Lock className="w-8 h-8 mx-auto mb-2 text-green-500 /* TODO: Use semantic token */" />
+                      <Lock className="w-8 h-8 mx-auto mb-2 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                       <div className="font-semibold">AES-256</div>
                       <div className="text-xs text-muted-foreground">Encryption</div>
                     </div>
@@ -1114,7 +1114,7 @@ MULTI-MODAL INPUT PROCESSING:
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-sm">System Security</span>
-                      <Badge className="bg-green-500 /* TODO: Use semantic token */ text-white">
+                      <Badge className="bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-white">
                         Excellent
                       </Badge>
                     </div>
@@ -1141,7 +1141,7 @@ MULTI-MODAL INPUT PROCESSING:
                         key={index}
                         className="flex items-start gap-2 text-xs p-2 bg-muted/30 rounded"
                       >
-                        <CheckCircle className="w-3 h-3 text-green-500 /* TODO: Use semantic token */ mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="w-3 h-3 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-0.5 flex-shrink-0" />
                         <span>{event}</span>
                       </div>
                     ))}

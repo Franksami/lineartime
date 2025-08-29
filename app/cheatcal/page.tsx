@@ -197,7 +197,7 @@ export default function CheatCalMainApplication() {
               whileHover={{ scale: 1.1, rotate: 5 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
-              <Skull className="w-16 h-16 text-red-500 /* TODO: Use semantic token */" />
+              <Skull className="w-16 h-16 text-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
               <div className="absolute -top-2 -right-2">
                 <Flame className="w-6 h-6 text-orange-500" />
               </div>
@@ -207,12 +207,12 @@ export default function CheatCalMainApplication() {
               <h1 className="text-5xl font-bold bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent">
                 Command Center
               </h1>
-              <div className="text-sm text-gray-400 /* TODO: Use semantic token */ font-mono">
+              <div className="text-sm text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-mono">
                 The AI That Cheats At Productivity
               </div>
             </div>
 
-            <Crown className="w-16 h-16 text-yellow-500 /* TODO: Use semantic token */" />
+            <Crown className="w-16 h-16 text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
           </div>
 
           <motion.div
@@ -221,13 +221,13 @@ export default function CheatCalMainApplication() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="text-2xl font-bold text-red-400 /* TODO: Use semantic token */ mb-3">
+            <div className="text-2xl font-bold text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-3">
               💰 "For People Who Get Money" 💰
             </div>
-            <div className="text-lg text-gray-300 /* TODO: Use semantic token */">
+            <div className="text-lg text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
               Real hustlers • Elite entrepreneurs • Money-focused professionals
             </div>
-            <div className="text-md text-yellow-400 /* TODO: Use semantic token */ mt-2">
+            <div className="text-md text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-2">
               "Stop working harder, start coordinating smarter, get more money"
             </div>
           </motion.div>
@@ -241,7 +241,7 @@ export default function CheatCalMainApplication() {
           >
             <Badge
               variant="destructive"
-              className="bg-red-600 /* TODO: Use semantic token */ px-4 py-2"
+              className="bg-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ px-4 py-2"
             >
               <Eye className="w-4 h-4 mr-2" />
               Monitoring: {monitoringActive ? 'ACTIVE' : 'PAUSED'}
@@ -249,7 +249,7 @@ export default function CheatCalMainApplication() {
 
             <Badge
               variant="secondary"
-              className="bg-green-600 /* TODO: Use semantic token */ px-4 py-2 text-white"
+              className="bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ px-4 py-2 text-white"
             >
               <DollarSign className="w-4 h-4 mr-2" />
               Value Today: ${productivityMetrics.daily_value_created.toLocaleString()}
@@ -271,15 +271,15 @@ export default function CheatCalMainApplication() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <Card className="bg-gray-900 /* TODO: Use semantic token */ border-green-500 /* TODO: Use semantic token */">
+          <Card className="bg-gray-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-green-400 /* TODO: Use semantic token */">
+              <CardTitle className="flex items-center space-x-2 text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 <Brain className="w-5 h-5" />
                 <span>Command Center Architecture (Money-Focused Design)</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <pre className="text-xs text-green-400 /* TODO: Use semantic token */ font-mono overflow-x-auto leading-tight">
+              <pre className="text-xs text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-mono overflow-x-auto leading-tight">
                 {CHEATCAL_APP_ARCHITECTURE}
               </pre>
             </CardContent>
@@ -288,16 +288,16 @@ export default function CheatCalMainApplication() {
 
         {/* Main Interface Tabs */}
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 bg-gray-800 /* TODO: Use semantic token */ border border-gray-600 /* TODO: Use semantic token */">
+          <TabsList className="grid w-full grid-cols-5 bg-gray-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border border-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
             <TabsTrigger
               value="dashboard"
-              className="data-[state=active]:bg-red-600 /* TODO: Use semantic token */"
+              className="data-[state=active]:bg-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
             >
               💀 Dashboard
             </TabsTrigger>
             <TabsTrigger
               value="calendar"
-              className="data-[state=active]:bg-green-600 /* TODO: Use semantic token */"
+              className="data-[state=active]:bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
             >
               📅 Cheat Calendar
             </TabsTrigger>
@@ -306,13 +306,13 @@ export default function CheatCalMainApplication() {
             </TabsTrigger>
             <TabsTrigger
               value="university"
-              className="data-[state=active]:bg-purple-600 /* TODO: Use semantic token */"
+              className="data-[state=active]:bg-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
             >
               🎓 University
             </TabsTrigger>
             <TabsTrigger
               value="viral"
-              className="data-[state=active]:bg-yellow-600 /* TODO: Use semantic token */"
+              className="data-[state=active]:bg-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
             >
               🔥 Viral
             </TabsTrigger>
@@ -323,16 +323,16 @@ export default function CheatCalMainApplication() {
             {/* Money-Focused Metrics Dashboard */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Card className="bg-gradient-to-br from-green-600/20 to-green-800/20 border-green-500 /* TODO: Use semantic token */">
+                <Card className="bg-gradient-to-br from-green-600/20 to-green-800/20 border-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   <CardContent className="p-6 text-center">
-                    <DollarSign className="w-8 h-8 text-green-400 /* TODO: Use semantic token */ mx-auto mb-3" />
-                    <div className="text-3xl font-bold text-green-400 /* TODO: Use semantic token */">
+                    <DollarSign className="w-8 h-8 text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mx-auto mb-3" />
+                    <div className="text-3xl font-bold text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       ${productivityMetrics.daily_value_created.toLocaleString()}
                     </div>
-                    <div className="text-sm text-green-300 /* TODO: Use semantic token */">
+                    <div className="text-sm text-green-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       Value Cheated Today
                     </div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */ mt-2">
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-2">
                       🎯 Target: ${(productivityMetrics.daily_value_created * 1.3).toLocaleString()}
                     </div>
                   </CardContent>
@@ -347,7 +347,7 @@ export default function CheatCalMainApplication() {
                       {productivityMetrics.coordination_optimizations_active}
                     </div>
                     <div className="text-sm text-orange-300">Active Cheats</div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */ mt-2">
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-2">
                       ⚡ Optimizing your money-making workflow
                     </div>
                   </CardContent>
@@ -355,16 +355,16 @@ export default function CheatCalMainApplication() {
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Card className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border-blue-500 /* TODO: Use semantic token */">
+                <Card className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border-blue-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   <CardContent className="p-6 text-center">
-                    <Target className="w-8 h-8 text-blue-400 /* TODO: Use semantic token */ mx-auto mb-3" />
-                    <div className="text-3xl font-bold text-blue-400 /* TODO: Use semantic token */">
+                    <Target className="w-8 h-8 text-blue-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mx-auto mb-3" />
+                    <div className="text-3xl font-bold text-blue-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       {productivityMetrics.time_saved_hours.toFixed(1)}h
                     </div>
-                    <div className="text-sm text-blue-300 /* TODO: Use semantic token */">
+                    <div className="text-sm text-blue-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       Time Saved Today
                     </div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */ mt-2">
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-2">
                       💰 = ${(productivityMetrics.time_saved_hours * 500).toLocaleString()} value
                     </div>
                   </CardContent>
@@ -372,16 +372,16 @@ export default function CheatCalMainApplication() {
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Card className="bg-gradient-to-br from-red-600/20 to-red-800/20 border-red-500 /* TODO: Use semantic token */">
+                <Card className="bg-gradient-to-br from-red-600/20 to-red-800/20 border-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   <CardContent className="p-6 text-center">
-                    <Flame className="w-8 h-8 text-red-400 /* TODO: Use semantic token */ mx-auto mb-3" />
-                    <div className="text-3xl font-bold text-red-400 /* TODO: Use semantic token */">
+                    <Flame className="w-8 h-8 text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mx-auto mb-3" />
+                    <div className="text-3xl font-bold text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       {productivityMetrics.controversy_engagement}%
                     </div>
-                    <div className="text-sm text-red-300 /* TODO: Use semantic token */">
+                    <div className="text-sm text-red-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       Controversy Score
                     </div>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */ mt-2">
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-2">
                       🔥 Love it or hate it - never ignored
                     </div>
                   </CardContent>
@@ -390,9 +390,9 @@ export default function CheatCalMainApplication() {
             </div>
 
             {/* Live Productivity Cheating Status */}
-            <Card className="bg-gray-900 /* TODO: Use semantic token */ border-yellow-500 /* TODO: Use semantic token */">
+            <Card className="bg-gray-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2 text-yellow-400 /* TODO: Use semantic token */">
+                <CardTitle className="flex items-center space-x-2 text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   <Activity className="w-5 h-5" />
                   <span>Live Productivity Cheating Status</span>
                 </CardTitle>
@@ -427,17 +427,17 @@ export default function CheatCalMainApplication() {
                   ].map((cheat, index) => (
                     <motion.div
                       key={cheat.action}
-                      className="flex items-center justify-between p-4 rounded-lg bg-gray-800 /* TODO: Use semantic token */ border border-yellow-500 /* TODO: Use semantic token *//30"
+                      className="flex items-center justify-between p-4 rounded-lg bg-gray-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border border-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30"
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
                       whileHover={{ scale: 1.02, borderColor: '#eab308' }}
                     >
                       <div className="flex-1">
-                        <div className="font-semibold text-yellow-300 /* TODO: Use semantic token */">
+                        <div className="font-semibold text-yellow-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           {cheat.action}
                         </div>
-                        <div className="text-sm text-gray-400 /* TODO: Use semantic token */">
+                        <div className="text-sm text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           {cheat.controversy}
                         </div>
                       </div>
@@ -447,17 +447,17 @@ export default function CheatCalMainApplication() {
                           className={cn(
                             'border-0',
                             cheat.status === 'ACTIVE'
-                              ? 'bg-red-600 /* TODO: Use semantic token */'
+                              ? 'bg-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                               : cheat.status === 'RUNNING'
-                                ? 'bg-green-600 /* TODO: Use semantic token */'
+                                ? 'bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                                 : cheat.status === 'PROCESSING'
                                   ? 'bg-orange-600'
-                                  : 'bg-blue-600 /* TODO: Use semantic token */'
+                                  : 'bg-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                           )}
                         >
                           {cheat.status}
                         </Badge>
-                        <div className="text-sm font-medium text-green-400 /* TODO: Use semantic token */">
+                        <div className="text-sm font-medium text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           {cheat.impact}
                         </div>
                       </div>
@@ -466,9 +466,9 @@ export default function CheatCalMainApplication() {
                 </div>
 
                 {/* Controversial Control Panel */}
-                <div className="mt-6 p-4 bg-red-500 /* TODO: Use semantic token *//10 border border-red-500 /* TODO: Use semantic token *//30 rounded-lg">
+                <div className="mt-6 p-4 bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 border border-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 rounded-lg">
                   <div className="flex items-center justify-between mb-4">
-                    <h4 className="font-semibold text-red-300 /* TODO: Use semantic token */">
+                    <h4 className="font-semibold text-red-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       ⚠️ Controversial Monitoring Controls
                     </h4>
                     <Badge variant="destructive">👁️ WATCHING EVERYTHING</Badge>
@@ -476,37 +476,37 @@ export default function CheatCalMainApplication() {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
-                      <label className="text-sm text-gray-300 /* TODO: Use semantic token */">
+                      <label className="text-sm text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                         Privacy vs Profit
                       </label>
                       <div className="flex items-center space-x-2">
-                        <span className="text-xs text-red-400 /* TODO: Use semantic token */">
+                        <span className="text-xs text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           Privacy
                         </span>
-                        <div className="flex-1 h-2 bg-gray-700 /* TODO: Use semantic token */ rounded">
+                        <div className="flex-1 h-2 bg-gray-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded">
                           <div
                             className="h-full bg-gradient-to-r from-red-500 to-green-500 rounded"
                             style={{ width: `${userProfile.privacy_vs_profit_preference}%` }}
                           />
                         </div>
-                        <span className="text-xs text-green-400 /* TODO: Use semantic token */">
+                        <span className="text-xs text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           Profit
                         </span>
                       </div>
-                      <div className="text-xs text-yellow-400 /* TODO: Use semantic token */">
+                      <div className="text-xs text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                         💰 {userProfile.privacy_vs_profit_preference}% profit-focused
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm text-gray-300 /* TODO: Use semantic token */">
+                      <label className="text-sm text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                         Controversy Tolerance
                       </label>
                       <div className="text-center">
-                        <div className="text-lg font-bold text-red-400 /* TODO: Use semantic token */">
+                        <div className="text-lg font-bold text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           {controversyLevel}%
                         </div>
-                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           {controversyLevel >= 90
                             ? '💀 CHAOS MODE'
                             : controversyLevel >= 70
@@ -517,14 +517,14 @@ export default function CheatCalMainApplication() {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm text-gray-300 /* TODO: Use semantic token */">
+                      <label className="text-sm text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                         Money Focus Level
                       </label>
                       <div className="text-center">
-                        <div className="text-lg font-bold text-green-400 /* TODO: Use semantic token */">
+                        <div className="text-lg font-bold text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           {userProfile.money_focus_level}%
                         </div>
-                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                        <div className="text-xs text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           💎 TRUE MONEY-GETTER
                         </div>
                       </div>
@@ -535,7 +535,7 @@ export default function CheatCalMainApplication() {
                     <Button
                       variant="destructive"
                       size="sm"
-                      className="bg-red-600 /* TODO: Use semantic token */ hover:bg-red-700 /* TODO: Use semantic token */"
+                      className="bg-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:bg-red-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                       onClick={() => handleModeChange('chaos')}
                     >
                       💀 Maximum Chaos Mode
@@ -544,7 +544,7 @@ export default function CheatCalMainApplication() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="border-yellow-500 /* TODO: Use semantic token */ text-yellow-400 /* TODO: Use semantic token */ hover:bg-yellow-500 /* TODO: Use semantic token *//10"
+                      className="border-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10"
                     >
                       🎓 Join Command Center University
                     </Button>
@@ -552,7 +552,7 @@ export default function CheatCalMainApplication() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="border-green-500 /* TODO: Use semantic token */ text-green-400 /* TODO: Use semantic token */ hover:bg-green-500 /* TODO: Use semantic token *//10"
+                      className="border-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10"
                     >
                       💰 Find Coordination Cheater
                     </Button>
@@ -564,9 +564,9 @@ export default function CheatCalMainApplication() {
 
           {/* Calendar Tab - Sophisticated Productivity Interface */}
           <TabsContent value="calendar" className="space-y-6">
-            <Card className="bg-gray-900 /* TODO: Use semantic token */ border-blue-500 /* TODO: Use semantic token */ min-h-[600px]">
+            <Card className="bg-gray-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-blue-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ min-h-[600px]">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2 text-blue-400 /* TODO: Use semantic token */">
+                <CardTitle className="flex items-center space-x-2 text-blue-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   <Target className="w-5 h-5" />
                   <span>Quantum Calendar - Productivity Cheating Interface</span>
                 </CardTitle>
@@ -588,7 +588,7 @@ export default function CheatCalMainApplication() {
 
           {/* Marketplace Tab */}
           <TabsContent value="marketplace" className="space-y-6">
-            <Card className="bg-gray-900 /* TODO: Use semantic token */ border-orange-500">
+            <Card className="bg-gray-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-orange-500">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2 text-orange-400">
                   <Users className="w-5 h-5" />
@@ -601,7 +601,7 @@ export default function CheatCalMainApplication() {
                   <h3 className="text-2xl font-bold text-orange-400 mb-2">
                     Find Your Coordination Cheater
                   </h3>
-                  <p className="text-gray-300 /* TODO: Use semantic token */ mb-6">
+                  <p className="text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-6">
                     Professional coordination specialists who help money-focused professionals
                     optimize their workflows for maximum revenue.
                   </p>
@@ -616,9 +616,9 @@ export default function CheatCalMainApplication() {
 
           {/* University Tab */}
           <TabsContent value="university" className="space-y-6">
-            <Card className="bg-gray-900 /* TODO: Use semantic token */ border-purple-500 /* TODO: Use semantic token */">
+            <Card className="bg-gray-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2 text-purple-400 /* TODO: Use semantic token */">
+                <CardTitle className="flex items-center space-x-2 text-purple-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   <Crown className="w-5 h-5" />
                   <span>Command Center University - Get Out The Productivity Matrix</span>
                 </CardTitle>
@@ -631,26 +631,26 @@ export default function CheatCalMainApplication() {
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <Brain className="w-20 h-20 text-purple-500 /* TODO: Use semantic token */ mx-auto mb-4" />
-                    <h3 className="text-3xl font-bold text-purple-400 /* TODO: Use semantic token */ mb-2">
+                    <Brain className="w-20 h-20 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mx-auto mb-4" />
+                    <h3 className="text-3xl font-bold text-purple-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-2">
                       💰 "For People Who Get Money" 💰
                     </h3>
-                    <p className="text-gray-300 /* TODO: Use semantic token */ text-lg mb-4">
+                    <p className="text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-lg mb-4">
                       Join 100K+ hustlers who chose controversial productivity optimization over
                       traditional methods
                     </p>
-                    <div className="text-yellow-400 /* TODO: Use semantic token */ font-semibold">
+                    <div className="text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-semibold">
                       "Stop being poor - Learn billionaire coordination secrets"
                     </div>
                   </motion.div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <Card className="bg-purple-900 /* TODO: Use semantic token *//30 border-purple-500 /* TODO: Use semantic token *//50">
+                    <Card className="bg-purple-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 border-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50">
                       <CardContent className="p-4">
-                        <h4 className="font-bold text-purple-300 /* TODO: Use semantic token */ mb-2">
+                        <h4 className="font-bold text-purple-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-2">
                           💎 What You Get:
                         </h4>
-                        <ul className="text-sm text-gray-300 /* TODO: Use semantic token */ space-y-1 text-left">
+                        <ul className="text-sm text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ space-y-1 text-left">
                           <li>• 5 money-focused coordination schools</li>
                           <li>• AI productivity optimization tools</li>
                           <li>• Elite money-getter community access</li>
@@ -660,12 +660,12 @@ export default function CheatCalMainApplication() {
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-green-900 /* TODO: Use semantic token *//30 border-green-500 /* TODO: Use semantic token *//50">
+                    <Card className="bg-green-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 border-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50">
                       <CardContent className="p-4">
-                        <h4 className="font-bold text-green-300 /* TODO: Use semantic token */ mb-2">
+                        <h4 className="font-bold text-green-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-2">
                           🎯 Who This Is For:
                         </h4>
-                        <ul className="text-sm text-gray-300 /* TODO: Use semantic token */ space-y-1 text-left">
+                        <ul className="text-sm text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ space-y-1 text-left">
                           <li>• Course creators wanting $100K+ launches</li>
                           <li>• Agency owners scaling to 8+ figures</li>
                           <li>• Entrepreneurs who prioritize results</li>
@@ -677,7 +677,7 @@ export default function CheatCalMainApplication() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="text-2xl font-bold text-green-400 /* TODO: Use semantic token */">
+                    <div className="text-2xl font-bold text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       $49/month - Join The Money-Getters
                     </div>
                     <Button
@@ -688,7 +688,7 @@ export default function CheatCalMainApplication() {
                       GET OUT THE PRODUCTIVITY MATRIX
                       <Crown className="w-6 h-6 ml-3" />
                     </Button>
-                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */">
+                    <div className="text-xs text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       💀 "Privacy is for people who don't make serious money"
                     </div>
                   </div>
@@ -705,18 +705,18 @@ export default function CheatCalMainApplication() {
 
         {/* Controversial Footer */}
         <motion.footer
-          className="text-center p-6 bg-gray-900 /* TODO: Use semantic token */ border border-red-500 /* TODO: Use semantic token *//30 rounded-lg"
+          className="text-center p-6 bg-gray-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border border-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 rounded-lg"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
         >
-          <div className="text-red-400 /* TODO: Use semantic token */ font-bold mb-2">
+          <div className="text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-bold mb-2">
             ⚠️ "This AI watches everything you do to help you make more money"
           </div>
-          <div className="text-gray-400 /* TODO: Use semantic token */ text-sm">
+          <div className="text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-sm">
             Privacy advocates will hate it. Money-getters will love it. Choose your side.
           </div>
-          <div className="text-yellow-400 /* TODO: Use semantic token */ text-xs mt-2">
+          <div className="text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-xs mt-2">
             💰 "Results over reputation. Money over conventional methods. Success over safety."
           </div>
         </motion.footer>

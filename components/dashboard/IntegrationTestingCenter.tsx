@@ -179,11 +179,11 @@ const IntegrationTestingCenter: React.FC = () => {
       case 'google':
         return <Globe className="h-5 w-5 text-primary" />;
       case 'microsoft':
-        return <Server className="h-5 w-5 text-blue-600 /* TODO: Use semantic token */" />;
+        return <Server className="h-5 w-5 text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       case 'apple':
-        return <Calendar className="h-5 w-5 text-gray-600 /* TODO: Use semantic token */" />;
+        return <Calendar className="h-5 w-5 text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       case 'caldav':
-        return <Database className="h-5 w-5 text-green-600 /* TODO: Use semantic token */" />;
+        return <Database className="h-5 w-5 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       default:
         return <Globe className="h-5 w-5" />;
     }
@@ -193,28 +193,28 @@ const IntegrationTestingCenter: React.FC = () => {
     switch (status) {
       case 'connected':
         return (
-          <Badge className="bg-green-100 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ border-green-200 /* TODO: Use semantic token */">
+          <Badge className="bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-green-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
             <CheckCircle className="h-3 w-3 mr-1" />
             Connected
           </Badge>
         );
       case 'error':
         return (
-          <Badge className="bg-red-100 /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */ border-red-200 /* TODO: Use semantic token */">
+          <Badge className="bg-red-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-red-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
             <AlertCircle className="h-3 w-3 mr-1" />
             Error
           </Badge>
         );
       case 'disconnected':
         return (
-          <Badge className="bg-muted text-gray-800 /* TODO: Use semantic token */ border-border">
+          <Badge className="bg-muted text-gray-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-border">
             <Clock className="h-3 w-3 mr-1" />
             Disconnected
           </Badge>
         );
       default:
         return (
-          <Badge className="bg-muted text-gray-800 /* TODO: Use semantic token */ border-border">
+          <Badge className="bg-muted text-gray-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-border">
             Unknown
           </Badge>
         );
@@ -443,7 +443,7 @@ const IntegrationTestingCenter: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span>Success Rate:</span>
                   <span
-                    className={`font-mono ${getSuccessRate(provider.id) >= 95 ? 'text-green-600 /* TODO: Use semantic token */' : 'text-yellow-600 /* TODO: Use semantic token */'}`}
+                    className={`font-mono ${getSuccessRate(provider.id) >= 95 ? 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */' : 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'}`}
                   >
                     {getSuccessRate(provider.id)}%
                   </span>
@@ -629,7 +629,7 @@ const IntegrationTestingCenter: React.FC = () => {
                             {getAverageResponseTime(selectedProvider.id)}ms
                           </p>
                         </div>
-                        <TrendingUp className="h-8 w-8 text-green-500 /* TODO: Use semantic token */" />
+                        <TrendingUp className="h-8 w-8 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                       </div>
                     </CardContent>
                   </Card>
@@ -643,7 +643,7 @@ const IntegrationTestingCenter: React.FC = () => {
                             {getSuccessRate(selectedProvider.id)}%
                           </p>
                         </div>
-                        <CheckCircle className="h-8 w-8 text-green-500 /* TODO: Use semantic token */" />
+                        <CheckCircle className="h-8 w-8 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                       </div>
                     </CardContent>
                   </Card>
@@ -869,10 +869,10 @@ const IntegrationTestingCenter: React.FC = () => {
                               <span
                                 className={
                                   result.responseTime > 1000
-                                    ? 'text-red-600 /* TODO: Use semantic token */'
+                                    ? 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                                     : result.responseTime > 500
-                                      ? 'text-yellow-600 /* TODO: Use semantic token */'
-                                      : 'text-green-600 /* TODO: Use semantic token */'
+                                      ? 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
+                                      : 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                                 }
                               >
                                 {result.responseTime}ms
@@ -882,8 +882,8 @@ const IntegrationTestingCenter: React.FC = () => {
                               <span
                                 className={
                                   result.response.status >= 400
-                                    ? 'text-red-600 /* TODO: Use semantic token */'
-                                    : 'text-green-600 /* TODO: Use semantic token */'
+                                    ? 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
+                                    : 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                                 }
                               >
                                 {result.response.status}

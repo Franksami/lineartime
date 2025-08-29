@@ -126,20 +126,20 @@ export class ErrorBoundary extends Component<Props, State> {
 
       // Default error UI
       return (
-        <div className="min-h-screen flex items-center justify-center bg-muted dark:bg-gray-900 /* TODO: Use semantic token */ px-4 py-12">
+        <div className="min-h-screen flex items-center justify-center bg-muted dark:bg-gray-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ px-4 py-12">
           <div className="max-w-2xl w-full">
-            <div className="bg-white dark:bg-gray-800 /* TODO: Use semantic token */ rounded-lg shadow-xl overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg shadow-xl overflow-hidden">
               {/* Error Header */}
-              <div className="bg-red-50 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//20 border-b border-red-200 /* TODO: Use semantic token */ dark:border-red-800 /* TODO: Use semantic token */ p-6">
+              <div className="bg-red-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20 border-b border-red-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-red-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ p-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <AlertCircle className="h-8 w-8 text-red-600 /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */" />
+                    <AlertCircle className="h-8 w-8 text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   </div>
                   <div className="ml-3 flex-1">
-                    <h3 className="text-lg font-medium text-red-800 /* TODO: Use semantic token */ dark:text-red-200 /* TODO: Use semantic token */">
+                    <h3 className="text-lg font-medium text-red-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-red-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       Something went wrong
                     </h3>
-                    <p className="mt-1 text-sm text-red-700 /* TODO: Use semantic token */ dark:text-red-300 /* TODO: Use semantic token */">
+                    <p className="mt-1 text-sm text-red-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-red-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       {isRecovering
                         ? 'Attempting to recover...'
                         : "An unexpected error occurred. The error has been logged and we'll look into it."}
@@ -150,8 +150,8 @@ export class ErrorBoundary extends Component<Props, State> {
 
               {/* Error Message */}
               <div className="p-6">
-                <div className="bg-muted dark:bg-gray-700 /* TODO: Use semantic token */ rounded-lg p-4">
-                  <p className="text-sm font-mono text-muted-foreground dark:text-gray-300 /* TODO: Use semantic token */">
+                <div className="bg-muted dark:bg-gray-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg p-4">
+                  <p className="text-sm font-mono text-muted-foreground dark:text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                     {error.message}
                   </p>
                 </div>
@@ -161,7 +161,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   <div className="mt-4">
                     <button
                       onClick={this.toggleDetails}
-                      className="flex items-center text-sm text-gray-600 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ hover:text-foreground dark:hover:text-gray-200 /* TODO: Use semantic token */"
+                      className="flex items-center text-sm text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:text-foreground dark:hover:text-gray-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                     >
                       {showDetails ? (
                         <>
@@ -181,10 +181,10 @@ export class ErrorBoundary extends Component<Props, State> {
                         {/* Stack Trace */}
                         {error.stack && (
                           <div>
-                            <h4 className="text-xs font-medium text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ uppercase tracking-wide mb-1">
+                            <h4 className="text-xs font-medium text-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ uppercase tracking-wide mb-1">
                               Stack Trace
                             </h4>
-                            <pre className="bg-gray-900 /* TODO: Use semantic token */ dark:bg-black text-gray-100 /* TODO: Use semantic token */ rounded-lg p-3 text-xs overflow-x-auto">
+                            <pre className="bg-gray-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-black text-gray-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg p-3 text-xs overflow-x-auto">
                               {error.stack}
                             </pre>
                           </div>
@@ -193,10 +193,10 @@ export class ErrorBoundary extends Component<Props, State> {
                         {/* Component Stack */}
                         {errorInfo?.componentStack && (
                           <div>
-                            <h4 className="text-xs font-medium text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ uppercase tracking-wide mb-1">
+                            <h4 className="text-xs font-medium text-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ uppercase tracking-wide mb-1">
                               Component Stack
                             </h4>
-                            <pre className="bg-gray-900 /* TODO: Use semantic token */ dark:bg-black text-gray-100 /* TODO: Use semantic token */ rounded-lg p-3 text-xs overflow-x-auto">
+                            <pre className="bg-gray-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-black text-gray-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg p-3 text-xs overflow-x-auto">
                               {errorInfo.componentStack}
                             </pre>
                           </div>
@@ -205,10 +205,10 @@ export class ErrorBoundary extends Component<Props, State> {
                         {/* Error ID */}
                         {this.state.errorId && (
                           <div>
-                            <h4 className="text-xs font-medium text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ uppercase tracking-wide mb-1">
+                            <h4 className="text-xs font-medium text-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ uppercase tracking-wide mb-1">
                               Error ID
                             </h4>
-                            <p className="text-xs font-mono text-gray-600 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
+                            <p className="text-xs font-mono text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                               {this.state.errorId}
                             </p>
                           </div>
@@ -223,7 +223,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   <button
                     onClick={this.handleReset}
                     disabled={isRecovering}
-                    className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 /* TODO: Use semantic token */ hover:bg-blue-700 /* TODO: Use semantic token */ focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 /* TODO: Use semantic token */ disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:bg-blue-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <RefreshCw className={`h-4 w-4 mr-2 ${isRecovering ? 'animate-spin' : ''}`} />
                     {isRecovering ? 'Recovering...' : 'Try Again'}
@@ -231,7 +231,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
                   <button
                     onClick={this.handleGoHome}
-                    className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 /* TODO: Use semantic token */ dark:border-gray-600 /* TODO: Use semantic token */ text-sm font-medium rounded-md text-muted-foreground dark:text-gray-300 /* TODO: Use semantic token */ bg-white dark:bg-gray-800 /* TODO: Use semantic token */ hover:bg-muted dark:hover:bg-gray-700 /* TODO: Use semantic token */ focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 /* TODO: Use semantic token */"
+                    className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-sm font-medium rounded-md text-muted-foreground dark:text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-white dark:bg-gray-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:bg-muted dark:hover:bg-gray-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                   >
                     <Home className="h-4 w-4 mr-2" />
                     Go Home
@@ -240,7 +240,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
                 {/* Recovery Attempts */}
                 {this.state.recoveryAttempts > 0 && (
-                  <p className="mt-3 text-xs text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
+                  <p className="mt-3 text-xs text-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                     Recovery attempts: {this.state.recoveryAttempts}
                   </p>
                 )}
@@ -248,7 +248,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
 
             {/* Help Text */}
-            <p className="mt-4 text-center text-sm text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
+            <p className="mt-4 text-center text-sm text-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
               If this problem persists, please contact support or try refreshing the page.
             </p>
           </div>
@@ -298,19 +298,19 @@ export function AsyncErrorBoundary({
     }
 
     return (
-      <div className="p-4 bg-yellow-50 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//20 border border-yellow-200 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ rounded-lg">
+      <div className="p-4 bg-yellow-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20 border border-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg">
         <div className="flex">
-          <AlertCircle className="h-5 w-5 text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */" />
+          <AlertCircle className="h-5 w-5 text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
           <div className="ml-3">
-            <h3 className="text-sm font-medium text-yellow-800 /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */">
+            <h3 className="text-sm font-medium text-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
               Async Error
             </h3>
-            <p className="mt-1 text-sm text-yellow-700 /* TODO: Use semantic token */ dark:text-yellow-300 /* TODO: Use semantic token */">
+            <p className="mt-1 text-sm text-yellow-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-yellow-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
               {error.message}
             </p>
             <button
               onClick={() => setError(null)}
-              className="mt-2 text-sm text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */ hover:text-yellow-500 /* TODO: Use semantic token */"
+              className="mt-2 text-sm text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
             >
               Dismiss
             </button>

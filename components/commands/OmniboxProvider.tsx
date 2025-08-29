@@ -225,7 +225,7 @@ export function OmniboxProvider() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {parsedIntent.confidence >= 0.8 ? (
-                      <Check className="h-4 w-4 text-green-500" />
+                      <Check className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
                     ) : (
                       <AlertCircle className="h-4 w-4 text-amber-500" />
                     )}
@@ -244,11 +244,11 @@ export function OmniboxProvider() {
 
                 {/* Auto-execute notification */}
                 {parsedIntent.confidence >= 0.8 && parsedIntent.action && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                    <div className="text-sm font-medium text-green-800">
+                  <div className="bg-green-50 /* TODO: Use semantic token */ border border-green-200 /* TODO: Use semantic token */ rounded-lg p-3">
+                    <div className="text-sm font-medium text-green-800 /* TODO: Use semantic token */">
                       Auto-executing (confidence ≥80%)
                     </div>
-                    <div className="text-xs text-green-600 mt-1">{parsedIntent.action.type}</div>
+                    <div className="text-xs text-green-600 /* TODO: Use semantic token */ mt-1">{parsedIntent.action.type}</div>
                   </div>
                 )}
 

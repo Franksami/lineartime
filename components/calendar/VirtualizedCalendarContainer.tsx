@@ -527,7 +527,7 @@ export function VirtualizedCalendarContainer({
                   🚀 Virtualized
                 </div>
               )}
-              <div className="px-3 py-1 bg-green-100 /* TODO: Use semantic token */ text-green-700 /* TODO: Use semantic token */ rounded-full text-xs font-medium">
+              <div className="px-3 py-1 bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full text-xs font-medium">
                 {virtualizationMetrics.totalEvents} Events
               </div>
             </div>
@@ -637,7 +637,7 @@ export function VirtualizedCalendarContainer({
           <div className="space-y-1">
             <div>
               FPS:{' '}
-              <span className="font-mono text-green-600 /* TODO: Use semantic token */">
+              <span className="font-mono text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 {Math.round(virtualizationMetrics.scrollFPS)}
               </span>
             </div>

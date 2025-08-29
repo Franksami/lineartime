@@ -109,25 +109,25 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
     if (!stats.isOnline)
       return {
         status: 'offline',
-        color: 'text-gray-500 /* TODO: Use semantic token */',
+        color: 'text-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
         icon: WifiOff,
       };
     if (stats.syncInProgress) return { status: 'syncing', color: 'text-primary', icon: RefreshCw };
     if (stats.size === 0)
       return {
         status: 'healthy',
-        color: 'text-green-500 /* TODO: Use semantic token */',
+        color: 'text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
         icon: CheckCircle2,
       };
     if (stats.size > 100)
       return {
         status: 'warning',
-        color: 'text-yellow-500 /* TODO: Use semantic token */',
+        color: 'text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
         icon: AlertTriangle,
       };
     return {
       status: 'normal',
-      color: 'text-green-500 /* TODO: Use semantic token */',
+      color: 'text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
       icon: Activity,
     };
   };
@@ -200,7 +200,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">High Priority</span>
               </div>
-              <div className="text-2xl font-bold text-red-600 /* TODO: Use semantic token */">
+              <div className="text-2xl font-bold text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 {stats.byPriority.high}
               </div>
             </div>
@@ -210,7 +210,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <Activity className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Medium Priority</span>
               </div>
-              <div className="text-2xl font-bold text-yellow-600 /* TODO: Use semantic token */">
+              <div className="text-2xl font-bold text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 {stats.byPriority.medium}
               </div>
             </div>
@@ -220,7 +220,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm font-medium">Low Priority</span>
               </div>
-              <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">
+              <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 {stats.byPriority.low}
               </div>
             </div>
@@ -232,9 +232,9 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   {stats.isOnline ? (
-                    <Wifi className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
+                    <Wifi className="h-4 w-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   ) : (
-                    <WifiOff className="h-4 w-4 text-red-500 /* TODO: Use semantic token */" />
+                    <WifiOff className="h-4 w-4 text-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   )}
                   <span className="text-sm font-medium">Connection</span>
                 </div>
@@ -286,7 +286,7 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
                   variant="outline"
                   size="sm"
                   onClick={handleClearQueue}
-                  className="text-red-600 /* TODO: Use semantic token */ hover:text-red-700 /* TODO: Use semantic token */"
+                  className="text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:text-red-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Clear Queue
@@ -309,14 +309,14 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
 
           {/* Warnings */}
           {stats.size > 100 && (
-            <div className="p-3 bg-yellow-50 /* TODO: Use semantic token */ dark:bg-yellow-950 /* TODO: Use semantic token */ border border-yellow-200 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ rounded-lg">
+            <div className="p-3 bg-yellow-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-yellow-950 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border border-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-yellow-600 /* TODO: Use semantic token */" />
-                <span className="text-sm font-medium text-yellow-800 /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */">
+                <AlertTriangle className="h-4 w-4 text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
+                <span className="text-sm font-medium text-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   Large Queue Size
                 </span>
               </div>
-              <p className="text-sm text-yellow-700 /* TODO: Use semantic token */ dark:text-yellow-300 /* TODO: Use semantic token */ mt-1">
+              <p className="text-sm text-yellow-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-yellow-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-1">
                 You have {stats.size} items queued for sync. Consider forcing a sync or checking
                 your connection.
               </p>
@@ -324,14 +324,14 @@ export function AnalyticsSyncMonitor({ className, compact = false }: AnalyticsSy
           )}
 
           {!stats.isOnline && (
-            <div className="p-3 bg-muted dark:bg-gray-950 /* TODO: Use semantic token */ border border-border dark:border-gray-800 /* TODO: Use semantic token */ rounded-lg">
+            <div className="p-3 bg-muted dark:bg-gray-950 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border border-border dark:border-gray-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg">
               <div className="flex items-center gap-2">
-                <WifiOff className="h-4 w-4 text-gray-600 /* TODO: Use semantic token */" />
-                <span className="text-sm font-medium text-gray-800 /* TODO: Use semantic token */ dark:text-gray-200 /* TODO: Use semantic token */">
+                <WifiOff className="h-4 w-4 text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
+                <span className="text-sm font-medium text-gray-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-gray-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   Offline Mode
                 </span>
               </div>
-              <p className="text-sm text-muted-foreground dark:text-gray-300 /* TODO: Use semantic token */ mt-1">
+              <p className="text-sm text-muted-foreground dark:text-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-1">
                 Analytics data is being queued locally and will sync when connection is restored.
               </p>
             </div>

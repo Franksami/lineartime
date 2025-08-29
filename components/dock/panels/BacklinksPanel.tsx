@@ -135,11 +135,11 @@ function BacklinkItem({
 }) {
   const entity = direction === 'incoming' ? link.from : link.to;
   const linkTypeColors = {
-    related: 'bg-blue-100 text-blue-800',
+    related: 'bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */',
     depends_on: 'bg-orange-100 text-orange-800',
-    part_of: 'bg-green-100 text-green-800',
-    references: 'bg-purple-100 text-purple-800',
-    mentions: 'bg-gray-100 text-gray-800',
+    part_of: 'bg-green-100 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */',
+    references: 'bg-purple-100 /* TODO: Use semantic token */ text-purple-800 /* TODO: Use semantic token */',
+    mentions: 'bg-gray-100 /* TODO: Use semantic token */ text-gray-800 /* TODO: Use semantic token */',
   };
 
   return (
@@ -160,7 +160,7 @@ function BacklinkItem({
                 <Badge
                   className={cn(
                     'text-xs',
-                    linkTypeColors[link.type] || 'bg-gray-100 text-gray-800'
+                    linkTypeColors[link.type] || 'bg-gray-100 /* TODO: Use semantic token */ text-gray-800 /* TODO: Use semantic token */'
                   )}
                 >
                   {link.type.replace('_', ' ')}

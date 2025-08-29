@@ -329,9 +329,9 @@ export function BillingSettings() {
 
                 <div className="flex items-center space-x-2">
                   {permissions.features.apiAccess ? (
-                    <CheckCircle className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
+                    <CheckCircle className="h-4 w-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   ) : (
-                    <AlertCircle className="h-4 w-4 text-gray-400 /* TODO: Use semantic token */" />
+                    <AlertCircle className="h-4 w-4 text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   )}
                   <span className="text-sm">API Access</span>
                 </div>

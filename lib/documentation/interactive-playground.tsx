@@ -613,7 +613,7 @@ export function InteractivePlayground({
                       line.startsWith('ERROR:')
                         ? 'text-destructive'
                         : line.startsWith('WARN:')
-                          ? 'text-yellow-600'
+                          ? 'text-yellow-600 /* TODO: Use semantic token */'
                           : 'text-foreground'
                     }
                   >

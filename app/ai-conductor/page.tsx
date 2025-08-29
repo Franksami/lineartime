@@ -185,9 +185,9 @@ export default function AIConductorPage() {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <div className="relative">
-                  <Brain className="w-10 h-10 text-purple-500 /* TODO: Use semantic token */" />
+                  <Brain className="w-10 h-10 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   <motion.div
-                    className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 /* TODO: Use semantic token */ rounded-full"
+                    className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full"
                     animate={{ scale: [1, 1.3, 1] }}
                     transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}
                   />
@@ -210,14 +210,14 @@ export default function AIConductorPage() {
 
                 <Badge
                   variant="outline"
-                  className="bg-green-100 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */"
+                  className="bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                 >
                   ⚡ {currentFPS} FPS
                 </Badge>
 
                 <Badge
                   variant="outline"
-                  className="bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */"
+                  className="bg-blue-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                 >
                   💾 {memoryUsage}MB
                 </Badge>
@@ -254,7 +254,7 @@ export default function AIConductorPage() {
             <Card className="overflow-hidden">
               <div className="p-6">
                 <h2 className="text-xl font-bold mb-4 flex items-center space-x-2">
-                  <Sparkles className="w-6 h-6 text-purple-500 /* TODO: Use semantic token */" />
+                  <Sparkles className="w-6 h-6 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   <span>Integrated AI Enhancement Architecture</span>
                 </h2>
                 <pre className="text-xs font-mono text-foreground bg-muted/20 p-6 rounded-lg overflow-x-auto">
@@ -277,8 +277,8 @@ export default function AIConductorPage() {
               className="text-center p-4 rounded-lg bg-muted/50"
               whileHover={{ scale: 1.05 }}
             >
-              <Activity className="w-8 h-8 mx-auto mb-2 text-green-500 /* TODO: Use semantic token */" />
-              <div className="text-3xl font-bold text-green-500 /* TODO: Use semantic token */">
+              <Activity className="w-8 h-8 mx-auto mb-2 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
+              <div className="text-3xl font-bold text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 {currentFPS}
               </div>
               <div className="text-sm text-muted-foreground">FPS Maintained</div>
@@ -299,8 +299,8 @@ export default function AIConductorPage() {
               className="text-center p-4 rounded-lg bg-muted/50"
               whileHover={{ scale: 1.05 }}
             >
-              <Zap className="w-8 h-8 mx-auto mb-2 text-yellow-500 /* TODO: Use semantic token */" />
-              <div className="text-3xl font-bold text-yellow-500 /* TODO: Use semantic token */">
+              <Zap className="w-8 h-8 mx-auto mb-2 text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
+              <div className="text-3xl font-bold text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 {aiProcessingTime}ms
               </div>
               <div className="text-sm text-muted-foreground">AI Processing</div>
@@ -311,12 +311,12 @@ export default function AIConductorPage() {
               className="text-center p-4 rounded-lg bg-muted/50"
               whileHover={{ scale: 1.05 }}
             >
-              <DollarSign className="w-8 h-8 mx-auto mb-2 text-purple-500 /* TODO: Use semantic token */" />
-              <div className="text-3xl font-bold text-purple-500 /* TODO: Use semantic token */">
+              <DollarSign className="w-8 h-8 mx-auto mb-2 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
+              <div className="text-3xl font-bold text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 {formatCurrency(totalRevenueOptimized)}
               </div>
               <div className="text-sm text-muted-foreground">Revenue Optimized</div>
-              <div className="mt-2 text-xs text-green-600 /* TODO: Use semantic token */">
+              <div className="mt-2 text-xs text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 +{insights.length} opportunities
               </div>
             </motion.div>
@@ -456,10 +456,10 @@ export default function AIConductorPage() {
                         className={cn(
                           'font-medium',
                           currentFPS >= 112
-                            ? 'text-green-600 /* TODO: Use semantic token */'
+                            ? 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                             : currentFPS >= 90
-                              ? 'text-yellow-600 /* TODO: Use semantic token */'
-                              : 'text-red-600 /* TODO: Use semantic token */'
+                              ? 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
+                              : 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                         )}
                       >
                         {currentFPS >= 112
@@ -489,10 +489,10 @@ export default function AIConductorPage() {
                         className={cn(
                           'font-medium',
                           memoryUsage <= 70
-                            ? 'text-green-600 /* TODO: Use semantic token */'
+                            ? 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                             : memoryUsage <= 85
-                              ? 'text-yellow-600 /* TODO: Use semantic token */'
-                              : 'text-red-600 /* TODO: Use semantic token */'
+                              ? 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
+                              : 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                         )}
                       >
                         {memoryUsage <= 70
@@ -522,10 +522,10 @@ export default function AIConductorPage() {
                         className={cn(
                           'font-medium',
                           aiProcessingTime <= 16
-                            ? 'text-green-600 /* TODO: Use semantic token */'
+                            ? 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                             : aiProcessingTime <= 30
-                              ? 'text-yellow-600 /* TODO: Use semantic token */'
-                              : 'text-red-600 /* TODO: Use semantic token */'
+                              ? 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
+                              : 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                         )}
                       >
                         {aiProcessingTime <= 16
@@ -545,17 +545,17 @@ export default function AIConductorPage() {
         {/* Integration Summary */}
         <Card className="p-6">
           <h2 className="text-xl font-bold mb-6 flex items-center space-x-2">
-            <Target className="w-6 h-6 text-green-500 /* TODO: Use semantic token */" />
+            <Target className="w-6 h-6 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
             <span>AI Integration Achievement Summary</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <motion.div
-              className="p-4 rounded-lg border bg-green-50 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token *//20"
+              className="p-4 rounded-lg border bg-green-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20"
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center space-x-2 mb-2">
-                <CheckCircle className="w-5 h-5 text-green-500 /* TODO: Use semantic token */" />
+                <CheckCircle className="w-5 h-5 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                 <span className="font-medium">Multi-Modal AI Integration</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -565,7 +565,7 @@ export default function AIConductorPage() {
             </motion.div>
 
             <motion.div
-              className="p-4 rounded-lg border bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//20"
+              className="p-4 rounded-lg border bg-blue-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20"
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center space-x-2 mb-2">
@@ -579,11 +579,11 @@ export default function AIConductorPage() {
             </motion.div>
 
             <motion.div
-              className="p-4 rounded-lg border bg-purple-50 /* TODO: Use semantic token */ dark:bg-purple-900 /* TODO: Use semantic token *//20"
+              className="p-4 rounded-lg border bg-purple-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-purple-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20"
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center space-x-2 mb-2">
-                <Shield className="w-5 h-5 text-purple-500 /* TODO: Use semantic token */" />
+                <Shield className="w-5 h-5 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                 <span className="font-medium">Privacy-First Design</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -593,11 +593,11 @@ export default function AIConductorPage() {
             </motion.div>
 
             <motion.div
-              className="p-4 rounded-lg border bg-yellow-50 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//20"
+              className="p-4 rounded-lg border bg-yellow-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20"
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center space-x-2 mb-2">
-                <TrendingUp className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */" />
+                <TrendingUp className="w-5 h-5 text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                 <span className="font-medium">Revenue Optimization</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -621,11 +621,11 @@ export default function AIConductorPage() {
             </motion.div>
 
             <motion.div
-              className="p-4 rounded-lg border bg-red-50 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//20"
+              className="p-4 rounded-lg border bg-red-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20"
               whileHover={{ scale: 1.02 }}
             >
               <div className="flex items-center space-x-2 mb-2">
-                <Mic className="w-5 h-5 text-red-500 /* TODO: Use semantic token */" />
+                <Mic className="w-5 h-5 text-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                 <span className="font-medium">Voice Intelligence</span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -637,7 +637,7 @@ export default function AIConductorPage() {
         </Card>
 
         {/* Call to Action */}
-        <Card className="p-6 text-center bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-200 /* TODO: Use semantic token */ dark:border-purple-800 /* TODO: Use semantic token */">
+        <Card className="p-6 text-center bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-purple-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
           <div className="space-y-4">
             <div>
               <h2 className="text-2xl font-bold mb-2">Ready to Experience Revolutionary AI?</h2>

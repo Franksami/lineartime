@@ -729,13 +729,13 @@ Be helpful, concise, and always prioritize the user's productivity and work-life
                     <div className="text-xs text-muted-foreground">Total Events</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">
+                    <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       {meetings.length}
                     </div>
                     <div className="text-xs text-muted-foreground">Meetings</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">
+                    <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       {focusTime.length}
                     </div>
                     <div className="text-xs text-muted-foreground">Focus Blocks</div>

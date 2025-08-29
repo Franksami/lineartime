@@ -348,12 +348,12 @@ export function AccessibilityTester({
       {isMinimized && (
         <button
           onClick={() => setIsMinimized(false)}
-          className="bg-blue-600 text-white px-3 py-2 rounded-lg shadow-lg hover:bg-blue-700 font-mono text-sm"
+          className="bg-blue-600 /* TODO: Use semantic token */ text-white px-3 py-2 rounded-lg shadow-lg hover:bg-blue-700 /* TODO: Use semantic token */ font-mono text-sm"
           aria-label="Open accessibility tester"
         >
           ♿ A11y
           {summary && summary.total > 0 && (
-            <span className="ml-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs">
+            <span className="ml-2 bg-red-500 /* TODO: Use semantic token */ text-white px-2 py-1 rounded-full text-xs">
               {summary.total}
             </span>
           )}
@@ -362,21 +362,21 @@ export function AccessibilityTester({
 
       {/* Expanded View */}
       {!isMinimized && (
-        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-2xl w-96 max-h-[600px] overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-gray-900 /* TODO: Use semantic token */ rounded-lg shadow-2xl w-96 max-h-[600px] overflow-hidden border border-gray-200 /* TODO: Use semantic token */ dark:border-gray-700 /* TODO: Use semantic token */">
           {/* Header */}
-          <div className="bg-blue-600 text-white p-4 flex justify-between items-center">
+          <div className="bg-blue-600 /* TODO: Use semantic token */ text-white p-4 flex justify-between items-center">
             <h3 className="font-semibold">Accessibility Tester</h3>
             <div className="flex gap-2">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-white hover:bg-blue-700 px-2 py-1 rounded"
+                className="text-white hover:bg-blue-700 /* TODO: Use semantic token */ px-2 py-1 rounded"
                 aria-label={isOpen ? 'Collapse' : 'Expand'}
               >
                 {isOpen ? '−' : '+'}
               </button>
               <button
                 onClick={() => setIsMinimized(true)}
-                className="text-white hover:bg-blue-700 px-2 py-1 rounded"
+                className="text-white hover:bg-blue-700 /* TODO: Use semantic token */ px-2 py-1 rounded"
                 aria-label="Minimize"
               >
                 _
@@ -392,14 +392,14 @@ export function AccessibilityTester({
                 <button
                   onClick={() => runAccessibilityTest()}
                   disabled={isRunning}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-blue-600 /* TODO: Use semantic token */ text-white px-4 py-2 rounded hover:bg-blue-700 /* TODO: Use semantic token */ disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isRunning ? 'Running...' : 'Run Test'}
                 </button>
                 <button
                   onClick={exportReport}
                   disabled={!report}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 border border-gray-300 /* TODO: Use semantic token */ dark:border-gray-600 /* TODO: Use semantic token */ rounded hover:bg-gray-50 /* TODO: Use semantic token */ dark:hover:bg-gray-800 /* TODO: Use semantic token */ disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Export
                 </button>
@@ -407,19 +407,19 @@ export function AccessibilityTester({
 
               {/* Error Display */}
               {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 p-3 rounded">
+                <div className="bg-red-50 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//20 text-red-700 /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */ p-3 rounded">
                   Error: {error}
                 </div>
               )}
 
               {/* Summary */}
               {summary && (
-                <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded space-y-2">
+                <div className="bg-gray-50 /* TODO: Use semantic token */ dark:bg-gray-800 /* TODO: Use semantic token */ p-3 rounded space-y-2">
                   <h4 className="font-semibold mb-2">Violation Summary</h4>
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     {summary.critical > 0 && (
                       <div className="flex justify-between">
-                        <span className="text-red-700 dark:text-red-400">Critical:</span>
+                        <span className="text-red-700 /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */">Critical:</span>
                         <span className="font-semibold">{summary.critical}</span>
                       </div>
                     )}
@@ -431,19 +431,19 @@ export function AccessibilityTester({
                     )}
                     {summary.moderate > 0 && (
                       <div className="flex justify-between">
-                        <span className="text-yellow-700 dark:text-yellow-400">Moderate:</span>
+                        <span className="text-yellow-700 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */">Moderate:</span>
                         <span className="font-semibold">{summary.moderate}</span>
                       </div>
                     )}
                     {summary.minor > 0 && (
                       <div className="flex justify-between">
-                        <span className="text-blue-700 dark:text-blue-400">Minor:</span>
+                        <span className="text-blue-700 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */">Minor:</span>
                         <span className="font-semibold">{summary.minor}</span>
                       </div>
                     )}
                   </div>
                   {summary.total === 0 && (
-                    <div className="text-green-600 dark:text-green-400 font-semibold">
+                    <div className="text-green-600 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */ font-semibold">
                       ✅ No violations detected!
                     </div>
                   )}
@@ -458,18 +458,18 @@ export function AccessibilityTester({
                     {report.violations.map((violation, index) => (
                       <details
                         key={index}
-                        className="border border-gray-200 dark:border-gray-700 rounded p-2"
+                        className="border border-gray-200 /* TODO: Use semantic token */ dark:border-gray-700 /* TODO: Use semantic token */ rounded p-2"
                       >
                         <summary className="cursor-pointer">
                           <span
                             className={`inline-block px-2 py-1 rounded text-xs mr-2 ${
                               violation.impact === 'critical'
-                                ? 'bg-red-100 text-red-700'
+                                ? 'bg-red-100 /* TODO: Use semantic token */ text-red-700 /* TODO: Use semantic token */'
                                 : violation.impact === 'serious'
                                   ? 'bg-orange-100 text-orange-700'
                                   : violation.impact === 'moderate'
-                                    ? 'bg-yellow-100 text-yellow-700'
-                                    : 'bg-blue-100 text-blue-700'
+                                    ? 'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-700 /* TODO: Use semantic token */'
+                                    : 'bg-blue-100 /* TODO: Use semantic token */ text-blue-700 /* TODO: Use semantic token */'
                             }`}
                           >
                             {violation.impact}
@@ -477,13 +477,13 @@ export function AccessibilityTester({
                           <span className="text-sm">{violation.description}</span>
                         </summary>
                         <div className="mt-2 pl-4 space-y-2 text-xs">
-                          <p className="text-gray-600 dark:text-gray-400">{violation.help}</p>
+                          <p className="text-gray-600 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">{violation.help}</p>
                           <p>Affected: {violation.nodes.length} element(s)</p>
                           <a
                             href={violation.helpUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 dark:text-blue-400 hover:underline"
+                            className="text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ hover:underline"
                           >
                             Learn more →
                           </a>
@@ -496,7 +496,7 @@ export function AccessibilityTester({
 
               {/* Stats */}
               {report && (
-                <div className="text-xs text-gray-500 dark:text-gray-400">
+                <div className="text-xs text-gray-500 /* TODO: Use semantic token */ dark:text-gray-400 /* TODO: Use semantic token */">
                   <p>Passed: {report.passes.length} rules</p>
                   <p>Incomplete: {report.incomplete.length} rules</p>
                   <p>Not applicable: {report.inapplicable.length} rules</p>

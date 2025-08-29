@@ -70,13 +70,13 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
     {
       icon: Shield,
       text: 'Enterprise Security',
-      color: 'bg-green-500 /* TODO: Use semantic token */',
+      color: 'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
     },
     { icon: Zap, text: 'Lightning Fast', color: 'bg-primary' },
     {
       icon: Users,
       text: 'Team Collaboration',
-      color: 'bg-purple-500 /* TODO: Use semantic token */',
+      color: 'bg-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
     },
   ];
 
@@ -90,7 +90,7 @@ export function EnhancedSignInForm({ onModeSwitch }: EnhancedSignInFormProps) {
             exit={{ opacity: 0, y: -20 }}
             className="mb-4"
           >
-            <Alert className="border-green-200 /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */">
+            <Alert className="border-green-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
               <AlertDescription>
                 <strong>Success!</strong> Authentication successful! Redirecting...
               </AlertDescription>

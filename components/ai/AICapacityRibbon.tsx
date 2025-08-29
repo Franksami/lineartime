@@ -430,10 +430,10 @@ export function AICapacityRibbon({
   );
 
   const capacityIcon = {
-    low: <CheckCircle className="w-3 h-3 text-green-500 /* TODO: Use semantic token */" />,
+    low: <CheckCircle className="w-3 h-3 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />,
     medium: <Activity className="w-3 h-3 text-primary" />,
     high: <TrendingUp className="w-3 h-3 text-orange-500" />,
-    critical: <AlertTriangle className="w-3 h-3 text-red-500 /* TODO: Use semantic token */" />,
+    critical: <AlertTriangle className="w-3 h-3 text-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />,
   }[capacity.level];
 
   return (
@@ -459,7 +459,7 @@ export function AICapacityRibbon({
       {/* Main Capacity Bar */}
       <div className="relative w-full h-full">
         {/* Background Track */}
-        <div className="absolute inset-0 bg-gray-200 /* TODO: Use semantic token */ dark:bg-gray-800 /* TODO: Use semantic token */ rounded-full opacity-30" />
+        <div className="absolute inset-0 bg-gray-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-gray-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full opacity-30" />
 
         {/* Capacity Fill */}
         <motion.div
@@ -506,7 +506,7 @@ export function AICapacityRibbon({
                       {fullCapacityData.trends.trend_direction === 'increasing' ? (
                         <TrendingUp className="w-3 h-3 text-orange-500" />
                       ) : (
-                        <Activity className="w-3 h-3 text-green-500 /* TODO: Use semantic token */" />
+                        <Activity className="w-3 h-3 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                       )}
                       <span>{fullCapacityData.trends.trend_direction}</span>
                     </div>
@@ -547,7 +547,7 @@ export function AICapacityRibbon({
                 {showSuggestions && capacity.suggestions.length > 0 && (
                   <div>
                     <div className="flex items-center gap-1 mb-1">
-                      <Zap className="w-3 h-3 text-purple-500 /* TODO: Use semantic token */" />
+                      <Zap className="w-3 h-3 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                       <span className="text-xs font-medium">AI Suggestions</span>
                     </div>
                     <div className="space-y-1">

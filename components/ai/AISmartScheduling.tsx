@@ -898,7 +898,7 @@ export function AISmartScheduling({
               className="space-y-2"
             >
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-purple-500 /* TODO: Use semantic token */" />
+                <Sparkles className="w-4 h-4 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                 <span className="font-medium text-sm">AI Suggestions</span>
               </div>
 
@@ -914,13 +914,13 @@ export function AISmartScheduling({
                   <div className="flex items-start gap-2">
                     <div
                       className={cn('flex-shrink-0 p-1.5 rounded-full', {
-                        'bg-blue-100 /* TODO: Use semantic token */ text-blue-600 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//30':
+                        'bg-blue-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30':
                           suggestion.type === 'optimal_time',
                         'bg-orange-100 text-orange-600 dark:bg-orange-900/30':
                           suggestion.type === 'reschedule',
-                        'bg-purple-100 /* TODO: Use semantic token */ text-purple-600 /* TODO: Use semantic token */ dark:bg-purple-900 /* TODO: Use semantic token *//30':
+                        'bg-purple-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-purple-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30':
                           suggestion.type === 'consolidate',
-                        'bg-green-100 /* TODO: Use semantic token */ text-green-600 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token *//30':
+                        'bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30':
                           suggestion.type === 'focus_time',
                       })}
                     >
@@ -933,7 +933,7 @@ export function AISmartScheduling({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="font-medium text-sm truncate">{suggestion.title}</h4>
-                        <span className="px-2 py-1 text-xs bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//30 rounded-full">
+                        <span className="px-2 py-1 text-xs bg-blue-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 rounded-full">
                           {Math.round(suggestion.confidence * 100)}%
                         </span>
                       </div>
@@ -967,7 +967,7 @@ export function AISmartScheduling({
                       {/* Impact Indicators */}
                       <div className="flex items-center gap-3 text-xs mb-2">
                         <div className="flex items-center gap-1">
-                          <TrendingUp className="w-3 h-3 text-green-500 /* TODO: Use semantic token */" />
+                          <TrendingUp className="w-3 h-3 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                           <span>
                             Productivity: {Math.round(suggestion.impact.productivity_gain * 100)}%
                           </span>
@@ -1031,10 +1031,10 @@ export function AISmartScheduling({
                                   <li
                                     key={i}
                                     className={cn({
-                                      'text-red-600 /* TODO: Use semantic token */':
+                                      'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                                         conflict.severity === 'high',
                                       'text-orange-600': conflict.severity === 'medium',
-                                      'text-yellow-600 /* TODO: Use semantic token */':
+                                      'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                                         conflict.severity === 'low',
                                     })}
                                   >
@@ -1064,7 +1064,7 @@ export function AISmartScheduling({
               className="space-y-2"
             >
               <div className="flex items-center gap-2">
-                <Target className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />
+                <Target className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                 <span className="font-medium text-sm">Optimal Time Slots</span>
                 <span className="text-xs text-muted-foreground">
                   ({requestedDuration}min duration)
@@ -1091,10 +1091,10 @@ export function AISmartScheduling({
                       <div className="flex items-center gap-1">
                         <div
                           className={cn('w-2 h-2 rounded-full', {
-                            'bg-green-500 /* TODO: Use semantic token */': slot.score >= 0.8,
-                            'bg-yellow-500 /* TODO: Use semantic token */': slot.score >= 0.6,
+                            'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */': slot.score >= 0.8,
+                            'bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */': slot.score >= 0.6,
                             'bg-orange-500': slot.score >= 0.4,
-                            'bg-red-500 /* TODO: Use semantic token */': slot.score < 0.4,
+                            'bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */': slot.score < 0.4,
                           })}
                         />
                         <span className="font-medium text-sm">
@@ -1108,7 +1108,7 @@ export function AISmartScheduling({
                         </span>
                       </div>
                       <div className="flex-1" />
-                      <span className="text-xs bg-green-100 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token *//30 px-2 py-1 rounded-full">
+                      <span className="text-xs bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 px-2 py-1 rounded-full">
                         {Math.round(slot.score * 100)}% match
                       </span>
                     </div>

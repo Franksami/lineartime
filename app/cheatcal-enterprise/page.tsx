@@ -312,17 +312,17 @@ export default function CheatCalEnterprisePage() {
       >
         <div className="flex items-center justify-center gap-8 p-4 text-sm">
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-blue-600 /* TODO: Use semantic token */" />
+            <Calendar className="w-4 h-4 text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
             <span className="font-medium">{metrics.totalEvents.toLocaleString()} Events</span>
           </div>
           <div className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
+            <TrendingUp className="w-4 h-4 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
             <span className="font-medium">
               ${(metrics.totalRevenue / 1000).toFixed(0)}K Revenue
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <Brain className="w-4 h-4 text-purple-600 /* TODO: Use semantic token */" />
+            <Brain className="w-4 h-4 text-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
             <span className="font-medium">{metrics.categories} Categories</span>
           </div>
           <div className="flex items-center gap-2">
@@ -371,21 +371,21 @@ export default function CheatCalEnterprisePage() {
                   title: '10-Library Ecosystem',
                   description:
                     'Seamlessly switch between FullCalendar, Toast UI, React Big Calendar, and 7 more professional libraries',
-                  color: 'text-blue-600 /* TODO: Use semantic token */',
+                  color: 'text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
                 },
                 {
                   icon: TrendingUp,
                   title: 'AI Revenue Planner',
                   description:
                     'Real-time coordination optimization showing potential revenue increases up to 287%',
-                  color: 'text-green-600 /* TODO: Use semantic token */',
+                  color: 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
                 },
                 {
                   icon: Brain,
                   title: 'AI Conductor System',
                   description:
                     'Multi-agent AI orchestration with conflict detection, capacity analysis, and smart scheduling',
-                  color: 'text-purple-600 /* TODO: Use semantic token */',
+                  color: 'text-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
                 },
                 {
                   icon: Zap,
@@ -399,14 +399,14 @@ export default function CheatCalEnterprisePage() {
                   title: 'Enterprise Security',
                   description:
                     'SOC 2, GDPR compliance with comprehensive audit logging and threat detection',
-                  color: 'text-red-600 /* TODO: Use semantic token */',
+                  color: 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
                 },
                 {
                   icon: Users,
                   title: 'Multi-Modal Interface',
                   description:
                     'Voice commands, touch gestures, computer vision, and accessibility-first design',
-                  color: 'text-indigo-600 /* TODO: Use semantic token */',
+                  color: 'text-indigo-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
                 },
               ].map((feature, index) => (
                 <motion.div
@@ -433,19 +433,19 @@ export default function CheatCalEnterprisePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
+                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>
                       <kbd className="bg-muted px-2 py-1 rounded">⌘R</kbd> - Open Revenue Planner
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
+                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>
                       <kbd className="bg-muted px-2 py-1 rounded">⌘I</kbd> - Interface Controls
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
+                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>
                       <kbd className="bg-muted px-2 py-1 rounded">⌘A</kbd> - AI Conductor
                     </span>
@@ -453,17 +453,17 @@ export default function CheatCalEnterprisePage() {
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
+                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>
                       <kbd className="bg-muted px-2 py-1 rounded">⌘F</kbd> - Fullscreen Mode
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
+                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>Click toolbar to switch between 10 calendar libraries</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
+                    <CheckCircle className="w-4 h-4 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>Drag & drop events with AI suggestions</span>
                   </div>
                 </div>

@@ -31,10 +31,10 @@ export default function CalendarSyncPage() {
 
       {/* Info Banner */}
       <div className="container max-w-7xl mx-auto px-4 py-4">
-        <Card className="bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-950 /* TODO: Use semantic token *//20 border-blue-200 /* TODO: Use semantic token */ dark:border-blue-800 /* TODO: Use semantic token */">
+        <Card className="bg-blue-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-blue-950 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20 border-blue-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-blue-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
           <CardHeader className="pb-3">
             <div className="flex items-start gap-2">
-              <Info className="h-5 w-5 text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ mt-0.5" />
+              <Info className="h-5 w-5 text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-0.5" />
               <div>
                 <CardTitle className="text-base">Calendar Sync Enabled</CardTitle>
                 <CardDescription className="mt-1">

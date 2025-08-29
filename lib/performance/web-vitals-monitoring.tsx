@@ -280,14 +280,14 @@ function PerformanceDashboard({ report }: { report: PerformanceReport }) {
         <div className="flex gap-2">
           <button
             onClick={() => setShowDetails(!showDetails)}
-            className="text-gray-400 hover:text-white"
+            className="text-gray-400 /* TODO: Use semantic token */ hover:text-white"
             aria-label="Toggle details"
           >
             {showDetails ? '−' : '+'}
           </button>
           <button
             onClick={() => setIsMinimized(true)}
-            className="text-gray-400 hover:text-white"
+            className="text-gray-400 /* TODO: Use semantic token */ hover:text-white"
             aria-label="Minimize"
           >
             _
@@ -305,7 +305,7 @@ function PerformanceDashboard({ report }: { report: PerformanceReport }) {
         {/* Core Web Vitals */}
         {Array.from(report.metrics.entries()).map(([name, metric]) => (
           <div key={name} className="flex justify-between items-center">
-            <span className="text-gray-400">{name}:</span>
+            <span className="text-gray-400 /* TODO: Use semantic token */">{name}:</span>
             <span className={getRatingColor(metric.rating)}>
               {formatMetricValue(name, metric.value)}
             </span>
@@ -314,9 +314,9 @@ function PerformanceDashboard({ report }: { report: PerformanceReport }) {
 
         {/* Details Section */}
         {showDetails && report.recommendations.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-gray-700">
+          <div className="mt-3 pt-3 border-t border-gray-700 /* TODO: Use semantic token */">
             <h4 className="text-xs font-bold mb-2">Recommendations:</h4>
-            <ul className="text-xs text-gray-300 space-y-1">
+            <ul className="text-xs text-gray-300 /* TODO: Use semantic token */ space-y-1">
               {report.recommendations.map((rec, i) => (
                 <li key={i} className="pl-2">
                   • {rec}
@@ -352,20 +352,20 @@ function formatMetricValue(name: string, value: number): string {
 function getRatingColor(rating?: 'good' | 'needs-improvement' | 'poor'): string {
   switch (rating) {
     case 'good':
-      return 'text-green-400';
+      return 'text-green-400 /* TODO: Use semantic token */';
     case 'needs-improvement':
-      return 'text-yellow-400';
+      return 'text-yellow-400 /* TODO: Use semantic token */';
     case 'poor':
-      return 'text-red-400';
+      return 'text-red-400 /* TODO: Use semantic token */';
     default:
-      return 'text-gray-400';
+      return 'text-gray-400 /* TODO: Use semantic token */';
   }
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 75) return 'text-green-400';
-  if (score >= 50) return 'text-yellow-400';
-  return 'text-red-400';
+  if (score >= 75) return 'text-green-400 /* TODO: Use semantic token */';
+  if (score >= 50) return 'text-yellow-400 /* TODO: Use semantic token */';
+  return 'text-red-400 /* TODO: Use semantic token */';
 }
 
 // ============================================================================

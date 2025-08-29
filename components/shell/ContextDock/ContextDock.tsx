@@ -248,7 +248,7 @@ function DetailsPanel() {
         </div>
 
         <div className="bg-muted/50 p-3 rounded-lg">
-          <div className="text-xs text-blue-600 /* TODO: Use semantic token */ font-mono">
+          <div className="text-xs text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-mono">
             Phase 3: Views Implementation
           </div>
           <div className="text-xs text-muted-foreground mt-1">
@@ -272,7 +272,7 @@ function CapacityPanel() {
         </div>
 
         <div className="bg-muted/50 p-3 rounded-lg">
-          <div className="text-xs text-blue-600 /* TODO: Use semantic token */ font-mono">
+          <div className="text-xs text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-mono">
             Phase 5: Advanced Features
           </div>
           <div className="text-xs text-muted-foreground mt-1">

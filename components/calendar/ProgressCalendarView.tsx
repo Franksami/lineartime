@@ -144,24 +144,24 @@ export function ProgressCalendarView({
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'critical':
-        return 'bg-red-500 /* TODO: Use semantic token */';
+        return 'bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'high':
         return 'bg-orange-500';
       case 'medium':
-        return 'bg-yellow-500 /* TODO: Use semantic token */';
+        return 'bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'low':
-        return 'bg-green-500 /* TODO: Use semantic token */';
+        return 'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       default:
-        return 'bg-gray-500 /* TODO: Use semantic token */';
+        return 'bg-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
     }
   };
 
   const getProgressColor = (progress: number) => {
-    if (progress >= 100) return 'bg-green-500 /* TODO: Use semantic token */';
+    if (progress >= 100) return 'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
     if (progress >= 75) return 'bg-primary';
-    if (progress >= 50) return 'bg-yellow-500 /* TODO: Use semantic token */';
+    if (progress >= 50) return 'bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
     if (progress > 0) return 'bg-orange-500';
-    return 'bg-gray-300 /* TODO: Use semantic token */';
+    return 'bg-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
   };
 
   return (
@@ -188,13 +188,13 @@ export function ProgressCalendarView({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="text-center p-3 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */">
+                  <div className="text-2xl font-bold text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                     {progressStats.completed}
                   </div>
                   <div className="text-xs text-muted-foreground">Completed</div>
                 </div>
                 <div className="text-center p-3 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">
+                  <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                     {progressStats.inProgress}
                   </div>
                   <div className="text-xs text-muted-foreground">In Progress</div>
@@ -273,7 +273,7 @@ export function ProgressCalendarView({
                     >
                       <div className="flex items-center gap-2">
                         {event.completed || (event.progress || 0) >= 100 ? (
-                          <CheckCircle2 className="h-4 w-4 text-green-500 /* TODO: Use semantic token */" />
+                          <CheckCircle2 className="h-4 w-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                         ) : (
                           <Circle className="h-4 w-4 text-muted-foreground" />
                         )}
@@ -391,7 +391,7 @@ export function ProgressCalendarView({
                                       className={cn(
                                         'w-1.5 h-1.5 rounded-full',
                                         isCompleted
-                                          ? 'bg-green-500 /* TODO: Use semantic token */'
+                                          ? 'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                                           : getProgressColor(progress)
                                       )}
                                       title={`${event.title} - ${progress}%`}
@@ -422,7 +422,7 @@ export function ProgressCalendarView({
                 {/* Legend */}
                 <div className="mt-4 flex flex-wrap gap-4 text-xs text-muted-foreground">
                   <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */" />
+                    <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>Completed</span>
                   </div>
                   <div className="flex items-center gap-1">
@@ -430,7 +430,7 @@ export function ProgressCalendarView({
                     <span>75%+</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-yellow-500 /* TODO: Use semantic token */" />
+                    <div className="w-2 h-2 rounded-full bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>50%+</span>
                   </div>
                   <div className="flex items-center gap-1">
@@ -438,7 +438,7 @@ export function ProgressCalendarView({
                     <span>In Progress</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-gray-300 /* TODO: Use semantic token */" />
+                    <div className="w-2 h-2 rounded-full bg-gray-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>Not Started</span>
                   </div>
                 </div>

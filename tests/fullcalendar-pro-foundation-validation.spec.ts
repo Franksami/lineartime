@@ -292,7 +292,7 @@ test.describe('FullCalendar Pro Foundation Validation', () => {
     // Check that performance level is acceptable
     const performanceLevel = page
       .locator(
-        '.text-green-600 /* TODO: Use semantic token */, .text-blue-600 /* TODO: Use semantic token */, .text-yellow-600 /* TODO: Use semantic token */'
+        '.text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */, .text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */, .text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
       )
       .first();
     // Should be excellent, good, or warning (not poor/critical)

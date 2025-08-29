@@ -880,13 +880,13 @@ export function LiveCollaborationLayer({
                     className={cn(
                       'w-10 h-10 rounded-full border-2 border-white shadow-md flex items-center justify-center text-white font-medium text-sm',
                       {
-                        'ring-2 ring-green-400 /* TODO: Use semantic token */':
+                        'ring-2 ring-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                           user.status === 'active',
-                        'ring-2 ring-yellow-400 /* TODO: Use semantic token */':
+                        'ring-2 ring-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                           user.status === 'idle',
-                        'ring-2 ring-gray-400 /* TODO: Use semantic token */':
+                        'ring-2 ring-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                           user.status === 'away',
-                        'ring-2 ring-red-400 /* TODO: Use semantic token */':
+                        'ring-2 ring-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                           user.status === 'offline',
                       }
                     )}
@@ -916,7 +916,7 @@ export function LiveCollaborationLayer({
           </AnimatePresence>
 
           {collaborators.size > maxCollaborators && (
-            <div className="w-10 h-10 rounded-full bg-gray-500 /* TODO: Use semantic token */ border-2 border-white shadow-md flex items-center justify-center text-white font-medium text-sm">
+            <div className="w-10 h-10 rounded-full bg-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-2 border-white shadow-md flex items-center justify-center text-white font-medium text-sm">
               +{collaborators.size - maxCollaborators}
             </div>
           )}
@@ -932,13 +932,13 @@ export function LiveCollaborationLayer({
                   className={cn(
                     'bg-background border border-border rounded-lg shadow-lg p-4 max-w-sm cursor-pointer',
                     {
-                      'border-red-200 /* TODO: Use semantic token */ bg-red-50 /* TODO: Use semantic token */ dark:border-red-800 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//20':
+                      'border-red-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-red-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-red-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20':
                         conflict.severity === 'critical',
                       'border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-900/20':
                         conflict.severity === 'high',
-                      'border-yellow-200 /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//20':
+                      'border-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20':
                         conflict.severity === 'medium',
-                      'border-blue-200 /* TODO: Use semantic token */ bg-blue-50 /* TODO: Use semantic token */ dark:border-blue-800 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//20':
+                      'border-blue-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-blue-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-blue-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20':
                         conflict.severity === 'low',
                     }
                   )}
@@ -955,12 +955,12 @@ export function LiveCollaborationLayer({
                   <div className="flex items-start gap-3">
                     <div
                       className={cn('flex-shrink-0 p-1.5 rounded-full', {
-                        'bg-red-100 /* TODO: Use semantic token */ text-red-600 /* TODO: Use semantic token */':
+                        'bg-red-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                           conflict.severity === 'critical',
                         'bg-orange-100 text-orange-600': conflict.severity === 'high',
-                        'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-600 /* TODO: Use semantic token */':
+                        'bg-yellow-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                           conflict.severity === 'medium',
-                        'bg-blue-100 /* TODO: Use semantic token */ text-blue-600 /* TODO: Use semantic token */':
+                        'bg-blue-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                           conflict.severity === 'low',
                       })}
                     >
@@ -978,7 +978,7 @@ export function LiveCollaborationLayer({
                         <Clock className="w-3 h-3" />
                         <span>{conflict.detectedAt.toLocaleTimeString()}</span>
                         {conflict.autoResolvable && (
-                          <div className="flex items-center gap-1 text-green-600 /* TODO: Use semantic token */">
+                          <div className="flex items-center gap-1 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                             <CheckCircle2 className="w-3 h-3" />
                             <span>Auto-resolvable</span>
                           </div>
@@ -1109,12 +1109,12 @@ export function LiveCollaborationLayer({
                         <strong>Severity:</strong>
                         <span
                           className={cn('ml-2 px-2 py-1 rounded-full text-xs', {
-                            'bg-red-100 /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */':
+                            'bg-red-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                               selectedConflict.severity === 'critical',
                             'bg-orange-100 text-orange-800': selectedConflict.severity === 'high',
-                            'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */':
+                            'bg-yellow-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                               selectedConflict.severity === 'medium',
-                            'bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */':
+                            'bg-blue-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */':
                               selectedConflict.severity === 'low',
                           })}
                         >
@@ -1142,7 +1142,7 @@ export function LiveCollaborationLayer({
                                 handleAutoResolveConflict(selectedConflict.id);
                                 setShowConflictModal(false);
                               }}
-                              className="px-4 py-2 bg-primary text-white rounded hover:bg-blue-600 /* TODO: Use semantic token */ transition-colors text-sm font-medium"
+                              className="px-4 py-2 bg-primary text-white rounded hover:bg-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ transition-colors text-sm font-medium"
                             >
                               Apply Auto-Resolution
                             </button>
@@ -1153,7 +1153,7 @@ export function LiveCollaborationLayer({
 
                     <div className="border border-border rounded-lg p-4 hover:bg-muted/50 transition-colors">
                       <div className="flex items-start gap-3">
-                        <Merge className="w-5 h-5 text-green-500 /* TODO: Use semantic token */ mt-0.5" />
+                        <Merge className="w-5 h-5 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-0.5" />
                         <div className="flex-1">
                           <h5 className="font-medium">Smart Merge</h5>
                           <p className="text-sm text-muted-foreground mb-3">
@@ -1171,7 +1171,7 @@ export function LiveCollaborationLayer({
                               resolveConflict(selectedConflict.id, resolution);
                               setShowConflictModal(false);
                             }}
-                            className="px-4 py-2 bg-green-500 /* TODO: Use semantic token */ text-white rounded hover:bg-green-600 /* TODO: Use semantic token */ transition-colors text-sm font-medium"
+                            className="px-4 py-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-white rounded hover:bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ transition-colors text-sm font-medium"
                           >
                             Apply Smart Merge
                           </button>
@@ -1181,7 +1181,7 @@ export function LiveCollaborationLayer({
 
                     <div className="border border-border rounded-lg p-4 hover:bg-muted/50 transition-colors">
                       <div className="flex items-start gap-3">
-                        <Users className="w-5 h-5 text-purple-500 /* TODO: Use semantic token */ mt-0.5" />
+                        <Users className="w-5 h-5 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mt-0.5" />
                         <div className="flex-1">
                           <h5 className="font-medium">Manual Resolution</h5>
                           <p className="text-sm text-muted-foreground mb-3">
@@ -1192,7 +1192,7 @@ export function LiveCollaborationLayer({
                               // Would open detailed manual resolution interface
                               console.log('Manual resolution not implemented in demo');
                             }}
-                            className="px-4 py-2 bg-purple-500 /* TODO: Use semantic token */ text-white rounded hover:bg-purple-600 /* TODO: Use semantic token */ transition-colors text-sm font-medium"
+                            className="px-4 py-2 bg-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-white rounded hover:bg-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ transition-colors text-sm font-medium"
                             disabled
                           >
                             Manual Review (Demo)
@@ -1214,8 +1214,8 @@ export function LiveCollaborationLayer({
               className={cn(
                 'w-2 h-2 rounded-full',
                 webSocketAPI.isConnected
-                  ? 'bg-green-500 /* TODO: Use semantic token */'
-                  : 'bg-red-500 /* TODO: Use semantic token */'
+                  ? 'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
+                  : 'bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
               )}
             />
             <span className="text-muted-foreground">

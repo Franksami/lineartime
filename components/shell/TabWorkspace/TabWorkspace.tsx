@@ -265,7 +265,7 @@ function WeekViewPlaceholder() {
           Seven-day calendar view with existing calendar integration. Will integrate with preserved
           backend calendar data.
         </p>
-        <div className="text-sm text-blue-600">Implementation: Phase 3 - Views</div>
+        <div className="text-sm text-blue-600 /* TODO: Use semantic token */">Implementation: Phase 3 - Views</div>
       </div>
     </div>
   );
@@ -280,7 +280,7 @@ function PlannerViewPlaceholder() {
           Kanban task management with time-blocking capabilities. Research-validated workflow
           patterns from Manifestly.
         </p>
-        <div className="text-sm text-blue-600">Implementation: Phase 3 - Views</div>
+        <div className="text-sm text-blue-600 /* TODO: Use semantic token */">Implementation: Phase 3 - Views</div>
       </div>
     </div>
   );
@@ -295,7 +295,7 @@ function NotesViewPlaceholder() {
           Markdown editing with entity linking and backlinks. Research-validated patterns from
           Obsidian.
         </p>
-        <div className="text-sm text-blue-600">Implementation: Phase 3 - Views</div>
+        <div className="text-sm text-blue-600 /* TODO: Use semantic token */">Implementation: Phase 3 - Views</div>
       </div>
     </div>
   );
@@ -310,7 +310,7 @@ function MailboxViewPlaceholder() {
           Email triage with conversion to tasks, events, and notes. AI-powered routing and entity
           conversion.
         </p>
-        <div className="text-sm text-blue-600">Implementation: Phase 4 - AI Integration</div>
+        <div className="text-sm text-blue-600 /* TODO: Use semantic token */">Implementation: Phase 4 - AI Integration</div>
       </div>
     </div>
   );

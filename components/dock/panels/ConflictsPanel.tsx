@@ -118,10 +118,10 @@ function ConflictCard({
   resolutionInProgress: string | null;
 }) {
   const severityColors = {
-    low: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    low: 'bg-yellow-100 /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */ border-yellow-200 /* TODO: Use semantic token */',
     medium: 'bg-orange-100 text-orange-800 border-orange-200',
-    high: 'bg-red-100 text-red-800 border-red-200',
-    critical: 'bg-red-200 text-red-900 border-red-300',
+    high: 'bg-red-100 /* TODO: Use semantic token */ text-red-800 /* TODO: Use semantic token */ border-red-200 /* TODO: Use semantic token */',
+    critical: 'bg-red-200 /* TODO: Use semantic token */ text-red-900 /* TODO: Use semantic token */ border-red-300 /* TODO: Use semantic token */',
   };
 
   return (
@@ -142,12 +142,12 @@ function ConflictCard({
                 className={cn(
                   'h-4 w-4',
                   conflict.severity === 'critical'
-                    ? 'text-red-600'
+                    ? 'text-red-600 /* TODO: Use semantic token */'
                     : conflict.severity === 'high'
-                      ? 'text-red-500'
+                      ? 'text-red-500 /* TODO: Use semantic token */'
                       : conflict.severity === 'medium'
                         ? 'text-orange-500'
-                        : 'text-yellow-500'
+                        : 'text-yellow-500 /* TODO: Use semantic token */'
                 )}
               />
               <span className="text-sm font-medium line-clamp-1">{conflict.description}</span>
@@ -301,7 +301,7 @@ function ConflictMonitoringControls({
 
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">Conflicts:</span>
-          <span className={cn(conflictCount > 0 ? 'text-red-600 font-medium' : 'text-green-600')}>
+          <span className={cn(conflictCount > 0 ? 'text-red-600 /* TODO: Use semantic token */ font-medium' : 'text-green-600 /* TODO: Use semantic token */')}>
             {conflictCount}
           </span>
         </div>
@@ -375,10 +375,10 @@ export function ConflictsPanel() {
         <div className="p-3 space-y-3">
           {conflicts.length === 0 ? (
             <div className="text-center py-8">
-              <div className="text-green-600 mb-2">
+              <div className="text-green-600 /* TODO: Use semantic token */ mb-2">
                 <TrendingUp className="h-8 w-8 mx-auto" />
               </div>
-              <p className="text-sm font-medium text-green-600">No Conflicts</p>
+              <p className="text-sm font-medium text-green-600 /* TODO: Use semantic token */">No Conflicts</p>
               <p className="text-xs text-muted-foreground mt-1">
                 {isMonitoring
                   ? 'Monitoring for conflicts...'

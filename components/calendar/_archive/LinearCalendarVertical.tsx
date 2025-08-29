@@ -513,7 +513,7 @@ export function CommandCenterCalendarVertical({
                           
                           {/* Overlap warning */}
                           {dateEvents.length > 2 && (
-                            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 /* TODO: Use semantic token */ rounded-full" />
+                            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full" />
                           )}
                         </button>
                       )

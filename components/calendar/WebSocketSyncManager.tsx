@@ -791,10 +791,10 @@ export function WebSocketSyncManager({
     if (!children) return null;
 
     const statusColors = {
-      connecting: 'bg-yellow-500 /* TODO: Use semantic token */',
-      connected: 'bg-green-500 /* TODO: Use semantic token */',
-      disconnected: 'bg-gray-500 /* TODO: Use semantic token */',
-      error: 'bg-red-500 /* TODO: Use semantic token */',
+      connecting: 'bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
+      connected: 'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
+      disconnected: 'bg-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
+      error: 'bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
       reconnecting: 'bg-orange-500',
     };
 

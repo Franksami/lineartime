@@ -156,7 +156,7 @@ export function EventContextMenu({
 
         <ContextMenuItem
           onClick={() => onDelete?.(event)}
-          className="gap-2 text-red-600 /* TODO: Use semantic token */ focus:text-red-600 /* TODO: Use semantic token */"
+          className="gap-2 text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ focus:text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
         >
           <Trash2 className="h-4 w-4" />
           Delete

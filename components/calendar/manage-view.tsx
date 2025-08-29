@@ -36,7 +36,7 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Manage Events</h1>
-          <p className="text-gray-600 /* TODO: Use semantic token */">
+          <p className="text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
             Organize and manage your calendar events
           </p>
         </div>
@@ -45,7 +45,7 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
         <div className="bg-white rounded-lg p-6 shadow-sm border border-border mb-6">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 /* TODO: Use semantic token */ w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ w-4 h-4" />
               <Input
                 placeholder="Search events..."
                 value={searchTerm}
@@ -106,12 +106,12 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 /* TODO: Use semantic token */ mb-2">
+                    <p className="text-sm text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-2">
                       {format(event.startDate, 'MMM d, yyyy')} -{' '}
                       {format(event.endDate, 'MMM d, yyyy')}
                     </p>
                     {event.description && (
-                      <p className="text-sm text-gray-500 /* TODO: Use semantic token */">
+                      <p className="text-sm text-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                         {event.description}
                       </p>
                     )}
@@ -124,7 +124,7 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDeleteEvent(event.id)}
-                      className="text-red-600 /* TODO: Use semantic token */ hover:text-red-700 /* TODO: Use semantic token */ hover:bg-red-50 /* TODO: Use semantic token */"
+                      className="text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:text-red-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ hover:bg-red-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -136,7 +136,7 @@ export function ManageView({ events, onEventsChange }: ManageViewProps) {
 
           {filteredEvents.length === 0 && (
             <div className="p-12 text-center">
-              <p className="text-gray-500 /* TODO: Use semantic token */">
+              <p className="text-gray-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 No events found matching your criteria.
               </p>
             </div>

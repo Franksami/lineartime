@@ -246,17 +246,17 @@ export function AISchedulingSuggestions({
   const getImpactColor = (impact: AISuggestion['impact']) => {
     switch (impact) {
       case 'high':
-        return 'text-green-600 /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ border-green-200 /* TODO: Use semantic token */';
+        return 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-green-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'medium':
-        return 'text-yellow-600 /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */ border-yellow-200 /* TODO: Use semantic token */';
+        return 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'low':
-        return 'text-blue-600 /* TODO: Use semantic token */ bg-blue-50 /* TODO: Use semantic token */ border-blue-200 /* TODO: Use semantic token */';
+        return 'text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-blue-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-blue-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
     }
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.9) return 'text-green-600 /* TODO: Use semantic token */';
-    if (confidence >= 0.7) return 'text-yellow-600 /* TODO: Use semantic token */';
+    if (confidence >= 0.9) return 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
+    if (confidence >= 0.7) return 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
     return 'text-orange-600';
   };
 

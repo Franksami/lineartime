@@ -91,7 +91,7 @@ const providerConfigs: Record<Provider, ProviderConfig> = {
         <path d="M11.4 11.4H2.6V2.6h8.8v8.8zm10 0h-8.8V2.6h8.8v8.8zm-10 10H2.6v-8.8h8.8v8.8zm10 0h-8.8v-8.8h8.8v8.8z" />
       </svg>
     ),
-    color: 'bg-blue-600 /* TODO: Use semantic token */',
+    color: 'bg-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
     authType: 'oauth',
     description: 'Connect with Outlook and Microsoft 365 calendars',
     setupInstructions: [
@@ -107,7 +107,7 @@ const providerConfigs: Record<Provider, ProviderConfig> = {
         <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.09v-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
       </svg>
     ),
-    color: 'bg-gray-800 /* TODO: Use semantic token */',
+    color: 'bg-gray-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
     authType: 'basic',
     description: 'Sync with iCloud Calendar using app-specific passwords',
     setupInstructions: [
@@ -119,7 +119,7 @@ const providerConfigs: Record<Provider, ProviderConfig> = {
   caldav: {
     name: 'CalDAV Server',
     icon: <Calendar className="w-5 h-5" />,
-    color: 'bg-green-600 /* TODO: Use semantic token */',
+    color: 'bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
     authType: 'basic',
     description: 'Connect to any CalDAV-compatible calendar server',
     setupInstructions: [
@@ -135,7 +135,7 @@ const providerConfigs: Record<Provider, ProviderConfig> = {
         <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.139c-.093-.514.28-.887.747-.933zM1.936 1.035l13.31-.98c1.634-.14 2.055-.047 3.082.7l4.249 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.047-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.447-1.632z" />
       </svg>
     ),
-    color: 'bg-gray-700 /* TODO: Use semantic token */',
+    color: 'bg-gray-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
     authType: 'api',
     description: 'Sync calendar databases from Notion',
     setupInstructions: [
@@ -151,7 +151,7 @@ const providerConfigs: Record<Provider, ProviderConfig> = {
         <path d="M18.645 6.143L15.858 2.61a3.475 3.475 0 00-1.19-.863L8.379.018a.415.415 0 00-.49.324L6.16 8.097 3.2 14.625l-1.666 3.318a.776.776 0 00.045.785l3.92 5.896c.177.267.572.306.806.087l7.306-6.847 6.69-6.047a1.816 1.816 0 00.393-2.387l-2.05-3.287zm-2.468 4.785l-3.52 3.194c-.115.104-.186.257-.195.416l-.264 4.453-3.268 3.066-2.264-3.4a.596.596 0 00-.185-.197l-2.89-1.927 1.03-2.062 3.095-5.625.867-1.565 3.143.987c.145.046.263.144.33.274l1.66 3.195a.57.57 0 01-.076.608l-1.318 1.58 2.242 1.492c.297.198.363.607.153.901l-.74.96z" />
       </svg>
     ),
-    color: 'bg-purple-600 /* TODO: Use semantic token */',
+    color: 'bg-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
     authType: 'api',
     description: 'Sync events from Obsidian Daily Notes',
     setupInstructions: [

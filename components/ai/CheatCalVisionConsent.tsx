@@ -298,7 +298,7 @@ export function CheatCalVisionConsent({
               <div className="flex items-center gap-2">
                 <Badge
                   variant="outline"
-                  className="bg-yellow-100 /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */ border-yellow-300 /* TODO: Use semantic token */"
+                  className="bg-yellow-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-yellow-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                 >
                   Controversial AI
                 </Badge>
@@ -362,7 +362,7 @@ export function CheatCalVisionConsent({
                     </Card>
 
                     <Card className="p-4 text-center">
-                      <Brain className="w-8 h-8 mx-auto mb-3 text-purple-500 /* TODO: Use semantic token */" />
+                      <Brain className="w-8 h-8 mx-auto mb-3 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                       <h4 className="font-semibold mb-2">AI Optimization</h4>
                       <p className="text-sm text-muted-foreground">
                         Intelligent suggestions for productivity improvements and time optimization
@@ -370,7 +370,7 @@ export function CheatCalVisionConsent({
                     </Card>
 
                     <Card className="p-4 text-center">
-                      <Shield className="w-8 h-8 mx-auto mb-3 text-green-500 /* TODO: Use semantic token */" />
+                      <Shield className="w-8 h-8 mx-auto mb-3 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                       <h4 className="font-semibold mb-2">Privacy First</h4>
                       <p className="text-sm text-muted-foreground">
                         90% on-device processing with no persistent storage of your screen content
@@ -378,14 +378,14 @@ export function CheatCalVisionConsent({
                     </Card>
                   </div>
 
-                  <div className="bg-yellow-50 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//20 border border-yellow-200 /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ rounded-lg p-4">
+                  <div className="bg-yellow-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20 border border-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg p-4">
                     <div className="flex items-start gap-3">
-                      <AlertTriangle className="w-5 h-5 text-yellow-600 /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */ flex-shrink-0 mt-0.5" />
+                      <AlertTriangle className="w-5 h-5 text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ flex-shrink-0 mt-0.5" />
                       <div>
-                        <h4 className="font-semibold text-yellow-800 /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */ mb-1">
+                        <h4 className="font-semibold text-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-1">
                           Controversial Technology Notice
                         </h4>
-                        <p className="text-yellow-700 /* TODO: Use semantic token */ dark:text-yellow-300 /* TODO: Use semantic token */ text-sm">
+                        <p className="text-yellow-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-yellow-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-sm">
                           This system monitors your screen activity to provide productivity
                           insights. While controversial, it's designed with privacy-first principles
                           and transparent user control.
@@ -411,7 +411,7 @@ export function CheatCalVisionConsent({
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="bg-black text-green-400 /* TODO: Use semantic token */ rounded-lg p-4 font-mono text-xs overflow-x-auto"
+                        className="bg-black text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg p-4 font-mono text-xs overflow-x-auto"
                       >
                         <pre>{VISION_ARCHITECTURE}</pre>
                       </motion.div>
@@ -484,8 +484,8 @@ export function CheatCalVisionConsent({
                             className={cn(
                               'p-2 rounded-full flex-shrink-0',
                               permissions[permission.key]
-                                ? 'bg-green-100 /* TODO: Use semantic token */ text-green-600 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token *//30 dark:text-green-400 /* TODO: Use semantic token */'
-                                : 'bg-muted text-gray-600 /* TODO: Use semantic token */ dark:bg-gray-900 /* TODO: Use semantic token *//30 dark:text-gray-400 /* TODO: Use semantic token */'
+                                ? 'bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 dark:text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
+                                : 'bg-muted text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-gray-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 dark:text-gray-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                             )}
                           >
                             {permission.icon}
@@ -570,7 +570,7 @@ export function CheatCalVisionConsent({
                         <div className="text-sm text-muted-foreground">Analyses Completed</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-green-500 /* TODO: Use semantic token */">
+                        <div className="text-2xl font-bold text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                           90%
                         </div>
                         <div className="text-sm text-muted-foreground">On-Device Processing</div>
@@ -603,14 +603,14 @@ export function CheatCalVisionConsent({
                     </div>
                   </Card>
 
-                  <div className="bg-blue-50 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//20 border border-blue-200 /* TODO: Use semantic token */ dark:border-blue-800 /* TODO: Use semantic token */ rounded-lg p-4">
+                  <div className="bg-blue-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20 border border-blue-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-blue-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg p-4">
                     <div className="flex items-start gap-3">
-                      <Info className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ flex-shrink-0 mt-0.5" />
+                      <Info className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ flex-shrink-0 mt-0.5" />
                       <div>
-                        <h4 className="font-semibold text-blue-800 /* TODO: Use semantic token */ dark:text-blue-200 /* TODO: Use semantic token */ mb-1">
+                        <h4 className="font-semibold text-blue-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-blue-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-1">
                           Ready for Productivity Cheating
                         </h4>
-                        <p className="text-blue-700 /* TODO: Use semantic token */ dark:text-blue-300 /* TODO: Use semantic token */ text-sm">
+                        <p className="text-blue-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-blue-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-sm">
                           Your Command Center computer vision system is configured and ready to help
                           you optimize productivity through controversial but powerful screen
                           analysis.
@@ -643,7 +643,7 @@ export function CheatCalVisionConsent({
 
                   <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
                     <div className="text-center">
-                      <Eye className="w-8 h-8 mx-auto mb-2 text-purple-500 /* TODO: Use semantic token */" />
+                      <Eye className="w-8 h-8 mx-auto mb-2 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                       <div className="text-sm font-medium">Always Watching</div>
                     </div>
                     <div className="text-center">
@@ -651,16 +651,16 @@ export function CheatCalVisionConsent({
                       <div className="text-sm font-medium">AI Optimizing</div>
                     </div>
                     <div className="text-center">
-                      <Shield className="w-8 h-8 mx-auto mb-2 text-green-500 /* TODO: Use semantic token */" />
+                      <Shield className="w-8 h-8 mx-auto mb-2 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                       <div className="text-sm font-medium">Privacy First</div>
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 /* TODO: Use semantic token */ dark:border-purple-800 /* TODO: Use semantic token */ rounded-lg p-4">
-                    <h4 className="font-semibold text-purple-800 /* TODO: Use semantic token */ dark:text-purple-200 /* TODO: Use semantic token */ mb-2">
+                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:border-purple-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-lg p-4">
+                    <h4 className="font-semibold text-purple-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-purple-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-2">
                       🎯 What Happens Next?
                     </h4>
-                    <ul className="text-sm text-purple-700 /* TODO: Use semantic token */ dark:text-purple-300 /* TODO: Use semantic token */ space-y-1 text-left max-w-md mx-auto">
+                    <ul className="text-sm text-purple-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-purple-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */ space-y-1 text-left max-w-md mx-auto">
                       <li>• Real-time screen analysis begins immediately</li>
                       <li>• AI-powered productivity suggestions appear automatically</li>
                       <li>• Coordination opportunities detected and highlighted</li>

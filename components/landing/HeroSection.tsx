@@ -210,7 +210,7 @@ export function HeroSection({ onGetStarted }: HeroSectionProps) {
                   transition={{ delay: 0.5 + index * 0.1 }}
                   className="flex items-center space-x-2 text-sm text-muted-foreground"
                 >
-                  <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />
+                  <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   <span>{feature}</span>
                 </motion.div>
               ))}

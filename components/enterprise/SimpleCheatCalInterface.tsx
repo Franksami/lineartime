@@ -221,11 +221,11 @@ export default function SimpleCheatCalInterface() {
   // Professional styling functions
   const getEventTypeColor = (type: CheatCalEvent['type']) => {
     const colors = {
-      revenue: 'bg-green-600 /* TODO: Use semantic token */',
-      coordination: 'bg-blue-600 /* TODO: Use semantic token */',
-      focus: 'bg-purple-600 /* TODO: Use semantic token */',
+      revenue: 'bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
+      coordination: 'bg-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
+      focus: 'bg-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
       client: 'bg-orange-600',
-      optimization: 'bg-yellow-600 /* TODO: Use semantic token */',
+      optimization: 'bg-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
     };
     return colors[type] || 'bg-muted';
   };
@@ -233,13 +233,13 @@ export default function SimpleCheatCalInterface() {
   const getPriorityColor = (priority: CheatCalEvent['priority']) => {
     switch (priority) {
       case 'critical':
-        return 'text-red-600 /* TODO: Use semantic token */';
+        return 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'high':
         return 'text-orange-600';
       case 'medium':
-        return 'text-yellow-600 /* TODO: Use semantic token */';
+        return 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'low':
-        return 'text-green-600 /* TODO: Use semantic token */';
+        return 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       default:
         return 'text-muted-foreground';
     }
@@ -476,7 +476,7 @@ export default function SimpleCheatCalInterface() {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-muted-foreground">Daily Value Impact</span>
-                  <span className="text-sm font-medium text-green-600 /* TODO: Use semantic token */">
+                  <span className="text-sm font-medium text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                     +${totalDailyValue.toLocaleString()}
                   </span>
                 </div>
@@ -484,7 +484,7 @@ export default function SimpleCheatCalInterface() {
 
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-muted-foreground">Efficiency Score</span>
-                  <span className="text-sm font-medium text-blue-600 /* TODO: Use semantic token */">
+                  <span className="text-sm font-medium text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                     94%
                   </span>
                 </div>
@@ -542,7 +542,7 @@ export default function SimpleCheatCalInterface() {
                               <span>{event.duration}</span>
                             </div>
                             {event.revenueImpact && (
-                              <div className="flex items-center space-x-1 text-green-600 /* TODO: Use semantic token */">
+                              <div className="flex items-center space-x-1 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                                 <DollarSign className="h-3 w-3" />
                                 <span>${Math.round(event.revenueImpact / 1000)}K</span>
                               </div>
@@ -746,12 +746,12 @@ export default function SimpleCheatCalInterface() {
                     <Card>
                       <CardHeader>
                         <CardTitle className="flex items-center space-x-2">
-                          <TrendingUp className="w-5 h-5 text-green-600 /* TODO: Use semantic token */" />
+                          <TrendingUp className="w-5 h-5 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                           <span>Revenue Impact</span>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-3xl font-bold text-green-600 /* TODO: Use semantic token */ mb-2">
+                        <div className="text-3xl font-bold text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-2">
                           +${Math.floor(totalDailyValue).toLocaleString()}
                         </div>
                         <div className="text-sm text-muted-foreground">
@@ -769,12 +769,12 @@ export default function SimpleCheatCalInterface() {
                     <Card>
                       <CardHeader>
                         <CardTitle className="flex items-center space-x-2">
-                          <Activity className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */" />
+                          <Activity className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                           <span>System Performance</span>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-3xl font-bold text-blue-600 /* TODO: Use semantic token */ mb-2">
+                        <div className="text-3xl font-bold text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ mb-2">
                           112 FPS
                         </div>
                         <div className="text-sm text-muted-foreground">Animation performance</div>
@@ -789,7 +789,7 @@ export default function SimpleCheatCalInterface() {
                     <Card>
                       <CardHeader>
                         <CardTitle className="flex items-center space-x-2">
-                          <Activity className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */" />
+                          <Activity className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                           <span>System Status</span>
                         </CardTitle>
                       </CardHeader>
@@ -797,15 +797,15 @@ export default function SimpleCheatCalInterface() {
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <div className="text-sm text-muted-foreground">Calendar Events</div>
-                            <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */">
+                            <div className="text-2xl font-bold text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                               {events.length}
                             </div>
                           </div>
                           <div className="space-y-2">
                             <div className="text-sm text-muted-foreground">Security Status</div>
                             <div className="flex items-center space-x-2">
-                              <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ rounded-full"></div>
-                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ font-medium">
+                              <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full"></div>
+                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-medium">
                                 Secure
                               </span>
                             </div>
@@ -813,8 +813,8 @@ export default function SimpleCheatCalInterface() {
                           <div className="space-y-2">
                             <div className="text-sm text-muted-foreground">Input Validation</div>
                             <div className="flex items-center space-x-2">
-                              <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ rounded-full"></div>
-                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ font-medium">
+                              <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full"></div>
+                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-medium">
                                 Active
                               </span>
                             </div>
@@ -822,8 +822,8 @@ export default function SimpleCheatCalInterface() {
                           <div className="space-y-2">
                             <div className="text-sm text-muted-foreground">XSS Protection</div>
                             <div className="flex items-center space-x-2">
-                              <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ rounded-full"></div>
-                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ font-medium">
+                              <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full"></div>
+                              <span className="text-sm text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-medium">
                                 Enabled
                               </span>
                             </div>
@@ -835,7 +835,7 @@ export default function SimpleCheatCalInterface() {
                     <Card>
                       <CardHeader>
                         <CardTitle className="flex items-center space-x-2">
-                          <Sparkles className="w-5 h-5 text-purple-600 /* TODO: Use semantic token */" />
+                          <Sparkles className="w-5 h-5 text-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                           <span>AI Insights</span>
                         </CardTitle>
                       </CardHeader>
@@ -968,7 +968,7 @@ export default function SimpleCheatCalInterface() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">AI Processing</span>
                     <Badge variant="outline">
-                      <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ rounded-full mr-2 animate-pulse" />
+                      <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full mr-2 animate-pulse" />
                       Active
                     </Badge>
                   </div>
@@ -1023,7 +1023,7 @@ export default function SimpleCheatCalInterface() {
                           <div className="text-sm font-medium text-foreground">{tool.name}</div>
                           <div className="text-xs text-muted-foreground">{tool.desc}</div>
                         </div>
-                        <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ rounded-full" />
+                        <div className="w-2 h-2 bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full" />
                       </motion.div>
                     ))}
                   </div>
@@ -1054,7 +1054,7 @@ export default function SimpleCheatCalInterface() {
                           </div>
                           <Badge
                             variant="outline"
-                            className="bg-green-600 /* TODO: Use semantic token *//10 text-green-600 /* TODO: Use semantic token */"
+                            className="bg-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                           >
                             +{activity.value}
                           </Badge>

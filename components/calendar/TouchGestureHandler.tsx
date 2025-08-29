@@ -1019,7 +1019,7 @@ export const TouchGestureHandler = forwardRef<TouchGestureHandlerRef, TouchGestu
         {/* Performance indicator (development only) */}
         {debugMode && process.env.NODE_ENV === 'development' && (
           <motion.div
-            className="absolute top-4 right-4 bg-green-500 /* TODO: Use semantic token *//80 text-white p-1 rounded text-xs z-50"
+            className="absolute top-4 right-4 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//80 text-white p-1 rounded text-xs z-50"
             animate={{
               backgroundColor:
                 performanceMonitor.getMetrics().averageResponseTime <

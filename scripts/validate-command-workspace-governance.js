@@ -92,6 +92,7 @@ async function scanForViolations() {
       '**/*.test.*',
       '**/*.spec.*',
       '**/*.generated.*',
+      'scripts/**', // Exclude governance scripts themselves
     ],
   });
 

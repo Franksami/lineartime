@@ -73,10 +73,10 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
     <Card className="p-6 space-y-6">
       <div className="space-y-2">
         <div className="flex items-center gap-2">
-          <Wand2 className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */" />
+          <Wand2 className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
           <h3 className="text-lg font-semibold">Natural Language Event Parser</h3>
         </div>
-        <p className="text-sm text-gray-600 /* TODO: Use semantic token */">
+        <p className="text-sm text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
           Describe your event in natural language and I'll parse it into a structured calendar
           event.
         </p>
@@ -98,16 +98,16 @@ export function NaturalLanguageParser({ onEventParsed }: NaturalLanguageParserPr
         </div>
 
         {error && (
-          <div className="p-3 bg-red-50 /* TODO: Use semantic token */ border border-red-200 /* TODO: Use semantic token */ rounded-md">
-            <p className="text-sm text-red-600 /* TODO: Use semantic token */">{error}</p>
+          <div className="p-3 bg-red-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border border-red-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-md">
+            <p className="text-sm text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">{error}</p>
           </div>
         )}
 
         {parsedEvent && (
-          <div className="p-4 bg-green-50 /* TODO: Use semantic token */ border border-green-200 /* TODO: Use semantic token */ rounded-md space-y-3">
+          <div className="p-4 bg-green-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border border-green-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-md space-y-3">
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-green-600 /* TODO: Use semantic token */" />
-              <span className="font-medium text-green-800 /* TODO: Use semantic token */">
+              <Calendar className="w-4 h-4 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
+              <span className="font-medium text-green-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 Event Parsed Successfully!
               </span>
             </div>

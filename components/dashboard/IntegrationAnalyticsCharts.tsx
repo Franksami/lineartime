@@ -201,14 +201,14 @@ const IntegrationAnalyticsCharts: React.FC = () => {
         <Card className="bg-card/50 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />
+              <Zap className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
               <div className="flex-1">
                 <p className="text-xs text-muted-foreground">Success Rate</p>
                 <p className="text-lg font-semibold text-foreground">{metrics.successRate}%</p>
               </div>
               <Badge
                 variant="secondary"
-                className="text-xs text-green-600 /* TODO: Use semantic token */"
+                className="text-xs text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
               >
                 Excellent
               </Badge>
@@ -234,7 +234,7 @@ const IntegrationAnalyticsCharts: React.FC = () => {
         <Card className="bg-card/50 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-purple-500 /* TODO: Use semantic token */" />
+              <Calendar className="w-4 h-4 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
               <div className="flex-1">
                 <p className="text-xs text-muted-foreground">Total Events</p>
                 <p className="text-lg font-semibold text-foreground">
@@ -260,10 +260,10 @@ const IntegrationAnalyticsCharts: React.FC = () => {
         <Card className="bg-card/50 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ animate-pulse" />
               <div className="flex-1">
                 <p className="text-xs text-muted-foreground">System Status</p>
-                <p className="text-lg font-semibold text-green-600 /* TODO: Use semantic token */">
+                <p className="text-lg font-semibold text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   Healthy
                 </p>
               </div>
@@ -418,7 +418,7 @@ const IntegrationAnalyticsCharts: React.FC = () => {
       {/* Real-time Status Indicator */}
       <div className="flex items-center justify-center py-4">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ animate-pulse" />
+          <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ animate-pulse" />
           <span>Real-time data • Last updated: {new Date().toLocaleTimeString()}</span>
         </div>
       </div>

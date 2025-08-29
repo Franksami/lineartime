@@ -345,7 +345,7 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
               hasError && 'border-destructive focus:ring-destructive',
               hasValue &&
                 !hasError &&
-                'border-green-500 /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */',
+                'border-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
               className
             )}
           />
@@ -359,7 +359,7 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
               hasError && 'border-destructive focus:ring-destructive',
               hasValue &&
                 !hasError &&
-                'border-green-500 /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */',
+                'border-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
               className
             )}
           />
@@ -374,7 +374,7 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
               hasError && 'border-destructive focus:ring-destructive',
               hasValue &&
                 !hasError &&
-                'border-green-500 /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */',
+                'border-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ focus:ring-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
               className
             )}
           />
@@ -403,7 +403,7 @@ export const ProfessionalFormField: React.FC<FormFieldProps> = ({
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
           >
-            <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />
+            <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
           </motion.div>
         )}
       </div>
@@ -723,7 +723,7 @@ export const ProfessionalForm: React.FC<ProfessionalFormProps> = ({
                       <span>{Object.keys(errors).length} error(s) found</span>
                     </div>
                   ) : isValid ? (
-                    <div className="flex items-center space-x-2 text-green-600 /* TODO: Use semantic token */">
+                    <div className="flex items-center space-x-2 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                       <CheckCircle className="w-4 h-4" />
                       <span>Form valid</span>
                     </div>

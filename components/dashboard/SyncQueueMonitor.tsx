@@ -195,17 +195,17 @@ const SyncQueueMonitor: React.FC = () => {
   const getStatusColor = (status: SyncJob['status']) => {
     switch (status) {
       case 'completed':
-        return 'text-green-600 /* TODO: Use semantic token */ bg-green-100 /* TODO: Use semantic token */';
+        return 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'processing':
-        return 'text-blue-600 /* TODO: Use semantic token */ bg-blue-100 /* TODO: Use semantic token */';
+        return 'text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-blue-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'pending':
-        return 'text-yellow-600 /* TODO: Use semantic token */ bg-yellow-100 /* TODO: Use semantic token */';
+        return 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-yellow-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'failed':
-        return 'text-red-600 /* TODO: Use semantic token */ bg-red-100 /* TODO: Use semantic token */';
+        return 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-red-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'retrying':
         return 'text-orange-600 bg-orange-100';
       default:
-        return 'text-gray-600 /* TODO: Use semantic token */ bg-muted';
+        return 'text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-muted';
     }
   };
 
@@ -327,8 +327,8 @@ const SyncQueueMonitor: React.FC = () => {
         <Card className="bg-card/50 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-500 /* TODO: Use semantic token *//10 rounded-lg">
-                <CheckCircle className="w-5 h-5 text-green-500 /* TODO: Use semantic token */" />
+              <div className="p-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 rounded-lg">
+                <CheckCircle className="w-5 h-5 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Completed Today</p>
@@ -341,8 +341,8 @@ const SyncQueueMonitor: React.FC = () => {
         <Card className="bg-card/50 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500 /* TODO: Use semantic token *//10 rounded-lg">
-                <TrendingUp className="w-5 h-5 text-purple-500 /* TODO: Use semantic token */" />
+              <div className="p-2 bg-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 rounded-lg">
+                <TrendingUp className="w-5 h-5 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Success Rate</p>
@@ -418,7 +418,7 @@ const SyncQueueMonitor: React.FC = () => {
                     )}
 
                     {job.error && (
-                      <div className="mb-3 p-2 bg-red-50 /* TODO: Use semantic token */ border border-red-200 /* TODO: Use semantic token */ rounded text-sm text-red-700 /* TODO: Use semantic token */">
+                      <div className="mb-3 p-2 bg-red-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border border-red-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded text-sm text-red-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                         <span className="font-medium">Error: </span>
                         {job.error}
                       </div>
@@ -458,7 +458,7 @@ const SyncQueueMonitor: React.FC = () => {
         <div className="flex items-center gap-3 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-blue-600 /* TODO: Use semantic token */ font-medium">
+            <span className="text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-medium">
               Queue Active
             </span>
           </div>

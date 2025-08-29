@@ -407,12 +407,12 @@ export default function ComprehensivePlannerInterface() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
-                    <TrendingUp className="w-5 h-5 text-green-600 /* TODO: Use semantic token */" />
+                    <TrendingUp className="w-5 h-5 text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>Revenue Impact</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-green-600 /* TODO: Use semantic token */">
+                  <div className="text-3xl font-bold text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                     +$12,847
                   </div>
                   <div className="text-sm text-muted-foreground">
@@ -425,12 +425,12 @@ export default function ComprehensivePlannerInterface() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
-                    <Activity className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */" />
+                    <Activity className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <span>Productivity Score</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-blue-600 /* TODO: Use semantic token */">
+                  <div className="text-3xl font-bold text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                     94%
                   </div>
                   <div className="text-sm text-muted-foreground">Coordination efficiency</div>

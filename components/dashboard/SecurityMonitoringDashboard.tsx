@@ -177,11 +177,11 @@ const SecurityMonitoringDashboard: React.FC = () => {
 
     switch (type) {
       case 'success':
-        return <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />;
+        return <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       case 'warning':
-        return <AlertTriangle className="w-4 h-4 text-yellow-500 /* TODO: Use semantic token */" />;
+        return <AlertTriangle className="w-4 h-4 text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       case 'error':
-        return <XCircle className="w-4 h-4 text-red-500 /* TODO: Use semantic token */" />;
+        return <XCircle className="w-4 h-4 text-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       default:
         return <AlertCircle className="w-4 h-4 text-primary" />;
     }
@@ -190,39 +190,39 @@ const SecurityMonitoringDashboard: React.FC = () => {
   const getEventColor = (type: string) => {
     switch (type) {
       case 'success':
-        return 'text-green-600 /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ border-green-200 /* TODO: Use semantic token */';
+        return 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-green-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'warning':
-        return 'text-yellow-600 /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */ border-yellow-200 /* TODO: Use semantic token */';
+        return 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-yellow-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-yellow-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'error':
-        return 'text-red-600 /* TODO: Use semantic token */ bg-red-50 /* TODO: Use semantic token */ border-red-200 /* TODO: Use semantic token */';
+        return 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-red-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-red-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       default:
-        return 'text-blue-600 /* TODO: Use semantic token */ bg-blue-50 /* TODO: Use semantic token */ border-blue-200 /* TODO: Use semantic token */';
+        return 'text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-blue-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ border-blue-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
     }
   };
 
   const getComplianceColor = (status: string) => {
     switch (status) {
       case 'compliant':
-        return 'text-green-600 /* TODO: Use semantic token */';
+        return 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'partial':
-        return 'text-yellow-600 /* TODO: Use semantic token */';
+        return 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'non-compliant':
-        return 'text-red-600 /* TODO: Use semantic token */';
+        return 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       default:
-        return 'text-gray-600 /* TODO: Use semantic token */';
+        return 'text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
     }
   };
 
   const getTokenStatusColor = (status: string) => {
     switch (status) {
       case 'valid':
-        return 'text-green-600 /* TODO: Use semantic token */ bg-green-100 /* TODO: Use semantic token */';
+        return 'text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'expiring':
-        return 'text-yellow-600 /* TODO: Use semantic token */ bg-yellow-100 /* TODO: Use semantic token */';
+        return 'text-yellow-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-yellow-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       case 'expired':
-        return 'text-red-600 /* TODO: Use semantic token */ bg-red-100 /* TODO: Use semantic token */';
+        return 'text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-red-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */';
       default:
-        return 'text-gray-600 /* TODO: Use semantic token */ bg-muted';
+        return 'text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-muted';
     }
   };
 
@@ -282,70 +282,70 @@ const SecurityMonitoringDashboard: React.FC = () => {
 
       {/* Security Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-green-50 /* TODO: Use semantic token *//50 border-green-200 /* TODO: Use semantic token *//50 dark:bg-green-950 /* TODO: Use semantic token *//20 dark:border-green-800 /* TODO: Use semantic token *//50">
+        <Card className="bg-green-50 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50 border-green-200 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50 dark:bg-green-950 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20 dark:border-green-800 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-500 /* TODO: Use semantic token *//10 rounded-lg">
-                <Shield className="w-5 h-5 text-green-500 /* TODO: Use semantic token */" />
+              <div className="p-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 rounded-lg">
+                <Shield className="w-5 h-5 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
               </div>
               <div>
-                <p className="text-sm font-medium text-green-700 /* TODO: Use semantic token */ dark:text-green-300 /* TODO: Use semantic token */">
+                <p className="text-sm font-medium text-green-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-green-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   Security Status
                 </p>
-                <p className="text-xl font-bold text-green-800 /* TODO: Use semantic token */ dark:text-green-200 /* TODO: Use semantic token */">
+                <p className="text-xl font-bold text-green-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-green-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   Secure
                 </p>
               </div>
             </div>
             <div className="mt-3 flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ animate-pulse" />
-              <span className="text-xs text-green-600 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */">
+              <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ animate-pulse" />
+              <span className="text-xs text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 All systems protected
               </span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-blue-50 /* TODO: Use semantic token *//50 border-blue-200 /* TODO: Use semantic token *//50 dark:bg-blue-950 /* TODO: Use semantic token *//20 dark:border-blue-800 /* TODO: Use semantic token *//50">
+        <Card className="bg-blue-50 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50 border-blue-200 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50 dark:bg-blue-950 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20 dark:border-blue-800 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary/10 rounded-lg">
                 <Lock className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium text-blue-700 /* TODO: Use semantic token */ dark:text-blue-300 /* TODO: Use semantic token */">
+                <p className="text-sm font-medium text-blue-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-blue-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   Encryption
                 </p>
-                <p className="text-xl font-bold text-blue-800 /* TODO: Use semantic token */ dark:text-blue-200 /* TODO: Use semantic token */">
+                <p className="text-xl font-bold text-blue-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-blue-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   AES-256-GCM
                 </p>
               </div>
             </div>
             <div className="mt-3">
-              <span className="text-xs text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */">
+              <span className="text-xs text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 All tokens encrypted
               </span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-purple-50 /* TODO: Use semantic token *//50 border-purple-200 /* TODO: Use semantic token *//50 dark:bg-purple-950 /* TODO: Use semantic token *//20 dark:border-purple-800 /* TODO: Use semantic token *//50">
+        <Card className="bg-purple-50 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50 border-purple-200 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50 dark:bg-purple-950 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20 dark:border-purple-800 /* TODO: Use semantic token */ /* TODO: Use semantic token *//50">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500 /* TODO: Use semantic token *//10 rounded-lg">
-                <Activity className="w-5 h-5 text-purple-500 /* TODO: Use semantic token */" />
+              <div className="p-2 bg-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 rounded-lg">
+                <Activity className="w-5 h-5 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
               </div>
               <div>
-                <p className="text-sm font-medium text-purple-700 /* TODO: Use semantic token */ dark:text-purple-300 /* TODO: Use semantic token */">
+                <p className="text-sm font-medium text-purple-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-purple-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   Active Monitoring
                 </p>
-                <p className="text-xl font-bold text-purple-800 /* TODO: Use semantic token */ dark:text-purple-200 /* TODO: Use semantic token */">
+                <p className="text-xl font-bold text-purple-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-purple-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                   24/7
                 </p>
               </div>
             </div>
             <div className="mt-3">
-              <span className="text-xs text-purple-600 /* TODO: Use semantic token */ dark:text-purple-400 /* TODO: Use semantic token */">
+              <span className="text-xs text-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-purple-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 Real-time threat detection
               </span>
             </div>
@@ -524,8 +524,8 @@ const SecurityMonitoringDashboard: React.FC = () => {
       <div className="flex items-center justify-center py-4">
         <div className="flex items-center gap-3 text-sm">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ animate-pulse" />
-            <span className="text-green-600 /* TODO: Use semantic token */ font-medium">
+            <div className="w-2 h-2 rounded-full bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ animate-pulse" />
+            <span className="text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-medium">
               Security Status: Healthy
             </span>
           </div>

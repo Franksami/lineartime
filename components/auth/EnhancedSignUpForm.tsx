@@ -69,8 +69,8 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
 
   const features = [
     { icon: Calendar, text: 'AI Calendar', color: 'bg-primary' },
-    { icon: TrendingUp, text: 'Analytics', color: 'bg-green-500 /* TODO: Use semantic token */' },
-    { icon: Users, text: 'Team Sync', color: 'bg-purple-500 /* TODO: Use semantic token */' },
+    { icon: TrendingUp, text: 'Analytics', color: 'bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */' },
+    { icon: Users, text: 'Team Sync', color: 'bg-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */' },
     { icon: Shield, text: 'Secure', color: 'bg-orange-500' },
   ];
 
@@ -100,7 +100,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
             exit={{ opacity: 0, scale: 0.8 }}
             className="mb-4"
           >
-            <Alert className="border-green-200 /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */">
+            <Alert className="border-green-200 /* TODO: Use semantic token */ /* TODO: Use semantic token */ bg-green-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
               <CheckCircle className="h-4 w-4" />
               <AlertDescription>
                 <strong>Welcome to Command Center Calendar!</strong> Your account is ready. Let's
@@ -171,7 +171,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                 {[...Array(5)].map((_, i) => (
                   <div
                     key={i}
-                    className="w-3 h-3 bg-yellow-400 /* TODO: Use semantic token */ rounded-full"
+                    className="w-3 h-3 bg-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full"
                   />
                 ))}
               </div>
@@ -274,7 +274,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                       transition={{ delay: 1.0 + index * 0.1 }}
                       className="flex items-center space-x-3 p-2 rounded-md hover:bg-accent/10 transition-colors"
                     >
-                      <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ flex-shrink-0" />
                       <div>
                         <p className="text-sm font-semibold text-foreground">{benefit.title}</p>
                         <p className="text-xs text-muted-foreground">{benefit.description}</p>
@@ -296,7 +296,7 @@ export function EnhancedSignUpForm({ onModeSwitch }: EnhancedSignUpFormProps) {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className="w-3 h-3 fill-yellow-400 text-yellow-400 /* TODO: Use semantic token */"
+                      className="w-3 h-3 fill-yellow-400 text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
                     />
                   ))}
                 </div>

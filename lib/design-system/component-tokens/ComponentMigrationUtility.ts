@@ -480,7 +480,7 @@ export const quickMigrationHelpers = {
       'bg-muted': 'bg-muted',
       'bg-muted': 'bg-accent',
       'text-black': 'text-foreground',
-      'text-gray-600 /* TODO: Use semantic token */': 'text-muted-foreground',
+      'text-gray-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */': 'text-muted-foreground',
       'border-border': 'border-border',
 
       // Shadows

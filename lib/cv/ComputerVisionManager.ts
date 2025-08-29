@@ -617,7 +617,7 @@ Allow this computer vision operation?
         'fixed top-4 right-4 bg-primary text-primary-foreground px-3 py-2 rounded-lg shadow-lg z-50';
       indicator.innerHTML = `
         <div class="flex items-center gap-2 text-sm">
-          <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <div class="w-2 h-2 bg-green-400 /* TODO: Use semantic token */ rounded-full animate-pulse"></div>
           <span>CV: ${operation}</span>
         </div>
       `;

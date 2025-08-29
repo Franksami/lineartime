@@ -242,9 +242,9 @@ const EliteMetricCard: React.FC<{ metric: CheatCalMetric }> = ({ metric }) => {
   
   // Controversy level styling
   const controversyStyle = {
-    standard: "border-blue-500 /* TODO: Use semantic token *//30 bg-primary/5",
+    standard: "border-blue-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 bg-primary/5",
     moderate: "border-orange-500/30 bg-orange-500/5", 
-    high: "border-red-500 /* TODO: Use semantic token *//30 bg-red-500 /* TODO: Use semantic token *//5"
+    high: "border-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//5"
   }[metric.controversy_level];
 
   return (
@@ -268,20 +268,20 @@ const EliteMetricCard: React.FC<{ metric: CheatCalMetric }> = ({ metric }) => {
             </span>
             <div className={cn(
               "flex items-center gap-1 text-sm font-medium",
-              isPositive ? "text-green-600 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */" : "text-red-600 /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */"
+              isPositive ? "text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */" : "text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
             )}>
               {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
               {Math.abs(metric.change)}%
             </div>
           </div>
-          <div className="text-xs text-green-400 /* TODO: Use semantic token */ font-medium mt-1">
+          <div className="text-xs text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-medium mt-1">
             💰 ${(metric.money_impact / 1000).toFixed(0)}K impact
           </div>
         </div>
         
         {/* Controversial status indicator */}
         <div className="flex flex-col items-center gap-2">
-          {metric.controversy_level === "high" && <Eye className="w-5 h-5 text-red-500 /* TODO: Use semantic token */" />}
+          {metric.controversy_level === "high" && <Eye className="w-5 h-5 text-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />}
           {metric.controversy_level === "moderate" && <Target className="w-5 h-5 text-orange-500" />}  
           {metric.controversy_level === "standard" && <Zap className="w-5 h-5 text-primary" />}
           
@@ -306,8 +306,8 @@ const EliteMetricCard: React.FC<{ metric: CheatCalMetric }> = ({ metric }) => {
               transition={{ duration: 1, delay: 0.5, type: "spring", stiffness: 100 }}
               className={cn(
                 "h-2 rounded-full",
-                progressPercentage >= 90 ? "bg-green-500 /* TODO: Use semantic token */" : 
-                progressPercentage >= 70 ? "bg-yellow-500 /* TODO: Use semantic token */" : "bg-red-500 /* TODO: Use semantic token */"
+                progressPercentage >= 90 ? "bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" : 
+                progressPercentage >= 70 ? "bg-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" : "bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */"
               )}
             />
           </div>
@@ -319,15 +319,15 @@ const EliteMetricCard: React.FC<{ metric: CheatCalMetric }> = ({ metric }) => {
 
 const EliteTaskCard: React.FC<{ task: EliteTask }> = ({ task }) => {
   const priorityConfig = {
-    billionaire: { color: "bg-yellow-100 /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token *//30 dark:text-yellow-300 /* TODO: Use semantic token */", icon: "👑" },
-    millionaire: { color: "bg-green-100 /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token *//30 dark:text-green-300 /* TODO: Use semantic token */", icon: "💎" },
-    entrepreneur: { color: "bg-blue-100 /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//30 dark:text-blue-300 /* TODO: Use semantic token */", icon: "⚡" }
+    billionaire: { color: "bg-yellow-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-yellow-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-yellow-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 dark:text-yellow-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */", icon: "👑" },
+    millionaire: { color: "bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 dark:text-green-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */", icon: "💎" },
+    entrepreneur: { color: "bg-blue-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-blue-800 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 dark:text-blue-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */", icon: "⚡" }
   };
 
   const statusConfig = {
-    cheating: { color: "text-red-400 /* TODO: Use semantic token */", icon: <Skull className="w-4 h-4" />, label: "AI Cheating" },
+    cheating: { color: "text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */", icon: <Skull className="w-4 h-4" />, label: "AI Cheating" },
     optimizing: { color: "text-orange-400", icon: <Brain className="w-4 h-4" />, label: "Optimizing" },
-    dominated: { color: "text-green-400 /* TODO: Use semantic token */", icon: <Trophy className="w-4 h-4" />, label: "Dominated" }
+    dominated: { color: "text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */", icon: <Trophy className="w-4 h-4" />, label: "Dominated" }
   };
 
   const priority = priorityConfig[task.priority];
@@ -340,7 +340,7 @@ const EliteTaskCard: React.FC<{ task: EliteTask }> = ({ task }) => {
       whileHover={{ scale: 1.01, x: 2 }}
       className={cn(
         "backdrop-blur-sm border rounded-lg p-5 hover:shadow-lg transition-all duration-200",
-        task.controversy_required ? "border-red-500 /* TODO: Use semantic token *//30 bg-red-500 /* TODO: Use semantic token *//5" : "border-border/30 bg-card/30"
+        task.controversy_required ? "border-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//5" : "border-border/30 bg-card/30"
       )}
     >
       <div className="flex items-start justify-between mb-4">
@@ -348,7 +348,7 @@ const EliteTaskCard: React.FC<{ task: EliteTask }> = ({ task }) => {
           <div className="flex items-center gap-2 mb-2">
             <span className="text-lg">{priority.icon}</span>
             <h4 className="font-semibold text-foreground text-sm">{task.title}</h4>
-            {task.controversy_required && <Eye className="w-4 h-4 text-red-500 /* TODO: Use semantic token */" />}
+            {task.controversy_required && <Eye className="w-4 h-4 text-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />}
           </div>
           <p className="text-xs text-muted-foreground">{task.category}</p>
         </div>
@@ -366,7 +366,7 @@ const EliteTaskCard: React.FC<{ task: EliteTask }> = ({ task }) => {
       
       <div className="flex items-center justify-between">
         <div className="text-sm">
-          <span className="font-bold text-green-400 /* TODO: Use semantic token */ tabular-nums">
+          <span className="font-bold text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ tabular-nums">
             ${(task.money_value / 1000).toFixed(0)}K
           </span>
           <span className="text-muted-foreground ml-1">money value</span>
@@ -377,7 +377,7 @@ const EliteTaskCard: React.FC<{ task: EliteTask }> = ({ task }) => {
       </div>
       
       {task.controversy_required && (
-        <div className="mt-3 p-2 bg-red-500 /* TODO: Use semantic token *//10 border border-red-500 /* TODO: Use semantic token *//20 rounded text-xs text-red-300 /* TODO: Use semantic token */">
+        <div className="mt-3 p-2 bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 border border-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//20 rounded text-xs text-red-300 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
           ⚠️ Requires controversial methods for optimal results
         </div>
       )}
@@ -387,10 +387,10 @@ const EliteTaskCard: React.FC<{ task: EliteTask }> = ({ task }) => {
 
 const ProductivityCheatCard: React.FC<{ cheat: ProductivityCheat }> = ({ cheat }) => {
   const typeConfig = {
-    revenue: { icon: DollarSign, color: "text-green-600 /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */", bg: "bg-green-100 /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token *//30" },
-    efficiency: { icon: Zap, color: "text-blue-600 /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */", bg: "bg-blue-100 /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token *//30" },
-    competition: { icon: Target, color: "text-red-600 /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */", bg: "bg-red-100 /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token *//30" },
-    optimization: { icon: Brain, color: "text-purple-600 /* TODO: Use semantic token */ dark:text-purple-400 /* TODO: Use semantic token */", bg: "bg-purple-100 /* TODO: Use semantic token */ dark:bg-purple-900 /* TODO: Use semantic token *//30" }
+    revenue: { icon: DollarSign, color: "text-green-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */", bg: "bg-green-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-green-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30" },
+    efficiency: { icon: Zap, color: "text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-blue-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */", bg: "bg-blue-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-blue-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30" },
+    competition: { icon: Target, color: "text-red-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */", bg: "bg-red-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-red-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30" },
+    optimization: { icon: Brain, color: "text-purple-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:text-purple-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */", bg: "bg-purple-100 /* TODO: Use semantic token */ /* TODO: Use semantic token */ dark:bg-purple-900 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30" }
   };
 
   const config = typeConfig[cheat.type];
@@ -412,7 +412,7 @@ const ProductivityCheatCard: React.FC<{ cheat: ProductivityCheat }> = ({ cheat }
           <div className="flex items-center gap-2 mb-2">
             <h4 className="font-semibold text-foreground">{cheat.title}</h4>
             {cheat.controversy_level >= 80 && (
-              <div className="flex items-center gap-1 text-xs text-red-400 /* TODO: Use semantic token */">
+              <div className="flex items-center gap-1 text-xs text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
                 <Skull className="w-3 h-3" />
                 High Controversy
               </div>
@@ -423,14 +423,14 @@ const ProductivityCheatCard: React.FC<{ cheat: ProductivityCheat }> = ({ cheat }
           
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div className="text-lg font-bold text-green-400 /* TODO: Use semantic token */ tabular-nums">
+              <div className="text-lg font-bold text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ tabular-nums">
                 ${(cheat.money_impact / 1000).toFixed(0)}K
               </div>
               <div className="text-xs text-muted-foreground">Money Impact</div>
             </div>
             
             <div>
-              <div className="text-lg font-bold text-blue-400 /* TODO: Use semantic token */ tabular-nums">
+              <div className="text-lg font-bold text-blue-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ tabular-nums">
                 {cheat.confidence}%
               </div>
               <div className="text-xs text-muted-foreground">AI Confidence</div>
@@ -498,7 +498,7 @@ export const CheatCalMainLayout: React.FC = () => {
                 <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500 rounded-xl flex items-center justify-center relative">
                   <Skull className="w-7 h-7 text-white" />
                   <div className="absolute -top-1 -right-1">
-                    <Crown className="w-4 h-4 text-yellow-400 /* TODO: Use semantic token */" />
+                    <Crown className="w-4 h-4 text-yellow-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                   </div>
                 </div>
                 <div>
@@ -510,17 +510,17 @@ export const CheatCalMainLayout: React.FC = () => {
               {/* Controversial Status Indicators */}
               <div className="flex items-center gap-3">
                 <motion.div 
-                  className="flex items-center gap-2 px-3 py-2 bg-red-500 /* TODO: Use semantic token *//10 border border-red-500 /* TODO: Use semantic token *//30 rounded-lg"
+                  className="flex items-center gap-2 px-3 py-2 bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 border border-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 rounded-lg"
                   animate={{ opacity: [1, 0.7, 1] }}
                   transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                 >
-                  <Eye className="w-4 h-4 text-red-400 /* TODO: Use semantic token */" />
-                  <span className="text-sm font-medium text-red-400 /* TODO: Use semantic token */">Monitoring Active</span>
+                  <Eye className="w-4 h-4 text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
+                  <span className="text-sm font-medium text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">Monitoring Active</span>
                 </motion.div>
                 
-                <div className="flex items-center gap-2 px-3 py-2 bg-green-500 /* TODO: Use semantic token *//10 border border-green-500 /* TODO: Use semantic token *//30 rounded-lg">
-                  <DollarSign className="w-4 h-4 text-green-400 /* TODO: Use semantic token */" />
-                  <span className="text-sm font-medium text-green-400 /* TODO: Use semantic token */ tabular-nums">
+                <div className="flex items-center gap-2 px-3 py-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//10 border border-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token *//30 rounded-lg">
+                  <DollarSign className="w-4 h-4 text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
+                  <span className="text-sm font-medium text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ tabular-nums">
                     ${(eliteMetrics.reduce((sum, m) => sum + m.money_impact, 0) / 1000).toFixed(0)}K Today
                   </span>
                 </div>
@@ -635,7 +635,7 @@ export const CheatCalMainLayout: React.FC = () => {
                       className={cn(
                         "px-4 py-2 rounded-lg text-sm font-medium transition-all",
                         controversyMode === option.mode
-                          ? "bg-red-500 /* TODO: Use semantic token */ text-white shadow-lg"
+                          ? "bg-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-white shadow-lg"
                           : "bg-muted text-muted-foreground hover:bg-muted/80"
                       )}
                     >
@@ -690,7 +690,7 @@ export const CheatCalMainLayout: React.FC = () => {
                   <h2 className="text-2xl font-bold text-foreground">🧠 AI Productivity Cheats</h2>
                   <p className="text-muted-foreground">Controversial methods that deliver extraordinary results</p>
                 </div>
-                <div className="text-sm text-green-400 /* TODO: Use semantic token */ font-medium">
+                <div className="text-sm text-green-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */ font-medium">
                   💰 Total Impact: ${(productivityCheats.reduce((sum, c) => sum + c.money_impact, 0) / 1000).toFixed(0)}K
                 </div>
               </div>
@@ -756,7 +756,7 @@ export const CheatCalMainLayout: React.FC = () => {
             <div className="text-sm text-muted-foreground mb-1">
               ⚠️ "This AI monitors everything to help you make more money"
             </div>
-            <div className="text-xs text-red-400 /* TODO: Use semantic token */">
+            <div className="text-xs text-red-400 /* TODO: Use semantic token */ /* TODO: Use semantic token */">
               Privacy advocates will hate it. Elite professionals will love it. Choose your side.
             </div>
           </div>

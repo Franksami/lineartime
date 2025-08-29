@@ -210,7 +210,7 @@ export function Sidebar() {
             Active View: <span className="text-foreground">{activeView}</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 bg-green-500 /* TODO: Use semantic token */ rounded-full" />
+            <div className="h-2 w-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full" />
             <span>Shell Active</span>
           </div>
         </div>

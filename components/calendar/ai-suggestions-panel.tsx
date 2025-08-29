@@ -48,20 +48,20 @@ export function AISuggestionsPanel({
       case 'optimization':
         return <Lightbulb className="w-4 h-4 text-primary" />;
       case 'grouping':
-        return <Info className="w-4 h-4 text-purple-500 /* TODO: Use semantic token */" />;
+        return <Info className="w-4 h-4 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       default:
-        return <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />;
+        return <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
     }
   };
 
   const getFeedbackIcon = (type: string) => {
     switch (type) {
       case 'success':
-        return <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */" />;
+        return <CheckCircle className="w-4 h-4 text-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       case 'warning':
         return <AlertTriangle className="w-4 h-4 text-amber-500" />;
       case 'error':
-        return <AlertTriangle className="w-4 h-4 text-red-500 /* TODO: Use semantic token */" />;
+        return <AlertTriangle className="w-4 h-4 text-red-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />;
       default:
         return <Info className="w-4 h-4 text-primary" />;
     }
@@ -72,7 +72,7 @@ export function AISuggestionsPanel({
       <div className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */" />
+            <Lightbulb className="w-5 h-5 text-blue-600 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
             <h3 className="font-semibold text-sm">AI Assistant</h3>
             {isAnalyzing && <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />}
           </div>
@@ -106,10 +106,10 @@ export function AISuggestionsPanel({
                 className={cn(
                   'flex items-center gap-2 p-2 rounded-md text-sm',
                   dragFeedback.type === 'success' &&
-                    'bg-green-50 /* TODO: Use semantic token */ text-green-700 /* TODO: Use semantic token */',
+                    'bg-green-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-green-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */',
                   dragFeedback.type === 'warning' && 'bg-amber-50 text-amber-700',
                   dragFeedback.type === 'error' &&
-                    'bg-red-50 /* TODO: Use semantic token */ text-red-700 /* TODO: Use semantic token */'
+                    'bg-red-50 /* TODO: Use semantic token */ /* TODO: Use semantic token */ text-red-700 /* TODO: Use semantic token */ /* TODO: Use semantic token */'
                 )}
               >
                 {getFeedbackIcon(dragFeedback.type)}

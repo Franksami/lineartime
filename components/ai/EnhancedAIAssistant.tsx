@@ -536,7 +536,7 @@ export function EnhancedAIAssistant({
                       handleAIRequest('Suggest optimal times for a 1-hour meeting this week');
                     }}
                   >
-                    <Lightbulb className="w-4 h-4 mr-2 text-yellow-500 /* TODO: Use semantic token */" />
+                    <Lightbulb className="w-4 h-4 mr-2 text-yellow-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <div className="text-left">
                       <div className="font-medium text-sm">Smart Scheduling</div>
                       <div className="text-xs text-muted-foreground">
@@ -570,7 +570,7 @@ export function EnhancedAIAssistant({
                       handleAIRequest('Create a team standup meeting for tomorrow at 9am');
                     }}
                   >
-                    <Zap className="w-4 h-4 mr-2 text-purple-500 /* TODO: Use semantic token */" />
+                    <Zap className="w-4 h-4 mr-2 text-purple-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */" />
                     <div className="text-left">
                       <div className="font-medium text-sm">Quick Event Creation</div>
                       <div className="text-xs text-muted-foreground">
@@ -603,23 +603,23 @@ export function EnhancedAIAssistant({
                   <div className="text-sm font-medium">Available AI Tools</div>
                   <div className="space-y-2 text-xs">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded-full" />
+                      <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full" />
                       Calendar Availability Analysis
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded-full" />
+                      <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full" />
                       Intelligent Event Creation
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded-full" />
+                      <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full" />
                       Conflict Detection & Resolution
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded-full" />
+                      <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full" />
                       Smart Time Suggestions
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ rounded-full" />
+                      <div className="w-2 h-2 bg-green-500 /* TODO: Use semantic token */ /* TODO: Use semantic token */ rounded-full" />
                       Automated Rescheduling
                     </div>
                   </div>
